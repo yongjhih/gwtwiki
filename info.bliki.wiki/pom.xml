@@ -13,9 +13,26 @@
   	<name>MathEclipse</name>
   	<url>http://matheclipse.org/en/Java_Wikipedia_API</url>
   </organization>
-  	<modules>
-		<module>bliki-core</module>
-	</modules>
+  <modules>
+	<module>bliki-core</module>
+  </modules>
+  <scm>
+		<connection>scm:svn:http://gwtwiki.googlecode.com/svn/trunk/</connection>
+		<developerConnection>scm:svn:https://gwtwiki.googlecode.com/svn/trunk/</developerConnection>
+		<tag>HEAD</tag>
+		<url>http://code.google.com/p/gwtwiki/source/browse/</url>
+  </scm>
+  <issueManagement>
+		<system>Google Code</system>
+		<url>http://code.google.com/p/gwtwiki/issues/list</url>
+  </issueManagement>
+  <licenses>
+		<license>
+			<name>Eclipse Public License 1.0</name>
+			<url>http://www.opensource.org/licenses/eclipse-1.0.php</url>
+			<distribution>repo</distribution>
+		</license>
+  </licenses>
   <dependencies>
     <dependency>
       <groupId>commons-codec</groupId>
