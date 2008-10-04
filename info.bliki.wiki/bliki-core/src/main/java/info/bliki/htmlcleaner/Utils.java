@@ -73,6 +73,9 @@ public class Utils {
 			index++;
 		}
 
+		if (index == 0) {
+			return s;
+		}
 		return (index >= len) ? "" : s.substring(index);
 	}
 
@@ -93,6 +96,9 @@ public class Utils {
 			index--;
 		}
 
+		if (index == len) {
+			return s;
+		}
 		return (index <= 0) ? "" : s.substring(0, index);
 	}
 
@@ -115,12 +121,15 @@ public class Utils {
 			}
 			index++;
 		}
-
+		if (index == 0) {
+			return s;
+		}
 		return (index >= len) ? "" : s.substring(index);
 	}
 
 	/**
-	 * Trims specified string from left and right and stops at <code>\n</code> character
+	 * Trims specified string from left and right and stops at <code>\n</code>
+	 * character on the right
 	 * 
 	 * @param s
 	 */
@@ -129,18 +138,18 @@ public class Utils {
 			return null;
 		}
 		int leftIndex = 0;
-		int len = s.length(); 
+		int len = s.length();
 
 		while (leftIndex < len && Character.isWhitespace(s.charAt(leftIndex))) {
-//			if (s.charAt(leftIndex) == '\n') {
-//				break;
-//			}
+			// if (s.charAt(leftIndex) == '\n') {
+			// break;
+			// }
 			leftIndex++;
 		}
-    if (leftIndex>=len) {
-    	return "";
-    }
-//		return (leftIndex >= len) ? "" : s.substring(leftIndex);
+		if (leftIndex >= len) {
+			return "";
+		}
+		// return (leftIndex >= len) ? "" : s.substring(leftIndex);
 
 		int rightIndex = len;
 
@@ -152,11 +161,15 @@ public class Utils {
 			}
 		}
 		if (rightIndex <= 0) {
-    	return "";
-    }
+			return "";
+		}
+		if ((leftIndex == 0) && rightIndex == len) {
+			return s;
+		}
 		return s.substring(leftIndex, rightIndex);
-		
+
 	}
+
 	/**
 	 * Reads content from the specified URL with specified charset into string
 	 * 
