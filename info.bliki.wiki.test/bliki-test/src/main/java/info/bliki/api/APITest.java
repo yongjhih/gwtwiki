@@ -5,7 +5,10 @@ import info.bliki.wiki.model.WikiModel;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
+
+import org.xml.sax.SAXException;
 
 public class APITest {
 	public APITest() {
@@ -101,11 +104,38 @@ public class APITest {
 		}
 	}
 
+	public static void testQueryXML001() {
+		User user = new User("", "", "http://en.wikipedia.org/w/api.php");
+		user.login();
+		ArrayList<String> listOfTitleStrings = new ArrayList<String>();
+		String[] valuePairs = { "list", "allpages", "apfrom", "B", "aplimit", "20" };
+		Connector connector = new Connector();
+		String responseBody = connector.queryXML(user, listOfTitleStrings, valuePairs);
+		if (responseBody == null) {
+			System.out.println("Got no XML result for the query");
+		}
+		XMLPagesParser parser;
+		try {
+			parser = new XMLPagesParser(responseBody);
+			parser.parse();
+			List<Page> listOfPages = parser.getPagesList();
+			for (Page page : listOfPages) {
+				// print page information
+				System.out.println(page.toString());
+			}
+		} catch (SAXException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
 	public static void main(String[] args) {
-		 testQueryContent002();
-		 testQueryContent001();
-		 testQueryLinks001();
-		 testQueryCategories001();
-		testQueryImageinfo001();
+		// testQueryContent002();
+		// testQueryContent001();
+		// testQueryLinks001();
+		// testQueryCategories001();
+		// testQueryImageinfo001();
+		testQueryXML001();
 	}
 }
