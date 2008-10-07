@@ -5,7 +5,6 @@ import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.httpclient.Cookie;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpException;
 import org.apache.commons.httpclient.MultiThreadedHttpConnectionManager;
@@ -42,8 +41,8 @@ public class Connector {
 	 * password and actionURL
 	 * 
 	 * @param user
-	 *          the completed user information or <code>null</code>, if the
-	 *          login fails
+	 *          the completed user information or <code>null</code>, if the login
+	 *          fails
 	 * @return
 	 */
 	public User login(User user) {
@@ -116,9 +115,55 @@ public class Connector {
 	 *          user login information
 	 * @param listOfTitleStrings
 	 *          a list of title Strings "ArticleA,ArticleB,..."
+	 * @param valuePairs
+	 *          pairs of query strings which should be appended to the Mediawiki API URL
 	 * @return
 	 */
 	public List<Page> query(User user, List<String> listOfTitleStrings, String[] valuePairs) {
+		try {
+			String responseBody = queryXML(user, listOfTitleStrings, valuePairs);
+			if (responseBody != null) {
+				// System.out.println(responseBody);
+				XMLPagesParser parser = new XMLPagesParser(responseBody);
+				parser.parse();
+				return parser.getPagesList();
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (SAXException e) {
+			e.printStackTrace();
+		}
+		// no pages parsed!?
+		return new ArrayList<Page>();
+	}
+
+	/**
+	 * Get the raw XML result from the Mediawiki API
+	 * 
+	 * @param user
+	 *          user login information
+	 * @param valuePairs
+	 *          pairs of query strings which should be appended to the Mediawiki API URL
+	 * @return the raw XML string produced by the query; <code>null</code>
+	 *         otherwise
+	 */ 
+	public String queryXML(User user, String[] valuePairs) {
+		return queryXML(user, new ArrayList<String>(), valuePairs);
+	}
+
+	/**
+	 * Get the raw XML result from the Mediawiki API
+	 * 
+	 * @param user
+	 *          user login information
+	 * @param listOfTitleStrings
+	 *          a list of possibly empty title Strings "ArticleA,ArticleB,..."
+	 * @param valuePairs
+	 *          pairs of query strings which should be appended to the Mediawiki API URL
+	 * @return the raw XML string produced by the query; <code>null</code>
+	 *         otherwise
+	 */
+	public String queryXML(User user, List<String> listOfTitleStrings, String[] valuePairs) {
 		PostMethod method = new PostMethod(user.getActionUrl());
 
 		method.setFollowRedirects(false);
@@ -134,17 +179,21 @@ public class Connector {
 			}
 		}
 		int k = 0;
-		int size = 6;
+		int size = 5;
 		if (valuePairs != null) {
-			size = 6 + (valuePairs.length / 2);
+			size = 5 + (valuePairs.length / 2);
 		}
-
+		if (titlesString.length() > 0) {
+			size++;
+		}
 		try {
 			NameValuePair[] params = new NameValuePair[size];
 
 			params[k++] = new NameValuePair("action", "query");
-			// don't encode the title for the NameValuePair !
-			params[k++] = new NameValuePair("titles", titlesString.toString());
+			if (titlesString.length() > 0) {
+				// don't encode the title for the NameValuePair !
+				params[k++] = new NameValuePair("titles", titlesString.toString());
+			}
 			params[k++] = new NameValuePair("lgusername", user.getUserid());
 			params[k++] = new NameValuePair("lguserid", user.getNormalizedUsername());
 			params[k++] = new NameValuePair("lgtoken", user.getToken());
@@ -158,11 +207,7 @@ public class Connector {
 
 			int responseCode = client.executeMethod(method);
 			if (responseCode == 200) {
-				String responseBody = method.getResponseBodyAsString();
-				// System.out.println(responseBody);
-				XMLPagesParser parser = new XMLPagesParser(responseBody);
-				parser.parse();
-				return parser.getPagesList();
+				return method.getResponseBodyAsString();
 			}
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
@@ -170,13 +215,10 @@ public class Connector {
 			e.printStackTrace();
 		} catch (IOException e) {
 			e.printStackTrace();
-		} catch (SAXException e) {
-			e.printStackTrace();
 		} finally {
 			method.releaseConnection();
 		}
-		// no pages parsed!?
-		return new ArrayList<Page>();
+		return null;
 	}
 
 	// TODO: this doesn't work at the moment:
