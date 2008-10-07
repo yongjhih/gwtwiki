@@ -107,10 +107,9 @@ public class APITest {
 	public static void testQueryXML001() {
 		User user = new User("", "", "http://en.wikipedia.org/w/api.php");
 		user.login();
-		ArrayList<String> listOfTitleStrings = new ArrayList<String>();
 		String[] valuePairs = { "list", "allpages", "apfrom", "B", "aplimit", "20" };
 		Connector connector = new Connector();
-		String responseBody = connector.queryXML(user, listOfTitleStrings, valuePairs);
+		String responseBody = connector.queryXML(user, valuePairs);
 		if (responseBody == null) {
 			System.out.println("Got no XML result for the query");
 		}
