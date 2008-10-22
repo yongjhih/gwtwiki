@@ -26,6 +26,8 @@ public class XMLPagesParser extends AbstractXMLParser {
 
 	private static final String URL_ID = "url";
 
+	private static final String THUMB_URL_ID = "thumburl";
+	
 	private static final String ANON_ID = "anon";
 
 	private static final String PL_ID = "pl";
@@ -80,6 +82,7 @@ public class XMLPagesParser extends AbstractXMLParser {
 			// <imgeinfo><ii url="...">...</imageinfo>
 			if (fPage != null) {
 				fPage.setImageUrl(fAttributes.getValue(URL_ID));
+				fPage.setImageThumbUrl(fAttributes.getValue(THUMB_URL_ID));
 			}
 		}
 		fData = null;

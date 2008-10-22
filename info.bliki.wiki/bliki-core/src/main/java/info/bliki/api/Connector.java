@@ -109,6 +109,11 @@ public class Connector {
 		return query(user, listOfImageStrings, valuePairs);
 	}
 
+	public List<Page> queryImageinfo(User user, List<String> listOfImageStrings, int imageWidth) {
+		String[] valuePairs = { "prop", "imageinfo", "iiprop", "url", "iiurlwidth", Integer.toString(imageWidth) };
+		return query(user, listOfImageStrings, valuePairs);
+	}
+
 	/**
 	 * 
 	 * @param user
@@ -116,7 +121,8 @@ public class Connector {
 	 * @param listOfTitleStrings
 	 *          a list of title Strings "ArticleA,ArticleB,..."
 	 * @param valuePairs
-	 *          pairs of query strings which should be appended to the Mediawiki API URL
+	 *          pairs of query strings which should be appended to the Mediawiki
+	 *          API URL
 	 * @return
 	 */
 	public List<Page> query(User user, List<String> listOfTitleStrings, String[] valuePairs) {
@@ -143,10 +149,11 @@ public class Connector {
 	 * @param user
 	 *          user login information
 	 * @param valuePairs
-	 *          pairs of query strings which should be appended to the Mediawiki API URL
+	 *          pairs of query strings which should be appended to the Mediawiki
+	 *          API URL
 	 * @return the raw XML string produced by the query; <code>null</code>
 	 *         otherwise
-	 */ 
+	 */
 	public String queryXML(User user, String[] valuePairs) {
 		return queryXML(user, new ArrayList<String>(), valuePairs);
 	}
@@ -159,7 +166,8 @@ public class Connector {
 	 * @param listOfTitleStrings
 	 *          a list of possibly empty title Strings "ArticleA,ArticleB,..."
 	 * @param valuePairs
-	 *          pairs of query strings which should be appended to the Mediawiki API URL
+	 *          pairs of query strings which should be appended to the Mediawiki
+	 *          API URL
 	 * @return the raw XML string produced by the query; <code>null</code>
 	 *         otherwise
 	 */

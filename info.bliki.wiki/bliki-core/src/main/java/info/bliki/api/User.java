@@ -4,7 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Manages user data from the <a href="http://meta.wikimedia.org/w/api.php">Wikimedia API</a>
+ * Manages user data from the <a
+ * href="http://meta.wikimedia.org/w/api.php">Wikimedia API</a>
  */
 public class User {
 	public static final String SUCCESS_ID = "Success";
@@ -103,11 +104,19 @@ public class User {
 	public List<Page> queryImageinfo(List<String> listOfImageStrings) {
 		return connector.queryImageinfo(this, listOfImageStrings);
 	}
-	
+
+	public List<Page> queryImageinfo(List<String> listOfImageStrings, int imageWidth) {
+		return connector.queryImageinfo(this, listOfImageStrings, imageWidth);
+	}
+
 	public List<Page> queryImageinfo(String[] listOfImageStrings) {
 		return queryImageinfo(arrayToList(listOfImageStrings));
 	}
-	 
+
+	public List<Page> queryImageinfo(String[] listOfImageStrings, int imageWidth) {
+		return queryImageinfo(arrayToList(listOfImageStrings), imageWidth);
+	}
+
 	// TODO
 	// public boolean submit(String actionUrl, String title, String uploadContent,
 	// String summary, String timestamp, boolean minorEdit,

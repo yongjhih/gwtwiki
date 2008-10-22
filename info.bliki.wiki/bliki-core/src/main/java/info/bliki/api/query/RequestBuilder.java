@@ -1,8 +1,6 @@
 package info.bliki.api.query;
 
-import java.util.Arrays;
 import java.util.Collection;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;

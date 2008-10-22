@@ -13,7 +13,8 @@ import org.apache.commons.httpclient.MultiThreadedHttpConnectionManager;
 import org.apache.commons.httpclient.methods.GetMethod;
 
 /**
- * Manages page data from the <a href="http://meta.wikimedia.org/w/api.php">Wikimedia API</a>
+ * Manages page data from the <a
+ * href="http://meta.wikimedia.org/w/api.php">Wikimedia API</a>
  */
 public class Page {
 	List<Link> links;
@@ -28,6 +29,8 @@ public class Page {
 
 	// imageinfo
 	String imageUrl;
+
+	String imageThumbUrl;
 
 	Revision revision = null;
 
@@ -70,6 +73,10 @@ public class Page {
 		return imageUrl;
 	}
 
+	public String getImageThumbUrl() {
+		return imageThumbUrl;
+	}
+
 	public void setNs(String ns) {
 		this.ns = ns;
 	}
@@ -99,6 +106,10 @@ public class Page {
 	 */
 	public void setImageUrl(String imageUrl) {
 		this.imageUrl = imageUrl;
+	}
+
+	public void setImageThumbUrl(String imageThumbUrl) {
+		this.imageThumbUrl = imageThumbUrl;
 	}
 
 	@Override
@@ -151,7 +162,21 @@ public class Page {
 	 *          <code>FileOutputStream</code>.
 	 */
 	public void downloadImageUrl(OutputStream outputStream) {
-		if (imageUrl != null && imageUrl.length() > 3) {
+		downloadImageUrl(outputStream, imageUrl);
+	}
+
+	/**
+	 * If this page was created with User#queryImageinfo() you can download the
+	 * image with this method. <br/> <b>Note:</b> this method doesn't close the
+	 * given output stream!
+	 * 
+	 * @param outputStream
+	 *          the output stream where the image should be written to. For
+	 *          example, if you would save the image in a file, you can use
+	 *          <code>FileOutputStream</code>.
+	 */
+	public void downloadImageUrl(OutputStream outputStream, String url) {
+		if (url != null && url.length() > 3) {
 			BufferedInputStream bis = null;
 			GetMethod method = null;
 			try {
@@ -160,15 +185,15 @@ public class Page {
 				client.getHttpConnectionManager().getParams().setConnectionTimeout(30000);
 
 				String extension = "jpg";
-				int index = imageUrl.lastIndexOf('.');
+				int index = url.lastIndexOf('.');
 				if (index > 0) {
-					String extension2 = imageUrl.substring(index + 1).toLowerCase();
+					String extension2 = url.substring(index + 1).toLowerCase();
 					if (extension2.equals("svg") || extension2.equals("gif") || extension2.equals("png") || extension2.equals("jpg")
 							|| extension2.equals("jpeg")) {
 						extension = extension2;
 					}
 				}
-				method = new GetMethod(imageUrl);
+				method = new GetMethod(url);
 				method.setFollowRedirects(false);
 				method.setRequestHeader("accept", "image/" + extension);
 				method.setRequestHeader("User-Agent", Connector.USER_AGENT);

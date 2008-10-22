@@ -151,7 +151,12 @@ public class APIWikiModel extends WikiModel {
 			String imageNamespace = getImageNamespace();
 			String[] listOfTitleStrings = { imageNamespace + ":" + imageName };
 			fUser.login();
-			List<Page> listOfPages = fUser.queryImageinfo(listOfTitleStrings);
+			List<Page> listOfPages;
+			if (imageFormat.getSize() > 0) {
+				listOfPages = fUser.queryImageinfo(listOfTitleStrings, imageFormat.getSize());
+			} else {
+				listOfPages = fUser.queryImageinfo(listOfTitleStrings);
+			}
 			for (Page page : listOfPages) {
 
 				imageData = new ImageData(imageName);
@@ -159,10 +164,23 @@ public class APIWikiModel extends WikiModel {
 				// download the image to fImageDirectoryName directory
 				FileOutputStream os = null;
 				try {
-					String filename = fImageDirectoryName + page.getTitle().substring(imageNamespace.length() + 1).replaceAll(" ", "_");
+					String imageUrl;
+					if (imageFormat.getSize() > 0) {
+						imageUrl = page.getImageThumbUrl();
+					} else {
+						imageUrl = page.getImageUrl();
+					} 
+					String urlImageName = page.getTitle().substring(imageNamespace.length() + 1).replaceAll(" ", "_");
+					if (imageUrl!=null) {
+						int index = imageUrl.lastIndexOf('/');
+						if (index>0) {
+							urlImageName = imageUrl.substring(index+1);
+						}
+					}
+					String filename = fImageDirectoryName + urlImageName;
 					os = new FileOutputStream(filename);
-					page.downloadImageUrl(os);
-					imageData.setUrl(page.getImageUrl());
+					page.downloadImageUrl(os, imageUrl);
+					imageData.setUrl(imageUrl);
 					imageData.setFilename(filename);
 					fWikiDB.insertImage(imageData);
 					super.appendInternalImageLink(hrefImageLink, "file:///" + filename, imageFormat);
