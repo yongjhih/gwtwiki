@@ -10,7 +10,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-
 public class WikipediaScanner {
 
 	public final static String TAG_NAME = "$TAG_NAME";
@@ -1541,10 +1540,11 @@ public class WikipediaScanner {
 						return readUntilIgnoreCase(fScannerPosition, "</", "source>");
 					} else if (tagName.equals("math")) {
 						return readUntilIgnoreCase(fScannerPosition, "</", "math>");
-					}  else if (tagName.equals("span")) {
+					} else if (tagName.equals("span")) {
 						return readUntilIgnoreCase(fScannerPosition, "</", "span>");
-					} else if (tagName.equals("div")) {
-						return readUntilIgnoreCase(fScannerPosition, "</", "div>");
+						// <div> could be nested ?
+						// } else if (tagName.equals("div")) {
+						// return readUntilIgnoreCase(fScannerPosition, "</", "div>");
 					}
 				}
 			}
