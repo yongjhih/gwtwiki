@@ -408,6 +408,19 @@ public class WikiTestModel extends WikiModel {
 			+ "{{documentation}}\n"
 			+ "<!-- Add cats and interwikis to the /doc subpage, not here! -->\n" + "</noinclude>";
 
+	final static String FURTHER = "<includeonly>:<span class=\"boilerplate further\"\n" + 
+			">''{{{altphrase|Further information}}}: {{#if:{{{1|}}} |<!--then:-->{{{1}}} |<!--\n" + 
+			"else:-->'''Error: [[Template:Further|Template must be given at least one article name]]''' \n" + 
+			"}}{{#if:{{{2|}}}|{{#if:{{{3|}}}|, |&#32;and }}  {{{2}}}\n" + 
+			"}}{{#if:{{{3|}}}|{{#if:{{{4|}}}|, |, and }} {{{3}}}\n" + 
+			"}}{{#if:{{{4|}}}|{{#if:{{{5|}}}|, |, and }} {{{4}}}\n" + 
+			"}}{{#if:{{{5|}}}|, and {{{5}}}\n" + 
+			"}}{{#if:{{{6|}}}| — '''<br/>Error: [[Template:Futher|Too many links specified (maximum is 5)]]'''\n" + 
+			"}}''</span></includeonly><!-- includeonly block is needed, as otherwise the bare template gives error message \n" + 
+			"\"Error: Template must be given at least one article name\"\n" + 
+			" ---><noinclude>\n" + 
+			"{{template doc}}</noinclude>";
+
 	boolean fSemanticWebActive;
 
 	static {
@@ -477,6 +490,8 @@ public class WikiTestModel extends WikiModel {
 				return "c) First: {{{1}}} Second: {{{2}}}";
 			} else if (name.equals("Ifeq")) {
 				return IFEQ_TEST;
+			} else if (name.equals("Further")) {
+				return FURTHER;
 			}
 		} else {
 			if (name.equals("Include_Page")) {

@@ -341,4 +341,7 @@ public class TemplateFilterTest extends FilterTestSupport {
 				"{{!}}}\n"+
 				"}}}}"));
 	}
+	public void testFurther() {
+		assertEquals("<dl><dd><span class=\"boilerplate further\"><i>Further information: <a href=\"http://www.bliki.info/wiki/History_of_molecular_biology\" id=\"w\">History of molecular biology</a></i></span></dd></dl>",wikiModel.render("{{further|[[History of molecular biology]]}}"));
+	}
 }

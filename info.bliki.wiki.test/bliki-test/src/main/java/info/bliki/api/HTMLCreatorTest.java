@@ -67,7 +67,11 @@ public class HTMLCreatorTest {
 		testWikipediaENAPI("Chris Capuano");
 	}
 
+	public static void testCreator004() {
+		testWikipediaENAPI("Protein");
+	}
+	
 	public static void main(String[] args) {
-		testCreator001();
+		testCreator004();
 	}
 }

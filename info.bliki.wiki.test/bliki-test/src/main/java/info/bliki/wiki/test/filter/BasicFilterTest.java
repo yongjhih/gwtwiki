@@ -175,4 +175,12 @@ public class BasicFilterTest extends FilterTestSupport {
 	public void testSignature08() {
 		assertEquals("\n" + "<p>~~~</p>", wikiModel.render("~~~"));
 	}
+	
+	public void testSpan001() {
+		
+		assertEquals("\n" + 
+				"<p><span class=\"xxx\">test</span></p>", wikiModel.render("<span class=\"xxx\"\n" + 
+		">test</span>"));
+		
+	}
 }
