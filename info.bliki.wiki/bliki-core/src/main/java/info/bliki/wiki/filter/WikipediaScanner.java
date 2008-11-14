@@ -1541,6 +1541,10 @@ public class WikipediaScanner {
 						return readUntilIgnoreCase(fScannerPosition, "</", "source>");
 					} else if (tagName.equals("math")) {
 						return readUntilIgnoreCase(fScannerPosition, "</", "math>");
+					}  else if (tagName.equals("span")) {
+						return readUntilIgnoreCase(fScannerPosition, "</", "span>");
+					} else if (tagName.equals("div")) {
+						return readUntilIgnoreCase(fScannerPosition, "</", "div>");
 					}
 				}
 			}
