@@ -64,9 +64,9 @@ public class WikiDB {
 		properties.put("password", "user1");
 		String jdbcUrl;
 		if (directory.charAt(directory.length() - 1) == '/') {
-			jdbcUrl = "jdbc:derby:" + directory + databasename + ";create=true";
+			jdbcUrl = "jdbc:derby:" + directory + databasename + ";create=true;characterEncoding=utf-8";
 		} else {
-			jdbcUrl = "jdbc:derby:" + directory + "/" + databasename + ";create=true";
+			jdbcUrl = "jdbc:derby:" + directory + "/" + databasename + ";create=true;characterEncoding=utf-8";
 		}
 		fConnection = DriverManager.getConnection(jdbcUrl, properties);
 		createTableIfItDoesntExist();
