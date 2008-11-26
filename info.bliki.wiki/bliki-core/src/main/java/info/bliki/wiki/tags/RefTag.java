@@ -1,6 +1,5 @@
 package info.bliki.wiki.tags;
 
-import info.bliki.htmlcleaner.BaseToken;
 import info.bliki.htmlcleaner.TagNode;
 import info.bliki.wiki.filter.ITextConverter;
 import info.bliki.wiki.model.IWikiModel;
@@ -10,10 +9,10 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
-
 /**
  * Wiki tag for references &lt;ref&gt;reference text...&lt;/ref&gt;
  * 
+ * See <a href="http://en.wikipedia.org/wiki/Wikipedia:Footnotes">Footnotes</a>
  */
 public class RefTag extends HTMLTag implements IBodyTag {
 
@@ -35,7 +34,8 @@ public class RefTag extends HTMLTag implements IBodyTag {
 		renderHTMLWithoutTag(converter, buf, model);
 		Map<String, String> map = getAttributes();
 		String value = (String) map.get("name");
-		String[] offset = model.addToReferences(buf.toString(), value);// getBodyString());
+		String[] offset = model.addToReferences(buf.toString(), value);// getBodyString
+																																		// ());
 		writer.append("<sup id=\"_ref-");
 		if (offset[1] == null) {
 			writer.append(offset[0]);

@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.util.EmptyStackException;
 import java.util.List;
 
-
 /**
  * Stack which contains the currently generated HTML/Wiki tags from the parsing
  * process.
@@ -43,8 +42,8 @@ public class TagStack extends ArrayList<TagToken> {
 	}
 
 	/**
-	 * Removes the <code>TagToken</code> at the top of this stack and returns
-	 * that <code>TagToken</code>.
+	 * Removes the <code>TagToken</code> at the top of this stack and returns that
+	 * <code>TagToken</code>.
 	 * 
 	 * @return The <code>TagToken</code> at the top of this stack.
 	 */
@@ -68,22 +67,26 @@ public class TagStack extends ArrayList<TagToken> {
 	}
 
 	/**
-	 * Pushes a <code>TagToken</code> item onto the top of this stack. 
+	 * Pushes a <code>TagToken</code> item onto the top of this stack.
 	 * 
 	 * @param item
 	 *          the <code>TagToken</code> item to be pushed onto this stack.
-	 * @return <code>true</code> if this collection changed as a result of the call
+	 * @return <code>true</code> if this collection changed as a result of the
+	 *         call
 	 */
 	public boolean push(TagToken item) {
 		return add(item);
 	}
 
 	/**
-	 * Pushes a new <code>TagNode</code> created from the nodeString onto the top of this stack. 
+	 * Pushes a new <code>TagNode</code> created from the nodeString onto the top
+	 * of this stack.
 	 * 
 	 * @param nodeString
-	 *          the string for the new <code>TagNode</code> item to be pushed onto this stack.
-	 * @return <code>true</code> if this collection changed as a result of the call
+	 *          the string for the new <code>TagNode</code> item to be pushed onto
+	 *          this stack.
+	 * @return <code>true</code> if this collection changed as a result of the
+	 *         call
 	 */
 	public boolean push(String nodeString) {
 		return add(new TagNode(nodeString));

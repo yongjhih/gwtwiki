@@ -60,7 +60,7 @@ public class PDFWikiModel extends WikiModel {
 		return null;
 	}
 
-	public void appendInternalLink(String topic, String hashSection, String topicDescription, String cssClass) {
+	public void appendInternalLink(String topic, String hashSection, String topicDescription, String cssClass, boolean parseRecursive) {
 		// WPATag aTagNode = new WPATag();
 		// append(aTagNode);
 		// aTagNode.addAttribute("id", "w", true);

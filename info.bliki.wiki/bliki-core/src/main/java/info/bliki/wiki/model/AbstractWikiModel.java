@@ -28,7 +28,6 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.ResourceBundle;
 
-
 /**
  * Standard model implementation for the Wikipedia syntax
  * 
@@ -36,17 +35,11 @@ import java.util.ResourceBundle;
 public abstract class AbstractWikiModel implements IWikiModel {
 	private static int fNextNumberCounter = 0;
 
-	protected final String[] fCategoryNamespaces = {
-			"Category", "Category"
-	};
+	protected final String[] fCategoryNamespaces = { "Category", "Category" };
 
-	protected final String[] fTemplateNamespaces = {
-			"Template", "Template"
-	};
+	protected final String[] fTemplateNamespaces = { "Template", "Template" };
 
-	protected final String[] fImageNamespaces = {
-			"Image", "Image"
-	};
+	protected final String[] fImageNamespaces = { "Image", "Image" };
 
 	protected ArrayList<Reference> fReferences;
 
@@ -275,7 +268,7 @@ public abstract class AbstractWikiModel implements IWikiModel {
 
 	}
 
-	public void appendInternalLink(String topic, String hashSection, String topicDescription, String cssClass) {
+	public void appendInternalLink(String topic, String hashSection, String topicDescription, String cssClass, boolean parseRecursive) {
 		WPATag aTagNode = new WPATag();
 		// append(aTagNode);
 		aTagNode.addAttribute("id", "w", true);
@@ -288,9 +281,15 @@ public abstract class AbstractWikiModel implements IWikiModel {
 			aTagNode.addAttribute("class", cssClass, true);
 		}
 		aTagNode.addObjectAttribute("wikilink", topic);
+
 		pushNode(aTagNode);
-		WikipediaParser.parseRecursive(topicDescription.trim(), this, false, true);
+		if (parseRecursive) {
+			WikipediaParser.parseRecursive(topicDescription.trim(), this, false, true);
+		} else {
+			aTagNode.addChild(new ContentToken(topicDescription));
+		}
 		popNode();
+
 		// ContentToken text = new ContentToken(topicDescription);
 		// aTagNode.addChild(text);
 	}
@@ -339,16 +338,17 @@ public abstract class AbstractWikiModel implements IWikiModel {
 
 	public void appendMailtoLink(String link, String linkName, boolean withoutSquareBrackets) {
 		// is it an image?
-		link = Utils.escapeXml(link, true, false, false);
-		int indx = link.lastIndexOf(".");
-		if (indx > 0 && indx < (link.length() - 3)) {
-			String ext = link.substring(indx + 1);
-			if (ext.equalsIgnoreCase("gif") || ext.equalsIgnoreCase("png") || ext.equalsIgnoreCase("jpg") || ext.equalsIgnoreCase("jpeg")
-					|| ext.equalsIgnoreCase("bmp")) {
-				appendExternalImageLink(link, linkName);
-				return;
-			}
-		}
+		// link = Utils.escapeXml(link, true, false, false);
+		// int indx = link.lastIndexOf(".");
+		// if (indx > 0 && indx < (link.length() - 3)) {
+		// String ext = link.substring(indx + 1);
+		// if (ext.equalsIgnoreCase("gif") || ext.equalsIgnoreCase("png") ||
+		// ext.equalsIgnoreCase("jpg") || ext.equalsIgnoreCase("jpeg")
+		// || ext.equalsIgnoreCase("bmp")) {
+		// appendExternalImageLink(link, linkName);
+		// return;
+		// }
+		// }
 		TagNode aTagNode = new TagNode("a");
 		append(aTagNode);
 		aTagNode.addAttribute("href", link, true);
@@ -447,9 +447,9 @@ public abstract class AbstractWikiModel implements IWikiModel {
 				}
 				addLink(rawTopicName);
 				if (-1 != hashIndex) {
-					appendInternalLink(rawTopicName, hash, viewableLinkDescription, null);
+					appendInternalLink(rawTopicName, hash, viewableLinkDescription, null, true);
 				} else {
-					appendInternalLink(rawTopicName, null, viewableLinkDescription, null);
+					appendInternalLink(rawTopicName, null, viewableLinkDescription, null, true);
 				}
 			}
 		}
@@ -474,7 +474,7 @@ public abstract class AbstractWikiModel implements IWikiModel {
 							viewableLinkDescription = relationValue;
 						}
 						if (viewableLinkDescription.trim().length() > 0) {
-							appendInternalLink(relationValue, null, viewableLinkDescription, "interwiki");
+							appendInternalLink(relationValue, null, viewableLinkDescription, "interwiki", true);
 						}
 						return true;
 					}
@@ -493,7 +493,8 @@ public abstract class AbstractWikiModel implements IWikiModel {
 				String category = rawNamespaceTopic.substring(colonIndex + 1).trim();
 				if (category != null && category.length() > 0) {
 					// TODO implement more sort-key behaviour
-					// http://en.wikipedia.org/wiki/Wikipedia:Categorization#Category_sorting
+					// http://en.wikipedia.org/wiki/Wikipedia:Categorization#
+					// Category_sorting
 					addCategory(category, viewableLinkDescription);
 					return true;
 				}
@@ -666,6 +667,10 @@ public abstract class AbstractWikiModel implements IWikiModel {
 		}
 	}
 
+	public boolean isCamelCaseEnabled() {
+		return false;
+	}
+
 	public boolean isCategoryNamespace(String namespace) {
 		return namespace.equalsIgnoreCase(fCategoryNamespaces[0]) || namespace.equalsIgnoreCase(fCategoryNamespaces[1]);
 	}
@@ -740,7 +745,7 @@ public abstract class AbstractWikiModel implements IWikiModel {
 		}
 		return buf.toString();
 	}
-
+	
 	public TagToken peekNode() {
 		return fTagStack.peek();
 	}

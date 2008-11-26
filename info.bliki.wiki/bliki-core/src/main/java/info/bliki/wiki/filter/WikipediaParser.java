@@ -32,6 +32,7 @@ import java.util.List;
 
 import org.apache.commons.validator.EmailValidator;
 
+import sun.reflect.ReflectionFactory.GetReflectionFactoryAction;
 
 /**
  * A Wikipedia syntax parser for the second pass in the parsing of a Wikipedia
@@ -40,13 +41,9 @@ import org.apache.commons.validator.EmailValidator;
  * @see TemplateParser for the first pass
  */
 public class WikipediaParser extends AbstractParser implements IParser {
-	private static final String[] TOC_IDENTIFIERS = {
-			"TOC", "NOTOC", "FORCETOC"
-	};
+	private static final String[] TOC_IDENTIFIERS = { "TOC", "NOTOC", "FORCETOC" };
 
-	final static String HEADER_STRINGS[] = {
-			"=", "==", "===", "====", "=====", "======"
-	};
+	final static String HEADER_STRINGS[] = { "=", "==", "===", "====", "=====", "======" };
 
 	final static int TokenNotFound = -2;
 
@@ -459,6 +456,11 @@ public class WikipediaParser extends AbstractParser implements IParser {
 					}
 					break;
 				}
+				if (fWikiModel.isCamelCaseEnabled() && Character.isUpperCase(fCurrentCharacter) && fWikiModel.getRecursionLevel() <= 1) {
+					if (parseCamelCaseLink()) {
+						continue;
+					}
+				}
 				if (!fWhiteStart) {
 					fWhiteStart = true;
 					fWhiteStartPosition = fCurrentPosition - 1;
@@ -636,6 +638,35 @@ public class WikipediaParser extends AbstractParser implements IParser {
 		return false;
 	}
 
+	private boolean parseCamelCaseLink() {
+		int startLinkPosition = fCurrentPosition - 1;
+		int temp = fCurrentPosition;
+		boolean isCamelCase = false;
+		try {
+			char ch = fSource[temp++];
+			while (Character.isLetterOrDigit(ch)) {
+				if (Character.isUpperCase(ch)) {
+					// at least 2 upper case characters appear in the word
+					isCamelCase = true;
+				}
+				ch = fSource[temp++];
+			}
+		} catch (IndexOutOfBoundsException iobe) {
+		}
+
+		if (isCamelCase) {
+			createContentToken(fWhiteStart, fWhiteStartPosition, 1);
+			fWhiteStart = false;
+			fCurrentPosition = temp - 1;
+
+			String name = new String(fSource, startLinkPosition, fCurrentPosition - startLinkPosition);
+			fWikiModel.appendInternalLink(name, null, name, null, false);
+			return true;
+		}
+
+		return false;
+	}
+
 	/**
 	 * Parse a wiki section starting with a '[' character
 	 * 
@@ -730,8 +761,10 @@ public class WikipediaParser extends AbstractParser implements IParser {
 		if (isStartOfLine() && !isEmptyLine(1)) {
 			// if (fWikiModel.stackSize() == 0 ||
 			// !fWikiModel.peekNode().equals("pre")) {
-			if (fWikiModel.stackSize() == 0 || !(fWikiModel.peekNode() instanceof HTMLBlockTag)|| (fWikiModel.peekNode() instanceof PTag)) {
-//					!(fWikiModel.peekNode() instanceof PreTag || fWikiModel.peekNode() instanceof WPPreTag)) {
+			if (fWikiModel.stackSize() == 0 || !(fWikiModel.peekNode() instanceof HTMLBlockTag)
+					|| (fWikiModel.peekNode() instanceof PTag)) {
+				// !(fWikiModel.peekNode() instanceof PreTag || fWikiModel.peekNode()
+				// instanceof WPPreTag)) {
 				createContentToken(fWhiteStart, fWhiteStartPosition, 2);
 				reduceTokenStack(Configuration.HTML_PRE_OPEN);
 
@@ -1562,8 +1595,8 @@ public class WikipediaParser extends AbstractParser implements IParser {
 	 * table of contents (TOC).
 	 * 
 	 * <br/><br/><b>Note:</b> in this level the wiki model will call the
-	 * <code>setUp()</code> method before parsing and the
-	 * <code>tearDown()</code> method after the parser has finished.
+	 * <code>setUp()</code> method before parsing and the <code>tearDown()</code>
+	 * method after the parser has finished.
 	 * 
 	 * @param rawWikitext
 	 *          the raw text of the article
@@ -1660,8 +1693,7 @@ public class WikipediaParser extends AbstractParser implements IParser {
 	 * of contents (TOC)
 	 * 
 	 * <b>Note:</b> the wiki model doesn't call the <code>setUp()</code> or
-	 * <code>tearDown()</code> methods for the subsequent recursive parser
-	 * steps.
+	 * <code>tearDown()</code> methods for the subsequent recursive parser steps.
 	 * 
 	 * @param rawWikitext
 	 * @param wikiModel
@@ -1677,8 +1709,7 @@ public class WikipediaParser extends AbstractParser implements IParser {
 	 * of contents (TOC)
 	 * 
 	 * <b>Note:</b> the wiki model doesn't call the <code>setUp()</code> or
-	 * <code>tearDown()</code> methods for the subsequent recursive parser
-	 * steps.
+	 * <code>tearDown()</code> methods for the subsequent recursive parser steps.
 	 * 
 	 * @param rawWikitext
 	 * @param wikiModel

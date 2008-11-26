@@ -14,7 +14,6 @@ import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.Set;
 
-
 /**
  * Interface for rendering a wiki model
  * 
@@ -24,16 +23,17 @@ public interface IWikiModel extends IConfiguration {
 	/**
 	 * When an article contains a token indicating that the article belongs to a
 	 * specific category this method should be called to add that category to the
-	 * output metadata. For the <code>sortKey</code> see also <a
-	 * href="http://en.wikipedia.org/wiki/Wikipedia:Categorization#Category_sorting">Wikipedia:Categorization#Category_sorting</a>
+	 * output metadata. For the <code>sortKey</code> see also <a href=
+	 * "http://en.wikipedia.org/wiki/Wikipedia:Categorization#Category_sorting"
+	 * >Wikipedia:Categorization#Category_sorting</a>
 	 * 
 	 * @param categoryName
 	 *          The name of the category that the document belongs to.
 	 * @param sortKey
-	 *          The sort key for the category, or <code>null</code> if no sort
-	 *          key has been specified. The sort key determines what order
-	 *          categories are sorted on category index pages, so a category for
-	 *          "John Doe" might be given a sort key of "Doe, John".
+	 *          The sort key for the category, or <code>null</code> if no sort key
+	 *          has been specified. The sort key determines what order categories
+	 *          are sorted on category index pages, so a category for "John Doe"
+	 *          might be given a sort key of "Doe, John".
 	 */
 	public void addCategory(String categoryName, String sortKey);
 
@@ -83,8 +83,7 @@ public interface IWikiModel extends IConfiguration {
 	 * @param reference
 	 *          the rendered HTML code of the ref-Tag body
 	 * @param nameAttribute
-	 *          the value of the <code>name</code> attribute or
-	 *          <code>null</code>
+	 *          the value of the <code>name</code> attribute or <code>null</code>
 	 * @return the current offset (i.e. size()-1) of the element in the list
 	 */
 	public String[] addToReferences(String reference, String nameAttribute);
@@ -141,8 +140,10 @@ public interface IWikiModel extends IConfiguration {
 	 * @param topicDescription
 	 * @param cssClass
 	 *          the links CSS class style
+	 * @param parseRecursive
+	 *          TODO
 	 */
-	public void appendInternalLink(String topic, String hashSection, String topicDescription, String cssClass);
+	public void appendInternalLink(String topic, String hashSection, String topicDescription, String cssClass, boolean parseRecursive);
 
 	/**
 	 * Append an InterWiki link
@@ -178,16 +179,16 @@ public interface IWikiModel extends IConfiguration {
 	 * @param linkName
 	 *          the link name which is separated from the URL by a space
 	 * @param withoutSquareBrackets
-	 *          if <code>true</code> a mailto link with no square brackets
-	 *          around the link was parsed
+	 *          if <code>true</code> a mailto link with no square brackets around
+	 *          the link was parsed
 	 */
 	public void appendMailtoLink(String link, String linkName, boolean withoutSquareBrackets);
 
 	/**
 	 * Check if the topic is a special namespace topic. In the
-	 * <code>AbstractWikiModel</code> defaults implementation this namespace
-	 * topic is parsed and checks for various namespaces, like
-	 * <code>Categories</code> and <code>Interwiki</code> links.
+	 * <code>AbstractWikiModel</code> defaults implementation this namespace topic
+	 * is parsed and checks for various namespaces, like <code>Categories</code>
+	 * and <code>Interwiki</code> links.
 	 * 
 	 * @param rawNamespaceTopic
 	 *          the text between the [[...]] square brackets of a wiki link before
@@ -201,10 +202,10 @@ public interface IWikiModel extends IConfiguration {
 	public boolean appendRawNamespaceLinks(String rawNamespaceTopic, String viewableLinkDescription, boolean containsNoPipe);
 
 	/**
-	 * May entry method for parsing a raw wiki link (i.e. the text between the
+	 * Main entry method for parsing a raw wiki link (i.e. the text between the
 	 * [[...]] square brackets). In the <code>AbstractWikiModel</code> defaults
 	 * implementation this link is parsed and the various other
-	 * <code>append...</code> methods of the model called fo the different
+	 * <code>append...</code> methods of the model are called for the different
 	 * cases.
 	 * 
 	 * @param rawLinkText
@@ -348,8 +349,7 @@ public interface IWikiModel extends IConfiguration {
 	 *          the name of the template
 	 * @param templateParameters
 	 *          if the namespace is the <b>Template</b> namespace, the current
-	 *          template parameters are stored as <code>String</code>s in this
-	 *          map
+	 *          template parameters are stored as <code>String</code>s in this map
 	 * 
 	 * @return <code>null</code> if no content was found
 	 */
@@ -376,8 +376,7 @@ public interface IWikiModel extends IConfiguration {
 	 * Get the internal list of references (i.e. footnotes)
 	 * 
 	 * 
-	 * @return the list of references or <code>null</code> if no reference
-	 *         exists
+	 * @return the list of references or <code>null</code> if no reference exists
 	 * @see Reference
 	 */
 	public List<Reference> getReferences();
@@ -412,8 +411,7 @@ public interface IWikiModel extends IConfiguration {
 	 * Get the &quot;table of content&quot; placeholder
 	 * 
 	 * @param isTOCIdentifier
-	 *          <code>true</code> if the <code>__TOC__</code> keyword was
-	 *          parsed
+	 *          <code>true</code> if the <code>__TOC__</code> keyword was parsed
 	 * @return the &quot;table of content&quot; tag
 	 */
 	public TableOfContentTag getTableOfContentTag(boolean isTOCIdentifier);
@@ -452,6 +450,16 @@ public interface IWikiModel extends IConfiguration {
 	 * @return the current recursion level counter
 	 */
 	public int incrementRecursionLevel();
+
+	/**
+	 * Checks if <a href="http://en.wikipedia.org/wiki/CamelCase">CamelCase</a>
+	 * words should also be used as wiki links.
+	 * 
+	 * 
+	 * @return <code>true</code> if CamelCase words should also be used as wiki
+	 *         links
+	 */
+	public boolean isCamelCaseEnabled();
 
 	/**
 	 * Check if the given namespace is a category namespace
@@ -512,8 +520,8 @@ public interface IWikiModel extends IConfiguration {
 
 	/**
 	 * Allow the parsing of semantic mediawiki (SMW) links. See <a
-	 * href="http://en.wikipedia.org/wiki/Semantic_MediaWiki">Semantic MediaWiki</a>
-	 * for more information.
+	 * href="http://en.wikipedia.org/wiki/Semantic_MediaWiki">Semantic
+	 * MediaWiki</a> for more information.
 	 * 
 	 * @param namespace
 	 * @return <code>true</code> if parsing of semantic mediawiki (SMW) links is
@@ -603,8 +611,7 @@ public interface IWikiModel extends IConfiguration {
 	/**
 	 * Push the given TagNode on top of the internal stack
 	 * 
-	 * @return <code>true</code> if the push on the internal stack was
-	 *         successful
+	 * @return <code>true</code> if the push on the internal stack was successful
 	 */
 	public boolean pushNode(TagToken node);
 
@@ -613,8 +620,8 @@ public interface IWikiModel extends IConfiguration {
 	 * 
 	 * @param converter
 	 *          a text converter. <b>Note</b> the converter may be
-	 *          <code>null</code>, if you only would like to analyze the raw
-	 *          wiki text and don't need to convert. This speeds up the parsing
+	 *          <code>null</code>, if you only would like to analyze the raw wiki
+	 *          text and don't need to convert. This speeds up the parsing
 	 *          process.
 	 * @param rawWikiText
 	 *          a raw wiki text
@@ -653,8 +660,8 @@ public interface IWikiModel extends IConfiguration {
 
 	/**
 	 * Activate the parsing of semantic Mediawiki (SMW) links See <a
-	 * href="http://en.wikipedia.org/wiki/Semantic_MediaWiki">Semantic MediaWiki</a>
-	 * for more information.
+	 * href="http://en.wikipedia.org/wiki/Semantic_MediaWiki">Semantic
+	 * MediaWiki</a> for more information.
 	 * 
 	 */
 	public void setSemanticWebActive(boolean semanticWeb);

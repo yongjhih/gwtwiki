@@ -1,8 +1,12 @@
 package info.bliki.wiki.model;
 
+/**
+ * Internal class for managing <a
+ * href="http://en.wikipedia.org/wiki/Wikipedia:Footnotes">Footnotes</a>
+ * 
+ */
 public class Reference {
-	public final static String CHARACTER_REFS = "abcdefghijklmnopqrstuvwxyz"
-			+ "ABCDEFGHIJKLMNOPQRTSUVWXYZ";
+	public final static String CHARACTER_REFS = "abcdefghijklmnopqrstuvwxyz" + "ABCDEFGHIJKLMNOPQRTSUVWXYZ";
 
 	private String fReference;
 	private String fNameAttribute;
@@ -29,7 +33,7 @@ public class Reference {
 	public int getCounter() {
 		return fCounter;
 	}
-	
+
 	public String getAttribute() {
 		return fNameAttribute;
 	}

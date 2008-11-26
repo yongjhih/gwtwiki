@@ -89,7 +89,7 @@ public class WikiModel extends AbstractWikiModel {
 	}
 
 	@Override
-	public void appendInternalLink(String topic, String hashSection, String topicDescription, String cssClass) {
+	public void appendInternalLink(String topic, String hashSection, String topicDescription, String cssClass, boolean parseRecursive) {
 		String hrefLink;
 		if (topic.length() > 0) {
 			String encodedtopic = Encoder.encodeTitleUrl(topic);
@@ -104,7 +104,7 @@ public class WikiModel extends AbstractWikiModel {
 				hrefLink = fExternalWikiBaseURL.replace("${title}", "");
 			}
 		}
-		super.appendInternalLink(hrefLink, hashSection, topicDescription, cssClass);
+		super.appendInternalLink(hrefLink, hashSection, topicDescription, cssClass, parseRecursive);
 	}
 
 	/**
