@@ -32,8 +32,6 @@ import java.util.List;
 
 import org.apache.commons.validator.EmailValidator;
 
-import sun.reflect.ReflectionFactory.GetReflectionFactoryAction;
-
 /**
  * A Wikipedia syntax parser for the second pass in the parsing of a Wikipedia
  * source text.
@@ -235,6 +233,10 @@ public class WikipediaParser extends AbstractParser implements IParser {
 
 				// ---------Identify the next token-------------
 				switch (fCurrentCharacter) {
+				case '\n':
+					// check at the end of line, if there is open wiki bold or italic markup
+					reduceTokenStackBoldItalic();
+					break;
 				case '{':
 					// dummy parsing of wikipedia templates for event listeners
 					if (parseTemplate()) {
@@ -1493,11 +1495,28 @@ public class WikipediaParser extends AbstractParser implements IParser {
 	 * Reduce the current token stack completely
 	 */
 	private void reduceTokenStack() {
-		if (fWikiModel.stackSize() == 0) {
-			return;
-		}
 		while (fWikiModel.stackSize() > 0) {
 			fWikiModel.popNode();
+		}
+	}
+
+	private void reduceTokenStackBoldItalic() {
+		boolean found = false;
+		while (fWikiModel.stackSize() > 0) {
+			TagToken token = fWikiModel.peekNode();//
+			if (token.equals(BOLD) || token.equals(ITALIC) || token.equals(BOLDITALIC)) {
+				if (fWhiteStart) {
+					found = true;
+					createContentToken(fWhiteStart, fWhiteStartPosition, 1);
+				}
+				fWikiModel.popNode();
+			} else {
+				return;
+			}
+		}
+		if (found) {
+			fWhiteStart = true;
+			fWhiteStartPosition = fCurrentPosition;
 		}
 	}
 
