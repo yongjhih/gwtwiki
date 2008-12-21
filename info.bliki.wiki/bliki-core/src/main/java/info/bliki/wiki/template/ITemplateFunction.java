@@ -1,9 +1,9 @@
 package info.bliki.wiki.template;
 
-import java.io.IOException;
-
 import info.bliki.wiki.filter.TemplateParser;
 import info.bliki.wiki.model.IWikiModel;
+
+import java.io.IOException;
 
 /**
  * Interface for a template parser function (i.e. <code>{{ #if: ... }}</code> )

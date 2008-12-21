@@ -1,6 +1,5 @@
 package info.bliki.wiki.template;
 
-import info.bliki.wiki.filter.TemplateParser;
 import info.bliki.wiki.filter.WikipediaScanner;
 import info.bliki.wiki.model.IWikiModel;
 
