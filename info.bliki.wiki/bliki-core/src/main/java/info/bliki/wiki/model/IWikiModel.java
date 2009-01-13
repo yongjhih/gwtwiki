@@ -274,8 +274,10 @@ public interface IWikiModel extends IConfiguration {
 	/**
 	 * Encode the <i>wiki links title</i> into a URL for HTML hyperlinks (i.e.
 	 * create the <i>href</i> attribute representation for the <i>a</i> tag). To
-	 * get the behavior of the MediaWiki software, which is configured to convert
-	 * the first letter to upper case, the <code>firstCharacterAsUpperCase</code>
+	 * get the <a
+	 * href="http://meta.wikimedia.org/wiki/Help:Page_name#Case-sensitivity"
+	 * >behavior of the MediaWiki software</a>, which is configured to convert the
+	 * first letter to upper case, the <code>firstCharacterAsUpperCase</code>
 	 * parameters must be set to <code>true</code>. For an example encoding
 	 * routine see
 	 * {@link info.bliki.wiki.filter.Encoder#encodeTitleToUrl(String, boolean)}
