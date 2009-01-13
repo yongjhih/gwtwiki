@@ -267,14 +267,18 @@ public abstract class AbstractWikiModel implements IWikiModel {
 		popNode(); // div
 
 	}
-
+	
+	public String encodeTitleToUrl(String wikiTitle, boolean firstCharacterAsUpperCase) {
+		return Encoder.encodeTitleToUrl(wikiTitle, firstCharacterAsUpperCase);
+	}
+	
 	public void appendInternalLink(String topic, String hashSection, String topicDescription, String cssClass, boolean parseRecursive) {
 		WPATag aTagNode = new WPATag();
 		// append(aTagNode);
 		aTagNode.addAttribute("id", "w", true);
 		String href = topic;
 		if (hashSection != null) {
-			href = href + '#' + Encoder.encodeTitleUrl(hashSection);
+			href = href + '#' + encodeTitleToUrl(hashSection, true);
 		}
 		aTagNode.addAttribute("href", href, true);
 		if (cssClass != null) {
@@ -301,7 +305,7 @@ public abstract class AbstractWikiModel implements IWikiModel {
 			hrefLink = "#";
 		}
 
-		String encodedtopic = Encoder.encodeTitleUrl(title);
+		String encodedtopic = encodeTitleToUrl(title, true);
 		if (replaceColon()) {
 			encodedtopic = encodedtopic.replaceAll(":", "/");
 		}

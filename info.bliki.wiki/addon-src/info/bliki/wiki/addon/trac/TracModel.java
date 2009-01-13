@@ -88,13 +88,13 @@ public class TracModel extends AbstractTracModel {
 	}
 
 	@Override
-	public void appendInternalLink(String topic, String hashSection, String topicDescription, String cssClass) {
-		String encodedtopic = Encoder.encodeTitleUrl(topic);
+	public void appendInternalLink(String topic, String hashSection, String topicDescription, String cssClass, boolean parseRecursive) {
+		String encodedtopic = encodeTitleToUrl(topic, true);
 		if (replaceColon()) {
 			encodedtopic = encodedtopic.replaceAll(":", "/");
 		}
 		String hrefLink = fExternalWikiBaseURL.replace("${title}", encodedtopic);
-		super.appendInternalLink(hrefLink, hashSection, topicDescription, cssClass);
+		super.appendInternalLink(hrefLink, hashSection, topicDescription, cssClass, parseRecursive);
 	}
 
 	/**

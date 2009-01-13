@@ -47,7 +47,7 @@ public class PDFWikiModel extends WikiModel {
 		if (result != null) {
 			return result;
 		}
-		String name = Encoder.encodeTitleUrl(articleName);
+		String name = encodeTitleToUrl(articleName, true);
 		if (namespace.equals("Template")) {
 			// if (name.equals("Mytemplate")) {
 			// return MYTEMPLATE_TEXT;

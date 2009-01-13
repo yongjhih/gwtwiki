@@ -237,7 +237,7 @@ public abstract class AbstractTracModel implements IWikiModel {
 
 	}
 
-	public void appendInternalLink(String topic, String hashSection, String topicDescription, String cssClass) {
+	public void appendInternalLink(String topic, String hashSection, String topicDescription, String cssClass, boolean parseRecursive) {
 		WPATag aTagNode = new WPATag();
 		append(aTagNode);
 		aTagNode.addAttribute("id", "w", true);
@@ -251,7 +251,11 @@ public abstract class AbstractTracModel implements IWikiModel {
 		ContentToken text = new ContentToken(topicDescription);
 		aTagNode.addChild(text);
 	}
-
+	
+	public String encodeTitleToUrl(String wikiTitle, boolean firstCharacterAsUpperCase) {
+		return Encoder.encodeTitleToUrl(wikiTitle, firstCharacterAsUpperCase);
+	}
+	
 	public void appendInterWikiLink(String namespace, String title, String linkText) {
 		String hrefLink = getInterwikiMap().get(namespace.toLowerCase());
 		if (hrefLink == null) {
@@ -259,7 +263,7 @@ public abstract class AbstractTracModel implements IWikiModel {
 			hrefLink = "#";
 		}
 
-		String encodedtopic = Encoder.encodeTitleUrl(title);
+		String encodedtopic = encodeTitleToUrl(title, true);
 		if (replaceColon()) {
 			encodedtopic = encodedtopic.replaceAll(":", "/");
 		}
@@ -401,9 +405,9 @@ public abstract class AbstractTracModel implements IWikiModel {
 				}
 				addLink(rawTopicName);
 				if (-1 != hashIndex) {
-					appendInternalLink(rawTopicName, hash, viewableLinkDescription, null);
+					appendInternalLink(rawTopicName, hash, viewableLinkDescription, null, true);
 				} else {
-					appendInternalLink(rawTopicName, null, viewableLinkDescription, null);
+					appendInternalLink(rawTopicName, null, viewableLinkDescription, null, true);
 				}
 			}
 		}
@@ -428,7 +432,7 @@ public abstract class AbstractTracModel implements IWikiModel {
 							viewableLinkDescription = relationValue;
 						}
 						if (viewableLinkDescription.trim().length() > 0) {
-							appendInternalLink(relationValue, null, viewableLinkDescription, null);
+							appendInternalLink(relationValue, null, viewableLinkDescription, null, true);
 						}
 						return true;
 					}
@@ -638,6 +642,10 @@ public abstract class AbstractTracModel implements IWikiModel {
 		}
 	}
 
+	public boolean isCamelCaseEnabled() {
+		return false;
+	}
+	
 	public boolean isCategoryNamespace(String namespace) {
 		for (int i = 0; i < fCategoryNamespaces.size(); i++) {
 			if (namespace.equalsIgnoreCase(fCategoryNamespaces.get(i))) {

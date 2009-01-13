@@ -92,7 +92,7 @@ public class WikiModel extends AbstractWikiModel {
 	public void appendInternalLink(String topic, String hashSection, String topicDescription, String cssClass, boolean parseRecursive) {
 		String hrefLink;
 		if (topic.length() > 0) {
-			String encodedtopic = Encoder.encodeTitleUrl(topic);
+			String encodedtopic = encodeTitleToUrl(topic, true);
 			if (replaceColon()) {
 				encodedtopic = encodedtopic.replaceAll(":", "/");
 			}

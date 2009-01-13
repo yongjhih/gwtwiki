@@ -833,7 +833,7 @@ public class TracParser extends AbstractParser {
 					createContentToken(fWhiteStart, fWhiteStartPosition, fCurrentPosition - startPosition + 1);
 					fWhiteStart = false;
 					String camelCaseStr = camelCasePageName.toString();
-					fWikiModel.appendInternalLink(camelCaseStr, null, camelCaseStr, null);
+					fWikiModel.appendInternalLink(camelCaseStr, null, camelCaseStr, null, true);
 
 					return true;
 				}
@@ -1343,7 +1343,7 @@ public class TracParser extends AbstractParser {
 					urlString = urlString.substring(urlStart, urlEnd);
 					alias = urlString;
 				}
-				fWikiModel.appendInternalLink(urlString, null, alias, null);
+				fWikiModel.appendInternalLink(urlString, null, alias, null, true);
 				return true;
 			}
 			if (lowerCaseName.startsWith("\"") && lowerCaseName.length() > 1) {
@@ -1358,7 +1358,7 @@ public class TracParser extends AbstractParser {
 					urlEnd = index;
 				}
 				urlString = urlString.substring(urlStart, urlEnd);
-				fWikiModel.appendInternalLink(urlString, null, urlString, null);
+				fWikiModel.appendInternalLink(urlString, null, urlString, null, true);
 				return true;
 			}
 			boolean prefixCheck = lowerCaseName.startsWith("http://");
