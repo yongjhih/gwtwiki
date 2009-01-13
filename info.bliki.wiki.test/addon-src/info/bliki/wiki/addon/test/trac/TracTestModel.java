@@ -47,7 +47,7 @@ public class TracTestModel extends TracModel {
 		if (result != null) {
 			return result;
 		}
-		String name = Encoder.encodeTitleUrl(articleName);
+		String name = encodeTitleToUrl(articleName, true);
 		return null;
 	}
 

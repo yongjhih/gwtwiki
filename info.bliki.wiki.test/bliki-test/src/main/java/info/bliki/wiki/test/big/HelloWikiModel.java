@@ -35,7 +35,7 @@ public class HelloWikiModel extends WikiModel {
 			return result;
 		}
 		if (namespace.equals("Template")) {
-			String name = Encoder.encodeTitleUrl(templateName);
+			String name = encodeTitleToUrl(templateName, true);
 			// important: the Template name starts with an uppercase character!
 			if (name.equals("Reflist")) {
 				return REFLIST_TEXT;

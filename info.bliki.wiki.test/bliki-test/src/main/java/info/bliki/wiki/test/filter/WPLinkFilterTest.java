@@ -63,7 +63,7 @@ public class WPLinkFilterTest extends FilterTestSupport {
 	public void testCategory02() {
 		assertEquals("", wikiModel.render("[[Category:Rock and Roll Hall of Fame inductees|Beatles, The]]"));
 		Map<String, String> map = wikiModel.getCategories();
-//		assertTrue(map.containsKey("Rock and Roll Hall of Fame inductees"));
+		// assertTrue(map.containsKey("Rock and Roll Hall of Fame inductees"));
 		assertTrue(map.containsValue("Beatles, The"));
 	}
 
@@ -116,7 +116,7 @@ public class WPLinkFilterTest extends FilterTestSupport {
 	public void testLink13() {
 		assertEquals("\n" + "<p>test [[lets start a <a href=\"http://www.bliki.info/wiki/Nested\" id=\"w\">nested</a> link]] test</p>",
 				wikiModel.render("test [[lets start a [[nested]] link]] test"));
-		Set set = wikiModel.getLinks();
+		Set<String> set = wikiModel.getLinks();
 		assertTrue(set.contains("nested"));
 	}
 
@@ -129,11 +129,9 @@ public class WPLinkFilterTest extends FilterTestSupport {
 		assertEquals("\n" + "<p><a href=\"#Section_Link\" id=\"w\">A Section Link</a></p>", wikiModel
 				.render("[[#Section Link|A Section Link]]"));
 	}
-	
+
 	public void testSectionLink02() {
-		assertEquals("\n" + 
-				"<p><a href=\"#Section%C3%A4%C3%B6%C3%BC\" id=\"w\" /></p>", wikiModel
-				.render("[[#Sectionäöü]]"));
+		assertEquals("\n" + "<p><a href=\"#Section%C3%A4%C3%B6%C3%BC\" id=\"w\" /></p>", wikiModel.render("[[#Sectionäöü]]"));
 	}
 
 	public void testRedirect01() {

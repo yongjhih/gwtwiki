@@ -23,7 +23,7 @@ public class LaTeXTestModel extends WikiModel {
 		if (result != null) {
 			return result;
 		}
-		String name = Encoder.encodeTitleUrl(articleName);
+		String name = encodeTitleToUrl(articleName, true);
 		if (name.equals("Test")) {
 			return "a) First: {{{1}}} Second: {{{2}}}";
 		} else if (name.equals("Templ1")) {

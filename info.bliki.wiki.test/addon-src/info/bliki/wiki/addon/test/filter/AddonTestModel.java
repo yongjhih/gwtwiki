@@ -64,7 +64,7 @@ public class AddonTestModel extends WikiModel {
 		if (result != null) {
 			return result;
 		}
-		String name = Encoder.encodeTitleUrl(articleName);
+		String name = encodeTitleToUrl(articleName, true);
 		if (name.equals("Reflist")) {
 			return REFLIST_TEXT;
 		} else if (name.equals("Cite_web")) {

@@ -11,7 +11,6 @@ import junit.framework.TestCase;
  * Support class for defining JUnit FilterTests.
  * 
  */
-
 public class FilterTestSupport extends TestCase {
 	public static final String WINDOWS_NEWLINE = "\r\n";
 

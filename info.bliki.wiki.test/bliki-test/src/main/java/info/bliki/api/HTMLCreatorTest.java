@@ -72,6 +72,6 @@ public class HTMLCreatorTest {
 	}
 	
 	public static void main(String[] args) {
-		testCreator004();
+		testCreator001();
 	}
 }

@@ -453,7 +453,7 @@ public class WikiTestModel extends WikiModel {
 		if (result != null) {
 			return result;
 		}
-		String name = Encoder.encodeTitleUrl(articleName);
+		String name = encodeTitleToUrl(articleName, true);
 		if (isTemplateNamespace(namespace)) {
 			if (MagicWord.isMagicWord(articleName)) {
 				return MagicWord.processMagicWord(articleName, this);
