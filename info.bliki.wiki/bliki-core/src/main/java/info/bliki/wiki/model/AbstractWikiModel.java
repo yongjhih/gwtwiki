@@ -19,6 +19,8 @@ import info.bliki.wiki.tags.WPATag;
 import info.bliki.wiki.tags.code.SourceCodeFormatter;
 import info.bliki.wiki.tags.util.TagStack;
 import info.bliki.wiki.template.ITemplateFunction;
+import info.bliki.wiki.template.extension.AttributeList;
+import info.bliki.wiki.template.extension.AttributeRenderer;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -32,7 +34,7 @@ import java.util.ResourceBundle;
  * Standard model implementation for the Wikipedia syntax
  * 
  */
-public abstract class AbstractWikiModel implements IWikiModel {
+public abstract class AbstractWikiModel implements IWikiModel, IContext {
 	private static int fNextNumberCounter = 0;
 
 	protected final String[] fCategoryNamespaces = { "Category", "Category" };
@@ -64,6 +66,27 @@ public abstract class AbstractWikiModel implements IWikiModel {
 	protected TableOfContentTag fTableOfContentTag = null;
 
 	protected String fPageTitle = "PAGENAME";
+
+	/**
+	 * Map an attribute name to its value(s). These values are set by outside code
+	 * via st.setAttribute(name, value). StringTemplate is like self in that a
+	 * template is both the "class def" and "instance". When you create a
+	 * StringTemplate or setTemplate, the text is broken up into chunks (i.e.,
+	 * compiled down into a series of chunks that can be evaluated later). You can
+	 * have multiple
+	 */
+	protected Map attributes;
+
+	/**
+	 * A Map<Class,Object> that allows people to register a renderer for a
+	 * particular kind of object to be displayed in this template. This overrides
+	 * any renderer set for this template's group.
+	 * 
+	 * Most of the time this map is not used because the StringTemplateGroup has
+	 * the general renderer map for all templates in that group. Sometimes though
+	 * you want to override the group's renderers.
+	 */
+	protected Map attributeRenderers;
 
 	public AbstractWikiModel() {
 		this(Configuration.DEFAULT_CONFIGURATION);
@@ -267,11 +290,11 @@ public abstract class AbstractWikiModel implements IWikiModel {
 		popNode(); // div
 
 	}
-	
+
 	public String encodeTitleToUrl(String wikiTitle, boolean firstCharacterAsUpperCase) {
 		return Encoder.encodeTitleToUrl(wikiTitle, firstCharacterAsUpperCase);
 	}
-	
+
 	public void appendInternalLink(String topic, String hashSection, String topicDescription, String cssClass, boolean parseRecursive) {
 		WPATag aTagNode = new WPATag();
 		// append(aTagNode);
@@ -749,7 +772,7 @@ public abstract class AbstractWikiModel implements IWikiModel {
 		}
 		return buf.toString();
 	}
-	
+
 	public TagToken peekNode() {
 		return fTagStack.peek();
 	}
@@ -848,5 +871,228 @@ public abstract class AbstractWikiModel implements IWikiModel {
 
 	public String getPageName() {
 		return fPageTitle;
+	}
+
+	/**
+	 * Resolve an attribute reference. It can be in four possible places:
+	 * 
+	 * 1. the attribute list for the current template 2. if self is an embedded
+	 * template, somebody invoked us possibly with arguments--check the argument
+	 * context 3. if self is an embedded template, the attribute list for the
+	 * enclosing instance (recursively up the enclosing instance chain) 4. if
+	 * nothing is found in the enclosing instance chain, then it might be a map
+	 * defined in the group or the its supergroup etc...
+	 * 
+	 * Attribute references are checked for validity. If an attribute has a value,
+	 * its validity was checked before template rendering. If the attribute has no
+	 * value, then we must check to ensure it is a valid reference. Somebody could
+	 * reference any random value like $xyz$; formal arg checks before rendering
+	 * cannot detect this--only the ref can initiate a validity check. So, if no
+	 * value, walk up the enclosed template tree again, this time checking formal
+	 * parameters not attributes Map. The formal definition must exist even if no
+	 * value.
+	 * 
+	 * To avoid infinite recursion in toString(), we have another condition to
+	 * check regarding attribute values. If your template has a formal argument,
+	 * foo, then foo will hide any value available from "above" in order to
+	 * prevent infinite recursion.
+	 * 
+	 * This method is not static so people can override functionality.
+	 */
+	public Object getAttribute(String attribute) { // StringTemplate self, String
+		// attribute) {
+		//System.out.println("### get("+self.getEnclosingInstanceStackString()+", "+
+		// attribute+")");
+		// System.out.println("attributes="+(self.attributes!=null?self.attributes.
+		// keySet().toString():"none"));
+		// if ( self==null ) {
+		// return null;
+		// }
+		//
+		// if ( lintMode ) {
+		// self.trackAttributeReference(attribute);
+		// }
+
+		// is it here?
+		Object o = null;
+		if (attributes != null) {
+			o = attributes.get(attribute);
+		}
+
+		// // nope, check argument context in case embedded
+		// if ( o==null ) {
+		// Map argContext = self.getArgumentContext();
+		// if ( argContext!=null ) {
+		// o = argContext.get(attribute);
+		// }
+		// }
+		//
+		// if ( o==null &&
+		// !self.passThroughAttributes &&
+		// self.getFormalArgument(attribute)!=null )
+		// {
+		// // if you've defined attribute as formal arg for this
+		// // template and it has no value, do not look up the
+		// // enclosing dynamic scopes. This avoids potential infinite
+		// // recursion.
+		// return null;
+		// }
+		//
+		// // not locally defined, check enclosingInstance if embedded
+		// if ( o==null && self.enclosingInstance!=null ) {
+		// /*
+		// System.out.println("looking for "+getName()+"."+attribute+" in super="+
+		// enclosingInstance.getName());
+		// */
+		// Object valueFromEnclosing = get(self.enclosingInstance, attribute);
+		// if ( valueFromEnclosing==null ) {
+		// checkNullAttributeAgainstFormalArguments(self, attribute);
+		// }
+		// o = valueFromEnclosing;
+		// }
+		//
+		// // not found and no enclosing instance to look at
+		// else if ( o==null && self.enclosingInstance==null ) {
+		// // It might be a map in the group or supergroup...
+		// o = self.group.getMap(attribute);
+		// }
+
+		return o;
+	}
+
+	/**
+	 * Map a value to a named attribute. Throw NoSuchElementException if the named
+	 * attribute is not formally defined in self's specific template and a formal
+	 * argument list exists.
+	 */
+	protected void rawSetAttribute(Map attributes, String name, Object value) {
+		// if ( formalArguments!=FormalArgument.UNKNOWN &&
+		// getFormalArgument(name)==null )
+		// {
+		// // a normal call to setAttribute with unknown attribute
+		// throw new NoSuchElementException("no such attribute: "+name+
+		// " in template context "+
+		// getEnclosingInstanceStackString());
+		// }
+		if (value == null) {
+			return;
+		}
+		attributes.put(name, value);
+	}
+
+	/**
+	 * Set an attribute for this template. If you set the same attribute more than
+	 * once, you get a multi-valued attribute. If you send in a StringTemplate
+	 * object as a value, it's enclosing instance (where it will inherit values
+	 * from) is set to 'this'. This would be the normal case, though you can set
+	 * it back to null after this call if you want. If you send in a List plus
+	 * other values to the same attribute, they all get flattened into one List of
+	 * values. This will be a new list object so that incoming objects are not
+	 * altered. If you send in an array, it is converted to an ArrayIterator.
+	 */
+	public void setAttribute(String name, Object value) {
+		if (value == null || name == null) {
+			return;
+		}
+		if (name.indexOf('.') >= 0) {
+			throw new IllegalArgumentException("cannot have '.' in attribute names");
+		}
+		if (attributes == null) {
+			attributes = new HashMap();
+		}
+
+		// if (value instanceof StringTemplate) {
+		// ((StringTemplate) value).setEnclosingInstance(this);
+		// } else {
+		// // convert value if array
+		// value = ASTExpr.convertArrayToList(value);
+		// }
+
+		// convert plain collections
+		// get exactly in this scope (no enclosing)
+
+		// it will be a multi-value attribute
+		// System.out.println("exists: "+name+"="+o);
+		AttributeList v = null;
+
+		Object o = this.attributes.get(name);
+		if (o == null) { // new attribute
+			if (value instanceof List) {
+				v = new AttributeList(((List) value).size());
+				// flatten incoming list into existing
+				v.addAll((List) value);
+				rawSetAttribute(this.attributes, name, v);
+				return;
+			}
+			rawSetAttribute(this.attributes, name, value);
+			return;
+		}
+
+		if (o.getClass() == AttributeList.class) { // already a list made by ST
+			v = (AttributeList) o;
+		} else if (o instanceof List) { // existing attribute is non-ST List
+			// must copy to an ST-managed list before adding new attribute
+			List listAttr = (List) o;
+			v = new AttributeList(listAttr.size());
+			v.addAll(listAttr);
+			rawSetAttribute(this.attributes, name, v); // replace attribute w/list
+		} else {
+			// non-list second attribute, must convert existing to ArrayList
+			v = new AttributeList(); // make list to hold multiple values
+			// make it point to list now
+			rawSetAttribute(this.attributes, name, v); // replace attribute w/list
+			v.add(o); // add previous single-valued attribute
+		}
+		if (value instanceof List) {
+			// flatten incoming list into existing
+			if (v != value) { // avoid weird cyclic add
+				v.addAll((List) value);
+			}
+		} else {
+			v.add(value);
+		}
+	}
+
+	/**
+	 * What renderer is registered for this attributeClassType for this template.
+	 * If not found, the template's group is queried.
+	 */
+	public AttributeRenderer getAttributeRenderer(Class attributeClassType) {
+		AttributeRenderer renderer = null;
+		if (attributeRenderers != null) {
+			renderer = (AttributeRenderer) attributeRenderers.get(attributeClassType);
+		}
+		if (renderer != null) {
+			// found it!
+			return renderer;
+		}
+
+		// we have no renderer overrides for the template or none for class arg
+		// check parent template if we are embedded
+		// if ( enclosingInstance!=null ) {
+		// return enclosingInstance.getAttributeRenderer(attributeClassType);
+		// }
+		// // else check group
+		// return group.getAttributeRenderer(attributeClassType);
+		return null;
+	}
+
+	/**
+	 * Specify a complete map of what object classes should map to which renderer
+	 * objects.
+	 */
+	public void setAttributeRenderers(Map renderers) {
+		this.attributeRenderers = renderers;
+	}
+
+	/**
+	 * Register a renderer for all objects of a particular type. This overrides
+	 * any renderer set in the group for this class type.
+	 */
+	public void registerRenderer(Class attributeClassType, AttributeRenderer renderer) {
+		if (attributeRenderers == null) {
+			attributeRenderers = new HashMap();
+		}
+		attributeRenderers.put(attributeClassType, renderer);
 	}
 }

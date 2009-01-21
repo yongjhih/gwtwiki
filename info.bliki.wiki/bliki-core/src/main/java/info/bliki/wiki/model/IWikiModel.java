@@ -7,6 +7,7 @@ import info.bliki.wiki.filter.ITextConverter;
 import info.bliki.wiki.tags.TableOfContentTag;
 import info.bliki.wiki.tags.util.TagStack;
 import info.bliki.wiki.template.ITemplateFunction;
+import info.bliki.wiki.template.extension.AttributeRenderer;
 
 import java.io.IOException;
 import java.util.List;
