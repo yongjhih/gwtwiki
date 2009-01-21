@@ -1,8 +1,12 @@
 package info.bliki.wiki.template;
 
-import info.bliki.wiki.filter.Encoder;
+import info.bliki.wiki.model.Configuration;
 import info.bliki.wiki.model.WikiModel;
+import info.bliki.wiki.template.extension.AttributeRenderer;
+import info.bliki.wiki.template.extension.DollarContext;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Map;
 
 /**
@@ -13,6 +17,27 @@ import java.util.Map;
 public class ParserFunctionModel extends WikiModel {
 	final static String CONCAT = "{{{1|}}}{{{2|}}}{{{3|}}}{{{4|}}}{{{5|}}}{{{6|}}}{{{7|}}}{{{8|}}}{{{9|}}}{{{10|}}}";
 
+	public class DateRenderer implements AttributeRenderer {
+		public String toString(Object o) {
+			SimpleDateFormat f = new SimpleDateFormat ("yyyy.MM.dd");
+			return f.format(((Calendar)o).getTime());
+		}
+		public String toString(Object o, String formatString) {
+			return toString(o);
+		}
+	}
+	
+	public class UppercaseRenderer implements AttributeRenderer {
+		public String toString(Object o) {
+			return (String)o;
+		}
+		public String toString(Object o, String formatString) {
+			if ( formatString.equals("upper") ) {
+				return ((String)o).toUpperCase();
+			}
+			return toString(o);
+		}
+	}
 	/**
 	 * Add German namespaces to the wiki model
 	 * 
@@ -21,6 +46,7 @@ public class ParserFunctionModel extends WikiModel {
 	 */
 	public ParserFunctionModel(String imageBaseURL, String linkBaseURL) {
 		super(imageBaseURL, linkBaseURL);
+		Configuration.DEFAULT_CONFIGURATION.addTemplateFunction("#$", DollarContext.CONST);
 	}
 
 	/**

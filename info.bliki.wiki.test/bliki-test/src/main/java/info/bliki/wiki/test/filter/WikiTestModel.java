@@ -1,10 +1,11 @@
 package info.bliki.wiki.test.filter;
 
 import info.bliki.htmlcleaner.TagNode;
-import info.bliki.wiki.filter.Encoder;
 import info.bliki.wiki.filter.MagicWord;
 import info.bliki.wiki.model.Configuration;
 import info.bliki.wiki.model.WikiModel;
+import info.bliki.wiki.template.extension.AttributeRenderer;
+import info.bliki.wiki.template.extension.DollarContext;
 
 import java.util.Locale;
 import java.util.Map;
@@ -425,7 +426,7 @@ public class WikiTestModel extends WikiModel {
 
 	static {
 		TagNode.addAllowedAttribute("style");
-	}
+	} 
 
 	public WikiTestModel(String imageBaseURL, String linkBaseURL) {
 		this(Locale.ENGLISH, imageBaseURL, linkBaseURL);

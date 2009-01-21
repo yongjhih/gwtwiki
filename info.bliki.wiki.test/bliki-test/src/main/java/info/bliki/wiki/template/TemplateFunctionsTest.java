@@ -1,5 +1,9 @@
 package info.bliki.wiki.template;
 
+import java.util.ArrayList;
+import java.util.GregorianCalendar;
+import java.util.List;
+
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
@@ -58,5 +62,42 @@ public class TemplateFunctionsTest extends TestCase {
 		assertEquals("{{{x}}}", wikiModel.parseTemplates("{{concat| {|{|{x}|}|} }}", false));
 		
 		assertEquals("1", wikiModel.parseTemplates("{{ #ifeq: {{{x}}} | {{concat| {|{|{x}|}|} }} | 1 | 0 }}", false));
+	}
+	
+	public void testRendererForST() throws Exception {
+		wikiModel.setAttribute("created",
+						new GregorianCalendar(2005, 07-1, 05));
+		wikiModel.registerRenderer(GregorianCalendar.class, wikiModel.new DateRenderer());
+		String expecting = "date: 2005.07.05";
+		assertEquals(expecting, wikiModel.parseTemplates("date: {{#$:created}}"));
+	}
+	
+	public void testRendererWithFormatAndList() throws Exception {
+		wikiModel.setAttribute("names", "ter");
+		wikiModel.setAttribute("names", "tom");
+		wikiModel.setAttribute("names", "sriram");
+		wikiModel.registerRenderer(String.class, wikiModel.new UppercaseRenderer());
+		String expecting = "The names: TERTOMSRIRAM";
+		assertEquals(expecting, wikiModel.parseTemplates("The names: {{#$:names|upper}}"));
+	}
+	
+	public void testRendererWithFormatAndSeparator() throws Exception {
+		wikiModel.setAttribute("names", "ter");
+		wikiModel.setAttribute("names", "tom");
+		wikiModel.setAttribute("names", "sriram");
+		wikiModel.registerRenderer(String.class, wikiModel.new UppercaseRenderer());
+		String expecting = "The names: TER and TOM and SRIRAM";
+		assertEquals(expecting, wikiModel.parseTemplates("The names: {{#$:names|upper|' and '}}"));
+	}
+
+	public void testRendererWithFormatAndSeparatorAndNull() throws Exception {
+		List<String> names = new ArrayList<String>();
+		names.add("ter");
+		names.add(null);
+		names.add("sriram");
+		wikiModel.setAttribute("names", names);
+		wikiModel.registerRenderer(String.class, wikiModel.new UppercaseRenderer());
+		String expecting = "The names: TER and N/A and SRIRAM";
+		assertEquals(expecting, wikiModel.parseTemplates("The names: {{#$:names|upper|' and '|n/a}}"));
 	}
 }
