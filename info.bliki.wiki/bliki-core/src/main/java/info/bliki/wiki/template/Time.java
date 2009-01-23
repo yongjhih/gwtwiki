@@ -9,9 +9,12 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * A template parser function for <code>{{ #time: ... }}</code> syntax
+ * A template parser function for <code>{{ #time: ... }}</code> syntax.
  * 
  * NOT COMPLETE YET!!!
+ * 
+ * See <a href="http://www.mediawiki.org/wiki/Help:Extension:ParserFunctions">
+ * Mediwiki's Help:Extension:ParserFunctions</a>
  * 
  */
 public class Time extends AbstractTemplateFunction {

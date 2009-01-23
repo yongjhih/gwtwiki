@@ -8,7 +8,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * A template parser function for <code>{{ #ifeq: ... }}</code> syntax
+ * A template parser function for <code>{{ #ifeq: ... }}</code> syntax. See <a
+ * href
+ * ="http://www.mediawiki.org/wiki/Help:Extension:ParserFunctions">Mediwiki's
+ * Help:Extension:ParserFunctions</a>
  * 
  */
 public class Ifeq extends AbstractTemplateFunction {

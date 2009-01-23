@@ -8,7 +8,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * A template parser function for <code>{{ #if: ... }}</code> syntax
+ * A template parser function for <code>{{ #if: ... }}</code> syntax. See <a
+ * href
+ * ="http://www.mediawiki.org/wiki/Help:Extension:ParserFunctions">Mediwiki's
+ * Help:Extension:ParserFunctions</a>
  * 
  */
 public class If extends AbstractTemplateFunction {
@@ -21,7 +24,7 @@ public class If extends AbstractTemplateFunction {
 	public String parseFunction(char[] src, int beginIndex, int endIndex, IWikiModel model) throws IOException {
 		List<String> list = new ArrayList<String>();
 		WikipediaScanner.splitByPipe(src, beginIndex, endIndex, list);
-		if (list.size() > 1) {		
+		if (list.size() > 1) {
 			String ifCondition = parse(list.get(0), model);
 			if (ifCondition.length() > 0) {
 				// &lt;then text&gt;
