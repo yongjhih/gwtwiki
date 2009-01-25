@@ -27,7 +27,7 @@ import com.google.gwt.user.client.ui.Widget;
 
 /**
  */
-public class Wiki implements EntryPoint { 
+public class Wiki implements EntryPoint {
 
 	private TabPanel fTabs = new TabPanel();
 
@@ -43,7 +43,7 @@ public class Wiki implements EntryPoint {
 
 	public static final HTML ANSWER_HTML = new HTML();
 
-	private final Button fPreviewButton = new Button("(P)review");
+	 private final Button fPreviewButton = new Button("(P)review");
 
 	private final Button fSendArticle = new Button("(S)end wiki article for review");
 
@@ -82,6 +82,7 @@ public class Wiki implements EntryPoint {
 				if (str.length() > 0) {
 					String result = fWikiFilter.filter(str, fWikiSettings);
 					PREVIEW_HTML.setHTML(result);
+					renderCode();
 				}
 				WIKI_EDITOR_BODY.setFocus(true);
 			}
@@ -171,5 +172,9 @@ public class Wiki implements EntryPoint {
 
 			}
 		});
-	}
+	} 
+
+	public static native void renderCode() /*-{
+	  $wnd.dp.SyntaxHighlighter.HighlightAll('code');
+	 }-*/;
 }

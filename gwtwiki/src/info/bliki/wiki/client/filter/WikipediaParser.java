@@ -1186,6 +1186,25 @@ public class WikipediaParser extends WikipediaScanner {
 									}
 								}
 								break;
+							case 's': // source
+								String sourceString = fStringSource.substring(fCurrentPosition - 1, fCurrentPosition + 7);
+
+								if (sourceString.equals("<source>")) {
+									fCurrentPosition += 7;
+									if (readUntilString("</source>")) {
+										String sourceContent = StringUtil
+												.str(fSource, htmlStartPosition + 7, fCurrentPosition - htmlStartPosition - 16);
+										if (sourceContent != null) {
+											copyWhite(fWhiteStart, fWhiteStartPosition, fCurrentPosition - htmlStartPosition + 1);
+											// <textarea> looks better if JavaScript is enabled, <pre> looks better if JavaScript is disabled
+											fResultBuffer.append("<pre name=\"code\" class=\"java\">");
+											copyMathLTGT(sourceContent);
+											fResultBuffer.append("</pre>");
+											continue;
+										}
+									}
+								}
+								break;
 							}
 						} catch (IndexOutOfBoundsException e) {
 							// do nothing
