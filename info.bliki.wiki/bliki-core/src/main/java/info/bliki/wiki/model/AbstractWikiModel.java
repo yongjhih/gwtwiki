@@ -12,10 +12,12 @@ import info.bliki.wiki.filter.HTMLConverter;
 import info.bliki.wiki.filter.ITextConverter;
 import info.bliki.wiki.filter.MagicWord;
 import info.bliki.wiki.filter.PDFConverter;
+import info.bliki.wiki.filter.StringPair;
 import info.bliki.wiki.filter.TemplateParser;
 import info.bliki.wiki.filter.WikipediaParser;
 import info.bliki.wiki.tags.TableOfContentTag;
 import info.bliki.wiki.tags.WPATag;
+import info.bliki.wiki.tags.WPTag;
 import info.bliki.wiki.tags.code.SourceCodeFormatter;
 import info.bliki.wiki.tags.util.TagStack;
 import info.bliki.wiki.template.ITemplateFunction;
@@ -25,6 +27,7 @@ import info.bliki.wiki.template.extension.AttributeRenderer;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -63,10 +66,24 @@ public abstract class AbstractWikiModel implements IWikiModel, IContext {
 
 	protected String fRedirectLink = null;
 
-	protected TableOfContentTag fTableOfContentTag = null;
-
 	protected String fPageTitle = "PAGENAME";
 
+	protected int fSectionCounter;
+
+	/**
+	 * A tag that manages the &quot;table of content&quot;
+	 * 
+	 */
+	private TableOfContentTag fTableOfContentTag = null;
+	/**
+	 * &quot;table of content&quot;
+	 * 
+	 */
+	private List<Object> fTableOfContent = null;
+	/**
+	 * Contains all anchor strings to create unique anchors
+	 */
+	private HashSet<String> fToCSet;
 	/**
 	 * Map an attribute name to its value(s). These values are set by outside code
 	 * via st.setAttribute(name, value). StringTemplate is like self in that a
@@ -632,31 +649,31 @@ public abstract class AbstractWikiModel implements IWikiModel, IContext {
 		return null;
 	}
 
-	public TableOfContentTag getTableOfContentTag(boolean isTOCIdentifier) {
-		if (fTableOfContentTag == null) {
-			TableOfContentTag tableOfContentTag = new TableOfContentTag("div");
-			tableOfContentTag.addAttribute("id", "tableofcontent", true);
-			tableOfContentTag.setShowToC(false);
-			tableOfContentTag.setTOCIdentifier(isTOCIdentifier);
-			fTableOfContentTag = tableOfContentTag;
-		} else {
-			if (isTOCIdentifier) {
-				// try {
-				TableOfContentTag tableOfContentTag = (TableOfContentTag) fTableOfContentTag.clone();
-				fTableOfContentTag.setShowToC(false);
-				tableOfContentTag.setShowToC(true);
-				tableOfContentTag.setTOCIdentifier(isTOCIdentifier);
-				fTableOfContentTag = tableOfContentTag;
-				// } catch (CloneNotSupportedException e) {
-				// e.printStackTrace();
-				// }
-			} else {
-				return fTableOfContentTag;
-			}
-		}
-		this.append(fTableOfContentTag);
-		return fTableOfContentTag;
-	}
+//	public TableOfContentTag getTableOfContentTag(boolean isTOCIdentifier) {
+//		if (fTableOfContentTag == null) {
+//			TableOfContentTag tableOfContentTag = new TableOfContentTag("div");
+//			tableOfContentTag.addAttribute("id", "tableofcontent", true);
+//			tableOfContentTag.setShowToC(false);
+//			tableOfContentTag.setTOCIdentifier(isTOCIdentifier);
+//			fTableOfContentTag = tableOfContentTag;
+//		} else {
+//			if (isTOCIdentifier) {
+//				// try {
+//				TableOfContentTag tableOfContentTag = (TableOfContentTag) fTableOfContentTag.clone();
+//				fTableOfContentTag.setShowToC(false);
+//				tableOfContentTag.setShowToC(true);
+//				tableOfContentTag.setTOCIdentifier(isTOCIdentifier);
+//				fTableOfContentTag = tableOfContentTag;
+//				// } catch (CloneNotSupportedException e) {
+//				// e.printStackTrace();
+//				// }
+//			} else {
+//				return fTableOfContentTag;
+//			}
+//		}
+//		this.append(fTableOfContentTag);
+//		return fTableOfContentTag;
+//	}
 
 	public ITemplateFunction getTemplateFunction(String name) {
 		return getTemplateMap().get(name);
@@ -685,10 +702,13 @@ public abstract class AbstractWikiModel implements IWikiModel, IContext {
 	protected void initialize() {
 		if (!fInitialized) {
 			fWikiListener = null;
+			fToCSet = null;
+			fTableOfContent = null;
 			fTagStack = new TagStack();
 			fReferences = null;
 			fReferenceNames = null;
 			fRecursionLevel = 0;
+			fSectionCounter = 0;
 			fReplaceColon = false;
 			fInitialized = true;
 		}
@@ -1094,5 +1114,108 @@ public abstract class AbstractWikiModel implements IWikiModel, IContext {
 			attributeRenderers = new HashMap();
 		}
 		attributeRenderers.put(attributeClassType, renderer);
+	}
+
+	public TagNode appendToCAnchor(String anchor) {
+		TagNode aTagNode = new TagNode("a");
+		aTagNode.addAttribute("name", anchor, true);
+		aTagNode.addAttribute("id", anchor, true);
+		return aTagNode;
+	}
+
+	/**
+	 * handle head for table of content
+	 * 
+	 * @param rawHead
+	 * @param headLevel
+	 */
+	public ITableOfContent appendHead(String rawHead, int headLevel, boolean noToC, int headCounter) {
+		TagStack localStack = WikipediaParser.parseRecursive(rawHead.trim(), this, true, true);
+
+		WPTag headTagNode = new WPTag("h" + headLevel);
+		headTagNode.addChildren(localStack.getNodeList());
+		String tocHead = headTagNode.getBodyString();
+		String anchor = Encoder.encodeUrl(tocHead);
+		createTableOfContent(false);
+		if (!noToC && (headCounter > 3)) {
+			fTableOfContentTag.setShowToC(true);
+		}
+		if (fToCSet.contains(anchor)) {
+			String newAnchor = anchor;
+			for (int i = 2; i < Integer.MAX_VALUE; i++) {
+				newAnchor = anchor + '_' + Integer.toString(i);
+				if (!fToCSet.contains(newAnchor)) {
+					break;
+				}
+			}
+			anchor = newAnchor;
+		}
+		addToTableOfContent(fTableOfContent, tocHead, anchor, headLevel);
+		if (getRecursionLevel() == 1) {
+			buildEditLinkUrl(fSectionCounter++);
+		}
+		TagNode aTagNode = new TagNode("a");
+		aTagNode.addAttribute("name", anchor, true);
+		aTagNode.addAttribute("id", anchor, true);
+		append(aTagNode);
+
+		append(headTagNode);
+		return fTableOfContentTag;
+	}
+
+	private void addToTableOfContent(List<Object> toc, String head, String anchor, int headLevel) {
+		if (headLevel == 1) {
+			toc.add(new StringPair(head, anchor));
+		} else {
+			if (toc.size() > 0) {
+				if (toc.get(toc.size() - 1) instanceof List) {
+					addToTableOfContent((List<Object>) toc.get(toc.size() - 1), head, anchor, --headLevel);
+					return;
+				}
+			}
+			ArrayList<Object> list = new ArrayList<Object>();
+			toc.add(list);
+			addToTableOfContent(list, head, anchor, --headLevel);
+		}
+	}
+
+	/**
+	 * 
+	 * @param isTOCIdentifier
+	 *          <code>true</code> if the __TOC__ keyword was parsed
+	 */
+	public ITableOfContent createTableOfContent(boolean isTOCIdentifier) {
+		if (fTableOfContentTag == null) {
+			TableOfContentTag tableOfContentTag = new TableOfContentTag("div");
+			tableOfContentTag.addAttribute("id", "tableofcontent", true);
+			tableOfContentTag.setShowToC(false);
+			tableOfContentTag.setTOCIdentifier(isTOCIdentifier);
+			fTableOfContentTag = tableOfContentTag;
+			this.append(fTableOfContentTag);
+		} else {
+			if (isTOCIdentifier) {
+				// try {
+				TableOfContentTag tableOfContentTag = (TableOfContentTag) fTableOfContentTag.clone();
+				fTableOfContentTag.setShowToC(false);
+				tableOfContentTag.setShowToC(true);
+				tableOfContentTag.setTOCIdentifier(isTOCIdentifier);
+				fTableOfContentTag = tableOfContentTag;
+				// } catch (CloneNotSupportedException e) {
+				// e.printStackTrace();
+				// }
+				this.append(fTableOfContentTag);
+			} else {
+			}
+		}
+		
+		if (fTableOfContentTag != null) {
+			if (fTableOfContent == null) {
+				fTableOfContent = fTableOfContentTag.getTableOfContent();
+			}
+		}
+		if (fToCSet == null) {
+			fToCSet = new HashSet<String>();
+		}
+		return fTableOfContentTag;
 	}
 }

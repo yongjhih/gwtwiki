@@ -4,10 +4,8 @@ import info.bliki.htmlcleaner.BaseToken;
 import info.bliki.htmlcleaner.TagToken;
 import info.bliki.wiki.filter.AbstractParser;
 import info.bliki.wiki.filter.ITextConverter;
-import info.bliki.wiki.tags.TableOfContentTag;
 import info.bliki.wiki.tags.util.TagStack;
 import info.bliki.wiki.template.ITemplateFunction;
-import info.bliki.wiki.template.extension.AttributeRenderer;
 
 import java.io.IOException;
 import java.util.List;
@@ -122,6 +120,22 @@ public interface IWikiModel extends IConfiguration {
 	 *          link was parsed
 	 */
 	public void appendExternalLink(String link, String linkName, boolean withoutSquareBrackets);
+
+	/**
+	 * Add a single wiki head (i.e. ==...==, ===...===, ====...====,...) to the
+	 * table of content
+	 * 
+	 * @param rawHead
+	 *          the unparsed header string
+	 * @param headLevel
+	 *          level of header (i.e. h1, h2, h3, h4, 5h,..)
+	 * @param noToc
+	 *          don't show the &quot;table of content&quot;
+	 * @param headCounter
+	 *          the total number of headers parsed
+	 * @return the &quot;table of content&quot; tag
+	 */
+	public ITableOfContent appendHead(String rawHead, int headLevel, boolean noToC, int headCounter);
 
 	/**
 	 * Append this internal wiki image link
@@ -256,12 +270,21 @@ public interface IWikiModel extends IConfiguration {
 	public void buildEditLinkUrl(int section);
 
 	/**
-	 * Create a new prasre instance
+	 * Create a new parser instance
 	 * 
 	 * @param rawWikitext
 	 * @return
 	 */
 	public AbstractParser createNewInstance(String rawWikitext);
+
+	/**
+	 * Create the &quot;table of content&quot; placeholder
+	 * 
+	 * @param isTOCIdentifier
+	 *          <code>true</code> if the __TOC__ keyword was parsed
+	 * @return the &quot;table of content&quot; tag
+	 */
+	public ITableOfContent createTableOfContent(boolean isTOCIdentifier);
 
 	/**
 	 * Decrement the current recursion level of the parser. The recursion level is
@@ -426,15 +449,6 @@ public interface IWikiModel extends IConfiguration {
 	 *         SemanticRelation exists
 	 */
 	public List<SemanticRelation> getSemanticRelations();
-
-	/**
-	 * Get the &quot;table of content&quot; placeholder
-	 * 
-	 * @param isTOCIdentifier
-	 *          <code>true</code> if the <code>__TOC__</code> keyword was parsed
-	 * @return the &quot;table of content&quot; tag
-	 */
-	public TableOfContentTag getTableOfContentTag(boolean isTOCIdentifier);
 
 	/**
 	 * Get a template parser function (i.e. <code>{{ #if: ... }}</code> )
@@ -679,19 +693,19 @@ public interface IWikiModel extends IConfiguration {
 	public boolean replaceColon();
 
 	/**
+	 * Set the title of the curretly rendered page data.
+	 * 
+	 * @param pageTitle
+	 */
+	public void setPageName(String pageTitle);
+
+	/**
 	 * Activate the parsing of semantic Mediawiki (SMW) links See <a
 	 * href="http://en.wikipedia.org/wiki/Semantic_MediaWiki">Semantic
 	 * MediaWiki</a> for more information.
 	 * 
 	 */
 	public void setSemanticWebActive(boolean semanticWeb);
-
-	/**
-	 * Set the title of the curretly rendered page data.
-	 * 
-	 * @param pageTitle
-	 */
-	public void setPageName(String pageTitle);
 
 	/**
 	 * Prepare or initialize the wiki model before rendering the wikipedia text
@@ -721,5 +735,4 @@ public interface IWikiModel extends IConfiguration {
 	 * 
 	 */
 	public void tearDown();
-
 }

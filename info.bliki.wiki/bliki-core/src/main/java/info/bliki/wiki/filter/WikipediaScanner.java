@@ -1,6 +1,7 @@
 package info.bliki.wiki.filter;
 
 import info.bliki.htmlcleaner.Utils;
+import info.bliki.wiki.model.ITableOfContent;
 import info.bliki.wiki.model.IWikiModel;
 import info.bliki.wiki.tags.TableOfContentTag;
 import info.bliki.wiki.tags.util.NodeAttribute;
@@ -9,6 +10,8 @@ import info.bliki.wiki.tags.util.WikiTagNode;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+
+import sun.tools.jstat.ParserException;
 
 public class WikipediaScanner {
 
@@ -69,7 +72,7 @@ public class WikipediaScanner {
 	 * @param tableOfContentTag
 	 * @return
 	 */
-	public WPTable wpTable(TableOfContentTag tableOfContentTag) {
+	public WPTable wpTable(ITableOfContent tableOfContentTag) {
 		WPTable table = null;
 		WPCell cell = null;
 		ArrayList<WPCell> cells = new ArrayList<WPCell>();

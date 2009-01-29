@@ -7,6 +7,7 @@ import info.bliki.htmlcleaner.TagToken;
 import info.bliki.wiki.model.Configuration;
 import info.bliki.wiki.model.DefaultEventListener;
 import info.bliki.wiki.model.IEventListener;
+import info.bliki.wiki.model.ITableOfContent;
 import info.bliki.wiki.model.IWikiModel;
 import info.bliki.wiki.tags.DdTag;
 import info.bliki.wiki.tags.DlTag;
@@ -15,7 +16,6 @@ import info.bliki.wiki.tags.HTMLBlockTag;
 import info.bliki.wiki.tags.HTMLTag;
 import info.bliki.wiki.tags.HrTag;
 import info.bliki.wiki.tags.PTag;
-import info.bliki.wiki.tags.TableOfContentTag;
 import info.bliki.wiki.tags.WPBoldItalicTag;
 import info.bliki.wiki.tags.WPPreTag;
 import info.bliki.wiki.tags.WPTag;
@@ -26,8 +26,6 @@ import info.bliki.wiki.tags.util.NodeAttribute;
 import info.bliki.wiki.tags.util.TagStack;
 import info.bliki.wiki.tags.util.WikiTagNode;
 
-import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 
 import org.apache.commons.validator.EmailValidator;
@@ -67,19 +65,9 @@ public class WikipediaParser extends AbstractParser implements IParser {
 
 	final static HTMLTag EM = new WPTag("em");
 
-	/**
-	 * &quot;table of content&quot;
-	 * 
-	 */
-	private List<Object> fTableOfContent = null;
-
-	private TableOfContentTag fTableOfContentTag = null;
-
-	private HashSet<String> fToCSet = null;
+	private ITableOfContent fTableOfContentTag = null;
 
 	private int fHeadCounter = 0;
-
-	private int fSectionCounter = 1;
 
 	/**
 	 * Enable HTML tags
@@ -234,7 +222,8 @@ public class WikipediaParser extends AbstractParser implements IParser {
 				// ---------Identify the next token-------------
 				switch (fCurrentCharacter) {
 				case '\n':
-					// check at the end of line, if there is open wiki bold or italic markup
+					// check at the end of line, if there is open wiki bold or italic
+					// markup
 					reduceTokenStackBoldItalic();
 					break;
 				case '{':
@@ -952,8 +941,10 @@ public class WikipediaParser extends AbstractParser implements IParser {
 			fEventListener.onHeader(fSource, headerStartPosition, headerEndPosition, level);
 			fCurrentPosition = endIndex;
 
-			handleHead(head, level);
-
+			// handleHead(head, level);
+			if (head != null) {
+				fTableOfContentTag = fWikiModel.appendHead(head, level, fNoToC, ++fHeadCounter);
+			}
 			return true;
 		}
 		return false;
@@ -1020,7 +1011,7 @@ public class WikipediaParser extends AbstractParser implements IParser {
 						fCurrentPosition = tocEndPosition + 1;
 						switch (i) {
 						case 0: // TOC
-							createTableOfContent(true);
+							fTableOfContentTag = fWikiModel.createTableOfContent(true);
 							fForceToC = true;
 							break;
 						case 1: // NOTOC
@@ -1160,232 +1151,6 @@ public class WikipediaParser extends AbstractParser implements IParser {
 			}
 		}
 		return false;
-	}
-
-	// private void handleWikipediaLink(String linkText, String suffix) {
-	// String name = linkText;
-	// if (name != null) {
-	// // trim the name for whitespace characters on the left side
-	// int trimLeftIndex = 0;
-	// while ((trimLeftIndex < name.length()) && (name.charAt(trimLeftIndex) <= '
-	// ')) {
-	// trimLeftIndex++;
-	// }
-	// if (trimLeftIndex > 0) {
-	// name = name.substring(trimLeftIndex);
-	// }
-	// // Is there an alias like [alias|link] ?
-	// int pipeIndex = name.lastIndexOf('|');
-	// String alias = "";
-	// if (-1 != pipeIndex) {
-	// alias = name.substring(pipeIndex + 1);
-	// name = name.substring(0, pipeIndex);
-	// if (alias.length() == 0) {
-	// // special cases like: [[Test:hello world|]] or [[Test(hello
-	// // world)|]]
-	// // or [[Test, hello world|]]
-	// alias = name;
-	// int index = alias.indexOf(':');
-	// if (index != -1) {
-	// alias = alias.substring(index + 1).trim();
-	// } else {
-	// index = alias.indexOf('(');
-	// if (index != -1) {
-	// alias = alias.substring(0, index).trim();
-	// } else {
-	// index = alias.indexOf(',');
-	// if (index != -1) {
-	// alias = alias.substring(0, index).trim();
-	// }
-	// }
-	// }
-	// }
-	// }
-	//
-	// int hashIndex = name.lastIndexOf('#');
-	//
-	// String hash = "";
-	// if (-1 != hashIndex && hashIndex != name.length() - 1) {
-	// hash = name.substring(hashIndex + 1);
-	// name = name.substring(0, hashIndex);
-	// }
-	//
-	// // trim the name for whitespace characters on the right side
-	// int trimRightIndex = name.length() - 1;
-	// while ((trimRightIndex >= 0) && (name.charAt(trimRightIndex) <= ' ')) {
-	// trimRightIndex--;
-	// }
-	// if (trimRightIndex != name.length() - 1) {
-	// name = name.substring(0, trimRightIndex + 1);
-	// }
-	//
-	// name = Encoder.encodeHtml(name);
-	// String view;
-	// if (-1 != pipeIndex) {
-	// view = alias + suffix;
-	// } else {
-	// if (name.length() > 0 && name.charAt(0) == ':') {
-	// view = name.substring(1) + suffix;
-	// } else {
-	// view = name + suffix;
-	// }
-	// }
-	//
-	// if (handleNamespaceLinks(name, view, pipeIndex)) {
-	// return;
-	// }
-	//
-	// int indx = name.indexOf(':');
-	// String namespace = null;
-	// if (indx >= 0) {
-	// namespace = name.substring(0, indx);
-	// }
-	// if (namespace != null && fWikiModel.isImageNamespace(namespace)) {
-	// fWikiModel.parseInternalImageLink(namespace, linkText);
-	// return;
-	// } else {
-	// if (name.length() > 0 && name.charAt(0) == ':') {
-	// name = name.substring(1);
-	// }
-	// if (name.length() > 0 && name.charAt(0) == ':') {
-	// name = name.substring(1);
-	// }
-	// fWikiModel.addLink(name);
-	// if (-1 != hashIndex) {
-	// fWikiModel.appendInternalLink(name, hash, view);
-	// } else {
-	// fWikiModel.appendInternalLink(name, null, view);
-	// }
-	// }
-	// }
-	// }
-
-	/**
-	 * @param name
-	 * @param view
-	 */
-	// private boolean handleNamespaceLinks(String name, String view, int
-	// pipeIndex) {
-	// int colonIndex = name.indexOf(':');
-	//
-	// if (colonIndex != (-1)) {
-	// String nameSpace = name.substring(0, colonIndex);
-	//
-	// if (fWikiModel.isSemanticWebActive() && (name.length() > colonIndex + 1)) {
-	// // See <a
-	// // href="http://en.wikipedia.org/wiki/Semantic_MediaWiki">Semantic
-	// // MediaWiki</a> for more information.
-	// if (name.charAt(colonIndex + 1) == ':') {
-	// // found an SMW relation
-	// String relationValue = name.substring(colonIndex + 2);
-	//
-	// if (fWikiModel.addSemanticRelation(nameSpace, relationValue)) {
-	// if ((-1) == pipeIndex) {
-	// view = relationValue;
-	// }
-	// if (view.trim().length() > 0) {
-	// fWikiModel.appendInternalLink(relationValue, null, view);
-	// }
-	// return true;
-	// }
-	// } else if (name.charAt(colonIndex + 1) == '=') {
-	// // found an SMW attribute
-	// String attributeValue = name.substring(colonIndex + 2);
-	// if (fWikiModel.addSemanticAttribute(nameSpace, attributeValue)) {
-	// fWikiModel.append(new ContentToken(attributeValue));
-	// return true;
-	// }
-	// }
-	//
-	// }
-	// if (fWikiModel.isCategoryNamespace(nameSpace)) {
-	// // add the category to this texts metadata
-	// String category = name.substring(colonIndex + 1);
-	// if (category != null && category.length() > 0) {
-	// fWikiModel.addCategory(category, "");
-	// return true;
-	// }
-	// } else if (fWikiModel.isInterWiki(nameSpace)) {
-	// String title = name.substring(colonIndex + 1);
-	// if (title != null && title.length() > 0) {
-	// fWikiModel.appendInterWikiLink(nameSpace, title, view);
-	// return true;
-	// }
-	// }
-	// }
-	// return false;
-	// }
-	private void addToTableOfContent(List<Object> toc, String head, String anchor, int headLevel) {
-		if (headLevel == 1) {
-			toc.add(new StringPair(head, anchor));
-		} else {
-			if (toc.size() > 0) {
-				if (toc.get(toc.size() - 1) instanceof List) {
-					addToTableOfContent((List<Object>) toc.get(toc.size() - 1), head, anchor, --headLevel);
-					return;
-				}
-			}
-			ArrayList<Object> list = new ArrayList<Object>();
-			toc.add(list);
-			addToTableOfContent(list, head, anchor, --headLevel);
-		}
-	}
-
-	/**
-	 * handle head for table of content
-	 * 
-	 * @param rawHead
-	 * @param headLevel
-	 */
-	private void handleHead(String rawHead, int headLevel) {
-		if (rawHead != null) {
-			TagStack localStack = parseRecursive(rawHead.trim(), fWikiModel, true, true);
-
-			WPTag headTagNode = new WPTag("h" + headLevel);
-			headTagNode.addChildren(localStack.getNodeList());
-			String tocHead = headTagNode.getBodyString();
-			String anchor = Encoder.encodeUrl(tocHead);
-			createTableOfContent(false);
-			if (!fNoToC && (++fHeadCounter) > 3) {
-				fTableOfContentTag.setShowToC(true);
-			}
-			if (fToCSet.contains(anchor)) {
-				String newAnchor = anchor;
-				for (int i = 2; i < Integer.MAX_VALUE; i++) {
-					newAnchor = anchor + '_' + Integer.toString(i);
-					if (!fToCSet.contains(newAnchor)) {
-						break;
-					}
-				}
-				anchor = newAnchor;
-			}
-			addToTableOfContent(fTableOfContent, tocHead, anchor, headLevel);
-			if (fWikiModel.getRecursionLevel() == 1) {
-				fWikiModel.buildEditLinkUrl(fSectionCounter++);
-			}
-			TagNode aTagNode = new TagNode("a");
-			aTagNode.addAttribute("name", anchor, true);
-			aTagNode.addAttribute("id", anchor, true);
-			fWikiModel.append(aTagNode);
-
-			fWikiModel.append(headTagNode);
-
-		}
-	}
-
-	/**
-	 * 
-	 * @param isTOCIdentifier
-	 *          <code>true</code> if the __TOC__ keyword was parsed
-	 */
-	private void createTableOfContent(boolean isTOCIdentifier) {
-		fTableOfContentTag = fWikiModel.getTableOfContentTag(isTOCIdentifier);
-		if (fTableOfContentTag != null) {
-			if (fTableOfContent == null) {
-				fTableOfContent = fTableOfContentTag.getTableOfContent();
-			}
-		}
-		fToCSet = new HashSet<String>();
 	}
 
 	private void handleTag(TagToken tag, WikiTagNode tagNode, String bodyString) {
@@ -1578,29 +1343,6 @@ public class WikipediaParser extends AbstractParser implements IParser {
 		}
 	}
 
-	/**
-	 * count the number of wiki headers in this document
-	 * 
-	 * @param toc
-	 * @return
-	 */
-	// private int isToC(List<Object> toc) {
-	// if (toc == null) {
-	// return 0;
-	// }
-	// if (toc.size() == 1 && (toc.get(0) instanceof List)) {
-	// return isToC((List<Object>) toc.get(0));
-	// }
-	// int result = 0;
-	// for (int i = 0; i < toc.size(); i++) {
-	// if (toc.get(i) instanceof List) {
-	// result += isToC((List<Object>) toc.get(i));
-	// } else {
-	// result++;
-	// }
-	// }
-	// return result;
-	// }
 	public boolean isNoToC() {
 		return fNoToC;
 	}

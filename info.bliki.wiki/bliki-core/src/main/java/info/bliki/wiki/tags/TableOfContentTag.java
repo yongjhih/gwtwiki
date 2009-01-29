@@ -3,6 +3,7 @@ package info.bliki.wiki.tags;
 import info.bliki.Messages;
 import info.bliki.wiki.filter.ITextConverter;
 import info.bliki.wiki.filter.StringPair;
+import info.bliki.wiki.model.ITableOfContent;
 import info.bliki.wiki.model.IWikiModel;
 import info.bliki.wiki.tags.util.IBodyTag;
 
@@ -11,10 +12,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Wiki tag for &quot;table of contents&quot inside a wikipedia article
+ * Wiki tag for rendering the &quot;table of contents&quot inside a wikipedia
+ * article
  * 
  */
-public class TableOfContentTag extends HTMLTag implements IBodyTag {
+public class TableOfContentTag extends HTMLTag implements IBodyTag, ITableOfContent {
 	private List<Object> fTableOfContent = null;
 
 	private boolean fShowToC;
@@ -79,6 +81,12 @@ public class TableOfContentTag extends HTMLTag implements IBodyTag {
 		return fShowToC;
 	}
 
+	/**
+	 * Enable or disable the rendering of the &quot;table of content&quot;
+	 * 
+	 * @param showToC
+	 *          if <code>true</code> render the &quot;table of content&quot;
+	 */
 	public void setShowToC(boolean showToC) {
 		fShowToC = showToC;
 	}
