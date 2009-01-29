@@ -13,10 +13,13 @@ import info.bliki.wiki.filter.HTMLConverter;
 import info.bliki.wiki.filter.ITextConverter;
 import info.bliki.wiki.filter.MagicWord;
 import info.bliki.wiki.filter.PDFConverter;
+import info.bliki.wiki.filter.StringPair;
 import info.bliki.wiki.filter.TemplateParser;
+import info.bliki.wiki.filter.WikipediaParser;
 import info.bliki.wiki.model.Configuration;
 import info.bliki.wiki.model.IConfiguration;
 import info.bliki.wiki.model.IEventListener;
+import info.bliki.wiki.model.ITableOfContent;
 import info.bliki.wiki.model.IWikiModel;
 import info.bliki.wiki.model.ImageFormat;
 import info.bliki.wiki.model.Reference;
@@ -24,6 +27,7 @@ import info.bliki.wiki.model.SemanticAttribute;
 import info.bliki.wiki.model.SemanticRelation;
 import info.bliki.wiki.tags.TableOfContentTag;
 import info.bliki.wiki.tags.WPATag;
+import info.bliki.wiki.tags.WPTag;
 import info.bliki.wiki.tags.code.SourceCodeFormatter;
 import info.bliki.wiki.tags.util.TagStack;
 import info.bliki.wiki.template.ITemplateFunction;
@@ -31,11 +35,11 @@ import info.bliki.wiki.template.ITemplateFunction;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.ResourceBundle;
-
 
 /**
  * Standard model implementation for the Wikipedia syntax
@@ -71,10 +75,25 @@ public abstract class AbstractTracModel implements IWikiModel {
 
 	protected String fRedirectLink = null;
 
-	protected TableOfContentTag fTableOfContentTag = null;
-
 	private String fPageTitle;
-	
+
+	protected int fSectionCounter;
+
+	/**
+	 * A tag that manages the &quot;table of content&quot;
+	 * 
+	 */
+	private TableOfContentTag fTableOfContentTag = null;
+	/**
+	 * &quot;table of content&quot;
+	 * 
+	 */
+	private List<Object> fTableOfContent = null;
+	/**
+	 * Contains all anchor strings to create unique anchors
+	 */
+	private HashSet<String> fToCSet;
+
 	public AbstractTracModel() {
 		this(Configuration.DEFAULT_CONFIGURATION);
 	}
@@ -251,11 +270,11 @@ public abstract class AbstractTracModel implements IWikiModel {
 		ContentToken text = new ContentToken(topicDescription);
 		aTagNode.addChild(text);
 	}
-	
+
 	public String encodeTitleToUrl(String wikiTitle, boolean firstCharacterAsUpperCase) {
 		return Encoder.encodeTitleToUrl(wikiTitle, firstCharacterAsUpperCase);
 	}
-	
+
 	public void appendInterWikiLink(String namespace, String title, String linkText) {
 		String hrefLink = getInterwikiMap().get(namespace.toLowerCase());
 		if (hrefLink == null) {
@@ -572,31 +591,32 @@ public abstract class AbstractTracModel implements IWikiModel {
 		return null;
 	}
 
-	public TableOfContentTag getTableOfContentTag(boolean isTOCIdentifier) {
-		if (fTableOfContentTag == null) {
-			TableOfContentTag tableOfContentTag = new TableOfContentTag("div");
-			tableOfContentTag.addAttribute("id", "tableofcontent", true);
-			tableOfContentTag.setShowToC(false);
-			tableOfContentTag.setTOCIdentifier(isTOCIdentifier);
-			fTableOfContentTag = tableOfContentTag;
-		} else {
-			if (isTOCIdentifier) {
-				// try {
-				TableOfContentTag tableOfContentTag = (TableOfContentTag) fTableOfContentTag.clone();
-				fTableOfContentTag.setShowToC(false);
-				tableOfContentTag.setShowToC(true);
-				tableOfContentTag.setTOCIdentifier(isTOCIdentifier);
-				fTableOfContentTag = tableOfContentTag;
-				// } catch (CloneNotSupportedException e) {
-				// e.printStackTrace();
-				// }
-			} else {
-				return fTableOfContentTag;
-			}
-		}
-		this.append(fTableOfContentTag);
-		return fTableOfContentTag;
-	}
+	// public TableOfContentTag getTableOfContentTag(boolean isTOCIdentifier) {
+	// if (fTableOfContentTag == null) {
+	// TableOfContentTag tableOfContentTag = new TableOfContentTag("div");
+	// tableOfContentTag.addAttribute("id", "tableofcontent", true);
+	// tableOfContentTag.setShowToC(false);
+	// tableOfContentTag.setTOCIdentifier(isTOCIdentifier);
+	// fTableOfContentTag = tableOfContentTag;
+	// } else {
+	// if (isTOCIdentifier) {
+	// // try {
+	// TableOfContentTag tableOfContentTag = (TableOfContentTag)
+	// fTableOfContentTag.clone();
+	// fTableOfContentTag.setShowToC(false);
+	// tableOfContentTag.setShowToC(true);
+	// tableOfContentTag.setTOCIdentifier(isTOCIdentifier);
+	// fTableOfContentTag = tableOfContentTag;
+	// // } catch (CloneNotSupportedException e) {
+	// // e.printStackTrace();
+	// // }
+	// } else {
+	// return fTableOfContentTag;
+	// }
+	// }
+	// this.append(fTableOfContentTag);
+	// return fTableOfContentTag;
+	// }
 
 	public ITemplateFunction getTemplateFunction(String name) {
 		return getTemplateMap().get(name);
@@ -626,6 +646,8 @@ public abstract class AbstractTracModel implements IWikiModel {
 		fNumber = 0;
 		if (!fInitialized) {
 			fWikiListener = null;
+			fToCSet = null;
+			fTableOfContent = null;
 			fCategoryNamespaces = new ArrayList<String>();
 			fTemplateNamespaces = new ArrayList<String>();
 			fImageNamespaces = new ArrayList<String>();
@@ -633,6 +655,7 @@ public abstract class AbstractTracModel implements IWikiModel {
 			fReferences = null;
 			fReferenceNames = null;
 			fRecursionLevel = 0;
+			fSectionCounter = 0;
 			fReplaceColon = false;
 			fCategoryNamespaces.add("Category");
 			fTemplateNamespaces.add("Template");
@@ -645,7 +668,7 @@ public abstract class AbstractTracModel implements IWikiModel {
 	public boolean isCamelCaseEnabled() {
 		return false;
 	}
-	
+
 	public boolean isCategoryNamespace(String namespace) {
 		for (int i = 0; i < fCategoryNamespaces.size(); i++) {
 			if (namespace.equalsIgnoreCase(fCategoryNamespaces.get(i))) {
@@ -828,11 +851,109 @@ public abstract class AbstractTracModel implements IWikiModel {
 	public AbstractParser createNewInstance(String rawWikitext) {
 		return new TracParser(rawWikitext, getWikiListener());
 	}
+
 	public void setPageName(String pageTitle) {
 		fPageTitle = pageTitle;
 	}
-	
+
 	public String getPageName() {
 		return fPageTitle;
+	}
+
+	/**
+	 * handle head for table of content
+	 * 
+	 * @param rawHead
+	 * @param headLevel
+	 */
+	public ITableOfContent appendHead(String rawHead, int headLevel, boolean noToC, int headCounter) {
+		TagStack localStack = WikipediaParser.parseRecursive(rawHead.trim(), this, true, true);
+
+		WPTag headTagNode = new WPTag("h" + headLevel);
+		headTagNode.addChildren(localStack.getNodeList());
+		String tocHead = headTagNode.getBodyString();
+		String anchor = Encoder.encodeUrl(tocHead);
+		createTableOfContent(false);
+		if (!noToC && (headCounter > 3)) {
+			fTableOfContentTag.setShowToC(true);
+		}
+		if (fToCSet.contains(anchor)) {
+			String newAnchor = anchor;
+			for (int i = 2; i < Integer.MAX_VALUE; i++) {
+				newAnchor = anchor + '_' + Integer.toString(i);
+				if (!fToCSet.contains(newAnchor)) {
+					break;
+				}
+			}
+			anchor = newAnchor;
+		}
+		addToTableOfContent(fTableOfContent, tocHead, anchor, headLevel);
+		if (getRecursionLevel() == 1) {
+			buildEditLinkUrl(fSectionCounter++);
+		}
+		TagNode aTagNode = new TagNode("a");
+		aTagNode.addAttribute("name", anchor, true);
+		aTagNode.addAttribute("id", anchor, true);
+		append(aTagNode);
+
+		append(headTagNode);
+		return fTableOfContentTag;
+	}
+
+	private void addToTableOfContent(List<Object> toc, String head, String anchor, int headLevel) {
+		if (headLevel == 1) {
+			toc.add(new StringPair(head, anchor));
+		} else {
+			if (toc.size() > 0) {
+				if (toc.get(toc.size() - 1) instanceof List) {
+					addToTableOfContent((List<Object>) toc.get(toc.size() - 1), head, anchor, --headLevel);
+					return;
+				}
+			}
+			ArrayList<Object> list = new ArrayList<Object>();
+			toc.add(list);
+			addToTableOfContent(list, head, anchor, --headLevel);
+		}
+	}
+
+	/**
+	 * 
+	 * @param isTOCIdentifier
+	 *          <code>true</code> if the __TOC__ keyword was parsed
+	 */
+	public ITableOfContent createTableOfContent(boolean isTOCIdentifier) {
+		if (fTableOfContentTag == null) {
+			TableOfContentTag tableOfContentTag = new TableOfContentTag("div");
+			tableOfContentTag.addAttribute("id", "tableofcontent", true);
+			tableOfContentTag.setShowToC(false);
+			tableOfContentTag.setTOCIdentifier(isTOCIdentifier);
+			fTableOfContentTag = tableOfContentTag;
+			this.append(fTableOfContentTag);
+		} else {
+			if (isTOCIdentifier) {
+				// try {
+				TableOfContentTag tableOfContentTag = (TableOfContentTag) fTableOfContentTag.clone();
+				fTableOfContentTag.setShowToC(false);
+				tableOfContentTag.setShowToC(true);
+				tableOfContentTag.setTOCIdentifier(isTOCIdentifier);
+				fTableOfContentTag = tableOfContentTag;
+				// } catch (CloneNotSupportedException e) {
+				// e.printStackTrace();
+				// }
+				this.append(fTableOfContentTag);
+			} else {
+			}
+		}
+
+		// fTableOfContentTag = getTableOfContentTag(isTOCIdentifier);
+		if (fTableOfContentTag != null) {
+			if (fTableOfContent == null) {
+				fTableOfContent = fTableOfContentTag.getTableOfContent();
+			}
+		}
+		if (fToCSet == null) {
+			fToCSet = new HashSet<String>();
+		}
+		return fTableOfContentTag;
 	}
 }

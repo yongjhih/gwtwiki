@@ -1,10 +1,16 @@
 package info.bliki.wiki.addon.trac;
 
+import info.bliki.htmlcleaner.TagNode;
 import info.bliki.wiki.filter.Encoder;
+import info.bliki.wiki.filter.StringPair;
+import info.bliki.wiki.filter.WikipediaParser;
 import info.bliki.wiki.model.Configuration;
 import info.bliki.wiki.model.ImageFormat;
 import info.bliki.wiki.model.SemanticAttribute;
 import info.bliki.wiki.model.SemanticRelation;
+import info.bliki.wiki.tags.TableOfContentTag;
+import info.bliki.wiki.tags.WPTag;
+import info.bliki.wiki.tags.util.TagStack;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -31,6 +37,7 @@ public class TracModel extends AbstractTracModel {
 	protected String fExternalImageBaseURL;
 
 	protected String fExternalWikiBaseURL;
+	
 
 	public TracModel(String imageBaseURL, String linkBaseURL) {
 		this(Configuration.DEFAULT_CONFIGURATION, imageBaseURL, linkBaseURL);

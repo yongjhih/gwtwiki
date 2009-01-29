@@ -76,15 +76,15 @@ public class TracParser extends AbstractParser {
 	 * &quot;table of content&quot;
 	 * 
 	 */
-	private List<Object> fTableOfContent = null;
+	// private List<Object> fTableOfContent = null;
 
 	private TableOfContentTag fTableOfContentTag = null;
 
-	private HashSet<String> fToCSet = null;
+	// private HashSet<String> fToCSet = null;
 
 	private int fHeadCounter = 0;
 
-	private int fSectionCounter = 1;
+	// private int fSectionCounter = 1;
 
 	/**
 	 * Enable HTML tags
@@ -308,18 +308,18 @@ public class TracParser extends AbstractParser {
 						continue;
 					}
 					break;
-//				case ' ': // pre-formatted text?
-//				case '\t':
-//					if (parsePreformattedHorizontalRuler()) {
-//						if (!fWhiteStart) {
-//							fWhiteStart = true;
-//							fWhiteStartPosition = fCurrentPosition;
-//						} else {
-//							createContentToken(fWhiteStart, fWhiteStartPosition, 1);
-//						}
-//						continue;
-//					}
-//					break;
+				// case ' ': // pre-formatted text?
+				// case '\t':
+				// if (parsePreformattedHorizontalRuler()) {
+				// if (!fWhiteStart) {
+				// fWhiteStart = true;
+				// fWhiteStartPosition = fCurrentPosition;
+				// } else {
+				// createContentToken(fWhiteStart, fWhiteStartPosition, 1);
+				// }
+				// continue;
+				// }
+				// break;
 				}
 				if (isStartOfLine() && fWikiModel.getRecursionLevel() == 1) {
 					if (fWikiModel.stackSize() > 0 && (fWikiModel.peekNode() instanceof PTag) && isEmptyLine(1)) {
@@ -1067,7 +1067,7 @@ public class TracParser extends AbstractParser {
 	}
 
 	private boolean parseLists() {
-	// set scanner pointer to '\n' character:
+		// set scanner pointer to '\n' character:
 		if (isStartOfLine()) {
 			setPosition(fCurrentPosition - 2);
 			WPList list = wpList();
@@ -1080,19 +1080,19 @@ public class TracParser extends AbstractParser {
 			}
 		}
 		return false;
-//		// set scanner pointer to '\n' character:
-//		if (isStartOfList()) {
-//			setPosition(fCurrentPosition - 3);
-//			WPList list = tracList();
-//			if (list != null && !list.isEmpty()) {
-//				createContentToken(fWhiteStart, fWhiteStartPosition, 1);
-//				reduceTokenStack(list);
-//				fCurrentPosition = getPosition() - 1;
-//				fWikiModel.append(list);
-//				return true;
-//			}
-//		}
-//		return false;
+		// // set scanner pointer to '\n' character:
+		// if (isStartOfList()) {
+		// setPosition(fCurrentPosition - 3);
+		// WPList list = tracList();
+		// if (list != null && !list.isEmpty()) {
+		// createContentToken(fWhiteStart, fWhiteStartPosition, 1);
+		// reduceTokenStack(list);
+		// fCurrentPosition = getPosition() - 1;
+		// fWikiModel.append(list);
+		// return true;
+		// }
+		// }
+		// return false;
 	}
 
 	private boolean parseSectionHeaders() {
@@ -1413,210 +1413,212 @@ public class TracParser extends AbstractParser {
 	// protected void createExternalLink(String urlString, String alias) {
 	// fWikiModel.appendExternalLink(urlString, alias, false);
 	// }
-//	private void handleWikipediaLink(String linkText, String suffix) {
-//		String name = linkText;
-//		if (name != null) {
-//			// trim the name for whitespace characters on the left side
-//			int trimLeftIndex = 0;
-//			while ((trimLeftIndex < name.length()) && (name.charAt(trimLeftIndex) <= ' ')) {
-//				trimLeftIndex++;
-//			}
-//			if (trimLeftIndex > 0) {
-//				name = name.substring(trimLeftIndex);
-//			}
-//			// Is there an alias like [alias|link] ?
-//			int pipeIndex = name.lastIndexOf('|');
-//			String alias = "";
-//			if (-1 != pipeIndex) {
-//				alias = name.substring(pipeIndex + 1);
-//				name = name.substring(0, pipeIndex);
-//				if (alias.length() == 0) {
-//					// special cases like: [[Test:hello world|]] or [[Test(hello
-//					// world)|]]
-//					// or [[Test, hello world|]]
-//					alias = name;
-//					int index = alias.indexOf(':');
-//					if (index != -1) {
-//						alias = alias.substring(index + 1).trim();
-//					} else {
-//						index = alias.indexOf('(');
-//						if (index != -1) {
-//							alias = alias.substring(0, index).trim();
-//						} else {
-//							index = alias.indexOf(',');
-//							if (index != -1) {
-//								alias = alias.substring(0, index).trim();
-//							}
-//						}
-//					}
-//				}
-//			}
-//
-//			int hashIndex = name.lastIndexOf('#');
-//
-//			String hash = "";
-//			if (-1 != hashIndex && hashIndex != name.length() - 1) {
-//				hash = name.substring(hashIndex + 1);
-//				name = name.substring(0, hashIndex);
-//			}
-//
-//			// trim the name for whitespace characters on the right side
-//			int trimRightIndex = name.length() - 1;
-//			while ((trimRightIndex >= 0) && (name.charAt(trimRightIndex) <= ' ')) {
-//				trimRightIndex--;
-//			}
-//			if (trimRightIndex != name.length() - 1) {
-//				name = name.substring(0, trimRightIndex + 1);
-//			}
-//
-//			name = Encoder.encodeHtml(name);
-//			String view;
-//			if (-1 != pipeIndex) {
-//				view = alias + suffix;
-//			} else {
-//				if (name.length() > 0 && name.charAt(0) == ':') {
-//					view = name.substring(1) + suffix;
-//				} else {
-//					view = name + suffix;
-//				}
-//			}
-//
-//			if (handleNamespaceLinks(name, view, pipeIndex)) {
-//				return;
-//			}
-//
-//			int indx = name.indexOf(':');
-//			String namespace = null;
-//			if (indx >= 0) {
-//				namespace = name.substring(0, indx);
-//			}
-//			if (namespace != null && fWikiModel.isImageNamespace(namespace)) {
-//				fWikiModel.parseInternalImageLink(namespace, linkText);
-//				return;
-//			} else {
-//				if (name.length() > 0 && name.charAt(0) == ':') {
-//					name = name.substring(1);
-//				}
-//				if (name.length() > 0 && name.charAt(0) == ':') {
-//					name = name.substring(1);
-//				}
-//				fWikiModel.addLink(name);
-//				if (-1 != hashIndex) {
-//					fWikiModel.appendInternalLink(name, hash, view);
-//				} else {
-//					fWikiModel.appendInternalLink(name, null, view);
-//				}
-//			}
-//		}
-//	}
-
+	// private void handleWikipediaLink(String linkText, String suffix) {
+	// String name = linkText;
+	// if (name != null) {
+	// // trim the name for whitespace characters on the left side
+	// int trimLeftIndex = 0;
+	// while ((trimLeftIndex < name.length()) && (name.charAt(trimLeftIndex) <=
+	// ' ')) {
+	// trimLeftIndex++;
+	// }
+	// if (trimLeftIndex > 0) {
+	// name = name.substring(trimLeftIndex);
+	// }
+	// // Is there an alias like [alias|link] ?
+	// int pipeIndex = name.lastIndexOf('|');
+	// String alias = "";
+	// if (-1 != pipeIndex) {
+	// alias = name.substring(pipeIndex + 1);
+	// name = name.substring(0, pipeIndex);
+	// if (alias.length() == 0) {
+	// // special cases like: [[Test:hello world|]] or [[Test(hello
+	// // world)|]]
+	// // or [[Test, hello world|]]
+	// alias = name;
+	// int index = alias.indexOf(':');
+	// if (index != -1) {
+	// alias = alias.substring(index + 1).trim();
+	// } else {
+	// index = alias.indexOf('(');
+	// if (index != -1) {
+	// alias = alias.substring(0, index).trim();
+	// } else {
+	// index = alias.indexOf(',');
+	// if (index != -1) {
+	// alias = alias.substring(0, index).trim();
+	// }
+	// }
+	// }
+	// }
+	// }
+	//
+	// int hashIndex = name.lastIndexOf('#');
+	//
+	// String hash = "";
+	// if (-1 != hashIndex && hashIndex != name.length() - 1) {
+	// hash = name.substring(hashIndex + 1);
+	// name = name.substring(0, hashIndex);
+	// }
+	//
+	// // trim the name for whitespace characters on the right side
+	// int trimRightIndex = name.length() - 1;
+	// while ((trimRightIndex >= 0) && (name.charAt(trimRightIndex) <= ' ')) {
+	// trimRightIndex--;
+	// }
+	// if (trimRightIndex != name.length() - 1) {
+	// name = name.substring(0, trimRightIndex + 1);
+	// }
+	//
+	// name = Encoder.encodeHtml(name);
+	// String view;
+	// if (-1 != pipeIndex) {
+	// view = alias + suffix;
+	// } else {
+	// if (name.length() > 0 && name.charAt(0) == ':') {
+	// view = name.substring(1) + suffix;
+	// } else {
+	// view = name + suffix;
+	// }
+	// }
+	//
+	// if (handleNamespaceLinks(name, view, pipeIndex)) {
+	// return;
+	// }
+	//
+	// int indx = name.indexOf(':');
+	// String namespace = null;
+	// if (indx >= 0) {
+	// namespace = name.substring(0, indx);
+	// }
+	// if (namespace != null && fWikiModel.isImageNamespace(namespace)) {
+	// fWikiModel.parseInternalImageLink(namespace, linkText);
+	// return;
+	// } else {
+	// if (name.length() > 0 && name.charAt(0) == ':') {
+	// name = name.substring(1);
+	// }
+	// if (name.length() > 0 && name.charAt(0) == ':') {
+	// name = name.substring(1);
+	// }
+	// fWikiModel.addLink(name);
+	// if (-1 != hashIndex) {
+	// fWikiModel.appendInternalLink(name, hash, view);
+	// } else {
+	// fWikiModel.appendInternalLink(name, null, view);
+	// }
+	// }
+	// }
+	// }
 	/**
 	 * @param name
 	 * @param view
 	 */
-//	private boolean handleNamespaceLinks(String name, String view, int pipeIndex) {
-//		int colonIndex = name.indexOf(':');
-//
-//		if (colonIndex != (-1)) {
-//			String nameSpace = name.substring(0, colonIndex);
-//
-//			if (fWikiModel.isSemanticWebActive() && (name.length() > colonIndex + 1)) {
-//				// See <a
-//				// href="http://en.wikipedia.org/wiki/Semantic_MediaWiki">Semantic
-//				// MediaWiki</a> for more information.
-//				if (name.charAt(colonIndex + 1) == ':') {
-//					// found an SMW relation
-//					String relationValue = name.substring(colonIndex + 2);
-//
-//					if (fWikiModel.addSemanticRelation(nameSpace, relationValue)) {
-//						if ((-1) == pipeIndex) {
-//							view = relationValue;
-//						}
-//						if (view.trim().length() > 0) {
-//							fWikiModel.appendInternalLink(relationValue, null, view);
-//						}
-//						return true;
-//					}
-//				} else if (name.charAt(colonIndex + 1) == '=') {
-//					// found an SMW attribute
-//					String attributeValue = name.substring(colonIndex + 2);
-//					if (fWikiModel.addSemanticAttribute(nameSpace, attributeValue)) {
-//						fWikiModel.append(new ContentToken(attributeValue));
-//						return true;
-//					}
-//				}
-//
-//			}
-//			if (fWikiModel.isCategoryNamespace(nameSpace)) {
-//				// add the category to this texts metadata
-//				String category = name.substring(colonIndex + 1);
-//				if (category != null && category.length() > 0) {
-//					fWikiModel.addCategory(category, "");
-//					return true;
-//				}
-//			} else if (fWikiModel.isInterWiki(nameSpace)) {
-//				String title = name.substring(colonIndex + 1);
-//				if (title != null && title.length() > 0) {
-//					fWikiModel.appendInterWikiLink(nameSpace, title, view);
-//					return true;
-//				}
-//			}
-//		}
-//		return false;
-//	}
-
-	private void addToTableOfContent(List<Object> toc, String head, String anchor, int headLevel) {
-		if (headLevel == 1) {
-			toc.add(new StringPair(head, anchor));
-		} else {
-			if (toc.size() > 0) {
-				if (toc.get(toc.size() - 1) instanceof List) {
-					addToTableOfContent((List<Object>) toc.get(toc.size() - 1), head, anchor, --headLevel);
-					return;
-				}
-			}
-			ArrayList<Object> list = new ArrayList<Object>();
-			toc.add(list);
-			addToTableOfContent(list, head, anchor, --headLevel);
-		}
-	}
-
+	// private boolean handleNamespaceLinks(String name, String view, int
+	// pipeIndex) {
+	// int colonIndex = name.indexOf(':');
+	//
+	// if (colonIndex != (-1)) {
+	// String nameSpace = name.substring(0, colonIndex);
+	//
+	// if (fWikiModel.isSemanticWebActive() && (name.length() > colonIndex + 1)) {
+	// // See <a
+	// // href="http://en.wikipedia.org/wiki/Semantic_MediaWiki">Semantic
+	// // MediaWiki</a> for more information.
+	// if (name.charAt(colonIndex + 1) == ':') {
+	// // found an SMW relation
+	// String relationValue = name.substring(colonIndex + 2);
+	//
+	// if (fWikiModel.addSemanticRelation(nameSpace, relationValue)) {
+	// if ((-1) == pipeIndex) {
+	// view = relationValue;
+	// }
+	// if (view.trim().length() > 0) {
+	// fWikiModel.appendInternalLink(relationValue, null, view);
+	// }
+	// return true;
+	// }
+	// } else if (name.charAt(colonIndex + 1) == '=') {
+	// // found an SMW attribute
+	// String attributeValue = name.substring(colonIndex + 2);
+	// if (fWikiModel.addSemanticAttribute(nameSpace, attributeValue)) {
+	// fWikiModel.append(new ContentToken(attributeValue));
+	// return true;
+	// }
+	// }
+	//
+	// }
+	// if (fWikiModel.isCategoryNamespace(nameSpace)) {
+	// // add the category to this texts metadata
+	// String category = name.substring(colonIndex + 1);
+	// if (category != null && category.length() > 0) {
+	// fWikiModel.addCategory(category, "");
+	// return true;
+	// }
+	// } else if (fWikiModel.isInterWiki(nameSpace)) {
+	// String title = name.substring(colonIndex + 1);
+	// if (title != null && title.length() > 0) {
+	// fWikiModel.appendInterWikiLink(nameSpace, title, view);
+	// return true;
+	// }
+	// }
+	// }
+	// return false;
+	// }
+	// private void addToTableOfContent(List<Object> toc, String head, String
+	// anchor, int headLevel) {
+	// if (headLevel == 1) {
+	// toc.add(new StringPair(head, anchor));
+	// } else {
+	// if (toc.size() > 0) {
+	// if (toc.get(toc.size() - 1) instanceof List) {
+	// addToTableOfContent((List<Object>) toc.get(toc.size() - 1), head, anchor,
+	// --headLevel);
+	// return;
+	// }
+	// }
+	// ArrayList<Object> list = new ArrayList<Object>();
+	// toc.add(list);
+	// addToTableOfContent(list, head, anchor, --headLevel);
+	// }
+	// }
 	/**
 	 * handle head for table of content
 	 * 
 	 * @param head
 	 * @param headLevel
 	 */
-	private void handleHead(String head, int headLevel) {
-		if (head != null) {
+	private void handleHead(String rawHead, int headLevel) {
+		if (rawHead != null) {
+			fWikiModel.appendHead(rawHead, headLevel, fNoToC, ++fHeadCounter);
 
-			String anchor = Encoder.encodeUrl(head.trim());
-
-			createTableOfContent(false);
-			if (!fNoToC && (++fHeadCounter) > 3) {
-				fTableOfContentTag.setShowToC(true);
-			}
-			if (fToCSet.contains(anchor)) {
-				String newAnchor = anchor;
-				for (int i = 2; i < Integer.MAX_VALUE; i++) {
-					newAnchor = anchor + '_' + Integer.toString(i);
-					if (!fToCSet.contains(newAnchor)) {
-						break;
-					}
-				}
-				anchor = newAnchor;
-			}
-			addToTableOfContent(fTableOfContent, head, anchor, headLevel);
-			if (fWikiModel.getRecursionLevel() == 1) {
-				fWikiModel.buildEditLinkUrl(fSectionCounter++);
-			}
-			TagNode aTagNode = new TagNode("a");
-			aTagNode.addAttribute("name", anchor, true);
-			aTagNode.addAttribute("id", anchor, true);
-			fWikiModel.append(aTagNode);
-			WPTag headTagNode = new WPTag("h" + headLevel);
-			headTagNode.addChild(new ContentToken(head));
-			fWikiModel.append(headTagNode);
+			// String anchor = Encoder.encodeUrl(head.trim());
+			//
+			// createTableOfContent(false);
+			// if (!fNoToC && (++fHeadCounter) > 3) {
+			// fTableOfContentTag.setShowToC(true);
+			// }
+			// if (fToCSet.contains(anchor)) {
+			// String newAnchor = anchor;
+			// for (int i = 2; i < Integer.MAX_VALUE; i++) {
+			// newAnchor = anchor + '_' + Integer.toString(i);
+			// if (!fToCSet.contains(newAnchor)) {
+			// break;
+			// }
+			// }
+			// anchor = newAnchor;
+			// }
+			// addToTableOfContent(fTableOfContent, head, anchor, headLevel);
+			// if (fWikiModel.getRecursionLevel() == 1) {
+			// fWikiModel.buildEditLinkUrl(fSectionCounter++);
+			// }
+			// TagNode aTagNode = new TagNode("a");
+			// aTagNode.addAttribute("name", anchor, true);
+			// aTagNode.addAttribute("id", anchor, true);
+			// fWikiModel.append(aTagNode);
+			// WPTag headTagNode = new WPTag("h" + headLevel);
+			// headTagNode.addChild(new ContentToken(head));
+			// fWikiModel.append(headTagNode);
 
 		}
 	}
@@ -1626,16 +1628,15 @@ public class TracParser extends AbstractParser {
 	 * @param isTOCIdentifier
 	 *          <code>true</code> if the __TOC__ keyword was parsed
 	 */
-	private void createTableOfContent(boolean isTOCIdentifier) {
-		fTableOfContentTag = fWikiModel.getTableOfContentTag(isTOCIdentifier);
-		if (fTableOfContentTag != null) {
-			if (fTableOfContent == null) {
-				fTableOfContent = fTableOfContentTag.getTableOfContent();
-			}
-		}
-		fToCSet = new HashSet<String>();
-	}
-
+	// private void createTableOfContent(boolean isTOCIdentifier) {
+	// fTableOfContentTag = fWikiModel.getTableOfContentTag(isTOCIdentifier);
+	// if (fTableOfContentTag != null) {
+	// if (fTableOfContent == null) {
+	// fTableOfContent = fTableOfContentTag.getTableOfContent();
+	// }
+	// }
+	// fToCSet = new HashSet<String>();
+	// }
 	private void handleTag(TagToken tag, WikiTagNode tagNode, String bodyString) {
 		String command = tagNode.getTagName();
 		try {
@@ -1845,8 +1846,8 @@ public class TracParser extends AbstractParser {
 	 * table of contents (TOC).
 	 * 
 	 * <br/><br/><b>Note:</b> in this level the wiki model will call the
-	 * <code>setUp()</code> method before parsing and the
-	 * <code>tearDown()</code> method after the parser has finished.
+	 * <code>setUp()</code> method before parsing and the <code>tearDown()</code>
+	 * method after the parser has finished.
 	 * 
 	 * @param wikiModel
 	 * @param rawWikitext
@@ -1923,8 +1924,7 @@ public class TracParser extends AbstractParser {
 	 * of contents (TOC)
 	 * 
 	 * <b>Note:</b> the wiki model doesn't call the <code>setUp()</code> or
-	 * <code>tearDown()</code> methods for the subsequent recursive parser
-	 * steps.
+	 * <code>tearDown()</code> methods for the subsequent recursive parser steps.
 	 * 
 	 * @param rawWikitext
 	 * @param wikiModel
@@ -1940,8 +1940,7 @@ public class TracParser extends AbstractParser {
 	 * of contents (TOC)
 	 * 
 	 * <b>Note:</b> the wiki model doesn't call the <code>setUp()</code> or
-	 * <code>tearDown()</code> methods for the subsequent recursive parser
-	 * steps.
+	 * <code>tearDown()</code> methods for the subsequent recursive parser steps.
 	 * 
 	 * @param rawWikitext
 	 * @param wikiModel
