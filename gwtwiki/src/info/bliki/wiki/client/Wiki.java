@@ -13,23 +13,18 @@ import com.google.gwt.user.client.rpc.InvocationException;
 import com.google.gwt.user.client.rpc.ServiceDefTarget;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.ClickListener;
-import com.google.gwt.user.client.ui.DockPanel;
 import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.HasAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.RootPanel;
-import com.google.gwt.user.client.ui.TabPanel;
-import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 /**
+ * A simple GWT wiki editor with basic wikipedia syntax support
  */
 public class Wiki implements EntryPoint {
-
-	private TabPanel fTabs = new TabPanel();
 
 	public static final HTML WIKI_TITLE = new HTML();
 
@@ -37,19 +32,17 @@ public class Wiki implements EntryPoint {
 
 	public static final TextBox WIKI_EDITOR_TITLE = new TextBox();
 
-	public static final TextArea WIKI_EDITOR_BODY = new TextArea();
+	public static WikiTextarea WIKI_EDITOR_BODY = null;
 
 	public static final HTML PREVIEW_HTML = new HTML();
 
 	public static final HTML ANSWER_HTML = new HTML();
 
-	 private final Button fPreviewButton = new Button("(P)review");
-
-	private final Button fSendArticle = new Button("(S)end wiki article for review");
+	private final Button fPreviewButton = new Button("(P)review");
 
 	protected WikipediaFilter fWikiFilter;
 
-	protected HashMap fWikiSettings;
+	protected HashMap<String, String> fWikiSettings;
 
 	private final WikiServiceAsync fService;
 
@@ -73,9 +66,9 @@ public class Wiki implements EntryPoint {
 		}
 		// setup wiki engine for preview:
 		fWikiFilter = new WikipediaFilter();
-		fWikiSettings = new HashMap();
+		fWikiSettings = new HashMap<String, String>();
 		fWikiSettings.put("wiki_url", "Wiki.html?title=${title}");
-
+		WIKI_EDITOR_BODY = new WikiTextarea(fWikiSettings);
 		fPreviewButton.addClickListener(new ClickListener() {
 			public void onClick(Widget sender) {
 				String str = WIKI_EDITOR_BODY.getText().trim();
@@ -87,35 +80,12 @@ public class Wiki implements EntryPoint {
 				WIKI_EDITOR_BODY.setFocus(true);
 			}
 		});
-		fSendArticle.setAccessKey('p');
-		fSendArticle.addClickListener(new ClickListener() {
-			public void onClick(Widget sender) {
-				String title = WIKI_EDITOR_TITLE.getText().trim();
-				if (title == null || title.length() == 0) {
-					title = "No_Title";
-				}
-				String str = WIKI_EDITOR_BODY.getText().trim();
-				if (str.length() > 0) {
-					callService(fService, title, str);
-				}
-				WIKI_EDITOR_BODY.setFocus(true);
-			}
-		});
-		fSendArticle.setAccessKey('s');
-		// <a href="mailto:test@test.com?subject=tests&body=test">dsfsdfsa</a>
 
 		VerticalPanel panel = WikiLoaderPanel.PANEL;
 		panel.setHorizontalAlignment(VerticalPanel.ALIGN_LEFT);
 		panel.setVerticalAlignment(VerticalPanel.ALIGN_TOP);
 		WikiLoaderPanel.HTML_PANEL.loadHTML(title);
 		panel.setWidth("100%");
-
-		DockPanel dp = new DockPanel();
-		// dp.add(list, DockPanel.WEST);
-		dp.add(panel, DockPanel.CENTER);
-		dp.setCellVerticalAlignment(panel, HasAlignment.ALIGN_TOP);
-		dp.setCellWidth(panel, "100%");
-		fTabs.add(dp, "article");
 
 		WIKI_EDITOR_BODY.setCharacterWidth(80);
 		WIKI_EDITOR_BODY.setVisibleLines(10);
@@ -130,19 +100,16 @@ public class Wiki implements EntryPoint {
 		editPanel.add(WIKI_EDITOR_BODY);
 		HorizontalPanel p2 = new HorizontalPanel();
 		p2.add(fPreviewButton);
-		p2.add(fSendArticle);
+		// p2.add(fSendArticle);
 		p2.add(ANSWER_HTML);
 		editPanel.add(p2);
 		editPanel.add(ANSWER_HTML);
 		editPanel.add(PREVIEW_HTML);
-		fTabs.add(editPanel, "edit");
 
-		fTabs.selectTab(0);
-
-		fTabs.setWidth("100%");
-		fTabs.setHeight("100%");
-		// History.addHistoryListener(this);
-		RootPanel.get().add(fTabs);
+		RootPanel slot = RootPanel.get("editor");
+		if (slot != null) {
+			slot.add(editPanel);
+		}
 	}
 
 	public static native String getMainArticle() /*-{
@@ -172,7 +139,7 @@ public class Wiki implements EntryPoint {
 
 			}
 		});
-	} 
+	}
 
 	public static native void renderCode() /*-{
 	  $wnd.dp.SyntaxHighlighter.HighlightAll('code');

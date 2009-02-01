@@ -21,13 +21,13 @@ import java.util.NoSuchElementException;
  */
 public class WikipediaParser extends WikipediaScanner {
 
-	public static final Map INTERWIKI_WIKIPEDIA = new HashMap();
+	public static final Map<String,String> INTERWIKI_WIKIPEDIA = new HashMap();
 
-	public static final Map INTERWIKI_WIKIBOOKS = new HashMap();
+	public static final Map<String,String> INTERWIKI_WIKIBOOKS = new HashMap();
 
-	public static final Map INTERWIKI_WIKIQUOTE = new HashMap();
+	public static final Map<String,String> INTERWIKI_WIKIQUOTE = new HashMap();
 
-	public static final Map INTERWIKI_WIKINEWS = new HashMap();
+	public static final Map<String,String> INTERWIKI_WIKINEWS = new HashMap();
 
 	public static final HashSet STOP_TAGS_SET = new HashSet();
 
