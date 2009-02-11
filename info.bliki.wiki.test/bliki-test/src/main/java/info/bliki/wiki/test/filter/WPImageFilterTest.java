@@ -40,8 +40,8 @@ public class WPImageFilterTest extends FilterTestSupport {
 
 	public void testImage03() {
 		assertEquals(
-				"\n" + 
-				"<p><a class=\"externallink\" href=\"http://Westernpad.jpg\" rel=\"nofollow\" title=\"http://Westernpad.jpg\">http://Westernpad.jpg</a></p>",
+				"\n"
+						+ "<p><a class=\"externallink\" href=\"http://Westernpad.jpg\" rel=\"nofollow\" title=\"http://Westernpad.jpg\">http://Westernpad.jpg</a></p>",
 				wikiModel.render("http://Westernpad.jpg"));
 	}
 
@@ -80,8 +80,36 @@ public class WPImageFilterTest extends FilterTestSupport {
 	}
 
 	public void testImage08() {
-		assertEquals("\n" + 
-				"<p><a class=\"externallink\" href=\"http://www.homeportals.net/downloads/ClassDiagram_3.0.198.jpg\" rel=\"nofollow\" title=\"http://www.homeportals.net/downloads/ClassDiagram_3.0.198.jpg\">Class\n" + 
-				"Diagram</a></p>", wikiModel.render("[http://www.homeportals.net/downloads/ClassDiagram_3.0.198.jpg Class\n" + "Diagram]"));
+		assertEquals(
+				"\n"
+						+ "<p><a class=\"externallink\" href=\"http://www.homeportals.net/downloads/ClassDiagram_3.0.198.jpg\" rel=\"nofollow\" title=\"http://www.homeportals.net/downloads/ClassDiagram_3.0.198.jpg\">Class\n"
+						+ "Diagram</a></p>", wikiModel.render("[http://www.homeportals.net/downloads/ClassDiagram_3.0.198.jpg Class\n"
+						+ "Diagram]"));
+	}
+
+	public void testImage09() {
+		assertEquals(
+				"\n"
+						+ "<p><div style=\"width:150px\"><a class=\"internal\" href=\"http://www.bliki.info/wiki/Main_Page\" title=\"Alt text\"><img src=\"http://www.bliki.info/wiki/150px-Example.png\" alt=\"Alt text\" title=\"Alt text\" class=\"location-none\" width=\"150px\" />\n"
+						+ "</a>\n" + "<div class=\"caption\">Title text</div></div>\n" + "</p>", wikiModel
+						.render("[[Image:Example.png|150px|link=Main Page\n" + "|alt=Alt text|Title text]]"));
+	}
+	
+	public void testImage10() {
+		assertEquals(
+				"\n"
+						+ "<p><div style=\"width:150px\"><a class=\"internal\" href=\"http://www.bliki.info/wiki/Main_Page\" title=\"Alt text\"><img src=\"http://www.bliki.info/wiki/150px-Example.png\" alt=\"Alt text\" title=\"Alt text\" class=\"location-none type-thumb\" width=\"150px\" />\n"
+						+ "</a>\n" + "<div class=\"thumbcaption\">Caption</div></div>\n" + "</p>", wikiModel
+						.render("[[Bild:Example.png|150px|link=Main Page|thumb|alt=Alt text|Caption]]"));
+	}
+	
+	public void testImage11() {
+		assertEquals(
+				"\n" + 
+				"<p><div style=\"width:150px\"><img src=\"http://www.bliki.info/wiki/150px-Example.png\" alt=\"Alt text\" title=\"Alt text\" class=\"location-none type-thumb\" width=\"150px\" />\n" + 
+				"\n" + 
+				"<div class=\"thumbcaption\">Caption</div></div>\n" + 
+				"</p>", wikiModel
+						.render("[[Bild:Example.png|150px|link=|thumb|alt=Alt text|Caption]]"));
 	}
 }

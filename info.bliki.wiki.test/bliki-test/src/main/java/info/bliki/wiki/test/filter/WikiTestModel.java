@@ -512,7 +512,7 @@ public class WikiTestModel extends WikiModel {
 
 	@Override
 	public boolean isImageNamespace(String name) {
-		return super.isImageNamespace(name);
+		return super.isImageNamespace(name)||name.equals(getImageNamespace());
 	}
 
 	@Override
