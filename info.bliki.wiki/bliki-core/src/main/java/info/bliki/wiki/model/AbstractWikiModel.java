@@ -277,7 +277,15 @@ public abstract class AbstractWikiModel implements IWikiModel, IContext {
 		String caption = imageFormat.getCaption();
 		TagNode divTagNode = new TagNode("div");
 		divTagNode.addAttribute("id", "image", false);
-		divTagNode.addAttribute("href", hrefImageLink, false);
+		// String link = imageFormat.getLink();
+		// if (link != null) {
+		// String href = encodeTitleToUrl(link, true);
+		// divTagNode.addAttribute("href", href, false);
+		// } else {
+		if (hrefImageLink.length() != 0) {
+			divTagNode.addAttribute("href", hrefImageLink, false);
+		}
+		// }
 		divTagNode.addAttribute("src", srcImageLink, false);
 		divTagNode.addObjectAttribute("wikiobject", imageFormat);
 		if (pxSize != -1) {
@@ -297,8 +305,11 @@ public abstract class AbstractWikiModel implements IWikiModel, IContext {
 			//			
 			TagStack localStack = WikipediaParser.parseRecursive(caption, this, true, true);
 			captionTagNode.addChildren(localStack.getNodeList());
-			String altAttribute = captionTagNode.getBodyString();
-			imageFormat.setAlt(altAttribute);
+			String altAttribute = imageFormat.getAlt();
+			if (altAttribute == null) {
+				altAttribute = captionTagNode.getBodyString();
+				imageFormat.setAlt(altAttribute);
+			}
 			pushNode(captionTagNode);
 			// WikipediaParser.parseRecursive(caption, this);
 			popNode();
@@ -316,7 +327,7 @@ public abstract class AbstractWikiModel implements IWikiModel, IContext {
 		WPATag aTagNode = new WPATag();
 		// append(aTagNode);
 		aTagNode.addAttribute("id", "w", true);
-		String href = topic;
+		String href = encodeTitleToUrl(topic, true);
 		if (hashSection != null) {
 			href = href + '#' + encodeTitleToUrl(hashSection, true);
 		}
@@ -649,31 +660,32 @@ public abstract class AbstractWikiModel implements IWikiModel, IContext {
 		return null;
 	}
 
-//	public TableOfContentTag getTableOfContentTag(boolean isTOCIdentifier) {
-//		if (fTableOfContentTag == null) {
-//			TableOfContentTag tableOfContentTag = new TableOfContentTag("div");
-//			tableOfContentTag.addAttribute("id", "tableofcontent", true);
-//			tableOfContentTag.setShowToC(false);
-//			tableOfContentTag.setTOCIdentifier(isTOCIdentifier);
-//			fTableOfContentTag = tableOfContentTag;
-//		} else {
-//			if (isTOCIdentifier) {
-//				// try {
-//				TableOfContentTag tableOfContentTag = (TableOfContentTag) fTableOfContentTag.clone();
-//				fTableOfContentTag.setShowToC(false);
-//				tableOfContentTag.setShowToC(true);
-//				tableOfContentTag.setTOCIdentifier(isTOCIdentifier);
-//				fTableOfContentTag = tableOfContentTag;
-//				// } catch (CloneNotSupportedException e) {
-//				// e.printStackTrace();
-//				// }
-//			} else {
-//				return fTableOfContentTag;
-//			}
-//		}
-//		this.append(fTableOfContentTag);
-//		return fTableOfContentTag;
-//	}
+	// public TableOfContentTag getTableOfContentTag(boolean isTOCIdentifier) {
+	// if (fTableOfContentTag == null) {
+	// TableOfContentTag tableOfContentTag = new TableOfContentTag("div");
+	// tableOfContentTag.addAttribute("id", "tableofcontent", true);
+	// tableOfContentTag.setShowToC(false);
+	// tableOfContentTag.setTOCIdentifier(isTOCIdentifier);
+	// fTableOfContentTag = tableOfContentTag;
+	// } else {
+	// if (isTOCIdentifier) {
+	// // try {
+	// TableOfContentTag tableOfContentTag = (TableOfContentTag)
+	// fTableOfContentTag.clone();
+	// fTableOfContentTag.setShowToC(false);
+	// tableOfContentTag.setShowToC(true);
+	// tableOfContentTag.setTOCIdentifier(isTOCIdentifier);
+	// fTableOfContentTag = tableOfContentTag;
+	// // } catch (CloneNotSupportedException e) {
+	// // e.printStackTrace();
+	// // }
+	// } else {
+	// return fTableOfContentTag;
+	// }
+	// }
+	// this.append(fTableOfContentTag);
+	// return fTableOfContentTag;
+	// }
 
 	public ITemplateFunction getTemplateFunction(String name) {
 		return getTemplateMap().get(name);
@@ -1207,7 +1219,7 @@ public abstract class AbstractWikiModel implements IWikiModel, IContext {
 			} else {
 			}
 		}
-		
+
 		if (fTableOfContentTag != null) {
 			if (fTableOfContent == null) {
 				fTableOfContent = fTableOfContentTag.getTableOfContent();

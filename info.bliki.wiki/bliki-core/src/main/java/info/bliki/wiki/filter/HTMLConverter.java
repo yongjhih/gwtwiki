@@ -15,7 +15,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-
 /**
  * A converter which renders the internal node representation as HTML text
  * 
@@ -138,19 +137,23 @@ public class HTMLConverter implements ITextConverter {
 			resultBuffer.append("px");
 			resultBuffer.append("\">");
 		}
-		resultBuffer.append("<a class=\"internal\" href=\"");
-		resultBuffer.append(map.get("href"));
-		resultBuffer.append("\" ");
-		if (caption != null && caption.length() > 0) {
-			resultBuffer.append("title=\"");
-			if (alt == null) {
-				resultBuffer.append(caption);
-			} else {
-				resultBuffer.append(alt);
+		String href = map.get("href");
+		if (href != null) {
+			resultBuffer.append("<a class=\"internal\" href=\"");
+			resultBuffer.append(map.get("href"));
+			resultBuffer.append("\" ");
+
+			if (caption != null && caption.length() > 0) {
+				resultBuffer.append("title=\"");
+				if (alt == null) {
+					resultBuffer.append(caption);
+				} else {
+					resultBuffer.append(alt);
+				}
+				resultBuffer.append('\"');
 			}
-			resultBuffer.append('\"');
+			resultBuffer.append('>');
 		}
-		resultBuffer.append('>');
 
 		resultBuffer.append("<img src=\"");
 		resultBuffer.append(map.get("src"));
@@ -184,7 +187,9 @@ public class HTMLConverter implements ITextConverter {
 		}
 		resultBuffer.append(" />\n");
 
-		resultBuffer.append("</a>");
+		if (href != null) {
+			resultBuffer.append("</a>");
+		}
 		List<Object> children = imageTagNode.getChildren();
 		if (children.size() != 0) {
 			nodesToText(children, resultBuffer, model);

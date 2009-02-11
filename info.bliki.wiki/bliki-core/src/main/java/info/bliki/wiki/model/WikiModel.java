@@ -1,6 +1,9 @@
 package info.bliki.wiki.model;
 
+import info.bliki.htmlcleaner.ContentToken;
 import info.bliki.wiki.filter.Encoder;
+import info.bliki.wiki.filter.WikipediaParser;
+import info.bliki.wiki.tags.WPATag;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -104,7 +107,27 @@ public class WikiModel extends AbstractWikiModel {
 				hrefLink = fExternalWikiBaseURL.replace("${title}", "");
 			}
 		}
-		super.appendInternalLink(hrefLink, hashSection, topicDescription, cssClass, parseRecursive);
+
+		WPATag aTagNode = new WPATag();
+		// append(aTagNode);
+		aTagNode.addAttribute("id", "w", true);
+		String href = hrefLink;
+		if (hashSection != null) {
+			href = href + '#' + encodeTitleToUrl(hashSection, true);
+		}
+		aTagNode.addAttribute("href", href, true);
+		if (cssClass != null) {
+			aTagNode.addAttribute("class", cssClass, true);
+		}
+		aTagNode.addObjectAttribute("wikilink", topic);
+
+		pushNode(aTagNode);
+		if (parseRecursive) {
+			WikipediaParser.parseRecursive(topicDescription.trim(), this, false, true);
+		} else {
+			aTagNode.addChild(new ContentToken(topicDescription));
+		}
+		popNode();
 	}
 
 	/**
@@ -145,13 +168,12 @@ public class WikiModel extends AbstractWikiModel {
 	 * <br/><br/><b>Note</b>: the pipe symbol (i.e. &quot;|&quot;) splits the
 	 * <code>rawImageLink</code> into different segments. The first segment is
 	 * used as the <code>&lt;image-name&gt;</code> and typically ends with
-	 * extensions like <code>.png</code>, <code>.gif</code>,
-	 * <code>.jpg</code> or <code>.jpeg</code>.
+	 * extensions like <code>.png</code>, <code>.gif</code>, <code>.jpg</code> or
+	 * <code>.jpeg</code>.
 	 * 
-	 * <br/><br/><b>Note</b>: if the image link contains a "width" attribute,
-	 * the filename is constructed as
-	 * <code>&lt;size&gt;px-&lt;image-name&gt;</code>, otherwise it's only the
-	 * <code>&lt;image-name&gt;</code>.
+	 * <br/><br/><b>Note</b>: if the image link contains a "width" attribute, the
+	 * filename is constructed as <code>&lt;size&gt;px-&lt;image-name&gt;</code>,
+	 * otherwise it's only the <code>&lt;image-name&gt;</code>.
 	 * 
 	 * @param imageNamespace
 	 *          the image namespace
@@ -177,13 +199,24 @@ public class WikiModel extends AbstractWikiModel {
 			if (replaceColon()) {
 				imageName = imageName.replaceAll(":", "/");
 			}
-			if (replaceColon()) {
-				imageHref = imageHref.replace("${title}", imageNamespace + '/' + imageName);
-				imageSrc = imageSrc.replace("${image}", imageName);
+			String link = imageFormat.getLink();
+			if (link != null) {
+				if (link.length()==0) {
+					imageHref = "";
+				} else {
+					String encodedTitle = encodeTitleToUrl(link, true);
+					imageHref = imageHref.replace("${title}", encodedTitle);
+				}
+				
 			} else {
-				imageHref = imageHref.replace("${title}", imageNamespace + ':' + imageName);
-				imageSrc = imageSrc.replace("${image}", imageName);
+				if (replaceColon()) {
+					imageHref = imageHref.replace("${title}", imageNamespace + '/' + imageName);
+				} else {
+					imageHref = imageHref.replace("${title}", imageNamespace + ':' + imageName);
+				}
 			}
+			imageSrc = imageSrc.replace("${image}", imageName);
+
 			appendInternalImageLink(imageHref, imageSrc, imageFormat);
 		}
 	}

@@ -86,6 +86,9 @@ public class Encoder {
 	 */
 	public static String encodeUrl(String s) {
 		int len = s.length();
+		if (len==0) {
+			return "";
+		}
 		StringBuilder sbuf = new StringBuilder(len + len / 10);
 		for (int i = 0; i < len; i++) {
 			int ch = s.charAt(i);
@@ -168,6 +171,9 @@ public class Encoder {
    */
 	public static String encodeTitleToUrl(String wikiTitle, boolean firstCharacterAsUpperCase) {
 		int len = wikiTitle.length();
+		if (len==0) {
+			return "";
+		}
 		for (int j = len - 1; j > 0; j--) {
 			if (Character.isWhitespace(wikiTitle.charAt(j))) {
 				continue;
@@ -202,6 +208,9 @@ public class Encoder {
 	 */
 	public static String encodeTitleLocalUrl(String wikiTitle) {
 		int len = wikiTitle.length();
+		if (len==0) {
+			return "";
+		}
 		for (int j = len - 1; j > 0; j--) {
 			if (Character.isWhitespace(wikiTitle.charAt(j))) {
 				continue;
@@ -243,6 +252,9 @@ public class Encoder {
 	 */
 	public static void encodeHtml(String text, StringBuilder buffer) {
 		final int len = text.length();
+		if (len==0) {
+			return;
+		}
 		int currentIndex = 0;
 		int lastIndex = currentIndex;
 		while (currentIndex < len) {
@@ -305,6 +317,9 @@ public class Encoder {
 
 	public static String encodeHtml(String text) {
 		int len = text.length();
+		if (len==0) {
+			return "";
+		}
 		StringBuilder buffer = new StringBuilder(len + len / 10);
 		encodeHtml(text, buffer);
 		return buffer.toString();

@@ -8,7 +8,8 @@ import java.util.List;
  * Represents an [[Image:....]] wiki link with all the possible attributes.
  * 
  * Copied from Patch #1488331 sf.net user: o_rossmueller; modified by axelclk
- * http://sourceforge.net/tracker/index.php?func=detail&aid=1488331&group_id=128886&atid=713150
+ * http ://sourceforge.net/tracker/index.php?func=detail&aid=1488331&group_id=
+ * 128886 &atid=713150
  * 
  */
 public class ImageFormat {
@@ -17,6 +18,7 @@ public class ImageFormat {
 		ImageFormat img = new ImageFormat();
 		List<String> list = WikipediaScanner.splitByPipe(rawImageLink, null);
 		if (list.size() > 0) {
+			String attrValue;
 			String token = list.get(0);
 			img.setFilename("");
 			if (token.length() > imageNamespace.length() && token.charAt(imageNamespace.length()) == ':') {
@@ -30,21 +32,35 @@ public class ImageFormat {
 				caption = list.get(j).trim();
 				if (caption.length() > 0) {
 					token = caption.toLowerCase();
-					if (token.equals("frame") || token.equals("thumb") || token.equals("thumbnail")) {
-						img.setType(token);
-						continue;
-					}
+					int defIndex = token.indexOf("=");
+					if (defIndex > 0) {
+						token = token.substring(0, defIndex).trim();
+						if (token.equals("link")) {
+							attrValue = caption.substring(defIndex+1).trim();
+							img.setLink(attrValue);
+							continue;
+						}
+						if (token.equals("alt")) {
+							attrValue = caption.substring(defIndex+1).trim();
+							img.setAlt(attrValue);
+							continue;
+						}
+					} else {
+						if (token.equals("frame") || token.equals("thumb") || token.equals("thumbnail")) {
+							img.setType(token);
+							continue;
+						}
 
-					if (token.equals("right") || token.equals("left") || token.equals("center") || token.equals("none")) {
-						img.setLocation(token);
-						continue;
-					}
+						if (token.equals("right") || token.equals("left") || token.equals("center") || token.equals("none")) {
+							img.setLocation(token);
+							continue;
+						}
 
-					if (token.endsWith("px")) {
-						img.setSize(token);
-						continue;
+						if (token.endsWith("px")) {
+							img.setSize(token);
+							continue;
+						}
 					}
-
 					img.setCaption(caption);
 				}
 			}
@@ -63,10 +79,12 @@ public class ImageFormat {
 	private int fSize = -1;
 
 	private String fCaption;
-	
+
 	private String fAlt;
 
 	private String fNamespace;
+
+	private String fLink;
 
 	public String getAlt() {
 		return fAlt;
@@ -86,6 +104,15 @@ public class ImageFormat {
 
 	public String getNamespace() {
 		return fNamespace;
+	}
+
+	/**
+	 * Get the &quote;link=&quote; attribute from the [[Image:...]] wiki link.
+	 * 
+	 * @return the &quote;link=&quote; attribute
+	 */
+	public String getLink() {
+		return fLink;
 	}
 
 	/**
@@ -128,6 +155,10 @@ public class ImageFormat {
 
 	public void setNamespace(String namespace) {
 		this.fNamespace = namespace;
+	}
+
+	public void setLink(String link) {
+		this.fLink = link;
 	}
 
 	/**
