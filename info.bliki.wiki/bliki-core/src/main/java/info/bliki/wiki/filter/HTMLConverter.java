@@ -183,7 +183,7 @@ public class HTMLConverter implements ITextConverter {
 		}
 
 		if (pxSize != -1) {
-			resultBuffer.append(" width=\"").append(Integer.toString(pxSize)).append("px\"");
+			resultBuffer.append(" width=\"").append(Integer.toString(pxSize)).append('\"');
 		}
 		resultBuffer.append(" />\n");
 
