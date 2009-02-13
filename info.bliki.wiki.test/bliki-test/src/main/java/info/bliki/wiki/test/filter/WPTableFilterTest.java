@@ -330,7 +330,7 @@ public class WPTableFilterTest extends FilterTestSupport {
 				"<th class=\"fn\" colspan=\"2\" style=\"text-align:center; font-size:larger;\">Chris Capuano</th></tr>\n" + 
 				"<tr>\n" + 
 				"<th colspan=\"2\" style=\"text-align:center;\">\n" + 
-				"<div style=\"width:300px\"><a class=\"internal\" href=\"http://www.bliki.info/wiki/Image:300px-Cap.jpg\" ><img src=\"http://www.bliki.info/wiki/300px-Cap.jpg\" class=\"location-none\" width=\"300px\" />\n" + 
+				"<div style=\"width:300px\"><a class=\"internal\" href=\"http://www.bliki.info/wiki/Image:300px-Cap.jpg\" ><img src=\"http://www.bliki.info/wiki/300px-Cap.jpg\" class=\"location-none\" width=\"300\" />\n" + 
 				"</a></div>\n" + 
 				"<br/>\n" + 
 				"</th></tr>\n" + 

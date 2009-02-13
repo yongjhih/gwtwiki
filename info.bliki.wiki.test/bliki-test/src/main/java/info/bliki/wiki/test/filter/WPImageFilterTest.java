@@ -33,7 +33,7 @@ public class WPImageFilterTest extends FilterTestSupport {
 	public void testImage02() {
 		assertEquals(
 				"\n"
-						+ "<p>these are the <div style=\"width:220px\"><a class=\"internal\" href=\"http://www.bliki.info/wiki/Image:220px-FIFA_WM_2006_Teams.png\" title=\"Qualifying countries\"><img src=\"http://www.bliki.info/wiki/220px-FIFA_WM_2006_Teams.png\" alt=\"Qualifying countries\" title=\"Qualifying countries\" class=\"location-none type-thumb\" width=\"220px\" />\n"
+						+ "<p>these are the <div style=\"width:220px\"><a class=\"internal\" href=\"http://www.bliki.info/wiki/Image:220px-FIFA_WM_2006_Teams.png\" title=\"Qualifying countries\"><img src=\"http://www.bliki.info/wiki/220px-FIFA_WM_2006_Teams.png\" alt=\"Qualifying countries\" title=\"Qualifying countries\" class=\"location-none type-thumb\" width=\"220\" />\n"
 						+ "</a>\n" + "<div class=\"thumbcaption\">Qualifying countries</div></div>\n" + "...</p>", wikiModel
 						.render("these are the [[Image:FIFA WM 2006 Teams.png|thumb|220px|Qualifying countries]]..."));
 	}
@@ -75,7 +75,7 @@ public class WPImageFilterTest extends FilterTestSupport {
 	public void testImage07() {
 		assertEquals(
 				"\n"
-						+ "<p><div style=\"width:400px\"><a class=\"internal\" href=\"http://www.bliki.info/wiki/Image:400px-ImageFileName.jpg\" ><img src=\"http://www.bliki.info/wiki/400px-ImageFileName.jpg\" class=\"location-center\" width=\"400px\" />\n"
+						+ "<p><div style=\"width:400px\"><a class=\"internal\" href=\"http://www.bliki.info/wiki/Image:400px-ImageFileName.jpg\" ><img src=\"http://www.bliki.info/wiki/400px-ImageFileName.jpg\" class=\"location-center\" width=\"400\" />\n"
 						+ "</a></div>\n" + "</p>", wikiModel.render("[[Image:ImageFileName.jpg|400px|Center]]"));
 	}
 
@@ -90,7 +90,7 @@ public class WPImageFilterTest extends FilterTestSupport {
 	public void testImage09() {
 		assertEquals(
 				"\n"
-						+ "<p><div style=\"width:150px\"><a class=\"internal\" href=\"http://www.bliki.info/wiki/Main_Page\" title=\"Alt text\"><img src=\"http://www.bliki.info/wiki/150px-Example.png\" alt=\"Alt text\" title=\"Alt text\" class=\"location-none\" width=\"150px\" />\n"
+						+ "<p><div style=\"width:150px\"><a class=\"internal\" href=\"http://www.bliki.info/wiki/Main_Page\" title=\"Alt text\"><img src=\"http://www.bliki.info/wiki/150px-Example.png\" alt=\"Alt text\" title=\"Alt text\" class=\"location-none\" width=\"150\" />\n"
 						+ "</a>\n" + "<div class=\"caption\">Title text</div></div>\n" + "</p>", wikiModel
 						.render("[[Image:Example.png|150px|link=Main Page\n" + "|alt=Alt text|Title text]]"));
 	}
@@ -98,7 +98,7 @@ public class WPImageFilterTest extends FilterTestSupport {
 	public void testImage10() {
 		assertEquals(
 				"\n"
-						+ "<p><div style=\"width:150px\"><a class=\"internal\" href=\"http://www.bliki.info/wiki/Main_Page\" title=\"Alt text\"><img src=\"http://www.bliki.info/wiki/150px-Example.png\" alt=\"Alt text\" title=\"Alt text\" class=\"location-none type-thumb\" width=\"150px\" />\n"
+						+ "<p><div style=\"width:150px\"><a class=\"internal\" href=\"http://www.bliki.info/wiki/Main_Page\" title=\"Alt text\"><img src=\"http://www.bliki.info/wiki/150px-Example.png\" alt=\"Alt text\" title=\"Alt text\" class=\"location-none type-thumb\" width=\"150\" />\n"
 						+ "</a>\n" + "<div class=\"thumbcaption\">Caption</div></div>\n" + "</p>", wikiModel
 						.render("[[Bild:Example.png|150px|link=Main Page|thumb|alt=Alt text|Caption]]"));
 	}
@@ -106,7 +106,7 @@ public class WPImageFilterTest extends FilterTestSupport {
 	public void testImage11() {
 		assertEquals(
 				"\n" + 
-				"<p><div style=\"width:150px\"><img src=\"http://www.bliki.info/wiki/150px-Example.png\" alt=\"Alt text\" title=\"Alt text\" class=\"location-none type-thumb\" width=\"150px\" />\n" + 
+				"<p><div style=\"width:150px\"><img src=\"http://www.bliki.info/wiki/150px-Example.png\" alt=\"Alt text\" title=\"Alt text\" class=\"location-none type-thumb\" width=\"150\" />\n" + 
 				"\n" + 
 				"<div class=\"thumbcaption\">Caption</div></div>\n" + 
 				"</p>", wikiModel

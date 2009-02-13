@@ -166,7 +166,7 @@ public class TemplateFilterTest extends FilterTestSupport {
 						+ "<div class=\"noprint\" style=\"clear: right; border: solid #aaa\n"
 						+ "1px; margin: 0 0 1em 1em; font-size: 90%; background: #f9f9f9; width:\n"
 						+ "250px; padding: 4px; text-align: left; float: right;\">\n"
-						+ "<div style=\"float: left;\"><div style=\"width:44px\"><a class=\"internal\" href=\"http://www.bliki.info/wiki/Image:44px-Wikipedia-logo-%0Aen.png\" ><img src=\"http://www.bliki.info/wiki/44px-Wikipedia-logo-%0Aen.png\" class=\"location-none\" width=\"44px\" />\n"
+						+ "<div style=\"float: left;\"><div style=\"width:44px\"><a class=\"internal\" href=\"http://www.bliki.info/wiki/Image:44px-Wikipedia-logo-%0Aen.png\" ><img src=\"http://www.bliki.info/wiki/44px-Wikipedia-logo-%0Aen.png\" class=\"location-none\" width=\"44\" />\n"
 						+ "</a></div>\n"
 						+ "</div>\n"
 						+ "<div style=\"margin-left: 60px;\"><a href=\"http://www.bliki.info/wiki/Wikipedia\" id=\"w\">Wikipedia</a> has an\n"
