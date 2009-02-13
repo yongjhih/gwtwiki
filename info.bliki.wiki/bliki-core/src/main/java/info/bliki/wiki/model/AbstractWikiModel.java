@@ -74,16 +74,18 @@ public abstract class AbstractWikiModel implements IWikiModel, IContext {
 	 * A tag that manages the &quot;table of content&quot;
 	 * 
 	 */
-	private TableOfContentTag fTableOfContentTag = null;
+	protected TableOfContentTag fTableOfContentTag = null;
 	/**
 	 * &quot;table of content&quot;
 	 * 
 	 */
-	private List<Object> fTableOfContent = null;
+	protected List<Object> fTableOfContent = null;
+	
 	/**
 	 * Contains all anchor strings to create unique anchors
 	 */
-	private HashSet<String> fToCSet;
+	protected HashSet<String> fToCSet;
+	
 	/**
 	 * Map an attribute name to its value(s). These values are set by outside code
 	 * via st.setAttribute(name, value). StringTemplate is like self in that a
