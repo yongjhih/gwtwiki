@@ -1,6 +1,5 @@
 package info.bliki.wiki.filter;
 
-import info.bliki.htmlcleaner.BaseToken;
 import info.bliki.htmlcleaner.ContentToken;
 import info.bliki.htmlcleaner.EndTagToken;
 import info.bliki.htmlcleaner.TagNode;
@@ -16,7 +15,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * A converter which renders the internal node representation as HTML text
+ * A converter which renders the internal tree node representation as HTML text
  * 
  */
 public class HTMLConverter implements ITextConverter {
