@@ -67,12 +67,10 @@ public class TagNode extends TagToken {
 	 * risks; if you need this attribute (or other attributes not listed here) you
 	 * can add it with the <code>static addAllowedAttribute()</code> method.
 	 */
-	public static final String[] ALLOWED_ATTRIBUTES = {
-			"title", "align", "lang", "dir", "width", "height", "bgcolor", "clear", "noshade", "cite", "size", "face", "color", "type",
-			"start", "value", "compact", "summary", "width", "border", "frame", "rules", "cellspacing", "cellpadding", "valign", "char",
-			"charoff", "colgroup", "col", "span", "abbr", "axis", "headers", "scope", "rowspan", "colspan", "id", "class", "name",
-			"href", "rel", "alt", "src"
-	};
+	public static final String[] ALLOWED_ATTRIBUTES = { "title", "align", "lang", "dir", "width", "height", "bgcolor", "clear",
+			"noshade", "cite", "size", "face", "color", "type", "start", "value", "compact", "summary", "width", "border", "frame",
+			"rules", "cellspacing", "cellpadding", "valign", "char", "charoff", "colgroup", "col", "span", "abbr", "axis", "headers",
+			"scope", "rowspan", "colspan", "id", "class", "name", "href", "rel", "alt", "src" };
 
 	protected static final HashSet<String> ALLOWED_ATTRIBUTES_SET = new HashSet<String>();
 
@@ -260,21 +258,44 @@ public class TagNode extends TagToken {
 	 * 
 	 * @return
 	 */
-	public String getBodyString() {
-		List children = getChildren();
+	public void getBodyString(Appendable buf) throws IOException {
+		List<Object> children = getChildren();
 		if (children.size() == 1 && children.get(0) instanceof ContentToken) {
-			return ((ContentToken) children.get(0)).getContent();
-		}
-		if (children.size() > 0) {
-			StringBuilder buf = new StringBuilder(children.size() * 16);
-			for (int i = 0; i < children.size(); i++) {
-				if (children.get(i) instanceof ContentToken) {
-					buf.append(((ContentToken) children.get(i)).getContent());
-				} else if (children.get(i) instanceof HTMLTag) {
-					buf.append(((HTMLTag) children.get(i)).getBodyString());
+			buf.append(((ContentToken) children.get(0)).getContent());
+		} else {
+			if (children.size() > 0) {
+				for (int i = 0; i < children.size(); i++) {
+					if (children.get(i) instanceof ContentToken) {
+						buf.append(((ContentToken) children.get(i)).getContent());
+					} else if (children.get(i) instanceof HTMLTag) {
+						((HTMLTag) children.get(i)).getBodyString(buf);
+					}
 				}
 			}
-			return buf.toString();
+		}
+	}
+
+	/**
+	 * Get the pure content text without the tags from this HTMLTag
+	 * 
+	 * @return
+	 */
+	public String getBodyString() {
+		List<Object> children = getChildren();
+		if (children.size() == 1 && children.get(0) instanceof ContentToken) {
+			return ((ContentToken) children.get(0)).getContent();
+		} else {
+			if (children.size() > 0) {
+				StringBuilder buf = new StringBuilder(children.size() * 16);
+				for (int i = 0; i < children.size(); i++) {
+					if (children.get(i) instanceof ContentToken) {
+						buf.append(((ContentToken) children.get(i)).getContent());
+					} else if (children.get(i) instanceof HTMLTag) {
+						buf.append(((HTMLTag) children.get(i)).getBodyString());
+					}
+				}
+				return buf.toString();
+			}
 		}
 		return "";
 	}
