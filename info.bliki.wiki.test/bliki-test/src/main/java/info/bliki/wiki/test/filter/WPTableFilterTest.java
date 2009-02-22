@@ -1,5 +1,6 @@
 package info.bliki.wiki.test.filter;
 
+import info.bliki.wiki.filter.PlainTextConverter;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
@@ -40,13 +41,8 @@ public class WPTableFilterTest extends FilterTestSupport {
 			+ "| A || B\n" + "|- \n" + "| C || D \n" + "|}\n" + "</nowiki></pre></blockquote>\n" + "\n"
 			+ "\'\'\'What it looks like in your browser\'\'\'\n"
 			+ "<blockquote style=\"background: white; border: 1px solid rgb(153, 153, 153); padding: 1em;\">\n" + "{| \n" + "| A\n"
-			+ "| B\n" + "|- \n" + "| C\n" + "| D\n" + "|}\n" + "</blockquote>\n" + "";
+			+ "| B\n" + "|- \n" + "| C\n" + "| D\n" + "|}\n" + "</blockquote>\n";
 
-	// + "<td>&#160;</td><td width=\"48%\">\n"
-	// + "<blockquote style=\"background: white; border: 1px solid rgb(153, 153,
-	// 153); padding: 1em;\">\n"
-	//
-	// + "</blockquote></td></tr></table>\n";
 
 	public final String TEST5 = "<table><tr></tr><tr><td>&#160;</td><td width=\"48%\">\n"
 			+ "<blockquote style=\"background: white; border: 1px solid rgb(153, 153, 153); padding: 1em;\">\n"
@@ -108,167 +104,51 @@ public class WPTableFilterTest extends FilterTestSupport {
 
 	public void testBlockquoteTable01() {
 		assertEquals(
-				"<a id=\"Simple_example\" name=\"Simple_example\"></a><h3>Simple example</h3>\n" + 
-				"<p>Both of these generate the same output.  Choose a style based on the number of cells in each row and the total text inside each cell.</p>\n" + 
-				"<p><b>Wiki markup</b>\n" + 
-				"</p><blockquote style=\"background: white; border: 1px solid rgb(153, 153, 153); padding: 1em;\">\n" + 
-				"<pre>\n" + 
-				"{| \n" + 
-				"| A \n" + 
-				"| B\n" + 
-				"|- \n" + 
-				"| C\n" + 
-				"| D\n" + 
-				"|}\n" + 
-				"</pre></blockquote>\n" + 
-				"<blockquote style=\"background: white; border: 1px solid rgb(153, 153, 153); padding: 1em;\">\n" + 
-				"<pre>\n" + 
-				"{| \n" + 
-				"| A || B\n" + 
-				"|- \n" + 
-				"| C || D \n" + 
-				"|}\n" + 
-				"</pre></blockquote>\n" + 
-				"\n" + 
-				"<p><b>What it looks like in your browser</b>\n" + 
-				"</p><blockquote style=\"background: white; border: 1px solid rgb(153, 153, 153); padding: 1em;\">\n" + 
-				"\n" + 
-				"<div style=\"page-break-inside:	avoid;\">\n" + 
-				"<table>\n" + 
-				"<tr>\n" + 
-				"<td>A</td>\n" + 
-				"<td>B</td></tr>\n" + 
-				"<tr>\n" + 
-				"<td>C</td>\n" + 
-				"<td>D</td></tr></table></div></blockquote>\n" + 
-				"", wikiModel.render(TEST3));
+				"<a id=\"Simple_example\" name=\"Simple_example\"></a><h3>Simple example</h3>\n"
+						+ "<p>Both of these generate the same output.  Choose a style based on the number of cells in each row and the total text inside each cell.</p>\n"
+						+ "<p><b>Wiki markup</b>\n"
+						+ "</p><blockquote style=\"background: white; border: 1px solid rgb(153, 153, 153); padding: 1em;\">\n" + "<pre>\n"
+						+ "{| \n" + "| A \n" + "| B\n" + "|- \n" + "| C\n" + "| D\n" + "|}\n" + "</pre></blockquote>\n"
+						+ "<blockquote style=\"background: white; border: 1px solid rgb(153, 153, 153); padding: 1em;\">\n" + "<pre>\n"
+						+ "{| \n" + "| A || B\n" + "|- \n" + "| C || D \n" + "|}\n" + "</pre></blockquote>\n" + "\n"
+						+ "<p><b>What it looks like in your browser</b>\n"
+						+ "</p><blockquote style=\"background: white; border: 1px solid rgb(153, 153, 153); padding: 1em;\">\n" + "\n"
+						+ "<div style=\"page-break-inside:	avoid;\">\n" + "<table>\n" + "<tr>\n" + "<td>A</td>\n" + "<td>B</td></tr>\n"
+						+ "<tr>\n" + "<td>C</td>\n" + "<td>D</td></tr></table></div></blockquote>\n" + "", wikiModel.render(TEST3));
 	}
 
 	public void testBlockquoteTable02() {
-		assertEquals("\n" + 
-				"<table>\n" + 
-				"\n" + 
-				"<tr>\n" + 
-				" \n" + 
-				"\n" + 
-				"<td />\n" + 
-				"\n" + 
-				"\n" + 
-				"</tr>\n" + 
-				"\n" + 
-				"</table>\n" + 
-				"", wikiModel
-				.render("<table><tr> \n" + "<td></td>\n\n</tr>\n</table>\n"));
+		assertEquals("\n" + "<table>\n" + "\n" + "<tr>\n" + " \n" + "\n" + "<td />\n" + "\n" + "\n" + "</tr>\n" + "\n" + "</table>\n"
+				+ "", wikiModel.render("<table><tr> \n" + "<td></td>\n\n</tr>\n</table>\n"));
 	}
 
 	public void testBlockquoteTable03() {
-		assertEquals("\n" + 
-				"<table>\n" + 
-				"\n" + 
-				"<tr>\n" + 
-				" \n" + 
-				"\n" + 
-				"<td />\n" + 
-				"</tr>\n" + 
-				"<tr>\n" + 
-				"\n" + 
-				"<td />\n" + 
-				"</tr>\n" + 
-				"</table>\n" + 
-				"",
-				wikiModel.render("<table><tr> \n" + "<td></td><tr><td></tr></table>\n"));
+		assertEquals("\n" + "<table>\n" + "\n" + "<tr>\n" + " \n" + "\n" + "<td />\n" + "</tr>\n" + "<tr>\n" + "\n" + "<td />\n"
+				+ "</tr>\n" + "</table>\n" + "", wikiModel.render("<table><tr> \n" + "<td></td><tr><td></tr></table>\n"));
 	}
 
 	public void testBlockquoteTable04() {
-		assertEquals("\n" + 
-				"<table>\n" + 
-				"\n" + 
-				"<tr>\n" + 
-				" \n" + 
-				"\n" + 
-				"<td>number 1</td>\n" + 
-				"</tr>\n" + 
-				"<tr>\n" + 
-				"\n" + 
-				"<td>number2\n" + 
-				"</td>\n" + 
-				"</tr>\n" + 
-				"</table>", wikiModel.render("<table><tr> \n" + "<td>number 1<tr><td>number2</table>\n"));
+		assertEquals("\n" + "<table>\n" + "\n" + "<tr>\n" + " \n" + "\n" + "<td>number 1</td>\n" + "</tr>\n" + "<tr>\n" + "\n"
+				+ "<td>number2\n" + "</td>\n" + "</tr>\n" + "</table>", wikiModel.render("<table><tr> \n"
+				+ "<td>number 1<tr><td>number2</table>\n"));
 	}
 
 	public void testBlockquoteTable05() {
-		assertEquals("\n" + 
-				"<table>\n" + 
-				"\n" + 
-				"<tr />\n" + 
-				"<tr>\n" + 
-				"\n" + 
-				"<td> </td>\n" + 
-				"<td width=\"48%\"><blockquote style=\"background: white; border: 1px solid rgb(153, 153, 153); padding: 1em;\">\n" + 
-				"\n" + 
-				"<div style=\"page-break-inside:	avoid;\">\n" + 
-				"<table class=\"wikitable\">\n" + 
-				"<caption>Multiplication table</caption>\n" + 
-				"<tr>\n" + 
-				"<th>&#215; </th>\n" + 
-				"<th>1 </th>\n" + 
-				"<th>2 </th>\n" + 
-				"<th>3</th></tr>\n" + 
-				"<tr>\n" + 
-				"<th>1</th>\n" + 
-				"<td>1 </td>\n" + 
-				"<td>2 </td>\n" + 
-				"<td>3</td></tr>\n" + 
-				"<tr>\n" + 
-				"<th>2</th>\n" + 
-				"<td>2 </td>\n" + 
-				"<td>4 </td>\n" + 
-				"<td>6</td></tr>\n" + 
-				"<tr>\n" + 
-				"<th>3</th>\n" + 
-				"<td>3 </td>\n" + 
-				"<td>6 </td>\n" + 
-				"<td>9</td></tr>\n" + 
-				"<tr>\n" + 
-				"<th>4</th>\n" + 
-				"<td>4 </td>\n" + 
-				"<td>8 </td>\n" + 
-				"<td>12</td></tr>\n" + 
-				"<tr>\n" + 
-				"<th>5</th>\n" + 
-				"<td>5 </td>\n" + 
-				"<td>10 </td>\n" + 
-				"<td>15</td></tr></table></div></blockquote></td>\n" + 
-				"</tr>\n" + 
-				"</table>\n" + 
-				"", wikiModel.render(TEST5));
+		assertEquals("\n" + "<table>\n" + "\n" + "<tr />\n" + "<tr>\n" + "\n" + "<td> </td>\n"
+				+ "<td width=\"48%\"><blockquote style=\"background: white; border: 1px solid rgb(153, 153, 153); padding: 1em;\">\n"
+				+ "\n" + "<div style=\"page-break-inside:	avoid;\">\n" + "<table class=\"wikitable\">\n"
+				+ "<caption>Multiplication table</caption>\n" + "<tr>\n" + "<th>&#215; </th>\n" + "<th>1 </th>\n" + "<th>2 </th>\n"
+				+ "<th>3</th></tr>\n" + "<tr>\n" + "<th>1</th>\n" + "<td>1 </td>\n" + "<td>2 </td>\n" + "<td>3</td></tr>\n" + "<tr>\n"
+				+ "<th>2</th>\n" + "<td>2 </td>\n" + "<td>4 </td>\n" + "<td>6</td></tr>\n" + "<tr>\n" + "<th>3</th>\n" + "<td>3 </td>\n"
+				+ "<td>6 </td>\n" + "<td>9</td></tr>\n" + "<tr>\n" + "<th>4</th>\n" + "<td>4 </td>\n" + "<td>8 </td>\n"
+				+ "<td>12</td></tr>\n" + "<tr>\n" + "<th>5</th>\n" + "<td>5 </td>\n" + "<td>10 </td>\n"
+				+ "<td>15</td></tr></table></div></blockquote></td>\n" + "</tr>\n" + "</table>\n" + "", wikiModel.render(TEST5));
 	}
 
 	public void testBlockquoteTable06() {
-		assertEquals("\n" + 
-				"<table align=\"center\" border=\"1\" cellpadding=\"3\" cellspacing=\"0\">\n" + 
-				"\n" + 
-				"  \n" + 
-				"<tr>\n" + 
-				"\n" + 
-				"     \n" + 
-				"<td>1</td>\n" + 
-				"     \n" + 
-				"<td>2</td>\n" + 
-				"  \n" + 
-				"</tr> \n" + 
-				"  \n" + 
-				"<tr>\n" + 
-				"\n" + 
-				"     \n" + 
-				"<td>3</td> \n" + 
-				"     \n" + 
-				"<td>4</td> \n" + 
-				"  \n" + 
-				"</tr>\n" + 
-				"\n" + 
-				"</table>\n" + 
-				"", wikiModel
+		assertEquals("\n" + "<table align=\"center\" border=\"1\" cellpadding=\"3\" cellspacing=\"0\">\n" + "\n" + "  \n" + "<tr>\n"
+				+ "\n" + "     \n" + "<td>1</td>\n" + "     \n" + "<td>2</td>\n" + "  \n" + "</tr> \n" + "  \n" + "<tr>\n" + "\n"
+				+ "     \n" + "<td>3</td> \n" + "     \n" + "<td>4</td> \n" + "  \n" + "</tr>\n" + "\n" + "</table>\n" + "", wikiModel
 				.render("<table align=\"center\" border=\"1\" cellspacing=\"0\" cellpadding=\"3\">\n" + "   <tr>\n" + "      <td>1</td>\n"
 						+ "      <td>2</td>\n" + "   </tr> \n" + "   <tr>\n" + "      <td>3</td> \n" + "      <td>4</td> \n" + "   </tr>\n"
 						+ "</table>\n"));
@@ -323,25 +203,25 @@ public class WPTableFilterTest extends FilterTestSupport {
 
 	public void testTHTableMix001() {
 		assertEquals(
-				"\n" + 
-				"<div style=\"page-break-inside:	avoid;\">\n" + 
-				"<table class=\"infobox bordered vcard\" style=\"width: 25em; text-align: left; font-size: 95%;\">\n" + 
-				"<tr>\n" + 
-				"<th class=\"fn\" colspan=\"2\" style=\"text-align:center; font-size:larger;\">Chris Capuano</th></tr>\n" + 
-				"<tr>\n" + 
-				"<th colspan=\"2\" style=\"text-align:center;\">\n" + 
-				"<div style=\"width:300px\"><a class=\"internal\" href=\"http://www.bliki.info/wiki/Image:300px-Cap.jpg\" ><img src=\"http://www.bliki.info/wiki/300px-Cap.jpg\" class=\"location-none\" width=\"300\" />\n" + 
-				"</a></div>\n" + 
-				"<br/>\n" + 
-				"</th></tr>\n" + 
-				"<tr>\n" + 
-				"<td colspan=\"2\" style=\"text-align:center; background: #042462;\"><span class=\"note\" style=\"color:white;\"><b><span style=\"color:white;\">Milwaukee Brewers</span> — No. 39</b></span></td></tr>\n" + 
-				"<tr style=\"text-align: center;\">\n" + 
-				"<td colspan=\"2\"><b><a href=\"http://www.bliki.info/wiki/Starting_pitcher\" id=\"w\">Starting pitcher</a></b></td></tr>\n" + 
-				"<tr>\n" + 
-				"<th colspan=\"2\" style=\"text-align:center;\">\n" + 
-				"Born: <a href=\"http://www.bliki.info/wiki/18\" id=\"w\">18</a> <a href=\"http://www.bliki.info/wiki/1978\" id=\"w\">1978</a><span style=\"display:none\"> (<span class=\"bday\">1978-8-18</span>)</span><span class=\"noprint\"> (age&#160;29)</span>\n" + 
-				"</th> </tr></table></div>",
+				"\n"
+						+ "<div style=\"page-break-inside:	avoid;\">\n"
+						+ "<table class=\"infobox bordered vcard\" style=\"width: 25em; text-align: left; font-size: 95%;\">\n"
+						+ "<tr>\n"
+						+ "<th class=\"fn\" colspan=\"2\" style=\"text-align:center; font-size:larger;\">Chris Capuano</th></tr>\n"
+						+ "<tr>\n"
+						+ "<th colspan=\"2\" style=\"text-align:center;\">\n"
+						+ "<div style=\"width:300px\"><a class=\"internal\" href=\"http://www.bliki.info/wiki/Image:300px-Cap.jpg\" ><img src=\"http://www.bliki.info/wiki/300px-Cap.jpg\" class=\"location-none\" width=\"300\" />\n"
+						+ "</a></div>\n"
+						+ "<br/>\n"
+						+ "</th></tr>\n"
+						+ "<tr>\n"
+						+ "<td colspan=\"2\" style=\"text-align:center; background: #042462;\"><span class=\"note\" style=\"color:white;\"><b><span style=\"color:white;\">Milwaukee Brewers</span> — No. 39</b></span></td></tr>\n"
+						+ "<tr style=\"text-align: center;\">\n"
+						+ "<td colspan=\"2\"><b><a href=\"http://www.bliki.info/wiki/Starting_pitcher\" id=\"w\">Starting pitcher</a></b></td></tr>\n"
+						+ "<tr>\n"
+						+ "<th colspan=\"2\" style=\"text-align:center;\">\n"
+						+ "Born: <a href=\"http://www.bliki.info/wiki/18\" id=\"w\">18</a> <a href=\"http://www.bliki.info/wiki/1978\" id=\"w\">1978</a><span style=\"display:none\"> (<span class=\"bday\">1978-8-18</span>)</span><span class=\"noprint\"> (age&#160;29)</span>\n"
+						+ "</th> </tr></table></div>",
 				wikiModel
 						.render("{| class=\"infobox bordered vcard\" style=\"width: 25em; text-align: left; font-size: 95%;\"\n"
 								+ "! colspan=\"2\" style=\"text-align:center; font-size:larger;\" class=\"fn\"| Chris Capuano\n"
@@ -357,22 +237,32 @@ public class WPTableFilterTest extends FilterTestSupport {
 	}
 
 	public void testEmptyCellTable() {
-		assertEquals("\n" + 
-				"<div style=\"page-break-inside:	avoid;\">\n" + 
-				"<table border=\"1\">\n" + 
-				"<tr>\n" + 
-				"<td></td>\n" + 
-				"<td>a.</td></tr>\n" + 
-				"<tr>\n" + 
-				"<td></td>\n" + 
-				"<td>b.</td></tr></table></div>\n" + 
-				"", wikiModel.render("{|border=\"1\"\n" + 
-				"|\n" + 
-				"|a.\n" + 
-				"|-\n" + 
-				"|\n" + 
-				"|b.\n" + 
+		assertEquals("\n" + "<div style=\"page-break-inside:	avoid;\">\n" + "<table border=\"1\">\n" + "<tr>\n" + "<td></td>\n"
+				+ "<td>a.</td></tr>\n" + "<tr>\n" + "<td></td>\n" + "<td>b.</td></tr></table></div>\n" + "", wikiModel
+				.render("{|border=\"1\"\n" + "|\n" + "|a.\n" + "|-\n" + "|\n" + "|b.\n" + "|}\n" + ""));
+	}
+
+	public void testBlockquoteTableText01() {
+		assertEquals("Simple exampleBoth of these generate the same output.  Choose a style based on the number of cells in each row and the total text inside each cell.Wiki markup\n" + 
+				"<nowiki>\n" + 
+				"{| \n" + 
+				"| A \n" + 
+				"| B\n" + 
+				"|- \n" + 
+				"| C\n" + 
+				"| D\n" + 
 				"|}\n" + 
-				""));
+				"</nowiki>\n" + 
+				"<nowiki>\n" + 
+				"{| \n" + 
+				"| A || B\n" + 
+				"|- \n" + 
+				"| C || D \n" + 
+				"|}\n" + 
+				"</nowiki>\n" + 
+				"What it looks like in your browser\n" + 
+				"\n" + 
+				"\n" + 
+				"", wikiModel.render(new PlainTextConverter(), TEST3));
 	}
 }
