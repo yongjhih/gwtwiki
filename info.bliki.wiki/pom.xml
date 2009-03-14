@@ -7,7 +7,7 @@
   <artifactId>info.bliki.wiki</artifactId>
   <packaging>pom</packaging>
   <name>Bliki POM</name>
-  <version>3.0.10</version>
+  <version>3.0.11</version>
   <description>The Bliki API is a Java-based Wiki to HTML renderer with MediaWiki syntax support.</description>
   <organization>
   	<name>MathEclipse</name>
@@ -63,6 +63,16 @@
       <groupId>org.apache.derby</groupId>
       <artifactId>derby</artifactId>
       <version>10.4.2.0</version>
+    </dependency>
+    <dependency>
+      <groupId>com.lowagie</groupId>
+      <artifactId>itext</artifactId>
+      <version>2.0.8</version>
+    </dependency>
+    <dependency>
+      <groupId>oro</groupId>
+      <artifactId>oro</artifactId>
+      <version>2.0.8</version>
     </dependency>
   </dependencies>
   
