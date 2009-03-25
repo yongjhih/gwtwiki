@@ -93,11 +93,21 @@ public class WPTableFilterTest extends FilterTestSupport {
 	}
 
 	public void testNestedTable2() {
-		assertEquals("\n" + "<div style=\"page-break-inside:	avoid;\">\n" + "<table border=\"1\">\n" + "<tr>\n"
-				+ "<td><a href=\"http://www.bliki.info/wiki/Test_Link\" id=\"w\">Test</a></td>\n" + "<td>&#945;</td>\n" + "<td>\n" + "\n"
-				+ "<div style=\"page-break-inside:	avoid;\">\n" + "<table bgcolor=\"#ABCDEF\" border=\"2\">\n" + "<tr>\n"
-				+ "<td>nested</td></tr>\n" + "<tr>\n" + "<td>table</td></tr></table></div></td>\n"
-				+ "<td>the original table again</td></tr></table></div>", wikiModel.render("{| border=1\n" + "|[[Test Link|Test]]\n"
+		assertEquals("\n" + 
+				"<div style=\"page-break-inside:	avoid;\">\n" + 
+				"<table border=\"1\">\n" + 
+				"<tr>\n" + 
+				"<td><a href=\"http://www.bliki.info/wiki/Test_Link\" title=\"Test Link\">Test</a></td>\n" + 
+				"<td>&#945;</td>\n" + 
+				"<td>\n" + 
+				"\n" + 
+				"<div style=\"page-break-inside:	avoid;\">\n" + 
+				"<table bgcolor=\"#ABCDEF\" border=\"2\">\n" + 
+				"<tr>\n" + 
+				"<td>nested</td></tr>\n" + 
+				"<tr>\n" + 
+				"<td>table</td></tr></table></div></td>\n" + 
+				"<td>the original table again</td></tr></table></div>", wikiModel.render("{| border=1\n" + "|[[Test Link|Test]]\n"
 				+ "| &alpha;\n" + "|\n" + "{| bgcolor=#ABCDEF border=2\n" + "|nested\n" + "|-\n" + "|table\n" + "|}\n"
 				+ "|the original table again\n" + "|}"));
 	}
@@ -167,21 +177,31 @@ public class WPTableFilterTest extends FilterTestSupport {
 
 	public void testAll() {
 		assertEquals(
-				"\n"
-						+ "<div style=\"page-break-inside:	avoid;\">\n"
-						+ "<table cellpadding=\"6\" cellspacing=\"3\" width=\"100%\">\n"
-						+ "<tr valign=\"top\">\n"
-						+ "<td bgcolor=\"#FFF4F4\" cellpadding=\"0\" cellspacing=\"0\" style=\"border: solid 1px #ffc9c9; padding:1em;\" width=\"40%\">\n"
-						+ "\n" + "<div style=\"page-break-inside:	avoid;\">\n" + "<table cellpadding=\"0\" cellspacing=\"0\">\n" + "<tr>\n"
-						+ "<td bgcolor=\"#FFF4F4\">\n" + "<b>Plog4u.org</b> is dedicated to developing a Wikipedia Eclipse Plugin\n"
-						+ "</td></tr></table></div>   </td>\n"
-						+ "<td bgcolor=\"#f0f0ff\" style=\"border: 1px solid #C6C9FF; padding: 1em;\" width=\"60%\">\n" + "\n"
-						+ "<div style=\"page-break-inside:	avoid;\">\n" + "<table cellpadding=\"6\" cellspacing=\"0\">\n" + "<tr>\n"
-						+ "<td bgcolor=\"#f0f0ff\">\n" + "</td></tr></table></div>\n" + "\n" + "</td></tr></table></div>", wikiModel
+				"\n" + 
+				"<div style=\"page-break-inside:	avoid;\">\n" + 
+				"<table cellpadding=\"6\" cellspacing=\"3\" width=\"100%\">\n" + 
+				"<tr valign=\"top\">\n" + 
+				"<td bgcolor=\"#FFF4F4\" cellpadding=\"0\" cellspacing=\"0\" style=\"border: solid 1px #ffc9c9; padding:1em;\" width=\"40%\">\n" + 
+				"\n" + 
+				"<div style=\"page-break-inside:	avoid;\">\n" + 
+				"<table cellpadding=\"0\" cellspacing=\"0\">\n" + 
+				"<tr>\n" + 
+				"<td bgcolor=\"#FFF4F4\">\n" + 
+				"<b>Plog4u.org</b> is dedicated to developing a Wikipedia Eclipse Plugin\n" + 
+				"</td></tr></table></div>   </td>\n" + 
+				"<td bgcolor=\"#f0f0ff\" style=\"border: 1px solid #C6C9FF; padding: 1em;\" width=\"60%\">\n" + 
+				"\n" + 
+				"<div style=\"page-break-inside:	avoid;\">\n" + 
+				"<table cellpadding=\"6\" cellspacing=\"0\">\n" + 
+				"<tr>\n" + 
+				"<td bgcolor=\"#f0f0ff\">\n" + 
+				"</td></tr></table></div>\n" + 
+				"\n" + 
+				"</td></tr></table></div>", wikiModel
 						.render(TEST));
 
 		assertEquals("\n" + "<div style=\"page-break-inside:	avoid;\">\n" + "<table border=\"1\">\n" + "<tr>\n"
-				+ "<td><a href=\"http://www.bliki.info/wiki/Test_Link\" id=\"w\">Test</a></td>\n" + "<td>&#945;</td>\n" + "<td>\n" + "\n"
+				+ "<td><a href=\"http://www.bliki.info/wiki/Test_Link\" title=\"Test Link\">Test</a></td>\n" + "<td>&#945;</td>\n" + "<td>\n" + "\n"
 				+ "<div style=\"page-break-inside:	avoid;\">\n" + "<table bgcolor=\"#ABCDEF\" border=\"2\">\n" + "<tr>\n"
 				+ "<td>nested</td></tr>\n" + "<tr>\n" + "<td>table</td></tr></table></div></td>\n"
 				+ "<td>the original table again</td></tr></table></div>", wikiModel.render("{| border=1\n" + "|[[Test Link|Test]]\n"
@@ -203,25 +223,25 @@ public class WPTableFilterTest extends FilterTestSupport {
 
 	public void testTHTableMix001() {
 		assertEquals(
-				"\n"
-						+ "<div style=\"page-break-inside:	avoid;\">\n"
-						+ "<table class=\"infobox bordered vcard\" style=\"width: 25em; text-align: left; font-size: 95%;\">\n"
-						+ "<tr>\n"
-						+ "<th class=\"fn\" colspan=\"2\" style=\"text-align:center; font-size:larger;\">Chris Capuano</th></tr>\n"
-						+ "<tr>\n"
-						+ "<th colspan=\"2\" style=\"text-align:center;\">\n"
-						+ "<div style=\"width:300px\"><a class=\"internal\" href=\"http://www.bliki.info/wiki/Image:300px-Cap.jpg\" ><img src=\"http://www.bliki.info/wiki/300px-Cap.jpg\" class=\"location-none\" width=\"300\" />\n"
-						+ "</a></div>\n"
-						+ "<br/>\n"
-						+ "</th></tr>\n"
-						+ "<tr>\n"
-						+ "<td colspan=\"2\" style=\"text-align:center; background: #042462;\"><span class=\"note\" style=\"color:white;\"><b><span style=\"color:white;\">Milwaukee Brewers</span> — No. 39</b></span></td></tr>\n"
-						+ "<tr style=\"text-align: center;\">\n"
-						+ "<td colspan=\"2\"><b><a href=\"http://www.bliki.info/wiki/Starting_pitcher\" id=\"w\">Starting pitcher</a></b></td></tr>\n"
-						+ "<tr>\n"
-						+ "<th colspan=\"2\" style=\"text-align:center;\">\n"
-						+ "Born: <a href=\"http://www.bliki.info/wiki/18\" id=\"w\">18</a> <a href=\"http://www.bliki.info/wiki/1978\" id=\"w\">1978</a><span style=\"display:none\"> (<span class=\"bday\">1978-8-18</span>)</span><span class=\"noprint\"> (age&#160;29)</span>\n"
-						+ "</th> </tr></table></div>",
+				"\n" + 
+				"<div style=\"page-break-inside:	avoid;\">\n" + 
+				"<table class=\"infobox bordered vcard\" style=\"width: 25em; text-align: left; font-size: 95%;\">\n" + 
+				"<tr>\n" + 
+				"<th class=\"fn\" colspan=\"2\" style=\"text-align:center; font-size:larger;\">Chris Capuano</th></tr>\n" + 
+				"<tr>\n" + 
+				"<th colspan=\"2\" style=\"text-align:center;\">\n" + 
+				"<div style=\"width:300px\"><a class=\"internal\" href=\"http://www.bliki.info/wiki/Image:300px-Cap.jpg\" ><img src=\"http://www.bliki.info/wiki/300px-Cap.jpg\" class=\"location-none\" width=\"300\" />\n" + 
+				"</a></div>\n" + 
+				"<br/>\n" + 
+				"</th></tr>\n" + 
+				"<tr>\n" + 
+				"<td colspan=\"2\" style=\"text-align:center; background: #042462;\"><span class=\"note\" style=\"color:white;\"><b><span style=\"color:white;\">Milwaukee Brewers</span> — No. 39</b></span></td></tr>\n" + 
+				"<tr style=\"text-align: center;\">\n" + 
+				"<td colspan=\"2\"><b><a href=\"http://www.bliki.info/wiki/Starting_pitcher\" title=\"Starting pitcher\">Starting pitcher</a></b></td></tr>\n" + 
+				"<tr>\n" + 
+				"<th colspan=\"2\" style=\"text-align:center;\">\n" + 
+				"Born: <a href=\"http://www.bliki.info/wiki/18\" title=\"18\">18</a> <a href=\"http://www.bliki.info/wiki/1978\" title=\"1978\">1978</a><span style=\"display:none\"> (<span class=\"bday\">1978-8-18</span>)</span><span class=\"noprint\"> (age&#160;29)</span>\n" + 
+				"</th> </tr></table></div>",
 				wikiModel
 						.render("{| class=\"infobox bordered vcard\" style=\"width: 25em; text-align: left; font-size: 95%;\"\n"
 								+ "! colspan=\"2\" style=\"text-align:center; font-size:larger;\" class=\"fn\"| Chris Capuano\n"

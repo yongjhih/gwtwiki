@@ -19,8 +19,8 @@ public class DivFilterTest extends FilterTestSupport {
 				"<div class=\"TabelleFeldListeHeader\">AuftragsKopf Felder</div>\n" + 
 				"\n" + 
 				"<ul>\n" + 
-				"<li><a href=\"http://www.bliki.info/wiki/Item1\" id=\"w\">item1</a></li>\n" + 
-				"<li><a href=\"http://www.bliki.info/wiki/Item2\" id=\"w\">item2</a></li>\n" + 
+				"<li><a href=\"http://www.bliki.info/wiki/Item1\" title=\"item1\">item1</a></li>\n" + 
+				"<li><a href=\"http://www.bliki.info/wiki/Item2\" title=\"item2\">item2</a></li>\n" + 
 				"<li>...</li></ul></div>",
 				wikiModel
 						.render("<div class=\"TabelleFeldListe\">\n"

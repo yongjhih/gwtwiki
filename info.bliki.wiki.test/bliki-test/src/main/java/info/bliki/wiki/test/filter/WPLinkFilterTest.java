@@ -17,18 +17,18 @@ public class WPLinkFilterTest extends FilterTestSupport {
 
 	public void testLinkHash() {
 		assertEquals(
-				"\n"
-						+ "<ol>\n"
-						+ "<li>\n"
-						+ "<ol>\n"
-						+ "<li><a href=\"http://www.bliki.info/wiki/Using_Eclipse_Wikipedia_Editor:Getting_Started#Features\" id=\"w\">Features</a></li></ol></li></ol>",
+				"\n" + 
+				"<ol>\n" + 
+				"<li>\n" + 
+				"<ol>\n" + 
+				"<li><a href=\"http://www.bliki.info/wiki/Using_Eclipse_Wikipedia_Editor:Getting_Started#Features\" title=\"Using Eclipse Wikipedia Editor:Getting Started\">Features</a></li></ol></li></ol>",
 				wikiModel.render("##[[Using Eclipse Wikipedia Editor:Getting Started#Features|Features]]"));
 	}
 
 	public void testLink() {
 		assertEquals(
-				"\n"
-						+ "<p>You could open the <a href=\"http://www.bliki.info/wiki/Wikipedia:sandbox\" id=\"w\">sandbox</a> in a separate window or tab to be able to see both this text and your tests in the sandbox.</p>",
+				"\n" + 
+				"<p>You could open the <a href=\"http://www.bliki.info/wiki/Wikipedia:sandbox\" title=\"Wikipedia:sandbox\">sandbox</a> in a separate window or tab to be able to see both this text and your tests in the sandbox.</p>",
 				wikiModel
 						.render("You could open the [[Wikipedia:sandbox|sandbox]] in a separate window or tab to be able to see both this text and your tests in the sandbox."));
 	}
@@ -42,11 +42,13 @@ public class WPLinkFilterTest extends FilterTestSupport {
 	}
 
 	public void testLink2() {
-		assertEquals("\n" + "<p><a href=\"http://www.bliki.info/wiki/Test\" id=\"w\">Test</a></p>", wikiModel.render("[[Test|Test]]"));
+		assertEquals("\n" + 
+				"<p><a href=\"http://www.bliki.info/wiki/Test\" title=\"Test\">Test</a></p>", wikiModel.render("[[Test|Test]]"));
 	}
 
 	public void testLink3() {
-		assertEquals("\n" + "<p><a href=\"http://www.bliki.info/wiki/Category:Test_page\" id=\"w\">Category:Test page</a></p>",
+		assertEquals("\n" + 
+				"<p><a href=\"http://www.bliki.info/wiki/Category:Test_page\" title=\"Category:Test page\">Category:Test page</a></p>",
 				wikiModel.render("[[:Category:Test page]]"));
 	}
 
@@ -73,27 +75,33 @@ public class WPLinkFilterTest extends FilterTestSupport {
 	}
 
 	public void testLink6() {
-		assertEquals("\n" + "<p><a href=\"http://www.bliki.info/wiki/Test:hello_world\" id=\"w\">hello world</a></p>", wikiModel
+		assertEquals("\n" + 
+				"<p><a href=\"http://www.bliki.info/wiki/Test:hello_world\" title=\"Test:hello world\">hello world</a></p>", wikiModel
 				.render("[[Test:hello world|]]"));
 	}
 
 	public void testLink7() {
-		assertEquals("\n" + "<p><a href=\"http://www.bliki.info/wiki/Test(hello_world)\" id=\"w\">Test</a></p>", wikiModel
+		assertEquals("\n" + 
+				"<p><a href=\"http://www.bliki.info/wiki/Test(hello_world)\" title=\"Test(hello world)\">Test</a></p>", wikiModel
 				.render("[[Test(hello world)|]]"));
 	}
 
 	public void testLink8() {
-		assertEquals("\n" + "<p><a href=\"http://www.bliki.info/wiki/Boston%2C_Massachusetts\" id=\"w\">Boston</a></p>", wikiModel
+		assertEquals("\n" + 
+				"<p><a href=\"http://www.bliki.info/wiki/Boston%2C_Massachusetts\" title=\"Boston, Massachusetts\">Boston</a></p>", wikiModel
 				.render("[[Boston, Massachusetts|]]"));
 	}
 
 	public void testLink9() {
-		assertEquals("\n" + "<p>test <a href=\"http://www.bliki.info/wiki/Lets_start%0Aa_2_rows_link\" id=\"w\">lets start\n"
-				+ "a 2 rows link</a> test</p>", wikiModel.render("test [[lets start\na 2 rows link]] test"));
+		assertEquals("\n" + 
+				"<p>test <a href=\"http://www.bliki.info/wiki/Lets_start%0Aa_2_rows_link\" title=\"lets start\n" + 
+				"a 2 rows link\">lets start\n" + 
+				"a 2 rows link</a> test</p>", wikiModel.render("test [[lets start\na 2 rows link]] test"));
 	}
 
 	public void testLink10() {
-		assertEquals("\n" + "<p>test <a href=\"http://www.bliki.info/wiki/Lets_start\" id=\"w\">a 2 rows piped link</a> test</p>",
+		assertEquals("\n" + 
+				"<p>test <a href=\"http://www.bliki.info/wiki/Lets_start\" title=\"lets start\">a 2 rows piped link</a> test</p>",
 				wikiModel.render("test [[lets start|\na 2 rows piped link]] test"));
 	}
 
@@ -105,8 +113,8 @@ public class WPLinkFilterTest extends FilterTestSupport {
 	//
 	public void testLink12() {
 		assertEquals(
-				"\n"
-						+ "<p>kellereien wie <a href=\"http://www.bliki.info/wiki/Henkell_%26amp%3B_S%C3%B6hnlein\" id=\"w\">Henkell</a>, <a href=\"http://www.bliki.info/wiki/S%C3%B6hnlein\" id=\"w\">Söhnlein</a></p>",
+				"\n" + 
+				"<p>kellereien wie <a href=\"http://www.bliki.info/wiki/Henkell_%26amp%3B_S%C3%B6hnlein\" title=\"Henkell &amp;amp; Söhnlein\">Henkell</a>, <a href=\"http://www.bliki.info/wiki/S%C3%B6hnlein\" title=\"Söhnlein\">Söhnlein</a></p>",
 				wikiModel.render("kellereien wie [[Henkell & Söhnlein|Henkell]], [[Söhnlein]]"));
 		Set set = wikiModel.getLinks();
 		assertTrue(set.contains("Söhnlein"));
@@ -114,7 +122,8 @@ public class WPLinkFilterTest extends FilterTestSupport {
 	}
 
 	public void testLink13() {
-		assertEquals("\n" + "<p>test [[lets start a <a href=\"http://www.bliki.info/wiki/Nested\" id=\"w\">nested</a> link]] test</p>",
+		assertEquals("\n" + 
+				"<p>test [[lets start a <a href=\"http://www.bliki.info/wiki/Nested\" title=\"nested\">nested</a> link]] test</p>",
 				wikiModel.render("test [[lets start a [[nested]] link]] test"));
 		Set<String> set = wikiModel.getLinks();
 		assertTrue(set.contains("nested"));
@@ -126,12 +135,14 @@ public class WPLinkFilterTest extends FilterTestSupport {
 	}
 
 	public void testSectionLink01() {
-		assertEquals("\n" + "<p><a href=\"#Section_Link\" id=\"w\">A Section Link</a></p>", wikiModel
+		assertEquals("\n" + 
+				"<p><a href=\"#Section_Link\" title=\"\">A Section Link</a></p>", wikiModel
 				.render("[[#Section Link|A Section Link]]"));
 	}
 
 	public void testSectionLink02() {
-		assertEquals("\n" + "<p><a href=\"#Section%C3%A4%C3%B6%C3%BC\" id=\"w\" /></p>", wikiModel.render("[[#Sectionäöü]]"));
+		assertEquals("\n" + 
+				"<p><a href=\"#Section%C3%A4%C3%B6%C3%BC\" title=\"\" /></p>", wikiModel.render("[[#Sectionäöü]]"));
 	}
 
 	public void testRedirect01() {

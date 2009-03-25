@@ -19,9 +19,9 @@ public class JavaTest extends FilterTestSupport {
 		assertEquals("\n" + 
 				"<p><b>Java Example</b>\n" + 
 				"</p><pre class=\"code\">\n" + 
-				"<b><font color=\"#7F0055\">public</font></b> <b><font color=\"#7F0055\">class</font></b> Test {\n" + 
-				"&#60; &#62; <font color=\"#2A00FF\">&#34; &#39; &#38;}\n" + 
-				"</font></pre>", result);
+				"<span style=\"color:#7F0055; font-weight: bold; \">public</span> <span style=\"color:#7F0055; font-weight: bold; \">class</span> Test {\n" + 
+				"&#60; &#62; <span style=\"color:#2A00FF; \">&#34; &#39; &#38;}\n" + 
+				"</span></pre>", result);
 	}
 
 	public void testJava002() {
@@ -30,7 +30,7 @@ public class JavaTest extends FilterTestSupport {
 		
 		assertEquals("\n" + 
 				"<p><b>Java Example</b>\n" + 
-				"</p><pre class=\"code\">Util util = <b><font color=\"#7F0055\">new</font></b> Util(<font color=\"#2A00FF\">&#34;c:\\\\temp\\\\&#34;</font>);\n" + 
+				"</p><pre class=\"code\">Util util = <span style=\"color:#7F0055; font-weight: bold; \">new</span> Util(<span style=\"color:#2A00FF; \">&#34;c:\\\\temp\\\\&#34;</span>);\n" + 
 				"util.doIt();</pre>", result);
 	}
 }

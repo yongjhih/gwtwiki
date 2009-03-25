@@ -3,12 +3,21 @@ package info.bliki.wiki.test.filter;
 import info.bliki.htmlcleaner.TagNode;
 import info.bliki.wiki.filter.MagicWord;
 import info.bliki.wiki.model.Configuration;
+import info.bliki.wiki.model.ITableOfContent;
 import info.bliki.wiki.model.WikiModel;
-import info.bliki.wiki.template.extension.AttributeRenderer;
-import info.bliki.wiki.template.extension.DollarContext;
+import info.bliki.wiki.tags.TableOfContentTag;
 
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Locale;
 import java.util.Map;
+
+import com.nutrun.xhtml.validator.XhtmlValidator;
+
+//import com.nutrun.xhtml.validator.XhtmlValidator;
 
 /**
  * Wiki model implementation which allows some special JUnit tests with
@@ -16,6 +25,14 @@ import java.util.Map;
  * 
  */
 public class WikiTestModel extends WikiModel {
+	public final static String XHTML_START = "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">\n"
+			+ "<html xmlns=\"http://www.w3.org/1999/xhtml\">\n"
+			+ "<head profile=\"http://gmpg.org/xfn/11\">\n"
+			+ "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\" />\n"
+			+ "\n"
+			+ "<title>A valid XHTML document</title>\n" + "</head>\n" + "<body>";
+	public final static String XHTML_END = "</body>\n" + "</html>";
+
 	public final static String PIPE_SYMBOL = "|<noinclude>{{template doc}}</noinclude>";
 	public final static String DOUBLE_PARAMETER = "{{{1}}}{{{1}}}";
 	public final static String REFLIST_TEXT = "<div class=\"references-small\" {{#if: {{{colwidth|}}}| style=\"-moz-column-width:{{{colwidth}}}; -webkit-column-width:{{{colwidth}}}; column-width:{{{colwidth}}};\" | {{#if: {{{1|}}}| style=\"-moz-column-count:{{{1}}}; -webkit-column-count:{{{1}}}; column-count:{{{1}}} }};\" |}}>\n"
@@ -409,24 +426,20 @@ public class WikiTestModel extends WikiModel {
 			+ "{{documentation}}\n"
 			+ "<!-- Add cats and interwikis to the /doc subpage, not here! -->\n" + "</noinclude>";
 
-	final static String FURTHER = "<includeonly>:<span class=\"boilerplate further\"\n" + 
-			">''{{{altphrase|Further information}}}: {{#if:{{{1|}}} |<!--then:-->{{{1}}} |<!--\n" + 
-			"else:-->'''Error: [[Template:Further|Template must be given at least one article name]]''' \n" + 
-			"}}{{#if:{{{2|}}}|{{#if:{{{3|}}}|, |&#32;and }}  {{{2}}}\n" + 
-			"}}{{#if:{{{3|}}}|{{#if:{{{4|}}}|, |, and }} {{{3}}}\n" + 
-			"}}{{#if:{{{4|}}}|{{#if:{{{5|}}}|, |, and }} {{{4}}}\n" + 
-			"}}{{#if:{{{5|}}}|, and {{{5}}}\n" + 
-			"}}{{#if:{{{6|}}}| — '''<br/>Error: [[Template:Futher|Too many links specified (maximum is 5)]]'''\n" + 
-			"}}''</span></includeonly><!-- includeonly block is needed, as otherwise the bare template gives error message \n" + 
-			"\"Error: Template must be given at least one article name\"\n" + 
-			" ---><noinclude>\n" + 
-			"{{template doc}}</noinclude>";
+	final static String FURTHER = "<includeonly>:<span class=\"boilerplate further\"\n"
+			+ ">''{{{altphrase|Further information}}}: {{#if:{{{1|}}} |<!--then:-->{{{1}}} |<!--\n"
+			+ "else:-->'''Error: [[Template:Further|Template must be given at least one article name]]''' \n"
+			+ "}}{{#if:{{{2|}}}|{{#if:{{{3|}}}|, |&#32;and }}  {{{2}}}\n" + "}}{{#if:{{{3|}}}|{{#if:{{{4|}}}|, |, and }} {{{3}}}\n"
+			+ "}}{{#if:{{{4|}}}|{{#if:{{{5|}}}|, |, and }} {{{4}}}\n" + "}}{{#if:{{{5|}}}|, and {{{5}}}\n"
+			+ "}}{{#if:{{{6|}}}| — '''<br/>Error: [[Template:Futher|Too many links specified (maximum is 5)]]'''\n"
+			+ "}}''</span></includeonly><!-- includeonly block is needed, as otherwise the bare template gives error message \n"
+			+ "\"Error: Template must be given at least one article name\"\n" + " ---><noinclude>\n" + "{{template doc}}</noinclude>";
 
 	boolean fSemanticWebActive;
 
 	static {
 		TagNode.addAllowedAttribute("style");
-	} 
+	}
 
 	public WikiTestModel(String imageBaseURL, String linkBaseURL) {
 		this(Locale.ENGLISH, imageBaseURL, linkBaseURL);
@@ -512,7 +525,7 @@ public class WikiTestModel extends WikiModel {
 
 	@Override
 	public boolean isImageNamespace(String name) {
-		return super.isImageNamespace(name)||name.equals(getImageNamespace());
+		return super.isImageNamespace(name) || name.equals(getImageNamespace());
 	}
 
 	@Override
@@ -532,4 +545,47 @@ public class WikiTestModel extends WikiModel {
 		return true;
 	}
 
+	@Override
+	public String render(String rawWikiText) {
+		String xhtmlArtifact = super.render(rawWikiText);
+		byte[] bytes;
+		try {
+			String xhtml = XHTML_START + xhtmlArtifact + XHTML_END;
+			bytes = xhtml.getBytes("UTF-8");
+
+			InputStream in = new ByteArrayInputStream(bytes);
+			XhtmlValidator validator = new XhtmlValidator();
+
+			validator.isValid(in);
+			String[] errors = validator.getErrors();
+			if (errors.length > 0) {
+				System.out.println(">>>>>");
+				for (int i = 0; i < errors.length; i++) {
+					System.out.println(errors[i]);
+				}
+				// junit.framework.Assert.assertEquals("", errors[0]);
+				System.out.println(xhtmlArtifact);
+				System.out.println("<<<<<");
+			}
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
+		return xhtmlArtifact;
+	}
+
+	/**
+	 * Test for <a href="http://groups.google.de/group/bliki/t/a0540e27f27f02a5">Discussion:  Hide Table of Contents (toc)?</a>
+	 */
+//	public ITableOfContent createTableOfContent(boolean isTOCIdentifier) {
+//		if (fToCSet == null) {
+//			fToCSet = new HashSet<String>();
+//			fTableOfContent = new ArrayList<Object>();
+//		}
+//		fTableOfContentTag =  new TableOfContentTag("div") {
+//			public void setShowToC(boolean showToC) {
+//				// do nothing
+//			}
+//		};
+//		return fTableOfContentTag;
+//	}
 }

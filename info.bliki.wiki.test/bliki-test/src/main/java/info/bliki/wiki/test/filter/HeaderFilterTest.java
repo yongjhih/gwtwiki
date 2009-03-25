@@ -58,7 +58,7 @@ public class HeaderFilterTest extends FilterTestSupport {
 						+ "</li>\n"
 						+ "</ul>\n"
 						+ "</ul></td></tr></table><hr/>\n"
-						+ "<a id=\"Text_%C3%9Cbersicht\" name=\"Text_%C3%9Cbersicht\"></a><h2>Text <a href=\"http://www.bliki.info/wiki/Overview\" id=\"w\">Übersicht</a></h2>",
+						+ "<a id=\"Text_%C3%9Cbersicht\" name=\"Text_%C3%9Cbersicht\"></a><h2>Text <a href=\"http://www.bliki.info/wiki/Overview\" title=\"Overview\">Übersicht</a></h2>",
 				wikiModel.render("__FORCETOC__ \n==Text [[Overview|Übersicht]]=="));
 	}
 	
@@ -79,7 +79,7 @@ public class HeaderFilterTest extends FilterTestSupport {
 				"</ul>\n" + 
 				"</ul>\n" + 
 				"</ul></td></tr></table><hr/>\n" + 
-				"<a id=\"Captions\" name=\"Captions\"></a><h3><a href=\"http://www.bliki.info/wiki/Help:Table_Caption\" id=\"w\">Captions</a></h3>",
+				"<a id=\"Captions\" name=\"Captions\"></a><h3><a href=\"http://www.bliki.info/wiki/Help:Table_Caption\" title=\"Help:Table Caption\">Captions</a></h3>",
 				wikiModel.render("__FORCETOC__ \n===[[Help:Table Caption|Captions]]==="));
 	}
 }

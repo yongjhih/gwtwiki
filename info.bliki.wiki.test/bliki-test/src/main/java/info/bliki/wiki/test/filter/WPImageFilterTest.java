@@ -17,16 +17,16 @@ public class WPImageFilterTest extends FilterTestSupport {
 				"\n"
 						+ "<p><a class=\"internal\" href=\"http://www.bliki.info/wiki/Image:baby_elephant.jpg\" title=\"Link to the Sandbox\"><img src=\"http://www.bliki.info/wiki/baby_elephant.jpg\" alt=\"Link to the Sandbox\" title=\"Link to the Sandbox\" class=\"location-none type-thumb\" />\n"
 						+ "</a>\n"
-						+ "<div class=\"thumbcaption\">Link to the <a href=\"http://www.bliki.info/wiki/Sandbox\" id=\"w\">Sandbox</a></div></p>",
+						+ "<div class=\"thumbcaption\">Link to the <a href=\"http://www.bliki.info/wiki/Sandbox\" title=\"Sandbox\">Sandbox</a></div></p>",
 				wikiModel.render("[[Image:baby_elephant.jpg|thumb|Link to the [[Sandbox]]]]"));
 	}
 
 	public void testImage01() {
 		assertEquals(
-				"\n"
-						+ "<p><a class=\"internal\" href=\"http://www.bliki.info/wiki/Image:baby_elephant.jpg\" title=\"Link to the Sandbox caption\"><img src=\"http://www.bliki.info/wiki/baby_elephant.jpg\" alt=\"Link to the Sandbox caption\" title=\"Link to the Sandbox caption\" class=\"location-none type-thumb\" />\n"
-						+ "</a>\n"
-						+ "<div class=\"thumbcaption\">Link to the <a href=\"http://www.bliki.info/wiki/Sandbox\" id=\"w\">Sandbox</a> caption</div></p>",
+				"\n" + 
+				"<p><a class=\"internal\" href=\"http://www.bliki.info/wiki/Image:baby_elephant.jpg\" title=\"Link to the Sandbox caption\"><img src=\"http://www.bliki.info/wiki/baby_elephant.jpg\" alt=\"Link to the Sandbox caption\" title=\"Link to the Sandbox caption\" class=\"location-none type-thumb\" />\n" + 
+				"</a>\n" + 
+				"<div class=\"thumbcaption\">Link to the <a href=\"http://www.bliki.info/wiki/Sandbox\" title=\"Sandbox\">Sandbox</a> caption</div></p>",
 				wikiModel.render("[[Image:baby_elephant.jpg|thumb|Link to the [[Sandbox]] caption]]"));
 	}
 
@@ -47,10 +47,10 @@ public class WPImageFilterTest extends FilterTestSupport {
 
 	public void testImage04() {
 		assertEquals(
-				"\n"
-						+ "<p>test <a class=\"internal\" href=\"http://www.bliki.info/wiki/Image:Kurhaus_Wiesbaden_A.jpg\" title=\"Neues Kurhaus aus dem Jahr 1907 am Bowling Green\"><img src=\"http://www.bliki.info/wiki/Kurhaus_Wiesbaden_A.jpg\" alt=\"Neues Kurhaus aus dem Jahr 1907 am Bowling Green\" title=\"Neues Kurhaus aus dem Jahr 1907 am Bowling Green\" class=\"location-none type-thumb\" />\n"
-						+ "</a>\n"
-						+ "<div class=\"thumbcaption\">Neues <a href=\"http://www.bliki.info/wiki/Kurhaus_Wiesbaden\" id=\"w\">Kurhaus</a> aus dem Jahr 1907 am <a href=\"http://www.bliki.info/wiki/Bowling_Green_(Wiesbaden)\" id=\"w\">Bowling Green</a></div> abc...</p>",
+				"\n" + 
+				"<p>test <a class=\"internal\" href=\"http://www.bliki.info/wiki/Image:Kurhaus_Wiesbaden_A.jpg\" title=\"Neues Kurhaus aus dem Jahr 1907 am Bowling Green\"><img src=\"http://www.bliki.info/wiki/Kurhaus_Wiesbaden_A.jpg\" alt=\"Neues Kurhaus aus dem Jahr 1907 am Bowling Green\" title=\"Neues Kurhaus aus dem Jahr 1907 am Bowling Green\" class=\"location-none type-thumb\" />\n" + 
+				"</a>\n" + 
+				"<div class=\"thumbcaption\">Neues <a href=\"http://www.bliki.info/wiki/Kurhaus_Wiesbaden\" title=\"Kurhaus Wiesbaden\">Kurhaus</a> aus dem Jahr 1907 am <a href=\"http://www.bliki.info/wiki/Bowling_Green_(Wiesbaden)\" title=\"Bowling Green (Wiesbaden)\">Bowling Green</a></div> abc...</p>",
 				wikiModel
 						.render("test [[Image:Kurhaus Wiesbaden A.jpg|thumb|Neues [[Kurhaus Wiesbaden|Kurhaus]] aus dem Jahr 1907 am [[Bowling Green (Wiesbaden)|Bowling Green]]]] abc..."));
 	}
@@ -64,10 +64,10 @@ public class WPImageFilterTest extends FilterTestSupport {
 
 	public void testImage06() {
 		assertEquals(
-				"\n"
-						+ "<p><a class=\"internal\" href=\"http://www.bliki.info/wiki/Image:Henkell-Schl%C3%B6sschen.JPG\" title=\"Henkell-Schlösschen der Sektkellerei Henkell &amp; Söhnlein KG\"><img src=\"http://www.bliki.info/wiki/Henkell-Schl%C3%B6sschen.JPG\" alt=\"Henkell-Schlösschen der Sektkellerei Henkell &amp; Söhnlein KG\" title=\"Henkell-Schlösschen der Sektkellerei Henkell &amp; Söhnlein KG\" class=\"location-none type-thumb\" />\n"
-						+ "</a>\n"
-						+ "<div class=\"thumbcaption\"><i>Henkell-Schlösschen</i> der Sektkellerei <a href=\"http://www.bliki.info/wiki/Henkell_%26amp%3B_S%C3%B6hnlein_KG\" id=\"w\">Henkell &#38; Söhnlein KG</a></div> Wiesbaden</p>",
+				"\n" + 
+				"<p><a class=\"internal\" href=\"http://www.bliki.info/wiki/Image:Henkell-Schl%C3%B6sschen.JPG\" title=\"Henkell-Schlösschen der Sektkellerei Henkell &amp; Söhnlein KG\"><img src=\"http://www.bliki.info/wiki/Henkell-Schl%C3%B6sschen.JPG\" alt=\"Henkell-Schlösschen der Sektkellerei Henkell &amp; Söhnlein KG\" title=\"Henkell-Schlösschen der Sektkellerei Henkell &amp; Söhnlein KG\" class=\"location-none type-thumb\" />\n" + 
+				"</a>\n" + 
+				"<div class=\"thumbcaption\"><i>Henkell-Schlösschen</i> der Sektkellerei <a href=\"http://www.bliki.info/wiki/Henkell_%26amp%3B_S%C3%B6hnlein_KG\" title=\"Henkell &amp;amp; Söhnlein KG\">Henkell &#38; Söhnlein KG</a></div> Wiesbaden</p>",
 				wikiModel
 						.render("[[Image:Henkell-Schlösschen.JPG|thumb|\'\'Henkell-Schlösschen\'\' der Sektkellerei [[Henkell & Söhnlein KG]]]] Wiesbaden"));
 	}

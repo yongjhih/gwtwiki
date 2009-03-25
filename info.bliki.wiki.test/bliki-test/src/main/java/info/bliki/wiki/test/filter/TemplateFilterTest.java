@@ -103,16 +103,16 @@ public class TemplateFilterTest extends FilterTestSupport {
 				"<tr>\n" + 
 				"<th colspan=\"2\" style=\"text-align: center; font-size: 130%;\">PAGENAME</th></tr>\n" + 
 				"<tr>\n" + 
-				"<th><a href=\"http://www.bliki.info/wiki/Software_release_life_cycle\" id=\"w\">Preview release</a></th>\n" + 
+				"<th><a href=\"http://www.bliki.info/wiki/Software_release_life_cycle\" title=\"Software release life cycle\">Preview release</a></th>\n" + 
 				"<td>0.6.5 </td></tr>\n" + 
 				"<tr>\n" + 
-				"<th><a href=\"http://www.bliki.info/wiki/List_of_software_categories\" id=\"w\">Genre</a></th>\n" + 
-				"<td><a href=\"http://www.bliki.info/wiki/Wiki_software\" id=\"w\">Wiki software</a></td></tr>\n" + 
+				"<th><a href=\"http://www.bliki.info/wiki/List_of_software_categories\" title=\"List of software categories\">Genre</a></th>\n" + 
+				"<td><a href=\"http://www.bliki.info/wiki/Wiki_software\" title=\"wiki software\">Wiki software</a></td></tr>\n" + 
 				"<tr>\n" + 
-				"<th><a href=\"http://www.bliki.info/wiki/Software_license\" id=\"w\">License</a></th>\n" + 
-				"<td><a href=\"http://www.bliki.info/wiki/GNU_Lesser_General_Public_License\" id=\"w\">LGPL</a></td></tr>\n" + 
+				"<th><a href=\"http://www.bliki.info/wiki/Software_license\" title=\"Software license\">License</a></th>\n" + 
+				"<td><a href=\"http://www.bliki.info/wiki/GNU_Lesser_General_Public_License\" title=\"GNU Lesser General Public License\">LGPL</a></td></tr>\n" + 
 				"<tr>\n" + 
-				"<th><a href=\"http://www.bliki.info/wiki/Website\" id=\"w\">Website</a></th>\n" + 
+				"<th><a href=\"http://www.bliki.info/wiki/Website\" title=\"Website\">Website</a></th>\n" + 
 				"<td><a class=\"externallink\" href=\"http://www.jamwiki.org/\" rel=\"nofollow\" title=\"http://www.jamwiki.org/\">JAMWiki wiki</a>\n" + 
 				"</td></tr></table></div>\n" + 
 				"", wikiModel.render("{{Infobox_Software\n" + "|name = JAMWiki\n" + "|logo = \n" + "|caption =\n" + "\n"
@@ -169,7 +169,7 @@ public class TemplateFilterTest extends FilterTestSupport {
 						+ "<div style=\"float: left;\"><div style=\"width:44px\"><a class=\"internal\" href=\"http://www.bliki.info/wiki/Image:44px-Wikipedia-logo-%0Aen.png\" ><img src=\"http://www.bliki.info/wiki/44px-Wikipedia-logo-%0Aen.png\" class=\"location-none\" width=\"44\" />\n"
 						+ "</a></div>\n"
 						+ "</div>\n"
-						+ "<div style=\"margin-left: 60px;\"><a href=\"http://www.bliki.info/wiki/Wikipedia\" id=\"w\">Wikipedia</a> has an\n"
+						+ "<div style=\"margin-left: 60px;\"><a href=\"http://www.bliki.info/wiki/Wikipedia\" title=\"Wikipedia\">Wikipedia</a> has an\n"
 						+ "<p>article on:\n"
 						+ "</p>\n"
 						+ "<div style=\"margin-left: 10px;\"><b><i><a href=\"http://en.wikipedia.org/wiki/PAGENAME\">PAGENAME</a></i></b> </div>"
@@ -233,29 +233,61 @@ public class TemplateFilterTest extends FilterTestSupport {
 
 	public void testNavbox() {
 		assertEquals(
-					 "\n<table cellspacing=\"0\" class=\"nowraplinks  ;;\">\n"
-						+ "\n"
-						+ "<tr>\n"
-						+ "\n"
-						+ "<th class=\"navbox-title\" colspan=\"2\" style=\";background: #EEDD82\">\n"
-						+ "\n"
-						+ "<div style=\"float:left; width:6em;text-align:left;\">\n"
-						+ "<div class=\"noprint plainlinksneverexpand\" style=\"background-color:transparent; padding:0; white-space:nowrap; font-weight:normal; font-size:xx-small; ;background: #EEDD82;border:none;;  \"><a href=\"http://www.bliki.info/wiki/Template:AcademyAwardBestActor_1981-2000\" id=\"w\"><span style=\";background: #EEDD82;border:none;;\" title=\"View this template\">v</span></a>&#160;<span style=\"font-size:80%;\">•</span>&#160;<a href=\"http://www.bliki.info/wiki/Template_talk:AcademyAwardBestActor_1981-2000\" id=\"w\"><span style=\"color:#002bb8;;background: #EEDD82;border:none;;\" title=\"Discussion about this template\">d</span></a>&#160;<span style=\"font-size:80%;\">•</span>&#160;<a class=\"externallink\" href=\"http://en.wikipedia.org/w/index.php?title=Template%3AAcademyAwardBestActor+1981-2000&#38;action=edit\" rel=\"nofollow\" title=\"http://en.wikipedia.org/w/index.php?title=Template%3AAcademyAwardBestActor+1981-2000&#38;action=edit\"><span style=\"color:#002bb8;;background: #EEDD82;border:none;;\" title=\"You can edit this template. Please use the preview button before saving.\">e</span></a></div></div><span style=\"font-size:%;\"><a href=\"http://www.bliki.info/wiki/Academy_Award_for_Best_Actor\" id=\"w\">Academy Award for</a> <a href=\"http://www.bliki.info/wiki/Academy_Award_for_Best_Actor#1980s\" id=\"w\">Best Actor</a></span>\n"
-						+ "</th>\n" + "</tr>\n" + "<tr style=\"height:2px;\">\n" + "\n" + "<td />\n" + "</tr>\n" + "<tr>\n" + "\n"
-						+ "<td class=\"navbox-list navbox-odd\" colspan=\"2\" style=\"width:100%;padding:0px;;;\">\n"
-						+ "<div style=\"padding:0em 0.25em\">\n" + "<div>\n" + "<p>{{nowrap}}{{·}}\n" + "{{nowrap}}{{·}}\n"
-						+ "{{nowrap}}{{·}}\n" + "{{nowrap}}{{·}}\n" + "{{nowrap}}{{·}}\n" + "{{nowrap}}{{·}}\n" + "{{nowrap}}{{·}}\n"
-						+ "{{nowrap}}{{·}}\n" + "{{nowrap}}{{·}}\n" + "{{nowrap}}{{·}}\n" + "{{nowrap}}{{·}}\n" + "{{nowrap}}{{·}}\n"
-						+ "{{nowrap}}{{·}}\n" + "{{nowrap}}{{·}}\n" + "{{nowrap}}{{·}}\n" + "{{nowrap}}{{·}}\n" + "{{nowrap}}{{·}}\n"
-						+ "{{nowrap}}{{·}}\n" + "{{nowrap}}{{·}}\n" + "{{nowrap}}</p><hr/>\n" + "<p>{{nowrap}}{{·}}\n" + "{{nowrap}}{{·}}\n"
-						+ "{{nowrap}}{{·}}\n" + "{{nowrap}}{{·}}\n" + "{{nowrap}}{{·}}\n" + "{{nowrap}}\n" + "</p></div></div></td>\n"
-						+ "</tr>\n" + "</table>", wikiModel.render(NAVBOX_STRING));
+					 "\n" + 
+					 "<table cellspacing=\"0\" class=\"nowraplinks  ;;\">\n" + 
+					 "\n" + 
+					 "<tr>\n" + 
+					 "\n" + 
+					 "<th class=\"navbox-title\" colspan=\"2\" style=\";background: #EEDD82\">\n" + 
+					 "\n" + 
+					 "<div style=\"float:left; width:6em;text-align:left;\">\n" + 
+					 "<div class=\"noprint plainlinksneverexpand\" style=\"background-color:transparent; padding:0; white-space:nowrap; font-weight:normal; font-size:xx-small; ;background: #EEDD82;border:none;;  \"><a href=\"http://www.bliki.info/wiki/Template:AcademyAwardBestActor_1981-2000\" title=\"Template:AcademyAwardBestActor 1981-2000\"><span style=\";background: #EEDD82;border:none;;\" title=\"View this template\">v</span></a>&#160;<span style=\"font-size:80%;\">•</span>&#160;<a href=\"http://www.bliki.info/wiki/Template_talk:AcademyAwardBestActor_1981-2000\" title=\"Template talk:AcademyAwardBestActor 1981-2000\"><span style=\"color:#002bb8;;background: #EEDD82;border:none;;\" title=\"Discussion about this template\">d</span></a>&#160;<span style=\"font-size:80%;\">•</span>&#160;<a class=\"externallink\" href=\"http://en.wikipedia.org/w/index.php?title=Template%3AAcademyAwardBestActor+1981-2000&#38;action=edit\" rel=\"nofollow\" title=\"http://en.wikipedia.org/w/index.php?title=Template%3AAcademyAwardBestActor+1981-2000&#38;action=edit\"><span style=\"color:#002bb8;;background: #EEDD82;border:none;;\" title=\"You can edit this template. Please use the preview button before saving.\">e</span></a></div></div><span style=\"font-size:%;\"><a href=\"http://www.bliki.info/wiki/Academy_Award_for_Best_Actor\" title=\"Academy Award for Best Actor\">Academy Award for</a> <a href=\"http://www.bliki.info/wiki/Academy_Award_for_Best_Actor#1980s\" title=\"Academy Award for Best Actor\">Best Actor</a></span>\n" + 
+					 "</th>\n" + 
+					 "</tr>\n" + 
+					 "<tr style=\"height:2px;\">\n" + 
+					 "\n" + 
+					 "<td />\n" + 
+					 "</tr>\n" + 
+					 "<tr>\n" + 
+					 "\n" + 
+					 "<td class=\"navbox-list navbox-odd\" colspan=\"2\" style=\"width:100%;padding:0px;;;\">\n" + 
+					 "<div style=\"padding:0em 0.25em\">\n" + 
+					 "<div>\n" + 
+					 "<p>{{nowrap}}{{·}}\n" + 
+					 "{{nowrap}}{{·}}\n" + 
+					 "{{nowrap}}{{·}}\n" + 
+					 "{{nowrap}}{{·}}\n" + 
+					 "{{nowrap}}{{·}}\n" + 
+					 "{{nowrap}}{{·}}\n" + 
+					 "{{nowrap}}{{·}}\n" + 
+					 "{{nowrap}}{{·}}\n" + 
+					 "{{nowrap}}{{·}}\n" + 
+					 "{{nowrap}}{{·}}\n" + 
+					 "{{nowrap}}{{·}}\n" + 
+					 "{{nowrap}}{{·}}\n" + 
+					 "{{nowrap}}{{·}}\n" + 
+					 "{{nowrap}}{{·}}\n" + 
+					 "{{nowrap}}{{·}}\n" + 
+					 "{{nowrap}}{{·}}\n" + 
+					 "{{nowrap}}{{·}}\n" + 
+					 "{{nowrap}}{{·}}\n" + 
+					 "{{nowrap}}{{·}}\n" + 
+					 "{{nowrap}}</p><hr/>\n" + 
+					 "<p>{{nowrap}}{{·}}\n" + 
+					 "{{nowrap}}{{·}}\n" + 
+					 "{{nowrap}}{{·}}\n" + 
+					 "{{nowrap}}{{·}}\n" + 
+					 "{{nowrap}}{{·}}\n" + 
+					 "{{nowrap}}\n" + 
+					 "</p></div></div></td>\n" + 
+					 "</tr>\n" + 
+					 "</table>", wikiModel.render(NAVBOX_STRING));
 	}
 
 	public void test11() {
 		assertEquals(
-				"\n"
-						+ "<p><a href=\"http://www.bliki.info/wiki/Template:AcademyAwardBestActor_1981-2000\" id=\"w\"><span style=\";background: #EEDD82;border:none;;\" title=\"View this template\">v</span></a></p>",
+				"\n" + 
+				"<p><a href=\"http://www.bliki.info/wiki/Template:AcademyAwardBestActor_1981-2000\" title=\"Template:AcademyAwardBestActor_1981-2000\"><span style=\";background: #EEDD82;border:none;;\" title=\"View this template\">v</span></a></p>",
 				wikiModel
 						.render("[[Template:AcademyAwardBestActor_1981-2000|<span title=\"View this template\" style=\";background: #EEDD82;border:none;;\">v</span>]]"));
 	}
@@ -342,6 +374,6 @@ public class TemplateFilterTest extends FilterTestSupport {
 				"}}}}"));
 	}
 	public void testFurther() {
-		assertEquals("<dl><dd><span class=\"boilerplate further\"><i>Further information: <a href=\"http://www.bliki.info/wiki/History_of_molecular_biology\" id=\"w\">History of molecular biology</a></i></span></dd></dl>",wikiModel.render("{{further|[[History of molecular biology]]}}"));
+		assertEquals("<dl><dd><span class=\"boilerplate further\"><i>Further information: <a href=\"http://www.bliki.info/wiki/History_of_molecular_biology\" title=\"History of molecular biology\">History of molecular biology</a></i></span></dd></dl>",wikiModel.render("{{further|[[History of molecular biology]]}}"));
 	}
 }

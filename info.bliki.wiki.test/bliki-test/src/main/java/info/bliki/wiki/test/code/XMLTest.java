@@ -28,14 +28,14 @@ public class XMLTest extends FilterTestSupport
 				"\n" + 
 				"<p><b>XML example:</b>\n" + 
 				"</p><pre class=\"code\">\n" + 
-				"  <b><font color=\"#7F0055\">&#60;extension</font></b>\n" + 
-				"           point=<font color=\"#2A00FF\">&#34;org.eclipse.help.toc&#34;</font><font color=\"#7F0055\">&#62;</font>\n" + 
-				"        <b><font color=\"#7F0055\">&#60;toc</font></b>\n" + 
-				"              file=<font color=\"#2A00FF\">&#34;phphelp.xml&#34;</font>\n" + 
-				"              primary=<font color=\"#2A00FF\">&#34;true&#34;</font><font color=\"#7F0055\">&#62;</font>\n" + 
-				"     <font color=\"#3F7F5F\">&#60;-- &#60;simple comment --&#62;</font>                      \n" + 
-				"        <b><font color=\"#7F0055\">&#60;/toc&#62;</font></b>\n" + 
-				"  <b><font color=\"#7F0055\">&#60;/extension&#62;</font></b>\n" + 
+				"  <b><span style=\"color:#7F0055; font-weight: bold; \">&#60;extension</span></b>\n" + 
+				"           point=<span style=\"color:#2A00FF; \">&#34;org.eclipse.help.toc&#34;</span><span style=\"color:#7F0055; font-weight: bold; \">&#62;</span>\n" + 
+				"        <b><span style=\"color:#7F0055; font-weight: bold; \">&#60;toc</span></b>\n" + 
+				"              file=<span style=\"color:#2A00FF; \">&#34;phphelp.xml&#34;</span>\n" + 
+				"              primary=<span style=\"color:#2A00FF; \">&#34;true&#34;</span><span style=\"color:#7F0055; font-weight: bold; \">&#62;</span>\n" + 
+				"     <span style=\"color:#3F7F5F; \">&#60;-- &#60;simple comment --&#62;</span>                      \n" + 
+				"        <b><span style=\"color:#7F0055; font-weight: bold; \">&#60;/toc&#62;</span></b>\n" + 
+				"  <b><span style=\"color:#7F0055; font-weight: bold; \">&#60;/extension&#62;</span></b>\n" + 
 				"</pre>", result);
 	}
 

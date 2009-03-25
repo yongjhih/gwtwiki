@@ -35,12 +35,29 @@ public class WPListFilterTest extends FilterTestSupport {
 	}
 
 	public void testList0() {
-		assertEquals("\n" + "<ul>\n" + "<li>Mixed list\n" + "<ol>\n" + "<li>with numbers</li></ol>\n" + "<ul>\n"
-				+ "<li>and bullets</li></ul>\n" + "<ol>\n" + "<li>and numbers</li></ol></li>\n" + "<li>bullets again\n" + "<ul>\n"
-				+ "<li>bullet level 2\n" + "<ul>\n" + "<li>bullet level 3\n" + "<ol>\n"
-				+ "<li>Number on level 4</li></ol></li></ul></li>\n" + "<li>bullet level 2\n" + "<ol>\n" + "<li>Number on level 3</li>\n"
-				+ "<li>Number <a href=\"http://www.bliki.info/wiki/Level:1\" id=\"w\">ones</a> level 3</li></ol></li></ul>\n" + "<ol>\n"
-				+ "<li>number level 2</li></ol></li>\n" + "<li>Level 1</li></ul>", wikiModel.render(LIST0));
+		assertEquals("\n" + 
+				"<ul>\n" + 
+				"<li>Mixed list\n" + 
+				"<ol>\n" + 
+				"<li>with numbers</li></ol>\n" + 
+				"<ul>\n" + 
+				"<li>and bullets</li></ul>\n" + 
+				"<ol>\n" + 
+				"<li>and numbers</li></ol></li>\n" + 
+				"<li>bullets again\n" + 
+				"<ul>\n" + 
+				"<li>bullet level 2\n" + 
+				"<ul>\n" + 
+				"<li>bullet level 3\n" + 
+				"<ol>\n" + 
+				"<li>Number on level 4</li></ol></li></ul></li>\n" + 
+				"<li>bullet level 2\n" + 
+				"<ol>\n" + 
+				"<li>Number on level 3</li>\n" + 
+				"<li>Number <a href=\"http://www.bliki.info/wiki/Level:1\" title=\"Level:1\">ones</a> level 3</li></ol></li></ul>\n" + 
+				"<ol>\n" + 
+				"<li>number level 2</li></ol></li>\n" + 
+				"<li>Level 1</li></ul>", wikiModel.render(LIST0));
 	}
 
 	public void testList1() {

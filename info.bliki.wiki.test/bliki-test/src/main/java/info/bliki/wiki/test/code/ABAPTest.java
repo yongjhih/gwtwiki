@@ -25,11 +25,11 @@ public class ABAPTest extends FilterTestSupport
 		assertEquals(
 				"\n" + 
 				"<p><b>ABAP Example</b>\n" + 
-				"</p><pre class=\"code\"><font color=\"#3F7F5F\">\n" + 
+				"</p><pre class=\"code\"><span style=\"color:#3F7F5F; \">\n" + 
 				"*--- line comment\n" + 
-				"</font><b><font color=\"#7F0055\">WRITE</font></b>: / <font color=\"#2A00FF\">&#39;&#39;&#39;Hello World&#39;&#39;&#39;</font> <font color=\"#3F7F5F\">&#34;test comment\n" + 
-				"</font>&#60; &#62; <font color=\"#3F7F5F\">&#34; &#39; &#38;}\n" + 
-				"</font></pre>", result);
+				"</span><b><span style=\"color:#7F0055; font-weight: bold; \">WRITE</span></b>: / <span style=\"color:#2A00FF; \">&#39;&#39;&#39;Hello World&#39;&#39;&#39;</span> <span style=\"color:#3F7F5F; \">&#34;test comment\n" + 
+				"</span>&#60; &#62; <span style=\"color:#3F7F5F; \">&#34; &#39; &#38;}\n" + 
+				"</span></pre>", result);
 	}
 
 }

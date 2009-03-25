@@ -25,8 +25,8 @@ public class JavaScriptTest extends FilterTestSupport
 		assertEquals("\n" + 
 				"<p><b>JavaScript Example</b>\n" + 
 				"</p><pre class=\"code\">\n" + 
-				"<b><font color=\"#7F0055\">public</font></b> <b><font color=\"#7F0055\">class</font></b> Test {\n" + 
-				"&#60; &#62; <font color=\"#2A00FF\">&#34; &#39; &#38;}\n" + 
-				"</font></pre>", result);
+				"<span style=\"color:#7F0055; font-weight: bold; \">public</span> <span style=\"color:#7F0055; font-weight: bold; \">class</span> Test {\n" + 
+				"&#60; &#62; <span style=\"color:#2A00FF; \">&#34; &#39; &#38;}\n" + 
+				"</span></pre>", result);
 	}
 }

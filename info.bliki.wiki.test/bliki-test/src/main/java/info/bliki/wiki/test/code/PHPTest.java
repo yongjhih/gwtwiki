@@ -24,16 +24,16 @@ public class PHPTest extends FilterTestSupport
 
 		assertEquals( 
 				"<pre class=\"code\">\n" + 
-				"<font color=\"#7F0055\">&#60;?php</font>\n" + 
-				"<font color=\"#3F7F5F\">/* A simple php script */</font>\n" + 
+				"<span style=\"color:#7F0055; font-weight: bold; \">&#60;?php</span>\n" + 
+				"<span style=\"color:#3F7F5F; \">/* A simple php script */</span>\n" + 
 				" \n" + 
-				"$choice = $_GET[<font color=\"#2A00FF\">&#39;foo&#39;</font>];\n" + 
-				"<b><font color=\"#7F0055\">if</font></b> ( $choice == 1 )\n" + 
+				"$choice = $_GET[<span style=\"color:#2A00FF; \">&#39;foo&#39;</span>];\n" + 
+				"<span style=\"color:#7F0055; font-weight: bold; \">if</span> ( $choice == 1 )\n" + 
 				"{\n" + 
-				"  <b><font color=\"#7F0055\">echo</font></b> <font color=\"#2A00FF\">&#34;Hello world&#34;</font>;\n" + 
+				"  <span style=\"color:#7F0055; font-weight: bold; \">echo</span> <span style=\"color:#2A00FF; \">&#34;Hello world&#34;</span>;\n" + 
 				"}\n" + 
 				"# end of script\n" + 
-				"<font color=\"#7F0055\">?&#62;</font>\n" + 
+				"<span style=\"color:#7F0055; font-weight: bold; \">?&#62;</span>\n" + 
 				"</pre>", result);
 	}
 }
