@@ -126,6 +126,9 @@ public class HTMLConverter implements ITextConverter {
 			alt = imageFormat.getAlt();
 			caption = Utils.escapeXml(caption, true, false, true);
 		}
+		if (alt==null) {
+			alt="";
+		}
 		String location = imageFormat.getLocation();
 		String type = imageFormat.getType();
 		int pxSize = imageFormat.getSize();
@@ -144,7 +147,7 @@ public class HTMLConverter implements ITextConverter {
 
 			if (caption != null && caption.length() > 0) {
 				resultBuffer.append("title=\"");
-				if (alt == null) {
+				if (alt.length() == 0) {
 					resultBuffer.append(caption);
 				} else {
 					resultBuffer.append(alt);
@@ -159,7 +162,7 @@ public class HTMLConverter implements ITextConverter {
 		resultBuffer.append("\"");
 
 		if (caption != null && caption.length() > 0) {
-			if (alt == null) {
+			if (alt.length()==0) {
 				resultBuffer.append(" alt=\"").append(caption).append("\"");
 				resultBuffer.append(" title=\"").append(caption).append("\"");
 			} else {

@@ -8,15 +8,19 @@ import java.util.HashSet;
  * 
  */
 abstract public class AbstractCPPBasedCodeFilter implements SourceCodeFormatter {
-	public final static String FONT_KEYWORD = "<font color=\"#7F0055\">";
+	public final static String FONT_KEYWORD = "<span style=\"color:#7F0055; font-weight: bold; \">";
+	// "<font color=\"#7F0055\">";
 
-	public final static String FONT_COMMENT = "<font color=\"#3F7F5F\">";
+	public final static String FONT_COMMENT = "<span style=\"color:#3F7F5F; \">";
+	// = "<font color=\"#3F7F5F\">";
 
-	public final static String FONT_STRINGS = "<font color=\"#2A00FF\">";
+	public final static String FONT_STRINGS = "<span style=\"color:#2A00FF; \">";
+	// = "<font color=\"#2A00FF\">";
 
-	public final static String FONT_JAVADOC = "<font color=\"#3F5FBF\">";
+	public final static String FONT_JAVADOC = "<span style=\"color:#3F5FBF; \">";
+	// = "<font color=\"#3F5FBF\">";
 
-	public final static String FONT_END = "</font>";
+	public final static String FONT_END = "</span>";
 
 	public static void appendChar(StringBuilder result, char currentChar) {
 		switch (currentChar) {
@@ -41,7 +45,7 @@ abstract public class AbstractCPPBasedCodeFilter implements SourceCodeFormatter 
 	}
 
 	public static void createHashMap(HashMap<String, String> map, String str) {
-		map.put(str, "<b>" + FONT_KEYWORD + str + FONT_END + "</b>");
+		map.put(str, FONT_KEYWORD + str + FONT_END);
 	}
 
 	public AbstractCPPBasedCodeFilter() {

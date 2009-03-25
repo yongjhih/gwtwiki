@@ -110,7 +110,7 @@ public class WikiModel extends AbstractWikiModel {
 
 		WPATag aTagNode = new WPATag();
 		// append(aTagNode);
-		aTagNode.addAttribute("id", "w", true);
+		aTagNode.addAttribute("title", topic, true);
 		String href = hrefLink;
 		if (hashSection != null) {
 			href = href + '#' + encodeTitleToUrl(hashSection, true);

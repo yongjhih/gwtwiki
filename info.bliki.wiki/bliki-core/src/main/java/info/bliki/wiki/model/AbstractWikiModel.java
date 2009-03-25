@@ -80,12 +80,12 @@ public abstract class AbstractWikiModel implements IWikiModel, IContext {
 	 * 
 	 */
 	protected List<Object> fTableOfContent = null;
-	
+
 	/**
 	 * Contains all anchor strings to create unique anchors
 	 */
 	protected HashSet<String> fToCSet;
-	
+
 	/**
 	 * Map an attribute name to its value(s). These values are set by outside code
 	 * via st.setAttribute(name, value). StringTemplate is like self in that a
@@ -233,14 +233,8 @@ public abstract class AbstractWikiModel implements IWikiModel, IContext {
 		spanTagNode.addChild(imgTagNode);
 		imgTagNode.addAttribute("src", imageSrc, true);
 		imgTagNode.addAttribute("alt", imageAltText, true);
-		imgTagNode.addAttribute("rel", "nofollow", true);
-
-		// writer.append("<span class=\"image\">");
-		// writer.append("<img src=\"");
-		// Encoder.encodeHtml(imageSrc, writer);
-		// writer.append("\" alt=\"");
-		// Encoder.encodeHtml(imageAltText, writer);
-		// writer.append("\" /></span>");
+		// "nofollow" keyword is not allowed for XHTML
+		// imgTagNode.addAttribute("rel", "nofollow", true);
 	}
 
 	public void appendExternalLink(String link, String linkName, boolean withoutSquareBrackets) {
