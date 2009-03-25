@@ -297,8 +297,8 @@ public interface IWikiModel extends IConfiguration {
 
 	/**
 	 * Encode the <i>wiki links title</i> into a URL for HTML hyperlinks (i.e.
-	 * create the <i>href</i> attribute representation for the <i>a</i> tag). To
-	 * get the <a
+	 * create the <i>href</i> attribute representation for the <i>a</i> tag). This
+	 * method uses the '%' character to encode special characters. To get the <a
 	 * href="http://meta.wikimedia.org/wiki/Help:Page_name#Case-sensitivity"
 	 * >behavior of the MediaWiki software</a>, which is configured to convert the
 	 * first letter to upper case, the <code>firstCharacterAsUpperCase</code>
@@ -313,6 +313,24 @@ public interface IWikiModel extends IConfiguration {
 	 * @see info.bliki.wiki.filter.Encoder#encodeTitleToUrl(String, boolean)
 	 */
 	public String encodeTitleToUrl(String wikiTitle, boolean firstCharacterAsUpperCase);
+
+	/**
+	 * Encode the <i>wiki links title</i> into a URL for HTML hyperlinks (i.e.
+	 * create the <i>href</i> attribute representation for the <i>a</i> tag). This
+	 * method uses the '.' character to encode special characters. To get the <a
+	 * href="http://meta.wikimedia.org/wiki/Help:Page_name#Case-sensitivity"
+	 * >behavior of the MediaWiki software</a>, which is configured to convert the
+	 * first letter to upper case, the <code>firstCharacterAsUpperCase</code>
+	 * parameters must be set to <code>true</code>. For an example encoding
+	 * routine see:
+	 * {@link info.bliki.wiki.filter.Encoder#encodeTitleDotUrl(String, boolean)}
+	 * 
+	 * @param firstCharacterAsUpperCase
+	 *          if <code>true</code> convert the first of the title to uppercase
+	 * 
+	 * @see info.bliki.wiki.filter.Encoder#encodeTitleToUrl(String, boolean)
+	 */
+	public String encodeTitleDotUrl(String wikiTitle, boolean firstCharacterAsUpperCase);
 
 	/**
 	 * Get the secondary namespace (i.e. the namespace for a non-englich locale)

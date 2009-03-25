@@ -319,13 +319,17 @@ public abstract class AbstractWikiModel implements IWikiModel, IContext {
 		return Encoder.encodeTitleToUrl(wikiTitle, firstCharacterAsUpperCase);
 	}
 
+	public String encodeTitleDotUrl(String wikiTitle, boolean firstCharacterAsUpperCase) {
+		return Encoder.encodeTitleDotUrl(wikiTitle, firstCharacterAsUpperCase);
+	}
+	
 	public void appendInternalLink(String topic, String hashSection, String topicDescription, String cssClass, boolean parseRecursive) {
 		WPATag aTagNode = new WPATag();
 		// append(aTagNode);
-		aTagNode.addAttribute("id", "w", true);
+		// aTagNode.addAttribute("id", "w", true);
 		String href = encodeTitleToUrl(topic, true);
 		if (hashSection != null) {
-			href = href + '#' + encodeTitleToUrl(hashSection, true);
+			href = href + '#' + encodeTitleDotUrl(hashSection, true);
 		}
 		aTagNode.addAttribute("href", href, true);
 		if (cssClass != null) {
@@ -1143,7 +1147,7 @@ public abstract class AbstractWikiModel implements IWikiModel, IContext {
 		WPTag headTagNode = new WPTag("h" + headLevel);
 		headTagNode.addChildren(localStack.getNodeList());
 		String tocHead = headTagNode.getBodyString();
-		String anchor = Encoder.encodeUrl(tocHead);
+		String anchor = Encoder.encodeDotUrl(tocHead);
 		createTableOfContent(false);
 		if (!noToC && (headCounter > 3)) {
 			fTableOfContentTag.setShowToC(true);

@@ -113,7 +113,7 @@ public class WikiModel extends AbstractWikiModel {
 		aTagNode.addAttribute("title", topic, true);
 		String href = hrefLink;
 		if (hashSection != null) {
-			href = href + '#' + encodeTitleToUrl(hashSection, true);
+			href = href + '#' + encodeTitleDotUrl(hashSection, true);
 		}
 		aTagNode.addAttribute("href", href, true);
 		if (cssClass != null) {

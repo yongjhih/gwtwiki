@@ -275,6 +275,10 @@ public abstract class AbstractTracModel implements IWikiModel {
 		return Encoder.encodeTitleToUrl(wikiTitle, firstCharacterAsUpperCase);
 	}
 
+	public String encodeTitleDotUrl(String wikiTitle, boolean firstCharacterAsUpperCase) {
+		return Encoder.encodeTitleDotUrl(wikiTitle, firstCharacterAsUpperCase);
+	}
+	
 	public void appendInterWikiLink(String namespace, String title, String linkText) {
 		String hrefLink = getInterwikiMap().get(namespace.toLowerCase());
 		if (hrefLink == null) {
