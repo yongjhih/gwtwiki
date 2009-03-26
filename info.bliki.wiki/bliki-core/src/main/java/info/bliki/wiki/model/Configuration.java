@@ -24,6 +24,7 @@ import info.bliki.wiki.tags.code.JavaScriptCodeFilter;
 import info.bliki.wiki.tags.code.PHPCodeFilter;
 import info.bliki.wiki.tags.code.SourceCodeFormatter;
 import info.bliki.wiki.tags.code.XMLCodeFilter;
+import info.bliki.wiki.template.Anchorencode;
 import info.bliki.wiki.template.Expr;
 import info.bliki.wiki.template.Fullurl;
 import info.bliki.wiki.template.ITemplateFunction;
@@ -373,6 +374,7 @@ public class Configuration implements IConfiguration {
 		for (int i = 0; i < INTERWIKI_STRINGS.length; i += 2) {
 			INTERWIKI_MAP.put(INTERWIKI_STRINGS[i], INTERWIKI_STRINGS[i + 1]);
 		}
+		TEMPLATE_FUNCTION_MAP.put("anchorencode", Anchorencode.CONST);
 		TEMPLATE_FUNCTION_MAP.put("fullurl", Fullurl.CONST);
 		TEMPLATE_FUNCTION_MAP.put("ns", NS.CONST);
 		TEMPLATE_FUNCTION_MAP.put("urlencode", URLEncode.CONST);
