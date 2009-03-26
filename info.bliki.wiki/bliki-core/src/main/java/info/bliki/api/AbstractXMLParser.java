@@ -65,7 +65,9 @@ public abstract class AbstractXMLParser extends DefaultHandler {
 	}
 
 	public void parse() throws IOException, SAXException {
-		fXMLReader.parse(new InputSource(fReader));
+		InputSource inputSource = new InputSource(fReader);
+		inputSource.setEncoding("UTF-8");
+		fXMLReader.parse(inputSource);
 	}
 
 }

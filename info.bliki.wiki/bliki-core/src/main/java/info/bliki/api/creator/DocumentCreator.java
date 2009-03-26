@@ -10,8 +10,11 @@ import info.bliki.wiki.model.IWikiModel;
 
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.io.Writer;
 import java.net.URL;
 import java.util.List;
 
@@ -123,12 +126,11 @@ public class DocumentCreator {
 	public void renderToFile(ITextConverter converter, String filename)
 			throws IOException {
 		File file = new File(filename);
+		Writer fw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file), "UTF-8"));
 		try {
-			BufferedWriter fw = new BufferedWriter(new FileWriter(file));
 			render(converter, fw);
-			fw.close();
 		} finally {
-
+            fw.close();
 		}
 	}
 
