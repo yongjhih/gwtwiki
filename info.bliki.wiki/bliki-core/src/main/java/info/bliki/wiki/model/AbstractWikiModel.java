@@ -289,7 +289,10 @@ public abstract class AbstractWikiModel implements IWikiModel, IContext {
 		}
 		pushNode(divTagNode);
 
-		if (caption != null && caption.length() > 0) {
+		String imageType = imageFormat.getType();
+		// TODO: test all these cases
+		if (caption != null && caption.length() > 0
+				&& ("frame".equals(imageType) || "thumb".equals(imageType) || "thumbnail".equals(imageType))) {
 
 			TagNode captionTagNode = new TagNode("div");
 			String clazzValue = "caption";
@@ -322,7 +325,7 @@ public abstract class AbstractWikiModel implements IWikiModel, IContext {
 	public String encodeTitleDotUrl(String wikiTitle, boolean firstCharacterAsUpperCase) {
 		return Encoder.encodeTitleDotUrl(wikiTitle, firstCharacterAsUpperCase);
 	}
-	
+
 	public void appendInternalLink(String topic, String hashSection, String topicDescription, String cssClass, boolean parseRecursive) {
 		WPATag aTagNode = new WPATag();
 		// append(aTagNode);
