@@ -11,8 +11,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import sun.tools.jstat.ParserException;
-
 public class WikipediaScanner {
 
 	public final static String TAG_NAME = "$TAG_NAME";
