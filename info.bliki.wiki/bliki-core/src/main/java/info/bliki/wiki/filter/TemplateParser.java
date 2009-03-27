@@ -11,7 +11,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-
 /**
  * A template parser for the first pass in the parsing of a Wikipedia text
  * 
@@ -22,6 +21,8 @@ public class TemplateParser extends AbstractParser {
 
 	private final boolean fRenderTemplate;
 
+	private boolean fOnlyIncludeFlag;
+
 	public TemplateParser(String stringSource) {
 		this(stringSource, false, false);
 	}
@@ -30,6 +31,7 @@ public class TemplateParser extends AbstractParser {
 		super(stringSource);
 		fParseOnlySignature = parseOnlySignature;
 		fRenderTemplate = renderTemplate;
+		fOnlyIncludeFlag = false;
 	}
 
 	public static void parse(String rawWikitext, IWikiModel wikiModel, Appendable writer, boolean renderTemplate) throws IOException {
@@ -98,13 +100,13 @@ public class TemplateParser extends AbstractParser {
 	}
 
 	/**
-	 * Preprocess parsing of the <code>&lt;includeonly&gt;</code> and
-	 * <code>&lt;noinclude&gt;</code> tags
+	 * Preprocess parsing of the <code>&lt;includeonly&gt;</code>,
+	 * <code>&lt;onlyinclude&gt;</code> and <code>&lt;noinclude&gt;</code> tags
 	 * 
 	 * @param writer
 	 * @throws IOException
 	 */
-	protected void runPreprocessParser(Appendable writer) throws IOException {
+	protected void runPreprocessParser(StringBuilder writer) throws IOException {
 		fWhiteStart = true;
 		fWhiteStartPosition = fCurrentPosition;
 		try {
@@ -133,19 +135,28 @@ public class TemplateParser extends AbstractParser {
 			// end of scanner text
 		}
 		try {
-			appendContent(writer, fWhiteStart, fWhiteStartPosition, 1);
+			if (!fOnlyIncludeFlag) {
+				appendContent(writer, fWhiteStart, fWhiteStartPosition, 1);
+			}
 		} catch (IndexOutOfBoundsException e) {
 			// end of scanner text
 		}
 	}
 
 	protected void runParser(Appendable writer) throws IOException {
+		// int oldCurrentPosition = 0;
 		fWhiteStart = true;
 		fWhiteStartPosition = fCurrentPosition;
 		try {
 			while (true) {
+				// if (oldCurrentPosition >= fCurrentPosition) {
+				// System.out.println("stop stop: " + oldCurrentPosition + "--" +
+				// fStringSource);
+				// System.exit(-1);
+				// }
 				fCurrentCharacter = fSource[fCurrentPosition++];
 
+				// oldCurrentPosition = fCurrentPosition;
 				// ---------Identify the next token-------------
 				switch (fCurrentCharacter) {
 				case '{': // wikipedia template handling
@@ -203,7 +214,16 @@ public class TemplateParser extends AbstractParser {
 		}
 	}
 
-	protected boolean parseIncludeWikiTags(Appendable writer) throws IOException {
+	/**
+	 * See <a href=
+	 * "http://en.wikipedia.org/wiki/Help:Template#Controlling_what_gets_transcluded"
+	 * >Help:Template#Controlling what gets transcluded</a>
+	 * 
+	 * @param writer
+	 * @return
+	 * @throws IOException
+	 */
+	protected boolean parseIncludeWikiTags(StringBuilder writer) throws IOException {
 		try {
 			switch (fSource[fCurrentPosition]) {
 			case '!': // <!-- html comment -->
@@ -237,18 +257,42 @@ public class TemplateParser extends AbstractParser {
 						if (!isTemplate()) {
 							if (tagName.equals("includeonly")) {
 								if (readUntilIgnoreCase("</", "includeonly>")) {
-									appendContent(writer, fWhiteStart, fWhiteStartPosition, fCurrentPosition - lessThanStart);
+									if (!fOnlyIncludeFlag) {
+										appendContent(writer, fWhiteStart, fWhiteStartPosition, fCurrentPosition - lessThanStart);
+									}
 									fWhiteStart = true;
 									fWhiteStartPosition = tagStart;
 
-									appendContent(writer, fWhiteStart, fWhiteStartPosition, 2 + "includeonly>".length());
+									if (!fOnlyIncludeFlag) {
+										appendContent(writer, fWhiteStart, fWhiteStartPosition, 2 + "includeonly>".length());
+									}
 									fWhiteStart = true;
 									fWhiteStartPosition = fCurrentPosition;
 									return true;
 								}
 							} else if (tagName.equals("noinclude")) {
 								if (readUntilIgnoreCase("</", "noinclude>")) {
-									appendContent(writer, fWhiteStart, fWhiteStartPosition, fCurrentPosition - lessThanStart);
+									if (!fOnlyIncludeFlag) {
+										appendContent(writer, fWhiteStart, fWhiteStartPosition, fCurrentPosition - lessThanStart);
+									}
+									fWhiteStart = true;
+									fWhiteStartPosition = fCurrentPosition;
+									return true;
+								}
+							} else if (tagName.equals("onlyinclude")) {
+								if (readUntilIgnoreCase("</", "onlyinclude>")) {
+									if (!fOnlyIncludeFlag) {
+										// delete the content, which is already added
+										writer.delete(0, writer.length());
+										fOnlyIncludeFlag = true;
+									}
+
+									// appendContent(writer, fWhiteStart, fWhiteStartPosition,
+									// fCurrentPosition - lessThanStart);
+									fWhiteStart = true;
+									fWhiteStartPosition = tagStart;
+
+									appendContent(writer, fWhiteStart, fWhiteStartPosition, 2 + "onlyinclude>".length());
 									fWhiteStart = true;
 									fWhiteStartPosition = fCurrentPosition;
 									return true;
@@ -268,6 +312,13 @@ public class TemplateParser extends AbstractParser {
 								}
 							} else if (tagName.equals("includeonly")) {
 								if (readUntilIgnoreCase("</", "includeonly>")) {
+									appendContent(writer, fWhiteStart, fWhiteStartPosition, fCurrentPosition - lessThanStart);
+									fWhiteStart = true;
+									fWhiteStartPosition = fCurrentPosition;
+									return true;
+								}
+							} else if (tagName.equals("onlyinclude")) {
+								if (readUntilIgnoreCase("</", "onlyinclude>")) {
 									appendContent(writer, fWhiteStart, fWhiteStartPosition, fCurrentPosition - lessThanStart);
 									fWhiteStart = true;
 									fWhiteStartPosition = fCurrentPosition;
@@ -386,6 +437,10 @@ public class TemplateParser extends AbstractParser {
 		int endOffset = fCurrentPosition - 2;
 		String function = checkParserFunction(startTemplatePosition, endOffset);
 		if (function != null) {
+			// System.out.println("Function: " + function);
+			// if (function.contains("[[Template")) {
+			// System.out.println("Function: " + fStringSource);
+			// }
 			ITemplateFunction templateFunction = fWikiModel.getTemplateFunction(function.toLowerCase());
 			if (templateFunction != null) {
 				// if (function.charAt(0) == '#') {
@@ -403,6 +458,8 @@ public class TemplateParser extends AbstractParser {
 		Object[] objs = createParameterMap(fSource, startTemplatePosition, fCurrentPosition - startTemplatePosition - 2);
 		HashMap<String, String> map = (HashMap<String, String>) objs[0];
 		String templateName = ((String) objs[1]).trim();
+		// System.out.println("Template name: " + fCurrentPosition + "--" +
+		// templateName);
 		if (templateName.length() > 0 && templateName.charAt(0) == ':') {
 			plainContent = fWikiModel.getRawWikiContent("", templateName.substring(1), map);
 		} else {
@@ -416,8 +473,9 @@ public class TemplateParser extends AbstractParser {
 			return true;
 		}
 		// if no template found insert plain template name string:
+		// writer.append("[[" + fWikiModel.getTemplateNamespace() + ":" +
+		// templateName + "]]");
 		writer.append("{{" + templateName + "}}");
-
 		return true;
 	}
 
@@ -568,7 +626,7 @@ public class TemplateParser extends AbstractParser {
 		char ch;
 		while (currOffset < endOffset) {
 			ch = fSource[currOffset++];
-			if (!Character.isWhitespace(ch)) {
+			if (Character.isLetter(ch) || ch == '#' || ch == '$') {
 				functionStart = currOffset - 1;
 				while (currOffset < endOffset) {
 					ch = fSource[currOffset++];
@@ -576,6 +634,8 @@ public class TemplateParser extends AbstractParser {
 						fCurrentPosition = currOffset;
 						return new String(fSource, functionStart, currOffset - functionStart - 1);
 						// break;
+					} else if (!Character.isLetterOrDigit(ch) && ch != '$') {
+						return null;
 					}
 				}
 				break;
@@ -606,9 +666,13 @@ public class TemplateParser extends AbstractParser {
 		// f.substring(fCurrentPosition - 1, fCurrentPosition + 3);
 		if (htmlCommentString.equals("<!--")) {
 			if (temp >= 0) {
-				appendContent(writer, fWhiteStart, fWhiteStartPosition, fCurrentPosition - temp - 1);
+				if (!fOnlyIncludeFlag) {
+					appendContent(writer, fWhiteStart, fWhiteStartPosition, fCurrentPosition - temp - 1);
+				}
 			} else {
-				appendContent(writer, fWhiteStart, fWhiteStartPosition, 1);
+				if (!fOnlyIncludeFlag) {
+					appendContent(writer, fWhiteStart, fWhiteStartPosition, 1);
+				}
 			}
 			fCurrentPosition += 3;
 			if (readUntil("-->")) {
