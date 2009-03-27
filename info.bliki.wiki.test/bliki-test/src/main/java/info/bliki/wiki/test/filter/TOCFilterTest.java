@@ -117,9 +117,9 @@ public class TOCFilterTest extends FilterTestSupport {
 				"<p>hello world 1</p>\n" + 
 				"<a id=\"hello_world_2\" name=\"hello_world_2\"></a><h2>hello world 2</h2>\n" + 
 				"<p>hello world 2</p>\n" + 
-				"<a id=\"hello_world_3\" name=\"hello_world_3\"></a><h2>hello world 3</h2>\n" + 
-				"<p>hello world 3\n" + 
+				"<a id=\"hello_world_.C3.9Cbersicht\" name=\"hello_world_.C3.9Cbersicht\"></a><h2>hello world Übersicht</h2>\n" + 
+				"<p>hello world Übersicht\n" + 
 				"</p>", wikiModel.render("=hello world 1=\n" + "hello world 1\n" + "\n"
-				+ "==hello world 2==\n" + "hello world 2\n" + "\n" + "==hello world 3==\n" + "hello world 3\n" ));
+				+ "==hello world 2==\n" + "hello world 2\n" + "\n" + "==hello world Übersicht==\n" + "hello world Übersicht\n" ));
 	}
 }

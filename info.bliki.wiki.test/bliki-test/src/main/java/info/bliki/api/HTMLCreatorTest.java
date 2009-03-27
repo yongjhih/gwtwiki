@@ -3,7 +3,7 @@ package info.bliki.api;
 import info.bliki.api.creator.DocumentCreator;
 import info.bliki.api.creator.WikiDB;
 import info.bliki.wiki.filter.Encoder;
-import info.bliki.wiki.model.APIWikiModel;
+import info.bliki.wiki.impl.APIWikiModel;
 
 import java.io.IOException;
 
@@ -71,7 +71,11 @@ public class HTMLCreatorTest {
 		testWikipediaENAPI("Protein");
 	}
 	
+	public static void testCreator005() {
+		testWikipediaENAPI("Depeche Mode");
+	}
+	
 	public static void main(String[] args) {
-		testCreator001();
+		testCreator002();
 	}
 }

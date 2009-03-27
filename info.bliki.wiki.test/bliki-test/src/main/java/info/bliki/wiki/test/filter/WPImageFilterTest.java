@@ -91,7 +91,7 @@ public class WPImageFilterTest extends FilterTestSupport {
 		assertEquals(
 				"\n"
 						+ "<p><div style=\"width:150px\"><a class=\"internal\" href=\"http://www.bliki.info/wiki/Main_Page\" title=\"Alt text\"><img src=\"http://www.bliki.info/wiki/150px-Example.png\" alt=\"Alt text\" title=\"Alt text\" class=\"location-none\" width=\"150\" />\n"
-						+ "</a>\n" + "<div class=\"caption\">Title text</div></div>\n" + "</p>", wikiModel
+						+ "</a></div>\n" + "</p>", wikiModel
 						.render("[[Image:Example.png|150px|link=Main Page\n" + "|alt=Alt text|Title text]]"));
 	}
 	

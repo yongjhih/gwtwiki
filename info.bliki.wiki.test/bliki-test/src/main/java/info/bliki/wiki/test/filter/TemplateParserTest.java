@@ -37,7 +37,17 @@ public class TemplateParserTest extends FilterTestSupport {
 				"", wikiModel.parseTemplates("{{templ1\n" + " | a = Test1\n"
 				+ " | b ={{templ2|sdfsf|klj}} \n" + "}}\n" + "", false));
 	}
-
+	
+	public void testTemplateCall4() {
+		// see method WikiTestModel#getRawWikiContent()
+		assertEquals("{{[[Template:example|example]]}}", wikiModel.parseTemplates("{{tl|example}}", false));
+	}
+	
+	public void testTemplateCall5() {
+		// see method WikiTestModel#getRawWikiContent()
+		assertEquals("(pronounced <span title=\"Pronunciation in the International Phonetic Alphabet (IPA)\" class=\"IPA\">[[WP:IPA for English|/dəˌpeʃˈmoʊd/]]</span>)", wikiModel.parseTemplates("({{pron-en|dəˌpeʃˈmoʊd}})", false));
+	}
+	
 	public void testTemplateParameter01() {
 		// see method WikiTestModel#getTemplateContent()
 		assertEquals("start-a) First: arg1 Second: arg2-end", wikiModel.parseTemplates("start-{{Test|arg1|arg2}}-end", false));

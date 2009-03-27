@@ -142,7 +142,7 @@ public class WPLinkFilterTest extends FilterTestSupport {
 
 	public void testSectionLink02() {
 		assertEquals("\n" + 
-				"<p><a href=\"#Section%C3%A4%C3%B6%C3%BC\" title=\"\" /></p>", wikiModel.render("[[#Sectionäöü]]"));
+				"<p><a href=\"#Section.C3.A4.C3.B6.C3.BC\" title=\"\" /></p>", wikiModel.render("[[#Sectionäöü]]"));
 	}
 
 	public void testRedirect01() {

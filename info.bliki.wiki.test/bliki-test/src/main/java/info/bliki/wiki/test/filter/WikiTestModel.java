@@ -3,19 +3,10 @@ package info.bliki.wiki.test.filter;
 import info.bliki.htmlcleaner.TagNode;
 import info.bliki.wiki.filter.MagicWord;
 import info.bliki.wiki.model.Configuration;
-import info.bliki.wiki.model.ITableOfContent;
 import info.bliki.wiki.model.WikiModel;
-import info.bliki.wiki.tags.TableOfContentTag;
 
-import java.io.ByteArrayInputStream;
-import java.io.InputStream;
-import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.Locale;
 import java.util.Map;
-
-import com.nutrun.xhtml.validator.XhtmlValidator;
 
 //import com.nutrun.xhtml.validator.XhtmlValidator;
 
@@ -25,12 +16,42 @@ import com.nutrun.xhtml.validator.XhtmlValidator;
  * 
  */
 public class WikiTestModel extends WikiModel {
-	public final static String XHTML_START = "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">\n"
-			+ "<html xmlns=\"http://www.w3.org/1999/xhtml\">\n"
-			+ "<head profile=\"http://gmpg.org/xfn/11\">\n"
-			+ "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\" />\n"
+	public final static String TL = "{{[[Template:{{{1}}}|{{{1}}}]]}}<noinclude>\n" + "{{pp-template|small=yes}}\n"
+			+ "{{documentation}}\n" + "</noinclude>";
+	public final static String PRON_ENG = "#REDIRECT [[Template:Pron-en]]";
+	public final static String PRON_EN = "<onlyinclude>pronounced <span title=\"Pronunciation in the International Phonetic Alphabet (IPA)\" class=\"IPA\">[[WP:IPA for English|/{{{1}}}/]]</span></onlyinclude>\n"
 			+ "\n"
-			+ "<title>A valid XHTML document</title>\n" + "</head>\n" + "<body>";
+			+ "==Example==\n"
+			+ "\n"
+			+ "This code:\n"
+			+ "\n"
+			+ ": <code><nowiki>A battleship, {{pron-en|ˈbætəlʃɪp}}, is ...</nowiki></code>\n"
+			+ "\n"
+			+ "will display:\n"
+			+ "\n"
+			+ ": A battleship, {{pron-en|ˈbætəlʃɪp}}, is ...\n"
+			+ "\n"
+			+ "==Usage==\n"
+			+ "{{usage of IPA templates}}\n"
+			+ "\n"
+			+ "<!-- PLEASE ADD CATEGORIES BELOW THIS LINE, THANKS. -->\n"
+			+ "\n"
+			+ "[[Category:IPA templates|{{PAGENAME}}]]\n"
+			+ "\n"
+			+ "<!-- PLEASE ADD INTERWIKIS BELOW THIS LINE, THANKS. -->\n"
+			+ "<noinclude>\n"
+			+ "[[ar:PronEng]]\n"
+			+ "[[tl:Template:PronEng]]\n" + "[[simple:Template:IPA-en]]\n" + "</noinclude>";
+
+	public final static String HTML_START = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
+			+ "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\" \n"
+			+ "   \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">\n" + "<html xmlns=\"http://www.w3.org/1999/xhtml\">\n"
+			+ "<head>\n" + "        <title>test</title>\n\n    </head>\n" + "    <body>";
+
+	public final static String XHTML_START = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
+			+ "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\" \n"
+			+ "   \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">\n";
+
 	public final static String XHTML_END = "</body>\n" + "</html>";
 
 	public final static String PIPE_SYMBOL = "|<noinclude>{{template doc}}</noinclude>";
@@ -506,6 +527,12 @@ public class WikiTestModel extends WikiModel {
 				return IFEQ_TEST;
 			} else if (name.equals("Further")) {
 				return FURTHER;
+			} else if (name.equals("Tl")) {
+				return TL;
+			} else if (name.equals("PronEng")) {
+				return PRON_ENG;
+			} else if (name.equals("Pron-en")) {
+				return PRON_EN;
 			}
 		} else {
 			if (name.equals("Include_Page")) {
@@ -548,44 +575,69 @@ public class WikiTestModel extends WikiModel {
 	@Override
 	public String render(String rawWikiText) {
 		String xhtmlArtifact = super.render(rawWikiText);
-		byte[] bytes;
-		try {
-			String xhtml = XHTML_START + xhtmlArtifact + XHTML_END;
-			bytes = xhtml.getBytes("UTF-8");
-
-			InputStream in = new ByteArrayInputStream(bytes);
-			XhtmlValidator validator = new XhtmlValidator();
-
-			validator.isValid(in);
-			String[] errors = validator.getErrors();
-			if (errors.length > 0) {
-				System.out.println(">>>>>");
-				for (int i = 0; i < errors.length; i++) {
-					System.out.println(errors[i]);
-				}
-				// junit.framework.Assert.assertEquals("", errors[0]);
-				System.out.println(xhtmlArtifact);
-				System.out.println("<<<<<");
-			}
-		} catch (UnsupportedEncodingException e) {
-			e.printStackTrace();
-		}
+		// byte[] bytes;
+		// try {
+		// String xhtml = HTML_START + xhtmlArtifact + XHTML_END;
+		//
+		// bytes = xhtml.getBytes("UTF-8");
+		//
+		// InputStream in = new ByteArrayInputStream(bytes);
+		// Parser parser = new Parser();
+		// HTMLSchema schema = new HTMLSchema();
+		// parser.setProperty(Parser.schemaProperty, schema);
+		// Writer w = new StringWriter();
+		// XMLWriter x = new XMLWriter(w);
+		// x.setOutputProperty(XMLWriter.METHOD, "xml");
+		// x.setOutputProperty(XMLWriter.OMIT_XML_DECLARATION, "yes");
+		// // x.setPrefix(schema.getURI(), "");
+		//
+		// parser.setFeature(Parser.namespacesFeature, false);
+		// parser.setFeature(Parser.defaultAttributesFeature, true);
+		// parser.setContentHandler(x);
+		// InputSource is = new InputSource(in);
+		// is.setEncoding("UTF-8");
+		// parser.parse(is);
+		// XhtmlValidator validator = new XhtmlValidator();
+		// xhtml = w.toString();
+		// bytes = (XHTML_START + xhtml).getBytes("UTF-8");
+		// in = new ByteArrayInputStream(bytes);
+		// validator.isValid(in);
+		// String[] errors = validator.getErrors();
+		// if (errors.length > 0) {
+		// System.out.println(">>>>>");
+		// for (int i = 0; i < errors.length; i++) {
+		// System.out.println(errors[i]);
+		// }
+		// // junit.framework.Assert.assertEquals("", errors[0]);
+		// System.out.println(xhtml);
+		// System.out.println("<<<<<");
+		// }
+		// return xhtmlArtifact;
+		// } catch (IOException e) {
+		// e.printStackTrace();
+		// } catch (SAXException e) {
+		// e.printStackTrace();
+		// // } catch (UnsupportedEncodingException e) {
+		// // e.printStackTrace();
+		// }
 		return xhtmlArtifact;
 	}
 
 	/**
-	 * Test for <a href="http://groups.google.de/group/bliki/t/a0540e27f27f02a5">Discussion:  Hide Table of Contents (toc)?</a>
+	 * Test for <a
+	 * href="http://groups.google.de/group/bliki/t/a0540e27f27f02a5">Discussion:
+	 * Hide Table of Contents (toc)?</a>
 	 */
-//	public ITableOfContent createTableOfContent(boolean isTOCIdentifier) {
-//		if (fToCSet == null) {
-//			fToCSet = new HashSet<String>();
-//			fTableOfContent = new ArrayList<Object>();
-//		}
-//		fTableOfContentTag =  new TableOfContentTag("div") {
-//			public void setShowToC(boolean showToC) {
-//				// do nothing
-//			}
-//		};
-//		return fTableOfContentTag;
-//	}
+	// public ITableOfContent createTableOfContent(boolean isTOCIdentifier) {
+	// if (fToCSet == null) {
+	// fToCSet = new HashSet<String>();
+	// fTableOfContent = new ArrayList<Object>();
+	// }
+	// fTableOfContentTag = new TableOfContentTag("div") {
+	// public void setShowToC(boolean showToC) {
+	// // do nothing
+	// }
+	// };
+	// return fTableOfContentTag;
+	// }
 }

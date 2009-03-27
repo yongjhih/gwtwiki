@@ -38,6 +38,18 @@ public class TemplateFilterTest extends FilterTestSupport {
 				+ " | a = Test1\n" + " | b ={{templ2|sdfsf|klj}} \n" + "}}\n" + ""));
 	}
 
+	public void testTemplateCall4() {
+		// see method WikiTestModel#getRawWikiContent()
+		assertEquals("\n" + 
+				"<p>{{<a href=\"http://www.bliki.info/wiki/Template:example\" title=\"Template:example\">example</a>}}</p>", wikiModel.render("{{tl|example}}"));
+	}
+	
+	public void testTemplateCall5() {
+		// see method WikiTestModel#getRawWikiContent()
+		assertEquals("\n" + 
+				"<p>(pronounced <span class=\"IPA\" title=\"Pronunciation in the International Phonetic Alphabet (IPA)\"><a href=\"http://www.bliki.info/wiki/WP:IPA_for_English\" title=\"WP:IPA for English\">/dəˌpeʃˈmoʊd/</a></span>)</p>", wikiModel.render("({{pron-en|dəˌpeʃˈmoʊd}})"));
+	}
+	
 	public void testTemplateNowiki() {
 		// see method WikiTestModel#getTemplateContent()
 		assertEquals("\n" + "<p>start-{{templ1|a=3|b}}-end</p>", wikiModel.render("start-<nowiki>{{templ1|a=3|b}}-</noWiKi>end"));
