@@ -1,5 +1,6 @@
 package info.bliki.wiki.test.filter;
 
+import info.bliki.wiki.filter.PlainTextConverter;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
@@ -100,5 +101,17 @@ public class WPListFilterTest extends FilterTestSupport {
 		assertEquals("\n" + "<ul>\n" + "<li>#</li></ul>", wikiModel.render("* #"));
 		// TODO solve this wrong JUnit test
 		// assertEquals("", wikiModel.render("* :*"));
+	}
+	
+	public void testList13() {
+		assertEquals("\n" + 
+				"test 1\n" + 
+				"test 2\n" + 
+				"test 3\n" + 
+				"hello\n" + 
+				"\n" + 
+				"\n" + 
+				"test 4\n" + 
+				"", wikiModel.render(new PlainTextConverter(), LIST3));
 	}
 }

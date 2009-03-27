@@ -285,4 +285,17 @@ public class WPTableFilterTest extends FilterTestSupport {
 				"\n" + 
 				"", wikiModel.render(new PlainTextConverter(), TEST3));
 	}
+	public void testWPTableText01() {
+		assertEquals("\n" + 
+				"\n" + 
+				"\n" + 
+				"\n" + 
+				"Plog4u.org is dedicated to developing a Wikipedia Eclipse Plugin\n" + 
+				"     \n" + 
+				"\n" + 
+				"\n" + 
+				" \n" + 
+				"\n" + 
+				" ", wikiModel.render(new PlainTextConverter(), TEST));
+	}
 }
