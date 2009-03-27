@@ -22,7 +22,7 @@
     This is Bliki Add-ons project.
   </description>
 
-  <dependencies>
+  <dependencies> 
     <dependency>
       <groupId>info.bliki.wiki</groupId>
       <artifactId>bliki-core</artifactId>
@@ -31,6 +31,7 @@
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
+      <scope>test</scope>
     </dependency>
   </dependencies>
   
