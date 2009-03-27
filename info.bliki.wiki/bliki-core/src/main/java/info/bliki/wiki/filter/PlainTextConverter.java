@@ -50,6 +50,10 @@ public class PlainTextConverter implements ITextConverter {
 							String content = contentToken.getContent();
 							content = Utils.escapeXml(content, true, true, true);
 							resultBuffer.append(content);
+						} else if (item instanceof WPList) {
+							((WPList)item).renderPlainText(this, resultBuffer, model);
+						} else if (item instanceof WPTable) {
+							((WPTable)item).renderPlainText(this, resultBuffer, model);
 						} else if (item instanceof HTMLTag) {
 							((HTMLTag) item).getBodyString(resultBuffer);
 						} else if (item instanceof TagNode) {

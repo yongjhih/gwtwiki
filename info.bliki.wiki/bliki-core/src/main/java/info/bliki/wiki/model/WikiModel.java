@@ -188,7 +188,7 @@ public class WikiModel extends AbstractWikiModel {
 			ImageFormat imageFormat = ImageFormat.getImageFormat(rawImageLink, imageNamespace);
 
 			String imageName = imageFormat.getFilename();
-			String sizeStr = imageFormat.getSizeStr();
+			String sizeStr = imageFormat.getWidthStr();
 			if (sizeStr != null) {
 				imageName = sizeStr + '-' + imageName;
 			}

@@ -155,8 +155,8 @@ public class APIWikiModel extends WikiModel {
 			String[] listOfTitleStrings = { imageNamespace + ":" + imageName };
 			fUser.login();
 			List<Page> listOfPages;
-			if (imageFormat.getSize() > 0) {
-				listOfPages = fUser.queryImageinfo(listOfTitleStrings, imageFormat.getSize());
+			if (imageFormat.getWidth() > 0) {
+				listOfPages = fUser.queryImageinfo(listOfTitleStrings, imageFormat.getWidth());
 			} else {
 				listOfPages = fUser.queryImageinfo(listOfTitleStrings);
 			}
@@ -168,7 +168,7 @@ public class APIWikiModel extends WikiModel {
 				FileOutputStream os = null;
 				try {
 					String imageUrl;
-					if (imageFormat.getSize() > 0) {
+					if (imageFormat.getWidth() > 0) {
 						imageUrl = page.getImageThumbUrl();
 					} else {
 						imageUrl = page.getImageUrl();

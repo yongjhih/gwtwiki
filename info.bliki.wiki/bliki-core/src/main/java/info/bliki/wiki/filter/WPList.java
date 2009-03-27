@@ -1,7 +1,9 @@
 package info.bliki.wiki.filter;
 
+import info.bliki.htmlcleaner.ContentToken;
 import info.bliki.wiki.model.Configuration;
 import info.bliki.wiki.model.IWikiModel;
+import info.bliki.wiki.tags.HTMLTag;
 import info.bliki.wiki.tags.WPTag;
 import info.bliki.wiki.tags.util.TagStack;
 
@@ -11,7 +13,7 @@ import java.util.List;
 
 /**
  * Represents a wikipedia list
- *  
+ * 
  */
 public class WPList extends WPTag {
 
@@ -221,7 +223,7 @@ public class WPList extends WPTag {
 		}
 		return tt;
 	}
-	
+
 	@Override
 	public boolean isReduceTokenStack() {
 		return true;
@@ -231,8 +233,80 @@ public class WPList extends WPTag {
 	public String getParents() {
 		return Configuration.SPECIAL_BLOCK_TAGS;
 	}
-	
+
 	public InternalList getNestedElements() {
 		return fNestedElements;
 	}
+
+	private void renderSubListPlainText(InternalList list, ITextConverter converter, Appendable buf, IWikiModel wikiModel)
+			throws IOException {
+		if (list.size() > 0) {
+			buf.append("\n");// <li>");
+		}
+
+		for (int i = 0; i < list.size(); i++) {
+			Object element = list.get(i);
+
+			if (element instanceof InternalList) {
+				InternalList subList = (InternalList) element;
+				// beginHTMLTag(buf, subList);
+				// recursive call:
+				renderSubListPlainText(subList, converter, buf, wikiModel);
+				// endHTMLTag(buf, subList);
+			} else {
+				TagStack stack = ((WPListElement) element).getTagStack();
+				if (stack != null) {
+					converter.nodesToText(stack.getNodeList(), buf, wikiModel);
+				}
+				// wikiModel.appendStack(((WPListElement)
+				// element).getTagStack());
+			}
+
+			if ((i < list.size() - 1) && list.get(i + 1) instanceof WPListElement) {
+				if (NEW_LINES) {
+					buf.append("\n");
+					// buf.append("</li>\n<li>");
+				} else {
+					// buf.append("</li><lSi>");
+				}
+			}
+
+		}
+		// if (list.size() > 0) {
+		// buf.append("</li>");
+		// }
+	}
+
+	public void renderPlainText(ITextConverter converter, Appendable buf, IWikiModel wikiModel) throws IOException {
+		if (!isEmpty()) {
+			fInternalListStack = null;
+
+			for (int i = 0; i < fNestedElements.size(); i++) {
+				Object element = fNestedElements.get(i);
+				if (element instanceof InternalList) {
+					InternalList subList = (InternalList) element;
+					// beginHTMLTag(buf, subList);
+					renderSubListPlainText(subList, converter, buf, wikiModel);
+					// if (subList.fChar == '*') {
+					// // bullet list
+					// buf.append("</ul>");
+					// } else {
+					// // numbered list
+					// buf.append("</ol>");
+					// }
+				} else {
+					TagStack stack = ((WPListElement) element).getTagStack();
+					if (stack != null) {
+						converter.nodesToText(stack.getNodeList(), buf, wikiModel);
+					}
+				}
+			}
+			
+			if (NEW_LINES) {
+				buf.append("\n");
+			}
+		}
+
+	}
+
 }

@@ -269,7 +269,8 @@ public abstract class AbstractWikiModel implements IWikiModel, IContext {
 	}
 
 	public void appendInternalImageLink(String hrefImageLink, String srcImageLink, ImageFormat imageFormat) {
-		int pxSize = imageFormat.getSize();
+		int pxWidth = imageFormat.getWidth();
+		int pxHeight = imageFormat.getHeight();
 		String caption = imageFormat.getCaption();
 		TagNode divTagNode = new TagNode("div");
 		divTagNode.addAttribute("id", "image", false);
@@ -284,8 +285,16 @@ public abstract class AbstractWikiModel implements IWikiModel, IContext {
 		// }
 		divTagNode.addAttribute("src", srcImageLink, false);
 		divTagNode.addObjectAttribute("wikiobject", imageFormat);
-		if (pxSize != -1) {
-			divTagNode.addAttribute("style", "width:" + pxSize + "px", false);
+		if (pxHeight != -1) {
+			if (pxWidth != -1) {
+				divTagNode.addAttribute("style", "height:" + pxHeight + "px; " + "width:" + pxWidth + "px", false);
+			} else {
+				divTagNode.addAttribute("style", "height:" + pxHeight + "px", false);
+			}
+		} else {
+			if (pxWidth != -1) {
+				divTagNode.addAttribute("style", "width:" + pxWidth + "px", false);
+			}
 		}
 		pushNode(divTagNode);
 

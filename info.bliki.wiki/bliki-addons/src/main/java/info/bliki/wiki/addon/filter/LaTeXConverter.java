@@ -111,7 +111,7 @@ public class LaTeXConverter implements ITextConverter {
 		String caption = imageFormat.getCaption();
 		String location = imageFormat.getLocation();
 		String type = imageFormat.getType();
-		int pxSize = imageFormat.getSize();
+		int pxSize = imageFormat.getWidth();
 		if (pxSize != -1) {
 			resultBuffer.append("<div style=\"");
 			resultBuffer.append("width:");

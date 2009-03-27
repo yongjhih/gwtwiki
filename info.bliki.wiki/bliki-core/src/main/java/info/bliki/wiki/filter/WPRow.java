@@ -92,6 +92,29 @@ public class WPRow {
 		}
 	}
 
+	public void renderPlainText(ITextConverter converter, Appendable buf, IWikiModel wikiModel) throws IOException {
+		if (fCells.size() > 0) {
+			if (fType == WPCell.CAPTION) {
+				if (fCells.size() == 1) {
+					if (HTMLTag.NEW_LINES) {
+						buf.append("\n");
+					}
+					((WPCell) fCells.get(0)).renderPlainText(converter, buf, wikiModel);
+				}
+			} else {
+				if (HTMLTag.NEW_LINES) {
+					buf.append("\n");
+				}
+				WPCell cell;
+				for (int i = 0; i < fCells.size(); i++) {
+					cell = (WPCell) fCells.get(i);
+					cell.renderPlainText(converter, buf, wikiModel);
+					buf.append(" ");
+				}
+			}
+		}
+	}
+
 	public int getNumColumns() {
 		return fCells.size();
 	}

@@ -66,6 +66,7 @@ public class WPTable extends WPTag {
 	public int getRowsSize() {
 		return fRows.size();
 	}
+
 	/**
 	 * @return
 	 */
@@ -131,5 +132,15 @@ public class WPTable extends WPTag {
 	@Override
 	public String getParents() {
 		return Configuration.SPECIAL_BLOCK_TAGS;
+	}
+
+	public void renderPlainText(ITextConverter converter, Appendable buf, IWikiModel wikiModel) throws IOException {
+		if (fRows.size() > 0) {
+			WPRow row;
+			for (int i = 0; i < fRows.size(); i++) {
+				row = fRows.get(i);
+				row.renderPlainText(converter, buf, wikiModel);
+			}
+		}
 	}
 }

@@ -182,6 +182,15 @@ public class WPCell {
 		}
 	}
 
+	public void renderPlainText(ITextConverter converter, Appendable buf, IWikiModel wikiModel) throws IOException {
+		if (fStack != null) {
+			List<BaseToken> list = fStack.getNodeList();
+			if (!list.isEmpty()) {
+				converter.nodesToText(fStack.getNodeList(), buf, wikiModel);
+			}
+		}
+	}
+
 	/**
 	 * @return Returns the type.
 	 */

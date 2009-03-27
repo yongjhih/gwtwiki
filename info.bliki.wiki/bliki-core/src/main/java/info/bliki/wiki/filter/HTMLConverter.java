@@ -126,18 +126,33 @@ public class HTMLConverter implements ITextConverter {
 			alt = imageFormat.getAlt();
 			caption = Utils.escapeXml(caption, true, false, true);
 		}
-		if (alt==null) {
-			alt="";
+		if (alt == null) {
+			alt = "";
 		}
 		String location = imageFormat.getLocation();
 		String type = imageFormat.getType();
-		int pxSize = imageFormat.getSize();
-		if (pxSize != -1) {
+		int pxWidth = imageFormat.getWidth();
+		int pxHeight = imageFormat.getHeight();
+		if (pxHeight != -1) {
 			resultBuffer.append("<div style=\"");
-			resultBuffer.append("width:");
-			resultBuffer.append(Integer.toString(pxSize));
-			resultBuffer.append("px");
+			resultBuffer.append("height:");
+			resultBuffer.append(Integer.toString(pxHeight));
+			if (pxWidth != -1) {
+				resultBuffer.append("px; width:");
+				resultBuffer.append(Integer.toString(pxWidth));
+				resultBuffer.append("px");
+			} else {
+				resultBuffer.append("px");
+			}
 			resultBuffer.append("\">");
+		} else {
+			if (pxWidth != -1) {
+				resultBuffer.append("<div style=\"");
+				resultBuffer.append("width:");
+				resultBuffer.append(Integer.toString(pxWidth));
+				resultBuffer.append("px");
+				resultBuffer.append("\">");
+			}
 		}
 		String href = map.get("href");
 		if (href != null) {
@@ -162,7 +177,7 @@ public class HTMLConverter implements ITextConverter {
 		resultBuffer.append("\"");
 
 		if (caption != null && caption.length() > 0) {
-			if (alt.length()==0) {
+			if (alt.length() == 0) {
 				resultBuffer.append(" alt=\"").append(caption).append("\"");
 				resultBuffer.append(" title=\"").append(caption).append("\"");
 			} else {
@@ -183,9 +198,15 @@ public class HTMLConverter implements ITextConverter {
 			resultBuffer.append(clazz.toString().trim());
 			resultBuffer.append("\"");
 		}
-
-		if (pxSize != -1) {
-			resultBuffer.append(" width=\"").append(Integer.toString(pxSize)).append('\"');
+		if (pxHeight != -1) {
+			resultBuffer.append(" height=\"").append(Integer.toString(pxHeight)).append("\" ");
+			if (pxWidth != -1) {
+				resultBuffer.append(" width=\"").append(Integer.toString(pxWidth)).append('\"');
+			}
+		} else {
+			if (pxWidth != -1) {
+				resultBuffer.append(" width=\"").append(Integer.toString(pxWidth)).append('\"');
+			}
 		}
 		resultBuffer.append(" />\n");
 
@@ -206,7 +227,7 @@ public class HTMLConverter implements ITextConverter {
 		// writer.append("</div>\n");
 		// }
 
-		if (pxSize != -1) {
+		if (pxHeight != -1 || pxWidth != -1) {
 			resultBuffer.append("</div>\n");
 		}
 	}

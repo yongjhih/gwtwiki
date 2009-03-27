@@ -36,12 +36,12 @@ public class ImageFormat {
 					if (defIndex > 0) {
 						token = token.substring(0, defIndex).trim();
 						if (token.equals("link")) {
-							attrValue = caption.substring(defIndex+1).trim();
+							attrValue = caption.substring(defIndex + 1).trim();
 							img.setLink(attrValue);
 							continue;
 						}
 						if (token.equals("alt")) {
-							attrValue = caption.substring(defIndex+1).trim();
+							attrValue = caption.substring(defIndex + 1).trim();
 							img.setAlt(attrValue);
 							continue;
 						}
@@ -74,9 +74,13 @@ public class ImageFormat {
 
 	private String fLocation = "none";
 
-	private String fSizeStr = null;
+	private String fWidthStr = null;
 
-	private int fSize = -1;
+	private int fWidth = -1;
+
+	private String fHeightStr = null;
+
+	private int fHeight = -1;
 
 	private String fCaption;
 
@@ -116,21 +120,47 @@ public class ImageFormat {
 	}
 
 	/**
-	 * Get the size of the image in pixel (example: "600px")
+	 * Get the width of the image in pixel (example: "600px")
 	 * 
 	 * @param size
+	 * 
+	 * @return <code>-1</code> if no width is specified
 	 */
-	public int getSize() {
-		return fSize;
+	public int getWidth() {
+		return fWidth;
 	}
 
 	/**
-	 * Get the size of the image as a string
+	 * Get the width of the image as a string
 	 * 
 	 * @param size
+	 * 
+	 * @return <code>null</code> if no width is specified
 	 */
-	public String getSizeStr() {
-		return fSizeStr;
+	public String getWidthStr() {
+		return fWidthStr;
+	}
+
+	/**
+	 * Get the height of the image in pixel (example: "600px")
+	 * 
+	 * @param size
+	 * 
+	 * @return <code>-1</code> if no width is specified
+	 */
+	public int getHeight() {
+		return fHeight;
+	}
+
+	/**
+	 * Get the height of the image as a string
+	 * 
+	 * @param size
+	 * 
+	 * @return <code>null</code> if no width is specified
+	 */
+	public String getHeightStr() {
+		return fHeightStr;
 	}
 
 	public String getType() {
@@ -163,23 +193,46 @@ public class ImageFormat {
 
 	/**
 	 * Set the size of the image in pixel. If the given string ends with "px"
-	 * additionally calculate the integer value of the size (example: "600px") If
-	 * the size is negative ignore it.
+	 * additionally calculate the integer value of the width and optionally the
+	 * size of the height (example: "600px"). If the size is negative ignore it.
+	 * 
+	 * See <a href="http://en.wikipedia.org/wiki/Image_markup#Size">Image
+	 * markup#Size</a>
 	 * 
 	 * @param size
 	 */
 	public void setSize(String size) {
-		fSizeStr = size.toLowerCase();
-		if (fSizeStr.endsWith("px")) {
+		String sizeStr = size.toLowerCase();
+		if (sizeStr.endsWith("px")) {
+			int indexOfX = sizeStr.indexOf("x");
+			if (indexOfX > 0 && indexOfX < sizeStr.length() - 1) {
+				// format "widthxheightpx"
+				fWidthStr = sizeStr.substring(0, indexOfX) + "px";
+				fHeightStr = sizeStr.substring(indexOfX + 1);
+				try {
+					this.fHeight = Integer.parseInt(fHeightStr.substring(0, fHeightStr.length() - 2));
+					if (fHeight < 0) {
+						this.fHeight = -1;
+						this.fHeightStr = null;
+					}
+				} catch (NumberFormatException e) {
+					this.fHeight = -1;
+					this.fHeightStr = null;
+				}
+			} else {
+				fWidthStr = sizeStr;
+				fHeightStr = null;
+				fHeight = -1;
+			}
 			try {
-				this.fSize = Integer.parseInt(fSizeStr.substring(0, fSizeStr.length() - 2));
-				if (fSize < 0) {
-					this.fSize = -1;
-					this.fSizeStr = null;
+				this.fWidth = Integer.parseInt(fWidthStr.substring(0, fWidthStr.length() - 2));
+				if (fWidth < 0) {
+					this.fWidth = -1;
+					this.fWidthStr = null;
 				}
 			} catch (NumberFormatException e) {
-				this.fSize = -1;
-				this.fSizeStr = null;
+				this.fWidth = -1;
+				this.fWidthStr = null;
 			}
 		}
 	}
