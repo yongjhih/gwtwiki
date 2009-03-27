@@ -1,6 +1,6 @@
 package info.bliki.api;
 
-public class TestXMLPagesParser {
+public class XMLPagesParserTest {
 
 	private static String MAIN_PAGE_XML = "<?xml version=\"1.0\" encoding=\"utf-8\"?><api><query><pages><page pageid=\"46907\" ns=\"0\" title=\"API\"><revisions><rev>{{MovedToMediaWiki|API}}\n"
 			+ "\n"
