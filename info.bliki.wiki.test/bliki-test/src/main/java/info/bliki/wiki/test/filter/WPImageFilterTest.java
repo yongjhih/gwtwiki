@@ -122,4 +122,14 @@ public class WPImageFilterTest extends FilterTestSupport {
 				"...</p>", wikiModel
 						.render("these are the [[Image:FIFA WM 2006 Teams.png|thumb|220x100px|Qualifying countries]]..."));
 	}
+	
+	public void testImage13() {
+		assertEquals(
+				"\n" + 
+				"<p>these are the <div style=\"height:100px\"><a class=\"internal\" href=\"http://www.bliki.info/wiki/Image:FIFA_WM_2006_Teams.png\" title=\"Qualifying countries\"><img src=\"http://www.bliki.info/wiki/FIFA_WM_2006_Teams.png\" alt=\"Qualifying countries\" title=\"Qualifying countries\" class=\"location-none type-thumb\" height=\"100\"  />\n" + 
+				"</a>\n" + 
+				"<div class=\"thumbcaption\">Qualifying countries</div></div>\n" + 
+				"...</p>", wikiModel
+						.render("these are the [[Image:FIFA WM 2006 Teams.png|thumb|x100px|Qualifying countries]]..."));
+	}
 }
