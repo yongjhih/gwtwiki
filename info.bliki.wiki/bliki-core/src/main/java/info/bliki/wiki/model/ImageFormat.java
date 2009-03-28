@@ -197,7 +197,8 @@ public class ImageFormat {
 	 * size of the height (example: "600px"). If the size is negative ignore it.
 	 * 
 	 * See <a href="http://en.wikipedia.org/wiki/Image_markup#Size">Image
-	 * markup#Size</a>
+	 * markup#Size</a> and See <a
+	 * href="http://www.mediawiki.org/wiki/Help:Images">Help:Images</a>
 	 * 
 	 * @param size
 	 */
@@ -205,7 +206,7 @@ public class ImageFormat {
 		String sizeStr = size.toLowerCase();
 		if (sizeStr.endsWith("px")) {
 			int indexOfX = sizeStr.indexOf("x");
-			if (indexOfX > 0 && indexOfX < sizeStr.length() - 1) {
+			if (indexOfX >= 0 && indexOfX < sizeStr.length() - 1) {
 				// format "widthxheightpx"
 				fWidthStr = sizeStr.substring(0, indexOfX) + "px";
 				fHeightStr = sizeStr.substring(indexOfX + 1);
