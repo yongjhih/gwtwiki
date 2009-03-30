@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <jardesc>
-    <jar path="info.bliki.wiki/bliki-3.0.11.jar"/>
+    <jar path="info.bliki.wiki/bliki-core-3.0.11.jar"/>
     <options buildIfNeeded="true" compress="true" descriptionLocation="/info.bliki.wiki/bliki.jardesc" exportErrors="true" exportWarnings="true" includeDirectoryEntries="false" overwrite="false" saveDescription="true" storeRefactorings="false" useSourceFolders="false"/>
     <storedRefactorings deprecationInfo="true" structuralOnly="false"/>
     <selectedProjects/>
@@ -11,6 +11,7 @@
         </sealing>
     </manifest>
     <selectedElements exportClassFiles="true" exportJavaFiles="false" exportOutputFolder="false">
+        <javaElement handleIdentifier="=info.bliki.wiki/bliki-core\/src\/main\/resources"/>
         <javaElement handleIdentifier="=info.bliki.wiki/bliki-core\/src\/main\/java"/>
     </selectedElements>
     <fatjar builder="org.eclipse.jdt.ui.plain_jar_builder" launchConfig=""/>
