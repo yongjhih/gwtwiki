@@ -26,17 +26,6 @@ import java.util.List;
  * >http://en.wikipedia.org/w/api.php</a>.
  * </p>
  * 
- * <p>
- * Examples how to use these class can be found in the
- * <ul>
- * <li><a href="http://plog4u.svn.sourceforge.net/viewvc/plog4u/info.bliki.wiki.test/src/info/bliki/api/HTMLCreatorTest.java?view=markup"
- * >info.bliki.api.HTMLCreatorTest.java</a></li>
- * <li><a href="http://plog4u.svn.sourceforge.net/viewvc/plog4u/info.bliki.wiki.test/src/info/bliki/api/PDFCreatorTest.java?view=markup"
- * >info.bliki.api.PDFCreatorTest.java</a></li>
- * </ul>
- * source files in the distribution.
- * </p>
- * 
  */
 public class DocumentCreator {
 	private final String[] fListOfTitleStrings;

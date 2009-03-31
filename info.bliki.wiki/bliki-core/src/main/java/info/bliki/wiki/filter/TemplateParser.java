@@ -67,12 +67,16 @@ public class TemplateParser extends AbstractParser {
 			int level = wikiModel.incrementRecursionLevel();
 			if (level > Configuration.PARSER_RECURSION_LIMIT) {
 				writer.append("Error - recursion limit exceeded parsing templates.");
-				return;
+				return; 
 			}
-			TemplateParser parser = new TemplateParser(rawWikitext, false, renderTemplate);
+			TemplateParser parser = new TemplateParser(rawWikitext, parseOnlySignature, renderTemplate);
 			parser.setModel(wikiModel);
 			StringBuilder sb = new StringBuilder(rawWikitext.length());
 			parser.runPreprocessParser(sb);
+			if (parseOnlySignature) {
+				writer.append(sb);
+				return;
+			}
 
 			StringBuilder plainBuffer = sb;
 			if (templateParameterMap != null && (!templateParameterMap.isEmpty())) {
@@ -83,7 +87,7 @@ public class TemplateParser extends AbstractParser {
 					plainBuffer = sb;
 				}
 			}
-			parser = new TemplateParser(plainBuffer.toString(), false, renderTemplate);
+			parser = new TemplateParser(plainBuffer.toString(), parseOnlySignature, renderTemplate);
 			parser.setModel(wikiModel);
 			// parser.initialize(plainBuffer.toString());
 			parser.runParser(writer);
@@ -122,6 +126,27 @@ public class TemplateParser extends AbstractParser {
 					}
 					fCurrentPosition = htmlStartPosition;
 					break;
+				case '~':
+					int tildeCounter = 0;
+					if (fSource[fCurrentPosition] == '~' && fSource[fCurrentPosition + 1] == '~') {
+						// parse signatures '~~~', '~~~~' or '~~~~~'
+						tildeCounter = 3;
+						try {
+							if (fSource[fCurrentPosition + 2] == '~') {
+								tildeCounter = 4;
+								if (fSource[fCurrentPosition + 3] == '~') {
+									tildeCounter = 5;
+								}
+							}
+						} catch (IndexOutOfBoundsException e1) {
+							// end of scanner text
+						}
+						appendContent(writer, fWhiteStart, fWhiteStartPosition, 1);
+						fWikiModel.appendSignature(writer, tildeCounter);
+						fCurrentPosition += (tildeCounter - 1);
+						fWhiteStart = true;
+						fWhiteStartPosition = fCurrentPosition;
+					}
 				}
 
 				if (!fWhiteStart) {

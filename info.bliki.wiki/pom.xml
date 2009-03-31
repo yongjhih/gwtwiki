@@ -3,7 +3,7 @@
     xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 
                         http://maven.apache.org/maven-v4_0_0.xsd">
   
-  <modelVersion>4.0.0</modelVersion>
+  <modelVersion>4.0.0</modelVersion> 
   
   <groupId>info.bliki.wiki</groupId>
   
@@ -13,7 +13,7 @@
   
   <name>Bliki POM</name>
   
-  <version>3.0.11</version>
+  <version>3.0.12-SNAPSHOT</version>
 
   <description>The Bliki API is a Java-based Wiki to HTML renderer with MediaWiki syntax support.</description>
 
@@ -58,17 +58,17 @@
       <dependency>
         <groupId>info.bliki.wiki</groupId>
         <artifactId>bliki-core</artifactId>
-        <version>3.0.11</version>
+        <version>3.0.12-SNAPSHOT</version>
       </dependency>
       <dependency>
         <groupId>info.bliki.wiki</groupId>
         <artifactId>bliki-pdf</artifactId>
-        <version>3.0.11</version>
+        <version>3.0.12-SNAPSHOT</version>
       </dependency>
       <dependency>
         <groupId>info.bliki.wiki</groupId>
         <artifactId>bliki-addons</artifactId>
-        <version>3.0.11</version>
+        <version>3.0.12-SNAPSHOT</version>
       </dependency>
     
       <dependency>
