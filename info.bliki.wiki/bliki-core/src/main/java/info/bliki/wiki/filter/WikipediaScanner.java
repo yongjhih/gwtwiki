@@ -38,10 +38,6 @@ public class WikipediaScanner {
 		this(src, 0);
 	}
 
-	public void setModel(IWikiModel wikiModel) {
-		fWikiModel = wikiModel;
-	}
-
 	public WikipediaScanner(String src, int position) {
 		fSource = src.toCharArray();
 		fStringSource = src;
@@ -49,10 +45,10 @@ public class WikipediaScanner {
 		// initialize(src, position);
 	}
 
-	// protected void initialize(String src, int position) {
-	//		
-	//		
-	// }
+
+	public void setModel(IWikiModel wikiModel) {
+		fWikiModel = wikiModel;
+	}
 
 	public int getPosition() {
 		return fScannerPosition;

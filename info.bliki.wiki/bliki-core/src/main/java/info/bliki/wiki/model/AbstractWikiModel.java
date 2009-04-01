@@ -105,7 +105,7 @@ public abstract class AbstractWikiModel implements IWikiModel, IContext {
 	 * the general renderer map for all templates in that group. Sometimes though
 	 * you want to override the group's renderers.
 	 */
-	protected Map attributeRenderers;
+	protected Map<Class,Object> attributeRenderers;
 
 	public AbstractWikiModel() {
 		this(Configuration.DEFAULT_CONFIGURATION);
@@ -370,7 +370,8 @@ public abstract class AbstractWikiModel implements IWikiModel, IContext {
 
 		String encodedtopic = encodeTitleToUrl(title, true);
 		if (replaceColon()) {
-			encodedtopic = encodedtopic.replaceAll(":", "/");
+			// encodedtopic = encodedtopic.replaceAll(":", "/");
+			encodedtopic = encodedtopic.replace(':', '/');
 		}
 		hrefLink = hrefLink.replace("${title}", encodedtopic);
 

@@ -97,7 +97,8 @@ public class WikiModel extends AbstractWikiModel {
 		if (topic.length() > 0) {
 			String encodedtopic = encodeTitleToUrl(topic, true);
 			if (replaceColon()) {
-				encodedtopic = encodedtopic.replaceAll(":", "/");
+				// encodedtopic = encodedtopic.replaceAll(":", "/");
+				encodedtopic = encodedtopic.replace(':', '/');
 			}
 			hrefLink = fExternalWikiBaseURL.replace("${title}", encodedtopic);
 		} else {
@@ -197,17 +198,18 @@ public class WikiModel extends AbstractWikiModel {
 			}
 			imageName = Encoder.encodeUrl(imageName);
 			if (replaceColon()) {
-				imageName = imageName.replaceAll(":", "/");
+				// imageName = imageName.replaceAll(":", "/");
+				imageName = imageName.replace(':', '/');
 			}
 			String link = imageFormat.getLink();
 			if (link != null) {
-				if (link.length()==0) {
+				if (link.length() == 0) {
 					imageHref = "";
 				} else {
 					String encodedTitle = encodeTitleToUrl(link, true);
 					imageHref = imageHref.replace("${title}", encodedTitle);
 				}
-				
+
 			} else {
 				if (replaceColon()) {
 					imageHref = imageHref.replace("${title}", imageNamespace + '/' + imageName);

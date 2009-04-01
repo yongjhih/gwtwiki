@@ -47,7 +47,7 @@ import info.bliki.wiki.template.URLEncode;
 
 import java.util.HashMap;
 import java.util.Map;
-
+import java.util.regex.Pattern;
 
 /**
  * Common Configuration settings
@@ -370,6 +370,10 @@ public class Configuration implements IConfiguration {
 	 */
 	protected static final HashMap<String, ITemplateFunction> TEMPLATE_FUNCTION_MAP = new HashMap<String, ITemplateFunction>();;
 
+	public final static Pattern NOWIKI_OPEN_PATTERN = Pattern.compile("\\<nowiki\\>", Pattern.CASE_INSENSITIVE);
+
+	public final static Pattern NOWIKI_CLOSE_PATTERN = Pattern.compile("\\<\\/nowiki\\>", Pattern.CASE_INSENSITIVE);
+
 	static {
 		for (int i = 0; i < INTERWIKI_STRINGS.length; i += 2) {
 			INTERWIKI_MAP.put(INTERWIKI_STRINGS[i], INTERWIKI_STRINGS[i + 1]);
@@ -393,7 +397,7 @@ public class Configuration implements IConfiguration {
 		TEMPLATE_FUNCTION_MAP.put("#switch", Switch.CONST);
 		TEMPLATE_FUNCTION_MAP.put("#tag", Tag.CONST);
 		TEMPLATE_FUNCTION_MAP.put("#time", Time.CONST);
-		
+
 		CODE_FORMATTER_MAP.put("abap", new ABAPCodeFilter());
 		CODE_FORMATTER_MAP.put("csharp", new CSharpCodeFilter());
 		CODE_FORMATTER_MAP.put("groovy", new GroovyCodeFilter());
@@ -466,15 +470,17 @@ public class Configuration implements IConfiguration {
 	public final static Configuration DEFAULT_CONFIGURATION = new Configuration();
 
 	/**
-	 * Limits the recursive call of the Wikipedia and Template parser to a depth of PARSER_RECURSION_LIMIT
+	 * Limits the recursive call of the Wikipedia and Template parser to a depth
+	 * of PARSER_RECURSION_LIMIT
 	 */
 	public final static int PARSER_RECURSION_LIMIT = 16;
 
 	/**
-	 * Limits the recursive call of the HTMLConverter renderer to a depth of RENDERER_RECURSION_LIMIT
+	 * Limits the recursive call of the HTMLConverter renderer to a depth of
+	 * RENDERER_RECURSION_LIMIT
 	 */
 	public final static int RENDERER_RECURSION_LIMIT = 256;
-	
+
 	public Configuration() {
 	}
 

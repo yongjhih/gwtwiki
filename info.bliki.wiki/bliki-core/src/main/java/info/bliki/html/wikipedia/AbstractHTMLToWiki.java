@@ -9,14 +9,15 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang.StringUtils;
 
 public class AbstractHTMLToWiki {
 	final Map<String, HTMLTag> fHashMap;
-	
+
 	final boolean fNoDiv;
 
 	final boolean fNoFont;
-	
+
 	public AbstractHTMLToWiki(Map<String, HTMLTag> map, boolean noDiv, boolean noFont) {
 		super();
 		fHashMap = map;
@@ -51,14 +52,15 @@ public class AbstractHTMLToWiki {
 		if (node instanceof ContentToken) {
 			ContentToken contentToken = (ContentToken) node;
 			String content = contentToken.getContent();
-			content = content.replaceAll("&nbsp;", " ");
+			// content = content.replaceAll("&nbsp;", " ");
+			content = StringUtils.replace(content, "&nbsp;", " ");
 			wikiText.append(content);
 		} else if (node instanceof TagNode) {
 			TagNode tagNode = (TagNode) node;
-	
+
 			String name = tagNode.getName();
 			HTMLTag tag = (HTMLTag) fHashMap.get(name);
-	
+
 			if (tag != null) {
 				boolean showWithoutTag = false;
 				if (fNoDiv && name.equals("div")) {

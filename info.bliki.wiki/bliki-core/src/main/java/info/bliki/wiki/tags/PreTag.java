@@ -13,10 +13,9 @@ import java.util.regex.Pattern;
  * 
  * @see WPPreTag
  */
-public class PreTag extends HTMLBlockTag implements INoBodyParsingTag {// implements IPreBodyParsingTag {
-	private final static Pattern NOWIKI_OPEN_PATTERN = Pattern.compile("\\<nowiki\\>", Pattern.CASE_INSENSITIVE);
-
-	private final static Pattern NOWIKI_CLOSE_PATTERN = Pattern.compile("\\<\\/nowiki\\>", Pattern.CASE_INSENSITIVE);
+public class PreTag extends HTMLBlockTag implements INoBodyParsingTag {// implements
+																																				// IPreBodyParsingTag
+																																				// {
 
 	public PreTag() {
 		super("pre", Configuration.SPECIAL_BLOCK_TAGS);
@@ -27,8 +26,8 @@ public class PreTag extends HTMLBlockTag implements INoBodyParsingTag {// implem
 		String content = getBodyString();
 		if (content != null && content.length() > 0) {
 			writer.append("\n<pre>");
-			content = NOWIKI_OPEN_PATTERN.matcher(content).replaceAll("");
-			content = NOWIKI_CLOSE_PATTERN.matcher(content).replaceAll("");
+			content = Configuration.NOWIKI_OPEN_PATTERN.matcher(content).replaceAll("");
+			content = Configuration.NOWIKI_CLOSE_PATTERN.matcher(content).replaceAll("");
 			NowikiTag.copyPre(content, writer, false);
 			writer.append("</pre>");
 		}

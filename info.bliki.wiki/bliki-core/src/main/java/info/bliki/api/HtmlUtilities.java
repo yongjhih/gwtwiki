@@ -8,6 +8,7 @@ import java.io.StringReader;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
+import org.apache.commons.lang.StringUtils;
 import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
@@ -17,9 +18,9 @@ import org.xml.sax.helpers.DefaultHandler;
 /**
  * TODO: delete this class file!
  * 
- * Sources adopted from the article <a
- * href="http://www.javaworld.com/javaworld/jw-08-2008/jw-08-java-wiki-extensions.html">Add
- * Java extensions to your wiki</a> with permission from Randall Scarberry.
+ * Sources adopted from the article <a href=
+ * "http://www.javaworld.com/javaworld/jw-08-2008/jw-08-java-wiki-extensions.html"
+ * >Add Java extensions to your wiki</a> with permission from Randall Scarberry.
  * 
  * 
  */
@@ -75,8 +76,8 @@ public class HtmlUtilities {
 		try {
 
 			// &nbsp; screws up the parsing. What a delicate flower SAX is.
-			html = html.replaceAll("&nbsp;", " ");
-
+			// html = html.replaceAll("&nbsp;", " ");
+			html = StringUtils.replace(html, "&nbsp;", " ");
 			SAXParser parser = mParserFactory.newSAXParser();
 			XMLReader reader = parser.getXMLReader();
 			reader.setContentHandler(handler);

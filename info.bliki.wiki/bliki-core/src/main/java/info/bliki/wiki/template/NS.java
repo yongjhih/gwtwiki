@@ -49,13 +49,14 @@ public class NS extends AbstractTemplateFunction {
 			} catch (NumberFormatException nfe) {
 				// the given argument could not be parsed as integer number
 
-				arg0 = arg0.replaceAll(" ", "_");
+				// arg0 = arg0.replaceAll(" ", "_");
+				arg0 = arg0.replace(' ', '_');
 				String value = NAMESPACE_MAP.get(arg0.toLowerCase());
 				if (value != null) {
 					return value;
 				}
-				return "[[:Template:Ns:"+arg0+"]]";
-			} 
+				return "[[:Template:Ns:" + arg0 + "]]";
+			}
 		}
 		return null;
 	}
