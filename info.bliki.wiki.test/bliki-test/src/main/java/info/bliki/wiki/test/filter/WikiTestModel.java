@@ -456,6 +456,338 @@ public class WikiTestModel extends WikiModel {
 			+ "}}''</span></includeonly><!-- includeonly block is needed, as otherwise the bare template gives error message \n"
 			+ "\"Error: Template must be given at least one article name\"\n" + " ---><noinclude>\n" + "{{template doc}}</noinclude>";
 
+	public final static String ANARCHISM_SIDEBAR = "{{Ideology\n"
+			+ "|ideology = Anarchism \n"
+			+ "|image    = [[File:Anarchy-symbol.svg|125px|\"Circle-A\" anarchy symbol]]\n"
+			+ "\n"
+			+ "|list1name  = Schools\n"
+			+ "|list1title = [[Anarchist schools of thought|Schools]]\n"
+			+ "|list1 = [[Agorism]]{{·}} [[Buddhist anarchism|Buddhist]]{{·}} [[Anarcho-capitalism|Capitalist]]<br/> [[Christian anarchism|Christian]]{{·}} [[Collectivist anarchism|Collectivist]]{{·}} [[Anarchist communism|Communist]]<br/> [[Crypto-anarchism]]{{·}} [[Anarcha-feminism|Feminist]]<br/> [[Free-market anarchism|Free market]]{{·}} [[Green anarchism|Green]]{{·}} [[Individualist anarchism|Individualist]]<br/> [[Infoanarchism]]{{·}} [[Insurrectionary anarchism|Insurrectionary]]<br/> [[Left anarchism|Leftist]]{{·}} [[Mutualism (economic theory)|Mutualist]]{{·}} [[Anarcho-pacifism|Pacifist]]<br/> [[Panarchism|Pananarchist]]{{·}} [[Philosophical anarchism|Philosophical]]<br/> [[Platformism|Platformist]]{{·}} [[Post-anarchism|Post-anarchist]]<br/> [[Post-colonial anarchism|Post-colonial]] {{·}}[[Post-left anarchy|Post-left]]<br/> [[Anarcho-primitivism|Primitivist]]{{·}} [[Social anarchism|Social]]{{·}} [[Anarcho-syndicalism|Syndicalist]]<br/>  [[Veganarchism|Vegan]]{{·}}[[Anarchism without adjectives|Without adjectives]]{{·}} [[Zenarchy|Zen]]\n"
+			+ "\n"
+			+ "|list2name  = Theory/Practice\n"
+			+ "|list2title = Theory{{·}}Practice\n"
+			+ "|list2 = [[Anarchy]]{{·}} [[Black bloc]]<br/> [[Class struggle]] {{·}} [[Commune (socialism)|Communes]]<br/> [[Consensus democracy]]<br/> [[Decentralization]]{{·}} [[Deep ecology]]<br/> [[Direct action]]{{·}} [[Direct democracy]]<br/> [[Dual power]]{{·}} [[Especifismo]]<br/> [[Horizontalidad]]{{·}} [[Illegalism]]<br/> [[Individual reclamation]]{{·}} [[Anarchist law|Law]]<br/> [[Participatory politics]]<br/> [[Permanent Autonomous Zone]]<br/> [[Prefigurative politics]]<br/> [[Private defense agency]]<br/> [[Propaganda of the deed]]<br/> [[Refusal of work]]{{·}} [[Rewilding (anarchism)|Rewilding]]<br/> [[Social ecology]]<br/> [[Spontaneous order]]\n"
+			+ "\n"
+			+ "|list3name  = Issues\n"
+			+ "|list3title = [[Issues in anarchism|Issues]]\n"
+			+ "|list3 = [[Anarchism and anarcho-capitalism|Anarcho-capitalism]]{{·}} [[Anarchism and animal rights|Animal rights]]<br/> [[Anarchism and capitalism|Capitalism]]{{·}} [[Criticisms of anarchism|Criticisms]]{{·}} [[Anarchism and Islam|Islam]]<br/> [[Lifestyle anarchism|Lifestylism]]{{·}} [[Anarchism and Marxism|Marxism]]{{·}} [[Anarchism and nationalism|Nationalism]]<br/> [[Anarchism and Orthodox Judaism|Orthodox Judaism]]{{·}} [[Anarchism and religion|Religion]]<br/> [[Anarchism and violence|Violence]]\n"
+			+ "\n"
+			+ "|list4name  = History\n"
+			+ "|list4title = [[History of anarchism|History]]\n"
+			+ "|list4 =  [[WTO Ministerial Conference of 1999 protest activity|1999 WTO Conference protest]]<br/>[[Amakasu Incident]]<br/> [[Anarchist Catalonia]]<br/> [[Anarchist Exclusion Act]]<br/> [[Anarchy in Somalia]]<br/> [[Australian Anarchist Centenary Celebrations|Australian Anarchist Centenary]]<br/> [[Barcelona May Days]]<br/> [[Carnival Against Capitalism]]<br/> [[Escuela Moderna]]{{·}} [[Hague Congress (1872)|Hague Congress]]<br/> [[Haymarket affair]]<br/> [[High Treason Incident]]<br/> [[International Anarchist Congress of Amsterdam|Congress of Amsterdam]]<br/> [[Kate Sharpley Library]]<br/> [[Kronstadt rebellion]]<br/> [[Labadie Collection]]{{·}} [[LIP (clockwork company)|LIP]]<br/> ''[[Manifesto of the Sixteen]]''<br/> [[May 1968]] {{·}} [[May Day]]<br/> [[Paris Commune]]<br/> [[Provo (movement)|Provo]]{{·}} [[Red inverted triangle]]<br/> {{longlink|[[Revolutionary Insurrectionary Army of Ukraine]]}} [[Spanish Revolution]]<br/> [[Left-wing uprisings against the Bolsheviks|Third Russian Revolution]]<br/> [[Tragic Week]]{{·}} [[Trial of the thirty]]\n"
+			+ "\n"
+			+ "|list5name  = Culture\n"
+			+ "|list5title = Culture\n"
+			+ "|list5 = [[Anarcho-punk]]{{·}} [[Anarchism and the arts|Arts]]<br/> [[Black anarchism]]{{·}} [[Culture jamming]]<br/> [[DIY culture]]{{·}} [[Freeganism]]<br/> [[Independent Media Center]]<br/> [[Infoshop]]{{·}} ''[[The Internationale]]''<br/> [[Jewish anarchism]]{{·}} [[Land and liberty (slogan)|Land and liberty]]<br/>  [[Lifestyle anarchism|Lifestylism]]{{·}} [[Popular education]]<br/>[[Property is theft!]]<br/> [[Radical cheerleading]]<br/> [[Radical environmentalism]]<br/> [[Squatting]]{{·}}[[Anarchist symbolism|Symbolism]]<br/> [[Anarchist terminology|Terminology]]{{·}}[[A las barricadas]] \n"
+			+ "|list6name  = Economics\n"
+			+ "|list6title = [[Anarchist economics|Economics]]\n"
+			+ "|list6 = [[Agorism]]{{·}} [[Anarcho-capitalism|Capitalism]]{{·}} [[Collectivist anarchism|Collectivism]]<br/> [[Anarchist communism|Communism]]{{·}} [[Cooperative|Co-operatives]]<br/> [[Counter-economics]]{{·}} [[Free-market anarchism|Free market]]<br/> [[Free school]]{{·}} [[Give-away shop|Free store]]<br/> [[Geolibertarianism]]{{·}}[[Gift economy]]<br/> [[Market abolitionism]]{{·}}[[Mutual aid (politics)|Mutual aid]]<br/> [[Mutualism (economic theory)|Mutualism]]{{·}}[[Participatory economics]]<br/> [[Really Really Free Market]]<br/> [[Self-ownership]]{{·}}[[Anarcho-syndicalism|Syndicalism]]<br/> [[Wage slavery]]<br/> [[Workers' self-management]]\n"
+			+ "\n"
+			+ "|list7name  = By region\n"
+			+ "|list7title = [[List of anarchist movements by region|By region]]\n"
+			+ "|list7 = [[Anarchism in Africa|Africa]]{{·}} [[Anarchism in Austria-Hungary|Austria-Hungary]]{{·}} [[Anarchism in Brazil|Brazil]]<br/> [[Anarchism in Canada|Canada]]{{·}} [[Anarchism in China|China]]{{·}} [[Anarchism in Cuba|Cuba]]{{·}} [[Anarchism in England|England]]<br/> [[Anarchism in France|France]]{{·}} [[Anarchism in Greece|Greece]]{{·}} [[Anarchism in India|India]]{{·}} [[Anarchism in Ireland|Ireland]]<br/> [[Anarchism in Israel|Israel]]{{·}} [[Anarchism in Italy|Italy]]{{·}} [[Anarchism in Japan|Japan]]{{·}} [[Anarchism in Korea|Korea]]<br/> [[Anarchism in Mexico|Mexico]]{{·}} [[Anarchism in Poland|Poland]]{{·}} [[Anarchism in Russia|Russia]]{{·}} [[Anarchism in Spain|Spain]]<br/> [[Anarchism in Sweden|Sweden]]{{·}} [[Anarchism in Turkey|Turkey]]{{·}} [[Anarchism in Ukraine|Ukraine]]<br/> [[Anarchism in the United States|United States]]{{·}} [[Anarchism in Vietnam|Vietnam]]\n"
+			+ "\n"
+			+ "|list8name  = Lists\n"
+			+ "|list8title = [[Lists of anarchism topics|Lists]]\n"
+			+ "|list8 = [[List of anarcho-punk bands|Anarcho-punk bands]]{{·}} [[List of anarchist books|Books]]<br/> [[List of anarchist communities|Communities]]{{·}} [[List of fictional anarchists|Fictional characters]]<br/> [[List of Jewish anarchists|Jewish anarchists]]{{·}} [[List of anarchist musicians|Musicians]]<br/> [[List of anarchist organizations|Organizations]]{{·}} [[List of anarchist periodicals|Periodicals]]{{·}} [[List of anarchist poets|Poets]]<br/> [[List of Russian anarchists|Russian anarchists]]\n"
+			+ "\n"
+			+ "|list9name  = Related\n"
+			+ "|list9title = Related topics\n"
+			+ "|list9 = [[Anti-capitalism]]{{·}} [[Anti-communism#Anarchist anti-communism|Anti-communism]]<br/> [[Anti-consumerism]]{{·}} [[Anti-corporate activism|Anti-corporatism]]<br/> [[Anti-globalization]]{{·}} [[Antimilitarism]]<br/> [[Anti-statism]]{{·}} [[Anti-war]]{{·}} [[Autarchism]]<br/> [[Autonomism]]{{·}} [[Labour movement]]<br/> [[Left communism]]{{·}} [[Libertarianism]]<br/> {{longlink|[[Libertarian perspectives on revolution]]}} [[Libertarian socialism]]<br/> [[Situationist International]]\n"
+			+ "}}<noinclude>\n" + "\n" + "[[Category:Anarchism templates| Anarchism]]\n" + "\n" + "[[ar:قالب:لاسلطوية]]\n"
+			+ "[[ca:Plantilla:Anarquisme]]\n" + "[[da:Skabelon:Anarkisme]]\n" + "[[es:Plantilla:Anarquismo]]\n"
+			+ "[[el:Πρότυπο:Αναρχισμός]]\n" + "[[he:תבנית:אנרכיזם]]\n" + "[[id:Templat:Anarkisme]]\n"
+			+ "[[is:Snið:Stjórnleysisstefna]]\n" + "[[nl:Sjabloon:Anarchisme]]\n" + "[[pl:Szablon:Anarchizm]]\n"
+			+ "[[pt:Predefinição:Anarquismo]]\n" + "[[ro:Format:Anarhism]]\n" + "[[ru:Шаблон:Анархизм]]\n"
+			+ "[[sk:Šablóna:Anarchizmus]]\n" + "[[sl:Predloga:Anarhizem]]\n" + "[[sv:Mall:Anarkism]]\n" + "[[tr:Şablon:Anarşizm]]\n"
+			+ "</noinclude>\n" + "";
+
+	public final static String IDEOLOGY = "{{Sidebar with collapsible lists\n" + "|style      = width:18.0em;\n"
+			+ "|pretitle   = Part of [[:Category:Politics|the Politics series]] on\n"
+			+ "|title      = {{#if:{{{linkoverride|}}}|{{{linkoverride}}}|{{{ideology}}}}}\n"
+			+ "|titlestyle = color:black; font-size:200%; font-weight:normal;\n" + "|image      = {{{image|}}}\n"
+			+ "|imagestyle = {{{imagestyle|}}}\n"
+			+ "|listtitlestyle = background:transparent; border-bottom:1px solid #aaa; text-align: center; padding-left:0.4em;\n"
+			+ "\n" + "|list1name   = {{{list1name|}}}\n" + "|list1title  = {{{list1title|}}}\n"
+			+ "|list1       = {{{list1 |}}}\n" + "|list2name   = {{{list2name|}}} \n" + "|list2title  = {{{list2title|}}}\n"
+			+ "|list2       = {{{list2|}}}\n" + "|list3name   = {{{list3name|}}} \n" + "|list3title  = {{{list3title|}}}\n"
+			+ "|list3       = {{{list3 |}}} \n" + "|list4name   = {{{list4name |}}}  \n" + "|list4title  = {{{list4title|}}} \n"
+			+ "|list4       = {{{list4 |}}}\n" + "|list5name   = {{{list5name|}}}\n" + "|list5title  = {{{list5title|}}}\n"
+			+ "|list5       = {{{list5|}}}\n" + "|list6name   = {{{list6name|}}}\n" + "|list6title  = {{{list6title|}}}\n"
+			+ "|list6       = {{{list6|}}}\n" + "|list7name   = {{{list7name|}}}\n" + "|list7title  = {{{list7title|}}}  \n"
+			+ "|list7       = {{{list7|}}}\n" + "|list8name   = {{{list8name|}}}\n" + "|list8title  = {{{list8title|}}}\n"
+			+ "|list8       = {{{list8|}}}\n" + "|list9name   = {{{list9name|}}}\n" + "|list9title  = {{{list9title|}}}\n"
+			+ "|list9       = {{{list9 |}}}\n" + "|list10name  = {{{list10name|}}}\n" + "|list10title = {{{list10title|}}}\n"
+			+ "|list10      = {{{list10|}}}\n" + "\n" + "|belowstyle = text-align:center;\n"
+			+ "|below = '''[[:portal:{{{ideology}}}|{{{ideology}}} Portal]]'''\n" + "}}<noinclude>\n" + "</noinclude>\n" + "";
+
+	public final static String SIDEBAR_WITH_COLLAPSIBLE_LISTS = "<noinclude>{{start sidebar page}}\n" + 
+			"</noinclude>{{Sidebar\n" + 
+			"|name            = {{{name|{{PAGENAME}}}}}\n" + 
+			"|class           = {{{class|{{{bodyclass|}}}}}}\n" + 
+			"|style           = {{{style|{{{bodystyle|}}}}}} <noinclude>width:15.0em;</noinclude>\n" + 
+			"|cellspacing     = {{{cellspacing|}}}\n" + 
+			"|cellpadding     = {{{cellpadding|}}}\n" + 
+			"\n" + 
+			"|outertitle      = {{{outertitle<includeonly>|</includeonly>}}}\n" + 
+			"|outertitleclass = {{{outertitleclass|}}}\n" + 
+			"|outertitlestyle = {{{outerttitlestyle|}}}\n" + 
+			"\n" + 
+			"|topimage        = {{{topimage<includeonly>|</includeonly>}}}\n" + 
+			"|topimageclass   = {{{topimageclass|}}}\n" + 
+			"|topimagestyle   = {{{topimagestyle|}}}\n" + 
+			"|topcaption      = {{{topcaption<includeonly>|</includeonly>}}}\n" + 
+			"|topcaptionstyle = {{{topcaptionstyle|}}}\n" + 
+			"\n" + 
+			"|pretitle        = {{{pretitle<includeonly>|</includeonly>}}}\n" + 
+			"|pretitlestyle   = {{{pretitlestyle|}}}\n" + 
+			"|title           = {{{title<includeonly>|</includeonly>}}}\n" + 
+			"|titleclass      = {{{titleclass|}}}\n" + 
+			"|titlestyle      = {{{titlestyle|}}}\n" + 
+			"\n" + 
+			"|image           = {{{image<includeonly>|</includeonly>}}}\n" + 
+			"|imageclass      = {{{imageclass|}}}\n" + 
+			"|imagestyle      = {{{imagestyle|}}}\n" + 
+			"|caption         = {{{caption<includeonly>|</includeonly>}}}\n" + 
+			"|captionstyle    = {{{captionstyle|}}}\n" + 
+			"\n" + 
+			"|abovestyle = border-top:1px solid #aaa; border-bottom:1px solid #aaa; {{{abovestyle|}}}\n" + 
+			"|above = {{{above<includeonly>|</includeonly>}}}\n" + 
+			"\n" + 
+			"|headingstyle    = {{{headingstyle|}}}\n" + 
+			"|contentstyle    = {{{contentstyle|}}}\n" + 
+			"\n" + 
+			"|heading1style = {{{heading1style|}}}\n" + 
+			"|heading1 = {{{heading1|}}}\n" + 
+			"|content1style = {{{content1style|}}}\n" + 
+			"|content1 = {{#if:{{{list1<includeonly>|</includeonly>}}}\n" + 
+			"             | {{Collapsible list\n" + 
+			"                |framestyle = {{{listframestyle|}}}{{{list1framestyle|}}}\n" + 
+			"                |title      = {{{list1title<includeonly>|</includeonly>}}}\n" + 
+			"                |titlestyle = {{{listtitlestyle|}}}{{{list1titlestyle|}}}\n" + 
+			"                |liststyle  = padding:0.2em 0 0.4em; text-align:center; {{#ifeq:{{{expanded|}}}|all |display:inline;}} {{#ifeq:{{{expanded|}}}|{{{list1name}}} |display:inline;}} {{{liststyle|}}}{{{list1style|}}}\n" + 
+			"                | {{{list1}}}\n" + 
+			"               }}\n" + 
+			"             | {{{content1|}}}\n" + 
+			"            }}\n" + 
+			"\n" + 
+			"|heading2style = {{{heading2style|}}}\n" + 
+			"|heading2 = {{{heading2|}}}\n" + 
+			"|content2style = {{{content2style|}}}\n" + 
+			"|content2 = {{#if:{{{list2<includeonly>|</includeonly>}}}\n" + 
+			"             | {{Collapsible list\n" + 
+			"                |framestyle = {{{listframestyle|}}}{{{list2framestyle|}}}\n" + 
+			"                |title      = {{{list2title<includeonly>|</includeonly>}}}\n" + 
+			"                |titlestyle = {{{listtitlestyle|}}}{{{list2titlestyle|}}}\n" + 
+			"                |liststyle  = padding:0.2em 0 0.4em; text-align:center; {{#ifeq:{{{expanded|}}}|all |display:inline;}} {{#ifeq:{{{expanded|}}}|{{{list2name}}} |display:inline;}} {{{liststyle|}}}{{{list2style|}}}\n" + 
+			"                | {{{list2}}}\n" + 
+			"               }}\n" + 
+			"             | {{{content2|}}}\n" + 
+			"            }}\n" + 
+			"\n" + 
+			"|heading3style = {{{heading3style|}}}\n" + 
+			"|heading3 = {{{heading3|}}}\n" + 
+			"|content3style = {{{content3style|}}}\n" + 
+			"|content3 = {{#if:{{{list3<includeonly>|</includeonly>}}}\n" + 
+			"             | {{Collapsible list\n" + 
+			"                |framestyle = {{{listframestyle|}}}{{{list3framestyle|}}}\n" + 
+			"                |title      = {{{list3title<includeonly>|</includeonly>}}}\n" + 
+			"                |titlestyle = {{{listtitlestyle|}}}{{{list3titlestyle|}}}\n" + 
+			"                |liststyle  = padding:0.2em 0 0.4em; text-align:center; {{#ifeq:{{{expanded|}}}|all |display:inline;}} {{#ifeq:{{{expanded|}}}|{{{list3name}}} |display:inline;}} {{{liststyle|}}}{{{list3style|}}}\n" + 
+			"                | {{{list3}}}\n" + 
+			"               }}\n" + 
+			"             | {{{content3|}}}\n" + 
+			"            }}\n" + 
+			"\n" + 
+			"|heading4style = {{{heading4style|}}}\n" + 
+			"|heading4 = {{{heading4|}}}\n" + 
+			"|content4style = {{{content4style|}}}\n" + 
+			"|content4 = <noinclude>''(......etc......)''</noinclude><!--\n" + 
+			"         --><includeonly><!--\n" + 
+			"          -->{{#if:{{{list4|}}}\n" + 
+			"              | {{Collapsible list\n" + 
+			"                 |framestyle = {{{listframestyle|}}}{{{list4framestyle|}}}\n" + 
+			"                 |title      = {{{list4title|}}}\n" + 
+			"                 |titlestyle = {{{listtitlestyle|}}}{{{list4titlestyle|}}}\n" + 
+			"                 |liststyle  = padding:0.2em 0 0.4em; text-align:center; {{#ifeq:{{{expanded|}}}|all |display:inline;}} {{#ifeq:{{{expanded|}}}|{{{list4name}}} |display:inline;}} {{{liststyle|}}}{{{list4style|}}}\n" + 
+			"                 | {{{list4}}}\n" + 
+			"                }}\n" + 
+			"              | {{{content4|}}}\n" + 
+			"             }}<!--\n" + 
+			"         --></includeonly>\n" + 
+			"\n" + 
+			"|heading5style = {{{heading5style|}}}\n" + 
+			"|heading5 = {{{heading5|}}}\n" + 
+			"|content5style = {{{content5style|}}}\n" + 
+			"|content5 = {{#if:{{{list5|}}}\n" + 
+			"             | {{Collapsible list\n" + 
+			"                |framestyle = {{{listframestyle|}}}{{{list5framestyle|}}}\n" + 
+			"                |title      = {{{list5title|}}}\n" + 
+			"                |titlestyle = {{{listtitlestyle|}}}{{{list5titlestyle|}}}\n" + 
+			"                |liststyle  = padding:0.2em 0 0.4em; text-align:center; {{#ifeq:{{{expanded|}}}|all |display:inline;}} {{#ifeq:{{{expanded|}}}|{{{list5name}}} |display:inline;}} {{{liststyle|}}}{{{list5style|}}}\n" + 
+			"                | {{{list5}}}\n" + 
+			"               }}\n" + 
+			"             | {{{content5|}}}\n" + 
+			"            }}\n" + 
+			"\n" + 
+			"|heading6style = {{{heading6style|}}}\n" + 
+			"|heading6 = {{{heading6|}}}\n" + 
+			"|content6style = {{{content6style|}}}\n" + 
+			"|content6 = {{#if:{{{list6|}}}\n" + 
+			"             | {{Collapsible list\n" + 
+			"                |framestyle = {{{listframestyle|}}}{{{list6framestyle|}}}\n" + 
+			"                |title      = {{{list6title|}}}\n" + 
+			"                |titlestyle = {{{listtitlestyle|}}}{{{list6titlestyle|}}}\n" + 
+			"                |liststyle  = padding:0.2em 0 0.4em; text-align:center; {{#ifeq:{{{expanded|}}}|all |display:inline;}} {{#ifeq:{{{expanded|}}}|{{{list6name}}} |display:inline;}} {{{liststyle|}}}{{{list6style|}}}\n" + 
+			"                | {{{list6}}}\n" + 
+			"               }}\n" + 
+			"             | {{{content6|}}}\n" + 
+			"            }}\n" + 
+			"\n" + 
+			"|heading7style = {{{heading7style|}}}\n" + 
+			"|heading7 = {{{heading7|}}}\n" + 
+			"|content7style = {{{content7style|}}}\n" + 
+			"|content7 = {{#if:{{{list7|}}}\n" + 
+			"             | {{Collapsible list\n" + 
+			"                |framestyle = {{{listframestyle|}}}{{{list7framestyle|}}}\n" + 
+			"                |title      = {{{list7title|}}}\n" + 
+			"                |titlestyle = {{{listtitlestyle|}}}{{{list7titlestyle|}}}\n" + 
+			"                |liststyle  = padding:0.2em 0 0.4em; text-align:center; {{#ifeq:{{{expanded|}}}|all |display:inline;}} {{#ifeq:{{{expanded|}}}|{{{list7name}}} |display:inline;}} {{{liststyle|}}}{{{list7style|}}}\n" + 
+			"                | {{{list7}}}\n" + 
+			"               }}\n" + 
+			"             | {{{content7|}}}\n" + 
+			"            }}\n" + 
+			"\n" + 
+			"|heading8style = {{{heading8style|}}}\n" + 
+			"|heading8 = {{{heading8|}}}\n" + 
+			"|content8style = {{{content8style|}}}\n" + 
+			"|content8 = {{#if:{{{list8|}}}\n" + 
+			"             | {{Collapsible list\n" + 
+			"                |framestyle = {{{listframestyle|}}}{{{list8framestyle|}}}\n" + 
+			"                |title      = {{{list8title|}}}\n" + 
+			"                |titlestyle = {{{listtitlestyle|}}}{{{list8titlestyle|}}}\n" + 
+			"                |liststyle  = padding:0.2em 0 0.4em; text-align:center; {{#ifeq:{{{expanded|}}}|all |display:inline;}} {{#ifeq:{{{expanded|}}}|{{{list8name}}} |display:inline;}} {{{liststyle|}}}{{{list8style|}}}\n" + 
+			"                | {{{list8}}}\n" + 
+			"               }}\n" + 
+			"             | {{{content8|}}}\n" + 
+			"            }}\n" + 
+			"\n" + 
+			"|heading9style = {{{heading9style|}}}\n" + 
+			"|heading9 = {{{heading9|}}}\n" + 
+			"|content9style = {{{content9style|}}}\n" + 
+			"|content9 = {{#if:{{{list9|}}}\n" + 
+			"             | {{Collapsible list\n" + 
+			"                |framestyle = {{{listframestyle|}}}{{{list9framestyle|}}}\n" + 
+			"                |title      = {{{list9title|}}}\n" + 
+			"                |titlestyle = {{{listtitlestyle|}}}{{{list9titlestyle|}}}\n" + 
+			"                |liststyle  = padding:0.2em 0 0.4em; text-align:center; {{#ifeq:{{{expanded|}}}|all |display:inline;}} {{#ifeq:{{{expanded|}}}|{{{list9name}}} |display:inline;}} {{{liststyle|}}}{{{list9style|}}}\n" + 
+			"                | {{{list9}}}\n" + 
+			"               }}\n" + 
+			"             | {{{content9|}}}\n" + 
+			"            }}\n" + 
+			"\n" + 
+			"|heading10style = {{{heading10style|}}}\n" + 
+			"|heading10 = {{{heading10|}}}\n" + 
+			"|content10style = {{{content10style|}}}\n" + 
+			"|content10 = {{#if:{{{list10|}}}\n" + 
+			"             | {{Collapsible list\n" + 
+			"                |framestyle = {{{listframestyle|}}}{{{list10framestyle|}}}\n" + 
+			"                |title      = {{{list10title|}}}\n" + 
+			"                |titlestyle = {{{listtitlestyle|}}}{{{list10titlestyle|}}}\n" + 
+			"                |liststyle  = padding:0.2em 0 0.4em; text-align:center; {{#ifeq:{{{expanded|}}}|all |display:inline;}} {{#ifeq:{{{expanded|}}}|{{{list10name}}} |display:inline;}} {{{liststyle|}}}{{{list10style|}}}\n" + 
+			"                | {{{list10}}}\n" + 
+			"               }}\n" + 
+			"             | {{{content10|}}}\n" + 
+			"            }}\n" + 
+			"\n" + 
+			"|heading11style = {{{heading11style|}}}\n" + 
+			"|heading11 = {{{heading11|}}}\n" + 
+			"|content11style = {{{content11style|}}}\n" + 
+			"|content11 = {{#if:{{{list11|}}}\n" + 
+			"             | {{Collapsible list\n" + 
+			"                |framestyle = {{{listframestyle|}}}{{{list11framestyle|}}}\n" + 
+			"                |title      = {{{list11title|}}}\n" + 
+			"                |titlestyle = {{{listtitlestyle|}}}{{{list11titlestyle|}}}\n" + 
+			"                |liststyle  = padding:0.2em 0 0.4em; text-align:center; {{#ifeq:{{{expanded|}}}|all |display:inline;}} {{#ifeq:{{{expanded|}}}|{{{list11name}}} |display:inline;}} {{{liststyle|}}}{{{list11style|}}}\n" + 
+			"                | {{{list11}}}\n" + 
+			"               }}\n" + 
+			"             | {{{content11|}}}\n" + 
+			"            }}\n" + 
+			"\n" + 
+			"|heading12style = {{{heading12style|}}}\n" + 
+			"|heading12 = {{{heading12|}}}\n" + 
+			"|content12style = {{{content12style|}}}\n" + 
+			"|content12 = {{#if:{{{list12|}}}\n" + 
+			"             | {{Collapsible list\n" + 
+			"                |framestyle = {{{listframestyle|}}}{{{list12framestyle|}}}\n" + 
+			"                |title      = {{{list12title|}}}\n" + 
+			"                |titlestyle = {{{listtitlestyle|}}}{{{list12titlestyle|}}}\n" + 
+			"                |liststyle  = padding:0.2em 0 0.4em; text-align:center; {{#ifeq:{{{expanded|}}}|all |display:inline;}} {{#ifeq:{{{expanded|}}}|{{{list12name}}} |display:inline;}} {{{liststyle|}}}{{{list12style|}}}\n" + 
+			"                | {{{list12}}}\n" + 
+			"               }}\n" + 
+			"             | {{{content12|}}}\n" + 
+			"            }}\n" + 
+			"\n" + 
+			"|heading13style = {{{heading13style|}}}\n" + 
+			"|heading13 = {{{heading13|}}}\n" + 
+			"|content13style = {{{content13style|}}}\n" + 
+			"|content13 = {{#if:{{{list13|}}}\n" + 
+			"             | {{Collapsible list\n" + 
+			"                |framestyle = {{{listframestyle|}}}{{{list13framestyle|}}}\n" + 
+			"                |title      = {{{list13title|}}}\n" + 
+			"                |titlestyle = {{{listtitlestyle|}}}{{{list13titlestyle|}}}\n" + 
+			"                |liststyle  = padding:0.2em 0 0.4em; text-align:center; {{#ifeq:{{{expanded|}}}|all |display:inline;}} {{#ifeq:{{{expanded|}}}|{{{list13name}}} |display:inline;}} {{{liststyle|}}}{{{list13style|}}}\n" + 
+			"                | {{{list13}}}\n" + 
+			"               }}\n" + 
+			"             | {{{content13|}}}\n" + 
+			"            }}\n" + 
+			"\n" + 
+			"|heading14style = {{{heading14style|}}}\n" + 
+			"|heading14 = {{{heading14|}}}\n" + 
+			"|content14style = {{{content14style|}}}\n" + 
+			"|content14 = {{#if:{{{list14|}}}\n" + 
+			"             | {{Collapsible list\n" + 
+			"                |framestyle = {{{listframestyle|}}}{{{list14framestyle|}}}\n" + 
+			"                |title      = {{{list14title|}}}\n" + 
+			"                |titlestyle = {{{listtitlestyle|}}}{{{list14titlestyle|}}}\n" + 
+			"                |liststyle  = padding:0.2em 0 0.4em; text-align:center; {{#ifeq:{{{expanded|}}}|all |display:inline;}} {{#ifeq:{{{expanded|}}}|{{{list14name}}} |display:inline;}} {{{liststyle|}}}{{{list14style|}}}\n" + 
+			"                | {{{list14}}}\n" + 
+			"               }}\n" + 
+			"             | {{{content14|}}}\n" + 
+			"            }}\n" + 
+			"\n" + 
+			"\n" + 
+			"|heading15style = {{{heading15style|}}}\n" + 
+			"|heading15 = {{{heading15|}}}\n" + 
+			"|content15style = {{{content15style|}}}\n" + 
+			"|content15 = {{#if:{{{list15<includeonly>|</includeonly>}}}\n" + 
+			"             | {{Collapsible list\n" + 
+			"                |framestyle = {{{listframestyle|}}}{{{list15framestyle|}}}\n" + 
+			"                |title      = {{{list15title<includeonly>|</includeonly>}}}\n" + 
+			"                |titlestyle = {{{listtitlestyle|}}}{{{list15titlestyle|}}}\n" + 
+			"                |liststyle  = padding:0.2em 0 0.4em; text-align:center; {{#ifeq:{{{expanded|}}}|all |display:inline;}} {{#ifeq:{{{expanded|}}}|{{{list15name}}} |display:inline;}} {{{liststyle|}}}{{{list15style|}}}\n" + 
+			"                | {{{list15}}}\n" + 
+			"               }}\n" + 
+			"             | {{{content15|}}}\n" + 
+			"            }}\n" + 
+			"\n" + 
+			"<!--Gap between sections above and any subsequent 'below' section:-->\n" + 
+			"|content16style = padding:0; line-height:0.4em;\n" + 
+			"|content16 = {{#if:{{{below<includeonly>|</includeonly>}}} |&nbsp;}}\n" + 
+			"\n" + 
+			"|belowstyle = border-top:1px solid #aaa; border-bottom:1px solid #aaa; {{{belowstyle|}}}\n" + 
+			"|below = {{{below<includeonly>|</includeonly>}}}\n" + 
+			"\n" + 
+			"|tnavbar        = {{{tnavbar|}}}\n" + 
+			"|tnavbarstyle   = padding-top:0.6em; {{{tnavbarstyle|}}}\n" + 
+			"|tnavbaroptions = {{{tnavbaroptions|}}}\n" + 
+			"\n" + 
+			"}}<noinclude>\n" + 
+			"{{end sidebar page}}\n" + 
+			"\n" + 
+			"<!---Please add metadata (categories, interwikis) to the <includeonly> section at the\n" + 
+			"     bottom of [[Template:Sidebar with collapsible lists/doc]] page, not here - thanks!--->\n" + 
+			"";
 	boolean fSemanticWebActive;
 
 	static {
@@ -533,7 +865,13 @@ public class WikiTestModel extends WikiModel {
 				return PRON_ENG;
 			} else if (name.equals("Pron-en")) {
 				return PRON_EN;
-			}
+			} else if (name.equals("Anarchism_sidebar")) {
+				return ANARCHISM_SIDEBAR;
+			} else if (name.equals("Ideology")) {
+				return IDEOLOGY;
+			} else if (name.equals("Sidebar_with_collapsible_lists")) {
+				return SIDEBAR_WITH_COLLAPSIBLE_LISTS;
+			}  
 		} else {
 			if (name.equals("Include_Page")) {
 				return "an include page";

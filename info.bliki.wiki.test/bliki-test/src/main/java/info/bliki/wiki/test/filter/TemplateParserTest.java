@@ -6,12 +6,17 @@ import junit.framework.TestSuite;
 import org.apache.commons.lang.StringEscapeUtils;
 
 public class TemplateParserTest extends FilterTestSupport {
+
 	public TemplateParserTest(String name) {
 		super(name);
 	}
 
 	public static Test suite() {
 		return new TestSuite(TemplateParserTest.class);
+	}
+
+	public void testAnarchismSidebar() {
+		assertEquals("{{Sidebar}}\n" + "{{end sidebar page}}\n" + "\n" + "", wikiModel.parseTemplates("{{Anarchism sidebar}}", false));
 	}
 
 	public void testNonExistentTemplate() {
@@ -32,22 +37,22 @@ public class TemplateParserTest extends FilterTestSupport {
 
 	public void testTemplateCall3() {
 		// see method WikiTestModel#getRawWikiContent()
-		assertEquals("b) First: Test1 Second: c) First: sdfsf Second: klj \n" + 
-				"\n" + 
-				"", wikiModel.parseTemplates("{{templ1\n" + " | a = Test1\n"
-				+ " | b ={{templ2|sdfsf|klj}} \n" + "}}\n" + "", false));
+		assertEquals("b) First: Test1 Second: c) First: sdfsf Second: klj \n" + "\n" + "", wikiModel.parseTemplates("{{templ1\n"
+				+ " | a = Test1\n" + " | b ={{templ2|sdfsf|klj}} \n" + "}}\n" + "", false));
 	}
-	
+
 	public void testTemplateCall4() {
 		// see method WikiTestModel#getRawWikiContent()
 		assertEquals("{{[[Template:example|example]]}}", wikiModel.parseTemplates("{{tl|example}}", false));
 	}
-	
+
 	public void testTemplateCall5() {
 		// see method WikiTestModel#getRawWikiContent()
-		assertEquals("(pronounced <span title=\"Pronunciation in the International Phonetic Alphabet (IPA)\" class=\"IPA\">[[WP:IPA for English|/dəˌpeʃˈmoʊd/]]</span>)", wikiModel.parseTemplates("({{pron-en|dəˌpeʃˈmoʊd}})", false));
+		assertEquals(
+				"(pronounced <span title=\"Pronunciation in the International Phonetic Alphabet (IPA)\" class=\"IPA\">[[WP:IPA for English|/dəˌpeʃˈmoʊd/]]</span>)",
+				wikiModel.parseTemplates("({{pron-en|dəˌpeʃˈmoʊd}})", false));
 	}
-	
+
 	public void testTemplateParameter01() {
 		// see method WikiTestModel#getTemplateContent()
 		assertEquals("start-a) First: arg1 Second: arg2-end", wikiModel.parseTemplates("start-{{Test|arg1|arg2}}-end", false));
@@ -257,7 +262,8 @@ public class TemplateParserTest extends FilterTestSupport {
 	public void testExpr017() {
 		assertEquals("<div class=\"error\">Expression error: Division by zero</div>", wikiModel.parseTemplates("{{#expr:4/0}}", false));
 		assertEquals("0.75", wikiModel.parseTemplates("{{#expr:3/4}}", false));
-		assertEquals("<div class=\"error\">Expression error: Division by zero</div>", wikiModel.parseTemplates("{{#expr:13 mod 0}}", false));
+		assertEquals("<div class=\"error\">Expression error: Division by zero</div>", wikiModel.parseTemplates("{{#expr:13 mod 0}}",
+				false));
 		assertEquals("1", wikiModel.parseTemplates("{{#expr:13 mod 3}}", false));
 		assertEquals("27", wikiModel.parseTemplates("{{#expr:3 ^3}}", false));
 		assertEquals("0.037037037037037035", wikiModel.parseTemplates("{{#expr:3 ^ (-3)}}", false));
@@ -312,72 +318,33 @@ public class TemplateParserTest extends FilterTestSupport {
 		Long currentSeconds = Long.valueOf(currentSecondsStr);
 		assertTrue(currentSeconds > 1212598361);
 	}
-	
+
 	public void testPipe001() {
-		assertEquals("hello worldhello world ", wikiModel.parseTemplates("{{2x|hello world"+
-						"}} ", false));
+		assertEquals("hello worldhello world ", wikiModel.parseTemplates("{{2x|hello world" + "}} ", false));
 	}
-	
+
 	public void testPipe002() {
-		assertEquals("{| \n" + 
-				"| A \n" + 
-				"| B\n" + 
-				"|- \n" + 
-				"| C\n" + 
-				"| D\n" + 
-				"|}\n"+
-				"{| \n" + 
-				"| A \n" + 
-				"| B\n" + 
-				"|- \n" + 
-				"| C\n" + 
-				"| D\n" + 
-				"|}\n", wikiModel.parseTemplates("{{2x|{{{!}} \n" + 
-				"{{!}} A \n" + 
-				"{{!}} B\n" + 
-				"{{!}}- \n" + 
-				"{{!}} C\n" + 
-				"{{!}} D\n" + 
-				"{{!}}}\n"+
-				"}}", false));
+		assertEquals("{| \n" + "| A \n" + "| B\n" + "|- \n" + "| C\n" + "| D\n" + "|}\n" + "{| \n" + "| A \n" + "| B\n" + "|- \n"
+				+ "| C\n" + "| D\n" + "|}\n", wikiModel.parseTemplates("{{2x|{{{!}} \n" + "{{!}} A \n" + "{{!}} B\n" + "{{!}}- \n"
+				+ "{{!}} C\n" + "{{!}} D\n" + "{{!}}}\n" + "}}", false));
 	}
-	
+
 	public void testPipe003() {
-		assertEquals("{| \n" + 
-				"| A \n" + 
-				"| B\n" + 
-				"|- \n" + 
-				"| C\n" + 
-				"| D\n" + 
-				"|}\n" + 
-				"{| \n" + 
-				"| A \n" + 
-				"| B\n" + 
-				"|- \n" + 
-				"| C\n" + 
-				"| D\n" + 
-				"|}\n" + 
-				"{| \n" + 
-				"| A \n" + 
-				"| B\n" + 
-				"|- \n" + 
-				"| C\n" + 
-				"| D\n" + 
-				"|}\n" + 
-				"{| \n" + 
-				"| A \n" + 
-				"| B\n" + 
-				"|- \n" + 
-				"| C\n" + 
-				"| D\n" + 
-				"|}\n" + 
-				"", wikiModel.parseTemplates("{{2x|{{2x|{{{!}} \n" + 
-				"{{!}} A \n" + 
-				"{{!}} B\n" + 
-				"{{!}}- \n" + 
-				"{{!}} C\n" + 
-				"{{!}} D\n" + 
-				"{{!}}}\n"+
-				"}}}}", false));
+		assertEquals("{| \n" + "| A \n" + "| B\n" + "|- \n" + "| C\n" + "| D\n" + "|}\n" + "{| \n" + "| A \n" + "| B\n" + "|- \n"
+				+ "| C\n" + "| D\n" + "|}\n" + "{| \n" + "| A \n" + "| B\n" + "|- \n" + "| C\n" + "| D\n" + "|}\n" + "{| \n" + "| A \n"
+				+ "| B\n" + "|- \n" + "| C\n" + "| D\n" + "|}\n" + "", wikiModel.parseTemplates("{{2x|{{2x|{{{!}} \n" + "{{!}} A \n"
+				+ "{{!}} B\n" + "{{!}}- \n" + "{{!}} C\n" + "{{!}} D\n" + "{{!}}}\n" + "}}}}", false));
+	}
+
+	public void testInvalidNoinclude() {
+		assertEquals("test123 start\n" + "test123 end", wikiModel.parseTemplates("test123 start<noinclude>\n" + "test123 end"));
+	}
+
+	public void testInvalidIncludeonly() {
+		assertEquals("test123 start", wikiModel.parseTemplates("test123 start<includeonly>\n" + "test123 end"));
+	}
+
+	public void testInvalidOnlyinclude() {
+		assertEquals("test123 start\n" + "test123 end", wikiModel.parseTemplates("test123 start<onlyinclude>\n" + "test123 end"));
 	}
 }

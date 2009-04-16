@@ -32,24 +32,25 @@ public class TemplateFilterTest extends FilterTestSupport {
 
 	public void testTemplateCall3() {
 		// see method WikiTestModel#getRawWikiContent()
-		assertEquals("\n" + 
-				"<p>b) First: Test1 Second: c) First: sdfsf Second: klj </p>\n" + 
-				"", wikiModel.render("{{templ1\n"
+		assertEquals("\n" + "<p>b) First: Test1 Second: c) First: sdfsf Second: klj </p>\n" + "", wikiModel.render("{{templ1\n"
 				+ " | a = Test1\n" + " | b ={{templ2|sdfsf|klj}} \n" + "}}\n" + ""));
 	}
 
 	public void testTemplateCall4() {
 		// see method WikiTestModel#getRawWikiContent()
-		assertEquals("\n" + 
-				"<p>{{<a href=\"http://www.bliki.info/wiki/Template:example\" title=\"Template:example\">example</a>}}</p>", wikiModel.render("{{tl|example}}"));
+		assertEquals(
+				"\n" + "<p>{{<a href=\"http://www.bliki.info/wiki/Template:example\" title=\"Template:example\">example</a>}}</p>",
+				wikiModel.render("{{tl|example}}"));
 	}
-	
+
 	public void testTemplateCall5() {
 		// see method WikiTestModel#getRawWikiContent()
-		assertEquals("\n" + 
-				"<p>(pronounced <span class=\"IPA\" title=\"Pronunciation in the International Phonetic Alphabet (IPA)\"><a href=\"http://www.bliki.info/wiki/WP:IPA_for_English\" title=\"WP:IPA for English\">/dəˌpeʃˈmoʊd/</a></span>)</p>", wikiModel.render("({{pron-en|dəˌpeʃˈmoʊd}})"));
+		assertEquals(
+				"\n"
+						+ "<p>(pronounced <span class=\"IPA\" title=\"Pronunciation in the International Phonetic Alphabet (IPA)\"><a href=\"http://www.bliki.info/wiki/WP:IPA_for_English\" title=\"WP:IPA for English\">/dəˌpeʃˈmoʊd/</a></span>)</p>",
+				wikiModel.render("({{pron-en|dəˌpeʃˈmoʊd}})"));
 	}
-	
+
 	public void testTemplateNowiki() {
 		// see method WikiTestModel#getTemplateContent()
 		assertEquals("\n" + "<p>start-{{templ1|a=3|b}}-end</p>", wikiModel.render("start-<nowiki>{{templ1|a=3|b}}-</noWiKi>end"));
@@ -109,27 +110,27 @@ public class TemplateFilterTest extends FilterTestSupport {
 
 	public void testTemplate12() {
 		assertEquals(
-				"\n" + 
-				"<div style=\"page-break-inside:	avoid;\">\n" + 
-				"<table cellspacing=\"5\" class=\"infobox\" style=\"width: 21em; font-size: 90%; text-align: left;\">\n" + 
-				"<tr>\n" + 
-				"<th colspan=\"2\" style=\"text-align: center; font-size: 130%;\">PAGENAME</th></tr>\n" + 
-				"<tr>\n" + 
-				"<th><a href=\"http://www.bliki.info/wiki/Software_release_life_cycle\" title=\"Software release life cycle\">Preview release</a></th>\n" + 
-				"<td>0.6.5 </td></tr>\n" + 
-				"<tr>\n" + 
-				"<th><a href=\"http://www.bliki.info/wiki/List_of_software_categories\" title=\"List of software categories\">Genre</a></th>\n" + 
-				"<td><a href=\"http://www.bliki.info/wiki/Wiki_software\" title=\"wiki software\">Wiki software</a></td></tr>\n" + 
-				"<tr>\n" + 
-				"<th><a href=\"http://www.bliki.info/wiki/Software_license\" title=\"Software license\">License</a></th>\n" + 
-				"<td><a href=\"http://www.bliki.info/wiki/GNU_Lesser_General_Public_License\" title=\"GNU Lesser General Public License\">LGPL</a></td></tr>\n" + 
-				"<tr>\n" + 
-				"<th><a href=\"http://www.bliki.info/wiki/Website\" title=\"Website\">Website</a></th>\n" + 
-				"<td><a class=\"externallink\" href=\"http://www.jamwiki.org/\" rel=\"nofollow\" title=\"http://www.jamwiki.org/\">JAMWiki wiki</a>\n" + 
-				"</td></tr></table></div>\n" + 
-				"", wikiModel.render("{{Infobox_Software\n" + "|name = JAMWiki\n" + "|logo = \n" + "|caption =\n" + "\n"
-						+ "|developer = \n" + "|latest_release_version = 0.6.5\n" + "|latest_release_date = [[March 16]], [[2008]]\n"
-						+ "|latest preview version = 0.6.5 \n" + "|latest preview date = \n" + "|operating_system = [[Cross-platform]]\n"
+				"\n"
+						+ "<div style=\"page-break-inside:	avoid;\">\n"
+						+ "<table cellspacing=\"5\" class=\"infobox\" style=\"width: 21em; font-size: 90%; text-align: left;\">\n"
+						+ "<tr>\n"
+						+ "<th colspan=\"2\" style=\"text-align: center; font-size: 130%;\">PAGENAME</th></tr>\n"
+						+ "<tr>\n"
+						+ "<th><a href=\"http://www.bliki.info/wiki/Software_release_life_cycle\" title=\"Software release life cycle\">Preview release</a></th>\n"
+						+ "<td>0.6.5 </td></tr>\n"
+						+ "<tr>\n"
+						+ "<th><a href=\"http://www.bliki.info/wiki/List_of_software_categories\" title=\"List of software categories\">Genre</a></th>\n"
+						+ "<td><a href=\"http://www.bliki.info/wiki/Wiki_software\" title=\"wiki software\">Wiki software</a></td></tr>\n"
+						+ "<tr>\n"
+						+ "<th><a href=\"http://www.bliki.info/wiki/Software_license\" title=\"Software license\">License</a></th>\n"
+						+ "<td><a href=\"http://www.bliki.info/wiki/GNU_Lesser_General_Public_License\" title=\"GNU Lesser General Public License\">LGPL</a></td></tr>\n"
+						+ "<tr>\n"
+						+ "<th><a href=\"http://www.bliki.info/wiki/Website\" title=\"Website\">Website</a></th>\n"
+						+ "<td><a class=\"externallink\" href=\"http://www.jamwiki.org/\" rel=\"nofollow\" title=\"http://www.jamwiki.org/\">JAMWiki wiki</a>\n"
+						+ "</td></tr></table></div>\n" + "", wikiModel.render("{{Infobox_Software\n" + "|name = JAMWiki\n" + "|logo = \n"
+						+ "|caption =\n" + "\n" + "|developer = \n" + "|latest_release_version = 0.6.5\n"
+						+ "|latest_release_date = [[March 16]], [[2008]]\n" + "|latest preview version = 0.6.5 \n"
+						+ "|latest preview date = \n" + "|operating_system = [[Cross-platform]]\n"
 						+ "|genre = [[wiki software|Wiki software]]\n" + "|license = [[GNU Lesser General Public License|LGPL]]\n"
 						+ "|website = [http://www.jamwiki.org/ JAMWiki wiki]\n" + "}}\n"));
 	}
@@ -185,8 +186,7 @@ public class TemplateFilterTest extends FilterTestSupport {
 						+ "<p>article on:\n"
 						+ "</p>\n"
 						+ "<div style=\"margin-left: 10px;\"><b><i><a href=\"http://en.wikipedia.org/wiki/PAGENAME\">PAGENAME</a></i></b> </div>"
-						+ "</div>"
-						+ "</div>"
+						+ "</div>" + "</div>"
 						+ "</div></div><span class=\"interProject\"><a href=\"http://en.wikipedia.org/wiki/PAGENAME\">Wikipedia</a></span>",
 				wikiModel.render(temp));
 	}
@@ -245,147 +245,77 @@ public class TemplateFilterTest extends FilterTestSupport {
 
 	public void testNavbox() {
 		assertEquals(
-					 "\n" + 
-					 "<table cellspacing=\"0\" class=\"nowraplinks  ;;\">\n" + 
-					 "\n" + 
-					 "<tr>\n" + 
-					 "\n" + 
-					 "<th class=\"navbox-title\" colspan=\"2\" style=\";background: #EEDD82\">\n" + 
-					 "\n" + 
-					 "<div style=\"float:left; width:6em;text-align:left;\">\n" + 
-					 "<div class=\"noprint plainlinksneverexpand\" style=\"background-color:transparent; padding:0; white-space:nowrap; font-weight:normal; font-size:xx-small; ;background: #EEDD82;border:none;;  \"><a href=\"http://www.bliki.info/wiki/Template:AcademyAwardBestActor_1981-2000\" title=\"Template:AcademyAwardBestActor 1981-2000\"><span style=\";background: #EEDD82;border:none;;\" title=\"View this template\">v</span></a>&#160;<span style=\"font-size:80%;\">•</span>&#160;<a href=\"http://www.bliki.info/wiki/Template_talk:AcademyAwardBestActor_1981-2000\" title=\"Template talk:AcademyAwardBestActor 1981-2000\"><span style=\"color:#002bb8;;background: #EEDD82;border:none;;\" title=\"Discussion about this template\">d</span></a>&#160;<span style=\"font-size:80%;\">•</span>&#160;<a class=\"externallink\" href=\"http://en.wikipedia.org/w/index.php?title=Template%3AAcademyAwardBestActor+1981-2000&#38;action=edit\" rel=\"nofollow\" title=\"http://en.wikipedia.org/w/index.php?title=Template%3AAcademyAwardBestActor+1981-2000&#38;action=edit\"><span style=\"color:#002bb8;;background: #EEDD82;border:none;;\" title=\"You can edit this template. Please use the preview button before saving.\">e</span></a></div></div><span style=\"font-size:%;\"><a href=\"http://www.bliki.info/wiki/Academy_Award_for_Best_Actor\" title=\"Academy Award for Best Actor\">Academy Award for</a> <a href=\"http://www.bliki.info/wiki/Academy_Award_for_Best_Actor#1980s\" title=\"Academy Award for Best Actor\">Best Actor</a></span>\n" + 
-					 "</th>\n" + 
-					 "</tr>\n" + 
-					 "<tr style=\"height:2px;\">\n" + 
-					 "\n" + 
-					 "<td />\n" + 
-					 "</tr>\n" + 
-					 "<tr>\n" + 
-					 "\n" + 
-					 "<td class=\"navbox-list navbox-odd\" colspan=\"2\" style=\"width:100%;padding:0px;;;\">\n" + 
-					 "<div style=\"padding:0em 0.25em\">\n" + 
-					 "<div>\n" + 
-					 "<p>{{nowrap}}{{·}}\n" + 
-					 "{{nowrap}}{{·}}\n" + 
-					 "{{nowrap}}{{·}}\n" + 
-					 "{{nowrap}}{{·}}\n" + 
-					 "{{nowrap}}{{·}}\n" + 
-					 "{{nowrap}}{{·}}\n" + 
-					 "{{nowrap}}{{·}}\n" + 
-					 "{{nowrap}}{{·}}\n" + 
-					 "{{nowrap}}{{·}}\n" + 
-					 "{{nowrap}}{{·}}\n" + 
-					 "{{nowrap}}{{·}}\n" + 
-					 "{{nowrap}}{{·}}\n" + 
-					 "{{nowrap}}{{·}}\n" + 
-					 "{{nowrap}}{{·}}\n" + 
-					 "{{nowrap}}{{·}}\n" + 
-					 "{{nowrap}}{{·}}\n" + 
-					 "{{nowrap}}{{·}}\n" + 
-					 "{{nowrap}}{{·}}\n" + 
-					 "{{nowrap}}{{·}}\n" + 
-					 "{{nowrap}}</p><hr/>\n" + 
-					 "<p>{{nowrap}}{{·}}\n" + 
-					 "{{nowrap}}{{·}}\n" + 
-					 "{{nowrap}}{{·}}\n" + 
-					 "{{nowrap}}{{·}}\n" + 
-					 "{{nowrap}}{{·}}\n" + 
-					 "{{nowrap}}\n" + 
-					 "</p></div></div></td>\n" + 
-					 "</tr>\n" + 
-					 "</table>", wikiModel.render(NAVBOX_STRING));
+				"\n"
+						+ "<table cellspacing=\"0\" class=\"nowraplinks  ;;\">\n"
+						+ "\n"
+						+ "<tr>\n"
+						+ "\n"
+						+ "<th class=\"navbox-title\" colspan=\"2\" style=\";background: #EEDD82\">\n"
+						+ "\n"
+						+ "<div style=\"float:left; width:6em;text-align:left;\">\n"
+						+ "<div class=\"noprint plainlinksneverexpand\" style=\"background-color:transparent; padding:0; white-space:nowrap; font-weight:normal; font-size:xx-small; ;background: #EEDD82;border:none;;  \"><a href=\"http://www.bliki.info/wiki/Template:AcademyAwardBestActor_1981-2000\" title=\"Template:AcademyAwardBestActor 1981-2000\"><span style=\";background: #EEDD82;border:none;;\" title=\"View this template\">v</span></a>&#160;<span style=\"font-size:80%;\">•</span>&#160;<a href=\"http://www.bliki.info/wiki/Template_talk:AcademyAwardBestActor_1981-2000\" title=\"Template talk:AcademyAwardBestActor 1981-2000\"><span style=\"color:#002bb8;;background: #EEDD82;border:none;;\" title=\"Discussion about this template\">d</span></a>&#160;<span style=\"font-size:80%;\">•</span>&#160;<a class=\"externallink\" href=\"http://en.wikipedia.org/w/index.php?title=Template%3AAcademyAwardBestActor+1981-2000&#38;action=edit\" rel=\"nofollow\" title=\"http://en.wikipedia.org/w/index.php?title=Template%3AAcademyAwardBestActor+1981-2000&#38;action=edit\"><span style=\"color:#002bb8;;background: #EEDD82;border:none;;\" title=\"You can edit this template. Please use the preview button before saving.\">e</span></a></div></div><span style=\"font-size:%;\"><a href=\"http://www.bliki.info/wiki/Academy_Award_for_Best_Actor\" title=\"Academy Award for Best Actor\">Academy Award for</a> <a href=\"http://www.bliki.info/wiki/Academy_Award_for_Best_Actor#1980s\" title=\"Academy Award for Best Actor\">Best Actor</a></span>\n"
+						+ "</th>\n" + "</tr>\n" + "<tr style=\"height:2px;\">\n" + "\n" + "<td />\n" + "</tr>\n" + "<tr>\n" + "\n"
+						+ "<td class=\"navbox-list navbox-odd\" colspan=\"2\" style=\"width:100%;padding:0px;;;\">\n"
+						+ "<div style=\"padding:0em 0.25em\">\n" + "<div>\n" + "<p>{{nowrap}}{{·}}\n" + "{{nowrap}}{{·}}\n"
+						+ "{{nowrap}}{{·}}\n" + "{{nowrap}}{{·}}\n" + "{{nowrap}}{{·}}\n" + "{{nowrap}}{{·}}\n" + "{{nowrap}}{{·}}\n"
+						+ "{{nowrap}}{{·}}\n" + "{{nowrap}}{{·}}\n" + "{{nowrap}}{{·}}\n" + "{{nowrap}}{{·}}\n" + "{{nowrap}}{{·}}\n"
+						+ "{{nowrap}}{{·}}\n" + "{{nowrap}}{{·}}\n" + "{{nowrap}}{{·}}\n" + "{{nowrap}}{{·}}\n" + "{{nowrap}}{{·}}\n"
+						+ "{{nowrap}}{{·}}\n" + "{{nowrap}}{{·}}\n" + "{{nowrap}}</p><hr/>\n" + "<p>{{nowrap}}{{·}}\n" + "{{nowrap}}{{·}}\n"
+						+ "{{nowrap}}{{·}}\n" + "{{nowrap}}{{·}}\n" + "{{nowrap}}{{·}}\n" + "{{nowrap}}\n" + "</p></div></div></td>\n"
+						+ "</tr>\n" + "</table>", wikiModel.render(NAVBOX_STRING));
 	}
 
 	public void test11() {
 		assertEquals(
-				"\n" + 
-				"<p><a href=\"http://www.bliki.info/wiki/Template:AcademyAwardBestActor_1981-2000\" title=\"Template:AcademyAwardBestActor_1981-2000\"><span style=\";background: #EEDD82;border:none;;\" title=\"View this template\">v</span></a></p>",
+				"\n"
+						+ "<p><a href=\"http://www.bliki.info/wiki/Template:AcademyAwardBestActor_1981-2000\" title=\"Template:AcademyAwardBestActor_1981-2000\"><span style=\";background: #EEDD82;border:none;;\" title=\"View this template\">v</span></a></p>",
 				wikiModel
 						.render("[[Template:AcademyAwardBestActor_1981-2000|<span title=\"View this template\" style=\";background: #EEDD82;border:none;;\">v</span>]]"));
 	}
-	
+
 	public void testPipe001() {
-		assertEquals("\n" + 
-				"<p>hello worldhello world </p>", wikiModel.render("{{2x|hello world"+
-						"}} "));
+		assertEquals("\n" + "<p>hello worldhello world </p>", wikiModel.render("{{2x|hello world" + "}} "));
 	}
-	
+
 	public void testPipe002() {
+		assertEquals("\n" + "<div style=\"page-break-inside:	avoid;\">\n" + "<table>\n" + "<tr>\n" + "<td>A </td>\n"
+				+ "<td>B</td></tr>\n" + "<tr>\n" + "<td>C</td>\n" + "<td>D</td></tr></table></div>\n" + "\n"
+				+ "<div style=\"page-break-inside:	avoid;\">\n" + "<table>\n" + "<tr>\n" + "<td>A </td>\n" + "<td>B</td></tr>\n" + "<tr>\n"
+				+ "<td>C</td>\n" + "<td>D</td></tr></table></div>\n" + "", wikiModel.render("{{2x|{{{!}} \n" + "{{!}} A \n" + "{{!}} B\n"
+				+ "{{!}}- \n" + "{{!}} C\n" + "{{!}} D\n" + "{{!}}}\n" + "}}"));
+	}
+
+	public void testPipe003() {
+		assertEquals("\n" + "<div style=\"page-break-inside:	avoid;\">\n" + "<table>\n" + "<tr>\n" + "<td>A </td>\n"
+				+ "<td>B</td></tr>\n" + "<tr>\n" + "<td>C</td>\n" + "<td>D</td></tr></table></div>\n" + "\n"
+				+ "<div style=\"page-break-inside:	avoid;\">\n" + "<table>\n" + "<tr>\n" + "<td>A </td>\n" + "<td>B</td></tr>\n" + "<tr>\n"
+				+ "<td>C</td>\n" + "<td>D</td></tr></table></div>\n" + "\n" + "<div style=\"page-break-inside:	avoid;\">\n" + "<table>\n"
+				+ "<tr>\n" + "<td>A </td>\n" + "<td>B</td></tr>\n" + "<tr>\n" + "<td>C</td>\n" + "<td>D</td></tr></table></div>\n" + "\n"
+				+ "<div style=\"page-break-inside:	avoid;\">\n" + "<table>\n" + "<tr>\n" + "<td>A </td>\n" + "<td>B</td></tr>\n" + "<tr>\n"
+				+ "<td>C</td>\n" + "<td>D</td></tr></table></div>\n" + "", wikiModel.render("{{2x|{{2x|{{{!}} \n" + "{{!}} A \n"
+				+ "{{!}} B\n" + "{{!}}- \n" + "{{!}} C\n" + "{{!}} D\n" + "{{!}}}\n" + "}}}}"));
+	}
+
+	public void testFurther() {
+		assertEquals(
+				"<dl><dd><span class=\"boilerplate further\"><i>Further information: <a href=\"http://www.bliki.info/wiki/History_of_molecular_biology\" title=\"History of molecular biology\">History of molecular biology</a></i></span></dd></dl>",
+				wikiModel.render("{{further|[[History of molecular biology]]}}"));
+	}
+
+	public void testInvalidNoinclude() {
 		assertEquals("\n" + 
-				"<div style=\"page-break-inside:	avoid;\">\n" + 
-				"<table>\n" + 
-				"<tr>\n" + 
-				"<td>A </td>\n" + 
-				"<td>B</td></tr>\n" + 
-				"<tr>\n" + 
-				"<td>C</td>\n" + 
-				"<td>D</td></tr></table></div>\n" + 
-				"\n" + 
-				"<div style=\"page-break-inside:	avoid;\">\n" + 
-				"<table>\n" + 
-				"<tr>\n" + 
-				"<td>A </td>\n" + 
-				"<td>B</td></tr>\n" + 
-				"<tr>\n" + 
-				"<td>C</td>\n" + 
-				"<td>D</td></tr></table></div>\n" + 
-				"", wikiModel.render("{{2x|{{{!}} \n" + 
-				"{{!}} A \n" + 
-				"{{!}} B\n" + 
-				"{{!}}- \n" + 
-				"{{!}} C\n" + 
-				"{{!}} D\n" + 
-				"{{!}}}\n"+
-				"}}"));
+				"<p>test123 start\n" + 
+				"test123 end</p>", wikiModel.render("test123 start<noinclude>\n" + "test123 end"));
 	}
 	
-	public void testPipe003() {
+	public void testInvalidIncludeonly() {
 		assertEquals("\n" + 
-				"<div style=\"page-break-inside:	avoid;\">\n" + 
-				"<table>\n" + 
-				"<tr>\n" + 
-				"<td>A </td>\n" + 
-				"<td>B</td></tr>\n" + 
-				"<tr>\n" + 
-				"<td>C</td>\n" + 
-				"<td>D</td></tr></table></div>\n" + 
-				"\n" + 
-				"<div style=\"page-break-inside:	avoid;\">\n" + 
-				"<table>\n" + 
-				"<tr>\n" + 
-				"<td>A </td>\n" + 
-				"<td>B</td></tr>\n" + 
-				"<tr>\n" + 
-				"<td>C</td>\n" + 
-				"<td>D</td></tr></table></div>\n" + 
-				"\n" + 
-				"<div style=\"page-break-inside:	avoid;\">\n" + 
-				"<table>\n" + 
-				"<tr>\n" + 
-				"<td>A </td>\n" + 
-				"<td>B</td></tr>\n" + 
-				"<tr>\n" + 
-				"<td>C</td>\n" + 
-				"<td>D</td></tr></table></div>\n" + 
-				"\n" + 
-				"<div style=\"page-break-inside:	avoid;\">\n" + 
-				"<table>\n" + 
-				"<tr>\n" + 
-				"<td>A </td>\n" + 
-				"<td>B</td></tr>\n" + 
-				"<tr>\n" + 
-				"<td>C</td>\n" + 
-				"<td>D</td></tr></table></div>\n" + 
-				"", wikiModel.render("{{2x|{{2x|{{{!}} \n" + 
-				"{{!}} A \n" + 
-				"{{!}} B\n" + 
-				"{{!}}- \n" + 
-				"{{!}} C\n" + 
-				"{{!}} D\n" + 
-				"{{!}}}\n"+
-				"}}}}"));
+				"<p>test123 start</p>", wikiModel.render("test123 start<includeonly>\n" + "test123 end"));
 	}
-	public void testFurther() {
-		assertEquals("<dl><dd><span class=\"boilerplate further\"><i>Further information: <a href=\"http://www.bliki.info/wiki/History_of_molecular_biology\" title=\"History of molecular biology\">History of molecular biology</a></i></span></dd></dl>",wikiModel.render("{{further|[[History of molecular biology]]}}"));
+	
+	public void testInvalidOnlyinclude() {
+		assertEquals("\n" + 
+				"<p>test123 start\n" + 
+				"test123 end</p>", wikiModel.render("test123 start<onlyinclude>\n" + "test123 end"));
 	}
 }

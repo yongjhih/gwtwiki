@@ -140,11 +140,21 @@ public class WPLinkFilterTest extends FilterTestSupport {
 				.render("[[#Section Link|A Section Link]]"));
 	}
 
+	public void testSpecialLink01() {
+		assertEquals("\n" + 
+				"<ul>\n" + 
+				"<li><a href=\"http://www.bliki.info/wiki/Special:Specialpages\" title=\"Special:Specialpages\">Special Pages</a></li></ul>", wikiModel
+				.render("* [[Special:Specialpages|Special Pages]]"));
+	}
+	
 	public void testSectionLink02() {
 		assertEquals("\n" + 
 				"<p><a href=\"#Section.C3.A4.C3.B6.C3.BC\" title=\"\" /></p>", wikiModel.render("[[#Sectionäöü]]"));
 	}
-
+	public void testSubLink01() {
+		assertEquals("\n" + 
+				"<p><a href=\"http://www.bliki.info/wiki/Test/testing\" title=\"test/testing\">test/testing</a></p>", wikiModel.render("[[test/testing]]"));
+	}
 	public void testRedirect01() {
 		assertEquals("", wikiModel.render("#REDIRECT [[Official position]]"));
 		assertEquals("Official position", wikiModel.getRedirectLink());

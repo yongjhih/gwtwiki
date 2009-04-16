@@ -75,6 +75,10 @@ public class HTMLCreatorTest {
 		testWikipediaENAPI("Depeche Mode");
 	}
 	
+	public static void testCreator006() {
+		testWikipediaENAPI("Anarchism");
+	}
+	
 	public static void main(String[] args) {
 		testCreator001();
 	}
