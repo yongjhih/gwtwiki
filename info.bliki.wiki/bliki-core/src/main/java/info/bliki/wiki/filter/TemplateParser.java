@@ -67,7 +67,7 @@ public class TemplateParser extends AbstractParser {
 			int level = wikiModel.incrementRecursionLevel();
 			if (level > Configuration.PARSER_RECURSION_LIMIT) {
 				writer.append("Error - recursion limit exceeded parsing templates.");
-				return; 
+				return;
 			}
 			TemplateParser parser = new TemplateParser(rawWikitext, parseOnlySignature, renderTemplate);
 			parser.setModel(wikiModel);
@@ -280,6 +280,7 @@ public class TemplateParser extends AbstractParser {
 							}
 						}
 						if (!isTemplate()) {
+							// not rendering a Template namespace directly
 							if (tagName.equals("includeonly")) {
 								if (readUntilIgnoreCase("</", "includeonly>")) {
 									if (!fOnlyIncludeFlag) {
@@ -295,6 +296,15 @@ public class TemplateParser extends AbstractParser {
 									fWhiteStartPosition = fCurrentPosition;
 									return true;
 								}
+
+								if (!fOnlyIncludeFlag) {
+									appendContent(writer, fWhiteStart, fWhiteStartPosition, fCurrentPosition - lessThanStart);
+								}
+								fWhiteStart = false;
+								// fWhiteStartPosition = tagStart;
+								fCurrentPosition = fStringSource.length();
+								return true;
+
 							} else if (tagName.equals("noinclude")) {
 								if (readUntilIgnoreCase("</", "noinclude>")) {
 									if (!fOnlyIncludeFlag) {
@@ -304,6 +314,10 @@ public class TemplateParser extends AbstractParser {
 									fWhiteStartPosition = fCurrentPosition;
 									return true;
 								}
+								appendContent(writer, fWhiteStart, fWhiteStartPosition, fCurrentPosition - lessThanStart);
+								fWhiteStart = true;
+								fWhiteStartPosition = tagStart;
+								return true;
 							} else if (tagName.equals("onlyinclude")) {
 								if (readUntilIgnoreCase("</", "onlyinclude>")) {
 									if (!fOnlyIncludeFlag) {
@@ -322,6 +336,10 @@ public class TemplateParser extends AbstractParser {
 									fWhiteStartPosition = fCurrentPosition;
 									return true;
 								}
+								appendContent(writer, fWhiteStart, fWhiteStartPosition, fCurrentPosition - lessThanStart);
+								fWhiteStart = true;
+								fWhiteStartPosition = tagStart;
+								return true;
 							}
 						} else {
 							if (tagName.equals("noinclude")) {
@@ -335,6 +353,10 @@ public class TemplateParser extends AbstractParser {
 									fWhiteStartPosition = fCurrentPosition;
 									return true;
 								}
+								appendContent(writer, fWhiteStart, fWhiteStartPosition, fCurrentPosition - lessThanStart);
+								fWhiteStart = true;
+								fWhiteStartPosition = tagStart;
+								return true;
 							} else if (tagName.equals("includeonly")) {
 								if (readUntilIgnoreCase("</", "includeonly>")) {
 									appendContent(writer, fWhiteStart, fWhiteStartPosition, fCurrentPosition - lessThanStart);
@@ -342,6 +364,12 @@ public class TemplateParser extends AbstractParser {
 									fWhiteStartPosition = fCurrentPosition;
 									return true;
 								}
+
+								appendContent(writer, fWhiteStart, fWhiteStartPosition, fCurrentPosition - lessThanStart);
+								fWhiteStart = false;
+								// fWhiteStartPosition = tagStart;
+								fCurrentPosition = fStringSource.length();
+								return true;
 							} else if (tagName.equals("onlyinclude")) {
 								if (readUntilIgnoreCase("</", "onlyinclude>")) {
 									appendContent(writer, fWhiteStart, fWhiteStartPosition, fCurrentPosition - lessThanStart);
@@ -349,6 +377,10 @@ public class TemplateParser extends AbstractParser {
 									fWhiteStartPosition = fCurrentPosition;
 									return true;
 								}
+								appendContent(writer, fWhiteStart, fWhiteStartPosition, fCurrentPosition - lessThanStart);
+								fWhiteStart = true;
+								fWhiteStartPosition = tagStart;
+								return true;
 							}
 						}
 					}
