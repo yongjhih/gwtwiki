@@ -56,8 +56,16 @@ public class Connector {
 
 		method.setFollowRedirects(false);
 		method.addRequestHeader("User-Agent", USER_AGENT);
-		NameValuePair[] params = new NameValuePair[] { new NameValuePair("action", "login"), new NameValuePair("format", "xml"),
-				new NameValuePair("lgname", userName), new NameValuePair("lgpassword", user.getPassword()) };
+		String lgDomain = user.getDomain();
+		NameValuePair[] params;
+		if (lgDomain.length() > 0) {
+			params = new NameValuePair[] { new NameValuePair("action", "login"), new NameValuePair("format", "xml"),
+					new NameValuePair("lgname", userName), new NameValuePair("lgpassword", user.getPassword()),
+					new NameValuePair("lgdomain", user.getDomain()) };
+		} else {
+			params = new NameValuePair[] { new NameValuePair("action", "login"), new NameValuePair("format", "xml"),
+					new NameValuePair("lgname", userName), new NameValuePair("lgpassword", user.getPassword()) };
+		}
 		method.addParameters(params);
 
 		try {

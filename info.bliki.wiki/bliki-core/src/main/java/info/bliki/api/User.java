@@ -16,18 +16,26 @@ public class User {
 
 	String userid;
 
-	String username;
+	final private String username;
 
 	String normalizedUsername;
 
 	String token;
 
-	String password;
+	final private String password;
 
-	String actionUrl;
+	final private String actionUrl;
+
+	final private String domain;
 
 	Connector connector;
 
+	/**
+	 * A default "blank" user, not really useful. Will be removed in later
+	 * releases.
+	 * 
+	 * @deprecated
+	 */
 	public User() {
 		super();
 		this.result = "";
@@ -37,18 +45,50 @@ public class User {
 		this.token = "";
 		this.password = "";
 		this.actionUrl = "";
+		this.domain = "";
 		this.connector = new Connector();
 	}
 
-	public User(String username, String password, String actionUrl) {
+	/**
+	 * Create a User for a Mediawiki wiki
+	 * 
+	 * @param lgname
+	 *          User Name
+	 * @param lgpassword
+	 *          Password
+	 * @param mediawikiApiUrl
+	 *          A mediawiki API Url (example: <a
+	 *          href="http://meta.wikimedia.org/w/api.php"
+	 *          >http://meta.wikimedia.org/w/api.php</a>
+	 */
+	public User(String lgname, String lgpassword, String mediawikiApiUrl) {
+		this(lgname, lgpassword, mediawikiApiUrl, "");
+	}
+
+	/**
+	 * Create a User for a Mediawiki wiki
+	 * 
+	 * @param lgname
+	 *          User Name
+	 * @param lgpassword
+	 *          Password
+	 * @param mediawikiApiUrl
+	 *          A mediawiki API Url (example: <a
+	 *          href="http://meta.wikimedia.org/w/api.php"
+	 *          >http://meta.wikimedia.org/w/api.php</a>
+	 * @param lgdomain
+	 *          Domain (optional)
+	 */
+	public User(String lgname, String lgpassword, String mediawikiApiUrl, String lgdomain) {
 		super();
 		this.result = ILLEGAL_ID;
 		this.userid = "";
-		this.username = username;
+		this.username = lgname;
 		this.normalizedUsername = "";
 		this.token = "";
-		this.password = password;
-		this.actionUrl = actionUrl;
+		this.password = lgpassword;
+		this.domain = lgdomain;
+		this.actionUrl = mediawikiApiUrl;
 		this.connector = new Connector();
 	}
 
@@ -157,6 +197,10 @@ public class User {
 		return actionUrl;
 	}
 
+	public String getDomain() {
+		return domain;
+	}
+	
 	public String getPassword() {
 		return password;
 	}
