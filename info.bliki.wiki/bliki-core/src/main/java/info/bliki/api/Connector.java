@@ -5,10 +5,7 @@ import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.httpclient.HttpClient;
-import org.apache.commons.httpclient.HttpException;
-import org.apache.commons.httpclient.MultiThreadedHttpConnectionManager;
-import org.apache.commons.httpclient.NameValuePair;
+import org.apache.commons.httpclient.*;
 import org.apache.commons.httpclient.methods.PostMethod;
 import org.xml.sax.SAXException;
 
@@ -70,7 +67,7 @@ public class Connector {
 
 		try {
 			int responseCode = client.executeMethod(method);
-			if (responseCode == 200) {
+			if (responseCode == HttpStatus.SC_OK) {
 				String responseBody = method.getResponseBodyAsString();
 				XMLUserParser parser = new XMLUserParser(user, responseBody);
 				parser.parse();
@@ -121,6 +118,7 @@ public class Connector {
 		String[] valuePairs = { "prop", "imageinfo", "iiprop", "url", "iiurlwidth", Integer.toString(imageWidth) };
 		return query(user, listOfImageStrings, valuePairs);
 	}
+
 
 	/**
 	 * 
@@ -222,7 +220,7 @@ public class Connector {
 			method.addParameters(params);
 
 			int responseCode = client.executeMethod(method);
-			if (responseCode == 200) {
+			if (responseCode == HttpStatus.SC_OK) {
 				return method.getResponseBodyAsString();
 			}
 		} catch (UnsupportedEncodingException e) {
