@@ -6,6 +6,8 @@ import java.util.Set;
 import java.util.TreeMap;
 import java.util.Map.Entry;
 
+import org.apache.commons.httpclient.NameValuePair;
+
 public class RequestBuilder {
 	Map<String, String> fQueryMap = new TreeMap<String, String>();
 
@@ -85,9 +87,8 @@ public class RequestBuilder {
 	}
 
 	/**
-	 * The format of the output One value: json, jsonfm, php, phpfm, wddx,
-	 * wddxfm, xml, xmlfm, yaml, yamlfm, rawfm, txt, txtfm, dbg, dbgfm Default:
-	 * xmlfm
+	 * The format of the output One value: json, jsonfm, php, phpfm, wddx, wddxfm,
+	 * xml, xmlfm, yaml, yamlfm, rawfm, txt, txtfm, dbg, dbgfm Default: xmlfm
 	 * 
 	 * @param lType
 	 * @return
@@ -243,5 +244,19 @@ public class RequestBuilder {
 			}
 		}
 		return buff.toString();
+	}
+
+	public NameValuePair[] getParameters() {
+		Set<Map.Entry<String, String>> set = fQueryMap.entrySet();
+		NameValuePair[] nameValuePairs = new NameValuePair[set.size()];
+		int count = 0;
+		for (Map.Entry<String, String> entry : set) {
+			if (entry.getValue() != null && entry.getValue().length() > 0) {
+				nameValuePairs[count++] = new NameValuePair(entry.getKey(), entry.getValue());
+			} else {
+				nameValuePairs[count++] = new NameValuePair(entry.getKey(), "");
+			}
+		}
+		return nameValuePairs;
 	}
 }

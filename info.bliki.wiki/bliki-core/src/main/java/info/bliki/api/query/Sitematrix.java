@@ -14,4 +14,8 @@ public class Sitematrix extends RequestBuilder {
 		super();
 		action("sitematrix");
 	}
+	
+	public static Sitematrix create() {
+		return new Sitematrix();
+	}
 }

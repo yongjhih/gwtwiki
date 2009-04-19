@@ -14,6 +14,10 @@ public class Parse extends RequestBuilder {
 		action("parse");
 	}
 
+	public static Parse create() {
+		return new Parse();
+	}
+	
 	/**
 	 * Title of page the text belongs to. Default: API
 	 * 

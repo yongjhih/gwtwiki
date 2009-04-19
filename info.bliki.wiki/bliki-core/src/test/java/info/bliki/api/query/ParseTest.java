@@ -1,8 +1,10 @@
 package info.bliki.api.query;
 
-import junit.framework.TestCase;
-import info.bliki.api.User;
 import info.bliki.api.Connector;
+import info.bliki.api.ParseData;
+import info.bliki.api.User;
+import junit.framework.TestCase;
+
 import org.apache.commons.lang.StringEscapeUtils;
 
 /**
@@ -10,16 +12,22 @@ import org.apache.commons.lang.StringEscapeUtils;
  */
 public class ParseTest extends TestCase {
 
-    public void testParseQuery() {
+	public void test001() {
+		RequestBuilder request = Parse.create().text("{{Project:Sandbox}}").title("A Sandbox Template test");
+		assertEquals("action=parse&amp;format=xml&amp;text={{Project:Sandbox}}&amp;title=A Sandbox Template test", request.toString());
+	}
 
-        User user = new User("", "", "http://meta.wikimedia.org/w/api.php");       
-        Connector connector = new Connector();
-        user = connector.login(user);
-        System.out.println(user.getToken());
-        info.bliki.api.Parse parse = connector.parse(user, "Main Page");
-        assertNotNull(parse);
-        assertNotNull(parse.getText());
-        String html = StringEscapeUtils.unescapeHtml(parse.getText());
-        System.out.println("Retrieved html text:\n" + html);
-    }
+	public void testParseQuery() {
+
+		User user = new User("", "", "http://meta.wikimedia.org/w/api.php");
+		Connector connector = new Connector();
+		user = connector.login(user);
+		System.out.println(user.getToken());
+		RequestBuilder request = Parse.create().page("Main Page");
+		ParseData parseData = connector.parse(user, request);
+		assertNotNull(parseData);
+		assertNotNull(parseData.getText());
+		String html = StringEscapeUtils.unescapeHtml(parseData.getText());
+		System.out.println("Retrieved html text:\n" + html);
+	}
 }

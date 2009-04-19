@@ -13,14 +13,14 @@ public class XMLParseParser extends AbstractXMLParser{
     private static final String TEXT_TAG = "text";
     private static final String DISPLAY_TITLE_ATTR = "displaytitle";
 
-    private Parse parse;
+    private ParseData parse;
 
     public XMLParseParser(String xmlText) throws SAXException {
         super(xmlText);
-        parse = new Parse();
+        parse = new ParseData();
     }
 
-    public Parse getParse() {
+    public ParseData getParse() {
         return parse;
     }
 

@@ -5,7 +5,7 @@ import java.util.List;
 /**
  * Manages parse data from the <a href="http://meta.wikimedia.org/w/api.php">Wikimedia API</a>
  */
-public class Parse {
+public class ParseData {
     private String displaytitle;
     private String text;
     private List<Link> links;

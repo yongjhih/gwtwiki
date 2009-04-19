@@ -32,7 +32,11 @@ public class OpenSearch extends RequestBuilder {
 		put("search", search);
 		return this;
 	}
-
+	
+	public static OpenSearch create() {
+		return new OpenSearch();
+	}
+	
 	public OpenSearch limit(int limit) {
 		put("limit", Integer.toString(limit));
 		return this;
