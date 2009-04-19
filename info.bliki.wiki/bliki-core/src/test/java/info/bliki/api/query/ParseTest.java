@@ -10,7 +10,7 @@ import org.apache.commons.lang.StringEscapeUtils;
 /**
  * Tests Parse query.
  */
-public class ParseTest extends TestCase {
+public class ParseTest extends BaseQueryTest {
 
 	public void test001() {
 		RequestBuilder request = Parse.create().text("{{Project:Sandbox}}").title("A Sandbox Template test");
@@ -19,7 +19,7 @@ public class ParseTest extends TestCase {
 
 	public void testParseQuery() {
 
-		User user = new User("", "", "http://meta.wikimedia.org/w/api.php");
+		User user = getAnonymousUser();
 		Connector connector = new Connector();
 		user = connector.login(user);
 		System.out.println(user.getToken());

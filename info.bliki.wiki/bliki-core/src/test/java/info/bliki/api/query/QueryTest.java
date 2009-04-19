@@ -4,7 +4,7 @@ import info.bliki.api.query.Query;
 import info.bliki.api.query.RequestBuilder;
 import junit.framework.TestCase;
 
-public class QueryTest extends TestCase {
+public class QueryTest extends BaseQueryTest {
 	public QueryTest(String name) {
 		super(name);
 	}

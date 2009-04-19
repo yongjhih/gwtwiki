@@ -1,6 +1,7 @@
 package info.bliki.api;
 
 import info.bliki.api.query.RequestBuilder;
+import info.bliki.api.query.Edit;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -218,7 +219,7 @@ public class Connector {
 	}
 
 	public ParseData parse(User user, RequestBuilder requestBuilder) {
-		String xmlResponse = sendParseXML(user, requestBuilder);
+		String xmlResponse = sendXML(user, requestBuilder);
 		if (xmlResponse != null) {
 			try {
 				XMLParseParser xmlParseParser = new XMLParseParser(xmlResponse);
@@ -233,17 +234,38 @@ public class Connector {
 		return null;
 	}
 
+    public void edit(User user, Edit editQuery) throws UnexpectedAnswerException {
+        String response = sendXML(user, editQuery);
+        try {
+            if (response != null) {
+                XMLEditParser editParser = new XMLEditParser(response);
+                editParser.parse();
+                ErrorData errorData = editParser.getErrorData();
+                if (errorData != null) {
+                    // if there is error data
+                    UnexpectedAnswerException ex = new UnexpectedAnswerException(errorData.getInfo());
+                    ex.setErrorData(errorData);
+                    throw ex;
+                }
+            }
+        } catch (SAXException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 	/**
 	 * Sends request for parse action
 	 * 
 	 * @param user
 	 *          user login information
-	 * @param params
+	 * @param requestBuilder
 	 *          additional parameters
 	 * @return the raw XML string produced by the query; <code>null</code>
 	 *         otherwise
 	 */
-	public String sendParseXML(User user, RequestBuilder requestBuilder) {
+	public String sendXML(User user, RequestBuilder requestBuilder) {
 		PostMethod method = createAuthenticatedPostMethod(user);
 		method.addParameters(requestBuilder.getParameters());
 		// if (params != null && !params.isEmpty()) {

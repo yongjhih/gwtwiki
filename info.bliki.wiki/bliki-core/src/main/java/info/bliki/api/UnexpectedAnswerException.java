@@ -4,6 +4,8 @@ package info.bliki.api;
  * this Exception is thrown, when the connection to a server returns unexpected values
  */ 
 public class UnexpectedAnswerException extends NetworkException {
+
+    private ErrorData errorData;
 	/** Constructs a new exception with null as its detail message. */
 	public UnexpectedAnswerException() {
 		super();
@@ -13,7 +15,7 @@ public class UnexpectedAnswerException extends NetworkException {
 	public UnexpectedAnswerException(String message) {
 		super(message);
 	}
-	
+
 	/** Constructs a new exception with the specified detail message and cause. */
 	public UnexpectedAnswerException(String message, Throwable cause) {
 		super(message);
@@ -24,5 +26,13 @@ public class UnexpectedAnswerException extends NetworkException {
 		typically contains the class and detail message of cause). */
  	public UnexpectedAnswerException(Throwable cause) {
 		super();	
-	} 
+	}
+
+    public ErrorData getErrorData() {
+        return errorData;
+    }
+
+    public void setErrorData(ErrorData errorData) {
+        this.errorData = errorData;
+    }
 }

@@ -11,10 +11,7 @@ import java.io.PrintWriter;
 import java.io.StringReader;
 import java.io.StringWriter;
 
-import org.apache.commons.httpclient.Cookie;
-import org.apache.commons.httpclient.HttpClient;
-import org.apache.commons.httpclient.HttpException;
-import org.apache.commons.httpclient.NameValuePair;
+import org.apache.commons.httpclient.*;
 import org.apache.commons.httpclient.cookie.CookiePolicy;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.httpclient.methods.PostMethod;
@@ -100,7 +97,7 @@ public class MediaWikiComm {
 
 		// Get the HTML from the page's edit tab.
 		GetMethod method = new GetMethod(fPageURL + "?title=" + title + "&action=edit");
-		int responseCode = 200;
+		int responseCode = HttpStatus.SC_OK;
 		String responseBody = null;
 
 		// Tell the HttpClient library not to worry about the cookies. We'll set
@@ -120,7 +117,7 @@ public class MediaWikiComm {
 
 			// Returns 200 on success. But techically, anything in the 200s
 			// is supposed to mean success.
-			if (responseCode >= 200 && responseCode < 300) {
+			if (responseCode >= HttpStatus.SC_OK && responseCode < 300) {
 
 				// Read the entire response and place it into responseBody.
 				// This will be the HTML for the entire page. (The same as
@@ -250,7 +247,7 @@ public class MediaWikiComm {
 
 		// Now post the data as multipart form data.
 		PostMethod method = new PostMethod(fPageURL + "?title=" + title + "&action=submit");
-		int responseCode = 200;
+		int responseCode = HttpStatus.SC_OK;
 
 		// Add the cookies to the request header manually.
 		method.getParams().setCookiePolicy(CookiePolicy.IGNORE_COOKIES);
@@ -277,7 +274,7 @@ public class MediaWikiComm {
 			// attempts a page redirection.
 			// 200 means the save failed probably because another user posted some
 			// edits since loadData() was called.
-			if (responseCode >= 200 && responseCode < 300) {
+			if (responseCode >= HttpStatus.SC_OK && responseCode < 300) {
 				// The calling code will respond by reloading the data, merging, and
 				// attempting to save again.
 				throw new ConcurrentEditException();
@@ -354,7 +351,7 @@ public class MediaWikiComm {
 				saveLoginData();
 
 				result = true;
-			} else if (responseCode == 200) {
+			} else if (responseCode == HttpStatus.SC_OK) {
 				// && responseBody.matches(config.getLoginWrongPw())
 				// || responseCode == 200
 				// && responseBody.matches(config.getLoginNoUser())) {
@@ -465,11 +462,11 @@ public class MediaWikiComm {
 			String responseBody = method.getResponseBodyAsString();
 			// log(method);
 
-			if (responseCode == 302 && responseBody.length() == 0 || responseCode == 200) {
+			if (responseCode == 302 && responseBody.length() == 0 || responseCode == HttpStatus.SC_OK) {
 				// && responseBody.matches(config.getLogoutSuccess())) {
 				// config.getloggedIn = false;
 				result = true;
-			} else if (responseCode == 200) {
+			} else if (responseCode == HttpStatus.SC_OK) {
 				// ### should check for a failure message
 				result = false;
 				throw new UnexpectedAnswerException("logout not successful: responseCode == 200");
