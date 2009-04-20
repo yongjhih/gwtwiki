@@ -216,12 +216,17 @@ public class Query extends RequestBuilder {
 	 * How many total pages to return. No more than 500 (5000 for bots) allowed.
 	 * Default: 10
 	 * 
-	 * @param title
+	 * @param limit
 	 * @return
 	 */
 	public Query aplimit(int limit) {
 		put("apfrom", Integer.toString(limit));
 		return this;
 	}
+
+    public Query intoken(String intoken) {
+        put("intoken", intoken);
+        return this;
+    }
 
 }

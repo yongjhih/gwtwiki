@@ -2,6 +2,7 @@ package info.bliki.api;
 
 import info.bliki.api.query.RequestBuilder;
 import info.bliki.api.query.Edit;
+import info.bliki.api.query.Query;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -54,7 +55,7 @@ public class Connector {
 	/**
 	 * Complete the Users login information The user must contain a username,
 	 * password and actionURL
-	 * 
+	 *
 	 * @param user
 	 *          the completed user information or <code>null</code>, if the login
 	 *          fails
@@ -137,8 +138,31 @@ public class Connector {
 		return query(user, listOfImageStrings, valuePairs);
 	}
 
+    /**
+     * Returns page info with edit token which is required for the edit action.
+     * @param user login information.
+     * @param title title of the page
+     * @return
+     */
+    private List<Page> queryInfoWithEditToken(User user, String title) {
+        Query query = Query.create().prop("info", "revisions").titles(title).intoken("edit");
+        return query(user, query);
+    }
+
+    public List<Page> query(User user, Query query) {
+        String response = sendXML(user, query);
+        try {
+            XMLPagesParser xmlPagesParser = new XMLPagesParser(response);
+            xmlPagesParser.parse();
+            return xmlPagesParser.getPagesList();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
 	/**
-	 * 
+	 *
 	 * @param user
 	 *          user login information
 	 * @param listOfTitleStrings
@@ -168,7 +192,7 @@ public class Connector {
 
 	/**
 	 * Get the raw XML result from the Mediawiki API
-	 * 
+	 *
 	 * @param user
 	 *          user login information
 	 * @param valuePairs
@@ -183,7 +207,7 @@ public class Connector {
 
 	/**
 	 * Get the raw XML result from the Mediawiki API
-	 * 
+	 *
 	 * @param user
 	 *          user login information
 	 * @param listOfTitleStrings
@@ -235,29 +259,45 @@ public class Connector {
 	}
 
     public void edit(User user, Edit editQuery) throws UnexpectedAnswerException {
-        String response = sendXML(user, editQuery);
-        try {
-            if (response != null) {
-                XMLEditParser editParser = new XMLEditParser(response);
-                editParser.parse();
-                ErrorData errorData = editParser.getErrorData();
-                if (errorData != null) {
-                    // if there is error data
-                    UnexpectedAnswerException ex = new UnexpectedAnswerException(errorData.getInfo());
-                    ex.setErrorData(errorData);
-                    throw ex;
+        // get edit token
+        String title = editQuery.get("title");
+        if (title != null) {
+            List<Page> pages = queryInfoWithEditToken(user, title);
+            if (pages != null && pages.size() == 1 && pages.get(0).getPageid() != null) {
+                Page page = pages.get(0);
+                if (page.getEditToken() != null) {
+                    // ok, edit token was received
+                    editQuery.token(page.getEditToken());
+                    String response = sendXML(user, editQuery);
+                    try {
+                        if (response != null) {
+                            XMLEditParser editParser = new XMLEditParser(response);
+                            editParser.parse();
+                            ErrorData errorData = editParser.getErrorData();
+                            if (errorData != null) {
+                                // if there is error data
+                                UnexpectedAnswerException ex = new UnexpectedAnswerException(errorData.getInfo());
+                                ex.setErrorData(errorData);
+                                throw ex;
+                            }
+                        }
+                    } catch (SAXException e) {
+                        e.printStackTrace();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                } else {
+                    throw new UnexpectedAnswerException("Edit token was not obtained");
                 }
+            } else {
+                throw new UnexpectedAnswerException("The specified page was not found");
             }
-        } catch (SAXException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
         }
     }
 
 	/**
 	 * Sends request for parse action
-	 * 
+	 *
 	 * @param user
 	 *          user login information
 	 * @param requestBuilder
@@ -265,7 +305,7 @@ public class Connector {
 	 * @return the raw XML string produced by the query; <code>null</code>
 	 *         otherwise
 	 */
-	public String sendXML(User user, RequestBuilder requestBuilder) {
+	private String sendXML(User user, RequestBuilder requestBuilder) {
 		PostMethod method = createAuthenticatedPostMethod(user);
 		method.addParameters(requestBuilder.getParameters());
 		// if (params != null && !params.isEmpty()) {

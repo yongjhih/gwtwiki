@@ -58,4 +58,9 @@ public class Edit extends RequestBuilder{
         put("text", text);
         return this;
     }
+
+    public Edit token(String token) {
+        put("token", token);
+        return this;
+    }
 }

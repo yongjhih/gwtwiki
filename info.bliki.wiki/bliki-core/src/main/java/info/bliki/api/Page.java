@@ -27,6 +27,8 @@ public class Page {
 
 	String title;
 
+    String editToken;
+
 	// imageinfo
 	String imageUrl;
 
@@ -149,7 +151,15 @@ public class Page {
 		return links.get(index);
 	}
 
-	protected final static int BLOCK_SIZE = 8192;
+    public String getEditToken() {
+        return editToken;
+    }
+
+    public void setEditToken(String editToken) {
+        this.editToken = editToken;
+    }
+
+    protected final static int BLOCK_SIZE = 8192;
 
 	/**
 	 * If this page was created with User#queryImageinfo() you can download the

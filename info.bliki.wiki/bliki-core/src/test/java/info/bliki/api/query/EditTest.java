@@ -16,12 +16,10 @@ public class EditTest extends BaseQueryTest {
 
         try {
             // there is no rights to do this action. The error must be received.
-            connector.edit(user, Edit.create().title("Main").text("blabla"));
+            connector.edit(user, Edit.create().title("MainTestTest").text("blabla"));
             fail("UnexpectedAnswerException must be thrown");
         } catch (UnexpectedAnswerException e) {
             // ok
-            assertNotNull(e.getErrorData());
-            System.out.println(e.getErrorData());
         }
     }
 

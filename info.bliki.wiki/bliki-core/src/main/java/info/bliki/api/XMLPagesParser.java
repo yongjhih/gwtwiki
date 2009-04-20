@@ -38,6 +38,8 @@ public class XMLPagesParser extends AbstractXMLParser {
 
 	private static final String II_ID = "ii";
 
+    private static final String EDIT_TOKEN_ID = "edittoken";
+
 	private Page fPage;
 
 	private Revision fRevision;
@@ -59,6 +61,7 @@ public class XMLPagesParser extends AbstractXMLParser {
 			fPage.setPageid(fAttributes.getValue(PAGE_ID));
 			fPage.setNs(fAttributes.getValue(NS_ID));
 			fPage.setTitle(fAttributes.getValue(TITLE_ID));
+            fPage.setEditToken(fAttributes.getValue(EDIT_TOKEN_ID));
 		} else if (REV_ID.equals(qName)) {
 			fRevision = new Revision();
 			fRevision.setAnon(fAttributes.getValue(ANON_ID));
