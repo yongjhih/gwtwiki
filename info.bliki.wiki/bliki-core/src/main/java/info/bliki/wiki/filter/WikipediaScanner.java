@@ -45,7 +45,6 @@ public class WikipediaScanner {
 		// initialize(src, position);
 	}
 
-
 	public void setModel(IWikiModel wikiModel) {
 		fWikiModel = wikiModel;
 	}
@@ -87,7 +86,7 @@ public class WikipediaScanner {
 			int startPos = fScannerPosition;
 			// read parameters until end of line
 			nextNewline();
-			table.setParams(new String(fSource, startPos, fScannerPosition - startPos));
+			table.setParams(fStringSource.substring(startPos, fScannerPosition));
 
 			char ch = ' ';
 
@@ -111,7 +110,7 @@ public class WikipediaScanner {
 							row = new WPRow(cells);
 							startPos = fScannerPosition;
 							nextNewline();
-							row.setParams(new String(fSource, startPos, fScannerPosition - startPos));
+							row.setParams(fStringSource.substring(startPos, fScannerPosition));
 							break;
 						case '+': // new row - "\n|+"
 							addTableRow(table, row);
@@ -671,7 +670,7 @@ public class WikipediaScanner {
 	 * @return <code>null</code> if no replacement could be found
 	 */
 	public StringBuilder replaceTemplateParameters(String template, Map<String, String> fTemplateParameters) {
-		StringBuilder buffer = null;// new StringBuilder(template.length() + 128);
+		StringBuilder buffer = null;
 		int bufferStart = 0;
 		try {
 			char ch;

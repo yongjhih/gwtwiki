@@ -245,7 +245,7 @@ public abstract class AbstractParser extends WikipediaScanner {
 		}
 
 		int endPos = fCurrentPosition - bbEndStr.length() - 2;
-		String innerTag = new String(fSource, startPos, endPos - startPos);
+		String innerTag = fStringSource.substring( startPos, endPos);
 
 		return createBBCode(bbStr, bbAttr, innerTag);
 	}

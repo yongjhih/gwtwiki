@@ -106,7 +106,7 @@ public class WikipediaParser extends AbstractParser implements IParser {
 				final int whiteEndPosition = fCurrentPosition - diff;
 				int count = whiteEndPosition - whiteStartPosition;
 				if (count > 0) {
-					fWikiModel.append(new ContentToken(new String(fSource, whiteStartPosition, count)));
+					fWikiModel.append(new ContentToken(fStringSource.substring(whiteStartPosition, whiteStartPosition + count)));
 				}
 			} finally {
 				fWhiteStart = false;
@@ -475,7 +475,7 @@ public class WikipediaParser extends AbstractParser implements IParser {
 		if (htmlCommentString.equals("<!--")) {
 			fCurrentPosition += 3;
 			if (readUntil("-->")) {
-				String htmlCommentContent = new String(fSource, htmlStartPosition + 3, fCurrentPosition - htmlStartPosition - 6);
+				String htmlCommentContent = fStringSource.substring(htmlStartPosition + 3, fCurrentPosition - 3);
 				if (htmlCommentContent != null) {
 					createContentToken(fWhiteStart, fWhiteStartPosition, fCurrentPosition - htmlStartPosition + 1);
 					return true;
@@ -510,7 +510,7 @@ public class WikipediaParser extends AbstractParser implements IParser {
 			}
 		}
 		if (foundISBN) {
-			String urlString = new String(fSource, urlStartPosition - 1, fCurrentPosition - urlStartPosition);
+			String urlString = fStringSource.substring(urlStartPosition - 1, fCurrentPosition - 1);
 			fCurrentPosition--;
 			fWikiModel.appendISBNLink(urlString);
 			return true;
@@ -610,7 +610,7 @@ public class WikipediaParser extends AbstractParser implements IParser {
 		} catch (IndexOutOfBoundsException e) {
 		}
 		if (foundUrl) {
-			String urlString = new String(fSource, urlStartPosition - 1, tempPosition - urlStartPosition);
+			String urlString = fStringSource.substring(urlStartPosition - 1, tempPosition - 1);
 			String email = urlString.substring(7);
 			if (EmailValidator.getInstance().isValid(email)) {
 				createContentToken(fWhiteStart, fWhiteStartPosition, 1);
@@ -703,7 +703,7 @@ public class WikipediaParser extends AbstractParser implements IParser {
 			fWhiteStart = false;
 			fCurrentPosition = temp - 1;
 
-			String name = new String(fSource, startLinkPosition, fCurrentPosition - startLinkPosition);
+			String name = fStringSource.substring(startLinkPosition, fCurrentPosition);
 			fWikiModel.appendInternalLink(name, null, name, null, false);
 			return true;
 		}
@@ -725,7 +725,7 @@ public class WikipediaParser extends AbstractParser implements IParser {
 			fWhiteStart = false;
 
 			if (readUntilChar(']')) {
-				String name = new String(fSource, startLinkPosition, fCurrentPosition - startLinkPosition - 1);
+				String name = fStringSource.substring(startLinkPosition, fCurrentPosition - 1);
 
 				// bbcode start
 				if (fWikiModel.parseBBCodes() && name.length() > 0) {
@@ -765,7 +765,7 @@ public class WikipediaParser extends AbstractParser implements IParser {
 		int temp = fCurrentPosition;
 		if (findWikiLinkEnd()) {
 			endLinkPosition = fCurrentPosition - 2;
-			String name = new String(fSource, startLinkPosition, endLinkPosition - startLinkPosition);
+			String name = fStringSource.substring(startLinkPosition, endLinkPosition);
 			// test for a suffix string behind the Wiki link. Useful for plurals.
 			// Example:
 			// Dolphins are [[aquatic mammal]]s that are closely related to [[whale]]s
@@ -859,7 +859,7 @@ public class WikipediaParser extends AbstractParser implements IParser {
 				TagToken dl = new DlTag();
 				TagToken dt = new DtTag();
 				reduceTokenStack(dl);
-				String head = new String(fSource, startHeadPosition, fCurrentPosition - startHeadPosition);
+				String head = fStringSource.substring(startHeadPosition, fCurrentPosition);
 				int index = head.indexOf(" : ");
 				if (index > 0) {
 					fWikiModel.pushNode(dl);
@@ -911,7 +911,7 @@ public class WikipediaParser extends AbstractParser implements IParser {
 			int startHeadPosition = fCurrentPosition;
 			if (readUntilEOL()) {
 				reduceTokenStack(Configuration.HTML_DL_OPEN);
-				String head = new String(fSource, startHeadPosition, fCurrentPosition - startHeadPosition);
+				String head = fStringSource.substring(startHeadPosition, fCurrentPosition);
 				for (int i = 0; i < levelHeader; i++) {
 					fWikiModel.pushNode(new DlTag());
 					fWikiModel.pushNode(new DdTag());
@@ -989,12 +989,11 @@ public class WikipediaParser extends AbstractParser implements IParser {
 			reduceTokenStack();
 			String head = "";
 			if (headerEndPosition > headerStartPosition) {
-				head = new String(fSource, headerStartPosition, headerEndPosition - headerStartPosition);
+				head = fStringSource.substring(headerStartPosition, headerEndPosition);
 			}
 			fEventListener.onHeader(fSource, headerStartPosition, headerEndPosition, level);
 			fCurrentPosition = endIndex;
 
-			// handleHead(head, level);
 			if (head != null) {
 				fTableOfContentTag = fWikiModel.appendHead(head, level, fNoToC, ++fHeadCounter);
 			}
@@ -1146,7 +1145,7 @@ public class WikipediaParser extends AbstractParser implements IParser {
 				macroBodyString = fStringSource.substring(startMacroPosition, index0);
 				fCurrentPosition = index0 + endTag.length() + 2;
 			} else {
-				macroBodyString = new String(fSource, startMacroPosition, fSource.length - startMacroPosition);
+				macroBodyString = fStringSource.substring(startMacroPosition, fSource.length);
 				fCurrentPosition = fSource.length;
 			}
 		} else {
