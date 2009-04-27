@@ -118,8 +118,32 @@ public interface IWikiModel extends IConfiguration {
 	 * @param withoutSquareBrackets
 	 *          if <code>true</code> a link with no square brackets around the
 	 *          link was parsed
+	 * @deprecated use
+	 *             {@link IWikiModel#appendExternalLink(String, String, String, boolean)}
+	 *             instead.
 	 */
 	public void appendExternalLink(String link, String linkName, boolean withoutSquareBrackets);
+
+	/**
+	 * Append an external link (starting with http, https, ftp,...) as described
+	 * in <a href="http://en.wikipedia.org/wiki/Help:Link#External_links">Help
+	 * Links</a>
+	 * 
+	 * @param uriSchemeName
+	 *          the top level URI (Uniform Resource Identifier) scheme name
+	 *          (without the following colon character ":"). Example "ftp",
+	 *          "http", "https". See <a
+	 *          href="http://en.wikipedia.org/wiki/URI_scheme">URI scheme</a>
+	 * @param link
+	 *          the external link with <code>http://, https:// or ftp://</code>
+	 *          prefix
+	 * @param linkName
+	 *          the link name which is separated from the URL by a space
+	 * @param withoutSquareBrackets
+	 *          if <code>true</code> a link with no square brackets around the
+	 *          link was parsed
+	 */
+	public void appendExternalLink(String uriSchemeName, String link, String linkName, boolean withoutSquareBrackets);
 
 	/**
 	 * Add a single wiki head (i.e. ==...==, ===...===, ====...====,...) to the
@@ -298,6 +322,24 @@ public interface IWikiModel extends IConfiguration {
 	/**
 	 * Encode the <i>wiki links title</i> into a URL for HTML hyperlinks (i.e.
 	 * create the <i>href</i> attribute representation for the <i>a</i> tag). This
+	 * method uses the '.' character to encode special characters. To get the <a
+	 * href="http://meta.wikimedia.org/wiki/Help:Page_name#Case-sensitivity"
+	 * >behavior of the MediaWiki software</a>, which is configured to convert the
+	 * first letter to upper case, the <code>firstCharacterAsUpperCase</code>
+	 * parameters must be set to <code>true</code>. For an example encoding
+	 * routine see:
+	 * {@link info.bliki.wiki.filter.Encoder#encodeTitleDotUrl(String, boolean)}
+	 * 
+	 * @param firstCharacterAsUpperCase
+	 *          if <code>true</code> convert the first of the title to uppercase
+	 * 
+	 * @see info.bliki.wiki.filter.Encoder#encodeTitleToUrl(String, boolean)
+	 */
+	public String encodeTitleDotUrl(String wikiTitle, boolean firstCharacterAsUpperCase);
+
+	/**
+	 * Encode the <i>wiki links title</i> into a URL for HTML hyperlinks (i.e.
+	 * create the <i>href</i> attribute representation for the <i>a</i> tag). This
 	 * method uses the '%' character to encode special characters. To get the <a
 	 * href="http://meta.wikimedia.org/wiki/Help:Page_name#Case-sensitivity"
 	 * >behavior of the MediaWiki software</a>, which is configured to convert the
@@ -313,24 +355,6 @@ public interface IWikiModel extends IConfiguration {
 	 * @see info.bliki.wiki.filter.Encoder#encodeTitleToUrl(String, boolean)
 	 */
 	public String encodeTitleToUrl(String wikiTitle, boolean firstCharacterAsUpperCase);
-
-	/**
-	 * Encode the <i>wiki links title</i> into a URL for HTML hyperlinks (i.e.
-	 * create the <i>href</i> attribute representation for the <i>a</i> tag). This
-	 * method uses the '.' character to encode special characters. To get the <a
-	 * href="http://meta.wikimedia.org/wiki/Help:Page_name#Case-sensitivity"
-	 * >behavior of the MediaWiki software</a>, which is configured to convert the
-	 * first letter to upper case, the <code>firstCharacterAsUpperCase</code>
-	 * parameters must be set to <code>true</code>. For an example encoding
-	 * routine see:
-	 * {@link info.bliki.wiki.filter.Encoder#encodeTitleDotUrl(String, boolean)}
-	 * 
-	 * @param firstCharacterAsUpperCase
-	 *          if <code>true</code> convert the first of the title to uppercase
-	 * 
-	 * @see info.bliki.wiki.filter.Encoder#encodeTitleToUrl(String, boolean)
-	 */
-	public String encodeTitleDotUrl(String wikiTitle, boolean firstCharacterAsUpperCase);
 
 	/**
 	 * Get the secondary namespace (i.e. the namespace for a non-englich locale)
@@ -595,6 +619,37 @@ public interface IWikiModel extends IConfiguration {
 	 * @return <code>true</code> if the currently parsed wiki text is a template
 	 */
 	public boolean isTemplateTopic();
+
+	/**
+	 * Check if the top level URI (Uniform Resource Identifier) scheme name is
+	 * valid in this model.
+	 * 
+	 * See <a href="http://en.wikipedia.org/wiki/URI_scheme">URI scheme</a>
+	 * 
+	 * @param uriScheme
+	 *          the top level URI (Uniform Resource Identifier) scheme name
+	 *          (without the following colon character ":")
+	 * @return <code>true</code> if the specified URI scheme is valid.
+	 * @see IWikiModel#isValidUriSchemeSpecificPart(String, String)
+	 */
+	public boolean isValidUriScheme(String uriScheme);
+
+	/**
+	 * Check if the scheme-specific part for a given top level URI (Uniform
+	 * Resource Identifier) scheme name is valid in this model.
+	 * 
+	 * See <a href="http://en.wikipedia.org/wiki/URI_scheme">URI scheme</a>
+	 * 
+	 * @param uriScheme
+	 *          the top level URI (Uniform Resource Identifier) scheme name
+	 *          (without the following colon character ":")
+	 * @param uriSchemeSpecificPart
+	 *          the URI (Uniform Resource Identifier) scheme part following the
+	 *          top level scheme name and the colon character ":"
+	 * @return <code>true</code> if the specified URI scheme is valid.
+	 * @see IWikiModel#isValidUriScheme(String)
+	 */
+	public boolean isValidUriSchemeSpecificPart(String uriScheme, String uriSchemeSpecificPart);
 
 	/**
 	 * Parse BBCode (Bulletin Board Code), like syntax codes in this wiki. See <a

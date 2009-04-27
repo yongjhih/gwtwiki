@@ -339,30 +339,6 @@ public class WikipediaParser extends AbstractParser implements IParser {
 						return TokenITALIC;
 					}
 					break;
-				case 'f': // ftp://
-				case 'F':
-					if (parseFTPLinks()) {
-						continue;
-					}
-					break;
-				case 'h': // http(s)://
-				case 'H':
-					if (parseHTTPLinks()) {
-						continue;
-					}
-					break;
-				case 'i': // "ISBN ..."
-				case 'I':
-					if (parseISBNLinks()) {
-						continue;
-					}
-					break;
-				case 'm': // mailto:
-				case 'M':
-					if (parseMailtoLinks()) {
-						continue;
-					}
-					break;
 				case '<':
 					if (fHtmlCodes) {
 						int htmlStartPosition = fCurrentPosition;
@@ -446,6 +422,22 @@ public class WikipediaParser extends AbstractParser implements IParser {
 						fCurrentPosition = htmlStartPosition;
 					}
 					break;
+				default:
+					if (Character.isLetter(fCurrentCharacter)) {
+						if (fCurrentCharacter == 'i' || fCurrentCharacter == 'I') {
+							// ISBN ?
+							if (parseISBNLinks()) {
+								continue;
+							}
+						}
+
+						if (parseURIScheme()) {
+							// a URI scheme registered in the wiki model (ftp, http,
+							// https,...)
+							continue;
+						}
+
+					}
 				}
 				if (fWikiModel.isCamelCaseEnabled() && Character.isUpperCase(fCurrentCharacter) && fWikiModel.getRecursionLevel() <= 1) {
 					if (parseCamelCaseLink()) {
@@ -526,74 +518,80 @@ public class WikipediaParser extends AbstractParser implements IParser {
 		return false;
 	}
 
-	private boolean parseFTPLinks() {
-		int urlStartPosition = fCurrentPosition;
-		boolean foundUrl = false;
-		try {
-			String urlString = fStringSource.substring(fCurrentPosition - 1, fCurrentPosition + 2);
-			if (urlString.equalsIgnoreCase("ftp")) {
-				fCurrentPosition += 2;
-				fCurrentCharacter = fSource[fCurrentPosition++];
+	// private boolean parseFTPLinks() {
+	// int urlStartPosition = fCurrentPosition;
+	// boolean foundUrl = false;
+	// try {
+	// String urlString = fStringSource.substring(fCurrentPosition - 1,
+	// fCurrentPosition + 2);
+	// if (urlString.equalsIgnoreCase("ftp")) {
+	// fCurrentPosition += 2;
+	// fCurrentCharacter = fSource[fCurrentPosition++];
+	//
+	// if (fCurrentCharacter == ':' && fSource[fCurrentPosition++] == '/' &&
+	// fSource[fCurrentPosition++] == '/') {
+	// createContentToken(fWhiteStart, fWhiteStartPosition, 6);
+	// fWhiteStart = false;
+	// foundUrl = true;
+	// while (Encoder.isUrlIdentifierPart(fSource[fCurrentPosition++])) {
+	// }
+	// }
+	// }
+	// } catch (IndexOutOfBoundsException e) {
+	// if (!foundUrl) {
+	// // rollback work :-)
+	// fCurrentPosition = urlStartPosition;
+	// }
+	// }
+	// if (foundUrl) {
+	// String urlString = new String(fSource, urlStartPosition - 1,
+	// fCurrentPosition - urlStartPosition);
+	// fCurrentPosition--;
+	// fWikiModel.appendExternalLink(urlString, urlString, true);
+	// return true;
+	// }
+	// return false;
+	// }
 
-				if (fCurrentCharacter == ':' && fSource[fCurrentPosition++] == '/' && fSource[fCurrentPosition++] == '/') {
-					createContentToken(fWhiteStart, fWhiteStartPosition, 6);
-					fWhiteStart = false;
-					foundUrl = true;
-					while (Encoder.isUrlIdentifierPart(fSource[fCurrentPosition++])) {
-					}
-				}
-			}
-		} catch (IndexOutOfBoundsException e) {
-			if (!foundUrl) {
-				// rollback work :-)
-				fCurrentPosition = urlStartPosition;
-			}
-		}
-		if (foundUrl) {
-			String urlString = new String(fSource, urlStartPosition - 1, fCurrentPosition - urlStartPosition);
-			fCurrentPosition--;
-			fWikiModel.appendExternalLink(urlString, urlString, true);
-			return true;
-		}
-		return false;
-	}
-
-	private boolean parseHTTPLinks() {
-		int urlStartPosition = fCurrentPosition;
-		boolean foundUrl = false;
-		try {
-			int diff = 7;
-			String urlString = fStringSource.substring(fCurrentPosition - 1, fCurrentPosition + 3);
-			if (urlString.equalsIgnoreCase("http")) {
-				fCurrentPosition += 3;
-				fCurrentCharacter = fSource[fCurrentPosition++];
-				if (fCurrentCharacter == 's') { // optional
-					fCurrentCharacter = fSource[fCurrentPosition++];
-					diff++;
-				}
-
-				if (fCurrentCharacter == ':' && fSource[fCurrentPosition++] == '/' && fSource[fCurrentPosition++] == '/') {
-					createContentToken(fWhiteStart, fWhiteStartPosition, diff);
-					fWhiteStart = false;
-					foundUrl = true;
-					while (Encoder.isUrlIdentifierPart(fSource[fCurrentPosition++])) {
-					}
-				}
-			}
-		} catch (IndexOutOfBoundsException e) {
-			if (!foundUrl) {
-				// rollback work :-)
-				fCurrentPosition = urlStartPosition;
-			}
-		}
-		if (foundUrl) {
-			String urlString = new String(fSource, urlStartPosition - 1, fCurrentPosition - urlStartPosition);
-			fCurrentPosition--;
-			fWikiModel.appendExternalLink(urlString, urlString, true);
-			return true;
-		}
-		return false;
-	}
+	// private boolean parseHTTPLinks() {
+	// int urlStartPosition = fCurrentPosition;
+	// boolean foundUrl = false;
+	// try {
+	// int diff = 7;
+	// String urlString = fStringSource.substring(fCurrentPosition - 1,
+	// fCurrentPosition + 3);
+	// if (urlString.equalsIgnoreCase("http")) {
+	// fCurrentPosition += 3;
+	// fCurrentCharacter = fSource[fCurrentPosition++];
+	// if (fCurrentCharacter == 's') { // optional
+	// fCurrentCharacter = fSource[fCurrentPosition++];
+	// diff++;
+	// }
+	//
+	// if (fCurrentCharacter == ':' && fSource[fCurrentPosition++] == '/' &&
+	// fSource[fCurrentPosition++] == '/') {
+	// createContentToken(fWhiteStart, fWhiteStartPosition, diff);
+	// fWhiteStart = false;
+	// foundUrl = true;
+	// while (Encoder.isUrlIdentifierPart(fSource[fCurrentPosition++])) {
+	// }
+	// }
+	// }
+	// } catch (IndexOutOfBoundsException e) {
+	// if (!foundUrl) {
+	// // rollback work :-)
+	// fCurrentPosition = urlStartPosition;
+	// }
+	// }
+	// if (foundUrl) {
+	// String urlString = new String(fSource, urlStartPosition - 1,
+	// fCurrentPosition - urlStartPosition);
+	// fCurrentPosition--;
+	// fWikiModel.appendExternalLink(urlString, urlString, true);
+	// return true;
+	// }
+	// return false;
+	// }
 
 	private boolean parseMailtoLinks() {
 		int urlStartPosition = fCurrentPosition;
@@ -620,6 +618,61 @@ public class WikipediaParser extends AbstractParser implements IParser {
 				fCurrentPosition = tempPosition;
 				fCurrentPosition--;
 				fWikiModel.appendMailtoLink(urlString, urlString, true);
+				return true;
+			}
+
+		}
+		// rollback work :-)
+		fCurrentPosition = urlStartPosition;
+		return false;
+	}
+
+	/**
+	 * See <a href="http://en.wikipedia.org/wiki/URI_scheme">URI scheme</a>
+	 * 
+	 * @return <code>true</code> if a registered URI scheme was found in the wiki
+	 *         models configuration..
+	 */
+	private boolean parseURIScheme() {
+		if (fCurrentCharacter == 'm' || fCurrentCharacter == 'M') {
+			// mailto ?
+			if (parseMailtoLinks()) {
+				return true;
+			}
+		}
+		int urlStartPosition = fCurrentPosition;
+		int tempPosition = fCurrentPosition;
+		String uriSchemeName = "";
+		int index = -1;
+		boolean foundUrl = false;
+		try {
+			index = fStringSource.indexOf(':', fCurrentPosition);
+			if (index > 0) {
+				uriSchemeName = fStringSource.substring(fCurrentPosition - 1, index).toLowerCase();
+
+				if (fWikiModel.isValidUriScheme(uriSchemeName)) {
+					// found something like "ftp", "http", "https"
+					tempPosition += uriSchemeName.length() + 1;
+					fCurrentCharacter = fSource[tempPosition++];
+
+					createContentToken(fWhiteStart, fWhiteStartPosition, 1);
+					fWhiteStart = false;
+					foundUrl = true;
+					while (Encoder.isUrlIdentifierPart(fSource[tempPosition++])) {
+					}
+
+				}
+			}
+		} catch (IndexOutOfBoundsException e) {
+		}
+		if (foundUrl) {
+			String restString = fStringSource.substring(urlStartPosition - 1, tempPosition - 1);
+			String uriSchemeSpecificPart = fStringSource.substring(index + 1, tempPosition - 1);
+			if (fWikiModel.isValidUriSchemeSpecificPart(uriSchemeName, uriSchemeSpecificPart)) {
+				fWhiteStart = false;
+				fCurrentPosition = tempPosition;
+				fCurrentPosition--;
+				fWikiModel.appendExternalLink(uriSchemeName, restString, restString, true);
 				return true;
 			}
 
@@ -1106,23 +1159,30 @@ public class WikipediaParser extends AbstractParser implements IParser {
 
 	private boolean handleHTTPLink(String name) {
 		String urlString;
+		String uriSchemeName = "";
 		if (name != null) {
 			boolean isEmail = false;
 			urlString = name.trim();
-			String email;
-			String lowerCaseName = urlString.toLowerCase();
-			boolean prefixCheck = lowerCaseName.startsWith("http://");
-			if (!prefixCheck) {
-				prefixCheck = lowerCaseName.startsWith("https://");
+
+			int index = -1;
+			boolean foundUrl = false;
+			try {
+				index = urlString.indexOf(':', 1);
+				if (index > 0) {
+					uriSchemeName = urlString.substring(0, index).toLowerCase();
+					if (uriSchemeName.equals("mailto")) {
+						isEmail = true;
+						foundUrl = true;
+					} else {
+						if (fWikiModel.isValidUriScheme(uriSchemeName)) {
+							foundUrl = true;
+						}
+					}
+				}
+			} catch (IndexOutOfBoundsException e) {
 			}
-			if (!prefixCheck) {
-				prefixCheck = lowerCaseName.startsWith("ftp://");
-			}
-			if (!prefixCheck) {
-				prefixCheck = lowerCaseName.startsWith("mailto:");
-				isEmail = true;
-			}
-			if (prefixCheck) {
+
+			if (foundUrl) {
 				// Wikipedia link style: name separated by space?
 				int pipeIndex = urlString.indexOf(' ');
 				String alias = "";
@@ -1134,6 +1194,7 @@ public class WikipediaParser extends AbstractParser implements IParser {
 				}
 
 				if (isEmail) {
+					String email;
 					if (pipeIndex > 7) {
 						email = urlString.substring(7, pipeIndex);
 					} else {
@@ -1144,8 +1205,12 @@ public class WikipediaParser extends AbstractParser implements IParser {
 						return true;
 					}
 				} else {
-					fWikiModel.appendExternalLink(urlString, alias, false);
-					return true;
+					parseURIScheme();
+					String uriSchemeSpecificPart = urlString.substring(index + 1);
+					if (fWikiModel.isValidUriSchemeSpecificPart(uriSchemeName, uriSchemeSpecificPart)) {
+						fWikiModel.appendExternalLink(uriSchemeName, urlString, alias, false);
+						return true;
+					}
 				}
 
 			}

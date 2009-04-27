@@ -46,7 +46,9 @@ import info.bliki.wiki.template.UCFirst;
 import info.bliki.wiki.template.URLEncode;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 import java.util.regex.Pattern;
 
 /**
@@ -370,11 +372,20 @@ public class Configuration implements IConfiguration {
 	 */
 	protected static final HashMap<String, ITemplateFunction> TEMPLATE_FUNCTION_MAP = new HashMap<String, ITemplateFunction>();;
 
+	/**
+	 * Allowed URI schemes
+	 */
+	protected static final HashSet<String> URI_SCHEME_MAP = new HashSet<String>();
+
 	public final static Pattern NOWIKI_OPEN_PATTERN = Pattern.compile("\\<nowiki\\>", Pattern.CASE_INSENSITIVE);
 
 	public final static Pattern NOWIKI_CLOSE_PATTERN = Pattern.compile("\\<\\/nowiki\\>", Pattern.CASE_INSENSITIVE);
 
 	static {
+		URI_SCHEME_MAP.add("http");
+		URI_SCHEME_MAP.add("https");
+		URI_SCHEME_MAP.add("ftp");
+
 		for (int i = 0; i < INTERWIKI_STRINGS.length; i += 2) {
 			INTERWIKI_MAP.put(INTERWIKI_STRINGS[i], INTERWIKI_STRINGS[i + 1]);
 		}
@@ -490,6 +501,39 @@ public class Configuration implements IConfiguration {
 
 	public String addInterwikiLink(String key, String value) {
 		return INTERWIKI_MAP.put(key, value);
+	}
+
+	/**
+	 * Get the set of all allowed URI scheme shortcuts like http, https, ftp,...
+	 * 
+	 * See <a href="http://en.wikipedia.org/wiki/URI_scheme">URI scheme</a>
+	 * 
+	 */
+	public Set<String> getUriSchemeSet() {
+		return URI_SCHEME_MAP;
+	}
+
+	/**
+	 * Add an allowed URI scheme shortcut like http, https, ftp,...
+	 * 
+	 * See <a href="http://en.wikipedia.org/wiki/URI_scheme">URI scheme</a>
+	 * 
+	 * @return <code>true</code> if the set did not already contain the specified
+	 *         URI key.
+	 */
+	public boolean addUriScheme(String uriKey) {
+		return URI_SCHEME_MAP.add(uriKey);
+	}
+
+	/**
+	 * Check if the URI scheme is allowed.
+	 * 
+	 * See <a href="http://en.wikipedia.org/wiki/URI_scheme">URI scheme</a>
+	 * 
+	 * @return <code>true</code> if the set contains the specified URI key.
+	 */
+	public boolean containsUriScheme(String uriKey) {
+		return URI_SCHEME_MAP.contains(uriKey);
 	}
 
 	public Map<String, ITemplateFunction> getTemplateMap() {

@@ -32,6 +32,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.ResourceBundle;
+import java.util.Set;
 
 /**
  * Standard model implementation for the Wikipedia syntax
@@ -105,7 +106,7 @@ public abstract class AbstractWikiModel implements IWikiModel, IContext {
 	 * the general renderer map for all templates in that group. Sometimes though
 	 * you want to override the group's renderers.
 	 */
-	protected Map<Class,Object> attributeRenderers;
+	protected Map<Class, Object> attributeRenderers;
 
 	public AbstractWikiModel() {
 		this(Configuration.DEFAULT_CONFIGURATION);
@@ -237,9 +238,49 @@ public abstract class AbstractWikiModel implements IWikiModel, IContext {
 		// imgTagNode.addAttribute("rel", "nofollow", true);
 	}
 
+	/**
+	 * Append an external link (starting with http, https, ftp,...) as described
+	 * in <a href="http://en.wikipedia.org/wiki/Help:Link#External_links">Help
+	 * Links</a>
+	 * 
+	 * @param link
+	 *          the external link with <code>http://, https:// or ftp://</code>
+	 *          prefix
+	 * @param linkName
+	 *          the link name which is separated from the URL by a space
+	 * @param withoutSquareBrackets
+	 *          if <code>true</code> a link with no square brackets around the
+	 *          link was parsed
+	 * @deprecated use
+	 *             {@link IWikiModel#appendExternalLink(String, String, String, boolean)}
+	 *             instead.
+	 */
 	public void appendExternalLink(String link, String linkName, boolean withoutSquareBrackets) {
-		// is it an image?
+		appendExternalLink("", link, linkName, withoutSquareBrackets);
+	}
+
+	/**
+	 * Append an external link (starting with http, https, ftp,...) as described
+	 * in <a href="http://en.wikipedia.org/wiki/Help:Link#External_links">Help
+	 * Links</a>
+	 * 
+	 * @param uriSchemeName
+	 *          the top level URI (Uniform Resource Identifier) scheme name
+	 *          (without the following colon character ":"). Example "ftp",
+	 *          "http", "https". See <a
+	 *          href="http://en.wikipedia.org/wiki/URI_scheme">URI scheme</a>
+	 * @param link
+	 *          the external link with <code>http://, https:// or ftp://</code>
+	 *          prefix
+	 * @param linkName
+	 *          the link name which is separated from the URL by a space
+	 * @param withoutSquareBrackets
+	 *          if <code>true</code> a link with no square brackets around the
+	 *          link was parsed
+	 */
+	public void appendExternalLink(String uriSchemeName, String link, String linkName, boolean withoutSquareBrackets) {
 		link = Utils.escapeXml(link, true, false, false);
+		// is the given link an image?
 		// int indx = link.lastIndexOf(".");
 		// if (indx > 0 && indx < (link.length() - 3)) {
 		// String ext = link.substring(indx + 1);
@@ -637,6 +678,10 @@ public abstract class AbstractWikiModel implements IWikiModel, IContext {
 		return fConfiguration.getInterwikiMap();
 	}
 
+	public Set<String> getUriSchemeSet() {
+		return fConfiguration.getUriSchemeSet();
+	}
+
 	public synchronized int getNextNumber() {
 		return fNextNumberCounter++;
 	}
@@ -753,6 +798,20 @@ public abstract class AbstractWikiModel implements IWikiModel, IContext {
 
 	public boolean isImageNamespace(String namespace) {
 		return namespace.equalsIgnoreCase(fImageNamespaces[0]) || namespace.equalsIgnoreCase(fImageNamespaces[1]);
+	}
+
+	public boolean isValidUriScheme(String uriScheme) {
+		return getUriSchemeSet().contains(uriScheme);
+	}
+
+	public boolean isValidUriSchemeSpecificPart(String uriScheme, String uriSchemeSpecificPart) {
+		if (uriScheme.equals("ftp") || uriScheme.equals("http") || uriScheme.equals("https")) {
+			if (uriSchemeSpecificPart.length() >= 2 && uriSchemeSpecificPart.substring(0, 2).equals("//")) {
+				return true;
+			}
+			return false;
+		}
+		return true;
 	}
 
 	public boolean isInterWiki(String namespace) {

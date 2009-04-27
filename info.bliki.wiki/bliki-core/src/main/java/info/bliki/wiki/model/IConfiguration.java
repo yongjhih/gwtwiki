@@ -5,22 +5,22 @@ import info.bliki.wiki.tags.code.SourceCodeFormatter;
 import info.bliki.wiki.template.ITemplateFunction;
 
 import java.util.Map;
-
+import java.util.Set;
 
 /**
  * Configuration interface for extensions similar to the Mediawiki <a
  * href="http://www.mediawiki.org/wiki/Manual:Tag_extensions">HTML styled tag
  * extension</a>, <a
  * href="http://www.mediawiki.org/wiki/Manual:Parser_functions">template parser
- * functions</a> and <a
- * href="http://www.mediawiki.org/wiki/Interwiki">interwiki links</a>
- *  
+ * functions</a> and <a href="http://www.mediawiki.org/wiki/Interwiki">interwiki
+ * links</a>
+ * 
  * @see info.bliki.wiki.model.Configuration
  */
 public interface IConfiguration {
 	/**
-	 * Get the <a href="http://www.mediawiki.org/wiki/Interwiki">interwiki links</a>
-	 * map for converting interwiki links into external URLs.
+	 * Get the <a href="http://www.mediawiki.org/wiki/Interwiki">interwiki
+	 * links</a> map for converting interwiki links into external URLs.
 	 * 
 	 * Example: maps the interwiki shortcut &quot;de&quot; to
 	 * &quot;http://de.wikipedia.org/wiki/${title}&quot;
@@ -47,8 +47,17 @@ public interface IConfiguration {
 	public Map<String, TagToken> getTokenMap();
 
 	/**
+	 * Get the set of all allowed URI scheme shortcuts like http, https, ftp,...
+	 * 
+	 * See <a href="http://en.wikipedia.org/wiki/URI_scheme">URI scheme</a>
+	 * 
+	 */
+	public Set<String> getUriSchemeSet();
+
+	/**
 	 * Add another Interwiki link to the configuration. The value string must
-	 * contain the <code>${title}</code> placeholder for the used wiki article link.
+	 * contain the <code>${title}</code> placeholder for the used wiki article
+	 * link.
 	 * 
 	 * @param key
 	 *          the prefix used in the interwiki link (i.e. [[prefix:...]] )
@@ -60,8 +69,8 @@ public interface IConfiguration {
 	public String addInterwikiLink(String key, String value);
 
 	/**
-	 * Add a new <a href="http://www.mediawiki.org/wiki/Interwiki">interwiki link</a>
-	 * to the configuration
+	 * Add a new <a href="http://www.mediawiki.org/wiki/Interwiki">interwiki
+	 * link</a> to the configuration
 	 * 
 	 * @param key
 	 * @param value
@@ -71,8 +80,8 @@ public interface IConfiguration {
 
 	/**
 	 * Add a new <a
-	 * href="http://www.mediawiki.org/wiki/Manual:Tag_extensions">HTML styled tag</a>
-	 * to the configuration
+	 * href="http://www.mediawiki.org/wiki/Manual:Tag_extensions">HTML styled
+	 * tag</a> to the configuration
 	 * 
 	 * @param key
 	 * @param value
