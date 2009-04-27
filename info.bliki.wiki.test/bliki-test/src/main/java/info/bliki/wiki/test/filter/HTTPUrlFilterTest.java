@@ -98,4 +98,17 @@ public class HTTPUrlFilterTest extends FilterTestSupport {
 						.render("[http://en.wikipedia.org/w/index.php?title=Template%3AMilwaukee+Brewers+roster+navbox&action=edit <span style=\"color:#002bb8;;background:#0a2351; color:#c9b074;;border:none;;\" title=\"You can edit this template. Please use the preview button before saving.\">e</span>]"));
 	}
 
+	public void testUrlTEL01() {
+		assertEquals(
+				"\n" + 
+				"<p>call <a class=\"telephonelink\" href=\"tel:+0815-4711\" title=\"tel:+0815-4711\">tel:+0815-4711</a></p>",
+				wikiModel.render("call tel:+0815-4711"));
+	}
+	
+	public void testUrlTEL02() {
+		assertEquals(
+				"\n" + 
+				"<p>call <a class=\"telephonelink\" href=\"tel:+0815-4711\" title=\"tel:+0815-4711\">a phone number</a></p>",
+				wikiModel.render("call [tel:+0815-4711 a phone number]"));
+	}
 }
