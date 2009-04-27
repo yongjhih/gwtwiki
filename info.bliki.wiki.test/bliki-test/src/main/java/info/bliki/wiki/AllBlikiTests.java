@@ -1,6 +1,5 @@
 package info.bliki.wiki;
 
-import info.bliki.api.query.test.QueryTest;
 import info.bliki.html.test.AllHTMLTests;
 import info.bliki.wiki.template.TemplateFunctionsTest;
 import info.bliki.wiki.template.expr.EvalDoubleTestCase;
@@ -23,7 +22,6 @@ public class AllBlikiTests extends TestCase {
 		s.addTest(AllHTMLTests.suite());
 //		s.addTestSuite(WikiStringBuilderTest.class);
 		s.addTest(EvalDoubleTestCase.suite());
-		s.addTestSuite(QueryTest.class);
 		return s;
 	}
 

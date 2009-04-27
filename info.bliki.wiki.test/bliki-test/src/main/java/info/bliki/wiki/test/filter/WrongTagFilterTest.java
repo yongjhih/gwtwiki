@@ -10,7 +10,7 @@ public class WrongTagFilterTest extends FilterTestSupport {
 
   public static Test suite() {
     return new TestSuite(WrongTagFilterTest.class);
-  }
+  } 
   
 //   public void testWrongTag0() {
 //    assertEquals("<p>[[Dülmener Wildpferde im Merfelder Bruch]]\n" + 
