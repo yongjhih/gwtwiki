@@ -546,7 +546,8 @@ public class TemplateParser extends AbstractParser {
 	 * @throws IOException
 	 */
 	private boolean parseTemplateParameter(Appendable writer, int startTemplatePosition, int templateEndPosition) throws IOException {
-		String plainContent = new String(fSource, startTemplatePosition - 2, templateEndPosition - startTemplatePosition + 2);
+		String plainContent = fStringSource.substring(startTemplatePosition - 2, templateEndPosition);
+
 		if (plainContent != null) {
 			fCurrentPosition = templateEndPosition;
 			WikipediaScanner scanner = new WikipediaScanner(plainContent);
@@ -689,8 +690,7 @@ public class TemplateParser extends AbstractParser {
 					ch = fSource[currOffset++];
 					if (ch == ':') {
 						fCurrentPosition = currOffset;
-						return new String(fSource, functionStart, currOffset - functionStart - 1);
-						// break;
+						return fStringSource.substring(functionStart, currOffset - 1);
 					} else if (!Character.isLetterOrDigit(ch) && ch != '$') {
 						return null;
 					}
@@ -719,8 +719,7 @@ public class TemplateParser extends AbstractParser {
 
 	protected boolean parseHTMLCommentTags(Appendable writer) throws IOException {
 		int temp = readWhitespaceUntilStartOfLine(2);
-		String htmlCommentString = new String(fSource, fCurrentPosition - 1, 4);
-		// f.substring(fCurrentPosition - 1, fCurrentPosition + 3);
+		String htmlCommentString = fStringSource.substring(fCurrentPosition - 1, fCurrentPosition+3);
 		if (htmlCommentString.equals("<!--")) {
 			if (temp >= 0) {
 				if (!fOnlyIncludeFlag) {
