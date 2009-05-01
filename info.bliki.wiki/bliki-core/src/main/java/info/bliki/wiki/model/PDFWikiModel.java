@@ -95,9 +95,7 @@ public class PDFWikiModel extends WikiModel {
 			// imageName += ".png";
 			// }
 			imageName = Encoder.encodeUrl(imageName);
-			// if (replaceColon()) {
-			// imageName = imageName.replaceAll(":", "/");
-			// }
+ 
 			if (replaceColon()) {
 				imageHref = imageHref.replace("${title}", imageNamespace + '/' + imageName);
 				imageSrc = imageSrc.replace("${image}", imageName);

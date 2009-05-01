@@ -173,7 +173,7 @@ public class APIWikiModel extends WikiModel {
 					} else {
 						imageUrl = page.getImageUrl();
 					} 
-					String urlImageName = page.getTitle().substring(imageNamespace.length() + 1).replaceAll(" ", "_");
+					String urlImageName = page.getTitle().substring(imageNamespace.length() + 1).replace(' ', '_');
 					if (imageUrl!=null) {
 						int index = imageUrl.lastIndexOf('/');
 						if (index>0) {

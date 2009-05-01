@@ -97,7 +97,6 @@ public class WikiModel extends AbstractWikiModel {
 		if (topic.length() > 0) {
 			String encodedtopic = encodeTitleToUrl(topic, true);
 			if (replaceColon()) {
-				// encodedtopic = encodedtopic.replaceAll(":", "/");
 				encodedtopic = encodedtopic.replace(':', '/');
 			}
 			hrefLink = fExternalWikiBaseURL.replace("${title}", encodedtopic);
@@ -198,7 +197,6 @@ public class WikiModel extends AbstractWikiModel {
 			}
 			imageName = Encoder.encodeUrl(imageName);
 			if (replaceColon()) {
-				// imageName = imageName.replaceAll(":", "/");
 				imageName = imageName.replace(':', '/');
 			}
 			String link = imageFormat.getLink();

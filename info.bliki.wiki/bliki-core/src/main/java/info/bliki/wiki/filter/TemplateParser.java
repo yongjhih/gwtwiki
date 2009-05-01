@@ -586,9 +586,9 @@ public class TemplateParser extends AbstractParser {
 
 		for (int i = 1; i < resultList.size(); i++) {
 			if (i == resultList.size() - 1) {
-				createSingleParameter(i, resultList.get(i).toCharArray(), map, true);
+				createSingleParameter(i, resultList.get(i), map, true);
 			} else {
-				createSingleParameter(i, resultList.get(i).toCharArray(), map, false);
+				createSingleParameter(i, resultList.get(i), map, false);
 			}
 		}
 
@@ -600,9 +600,11 @@ public class TemplateParser extends AbstractParser {
 	 * parameters map
 	 * 
 	 */
-	private static void createSingleParameter(int parameterCounter, char[] src, HashMap<String, String> map, boolean trimNewlineRight) {
+	private static void createSingleParameter(int parameterCounter, String srcString, HashMap<String, String> map,
+			boolean trimNewlineRight) {
 		int currOffset = 0;
-		int endOffset = src.length;
+		char[] src = srcString.toCharArray();
+		int endOffset = srcString.length();
 		char ch;
 		String parameter = null;
 		String value;
@@ -641,7 +643,7 @@ public class TemplateParser extends AbstractParser {
 					}
 				} else if (ch == '=') {
 					if (!equalCharParsed) {
-						parameter = new String(src, lastOffset, currOffset - lastOffset - 1).trim();
+						parameter = srcString.substring(lastOffset, currOffset - 1).trim();
 						lastOffset = currOffset;
 					}
 					equalCharParsed = true;
@@ -653,9 +655,9 @@ public class TemplateParser extends AbstractParser {
 		} finally {
 			if (currOffset > lastOffset) {
 				if (trimNewlineRight) {
-					value = Utils.trimNewlineRight(new String(src, lastOffset, currOffset - lastOffset));
+					value = Utils.trimNewlineRight(srcString.substring(lastOffset, currOffset));
 				} else {
-					value = new String(src, lastOffset, currOffset - lastOffset).trim();
+					value = srcString.substring(lastOffset, currOffset).trim();
 				}
 				map.put(Integer.toString(parameterCounter), value);
 				if (parameter != null) {
@@ -697,29 +699,13 @@ public class TemplateParser extends AbstractParser {
 				}
 				break;
 			}
-			// if (ch == '#') {
-			// functionStart = currOffset;
-			// while (currOffset < endOffset) {
-			// ch = fSource[currOffset++];
-			// if (ch == ':') {
-			// fCurrentPosition = currOffset;
-			// function = new String(fSource, functionStart, currOffset -
-			// functionStart - 1);
-			// break;
-			// }
-			// }
-			// break;
-			// } else if (Character.isWhitespace(ch)) {
-			// continue;
-			// }
-			// break;
 		}
 		return null;
 	}
 
 	protected boolean parseHTMLCommentTags(Appendable writer) throws IOException {
 		int temp = readWhitespaceUntilStartOfLine(2);
-		String htmlCommentString = fStringSource.substring(fCurrentPosition - 1, fCurrentPosition+3);
+		String htmlCommentString = fStringSource.substring(fCurrentPosition - 1, fCurrentPosition + 3);
 		if (htmlCommentString.equals("<!--")) {
 			if (temp >= 0) {
 				if (!fOnlyIncludeFlag) {

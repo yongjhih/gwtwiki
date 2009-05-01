@@ -411,7 +411,6 @@ public abstract class AbstractWikiModel implements IWikiModel, IContext {
 
 		String encodedtopic = encodeTitleToUrl(title, true);
 		if (replaceColon()) {
-			// encodedtopic = encodedtopic.replaceAll(":", "/");
 			encodedtopic = encodedtopic.replace(':', '/');
 		}
 		hrefLink = hrefLink.replace("${title}", encodedtopic);

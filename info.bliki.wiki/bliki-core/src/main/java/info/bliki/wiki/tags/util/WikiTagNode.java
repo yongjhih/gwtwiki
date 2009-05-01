@@ -3,13 +3,14 @@ package info.bliki.wiki.tags.util;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
+
 /**
- * WikiTagNode represents a generic tag. If no scanner is registered for a given tag
- * name, this is what you get. This is also the base class for all tags created
- * by the parser. 
+ * WikiTagNode represents a generic tag. If no scanner is registered for a given
+ * tag name, this is what you get. This is also the base class for all tags
+ * created by the parser.
  */
-public class WikiTagNode extends AbstractNode
-{
+public class WikiTagNode extends AbstractNode {
 	/**
 	 * 
 	 */
@@ -21,8 +22,8 @@ public class WikiTagNode extends AbstractNode
 	private final static String[] NONE = new String[0];
 
 	/**
-	 * The tag attributes. Objects of type {@link Attribute}. The first element
-	 * is the tag name, subsequent elements being either whitespace or real
+	 * The tag attributes. Objects of type {@link Attribute}. The first element is
+	 * the tag name, subsequent elements being either whitespace or real
 	 * attributes.
 	 */
 	protected List<NodeAttribute> mAttributes;
@@ -30,8 +31,7 @@ public class WikiTagNode extends AbstractNode
 	/**
 	 * Create an empty tag.
 	 */
-	public WikiTagNode()
-	{
+	public WikiTagNode() {
 		this(-1, -1, new ArrayList<NodeAttribute>());
 	}
 
@@ -39,17 +39,16 @@ public class WikiTagNode extends AbstractNode
 	 * Create a tag with the location and attributes provided
 	 * 
 	 * @param page
-	 *            The page this tag was read from.
+	 *          The page this tag was read from.
 	 * @param start
-	 *            The starting offset of this node within the page.
+	 *          The starting offset of this node within the page.
 	 * @param end
-	 *            The ending offset of this node within the page.
+	 *          The ending offset of this node within the page.
 	 * @param attributes
-	 *            The list of attributes that were parsed in this tag.
+	 *          The list of attributes that were parsed in this tag.
 	 * @see Attribute
 	 */
-	public WikiTagNode(int start, int end, ArrayList<NodeAttribute> attributes)
-	{
+	public WikiTagNode(int start, int end, ArrayList<NodeAttribute> attributes) {
 		super(start, end);
 
 		mAttributes = attributes;
@@ -70,12 +69,11 @@ public class WikiTagNode extends AbstractNode
 	 * Returns the value of an attribute.
 	 * 
 	 * @param name
-	 *            Name of attribute, case insensitive.
+	 *          Name of attribute, case insensitive.
 	 * @return The value associated with the attribute or null if it does not
 	 *         exist, or is a stand-alone or
 	 */
-	public String getAttribute(String name)
-	{
+	public String getAttribute(String name) {
 		Attribute attribute;
 		String ret;
 
@@ -89,22 +87,21 @@ public class WikiTagNode extends AbstractNode
 	}
 
 	/**
-	 * Set attribute with given key, value pair. Figures out a quote character
-	 * to use if necessary.
+	 * Set attribute with given key, value pair. Figures out a quote character to
+	 * use if necessary.
 	 * 
 	 * @param key
-	 *            The name of the attribute.
+	 *          The name of the attribute.
 	 * @param value
-	 *            The value of the attribute.
+	 *          The value of the attribute.
 	 */
-	public void setAttribute(String key, String value)
-	{
+	public void setAttribute(String key, String value) {
 		char ch;
 		boolean needed;
 		boolean singleq;
 		boolean doubleq;
-		String ref;
-		StringBuffer buffer;
+//		String ref;
+//		StringBuffer buffer;
 		char quote;
 		Attribute attribute;
 
@@ -135,23 +132,24 @@ public class WikiTagNode extends AbstractNode
 				// references
 				// convert all double quotes into &#34;
 				quote = '"';
-				ref = "&quot;"; // Translate.encode (quote);
+				//ref = "&quot;"; // Translate.encode (quote);
 				// JDK 1.4: value = value.replaceAll ("\"", ref);
-				buffer = new StringBuffer(value.length() * 5);
-				for (int i = 0; i < value.length(); i++) {
-					ch = value.charAt(i);
-					if (quote == ch)
-						buffer.append(ref);
-					else
-						buffer.append(ch);
-				}
-				value = buffer.toString();
+				value = StringUtils.replace(value, "\"", "&quot;");
+				// buffer = new StringBuffer(value.length() * 5);
+				// for (int i = 0; i < value.length(); i++) {
+				// ch = value.charAt(i);
+				// if (quote == ch)
+				// buffer.append(ref);
+				// else
+				// buffer.append(ch);
+				// }
+				// value = buffer.toString();
 			}
 		} else
 			quote = 0;
 		attribute = getAttributeEx(key);
 		if (null != attribute) { // see if we can splice it in rather than
-									// replace it
+			// replace it
 			attribute.setValue(value);
 			if (0 != quote)
 				attribute.setQuote(quote);
@@ -163,10 +161,9 @@ public class WikiTagNode extends AbstractNode
 	 * Remove the attribute with the given key, if it exists.
 	 * 
 	 * @param key
-	 *            The name of the attribute.
+	 *          The name of the attribute.
 	 */
-	public void removeAttribute(String key)
-	{
+	public void removeAttribute(String key) {
 		Attribute attribute;
 
 		attribute = getAttributeEx(key);
@@ -179,15 +176,14 @@ public class WikiTagNode extends AbstractNode
 	 * quote.
 	 * 
 	 * @param key
-	 *            The name of the attribute.
+	 *          The name of the attribute.
 	 * @param value
-	 *            The value of the attribute.
+	 *          The value of the attribute.
 	 * @param quote
-	 *            The quote character to be used around value. If zero, it is an
-	 *            unquoted value.
+	 *          The quote character to be used around value. If zero, it is an
+	 *          unquoted value.
 	 */
-	public void setAttribute(String key, String value, char quote)
-	{
+	public void setAttribute(String key, String value, char quote) {
 		setAttribute(new NodeAttribute(key, value, quote));
 	}
 
@@ -195,11 +191,10 @@ public class WikiTagNode extends AbstractNode
 	 * Returns the attribute with the given name.
 	 * 
 	 * @param name
-	 *            Name of attribute, case insensitive.
+	 *          Name of attribute, case insensitive.
 	 * @return The attribute or null if it does not exist.
 	 */
-	public NodeAttribute getAttributeEx(String name)
-	{
+	public NodeAttribute getAttributeEx(String name) {
 		List<NodeAttribute> attributes;
 		int size;
 		NodeAttribute attribute;
@@ -228,11 +223,10 @@ public class WikiTagNode extends AbstractNode
 	 * Set an attribute.
 	 * 
 	 * @param attribute
-	 *            The attribute to set.
+	 *          The attribute to set.
 	 * @see #setAttribute(Attribute)
 	 */
-	public void setAttributeEx(NodeAttribute attribute)
-	{
+	public void setAttributeEx(NodeAttribute attribute) {
 		setAttribute(attribute);
 	}
 
@@ -241,10 +235,9 @@ public class WikiTagNode extends AbstractNode
 	 * zeroth attribute (the tag name), use setTagName().
 	 * 
 	 * @param attribute
-	 *            The attribute to set.
+	 *          The attribute to set.
 	 */
-	public void setAttribute(NodeAttribute attribute)
-	{
+	public void setAttribute(NodeAttribute attribute) {
 		boolean replaced;
 		List<NodeAttribute> attributes;
 		int length;
@@ -282,8 +275,7 @@ public class WikiTagNode extends AbstractNode
 	 *         first element is the tag name, subsequent elements being either
 	 *         whitespace or real attributes.
 	 */
-	public List<NodeAttribute> getAttributesEx()
-	{
+	public List<NodeAttribute> getAttributesEx() {
 		return (mAttributes);
 	}
 
@@ -301,8 +293,7 @@ public class WikiTagNode extends AbstractNode
 	 * 
 	 * @return The tag name.
 	 */
-	public String getTagName()
-	{
+	public String getTagName() {
 		String ret;
 
 		ret = getRawTagName();
@@ -323,8 +314,7 @@ public class WikiTagNode extends AbstractNode
 	 * @return The tag name or null if this tag contains nothing or only
 	 *         whitespace.
 	 */
-	public String getRawTagName()
-	{
+	public String getRawTagName() {
 		List<NodeAttribute> attributes;
 		String ret;
 
@@ -342,10 +332,9 @@ public class WikiTagNode extends AbstractNode
 	 * the tag (the zeroth element of the attribute vector).
 	 * 
 	 * @param name
-	 *            The tag name.
+	 *          The tag name.
 	 */
-	public void setTagName(String name)
-	{
+	public void setTagName(String name) {
 		NodeAttribute attribute;
 		List<NodeAttribute> attributes;
 		Attribute zeroth;
@@ -375,8 +364,7 @@ public class WikiTagNode extends AbstractNode
 	 * @return The complete contents of the tag (within the angle brackets).
 	 */
 	@Override
-	public String getText()
-	{
+	public String getText() {
 		String ret;
 
 		ret = toHtml();
@@ -386,15 +374,14 @@ public class WikiTagNode extends AbstractNode
 	}
 
 	/**
-	 * Sets the attributes. NOTE: Values of the extended hashtable are two
-	 * element arrays of String, with the first element being the original name
-	 * (not uppercased), and the second element being the value.
+	 * Sets the attributes. NOTE: Values of the extended hashtable are two element
+	 * arrays of String, with the first element being the original name (not
+	 * uppercased), and the second element being the value.
 	 * 
 	 * @param attribs
-	 *            The attribute collection to set.
+	 *          The attribute collection to set.
 	 */
-	public void setAttributesEx(List<NodeAttribute> attribs)
-	{
+	public void setAttributesEx(List<NodeAttribute> attribs) {
 		mAttributes = attribs;
 	}
 
@@ -402,10 +389,9 @@ public class WikiTagNode extends AbstractNode
 	 * Sets the nodeBegin.
 	 * 
 	 * @param tagBegin
-	 *            The nodeBegin to set
+	 *          The nodeBegin to set
 	 */
-	public void setTagBegin(int tagBegin)
-	{
+	public void setTagBegin(int tagBegin) {
 		nodeBegin = tagBegin;
 	}
 
@@ -414,8 +400,7 @@ public class WikiTagNode extends AbstractNode
 	 * 
 	 * @return The nodeBegin value.
 	 */
-	public int getTagBegin()
-	{
+	public int getTagBegin() {
 		return (nodeBegin);
 	}
 
@@ -423,10 +408,9 @@ public class WikiTagNode extends AbstractNode
 	 * Sets the nodeEnd.
 	 * 
 	 * @param tagEnd
-	 *            The nodeEnd to set
+	 *          The nodeEnd to set
 	 */
-	public void setTagEnd(int tagEnd)
-	{
+	public void setTagEnd(int tagEnd) {
 		nodeEnd = tagEnd;
 	}
 
@@ -435,36 +419,33 @@ public class WikiTagNode extends AbstractNode
 	 * 
 	 * @return The nodeEnd value.
 	 */
-	public int getTagEnd()
-	{
+	public int getTagEnd() {
 		return (nodeEnd);
 	}
 
 	/**
 	 * Get the plain text from this node.
 	 * 
-	 * @return An empty string (tag contents do not display in a browser). If
-	 *         you want this tags HTML equivalent, use {@link #toHtml toHtml()}.
+	 * @return An empty string (tag contents do not display in a browser). If you
+	 *         want this tags HTML equivalent, use {@link #toHtml toHtml()}.
 	 */
 	@Override
-	public String toPlainTextString()
-	{
+	public String toPlainTextString() {
 		return ("");
 	}
 
 	/**
-	 * Render the tag as HTML. A call to a tag's <code>toHtml()</code> method
-	 * will render it in HTML.
+	 * Render the tag as HTML. A call to a tag's <code>toHtml()</code> method will
+	 * render it in HTML.
 	 * 
 	 * @param verbatim
-	 *            If <code>true</code> return as close to the original page
-	 *            text as possible.
+	 *          If <code>true</code> return as close to the original page text as
+	 *          possible.
 	 * @return The tag as an HTML fragment.
 	 * @see org.htmlparser.Node#toHtml()
 	 */
 	@Override
-	public String toHtml(boolean verbatim)
-	{
+	public String toHtml(boolean verbatim) {
 		int length;
 		int size;
 		List<NodeAttribute> attributes;
@@ -531,14 +512,12 @@ public class WikiTagNode extends AbstractNode
 	//        
 	// return (ret.toString ());
 	// }
-
 	/**
 	 * Is this an empty xml tag of the form &lt;tag/&gt;.
 	 * 
 	 * @return true if the last character of the last attribute is a '/'.
 	 */
-	public boolean isEmptyXmlTag()
-	{
+	public boolean isEmptyXmlTag() {
 		List<NodeAttribute> attributes;
 		int size;
 		Attribute attribute;
@@ -567,11 +546,10 @@ public class WikiTagNode extends AbstractNode
 	 * slash on the tag.
 	 * 
 	 * @param emptyXmlTag
-	 *            If true, ensures there is an ending slash in the node, i.e.
-	 *            &lt;tag/&gt;, otherwise removes it.
+	 *          If true, ensures there is an ending slash in the node, i.e.
+	 *          &lt;tag/&gt;, otherwise removes it.
 	 */
-	public void setEmptyXmlTag(boolean emptyXmlTag)
-	{
+	public void setEmptyXmlTag(boolean emptyXmlTag) {
 		List<NodeAttribute> attributes;
 		int size;
 		NodeAttribute attribute;
@@ -642,8 +620,7 @@ public class WikiTagNode extends AbstractNode
 	 * 
 	 * @return <code>true</code> if this tag is an end tag.
 	 */
-	public boolean isEndTag()
-	{
+	public boolean isEndTag() {
 		String raw;
 
 		raw = getRawTagName();
@@ -652,39 +629,36 @@ public class WikiTagNode extends AbstractNode
 	}
 
 	/**
-	 * Return the set of names handled by this tag. Since this a a generic tag,
-	 * it has no ids.
+	 * Return the set of names handled by this tag. Since this a a generic tag, it
+	 * has no ids.
 	 * 
 	 * @return The names to be matched that create tags of this type.
 	 */
-	public String[] getIds()
-	{
+	public String[] getIds() {
 		return (NONE);
 	}
 
 	/**
 	 * Return the set of tag names that cause this tag to finish. These are the
-	 * normal (non end tags) that if encountered while scanning (a composite
-	 * tag) will cause the generation of a virtual tag. Since this a a
-	 * non-composite tag, the default is no enders.
+	 * normal (non end tags) that if encountered while scanning (a composite tag)
+	 * will cause the generation of a virtual tag. Since this a a non-composite
+	 * tag, the default is no enders.
 	 * 
 	 * @return The names of following tags that stop further scanning.
 	 */
-	public String[] getEnders()
-	{
+	public String[] getEnders() {
 		return (NONE);
 	}
 
 	/**
 	 * Return the set of end tag names that cause this tag to finish. These are
 	 * the end tags that if encountered while scanning (a composite tag) will
-	 * cause the generation of a virtual tag. Since this a a non-composite tag,
-	 * it has no end tag enders.
+	 * cause the generation of a virtual tag. Since this a a non-composite tag, it
+	 * has no end tag enders.
 	 * 
 	 * @return The names of following end tags that stop further scanning.
 	 */
-	public String[] getEndTagEnders()
-	{
+	public String[] getEndTagEnders() {
 		return (NONE);
 	}
 

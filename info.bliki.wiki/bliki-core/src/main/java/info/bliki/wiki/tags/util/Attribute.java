@@ -2,17 +2,19 @@ package info.bliki.wiki.tags.util;
 
 import java.io.Serializable;
 
+import org.apache.commons.lang.StringUtils;
+
 /**
  * An attribute within a tag. Holds the name, assignment string, value and quote
  * character.
  * <p>
- * This class was made deliberately simple. Except for
- * {@link #setRawValue RawValue}, the properties are completely orthogonal,
- * that is: each property is independant of the others. This means you have
- * enough rope here to hang yourself, and it's very easy to create malformed
- * HTML. Where it's obvious, warnings and notes have been provided in the
- * setters javadocs, but it is up to you -- the programmer -- to ensure that the
- * contents of the four fields will yield valid HTML (if that's what you want).
+ * This class was made deliberately simple. Except for {@link #setRawValue
+ * RawValue}, the properties are completely orthogonal, that is: each property
+ * is independant of the others. This means you have enough rope here to hang
+ * yourself, and it's very easy to create malformed HTML. Where it's obvious,
+ * warnings and notes have been provided in the setters javadocs, but it is up
+ * to you -- the programmer -- to ensure that the contents of the four fields
+ * will yield valid HTML (if that's what you want).
  * <p>
  * Be especially mindful of quotes and assignment strings. These are handled by
  * the constructors where it's obvious, but in general, you need to set them
@@ -45,15 +47,12 @@ import java.io.Serializable;
  * Note that the assignment value and quoting need to be set separately when
  * building the attribute from scratch using the properties.
  * <p>
- * <table width="100.0%" align="Center" border="1"> <caption>Valid States for
- * Attributes.</caption>
+ * <table width="100.0%" align="Center" border="1">
+ * <caption>Valid States for Attributes.</caption>
  * <tr>
- * <th align="Center">Description</th>
- * <th align="Center">toString()</th>
- * <th align="Center">Name</th>
- * <th align="Center">Assignment</th>
- * <th align="Center">Value</th>
- * <th align="Center">Quote</th>
+ * <th align="Center">Description</th> <th align="Center">toString()</th> <th
+ * align="Center">Name</th> <th align="Center">Assignment</th> <th
+ * align="Center">Value</th> <th align="Center">Quote</th>
  * </tr>
  * <tr>
  * <td align="Center">whitespace attribute</td>
@@ -119,7 +118,8 @@ import java.io.Serializable;
  * <td align="Center">"value"</td>
  * <td align="Center"><code>"</code></td>
  * </tr>
- * </table> <br>
+ * </table>
+ * <br>
  * In words: <br>
  * If Name is null, and Assignment is null, and Quote is zero, it's whitepace
  * and Value has the whitespace text -- value <br>
@@ -154,13 +154,13 @@ import java.io.Serializable;
  * In this example, the id attribute is set for an H1 element:
  * 
  * <pre>
- * <code>
+ * &lt;code&gt;
  *  {@.html
- * <H1 id="section1">
+ * &lt;H1 id=&quot;section1&quot;&gt;
  *   This is an identified heading thanks to the id attribute
- * </H1>
+ * &lt;/H1&gt;
  * }
- * </code>
+ * &lt;/code&gt;
  * </pre>
  * 
  * By default, SGML requires that all attribute values be delimited using either
@@ -355,8 +355,8 @@ public abstract class Attribute implements Serializable {
 	/**
 	 * Set the name of this attribute. Set the part before the equals sign, or the
 	 * contents of the stand-alone attribute. <em>WARNING:</em> Setting this to
-	 * <code>null</code> can result in malformed HTML if the assignment string
-	 * is not <code>null</code>.
+	 * <code>null</code> can result in malformed HTML if the assignment string is
+	 * not <code>null</code>.
 	 * 
 	 * @param name
 	 *          The new name.
@@ -393,10 +393,10 @@ public abstract class Attribute implements Serializable {
 	}
 
 	/**
-	 * Set the assignment string of this attribute. <em>WARNING:</em> Setting
-	 * this property to other than an equals sign or <code>null</code> will
-	 * result in malformed HTML. In the case of a <code>null</code>, the
-	 * {@link  #setValue value} should also be set to <code>null</code>.
+	 * Set the assignment string of this attribute. <em>WARNING:</em> Setting this
+	 * property to other than an equals sign or <code>null</code> will result in
+	 * malformed HTML. In the case of a <code>null</code>, the {@link #setValue
+	 * value} should also be set to <code>null</code>.
 	 * 
 	 * @param assignment
 	 *          The new assignment string.
@@ -409,9 +409,9 @@ public abstract class Attribute implements Serializable {
 
 	/**
 	 * Get the value of the attribute. The part after the equals sign, or the text
-	 * if it's just a whitepace 'attribute'. <em>NOTE:</em> This does not
-	 * include any quotes that may have enclosed the value when it was read. To
-	 * get the un-stripped value use {@link  #getRawValue}.
+	 * if it's just a whitepace 'attribute'. <em>NOTE:</em> This does not include
+	 * any quotes that may have enclosed the value when it was read. To get the
+	 * un-stripped value use {@link #getRawValue}.
 	 * 
 	 * @return The value, or <code>null</code> if it's a stand-alone or empty
 	 *         attribute, or the text if it's just a whitepace 'attribute'.
@@ -436,8 +436,8 @@ public abstract class Attribute implements Serializable {
 
 	/**
 	 * Set the value of the attribute. The part after the equals sign, or the text
-	 * if it's a whitepace 'attribute'. <em>WARNING:</em> Setting this property
-	 * to a value that needs to be quoted without also setting the quote character
+	 * if it's a whitepace 'attribute'. <em>WARNING:</em> Setting this property to
+	 * a value that needs to be quoted without also setting the quote character
 	 * will result in malformed HTML.
 	 * 
 	 * @param value
@@ -476,7 +476,7 @@ public abstract class Attribute implements Serializable {
 	/**
 	 * Set the quote surrounding the value of the attribute. <em>WARNING:</em>
 	 * Setting this property to zero will result in malformed HTML if the
-	 * {@link  #getValue value} needs to be quoted (i.e. contains whitespace).
+	 * {@link #getValue value} needs to be quoted (i.e. contains whitespace).
 	 * 
 	 * @param quote
 	 *          The new quote value.
@@ -492,8 +492,8 @@ public abstract class Attribute implements Serializable {
 	 * text if it's just a whitepace 'attribute'. This includes the quotes around
 	 * the value if any.
 	 * 
-	 * @return The value, or <code>null</code> if it's a stand-alone attribute,
-	 *         or the text if it's just a whitepace 'attribute'.
+	 * @return The value, or <code>null</code> if it's a stand-alone attribute, or
+	 *         the text if it's just a whitepace 'attribute'.
 	 * @see #setRawValue
 	 */
 	public String getRawValue() {
@@ -540,8 +540,8 @@ public abstract class Attribute implements Serializable {
 	 * Set the value of the attribute and the quote character. If the value is
 	 * pure whitespace, assign it 'as is' and reset the quote character. If not,
 	 * check for leading and trailing double or single quotes, and if found use
-	 * this as the quote character and the inner contents of <code>value</code>
-	 * as the real value. Otherwise, examine the string to determine if quotes are
+	 * this as the quote character and the inner contents of <code>value</code> as
+	 * the real value. Otherwise, examine the string to determine if quotes are
 	 * needed and an appropriate quote character if so. This may involve changing
 	 * double quotes within the string to character references.
 	 * 
@@ -555,8 +555,8 @@ public abstract class Attribute implements Serializable {
 		boolean needed;
 		boolean singleq;
 		boolean doubleq;
-		String ref;
-		StringBuilder buffer;
+		// String ref;
+		// StringBuilder buffer;
 		char quote;
 
 		quote = 0;
@@ -596,17 +596,18 @@ public abstract class Attribute implements Serializable {
 						// uh-oh, we need to convert some quotes into character
 						// references, so convert all double quotes into &#34;
 						quote = '"';
-						ref = "&quot;"; // Translate.encode (quote);
+						// ref = "&quot;"; // Translate.encode (quote);
 						// JDK 1.4: value = value.replaceAll ("\"", ref);
-						buffer = new StringBuilder(value.length() * (ref.length() - 1));
-						for (int i = 0; i < value.length(); i++) {
-							ch = value.charAt(i);
-							if (quote == ch)
-								buffer.append(ref);
-							else
-								buffer.append(ch);
-						}
-						value = buffer.toString();
+						value = StringUtils.replace(value, "\"", "&quot;");
+						// buffer = new StringBuilder(value.length() * (ref.length() - 1));
+						// for (int i = 0; i < value.length(); i++) {
+						// ch = value.charAt(i);
+						// if (quote == ch)
+						// buffer.append(ref);
+						// else
+						// buffer.append(ch);
+						// }
+						// value = buffer.toString();
 					}
 				}
 			}
@@ -648,8 +649,8 @@ public abstract class Attribute implements Serializable {
 	/**
 	 * Predicate to determine if this attribute has a value.
 	 * 
-	 * @return <code>true</code> if this attribute has a value.
-	 *         <code>false</code> if it is empty or standalone.
+	 * @return <code>true</code> if this attribute has a value. <code>false</code>
+	 *         if it is empty or standalone.
 	 */
 	public boolean isValued() {
 		return (null != getValue());
