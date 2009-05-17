@@ -362,9 +362,9 @@ public class Scanner {
 				getChar();
 				if ((fCurrentChar == '+') || (fCurrentChar == '-')) {
 					getChar();
-					while (((fCurrentChar >= '0') && (fCurrentChar <= '9'))) {
-						getChar();
-					}
+				}
+				while (((fCurrentChar >= '0') && (fCurrentChar <= '9'))) {
+					getChar();
 				}
 			}
 		}
