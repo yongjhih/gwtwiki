@@ -17,9 +17,7 @@ public class HTMLCreatorTest {
 	}
 
 	public static void testWikipediaENAPI(String title) {
-		String[] listOfTitleStrings = {
-			title
-		};
+		String[] listOfTitleStrings = { title };
 		String titleURL = Encoder.encodeTitleLocalUrl(title);
 		User user = new User("", "", "http://en.wikipedia.org/w/api.php");
 		user.login();
@@ -29,6 +27,9 @@ public class HTMLCreatorTest {
 		String databaseSubdirectory = "WikiDB";
 		// the following directory must exist for image downloads
 		String imageDirectory = "c:/temp/WikiImages";
+		// the generated HTML will be stored in this file name:
+		String generatedHTMLFilename = mainDirectory + titleURL + ".html";
+
 		WikiDB db = null;
 
 		try {
@@ -38,7 +39,7 @@ public class HTMLCreatorTest {
 			creator.setHeader(HTMLConstants.HTML_HEADER1 + HTMLConstants.CSS_SCREEN_STYLE + HTMLConstants.HTML_HEADER2);
 			creator.setFooter(HTMLConstants.HTML_FOOTER);
 			wikiModel.setUp();
-			creator.renderToFile(mainDirectory + titleURL + ".html");
+			creator.renderToFile(generatedHTMLFilename);
 
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -70,15 +71,15 @@ public class HTMLCreatorTest {
 	public static void testCreator004() {
 		testWikipediaENAPI("Protein");
 	}
-	
+
 	public static void testCreator005() {
 		testWikipediaENAPI("Depeche Mode");
 	}
-	
+
 	public static void testCreator006() {
 		testWikipediaENAPI("Anarchism");
 	}
-	
+
 	public static void main(String[] args) {
 		testCreator001();
 	}
