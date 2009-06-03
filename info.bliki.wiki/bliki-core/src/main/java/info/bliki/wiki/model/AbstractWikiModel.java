@@ -409,7 +409,8 @@ public abstract class AbstractWikiModel implements IWikiModel, IContext {
 			hrefLink = "#";
 		}
 
-		String encodedtopic = encodeTitleToUrl(title, true);
+		// false -> don't convert first character to uppercase for interwiki links
+		String encodedtopic = encodeTitleToUrl(title, false);
 		if (replaceColon()) {
 			encodedtopic = encodedtopic.replace(':', '/');
 		}
