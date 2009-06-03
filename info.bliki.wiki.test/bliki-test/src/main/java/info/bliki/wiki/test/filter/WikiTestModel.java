@@ -8,8 +8,21 @@ import info.bliki.wiki.filter.WikipediaParser;
 import info.bliki.wiki.model.Configuration;
 import info.bliki.wiki.model.WikiModel;
 
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.StringWriter;
+import java.io.Writer;
 import java.util.Locale;
 import java.util.Map;
+
+import org.ccil.cowan.tagsoup.HTMLSchema;
+import org.ccil.cowan.tagsoup.Parser;
+import org.ccil.cowan.tagsoup.XMLWriter;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
+
+import com.nutrun.xhtml.validator.XhtmlValidator;
 
 //import com.nutrun.xhtml.validator.XhtmlValidator;
 
@@ -784,6 +797,7 @@ public class WikiTestModel extends WikiModel {
 	static {
 		TagNode.addAllowedAttribute("style");
 		Configuration.DEFAULT_CONFIGURATION.addUriScheme("tel");
+		Configuration.DEFAULT_CONFIGURATION.addInterwikiLink("intra", "/${title}");
 	}
 
 	public WikiTestModel(String imageBaseURL, String linkBaseURL) {
@@ -905,51 +919,51 @@ public class WikiTestModel extends WikiModel {
 	@Override
 	public String render(String rawWikiText) {
 		String xhtmlArtifact = super.render(rawWikiText);
-		// byte[] bytes;
-		// try {
-		// String xhtml = HTML_START + xhtmlArtifact + XHTML_END;
-		//
-		// bytes = xhtml.getBytes("UTF-8");
-		//
-		// InputStream in = new ByteArrayInputStream(bytes);
-		// Parser parser = new Parser();
-		// HTMLSchema schema = new HTMLSchema();
-		// parser.setProperty(Parser.schemaProperty, schema);
-		// Writer w = new StringWriter();
-		// XMLWriter x = new XMLWriter(w);
-		// x.setOutputProperty(XMLWriter.METHOD, "xml");
-		// x.setOutputProperty(XMLWriter.OMIT_XML_DECLARATION, "yes");
-		// // x.setPrefix(schema.getURI(), "");
-		//
-		// parser.setFeature(Parser.namespacesFeature, false);
-		// parser.setFeature(Parser.defaultAttributesFeature, true);
-		// parser.setContentHandler(x);
-		// InputSource is = new InputSource(in);
-		// is.setEncoding("UTF-8");
-		// parser.parse(is);
-		// XhtmlValidator validator = new XhtmlValidator();
-		// xhtml = w.toString();
-		// bytes = (XHTML_START + xhtml).getBytes("UTF-8");
-		// in = new ByteArrayInputStream(bytes);
-		// validator.isValid(in);
-		// String[] errors = validator.getErrors();
-		// if (errors.length > 0) {
-		// System.out.println(">>>>>");
-		// for (int i = 0; i < errors.length; i++) {
-		// System.out.println(errors[i]);
-		// }
-		// // junit.framework.Assert.assertEquals("", errors[0]);
-		// System.out.println(xhtml);
-		// System.out.println("<<<<<");
-		// }
-		// return xhtmlArtifact;
-		// } catch (IOException e) {
-		// e.printStackTrace();
-		// } catch (SAXException e) {
-		// e.printStackTrace();
-		// // } catch (UnsupportedEncodingException e) {
-		// // e.printStackTrace();
-		// }
+		byte[] bytes;
+		try {
+			String xhtml = HTML_START + xhtmlArtifact + XHTML_END;
+
+			bytes = xhtml.getBytes("UTF-8");
+
+			InputStream in = new ByteArrayInputStream(bytes);
+			Parser parser = new Parser();
+			HTMLSchema schema = new HTMLSchema();
+			parser.setProperty(Parser.schemaProperty, schema);
+			Writer w = new StringWriter();
+			XMLWriter x = new XMLWriter(w);
+			x.setOutputProperty(XMLWriter.METHOD, "xml");
+			x.setOutputProperty(XMLWriter.OMIT_XML_DECLARATION, "yes");
+			// x.setPrefix(schema.getURI(), "");
+
+			parser.setFeature(Parser.namespacesFeature, false);
+			parser.setFeature(Parser.defaultAttributesFeature, true);
+			parser.setContentHandler(x);
+			InputSource is = new InputSource(in);
+			is.setEncoding("UTF-8");
+			parser.parse(is);
+			XhtmlValidator validator = new XhtmlValidator();
+			xhtml = w.toString();
+			bytes = (XHTML_START + xhtml).getBytes("UTF-8");
+			in = new ByteArrayInputStream(bytes);
+			validator.isValid(in);
+			String[] errors = validator.getErrors();
+			if (errors.length > 0) {
+				System.out.println(">>>>>");
+				for (int i = 0; i < errors.length; i++) {
+					System.out.println(errors[i]);
+				}
+				// junit.framework.Assert.assertEquals("", errors[0]);
+				System.out.println(xhtml);
+				System.out.println("<<<<<");
+			}
+			return xhtmlArtifact;
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (SAXException e) {
+			e.printStackTrace();
+			// } catch (UnsupportedEncodingException e) {
+			// e.printStackTrace();
+		}
 		return xhtmlArtifact;
 	}
 

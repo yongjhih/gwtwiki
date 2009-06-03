@@ -70,7 +70,7 @@ public class WPLinkFilterTest extends FilterTestSupport {
 	}
 
 	public void testLink5() {
-		assertEquals("\n" + "<p><a href=\"http://wikitravel.org/en/Test\">wikitravel:test</a></p>", wikiModel
+		assertEquals("\n" + "<p><a href=\"http://wikitravel.org/en/test\">wikitravel:test</a></p>", wikiModel
 				.render("[[wikitravel:test]]"));
 	}
 
@@ -134,6 +134,12 @@ public class WPLinkFilterTest extends FilterTestSupport {
 				.render("[[de:Johann Wolfgang von Goethe|Goethe]]s Faust"));
 	}
 
+	public void testInterwiki2() {
+		assertEquals("\n" + 
+				"<p><a href=\"/page/directory\">Page directory</a></p>", wikiModel
+				.render("[[intra:page/directory|Page directory]]"));
+	}
+	
 	public void testSectionLink01() {
 		assertEquals("\n" + 
 				"<p><a href=\"#Section_Link\" title=\"\">A Section Link</a></p>", wikiModel
