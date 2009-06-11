@@ -6,5 +6,6 @@
 	<classpathentry kind="con" path="org.maven.ide.eclipse.MAVEN2_CLASSPATH_CONTAINER"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/info.bliki.wiki"/>
 	<classpathentry kind="lib" path="lib/tagsoup-1.2.jar"/>
+	<classpathentry kind="lib" path="lib/xhtmlvalidator-0.2.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>
