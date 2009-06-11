@@ -1,8 +1,8 @@
 package info.bliki.api.query;
 
-import info.bliki.api.User;
 import info.bliki.api.Connector;
 import info.bliki.api.UnexpectedAnswerException;
+import info.bliki.api.User;
 
 /**
  * Tests edit query.

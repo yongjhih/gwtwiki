@@ -1,8 +1,5 @@
 package info.bliki.api.query;
 
-import info.bliki.api.query.Query;
-import info.bliki.api.query.RequestBuilder;
-import junit.framework.TestCase;
 
 public class QueryTest extends BaseQueryTest {
 	public QueryTest(String name) {

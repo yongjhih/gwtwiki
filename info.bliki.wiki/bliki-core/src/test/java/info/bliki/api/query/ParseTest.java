@@ -3,7 +3,6 @@ package info.bliki.api.query;
 import info.bliki.api.Connector;
 import info.bliki.api.ParseData;
 import info.bliki.api.User;
-import junit.framework.TestCase;
 
 import org.apache.commons.lang.StringEscapeUtils;
 
