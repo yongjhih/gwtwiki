@@ -1,9 +1,7 @@
 package info.bliki.wiki.filter;
 
-import info.bliki.htmlcleaner.ContentToken;
 import info.bliki.wiki.model.Configuration;
 import info.bliki.wiki.model.IWikiModel;
-import info.bliki.wiki.tags.HTMLTag;
 import info.bliki.wiki.tags.WPTag;
 import info.bliki.wiki.tags.util.TagStack;
 
@@ -16,6 +14,9 @@ import java.util.List;
  * 
  */
 public class WPList extends WPTag {
+	public final static char DL_CHAR = ':';
+	public final static char OL_CHAR = '#';
+	public final static char UL_CHAR = '*';
 
 	private char[] fLastSequence;
 
@@ -43,7 +44,7 @@ public class WPList extends WPTag {
 	}
 
 	public WPList() {
-		super("*#");
+		super("*#:");
 		fLastSequence = null;
 		fNestedElements = null;
 		fInternalListStack = new ArrayList<InternalList>();
@@ -119,12 +120,15 @@ public class WPList extends WPTag {
 					InternalList subList = (InternalList) element;
 					beginHTMLTag(buf, subList);
 					renderSubListHTML(subList, converter, buf, wikiModel);
-					if (subList.fChar == '*') {
+					if (subList.fChar == UL_CHAR) {
 						// bullet list
 						buf.append("</ul>");
-					} else {
+					} else if (subList.fChar == OL_CHAR) {
 						// numbered list
 						buf.append("</ol>");
+					} else {
+						// definition list
+						buf.append("</dl>");
 					}
 				} else {
 					TagStack stack = ((WPListElement) element).getTagStack();
@@ -140,38 +144,41 @@ public class WPList extends WPTag {
 
 	private void beginHTMLTag(Appendable buf, InternalList subList) throws IOException {
 		if (NEW_LINES) {
-			if (subList.fChar == '*') {
-				// bullet list
-				buf.append("\n<ul>");
-			} else {
-				// numbered list
-				buf.append("\n<ol>");
-			}
+			buf.append('\n');
+		}
+		if (subList.fChar == UL_CHAR) {
+			// bullet list
+			buf.append("<ul>");
+		} else if (subList.fChar == OL_CHAR) {
+			// numbered list
+			buf.append("<ol>");
 		} else {
-			if (subList.fChar == '*') {
-				// bullet list
-				buf.append("<ul>");
-			} else {
-				// numbered list
-				buf.append("<ol>");
-			}
+			// definition list
+			buf.append("<dl>");
 		}
 	}
 
 	private void endHTMLTag(Appendable buf, InternalList subList) throws IOException {
-		if (subList.fChar == '*') {
+		if (subList.fChar == UL_CHAR) {
 			// bullet list
 			buf.append("</ul>");
-		} else {
+		} else if (subList.fChar == OL_CHAR) {
 			// numbered list
 			buf.append("</ol>");
+		} else {
+			// definition list
+			buf.append("</dl>");
 		}
 	}
 
 	private void renderSubListHTML(InternalList list, ITextConverter converter, Appendable buf, IWikiModel wikiModel)
 			throws IOException {
 		if (list.size() > 0) {
-			buf.append("\n<li>");
+			if (list.fChar == DL_CHAR) {
+				buf.append("\n<dd>");
+			} else {
+				buf.append("\n<li>");
+			}
 		}
 
 		for (int i = 0; i < list.size(); i++) {
@@ -194,15 +201,27 @@ public class WPList extends WPTag {
 
 			if ((i < list.size() - 1) && list.get(i + 1) instanceof WPListElement) {
 				if (NEW_LINES) {
-					buf.append("</li>\n<li>");
+					if (((WPListElement) list.get(i + 1)).getSequence()[0] == DL_CHAR) {
+						buf.append("</dd>\n<dd>");
+					} else {
+						buf.append("</li>\n<li>");
+					}
 				} else {
-					buf.append("</li><li>");
+					if (((WPListElement) list.get(i + 1)).getSequence()[0] == DL_CHAR) {
+						buf.append("</dd><dd>");
+					} else {
+						buf.append("</li><li>");
+					}
 				}
 			}
 
 		}
 		if (list.size() > 0) {
-			buf.append("</li>");
+			if (list.fChar == DL_CHAR) {
+				buf.append("</dd>");
+			} else {
+				buf.append("</li>");
+			}
 		}
 	}
 
@@ -301,7 +320,7 @@ public class WPList extends WPTag {
 					}
 				}
 			}
-			
+
 			if (NEW_LINES) {
 				buf.append("\n");
 			}

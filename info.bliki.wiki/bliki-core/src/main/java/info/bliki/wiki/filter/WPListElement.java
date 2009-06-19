@@ -4,7 +4,7 @@ import info.bliki.wiki.model.IWikiModel;
 import info.bliki.wiki.tags.util.TagStack;
 
 /**
- * Entry for a wikipedia list string (i.e. '*', '#',...)
+ * Entry for a Wikipedia list string (i.e. a line which starts with '*', '#', ':', ...)
  * 
  */
 public class WPListElement {
@@ -12,15 +12,33 @@ public class WPListElement {
 
 	int fEndPos;
 
-	public static final int OL = 2;
-
-	public static final int UL = 1;
+	// public static final int DL = 3;
+	//	
+	// public static final int OL = 2;
+	//
+	// public static final int UL = 1;
 
 	final char[] fSequence;
 
 	TagStack fStack;
 
+	/**
+	 * 
+	 * @param type
+	 * @param level
+	 * @param sequence
+	 * @param start
+	 * @deprecated use WPListElement(int level, final char[] sequence, int start)
+	 *             instead
+	 */
 	public WPListElement(int type, int level, final char[] sequence, int start) {
+		this(level, sequence, start);
+		// fSequence = sequence;
+		// fStartPos = start;
+		// fStack = null;
+	}
+
+	public WPListElement(int level, final char[] sequence, int start) {
 		fSequence = sequence;
 		fStartPos = start;
 		fStack = null;
@@ -71,12 +89,16 @@ public class WPListElement {
 	// }
 
 	/**
-	 * @return Returns the sequence.
+	 * @return returns the character sequence of this list element.
 	 */
 	char[] getSequence() {
 		return fSequence;
 	}
 
+	/**
+	 * 
+	 * @return <code>null</code> or the internally created TagStack
+	 */
 	public TagStack getTagStack() {
 		return fStack;
 	}

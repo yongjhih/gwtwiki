@@ -318,39 +318,35 @@ public class WikipediaScanner {
 					}
 					ch = fSource[fScannerPosition++];
 					switch (ch) {
-					case '#':
-					case '*':
+					case WPList.DL_CHAR:
+					case WPList.OL_CHAR:
+					case WPList.UL_CHAR:
 						int count;
 
 						count = 1;
-						while (fSource[fScannerPosition] == '*' || fSource[fScannerPosition] == '#') {
+						while (fSource[fScannerPosition] == WPList.UL_CHAR || fSource[fScannerPosition] == WPList.OL_CHAR
+								|| fSource[fScannerPosition] == WPList.DL_CHAR) {
 							count++;
 							fScannerPosition++;
 						}
 
-						int type;
+						// int type;
 						char[] sequence;
 						sequence = new char[count];
 						System.arraycopy(fSource, fScannerPosition - count, sequence, 0, count);
-						// last character determines type of list
-						if (fSource[fScannerPosition - 1] == '#') {
-							type = WPListElement.OL;
-						} else {
-							type = WPListElement.UL;
-						}
 
 						int startPos;
 						while (true) {
 							ch = fSource[fScannerPosition++];
 							if (!Character.isWhitespace(ch)) {
 								startPos = fScannerPosition - 1;
-								listElement = new WPListElement(type, count, sequence, startPos);
+								listElement = new WPListElement(count, sequence, startPos);
 								break;
 							}
 							if (ch == '\n') {
 								fScannerPosition--; // to detect next row
 								startPos = fScannerPosition;
-								listElement = new WPListElement(type, count, sequence, startPos);
+								listElement = new WPListElement(count, sequence, startPos);
 								listElement.createTagStack(fSource, fWikiModel, startPos);
 								list.add(listElement);
 								listElement = null;
@@ -365,14 +361,16 @@ public class WikipediaScanner {
 						return list;
 					}
 				}
-				ch = fSource[fScannerPosition++];
+				
 				if (ch == '<') {
 					int temp = readSpecialWikiTags(fScannerPosition);
 					if (temp >= 0) {
 						fScannerPosition = temp;
 						ch = fSource[fScannerPosition++];
+						continue;
 					}
 				}
+				ch = fSource[fScannerPosition++];
 			}
 		} catch (IndexOutOfBoundsException e) {
 			fScannerPosition = fSource.length + 1;
@@ -877,8 +875,8 @@ public class WikipediaScanner {
 		int len = sourceArray.length;
 		int countSingleOpenBraces = 0;
 		int parameterPosition = startPosition;
-		int templatePosition = -1;
-		int[] result = new int[] { -1, -1 };
+		// int templatePosition = -1;
+		// int[] result = new int[] { -1, -1 };
 		try {
 			while (true) {
 				ch = sourceArray[parameterPosition++];

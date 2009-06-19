@@ -246,17 +246,18 @@ public class WikipediaParser extends AbstractParser implements IParser {
 						continue;
 					}
 					break;
-				case '*': // <ul> list
-				case '#': // <ol> list
+				case WPList.DL_CHAR: // start of <dl> list
+				case WPList.OL_CHAR: // start of <ol> list
+				case WPList.UL_CHAR: // start of <ul> list
 					if (parseLists()) {
 						continue;
 					}
 					break;
-				case ':':
-					if (parseSimpleDefinitionLists()) {
-						continue;
-					}
-					break;
+				// case ':':
+				// if (parseSimpleDefinitionLists()) {
+				// continue;
+				// }
+				// break;
 				case ';':
 					if (parseDefinitionLists()) {
 						continue;
@@ -903,32 +904,32 @@ public class WikipediaParser extends AbstractParser implements IParser {
 		return false;
 	}
 
-	private boolean parseSimpleDefinitionLists() {
-		if (isStartOfLine()) {
-			createContentToken(fWhiteStart, fWhiteStartPosition, 1);
-
-			int levelHeader = getNumberOfChar(':') + 1;
-			int startHeadPosition = fCurrentPosition;
-			if (readUntilEOL()) {
-				reduceTokenStack(Configuration.HTML_DL_OPEN);
-				String head = fStringSource.substring(startHeadPosition, fCurrentPosition);
-				for (int i = 0; i < levelHeader; i++) {
-					fWikiModel.pushNode(new DlTag());
-					fWikiModel.pushNode(new DdTag());
-				}
-
-				WikipediaParser.parseRecursive(head.trim(), fWikiModel, false, true);
-
-				for (int i = 0; i < levelHeader; i++) {
-					// fResultBuffer.append("\n</dd></dl>");
-					fWikiModel.popNode();
-					fWikiModel.popNode();
-				}
-				return true;
-			}
-		}
-		return false;
-	}
+	// private boolean parseSimpleDefinitionLists() {
+	// if (isStartOfLine()) {
+	// createContentToken(fWhiteStart, fWhiteStartPosition, 1);
+	//
+	// int levelHeader = getNumberOfChar(':') + 1;
+	// int startHeadPosition = fCurrentPosition;
+	// if (readUntilEOL()) {
+	// reduceTokenStack(Configuration.HTML_DL_OPEN);
+	// String head = fStringSource.substring(startHeadPosition, fCurrentPosition);
+	// for (int i = 0; i < levelHeader; i++) {
+	// fWikiModel.pushNode(new DlTag());
+	// fWikiModel.pushNode(new DdTag());
+	// }
+	//
+	// WikipediaParser.parseRecursive(head.trim(), fWikiModel, false, true);
+	//
+	// for (int i = 0; i < levelHeader; i++) {
+	// // fResultBuffer.append("\n</dd></dl>");
+	// fWikiModel.popNode();
+	// fWikiModel.popNode();
+	// }
+	// return true;
+	// }
+	// }
+	// return false;
+	// }
 
 	private boolean parseLists() {
 		// set scanner pointer to '\n' character:
