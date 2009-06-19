@@ -14,7 +14,9 @@ public class DefinitionListFilterTest extends FilterTestSupport {
 
 	public void testDefinitionList0() {
 		assertEquals(
-				"<dl><dd><i>There is also an <a href=\"http://www.bliki.info/wiki/Asteroid\" title=\"asteroid\">asteroid</a> <a href=\"http://www.bliki.info/wiki/9969_Braille\" title=\"9969 Braille\">9969 Braille</a></i></dd></dl>",
+				"\n" + 
+				"<dl>\n" + 
+				"<dd><i>There is also an <a href=\"http://www.bliki.info/wiki/Asteroid\" title=\"asteroid\">asteroid</a> <a href=\"http://www.bliki.info/wiki/9969_Braille\" title=\"9969 Braille\">9969 Braille</a></i></dd></dl>",
 				wikiModel.render(":''There is also an [[asteroid]] [[9969 Braille]]''"));
 	}
 
@@ -27,13 +29,24 @@ public class DefinitionListFilterTest extends FilterTestSupport {
 	}
 
 	public void testDefinitionList10() {
-		assertEquals("<dl><dd>a simple test\n" + "  x+y\n" + "  </dd></dl>\n" + "<p>test test</p>", wikiModel
+		assertEquals("\n" + 
+				"<dl>\n" + 
+				"<dd>a simple test\n" + 
+				"  x+y\n" + 
+				"  </dd></dl>\n" + 
+				"<p>test test</p>", wikiModel
 				.render(":a simple test<nowiki>\n" + "  x+y\n" + "  </nowiki>\n" + "test test"));
 	}
 
 	public void testDefinitionList11() {
-		assertEquals("<dl><dd>a simple test<span class=\"math\">ein text</span></dd></dl>\n" + "<pre>\n x+y\n" + "  \n</pre>\n"
-				+ "<p>test test</p>", wikiModel.render(":a simple test<math>ein text\n" + "  x+y\n" + "  \n" + "test test"));
+		assertEquals("\n" + 
+				"<dl>\n" + 
+				"<dd>a simple test<span class=\"math\">ein text</span></dd></dl>\n" + 
+				"<pre>\n" + 
+				" x+y\n" + 
+				"  \n" + 
+				"</pre>\n" + 
+				"<p>test test</p>", wikiModel.render(":a simple test<math>ein text\n" + "  x+y\n" + "  \n" + "test test"));
 	}
 	
 }

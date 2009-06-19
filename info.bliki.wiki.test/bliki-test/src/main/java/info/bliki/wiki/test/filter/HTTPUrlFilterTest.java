@@ -68,8 +68,13 @@ public class HTTPUrlFilterTest extends FilterTestSupport {
 		assertEquals(
 				"\n"
 						+ "<p>Note that the numbers are not automatically made clickable until they are in this format:</p>\n"
-						+ "<dl><dd><a class=\"external text\" href=\"http://www.amazon.com/exec/obidos/ASIN/1413304540\" rel=\"nofollow\" title=\"http://www.amazon.com/exec/obidos/ASIN/1413304540\">ISBN 1413304540</a></dd></dl>\n"
-						+ "<dl><dd><a class=\"external text\" href=\"http://www.amazon.com/exec/obidos/ASIN/9781413304541\" rel=\"nofollow\" title=\"http://www.amazon.com/exec/obidos/ASIN/9781413304541\">ISBN 978-1413304541</a> <b><i>or</i></b> <a class=\"external text\" href=\"http://www.amazon.com/exec/obidos/ASIN/9781413304541\" rel=\"nofollow\" title=\"http://www.amazon.com/exec/obidos/ASIN/9781413304541\">ISBN 9781413304541</a> (without the dash)</dd></dl>",
+						+ "\n"
+						+ "<dl>\n"
+						+ "<dd><a class=\"external text\" href=\"http://www.amazon.com/exec/obidos/ASIN/1413304540\" rel=\"nofollow\" title=\"http://www.amazon.com/exec/obidos/ASIN/1413304540\">ISBN 1413304540</a></dd></dl>\n"
+						+ "\n"
+						+ "\n"
+						+ "<dl>\n"
+						+ "<dd><a class=\"external text\" href=\"http://www.amazon.com/exec/obidos/ASIN/9781413304541\" rel=\"nofollow\" title=\"http://www.amazon.com/exec/obidos/ASIN/9781413304541\">ISBN 978-1413304541</a> <b><i>or</i></b> <a class=\"external text\" href=\"http://www.amazon.com/exec/obidos/ASIN/9781413304541\" rel=\"nofollow\" title=\"http://www.amazon.com/exec/obidos/ASIN/9781413304541\">ISBN 9781413304541</a> (without the dash)</dd></dl>",
 				wikiModel.render("Note that the numbers are not automatically made clickable until they are in this format:\n" + "\n"
 						+ ":ISBN 1413304540\n" + "\n" + ":ISBN 978-1413304541 \'\'\'\'\'or\'\'\'\'\' ISBN 9781413304541 (without the dash)"));
 	}
@@ -92,23 +97,21 @@ public class HTTPUrlFilterTest extends FilterTestSupport {
 
 	public void testUrlWithSpan() {
 		assertEquals(
-				"\n" + 
-				"<p><a class=\"externallink\" href=\"http://en.wikipedia.org/w/index.php?title=Template%3AMilwaukee+Brewers+roster+navbox&#38;action=edit\" rel=\"nofollow\" title=\"http://en.wikipedia.org/w/index.php?title=Template%3AMilwaukee+Brewers+roster+navbox&#38;action=edit\"><span style=\"color:#002bb8;;background:#0a2351; color:#c9b074;;border:none;;\" title=\"You can edit this template. Please use the preview button before saving.\">e</span></a></p>",
+				"\n"
+						+ "<p><a class=\"externallink\" href=\"http://en.wikipedia.org/w/index.php?title=Template%3AMilwaukee+Brewers+roster+navbox&#38;action=edit\" rel=\"nofollow\" title=\"http://en.wikipedia.org/w/index.php?title=Template%3AMilwaukee+Brewers+roster+navbox&#38;action=edit\"><span style=\"color:#002bb8;;background:#0a2351; color:#c9b074;;border:none;;\" title=\"You can edit this template. Please use the preview button before saving.\">e</span></a></p>",
 				wikiModel
 						.render("[http://en.wikipedia.org/w/index.php?title=Template%3AMilwaukee+Brewers+roster+navbox&action=edit <span style=\"color:#002bb8;;background:#0a2351; color:#c9b074;;border:none;;\" title=\"You can edit this template. Please use the preview button before saving.\">e</span>]"));
 	}
 
 	public void testUrlTEL01() {
-		assertEquals(
-				"\n" + 
-				"<p>call <a class=\"telephonelink\" href=\"tel:+0815-4711\" title=\"tel:+0815-4711\">tel:+0815-4711</a></p>",
-				wikiModel.render("call tel:+0815-4711"));
+		assertEquals("\n"
+				+ "<p>call <a class=\"telephonelink\" href=\"tel:+0815-4711\" title=\"tel:+0815-4711\">tel:+0815-4711</a></p>", wikiModel
+				.render("call tel:+0815-4711"));
 	}
-	
+
 	public void testUrlTEL02() {
-		assertEquals(
-				"\n" + 
-				"<p>call <a class=\"telephonelink\" href=\"tel:+0815-4711\" title=\"tel:+0815-4711\">a phone number</a></p>",
-				wikiModel.render("call [tel:+0815-4711 a phone number]"));
+		assertEquals("\n"
+				+ "<p>call <a class=\"telephonelink\" href=\"tel:+0815-4711\" title=\"tel:+0815-4711\">a phone number</a></p>", wikiModel
+				.render("call [tel:+0815-4711 a phone number]"));
 	}
 }

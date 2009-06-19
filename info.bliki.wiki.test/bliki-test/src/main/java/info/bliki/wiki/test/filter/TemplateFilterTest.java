@@ -298,7 +298,9 @@ public class TemplateFilterTest extends FilterTestSupport {
 
 	public void testFurther() {
 		assertEquals(
-				"<dl><dd><span class=\"boilerplate further\"><i>Further information: <a href=\"http://www.bliki.info/wiki/History_of_molecular_biology\" title=\"History of molecular biology\">History of molecular biology</a></i></span></dd></dl>",
+				"\n" + 
+				"<dl>\n" + 
+				"<dd><span class=\"boilerplate further\"><i>Further information: <a href=\"http://www.bliki.info/wiki/History_of_molecular_biology\" title=\"History of molecular biology\">History of molecular biology</a></i></span></dd></dl>",
 				wikiModel.render("{{further|[[History of molecular biology]]}}"));
 	}
 

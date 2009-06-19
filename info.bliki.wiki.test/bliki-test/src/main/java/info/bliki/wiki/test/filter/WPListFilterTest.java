@@ -23,6 +23,10 @@ public class WPListFilterTest extends FilterTestSupport {
 
 	final public static String LIST4C = "# first\n  <!-- stupid comment-->  \n";
 
+	final public static String LIST_CONTINUATION = "* ''Unordered lists'' are easy to do:\n" + 
+			"** Start every line with a star.\n" + 
+			"*: Previous item continues.";
+	
 	public WPListFilterTest(String name) {
 		super(name);
 	}
@@ -103,6 +107,22 @@ public class WPListFilterTest extends FilterTestSupport {
 		// assertEquals("", wikiModel.render("* :*"));
 	}
 	
+	public void testListContinuation01() {
+		assertEquals("\n" + 
+				"<dl>\n" + 
+				"<dd><span>simple definition</span></dd></dl>", wikiModel.render(": <span>simple definition</span>"));
+	}
+	
+	public void testListContinuation02() {
+		assertEquals("\n" + 
+				"<ul>\n" + 
+				"<li><i>Unordered lists</i> are easy to do:\n" + 
+				"<ul>\n" + 
+				"<li>Start every line with a star.</li></ul>\n" + 
+				"<dl>\n" + 
+				"<dd>Previous item continues.</dd></dl></li></ul>", wikiModel.render(LIST_CONTINUATION));
+	}
+	
 	public void testList13() {
 		assertEquals("\n" + 
 				"test 1\n" + 
@@ -114,4 +134,5 @@ public class WPListFilterTest extends FilterTestSupport {
 				"test 4\n" + 
 				"", wikiModel.render(new PlainTextConverter(), LIST3));
 	}
+
 }
