@@ -23,10 +23,9 @@ public class WPListFilterTest extends FilterTestSupport {
 
 	final public static String LIST4C = "# first\n  <!-- stupid comment-->  \n";
 
-	final public static String LIST_CONTINUATION = "* ''Unordered lists'' are easy to do:\n" + 
-			"** Start every line with a star.\n" + 
-			"*: Previous item continues.";
-	
+	final public static String LIST_CONTINUATION = "* ''Unordered lists'' are easy to do:\n" + "** Start every line with a star.\n"
+			+ "*: Previous item continues.";
+
 	public WPListFilterTest(String name) {
 		super(name);
 	}
@@ -40,29 +39,12 @@ public class WPListFilterTest extends FilterTestSupport {
 	}
 
 	public void testList0() {
-		assertEquals("\n" + 
-				"<ul>\n" + 
-				"<li>Mixed list\n" + 
-				"<ol>\n" + 
-				"<li>with numbers</li></ol>\n" + 
-				"<ul>\n" + 
-				"<li>and bullets</li></ul>\n" + 
-				"<ol>\n" + 
-				"<li>and numbers</li></ol></li>\n" + 
-				"<li>bullets again\n" + 
-				"<ul>\n" + 
-				"<li>bullet level 2\n" + 
-				"<ul>\n" + 
-				"<li>bullet level 3\n" + 
-				"<ol>\n" + 
-				"<li>Number on level 4</li></ol></li></ul></li>\n" + 
-				"<li>bullet level 2\n" + 
-				"<ol>\n" + 
-				"<li>Number on level 3</li>\n" + 
-				"<li>Number <a href=\"http://www.bliki.info/wiki/Level:1\" title=\"Level:1\">ones</a> level 3</li></ol></li></ul>\n" + 
-				"<ol>\n" + 
-				"<li>number level 2</li></ol></li>\n" + 
-				"<li>Level 1</li></ul>", wikiModel.render(LIST0));
+		assertEquals("\n" + "<ul>\n" + "<li>Mixed list\n" + "<ol>\n" + "<li>with numbers</li></ol>\n" + "<ul>\n"
+				+ "<li>and bullets</li></ul>\n" + "<ol>\n" + "<li>and numbers</li></ol></li>\n" + "<li>bullets again\n" + "<ul>\n"
+				+ "<li>bullet level 2\n" + "<ul>\n" + "<li>bullet level 3\n" + "<ol>\n"
+				+ "<li>Number on level 4</li></ol></li></ul></li>\n" + "<li>bullet level 2\n" + "<ol>\n" + "<li>Number on level 3</li>\n"
+				+ "<li>Number <a href=\"http://www.bliki.info/wiki/Level:1\" title=\"Level:1\">ones</a> level 3</li></ol></li></ul>\n"
+				+ "<ol>\n" + "<li>number level 2</li></ol></li>\n" + "<li>Level 1</li></ul>", wikiModel.render(LIST0));
 	}
 
 	public void testList1() {
@@ -106,33 +88,31 @@ public class WPListFilterTest extends FilterTestSupport {
 		// TODO solve this wrong JUnit test
 		// assertEquals("", wikiModel.render("* :*"));
 	}
-	
+
 	public void testListContinuation01() {
-		assertEquals("\n" + 
-				"<dl>\n" + 
-				"<dd><span>simple definition</span></dd></dl>", wikiModel.render(": <span>simple definition</span>"));
+		assertEquals("\n" + "<dl>\n" + "<dd><span>simple definition</span></dd></dl>", wikiModel
+				.render(": <span>simple definition</span>"));
 	}
-	
+
 	public void testListContinuation02() {
-		assertEquals("\n" + 
-				"<ul>\n" + 
-				"<li><i>Unordered lists</i> are easy to do:\n" + 
-				"<ul>\n" + 
-				"<li>Start every line with a star.</li></ul>\n" + 
-				"<dl>\n" + 
-				"<dd>Previous item continues.</dd></dl></li></ul>", wikiModel.render(LIST_CONTINUATION));
+		assertEquals("\n" + "<ul>\n" + "<li><i>Unordered lists</i> are easy to do:\n" + "<ul>\n"
+				+ "<li>Start every line with a star.</li></ul>\n" + "<dl>\n" + "<dd>Previous item continues.</dd></dl></li></ul>",
+				wikiModel.render(LIST_CONTINUATION));
 	}
-	
+
+	public void testListContinuation03() {
+		assertEquals("\n" + "<ul>\n" + "<li>item 1\n" + "<ul>\n" + "<li>item 1.1</li></ul>\n" + "<dl>\n"
+				+ "<dd>continuation I am indented just right</dd></dl></li>\n" + "<li>item 1.2</li>\n" + "<li>item 2\n" + "<dl>\n"
+				+ "<dd>continuation I am indented too much</dd></dl>\n" + "<ul>\n" + "<li>item 2.1\n" + "<ul>\n"
+				+ "<li>item 2.1.1</li></ul></li></ul>\n" + "<dl>\n" + "<dd>continuation I am indented too little</dd></dl></li></ul>",
+				wikiModel.render("* item 1\n" + "** item 1.1\n" + "*:continuation I am indented just right\n" + "*item 1.2\n" + "*item 2\n"
+						+ "*:continuation I am indented too much\n" + "**item 2.1\n" + "***item 2.1.1\n"
+						+ "*:continuation I am indented too little"));
+	}
+
 	public void testList13() {
-		assertEquals("\n" + 
-				"test 1\n" + 
-				"test 2\n" + 
-				"test 3\n" + 
-				"hello\n" + 
-				"\n" + 
-				"\n" + 
-				"test 4\n" + 
-				"", wikiModel.render(new PlainTextConverter(), LIST3));
+		assertEquals("\n" + "test 1\n" + "test 2\n" + "test 3\n" + "hello\n" + "\n" + "\n" + "test 4\n" + "", wikiModel.render(
+				new PlainTextConverter(), LIST3));
 	}
 
 }
