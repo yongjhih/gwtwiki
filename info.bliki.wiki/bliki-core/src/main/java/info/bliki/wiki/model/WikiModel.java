@@ -175,12 +175,17 @@ public class WikiModel extends AbstractWikiModel {
 	 * filename is constructed as <code>&lt;size&gt;px-&lt;image-name&gt;</code>,
 	 * otherwise it's only the <code>&lt;image-name&gt;</code>.
 	 * 
+	 * <br/><br/>See <a href="http://en.wikipedia.org/wiki/Image_markup">Image
+	 * markup</a> and see <a
+	 * href="http://www.mediawiki.org/wiki/Help:Images">Help:Images</a>
+	 * 
 	 * @param imageNamespace
 	 *          the image namespace
 	 * @param rawImageLink
 	 *          the raw image link text without the surrounding
 	 *          <code>[[...]]</code>
 	 */
+	@Override
 	public void parseInternalImageLink(String imageNamespace, String rawImageLink) {
 		if (fExternalImageBaseURL != null) {
 			String imageHref = fExternalWikiBaseURL;

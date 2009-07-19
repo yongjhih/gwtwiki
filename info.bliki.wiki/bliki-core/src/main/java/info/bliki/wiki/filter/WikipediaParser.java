@@ -246,7 +246,8 @@ public class WikipediaParser extends AbstractParser implements IParser {
 						continue;
 					}
 					break;
-				case WPList.DL_CHAR: // start of <dl> list
+				case WPList.DL_DD_CHAR: // start of <dl><dd> list
+				case WPList.DL_DT_CHAR: // start of <dl><dt> list
 				case WPList.OL_CHAR: // start of <ol> list
 				case WPList.UL_CHAR: // start of <ul> list
 					if (parseLists()) {
@@ -258,11 +259,11 @@ public class WikipediaParser extends AbstractParser implements IParser {
 				// continue;
 				// }
 				// break;
-				case ';':
-					if (parseDefinitionLists()) {
-						continue;
-					}
-					break;
+//				case ';':
+//					if (parseDefinitionLists()) {
+//						continue;
+//					}
+//					break;
 				case '-': // parse ---- as <hr>
 					if (parseHorizontalRuler()) {
 						continue;

@@ -4,19 +4,16 @@ import info.bliki.wiki.model.IWikiModel;
 import info.bliki.wiki.tags.util.TagStack;
 
 /**
- * Entry for a Wikipedia list string (i.e. a line which starts with '*', '#', ':', ...)
+ * Entry for a Wikipedia list string (i.e. a line which starts with '*', '#',
+ * ':', ';'). See <a href="http://meta.wikimedia.org/wiki/Help:List"
+ * >http://meta.wikimedia.org/wiki/Help:List</a>
  * 
+ * @see info.bliki.wiki.filter.WPList
  */
 public class WPListElement {
 	int fStartPos;
 
 	int fEndPos;
-
-	// public static final int DL = 3;
-	//	
-	// public static final int OL = 2;
-	//
-	// public static final int UL = 1;
 
 	final char[] fSequence;
 
@@ -31,6 +28,7 @@ public class WPListElement {
 	 * @deprecated use WPListElement(int level, final char[] sequence, int start)
 	 *             instead
 	 */
+	@Deprecated
 	public WPListElement(int type, int level, final char[] sequence, int start) {
 		this(level, sequence, start);
 		// fSequence = sequence;
@@ -81,13 +79,6 @@ public class WPListElement {
 		fStartPos = startPos;
 	}
 
-	// public void filter(char[] src, IWikiModel wikiModel) {
-	// if (fEndPos > fStartPos) {
-	// WikipediaParser.parseRecursive(new String(src, fStartPos, fEndPos -
-	// fStartPos), wikiModel, false, true, false);
-	// }
-	// }
-
 	/**
 	 * @return returns the character sequence of this list element.
 	 */
@@ -101,5 +92,10 @@ public class WPListElement {
 	 */
 	public TagStack getTagStack() {
 		return fStack;
+	}
+
+	@Override
+	public String toString() {
+		return fStartPos+"|"+fEndPos+"|"+String.valueOf(fSequence);
 	}
 }

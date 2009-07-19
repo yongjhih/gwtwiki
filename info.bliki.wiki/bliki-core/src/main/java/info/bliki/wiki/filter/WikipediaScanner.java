@@ -298,6 +298,10 @@ public class WikipediaScanner {
 		int startPosition;
 		try {
 			char ch;
+			char lastCh = ' ';
+			char[] sequence = null;
+			int count = 0;
+
 			if (fScannerPosition < 0) {
 				// simulate newline
 				fScannerPosition = 0;
@@ -309,6 +313,38 @@ public class WikipediaScanner {
 			list = new WPList();
 
 			while (true) {
+				if (ch == WPList.DL_DD_CHAR && lastCh == WPList.DL_DT_CHAR && sequence != null) {
+					startPosition = fScannerPosition;
+					if (listElement != null) {
+						listElement.createTagStack(fSource, fWikiModel, fScannerPosition - 1);
+						list.add(listElement);
+						listElement = null;
+					}
+					char[] ddSequence = new char[sequence.length];
+					System.arraycopy(sequence, 0, ddSequence, 0, sequence.length);
+					ddSequence[sequence.length - 1] = WPList.DL_DD_CHAR;
+					sequence = ddSequence;
+					
+					int startPos;
+					while (true) {
+						ch = fSource[fScannerPosition++];
+						if (!Character.isWhitespace(ch)) {
+							startPos = fScannerPosition - 1;
+							listElement = new WPListElement(count, sequence, startPos);
+							break;
+						}
+						if (ch == '\n') {
+							fScannerPosition--; // to detect next row
+							startPos = fScannerPosition;
+							listElement = new WPListElement(count, sequence, startPos);
+							listElement.createTagStack(fSource, fWikiModel, startPos);
+							list.add(listElement);
+							listElement = null;
+							break;
+						}
+					}
+
+				}
 				if (ch == '\n' || fScannerPosition == 0) {
 					startPosition = fScannerPosition;
 					if (listElement != null) {
@@ -318,20 +354,18 @@ public class WikipediaScanner {
 					}
 					ch = fSource[fScannerPosition++];
 					switch (ch) {
-					case WPList.DL_CHAR:
+					case WPList.DL_DD_CHAR:
+					case WPList.DL_DT_CHAR:
 					case WPList.OL_CHAR:
 					case WPList.UL_CHAR:
-						int count;
-
 						count = 1;
+						lastCh = ch;
 						while (fSource[fScannerPosition] == WPList.UL_CHAR || fSource[fScannerPosition] == WPList.OL_CHAR
-								|| fSource[fScannerPosition] == WPList.DL_CHAR) {
+								|| fSource[fScannerPosition] == WPList.DL_DD_CHAR || fSource[fScannerPosition] == WPList.DL_DT_CHAR) {
 							count++;
-							fScannerPosition++;
+							lastCh = fSource[fScannerPosition++];
 						}
 
-						// int type;
-						char[] sequence;
 						sequence = new char[count];
 						System.arraycopy(fSource, fScannerPosition - count, sequence, 0, count);
 
@@ -361,7 +395,7 @@ public class WikipediaScanner {
 						return list;
 					}
 				}
-				
+
 				if (ch == '<') {
 					int temp = readSpecialWikiTags(fScannerPosition);
 					if (temp >= 0) {

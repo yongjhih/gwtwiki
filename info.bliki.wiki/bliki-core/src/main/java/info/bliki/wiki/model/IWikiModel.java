@@ -671,7 +671,10 @@ public interface IWikiModel extends IConfiguration {
 	public void parseEvents(IEventListener listener, String rawWikiText);
 
 	/**
-	 * Append the internal wiki image link to this model
+	 * Append the internal wiki image link to this model.
+	 * <br/><br/>See <a href="http://en.wikipedia.org/wiki/Image_markup">Image
+	 * markup</a> and see <a
+	 * href="http://www.mediawiki.org/wiki/Help:Images">Help:Images</a>.
 	 * 
 	 * @param imageNamespace
 	 *          the image namespace
