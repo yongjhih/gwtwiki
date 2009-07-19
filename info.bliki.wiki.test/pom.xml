@@ -6,7 +6,7 @@
 	<artifactId>info.bliki.wiki.test</artifactId>
 	<packaging>pom</packaging>
 	<name>Bliki POM Test</name>
-	<version>3.0.12</version>
+	<version>3.0.13-SNAPSHOT</version>
 	<description>The Bliki API is a Java-based Wiki to HTML renderer
 		with MediaWiki syntax support.</description>
 	<organization>
