@@ -21,11 +21,17 @@ public class DefinitionListFilterTest extends FilterTestSupport {
 	}
 
 	public void testDefinitionList1() {
-		assertEquals("<dl><dt>name</dt><dd>Definition</dd></dl>", wikiModel.render(";name:Definition"));
+		assertEquals("\n" + 
+				"<dl>\n" + 
+				"<dt>name</dt>\n" + 
+				"<dd>Definition</dd></dl>", wikiModel.render(";name:Definition"));
 	}
 
 	public void testDefinitionList2() {
-		assertEquals("<dl><dt>name</dt><dd>Definition</dd></dl>", wikiModel.render("; name : Definition"));
+		assertEquals("\n" + 
+				"<dl>\n" + 
+				"<dt>name </dt>\n" + 
+				"<dd>Definition</dd></dl>", wikiModel.render("; name : Definition"));
 	}
 
 	public void testDefinitionList10() {
@@ -49,4 +55,15 @@ public class DefinitionListFilterTest extends FilterTestSupport {
 				"<p>test test</p>", wikiModel.render(":a simple test<math>ein text\n" + "  x+y\n" + "  \n" + "test test"));
 	}
 	
+	public void testDefinitionList12() {
+		assertEquals("\n" + 
+				"<dl>\n" + 
+				"<dd>blabla\n" + 
+				"<dl>\n" + 
+				"<dd>blablabla</dd></dl></dd></dl>\n" + 
+				"<pre>\n" + 
+				"test it\n" + 
+				"\n" + 
+				"</pre>", wikiModel.render(":blabla\n::blablabla\n" + " test it\n"));
+	}
 }
