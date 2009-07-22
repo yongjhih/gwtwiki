@@ -24,7 +24,7 @@ import java.util.Map;
 
 /**
  * Wiki model implementation which uses the <code>info.bliki.api</code> package
- * for downloading templates from a defined wiki.
+ * for downloading templates ans images from a defined wiki.
  * 
  */
 public class APIWikiModel extends WikiModel {
@@ -37,6 +37,28 @@ public class APIWikiModel extends WikiModel {
 
 	private final User fUser;
 
+	/**
+	 * WikiModel which loads the templates and images through the <a
+	 * href="http://meta.wikimedia.org/w/api.php">Wikimedia API</a>
+	 * 
+	 * @param user
+	 *          a user for the <a
+	 *          href="http://meta.wikimedia.org/w/api.php">Wikimedia API</a>
+	 * @param wikiDB
+	 *          a wiki database to retrieve already downloaded topics and
+	 *          templates
+	 * @param imageBaseURL
+	 *          a url string which must contains a &quot;${image}&quot; variable
+	 *          which will be replaced by the image name, to create links to
+	 *          images.
+	 * @param linkBaseURL
+	 *          a url string which must contains a &quot;${title}&quot; variable
+	 *          which will be replaced by the topic title, to create links to
+	 *          other wiki topics.
+	 * @param imageDirectoryName
+	 *          a directory for storing dowloaded Wikipedia images. The directory
+	 *          must already exist.
+	 */
 	public APIWikiModel(User user, WikiDB wikiDB, String imageBaseURL, String linkBaseURL, String imageDirectoryName) {
 		this(user, wikiDB, Locale.ENGLISH, imageBaseURL, linkBaseURL, imageDirectoryName);
 	}
@@ -172,12 +194,12 @@ public class APIWikiModel extends WikiModel {
 						imageUrl = page.getImageThumbUrl();
 					} else {
 						imageUrl = page.getImageUrl();
-					} 
+					}
 					String urlImageName = page.getTitle().substring(imageNamespace.length() + 1).replace(' ', '_');
-					if (imageUrl!=null) {
+					if (imageUrl != null) {
 						int index = imageUrl.lastIndexOf('/');
-						if (index>0) {
-							urlImageName = imageUrl.substring(index+1);
+						if (index > 0) {
+							urlImageName = imageUrl.substring(index + 1);
 						}
 					}
 					String filename = fImageDirectoryName + urlImageName;

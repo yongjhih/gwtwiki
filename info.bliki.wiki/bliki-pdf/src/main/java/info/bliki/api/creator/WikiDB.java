@@ -4,7 +4,6 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Properties;
 
@@ -53,20 +52,22 @@ public class WikiDB {
 	 * @param directory
 	 *          the main directory name where the database subdirectory should be
 	 *          created
-	 * @param databasename
-	 *          the subdirectory name where the database files should be stored
+	 * @param databaseSubdirectoryName
+	 *          the subdirectory name where the database files should be stored.
+	 *          This directory should not exist if you would like to create a
+	 *          completely new database.
 	 * @throws Exception
 	 */
-	public WikiDB(String directory, String databasename) throws Exception {
+	public WikiDB(String directory, String databaseSubdirectoryName) throws Exception {
 		Class.forName("org.apache.derby.jdbc.EmbeddedDriver");
 		Properties properties = new Properties();
 		properties.put("user", "user1");
 		properties.put("password", "user1");
 		String jdbcUrl;
 		if (directory.charAt(directory.length() - 1) == '/') {
-			jdbcUrl = "jdbc:derby:" + directory + databasename + ";create=true;characterEncoding=utf-8";
+			jdbcUrl = "jdbc:derby:" + directory + databaseSubdirectoryName + ";create=true;characterEncoding=utf-8";
 		} else {
-			jdbcUrl = "jdbc:derby:" + directory + "/" + databasename + ";create=true;characterEncoding=utf-8";
+			jdbcUrl = "jdbc:derby:" + directory + "/" + databaseSubdirectoryName + ";create=true;characterEncoding=utf-8";
 		}
 		fConnection = DriverManager.getConnection(jdbcUrl, properties);
 		createTableIfItDoesntExist();
@@ -93,23 +94,6 @@ public class WikiDB {
 		fUpdateImage.close();
 		fConnection.close();
 	}
-
-	// private void showContentsOfTableTest() throws SQLException {
-	//
-	// Statement statement = fConnection.createStatement();
-	// ResultSet resultSet = statement.executeQuery("SELECT * FROM topic");
-	// int columnCnt = resultSet.getMetaData().getColumnCount();
-	// boolean shouldCreateTable = true;
-	// while (resultSet.next() && shouldCreateTable) {
-	// for (int i = 1; i <= columnCnt; i++) {
-	// System.out.print(resultSet.getString(i) + " ");
-	// }
-	// System.out.println();
-	// }
-	// resultSet.close();
-	// statement.close();
-	//
-	// }
 
 	/**
 	 * Select the topic data from the database
