@@ -36,6 +36,17 @@ public class WikiModel extends AbstractWikiModel {
 
 	protected String fExternalWikiBaseURL;
 
+	/**
+	 * 
+	 * @param imageBaseURL
+	 *          a url string which must contains a &quot;${image}&quot; variable
+	 *          which will be replaced by the image name, to create links to
+	 *          images.
+	 * @param linkBaseURL
+	 *          a url string which must contains a &quot;${title}&quot; variable
+	 *          which will be replaced by the topic title, to create links to
+	 *          other wiki topics.
+	 */
 	public WikiModel(String imageBaseURL, String linkBaseURL) {
 		this(Configuration.DEFAULT_CONFIGURATION, imageBaseURL, linkBaseURL);
 	}
