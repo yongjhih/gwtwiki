@@ -2,7 +2,6 @@ package info.bliki.html.jspwiki;
 
 import info.bliki.html.googlecode.ListGCTag;
 import info.bliki.html.googlecode.TableGCTag;
-import info.bliki.html.googlecode.TrGCTag;
 import info.bliki.html.wikipedia.ATag;
 import info.bliki.html.wikipedia.AbstractHTMLToWiki;
 import info.bliki.html.wikipedia.HTMLTag;
