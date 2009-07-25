@@ -6,7 +6,6 @@ import info.bliki.htmlcleaner.TagNode;
 
 import java.util.List;
 
-
 public abstract class AbstractHTMLTag implements HTMLTag {
 	boolean fconvertPlainText;
 
@@ -18,12 +17,23 @@ public abstract class AbstractHTMLTag implements HTMLTag {
 		this.fconvertPlainText = noNewLine;
 	}
 
+	public void close(TagNode node, StringBuilder resultBuffer) {
+		// do nothing by default
+	}
+
 	public void open(TagNode node, StringBuilder resultBuffer) {
+		// do nothing by default
+	}
+
+	public void emptyContent(AbstractHTMLToWiki html2WikiConverter, TagNode node, StringBuilder resultBuffer, boolean showWithoutTag) {
+		// do nothing by default
 	}
 
 	public void content(AbstractHTMLToWiki w, TagNode node, StringBuilder resultBuffer, boolean showWithoutTag) {
-		List children = node.getChildren();
-		if (children.size() != 0) {
+		List<Object> children = node.getChildren();
+		if (children.size() == 0) {
+			emptyContent(w, node, resultBuffer, showWithoutTag);
+		} else {
 			if (!showWithoutTag) {
 				open(node, resultBuffer);
 			}
@@ -47,9 +57,6 @@ public abstract class AbstractHTMLTag implements HTMLTag {
 				close(node, resultBuffer);
 			}
 		}
-	}
-
-	public void close(TagNode node, StringBuilder resultBuffer) {
 	}
 
 	public BaseToken getFirstContent(List children, String tagName) {

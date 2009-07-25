@@ -11,6 +11,12 @@ import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
 
+/**
+ * Base class for all HTML to wiki tet converters.
+ * 
+ * @see info.bliki.html.wikipedia.ToWikipedia
+ * @see info.bliki.html.googlecode.ToGoogleCode
+ */
 public class AbstractHTMLToWiki {
 	final Map<String, HTMLTag> fHashMap;
 

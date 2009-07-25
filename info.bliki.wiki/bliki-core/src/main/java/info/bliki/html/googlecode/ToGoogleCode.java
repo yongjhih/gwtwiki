@@ -11,8 +11,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Convert HTML text to Google Code wiki syntax
- *
+ * Convert HTML text to Google Code wiki syntax.
+ * 
+ * See: <a href="http://code.google.com/p/support/wiki/WikiSyntax">Google code
+ * WikiSyntax</a>
+ * 
  */
 public class ToGoogleCode extends AbstractHTMLToWiki implements IHTMLToWiki {
 	static private final Map<String, HTMLTag> TAG_MAP = new HashMap<String, HTMLTag>();
@@ -32,7 +35,7 @@ public class ToGoogleCode extends AbstractHTMLToWiki implements IHTMLToWiki {
 		TAG_MAP.put("code", new OpenCloseTag("{{{", "}}}"));
 		// TAG_MAP.put("blockquote", new OpenCloseTag("<blockquote>",
 		// "</blockquote>"));
-//		TAG_MAP.put("u", new OpenCloseTag("<u>", "</u>"));
+		// TAG_MAP.put("u", new OpenCloseTag("<u>", "</u>"));
 		TAG_MAP.put("del", new OpenCloseTag("~~", "~~"));
 		TAG_MAP.put("s", new OpenCloseTag("~~", "~~"));
 		TAG_MAP.put("sub", new OpenCloseTag(",,", ",,"));
