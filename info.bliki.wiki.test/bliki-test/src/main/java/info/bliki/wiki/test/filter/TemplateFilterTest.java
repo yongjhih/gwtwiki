@@ -114,10 +114,16 @@ public class TemplateFilterTest extends FilterTestSupport {
 						+ "<div style=\"page-break-inside:	avoid;\">\n"
 						+ "<table cellspacing=\"5\" class=\"infobox\" style=\"width: 21em; font-size: 90%; text-align: left;\">\n"
 						+ "<tr>\n"
-						+ "<th colspan=\"2\" style=\"text-align: center; font-size: 130%;\">PAGENAME</th></tr>\n"
+						+ "<th colspan=\"2\" style=\"text-align: center; font-size: 130%;\">JAMWiki</th></tr>\n"
+						+ "<tr>\n"
+						+ "<th><a href=\"http://www.bliki.info/wiki/Software_release_life_cycle\" title=\"Software release life cycle\">Latest release</a></th>\n"
+						+ "<td>0.6.5 / <a href=\"http://www.bliki.info/wiki/March_16\" title=\"March 16\">March 16</a>, <a href=\"http://www.bliki.info/wiki/2008\" title=\"2008\">2008</a></td></tr>\n"
 						+ "<tr>\n"
 						+ "<th><a href=\"http://www.bliki.info/wiki/Software_release_life_cycle\" title=\"Software release life cycle\">Preview release</a></th>\n"
 						+ "<td>0.6.5 </td></tr>\n"
+						+ "<tr>\n"
+						+ "<th><a href=\"http://www.bliki.info/wiki/Operating_system\" title=\"Operating system\">OS</a></th>\n"
+						+ "<td><a href=\"http://www.bliki.info/wiki/Cross-platform\" title=\"Cross-platform\">Cross-platform</a></td></tr>\n"
 						+ "<tr>\n"
 						+ "<th><a href=\"http://www.bliki.info/wiki/List_of_software_categories\" title=\"List of software categories\">Genre</a></th>\n"
 						+ "<td><a href=\"http://www.bliki.info/wiki/Wiki_software\" title=\"wiki software\">Wiki software</a></td></tr>\n"
@@ -135,61 +141,82 @@ public class TemplateFilterTest extends FilterTestSupport {
 						+ "|website = [http://www.jamwiki.org/ JAMWiki wiki]\n" + "}}\n"));
 	}
 
-	private final String TEST_STRING_01 = "[[Category:Interwiki templates|wikipedia]]\n" + "[[zh:Template:Wikipedia]]\n"
-			+ "&lt;/noinclude&gt;&lt;div class=&quot;sister-\n"
-			+ "wikipedia&quot;&gt;&lt;div class=&quot;sister-project&quot;&gt;&lt;div\n"
-			+ "class=&quot;noprint&quot; style=&quot;clear: right; border: solid #aaa\n"
-			+ "1px; margin: 0 0 1em 1em; font-size: 90%; background: #f9f9f9; width:\n"
-			+ "250px; padding: 4px; text-align: left; float: right;&quot;&gt;\n"
-			+ "&lt;div style=&quot;float: left;&quot;&gt;[[Image:Wikipedia-logo-\n" + "en.png|44px|none| ]]&lt;/div&gt;\n"
-			+ "&lt;div style=&quot;margin-left: 60px;&quot;&gt;{{#if:{{{lang|}}}|\n"
-			+ "{{{{{lang}}}}}&amp;nbsp;}}[[Wikipedia]] has {{#if:{{{cat|\n" + "{{{category|}}}}}}|a category|{{#if:{{{mul|{{{dab|\n"
-			+ "{{{disambiguation|}}}}}}}}}|articles|{{#if:{{{mulcat|}}}|categories|an\n" + "article}}}}}} on:\n"
-			+ "&lt;div style=&quot;margin-left: 10px;&quot;&gt;'''''{{#if:{{{cat|\n"
-			+ "{{{category|}}}}}}|[[w:{{#if:{{{lang|}}}|{{{lang}}}:}}Category:\n"
-			+ "{{ucfirst:{{{cat|{{{category}}}}}}}}|{{ucfirst:{{{1|{{{cat|\n"
-			+ "{{{category}}}}}}}}}}}]]|[[w:{{#if:{{{lang|}}}|{{{lang}}}:}}{{ucfirst:\n"
-			+ "{{#if:{{{dab|{{{disambiguation|}}}}}}|{{{dab|{{{disambiguation}}}}}}|\n"
-			+ "{{{1|{{PAGENAME}}}}}}}}}|{{ucfirst:{{{2|{{{1|{{{dab|{{{disambiguation|\n"
-			+ "{{PAGENAME}}}}}}}}}}}}}}}}]]}}''''' {{#if:{{{mul|{{{mulcat|}}}}}}|and\n"
-			+ "'''''{{#if:{{{mulcat|}}}|[[w:{{#if:{{{lang|}}}|{{{lang}}}:}}Category:\n"
-			+ "{{ucfirst:{{{mulcat}}}}}|{{ucfirst:{{{mulcatlabel|{{{mulcat}}}}}}}}]]|\n"
-			+ "[[w:{{#if:{{{lang|}}}|{{{lang}}}:}}{{ucfirst:{{{mul}}}}}|{{ucfirst:\n"
-			+ "{{{mullabel|{{{mul}}}}}}}}]]'''''}}|}}&lt;/div&gt;\n" + "&lt;/div&gt;\n" + "&lt;/div&gt;\n"
-			+ "&lt;/div&gt;&lt;/div&gt;&lt;span class=&quot;interProject&quot;&gt;[[w:\n"
-			+ "{{#if:{{{lang|}}}|{{{lang}}}:}}{{#if:{{{cat|{{{category|}}}}}}|\n"
-			+ "Category:{{ucfirst:{{{cat|{{{category}}}}}}}}|{{ucfirst:{{{dab|\n"
-			+ "{{{disambiguation|{{{1|{{PAGENAME}}}}}}}}}}}}}}}|Wikipedia {{#if:\n"
-			+ "{{{lang|}}}|&lt;sup&gt;{{{lang}}}&lt;/sup&gt;}}]]&lt;/span&gt;{{#if:\n"
-			+ "{{{mul|{{{mulcat|}}}}}}|&lt;span class=&quot;interProject&quot;&gt;[[w:\n"
-			+ "{{#if:{{{lang|}}}|{{{lang}}}:}}{{#if:{{{mulcat|}}}|Category:{{ucfirst:\n"
-			+ "{{{mulcat}}}}}|{{ucfirst:{{{mul}}}}}}}|Wikipedia {{#if:{{{lang|}}}|\n"
-			+ "&lt;sup&gt;{{{lang}}}&lt;/sup&gt;}}]]&lt;/span&gt;}}";
-
-	public void testNestedIf01() {
-		String temp = StringEscapeUtils.unescapeHtml(TEST_STRING_01);
-		assertEquals(
-				"\n"
-						+ "<p>\n"
-						+ "<a href=\"http://zh.wikipedia.org/wiki/Template:Wikipedia\">zh:Template:Wikipedia</a>\n"
-						+ "&#60;/noinclude&#62;</p>\n"
-						+ "<div class=\"sister-\n"
-						+ "wikipedia\">\n"
-						+ "<div class=\"sister-project\">\n"
-						+ "<div class=\"noprint\" style=\"clear: right; border: solid #aaa\n"
-						+ "1px; margin: 0 0 1em 1em; font-size: 90%; background: #f9f9f9; width:\n"
-						+ "250px; padding: 4px; text-align: left; float: right;\">\n"
-						+ "<div style=\"float: left;\"><div style=\"width:44px\"><a class=\"internal\" href=\"http://www.bliki.info/wiki/Image:44px-Wikipedia-logo-%0Aen.png\" ><img src=\"http://www.bliki.info/wiki/44px-Wikipedia-logo-%0Aen.png\" class=\"location-none\" width=\"44\" />\n"
-						+ "</a></div>\n"
-						+ "</div>\n"
-						+ "<div style=\"margin-left: 60px;\"><a href=\"http://www.bliki.info/wiki/Wikipedia\" title=\"Wikipedia\">Wikipedia</a> has an\n"
-						+ "<p>article on:\n"
-						+ "</p>\n"
-						+ "<div style=\"margin-left: 10px;\"><b><i><a href=\"http://en.wikipedia.org/wiki/PAGENAME\">PAGENAME</a></i></b> </div>"
-						+ "</div>" + "</div>"
-						+ "</div></div><span class=\"interProject\"><a href=\"http://en.wikipedia.org/wiki/PAGENAME\">Wikipedia</a></span>",
-				wikiModel.render(temp));
-	}
+	// private final String TEST_STRING_01 =
+	// "[[Category:Interwiki templates|wikipedia]]\n" +
+	// "[[zh:Template:Wikipedia]]\n"
+	// + "&lt;/noinclude&gt;&lt;div class=&quot;sister-\n"
+	// +
+	// "wikipedia&quot;&gt;&lt;div class=&quot;sister-project&quot;&gt;&lt;div\n"
+	// +
+	// "class=&quot;noprint&quot; style=&quot;clear: right; border: solid #aaa\n"
+	// + "1px; margin: 0 0 1em 1em; font-size: 90%; background: #f9f9f9; width:\n"
+	// + "250px; padding: 4px; text-align: left; float: right;&quot;&gt;\n"
+	// +
+	// "&lt;div style=&quot;float: left;&quot;&gt;[[Image:Wikipedia-logo-en.png|44px|none| ]]&lt;/div&gt;\n"
+	// + "&lt;div style=&quot;margin-left: 60px;&quot;&gt;{{#if:{{{lang|}}}|\n"
+	// + "{{{{{lang}}}}}&amp;nbsp;}}[[Wikipedia]] has {{#if:{{{cat|\n" +
+	// "{{{category|}}}}}}|a category|{{#if:{{{mul|{{{dab|\n"
+	// +
+	// "{{{disambiguation|}}}}}}}}}|articles|{{#if:{{{mulcat|}}}|categories|an\n"
+	// + "article}}}}}} on:\n"
+	// + "&lt;div style=&quot;margin-left: 10px;&quot;&gt;'''''{{#if:{{{cat|\n"
+	// + "{{{category|}}}}}}|[[w:{{#if:{{{lang|}}}|{{{lang}}}:}}Category:\n"
+	// + "{{ucfirst:{{{cat|{{{category}}}}}}}}|{{ucfirst:{{{1|{{{cat|\n"
+	// +
+	// "{{{category}}}}}}}}}}}]]|[[w:{{#if:{{{lang|}}}|{{{lang}}}:}}{{ucfirst:\n"
+	// + "{{#if:{{{dab|{{{disambiguation|}}}}}}|{{{dab|{{{disambiguation}}}}}}|\n"
+	// +
+	// "{{{1|{{PAGENAME}}}}}}}}}|{{ucfirst:{{{2|{{{1|{{{dab|{{{disambiguation|\n"
+	// + "{{PAGENAME}}}}}}}}}}}}}}}}]]}}''''' {{#if:{{{mul|{{{mulcat|}}}}}}|and\n"
+	// + "'''''{{#if:{{{mulcat|}}}|[[w:{{#if:{{{lang|}}}|{{{lang}}}:}}Category:\n"
+	// +
+	// "{{ucfirst:{{{mulcat}}}}}|{{ucfirst:{{{mulcatlabel|{{{mulcat}}}}}}}}]]|\n"
+	// + "[[w:{{#if:{{{lang|}}}|{{{lang}}}:}}{{ucfirst:{{{mul}}}}}|{{ucfirst:\n"
+	// + "{{{mullabel|{{{mul}}}}}}}}]]'''''}}|}}&lt;/div&gt;\n" + "&lt;/div&gt;\n"
+	// + "&lt;/div&gt;\n"
+	// +
+	// "&lt;/div&gt;&lt;/div&gt;&lt;span class=&quot;interProject&quot;&gt;[[w:\n"
+	// + "{{#if:{{{lang|}}}|{{{lang}}}:}}{{#if:{{{cat|{{{category|}}}}}}|\n"
+	// + "Category:{{ucfirst:{{{cat|{{{category}}}}}}}}|{{ucfirst:{{{dab|\n"
+	// + "{{{disambiguation|{{{1|{{PAGENAME}}}}}}}}}}}}}}}|Wikipedia {{#if:\n"
+	// + "{{{lang|}}}|&lt;sup&gt;{{{lang}}}&lt;/sup&gt;}}]]&lt;/span&gt;{{#if:\n"
+	// +
+	// "{{{mul|{{{mulcat|}}}}}}|&lt;span class=&quot;interProject&quot;&gt;[[w:\n"
+	// +
+	// "{{#if:{{{lang|}}}|{{{lang}}}:}}{{#if:{{{mulcat|}}}|Category:{{ucfirst:\n"
+	// + "{{{mulcat}}}}}|{{ucfirst:{{{mul}}}}}}}|Wikipedia {{#if:{{{lang|}}}|\n"
+	// + "&lt;sup&gt;{{{lang}}}&lt;/sup&gt;}}]]&lt;/span&gt;}}";
+	//
+	// public void testNestedIf01() {
+	// String temp = StringEscapeUtils.unescapeHtml(TEST_STRING_01);
+	// assertEquals(
+	// "\n"
+	// + "<p>\n"
+	// +
+	// "<a href=\"http://zh.wikipedia.org/wiki/Template:Wikipedia\">zh:Template:Wikipedia</a>\n"
+	// + "&#60;/noinclude&#62;</p>\n"
+	// + "<div class=\"sister-\n"
+	// + "wikipedia\">\n"
+	// + "<div class=\"sister-project\">\n"
+	// + "<div class=\"noprint\" style=\"clear: right; border: solid #aaa\n"
+	// + "1px; margin: 0 0 1em 1em; font-size: 90%; background: #f9f9f9; width:\n"
+	// + "250px; padding: 4px; text-align: left; float: right;\">\n"
+	// +
+	// "<div style=\"float: left;\"><div style=\"width:44px\"><a class=\"internal\" href=\"http://www.bliki.info/wiki/Image:44px-Wikipedia-logo-en.png\" ><img src=\"http://www.bliki.info/wiki/44px-Wikipedia-logo-en.png\" class=\"location-none\" width=\"44\" />\n"
+	// + "</a></div>\n"
+	// + "</div>\n"
+	// +
+	// "<div style=\"margin-left: 60px;\"><a href=\"http://www.bliki.info/wiki/Wikipedia\" title=\"Wikipedia\">Wikipedia</a> has an\n"
+	// + "<p>article on:\n"
+	// + "</p>\n"
+	// +
+	// "<div style=\"margin-left: 10px;\"><b><i><a href=\"http://en.wikipedia.org/wiki/PAGENAME\">PAGENAME</a></i></b> </div>"
+	// + "</div>" + "</div>"
+	// +
+	// "</div></div><span class=\"interProject\"><a href=\"http://en.wikipedia.org/wiki/PAGENAME\">Wikipedia</a></span>"
+	// ,
+	// wikiModel.render(temp));
+	// }
 
 	private final String TEST_STRING_02 = " {{#if:{{{cat|\n" + "{{{category|}}}}}}|a category|{{#if:{{{mul|{{{dab|\n"
 			+ "{{{disambiguation|}}}}}}}}}|articles|{{#if:{{{mulcat|}}}|categories|an\n" + "article}}}}}} on:\n";
@@ -245,24 +272,62 @@ public class TemplateFilterTest extends FilterTestSupport {
 
 	public void testNavbox() {
 		assertEquals(
-				"\n"
-						+ "<table cellspacing=\"0\" class=\"nowraplinks  ;;\">\n"
-						+ "\n"
-						+ "<tr>\n"
-						+ "\n"
-						+ "<th class=\"navbox-title\" colspan=\"2\" style=\";background: #EEDD82\">\n"
-						+ "\n"
-						+ "<div style=\"float:left; width:6em;text-align:left;\">\n"
-						+ "<div class=\"noprint plainlinksneverexpand\" style=\"background-color:transparent; padding:0; white-space:nowrap; font-weight:normal; font-size:xx-small; ;background: #EEDD82;border:none;;  \"><a href=\"http://www.bliki.info/wiki/Template:AcademyAwardBestActor_1981-2000\" title=\"Template:AcademyAwardBestActor 1981-2000\"><span style=\";background: #EEDD82;border:none;;\" title=\"View this template\">v</span></a>&#160;<span style=\"font-size:80%;\">•</span>&#160;<a href=\"http://www.bliki.info/wiki/Template_talk:AcademyAwardBestActor_1981-2000\" title=\"Template talk:AcademyAwardBestActor 1981-2000\"><span style=\"color:#002bb8;;background: #EEDD82;border:none;;\" title=\"Discussion about this template\">d</span></a>&#160;<span style=\"font-size:80%;\">•</span>&#160;<a class=\"externallink\" href=\"http://en.wikipedia.org/w/index.php?title=Template%3AAcademyAwardBestActor+1981-2000&#38;action=edit\" rel=\"nofollow\" title=\"http://en.wikipedia.org/w/index.php?title=Template%3AAcademyAwardBestActor+1981-2000&#38;action=edit\"><span style=\"color:#002bb8;;background: #EEDD82;border:none;;\" title=\"You can edit this template. Please use the preview button before saving.\">e</span></a></div></div><span style=\"font-size:%;\"><a href=\"http://www.bliki.info/wiki/Academy_Award_for_Best_Actor\" title=\"Academy Award for Best Actor\">Academy Award for</a> <a href=\"http://www.bliki.info/wiki/Academy_Award_for_Best_Actor#1980s\" title=\"Academy Award for Best Actor\">Best Actor</a></span>\n"
-						+ "</th>\n" + "</tr>\n" + "<tr style=\"height:2px;\">\n" + "\n" + "<td />\n" + "</tr>\n" + "<tr>\n" + "\n"
-						+ "<td class=\"navbox-list navbox-odd\" colspan=\"2\" style=\"width:100%;padding:0px;;;\">\n"
-						+ "<div style=\"padding:0em 0.25em\">\n" + "<div>\n" + "<p>{{nowrap}}{{·}}\n" + "{{nowrap}}{{·}}\n"
-						+ "{{nowrap}}{{·}}\n" + "{{nowrap}}{{·}}\n" + "{{nowrap}}{{·}}\n" + "{{nowrap}}{{·}}\n" + "{{nowrap}}{{·}}\n"
-						+ "{{nowrap}}{{·}}\n" + "{{nowrap}}{{·}}\n" + "{{nowrap}}{{·}}\n" + "{{nowrap}}{{·}}\n" + "{{nowrap}}{{·}}\n"
-						+ "{{nowrap}}{{·}}\n" + "{{nowrap}}{{·}}\n" + "{{nowrap}}{{·}}\n" + "{{nowrap}}{{·}}\n" + "{{nowrap}}{{·}}\n"
-						+ "{{nowrap}}{{·}}\n" + "{{nowrap}}{{·}}\n" + "{{nowrap}}</p><hr/>\n" + "<p>{{nowrap}}{{·}}\n" + "{{nowrap}}{{·}}\n"
-						+ "{{nowrap}}{{·}}\n" + "{{nowrap}}{{·}}\n" + "{{nowrap}}{{·}}\n" + "{{nowrap}}\n" + "</p></div></div></td>\n"
-						+ "</tr>\n" + "</table>", wikiModel.render(NAVBOX_STRING));
+				"\n" + 
+				"<table cellspacing=\"0\" class=\"navbox\" style=\";\">\n" + 
+				"\n" + 
+				"<tr>\n" + 
+				"\n" + 
+				"<td style=\"padding:2px;\">\n" + 
+				"<table cellspacing=\"0\" class=\"nowraplinks collapsible autocollapse \" style=\"width:100%;background:transparent;color:inherit;;\">\n" + 
+				"\n" + 
+				"<tr>\n" + 
+				"\n" + 
+				"<th class=\"navbox-title\" colspan=\"2\" style=\";background: #EEDD82\">\n" + 
+				"\n" + 
+				"<div style=\"float:left; width:6em;text-align:left;\">\n" + 
+				"<div class=\"noprint plainlinksneverexpand\" style=\"background-color:transparent; padding:0; white-space:nowrap; font-weight:normal; font-size:xx-small; ;background: #EEDD82;border:none;;  \"><a href=\"http://www.bliki.info/wiki/Template:AcademyAwardBestActor_1981-2000\" title=\"Template:AcademyAwardBestActor 1981-2000\"><span style=\";background: #EEDD82;border:none;;\" title=\"View this template\">v</span></a>&#160;<span style=\"font-size:80%;\">•</span>&#160;<a href=\"http://www.bliki.info/wiki/Template_talk:AcademyAwardBestActor_1981-2000\" title=\"Template talk:AcademyAwardBestActor 1981-2000\"><span style=\"color:#002bb8;;background: #EEDD82;border:none;;\" title=\"Discussion about this template\">d</span></a>&#160;<span style=\"font-size:80%;\">•</span>&#160;<a class=\"externallink\" href=\"http://en.wikipedia.org/w/index.php?title=Template%3AAcademyAwardBestActor+1981-2000&#38;action=edit\" rel=\"nofollow\" title=\"http://en.wikipedia.org/w/index.php?title=Template%3AAcademyAwardBestActor+1981-2000&#38;action=edit\"><span style=\"color:#002bb8;;background: #EEDD82;border:none;;\" title=\"You can edit this template. Please use the preview button before saving.\">e</span></a></div></div><span style=\"font-size:110%;\"><a href=\"http://www.bliki.info/wiki/Academy_Award_for_Best_Actor\" title=\"Academy Award for Best Actor\">Academy Award for</a> <a href=\"http://www.bliki.info/wiki/Academy_Award_for_Best_Actor#1980s\" title=\"Academy Award for Best Actor\">Best Actor</a></span>\n" + 
+				"</th>\n" + 
+				"</tr>\n" + 
+				"<tr style=\"height:2px;\">\n" + 
+				"\n" + 
+				"<td />\n" + 
+				"</tr>\n" + 
+				"<tr>\n" + 
+				"\n" + 
+				"<td class=\"navbox-list navbox-odd\" colspan=\"2\" style=\"width:100%;padding:0px;;;\">\n" + 
+				"<div style=\"padding:0em 0.25em\">\n" + 
+				"<div>\n" + 
+				"<p>{{nowrap}}{{·}}\n" + 
+				"{{nowrap}}{{·}}\n" + 
+				"{{nowrap}}{{·}}\n" + 
+				"{{nowrap}}{{·}}\n" + 
+				"{{nowrap}}{{·}}\n" + 
+				"{{nowrap}}{{·}}\n" + 
+				"{{nowrap}}{{·}}\n" + 
+				"{{nowrap}}{{·}}\n" + 
+				"{{nowrap}}{{·}}\n" + 
+				"{{nowrap}}{{·}}\n" + 
+				"{{nowrap}}{{·}}\n" + 
+				"{{nowrap}}{{·}}\n" + 
+				"{{nowrap}}{{·}}\n" + 
+				"{{nowrap}}{{·}}\n" + 
+				"{{nowrap}}{{·}}\n" + 
+				"{{nowrap}}{{·}}\n" + 
+				"{{nowrap}}{{·}}\n" + 
+				"{{nowrap}}{{·}}\n" + 
+				"{{nowrap}}{{·}}\n" + 
+				"{{nowrap}}</p><hr/>\n" + 
+				"<p>{{nowrap}}{{·}}\n" + 
+				"{{nowrap}}{{·}}\n" + 
+				"{{nowrap}}{{·}}\n" + 
+				"{{nowrap}}{{·}}\n" + 
+				"{{nowrap}}{{·}}\n" + 
+				"{{nowrap}}\n" + 
+				"</p></div></div></td>\n" + 
+				"</tr>\n" + 
+				"</table></td>\n" + 
+				"</tr>\n" + 
+				"</table>", wikiModel.render(NAVBOX_STRING));
 	}
 
 	public void test11() {
@@ -298,26 +363,43 @@ public class TemplateFilterTest extends FilterTestSupport {
 
 	public void testFurther() {
 		assertEquals(
-				"\n" + 
-				"<dl>\n" + 
-				"<dd><span class=\"boilerplate further\"><i>Further information: <a href=\"http://www.bliki.info/wiki/History_of_molecular_biology\" title=\"History of molecular biology\">History of molecular biology</a></i></span></dd></dl>",
+				"\n"
+						+ "<dl>\n"
+						+ "<dd><span class=\"boilerplate further\"><i>Further information: <a href=\"http://www.bliki.info/wiki/History_of_molecular_biology\" title=\"History of molecular biology\">History of molecular biology</a></i></span></dd></dl>",
 				wikiModel.render("{{further|[[History of molecular biology]]}}"));
 	}
 
 	public void testInvalidNoinclude() {
-		assertEquals("\n" + 
-				"<p>test123 start\n" + 
-				"test123 end</p>", wikiModel.render("test123 start<noinclude>\n" + "test123 end"));
+		assertEquals("\n" + "<p>test123 start\n" + "test123 end</p>", wikiModel.render("test123 start<noinclude>\n" + "test123 end"));
 	}
-	
+
 	public void testInvalidIncludeonly() {
-		assertEquals("\n" + 
-				"<p>test123 start</p>", wikiModel.render("test123 start<includeonly>\n" + "test123 end"));
+		assertEquals("\n" + "<p>test123 start</p>", wikiModel.render("test123 start<includeonly>\n" + "test123 end"));
 	}
-	
+
 	public void testInvalidOnlyinclude() {
-		assertEquals("\n" + 
-				"<p>test123 start\n" + 
-				"test123 end</p>", wikiModel.render("test123 start<onlyinclude>\n" + "test123 end"));
+		assertEquals("\n" + "<p>test123 start\n" + "test123 end</p>", wikiModel.render("test123 start<onlyinclude>\n" + "test123 end"));
+	}
+
+	public void testIf_image_test() {
+		assertEquals(
+				"\n"
+						+ "<p>test <div style=\"width:220px\"><a class=\"internal\" href=\"http://www.bliki.info/wiki/File:220px-test.jpg\" ><img src=\"http://www.bliki.info/wiki/220px-test.jpg\" class=\"location-none\" width=\"220\" />\n"
+						+ "</a></div>\n" + " test123</p>", wikiModel.render("test {{If_image_test|  image =  test.jpg}} test123"));
+	}
+
+	public void testMONTHNAME() {
+		assertEquals("\n" + "<p>test October test123</p>", wikiModel.render("test {{MONTHNAME | 10 }} test123"));
+	}
+
+	public void testMONTHNUMBER() {
+		assertEquals("\n" + "<p>test 10 test123</p>", wikiModel.render("test {{MONTHNUMBER | OctoBer }} test123"));
+	}
+
+	public void testbirth_date_and_age() {
+		assertEquals(
+				"\n"
+						+ "<p>test July 9, 1956<span style=\"display:none\"> (<span class=\"bday\">1956-07-09</span>)</span><span class=\"noprint\"> (age&#160;53)</span> test123</p>",
+				wikiModel.render("test {{birth date and age|1956|7|9}} test123"));
 	}
 }

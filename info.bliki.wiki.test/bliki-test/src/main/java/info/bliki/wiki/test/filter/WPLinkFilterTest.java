@@ -94,11 +94,16 @@ public class WPLinkFilterTest extends FilterTestSupport {
 
 	public void testLink9() {
 		assertEquals("\n" + 
-				"<p>test <a href=\"http://www.bliki.info/wiki/Lets_start%0Aa_2_rows_link\" title=\"lets start\n" + 
-				"a 2 rows link\">lets start\n" + 
-				"a 2 rows link</a> test</p>", wikiModel.render("test [[lets start\na 2 rows link]] test"));
+				"<p>test [[lets start\n" + 
+				"a 2 rows link]] test</p>", wikiModel.render("test [[lets start\na 2 rows link]] test"));
 	}
 
+	public void testLink9a() {
+		assertEquals("\n" + 
+				"<p>test <a href=\"http://www.bliki.info/wiki/Lets_start_a_2_rows_link\" title=\"lets start a 2 rows link\">lets start\n" + 
+				"a 2 rows link</a> test</p>", wikiModel.render("test [[lets start a 2 rows link|lets start\na 2 rows link]] test"));
+	}
+	
 	public void testLink10() {
 		assertEquals("\n" + 
 				"<p>test <a href=\"http://www.bliki.info/wiki/Lets_start\" title=\"lets start\">a 2 rows piped link</a> test</p>",

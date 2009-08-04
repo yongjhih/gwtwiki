@@ -38,46 +38,32 @@ public class WPListFilterTest extends FilterTestSupport {
 
 	public void testWPList01() {
 		String testString = "\n*#: a nested list\n";
-		
+
 		WikipediaScanner scanner = new WikipediaScanner(testString, 0);
 		scanner.setModel(wikiModel);
 		WPList wpList = scanner.wpList();
-		
+
 		assertEquals("*-#-:-5|18|*#:\n", wpList.toString());
-		
-		assertEquals("\n" + 
-				"\n" + 
-				"<ul>\n" + 
-				"<li>\n" + 
-				"<ol>\n" + 
-				"<li>\n" + 
-				"<dl>\n" + 
-				"<dd>a nested list</dd></dl></li></ol></li></ul>", wikiModel.render(testString));
-		
+
+		assertEquals("\n" + "\n" + "<ul>\n" + "<li>\n" + "<ol>\n" + "<li>\n" + "<dl>\n"
+				+ "<dd>a nested list</dd></dl></li></ol></li></ul>", wikiModel.render(testString));
+
 	}
-	
+
 	public void testWPList02() {
 		String testString = "\n*#; a nested list 1\n*#: a nested list 2\n";
-		
+
 		WikipediaScanner scanner = new WikipediaScanner(testString, 0);
 		scanner.setModel(wikiModel);
 		WPList wpList = scanner.wpList();
-		
-		assertEquals("*-#-;-5|20|*#;\n" + 
-				"25|40|*#:\n" , wpList.toString());
-		
-		assertEquals("\n" + 
-				"\n" + 
-				"<ul>\n" + 
-				"<li>\n" + 
-				"<ol>\n" + 
-				"<li>\n" + 
-				"<dl>\n" + 
-				"<dt>a nested list 1</dt>\n" + 
-				"<dd>a nested list 2</dd></dl></li></ol></li></ul>", wikiModel.render(testString));
-		
+
+		assertEquals("*-#-;-5|20|*#;\n" + "25|40|*#:\n", wpList.toString());
+
+		assertEquals("\n" + "\n" + "<ul>\n" + "<li>\n" + "<ol>\n" + "<li>\n" + "<dl>\n" + "<dt>a nested list 1</dt>\n"
+				+ "<dd>a nested list 2</dd></dl></li></ol></li></ul>", wikiModel.render(testString));
+
 	}
-	
+
 	public void testList0() {
 		assertEquals("\n" + "<ul>\n" + "<li>Mixed list\n" + "<ol>\n" + "<li>with numbers</li></ol>\n" + "<ul>\n"
 				+ "<li>and bullets</li></ul>\n" + "<ol>\n" + "<li>and numbers</li></ol></li>\n" + "<li>bullets again\n" + "<ul>\n"
@@ -133,6 +119,22 @@ public class WPListFilterTest extends FilterTestSupport {
 		// assertEquals("", wikiModel.render("* :*"));
 	}
 
+	public void testList13() {
+		assertEquals("\n" + "test 1\n" + "test 2\n" + "test 3\n" + "hello\n" + "\n" + "\n" + "test 4\n" + "", wikiModel.render(
+				new PlainTextConverter(), LIST3));
+	}
+
+	public void testList14() {
+		assertEquals("\n" + 
+				"\n" + 
+				"<ul>\n" + 
+				"<li>item 1\n" + 
+				"<ol>\n" + 
+				"<li>item 1.1</li>\n" + 
+				"<li>item 1.2</li></ol></li>\n" + 
+				"<li>item 2</li></ul>", wikiModel.render("\n" + "*item 1\n" + "*# item 1.1\n" + "*# item 1.2\n" + "* item 2"));
+	} 
+	
 	public void testListContinuation01() {
 		assertEquals("\n" + "<dl>\n" + "<dd><span>simple definition</span></dd></dl>", wikiModel
 				.render(": <span>simple definition</span>"));
@@ -155,47 +157,23 @@ public class WPListFilterTest extends FilterTestSupport {
 	}
 
 	public void testListContinuation04() {
-		assertEquals("\n" + 
-				"\n" + 
-				"<dl>\n" + 
-				"<dt>definition list 1</dt>\n" + 
-				"<dt>definition list 2</dt>\n" + 
-				"<dd>definition list 3</dd>\n" + 
-				"<dd>definition list 4</dd></dl>", wikiModel.render("\n" + "; definition list 1\n" + "; definition list 2\n" + ": definition list 3\n"
-				+ ": definition list 4"));
+		assertEquals("\n" + "\n" + "<dl>\n" + "<dt>definition list 1</dt>\n" + "<dt>definition list 2</dt>\n"
+				+ "<dd>definition list 3</dd>\n" + "<dd>definition list 4</dd></dl>", wikiModel.render("\n" + "; definition list 1\n"
+				+ "; definition list 2\n" + ": definition list 3\n" + ": definition list 4"));
 	}
 
 	public void testListContinuation05() {
-		assertEquals("\n" + 
-				"<dl>\n" + 
-				"<dt>definition lists</dt>\n" + 
-				"<dd>can be \n" + 
-				"<dl>\n" + 
-				"<dt>nested </dt>\n" + 
-				"<dd>too</dd></dl></dd></dl>", wikiModel.render("; definition lists\n" + ": can be \n" + ":; nested : too"));
+		assertEquals("\n" + "<dl>\n" + "<dt>definition lists</dt>\n" + "<dd>can be \n" + "<dl>\n" + "<dt>nested </dt>\n"
+				+ "<dd>too</dd></dl></dd></dl>", wikiModel.render("; definition lists\n" + ": can be \n" + ":; nested : too"));
 	}
 
 	public void testListContinuation06() {
-		assertEquals("\n" + 
-				"<ul>\n" + 
-				"<li>You can even do mixed lists\n" + 
-				"<ol>\n" + 
-				"<li>and nest them</li>\n" + 
-				"<li>inside each other\n" + 
-				"<ul>\n" + 
-				"<li>or break lines<br/>in lists.</li></ul>\n" + 
-				"<dl>\n" + 
-				"<dt>definition lists</dt>\n" + 
-				"<dd>can be \n" + 
-				"<dl>\n" + 
-				"<dt>nested </dt>\n" + 
-				"<dd>too</dd></dl></dd></dl></li></ol></li></ul>", wikiModel.render("* You can even do mixed lists\n" + "*# and nest them\n" + "*# inside each other\n"
-				+ "*#* or break lines<br>in lists.\n" + "*#; definition lists\n" + "*#: can be \n" + "*#:; nested : too"));
-	}
-
-	public void testList13() {
-		assertEquals("\n" + "test 1\n" + "test 2\n" + "test 3\n" + "hello\n" + "\n" + "\n" + "test 4\n" + "", wikiModel.render(
-				new PlainTextConverter(), LIST3));
+		assertEquals("\n" + "<ul>\n" + "<li>You can even do mixed lists\n" + "<ol>\n" + "<li>and nest them</li>\n"
+				+ "<li>inside each other\n" + "<ul>\n" + "<li>or break lines<br/>in lists.</li></ul>\n" + "<dl>\n"
+				+ "<dt>definition lists</dt>\n" + "<dd>can be \n" + "<dl>\n" + "<dt>nested </dt>\n"
+				+ "<dd>too</dd></dl></dd></dl></li></ol></li></ul>", wikiModel.render("* You can even do mixed lists\n"
+				+ "*# and nest them\n" + "*# inside each other\n" + "*#* or break lines<br>in lists.\n" + "*#; definition lists\n"
+				+ "*#: can be \n" + "*#:; nested : too"));
 	}
 
 }

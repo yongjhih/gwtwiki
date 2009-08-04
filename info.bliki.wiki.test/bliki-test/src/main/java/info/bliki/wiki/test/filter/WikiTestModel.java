@@ -3,7 +3,6 @@ package info.bliki.wiki.test.filter;
 import info.bliki.htmlcleaner.ContentToken;
 import info.bliki.htmlcleaner.TagNode;
 import info.bliki.htmlcleaner.Utils;
-import info.bliki.wiki.filter.MagicWord;
 import info.bliki.wiki.filter.WikipediaParser;
 import info.bliki.wiki.model.Configuration;
 import info.bliki.wiki.model.WikiModel;
@@ -24,14 +23,32 @@ import org.xml.sax.SAXException;
 
 import com.nutrun.xhtml.validator.XhtmlValidator;
 
-//import com.nutrun.xhtml.validator.XhtmlValidator;
-
 /**
  * Wiki model implementation which allows some special JUnit tests with
  * namespaces and predefined templates
  * 
  */
 public class WikiTestModel extends WikiModel {
+	public final static String BIRTH_DATE_AND_AGE = "<includeonly>{{#if:{{{df|}}}|{{#expr:{{{3|{{{day}}}}}}}} {{MONTHNAME|{{{2|{{{month}}}}}}}}|{{MONTHNAME|{{{2|{{{month}}}}}}}} {{#expr:{{{3|{{{day}}}}}}}},}} {{{1|{{{year}}}}}}<span style=\"display:none\"> (<span class=\"bday\">{{{1|{{{year}}}}}}-{{padleft:{{{2|{{{month}}}}}}|2|0}}-{{padleft:{{{3|{{{day}}}}}}|2|0}}</span>)</span><span class=\"noprint\"> (age&nbsp;{{age | {{{1|{{{year}}}}}} | {{{2|{{{month}}}}}} | {{{3|{{{day}}}}}} }})</span></includeonly><noinclude>\n"
+			+ "{{pp-template|small=yes}}\n" + "{{documentation}}\n" + "</noinclude>";
+	public final static String MONTHNAME = "<includeonly>{{#if:{{{1|}}}|{{#switch:{{MONTHNUMBER|{{{1}}}}}|1=January|2=February|3=March|4=April|5=May|6=June|7=July|8=August|9=September|10=October|11=November|12=December|Incorrect required parameter 1=''month''!}}|Missing required parameter 1=''month''!}}</includeonly><noinclude>\n"
+			+ "\n"
+			+ "{{pp-template|small=yes}}\n"
+			+ "{{Documentation}}\n"
+			+ "<!-- Add categories and interwikis to the /doc subpage, not here! -->\n" + "</noinclude>";
+	public final static String AGE = "<includeonly>{{#expr:({{{4|{{CURRENTYEAR}}}}})-({{{1}}})-(({{{5|{{CURRENTMONTH}}}}})<({{{2}}})or({{{5|{{CURRENTMONTH}}}}})=({{{2}}})and({{{6|{{CURRENTDAY}}}}})<({{{3}}}))}}</includeonly><noinclude>\n"
+			+ "{{pp-template|small=yes}}\n" + "{{template doc}}\n" + "</noinclude>";
+	public final static String MONTHNUMBER = "<includeonly>{{#if:{{{1|}}}\n" + " |{{#switch:{{lc:{{{1}}}}}\n" + "  |january|jan=1\n"
+			+ "  |february|feb=2\n" + "  |march|mar=3\n" + "  |apr|april=4\n" + "  |may=5\n" + "  |june|jun=6\n" + "  |july|jul=7\n"
+			+ "  |august|aug=8\n" + "  |september|sep=9\n" + "  |october|oct=10\n" + "  |november|nov=11\n" + "  |december|dec=12\n"
+			+ "  |{{#ifexpr:{{{1}}}<0\n" + "   |{{#ifexpr:(({{{1}}})round 0)!=({{{1}}})\n"
+			+ "    |{{#expr:12-(((0.5-({{{1}}}))round 0)mod 12)}}\n" + "    |{{#expr:12-(((11.5-({{{1}}}))round 0)mod 12)}}\n"
+			+ "   }}\n" + "  |{{#expr:(((10.5+{{{1}}})round 0)mod 12)+1}}\n" + "  }}\n" + " }}\n"
+			+ " |Missing required parameter 1=''month''!\n" + "}}</includeonly><noinclude>\n" + "{{pp-template|small=yes}}\n"
+			+ "{{Documentation}}\n" + "<!-- Add categories and interwikis to the /doc subpage, not here! -->\n" + "</noinclude>";
+
+	public final static String BORN_DATA = "{{#if:{{{birthname|}}}|{{{birthname|}}}<br />}}{{#if:{{{birth_date|{{{birthdate|}}}}}}|{{{birth_date|{{{birthdate}}}}}}<br />}}{{{location|{{{birth_place|{{{birthplace|}}}}}}}}}";
+
 	public final static String TL = "{{[[Template:{{{1}}}|{{{1}}}]]}}<noinclude>\n" + "{{pp-template|small=yes}}\n"
 			+ "{{documentation}}\n" + "</noinclude>";
 	public final static String PRON_ENG = "#REDIRECT [[Template:Pron-en]]";
@@ -792,6 +809,9 @@ public class WikiTestModel extends WikiModel {
 			+ "}}<noinclude>\n" + "{{end sidebar page}}\n" + "\n"
 			+ "<!---Please add metadata (categories, interwikis) to the <includeonly> section at the\n"
 			+ "     bottom of [[Template:Sidebar with collapsible lists/doc]] page, not here - thanks!--->\n" + "";
+
+	public final static String IF_IMAGE_TEST = "{{#if:{{{image|}}}|[[File:{{{image|}}}|{{#if:{{{image_size|{{{imagesize|}}}}}}|{{{image_size|{{{imagesize|}}}}}}|220px}}|alt={{{alt|}}}]]}}";
+
 	boolean fSemanticWebActive;
 
 	static {
@@ -824,13 +844,14 @@ public class WikiTestModel extends WikiModel {
 	public String getRawWikiContent(String namespace, String articleName, Map<String, String> map) {
 		String result = super.getRawWikiContent(namespace, articleName, map);
 		if (result != null) {
+			// found magic word template
 			return result;
 		}
 		String name = encodeTitleToUrl(articleName, true);
 		if (isTemplateNamespace(namespace)) {
-			if (MagicWord.isMagicWord(articleName)) {
-				return MagicWord.processMagicWord(articleName, this);
-			}
+			// if (MagicWord.isMagicWord(articleName)) {
+			// return MagicWord.processMagicWord(articleName, this);
+			// }
 			if (name.equals("Reflist")) {
 				return REFLIST_TEXT;
 			} else if (name.equals("!")) {
@@ -877,6 +898,18 @@ public class WikiTestModel extends WikiModel {
 				return IDEOLOGY;
 			} else if (name.equals("Sidebar_with_collapsible_lists")) {
 				return SIDEBAR_WITH_COLLAPSIBLE_LISTS;
+			} else if (name.equals("If_image_test")) {
+				return IF_IMAGE_TEST;
+			} else if (name.equals("Birth_date_and_age")) {
+				return BIRTH_DATE_AND_AGE;
+			} else if (name.equals("MONTHNAME")) {
+				return MONTHNAME;
+			} else if (name.equals("MONTHNUMBER")) {
+				return MONTHNUMBER;
+			} else if (name.equals("Age")) {
+				return AGE;
+			} else if (name.equals("Born_data")) {
+				return BORN_DATA;
 			}
 		} else {
 			if (name.equals("Include_Page")) {

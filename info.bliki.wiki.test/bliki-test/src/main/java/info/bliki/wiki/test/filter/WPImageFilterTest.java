@@ -81,9 +81,9 @@ public class WPImageFilterTest extends FilterTestSupport {
 
 	public void testImage08() {
 		assertEquals(
-				"\n"
-						+ "<p><a class=\"externallink\" href=\"http://www.homeportals.net/downloads/ClassDiagram_3.0.198.jpg\" rel=\"nofollow\" title=\"http://www.homeportals.net/downloads/ClassDiagram_3.0.198.jpg\">Class\n"
-						+ "Diagram</a></p>", wikiModel.render("[http://www.homeportals.net/downloads/ClassDiagram_3.0.198.jpg Class\n"
+				"\n" + 
+				"<p>[<a class=\"externallink\" href=\"http://www.homeportals.net/downloads/ClassDiagram_3.0.198.jpg\" rel=\"nofollow\" title=\"http://www.homeportals.net/downloads/ClassDiagram_3.0.198.jpg\">http://www.homeportals.net/downloads/ClassDiagram_3.0.198.jpg</a> Class\n" + 
+				"Diagram]</p>", wikiModel.render("[http://www.homeportals.net/downloads/ClassDiagram_3.0.198.jpg Class\n"
 						+ "Diagram]"));
 	}
 
