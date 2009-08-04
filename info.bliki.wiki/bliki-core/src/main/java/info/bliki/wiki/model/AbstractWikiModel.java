@@ -15,6 +15,8 @@ import info.bliki.wiki.filter.PDFConverter;
 import info.bliki.wiki.filter.StringPair;
 import info.bliki.wiki.filter.TemplateParser;
 import info.bliki.wiki.filter.WikipediaParser;
+import info.bliki.wiki.namespaces.INamespace;
+import info.bliki.wiki.namespaces.Namespace;
 import info.bliki.wiki.tags.TableOfContentTag;
 import info.bliki.wiki.tags.WPATag;
 import info.bliki.wiki.tags.WPTag;
@@ -41,12 +43,6 @@ import java.util.Set;
 public abstract class AbstractWikiModel implements IWikiModel, IContext {
 	private static int fNextNumberCounter = 0;
 
-	protected final String[] fCategoryNamespaces = { "Category", "Category" };
-
-	protected final String[] fTemplateNamespaces = { "Template", "Template" };
-
-	protected final String[] fImageNamespaces = { "Image", "Image" };
-
 	protected ArrayList<Reference> fReferences;
 
 	protected Map<String, Integer> fReferenceNames;
@@ -63,7 +59,9 @@ public abstract class AbstractWikiModel implements IWikiModel, IContext {
 
 	private IEventListener fWikiListener = null;
 
-	private ResourceBundle fResourceBundle;
+	protected INamespace fNamespace;
+
+	// private ResourceBundle fResourceBundle;
 
 	protected String fRedirectLink = null;
 
@@ -117,40 +115,58 @@ public abstract class AbstractWikiModel implements IWikiModel, IContext {
 	}
 
 	public AbstractWikiModel(Configuration configuration, Locale locale) {
-		this(configuration, Messages.getResourceBundle(locale));
+		this(configuration, Messages.getResourceBundle(locale), new Namespace(locale));
 	}
 
-	public AbstractWikiModel(Configuration configuration, ResourceBundle resourceBundle) {
+	public AbstractWikiModel(Configuration configuration, ResourceBundle resourceBundle, INamespace namespace) {
 		fInitialized = false;
 		fConfiguration = configuration;
-		fResourceBundle = resourceBundle;
-		String ns1, ns2;
-		ns1 = Messages.getString(resourceBundle, Messages.WIKI_API_CATEGORY1);
-		if (ns1 != null) {
-			fCategoryNamespaces[0] = ns1;
-			ns2 = Messages.getString(resourceBundle, Messages.WIKI_API_CATEGORY2);
-			if (ns2 != null) {
-				fCategoryNamespaces[1] = ns2;
-			}
-		}
-		ns1 = Messages.getString(resourceBundle, Messages.WIKI_API_TEMPLATE1);
-		if (ns1 != null) {
-			fTemplateNamespaces[0] = ns1;
-			ns2 = Messages.getString(resourceBundle, Messages.WIKI_API_TEMPLATE2);
-			if (ns2 != null) {
-				fTemplateNamespaces[1] = ns2;
-			}
-		}
-		ns1 = Messages.getString(resourceBundle, Messages.WIKI_API_IMAGE1);
-		if (ns1 != null) {
-			fImageNamespaces[0] = ns1;
-			ns2 = Messages.getString(resourceBundle, Messages.WIKI_API_IMAGE2);
-			if (ns2 != null) {
-				fImageNamespaces[1] = ns2;
-			}
-		}
+		// fResourceBundle = resourceBundle;
+		fNamespace = namespace;
+		// initializeNamespaces();
 		initialize();
 	}
+
+	// private void initializeNamespaces() {
+	// String ns1, ns2;
+	//
+	// ns1 = Messages.getString(fResourceBundle, Messages.WIKI_API_MEDIA1);
+	// if (ns1 != null) {
+	// fImageNamespaces[0] = ns1;
+	// ns2 = Messages.getString(fResourceBundle, Messages.WIKI_API_MEDIA2);
+	// if (ns2 != null) {
+	// fImageNamespaces[1] = ns2;
+	// }
+	// }
+	//
+	// ns1 = Messages.getString(fResourceBundle, Messages.WIKI_API_IMAGE1);
+	// if (ns1 != null) {
+	// fImageNamespaces[0] = ns1;
+	// ns2 = Messages.getString(fResourceBundle, Messages.WIKI_API_IMAGE2);
+	// if (ns2 != null) {
+	// fImageNamespaces[1] = ns2;
+	// }
+	// }
+	//
+	// ns1 = Messages.getString(fResourceBundle, Messages.WIKI_API_TEMPLATE1);
+	// if (ns1 != null) {
+	// fTemplateNamespaces[0] = ns1;
+	// ns2 = Messages.getString(fResourceBundle, Messages.WIKI_API_TEMPLATE2);
+	// if (ns2 != null) {
+	// fTemplateNamespaces[1] = ns2;
+	// }
+	// }
+	//
+	// ns1 = Messages.getString(fResourceBundle, Messages.WIKI_API_CATEGORY1);
+	// if (ns1 != null) {
+	// fCategoryNamespaces[0] = ns1;
+	// ns2 = Messages.getString(fResourceBundle, Messages.WIKI_API_CATEGORY2);
+	// if (ns2 != null) {
+	// fCategoryNamespaces[1] = ns2;
+	// }
+	// }
+	//
+	// }
 
 	public void addCategory(String categoryName, String sortKey) {
 
@@ -651,19 +667,19 @@ public abstract class AbstractWikiModel implements IWikiModel, IContext {
 	}
 
 	public String get2ndCategoryNamespace() {
-		return fCategoryNamespaces[1];
+		return fNamespace.getCategory2();
 	}
 
 	public String get2ndImageNamespace() {
-		return fImageNamespaces[1];
+		return fNamespace.getImage2();
 	}
 
 	public String get2ndTemplateNamespace() {
-		return fTemplateNamespaces[1];
+		return fNamespace.getTemplate2();
 	}
 
 	public String getCategoryNamespace() {
-		return fCategoryNamespaces[0];
+		return fNamespace.getCategory();
 	}
 
 	public Map<String, SourceCodeFormatter> getCodeFormatterMap() {
@@ -671,7 +687,7 @@ public abstract class AbstractWikiModel implements IWikiModel, IContext {
 	}
 
 	public String getImageNamespace() {
-		return fImageNamespaces[0];
+		return fNamespace.getImage();
 	}
 
 	public Map<String, String> getInterwikiMap() {
@@ -692,8 +708,17 @@ public abstract class AbstractWikiModel implements IWikiModel, IContext {
 
 	public String getRawWikiContent(String namespace, String templateName, Map<String, String> templateParameters) {
 		// String name = Encoder.encodeTitleUrl(articleName);
-		if (MagicWord.isMagicWord(templateName)) {
-			return MagicWord.processMagicWord(templateName, this);
+		if (isTemplateNamespace(namespace)) {
+			String magicWord = templateName;
+			String parameter = "";
+			int index = magicWord.indexOf(':');
+			if (index > 0) {
+				parameter = magicWord.substring(index + 1).trim();
+				magicWord = magicWord.substring(0, index);
+			}
+			if (MagicWord.isMagicWord(magicWord)) {
+				return MagicWord.processMagicWord(magicWord, parameter, this);
+			}
 		}
 		return null;
 	}
@@ -754,7 +779,7 @@ public abstract class AbstractWikiModel implements IWikiModel, IContext {
 	}
 
 	public String getTemplateNamespace() {
-		return fTemplateNamespaces[0];
+		return fNamespace.getTemplate();
 	}
 
 	public Map<String, TagToken> getTokenMap() {
@@ -789,7 +814,7 @@ public abstract class AbstractWikiModel implements IWikiModel, IContext {
 	}
 
 	public boolean isCategoryNamespace(String namespace) {
-		return namespace.equalsIgnoreCase(fCategoryNamespaces[0]) || namespace.equalsIgnoreCase(fCategoryNamespaces[1]);
+		return namespace.equalsIgnoreCase(fNamespace.getCategory()) || namespace.equalsIgnoreCase(fNamespace.getCategory2());
 	}
 
 	public boolean isEditorMode() {
@@ -797,7 +822,7 @@ public abstract class AbstractWikiModel implements IWikiModel, IContext {
 	}
 
 	public boolean isImageNamespace(String namespace) {
-		return namespace.equalsIgnoreCase(fImageNamespaces[0]) || namespace.equalsIgnoreCase(fImageNamespaces[1]);
+		return namespace.equalsIgnoreCase(fNamespace.getImage()) || namespace.equalsIgnoreCase(fNamespace.getImage2());
 	}
 
 	public boolean isValidUriScheme(String uriScheme) {
@@ -835,7 +860,7 @@ public abstract class AbstractWikiModel implements IWikiModel, IContext {
 	}
 
 	public boolean isTemplateNamespace(String namespace) {
-		return namespace.equalsIgnoreCase(fTemplateNamespaces[0]) || namespace.equalsIgnoreCase(fTemplateNamespaces[1]);
+		return namespace.equalsIgnoreCase(fNamespace.getTemplate()) || namespace.equalsIgnoreCase(fNamespace.getTemplate2());
 	}
 
 	public boolean isTemplateTopic() {
@@ -962,7 +987,7 @@ public abstract class AbstractWikiModel implements IWikiModel, IContext {
 	}
 
 	public ResourceBundle getResourceBundle() {
-		return fResourceBundle;
+		return fNamespace.getResourceBundle();
 	}
 
 	public AbstractParser createNewInstance(String rawWikitext) {
@@ -1302,4 +1327,5 @@ public abstract class AbstractWikiModel implements IWikiModel, IContext {
 		}
 		return fTableOfContentTag;
 	}
+
 }

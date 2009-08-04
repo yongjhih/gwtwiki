@@ -97,6 +97,13 @@ public class WPCell {
 
 			fAttributes = Util.getAttributes(params);
 			String rawWikiText = Utils.ltrimNewline(content);
+			// find first newline position
+			// see: http://code.google.com/p/gwtwiki/issues/detail?id=15
+//			int newlineIndex = rawWikiText.indexOf('\n');
+//			if (newlineIndex >= 0) {
+//				rawWikiText = rawWikiText.substring(0, newlineIndex) + "<p>" + rawWikiText.substring(newlineIndex);
+//			}
+
 			AbstractParser parser = wikiModel.createNewInstance(rawWikiText);
 			fStack = parser.parseRecursiveInternal(wikiModel, true, false);
 			List<BaseToken> list = fStack.getNodeList();

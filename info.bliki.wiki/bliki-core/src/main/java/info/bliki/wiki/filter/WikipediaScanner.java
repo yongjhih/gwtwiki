@@ -1,6 +1,7 @@
 package info.bliki.wiki.filter;
 
 import info.bliki.htmlcleaner.Utils;
+import info.bliki.wiki.model.Configuration;
 import info.bliki.wiki.model.ITableOfContent;
 import info.bliki.wiki.model.IWikiModel;
 import info.bliki.wiki.tags.TableOfContentTag;
@@ -63,7 +64,7 @@ public class WikipediaScanner {
 	 * See: <a href="http://meta.wikimedia.org/wiki/Help:Table">Help - Table</a>
 	 * 
 	 * @param tableOfContentTag
-	 * @return
+	 * @return <code>null</code> if no wiki table was found
 	 */
 	public WPTable wpTable(ITableOfContent tableOfContentTag) {
 		WPTable table = null;
@@ -324,7 +325,7 @@ public class WikipediaScanner {
 					System.arraycopy(sequence, 0, ddSequence, 0, sequence.length);
 					ddSequence[sequence.length - 1] = WPList.DL_DD_CHAR;
 					sequence = ddSequence;
-					
+
 					int startPos;
 					while (true) {
 						ch = fSource[fScannerPosition++];
@@ -701,12 +702,17 @@ public class WikipediaScanner {
 	 * @param fTemplateParameters
 	 * @return <code>null</code> if no replacement could be found
 	 */
-	public StringBuilder replaceTemplateParameters(String template, Map<String, String> fTemplateParameters) {
+	public StringBuilder replaceTemplateParameters(String template, Map<String, String> templateParameters) {
 		StringBuilder buffer = null;
 		int bufferStart = 0;
 		try {
+			int level = fWikiModel.incrementRecursionLevel();
+			if (level > Configuration.PARSER_RECURSION_LIMIT) {
+				return null; // no further processing
+			}
 			char ch;
 			int parameterStart = -1;
+			StringBuilder recursiveResult;
 			while (true) {
 				ch = fSource[fScannerPosition++];
 				if (ch == '{' && fSource[fScannerPosition] == '{' && fSource[fScannerPosition + 1] == '{') {
@@ -720,8 +726,8 @@ public class WikipediaScanner {
 						if (list.size() > 0) {
 							String parameterString = list.get(0);
 							String value = null;
-							if (fTemplateParameters != null) {
-								value = fTemplateParameters.get(parameterString);
+							if (templateParameters != null) {
+								value = templateParameters.get(parameterString);
 							}
 							if (value == null && list.size() > 1) {
 								value = list.get(1);
@@ -733,7 +739,16 @@ public class WikipediaScanner {
 								if (bufferStart < fScannerPosition) {
 									buffer.append(fSource, bufferStart, parameterStart - bufferStart - 3);
 								}
-								buffer.append(value);
+
+								WikipediaScanner scanner = new WikipediaScanner(value);
+								scanner.setModel(fWikiModel);
+								recursiveResult = scanner.replaceTemplateParameters(value, templateParameters);
+								if (recursiveResult != null) {
+									buffer.append(recursiveResult);
+								} else {
+									buffer.append(value);
+								}
+
 								bufferStart = fScannerPosition;
 							}
 						}
@@ -745,6 +760,8 @@ public class WikipediaScanner {
 			}
 		} catch (IndexOutOfBoundsException e) {
 			// ignore
+		} finally {
+			fWikiModel.decrementRecursionLevel();
 		}
 		if (buffer != null && bufferStart < fScannerPosition) {
 			buffer.append(fSource, bufferStart, fScannerPosition - bufferStart - 1);

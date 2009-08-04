@@ -73,7 +73,7 @@ public abstract class AbstractParser extends WikipediaScanner {
 	}
 
 	/**
-	 * rRead until character is found
+	 * Read until character is found
 	 * 
 	 * @param testedChar
 	 *          search the next position of this char
@@ -83,6 +83,28 @@ public abstract class AbstractParser extends WikipediaScanner {
 		int temp = fCurrentPosition;
 		try {
 			while ((fCurrentCharacter = fSource[fCurrentPosition++]) != testedChar) {
+			}
+			return true;
+		} catch (IndexOutOfBoundsException e) {
+			fCurrentPosition = temp;
+			return false;
+		}
+	}
+
+	/**
+	 * Read until character is found or stop at end-of-line
+	 * 
+	 * @param testedChar
+	 *          search the next position of this char
+	 * @return <code>true</code> if the tested character can be found
+	 */
+	protected final boolean readUntilCharOrStopAtEOL(char testedChar) {
+		int temp = fCurrentPosition;
+		try {
+			while ((fCurrentCharacter = fSource[fCurrentPosition++]) != testedChar) {
+				if (fCurrentCharacter == '\n' || fCurrentCharacter == '\r') {
+					return false;
+				}
 			}
 			return true;
 		} catch (IndexOutOfBoundsException e) {
@@ -245,7 +267,7 @@ public abstract class AbstractParser extends WikipediaScanner {
 		}
 
 		int endPos = fCurrentPosition - bbEndStr.length() - 2;
-		String innerTag = fStringSource.substring( startPos, endPos);
+		String innerTag = fStringSource.substring(startPos, endPos);
 
 		return createBBCode(bbStr, bbAttr, innerTag);
 	}
@@ -540,6 +562,16 @@ public abstract class AbstractParser extends WikipediaScanner {
 					if (--level == 0) {
 						break;
 					}
+				} else if (ch == '{' || ch == '}' || ch == '<' || ch == '>') {
+					if (!pipeSymbolFound) {
+						// see
+						// http://en.wikipedia.org/wiki/Help:Page_name#Special_characters
+						return false;
+					}
+				}
+
+				if ((!pipeSymbolFound) && (ch == '\n' || ch == '\r')) {
+					return false;
 				}
 			}
 			fCurrentPosition = position;

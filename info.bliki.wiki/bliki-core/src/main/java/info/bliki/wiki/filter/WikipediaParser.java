@@ -259,11 +259,11 @@ public class WikipediaParser extends AbstractParser implements IParser {
 				// continue;
 				// }
 				// break;
-//				case ';':
-//					if (parseDefinitionLists()) {
-//						continue;
-//					}
-//					break;
+				// case ';':
+				// if (parseDefinitionLists()) {
+				// continue;
+				// }
+				// break;
 				case '-': // parse ---- as <hr>
 					if (parseHorizontalRuler()) {
 						continue;
@@ -291,6 +291,13 @@ public class WikipediaParser extends AbstractParser implements IParser {
 						if (!isEmptyLine(1)) {
 							if (fWikiModel.stackSize() == 0) {
 								addParagraph();
+		//						if (fWikiModel.getRecursionLevel() == 1) {
+		//							addParagraph();
+		//						} else {
+		//							if (fCurrentPosition > 1) {
+		//								addParagraph();
+		//							}
+		//						}
 							} else {
 								TagToken tag = fWikiModel.peekNode();
 								if (tag instanceof WPPreTag) {
@@ -726,7 +733,7 @@ public class WikipediaParser extends AbstractParser implements IParser {
 			createContentToken(fWhiteStart, fWhiteStartPosition, 1);
 			fWhiteStart = false;
 
-			if (readUntilChar(']')) {
+			if (readUntilCharOrStopAtEOL(']')) {
 				String name = fStringSource.substring(startLinkPosition, fCurrentPosition - 1);
 
 				// bbcode start
@@ -747,8 +754,8 @@ public class WikipediaParser extends AbstractParser implements IParser {
 				if (handleHTTPLink(name)) {
 					return true;
 				}
-				fCurrentPosition = startLinkPosition;
 			}
+			fCurrentPosition = startLinkPosition;
 		}
 		return false;
 	}

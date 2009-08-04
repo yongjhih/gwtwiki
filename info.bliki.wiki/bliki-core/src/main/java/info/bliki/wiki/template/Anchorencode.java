@@ -1,12 +1,10 @@
 package info.bliki.wiki.template;
 
-import info.bliki.api.Connector;
 import info.bliki.wiki.filter.Encoder;
 import info.bliki.wiki.filter.WikipediaScanner;
 import info.bliki.wiki.model.IWikiModel;
 
 import java.io.IOException;
-import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 

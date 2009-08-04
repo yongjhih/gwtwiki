@@ -41,6 +41,6 @@ public class AbstractTemplateFunction implements ITemplateFunction {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		return buf.toString();
+		return buf.toString().trim();
 	}
 }

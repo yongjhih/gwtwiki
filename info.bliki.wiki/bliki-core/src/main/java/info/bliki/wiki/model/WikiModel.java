@@ -3,6 +3,7 @@ package info.bliki.wiki.model;
 import info.bliki.htmlcleaner.ContentToken;
 import info.bliki.wiki.filter.Encoder;
 import info.bliki.wiki.filter.WikipediaParser;
+import info.bliki.wiki.namespaces.INamespace;
 import info.bliki.wiki.tags.WPATag;
 
 import java.util.ArrayList;
@@ -63,8 +64,9 @@ public class WikiModel extends AbstractWikiModel {
 		fExternalWikiBaseURL = linkBaseURL;
 	}
 
-	public WikiModel(Configuration configuration, ResourceBundle resourceBundle, String imageBaseURL, String linkBaseURL) {
-		super(configuration, resourceBundle);
+	public WikiModel(Configuration configuration, ResourceBundle resourceBundle, INamespace namespace, String imageBaseURL,
+			String linkBaseURL) {
+		super(configuration, resourceBundle, namespace);
 		fExternalImageBaseURL = imageBaseURL;
 		fExternalWikiBaseURL = linkBaseURL;
 	}
@@ -250,4 +252,7 @@ public class WikiModel extends AbstractWikiModel {
 		templates = new HashSet<String>();
 	}
 
+	public INamespace getNamespace() {
+		return fNamespace;
+	}
 }

@@ -24,7 +24,7 @@ public class If extends AbstractTemplateFunction {
 	public String parseFunction(char[] src, int beginIndex, int endIndex, IWikiModel model) throws IOException {
 		List<String> list = new ArrayList<String>();
 		WikipediaScanner.splitByPipe(src, beginIndex, endIndex, list);
-		if (list.size() > 1) {
+		if (list.size() > 1) { 
 			String ifCondition = parse(list.get(0), model);
 			if (ifCondition.length() > 0) {
 				// &lt;then text&gt;

@@ -4,6 +4,7 @@ import info.bliki.htmlcleaner.BaseToken;
 import info.bliki.htmlcleaner.TagToken;
 import info.bliki.wiki.filter.AbstractParser;
 import info.bliki.wiki.filter.ITextConverter;
+import info.bliki.wiki.namespaces.INamespace;
 import info.bliki.wiki.tags.util.TagStack;
 import info.bliki.wiki.template.ITemplateFunction;
 
@@ -671,10 +672,9 @@ public interface IWikiModel extends IConfiguration {
 	public void parseEvents(IEventListener listener, String rawWikiText);
 
 	/**
-	 * Append the internal wiki image link to this model.
-	 * <br/><br/>See <a href="http://en.wikipedia.org/wiki/Image_markup">Image
-	 * markup</a> and see <a
-	 * href="http://www.mediawiki.org/wiki/Help:Images">Help:Images</a>.
+	 * Append the internal wiki image link to this model. <br/><br/>See <a
+	 * href="http://en.wikipedia.org/wiki/Image_markup">Image markup</a> and see
+	 * <a href="http://www.mediawiki.org/wiki/Help:Images">Help:Images</a>.
 	 * 
 	 * @param imageNamespace
 	 *          the image namespace
@@ -811,4 +811,7 @@ public interface IWikiModel extends IConfiguration {
 	 * 
 	 */
 	public void tearDown();
+
+	public INamespace getNamespace();
+	
 }

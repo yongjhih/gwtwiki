@@ -78,13 +78,15 @@ public class TemplateParser extends AbstractParser {
 				return;
 			}
 
+			StringBuilder parameterBuffer = sb;
 			StringBuilder plainBuffer = sb;
 			if (templateParameterMap != null && (!templateParameterMap.isEmpty())) {
-				String preprocessedContent = sb.toString();
+				String preprocessedContent = parameterBuffer.toString();
 				WikipediaScanner scanner = new WikipediaScanner(preprocessedContent);
-				plainBuffer = scanner.replaceTemplateParameters(preprocessedContent, templateParameterMap);
-				if (plainBuffer == null) {
-					plainBuffer = sb;
+				scanner.setModel(wikiModel);
+				parameterBuffer = scanner.replaceTemplateParameters(preprocessedContent, templateParameterMap);
+				if (parameterBuffer != null) {
+					plainBuffer = parameterBuffer;
 				}
 			}
 			parser = new TemplateParser(plainBuffer.toString(), parseOnlySignature, renderTemplate);
@@ -551,6 +553,7 @@ public class TemplateParser extends AbstractParser {
 		if (plainContent != null) {
 			fCurrentPosition = templateEndPosition;
 			WikipediaScanner scanner = new WikipediaScanner(plainContent);
+			scanner.setModel(fWikiModel);
 			StringBuilder plainBuffer = scanner.replaceTemplateParameters(plainContent, null);
 			if (plainBuffer == null) {
 				writer.append(plainContent);

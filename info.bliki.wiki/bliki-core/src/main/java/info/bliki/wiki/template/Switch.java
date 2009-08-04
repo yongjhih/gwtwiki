@@ -26,10 +26,11 @@ public class Switch extends AbstractTemplateFunction {
 		List<String> list = new ArrayList<String>();
 		WikipediaScanner.splitByPipe(src, beginIndex, endIndex, list);
 		if (list.size() > 2) {
-			String first = parse(list.get(0), model);
+			String defaultResult = null;
+			String conditionString = parse(list.get(0), model);
 			// StringBuilder firstBuffer = new StringBuilder(first.length());
 			// TemplateParser.parse(first, model, firstBuffer, false);
-			String conditionString = first.trim();
+			// String conditionString = first.trim();
 			boolean valueFound = false;
 			for (int i = 1; i < list.size(); i++) {
 				String temp = parse(list.get(i), model);
@@ -44,6 +45,13 @@ public class Switch extends AbstractTemplateFunction {
 					leftHandSide = temp.trim();
 				}
 				String parsedLHS = parse(leftHandSide, model);
+				if (index >= 0 && "#default".equals(parsedLHS)) {
+					defaultResult = temp.substring(index + 1).trim();
+					continue;
+				}
+				if (index < 0 && i == list.size() - 1) {
+					return parsedLHS;
+				}
 				if (equalsTypes(conditionString, parsedLHS)) {
 					if (index >= 0) {
 						return temp.substring(index + 1).trim();
@@ -53,6 +61,7 @@ public class Switch extends AbstractTemplateFunction {
 				}
 
 			}
+			return defaultResult;
 		}
 		return null;
 	}

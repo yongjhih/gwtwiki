@@ -17,6 +17,7 @@
 package info.bliki.wiki.filter;
 
 import info.bliki.wiki.model.IWikiModel;
+import info.bliki.wiki.namespaces.INamespace;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -260,15 +261,14 @@ public class MagicWord {
 	}
 
 	/**
-	 * Search through content, starting at a specific position, and search for
-	 * the first position after a matching end tag for a specified start tag.
-	 * For instance, if called with a start tag of "<b>" and an end tag of
-	 * "</b>", this method will operate as follows:
+	 * Search through content, starting at a specific position, and search for the
+	 * first position after a matching end tag for a specified start tag. For
+	 * instance, if called with a start tag of "<b>" and an end tag of "</b>",
+	 * this method will operate as follows:
 	 * 
 	 * "01<b>567</b>23" returns 12. "01<b>56<b>01</b>67</b>23" returns 22.
 	 */
-	private int findMatchingEndTag(String content, int start,
-			String startToken, String endToken) {
+	private int findMatchingEndTag(String content, int start, String startToken, String endToken) {
 		int pos = start;
 		int count = 0;
 		String substring = "";
@@ -290,9 +290,9 @@ public class MagicWord {
 	}
 
 	/**
-	 * Determine if a template name corresponds to a magic word requiring
-	 * special handling. See http://meta.wikimedia.org/wiki/Help:Magic_words for
-	 * a list of Mediawiki magic words.
+	 * Determine if a template name corresponds to a magic word requiring special
+	 * handling. See http://meta.wikimedia.org/wiki/Help:Magic_words for a list of
+	 * Mediawiki magic words.
 	 */
 	public static boolean isMagicWord(String name) {
 		return MAGIC_WORDS.contains(name);
@@ -303,7 +303,7 @@ public class MagicWord {
 	 * value. See http://meta.wikimedia.org/wiki/Help:Magic_words for a list of
 	 * Mediawiki magic words.
 	 */
-	public static String processMagicWord(String name, IWikiModel model) {
+	public static String processMagicWord(String name, String parameter, IWikiModel model) {
 		SimpleDateFormat formatter = new SimpleDateFormat();
 		TimeZone utc = TimeZone.getTimeZone("GMT+00");
 		Date current = new Date(System.currentTimeMillis());
@@ -388,7 +388,42 @@ public class MagicWord {
 		if (name.equals(MAGIC_PAGE_NAME)) {
 			String temp = model.getPageName();
 			if (temp != null) {
+				if (parameter.length() > 0) {
+					return parameter;
+				}
 				return temp;
+			}
+		}
+		
+		if (name.equals(MAGIC_FULL_PAGE_NAME)) {
+			String temp = model.getPageName();
+			if (temp != null) {
+				if (parameter.length() > 0) {
+					return parameter;
+				}
+				return temp;
+			}
+		}
+		
+		if (name.equals(MAGIC_TALK_PAGE_NAME)) {
+			String temp = model.getPageName();
+			if (temp != null) {
+				INamespace ns = model.getNamespace();
+				if (parameter.length() > 0) {
+					String namespace = parameter;
+					int index = namespace.indexOf(':');
+					if (index > 0) {
+						// {{TALKPAGENAME:Template:Sandbox}}
+						String rest = namespace.substring(index + 1);
+						namespace = namespace.substring(0, index);
+						String talkspace = ns.getTalkspace(namespace.toLowerCase());
+						if (talkspace != null) {
+							return talkspace + ":" + rest;
+						}
+					}
+					return ns.getTalk() + ":" + parameter;
+				}
+				return ns.getTalk() + temp;
 			}
 		}
 		// statistics
@@ -409,12 +444,12 @@ public class MagicWord {
 		// return new Integer(results).toString();
 		// } else if (name.equals(MAGIC_NUMBER_FILES)) {
 		// int results =
-		//WikiBase.getHandler().lookupWikiFileCount(parserInput.getVirtualWiki()
+		// WikiBase.getHandler().lookupWikiFileCount(parserInput.getVirtualWiki()
 		// );
 		// return numFormatter.format(results);
 		// } else if (name.equals(MAGIC_NUMBER_FILES_R)) {
 		// int results =
-		//WikiBase.getHandler().lookupWikiFileCount(parserInput.getVirtualWiki()
+		// WikiBase.getHandler().lookupWikiFileCount(parserInput.getVirtualWiki()
 		// );
 		// return new Integer(results).toString();
 		// } else if (name.equals(MAGIC_NUMBER_USERS)) {
@@ -480,7 +515,7 @@ public class MagicWord {
 		// } else if (name.equals(MAGIC_TALK_SPACE_E)) {
 		// String namespace = wikiLink.getNamespace();
 		// return
-		//Utilities.encodeForURL(NamespaceHandler.getCommentsNamespace(namespace
+		// Utilities.encodeForURL(NamespaceHandler.getCommentsNamespace(namespace
 		// ));
 		// } else if (name.equals(MAGIC_SUBJECT_SPACE) ||
 		// name.equals(MAGIC_ARTICLE_SPACE)) {
@@ -531,13 +566,11 @@ public class MagicWord {
 		// return formatter.format(revision);
 		/*
 		 * } else if (name.equals(MAGIC_REVISION_ID)) { } else if
-		 * (name.equals(MAGIC_SITE_NAME)) { } else if
-		 * (name.equals(MAGIC_SERVER)) { } else if
-		 * (name.equals(MAGIC_SCRIPT_PATH)) { } else if
+		 * (name.equals(MAGIC_SITE_NAME)) { } else if (name.equals(MAGIC_SERVER)) {
+		 * } else if (name.equals(MAGIC_SCRIPT_PATH)) { } else if
 		 * (name.equals(MAGIC_SERVER_NAME)) {
 		 */
 		// }
 		return name;
 	}
-
 }
