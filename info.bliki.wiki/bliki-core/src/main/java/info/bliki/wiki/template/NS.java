@@ -3,7 +3,6 @@ package info.bliki.wiki.template;
 import info.bliki.wiki.filter.WikipediaScanner;
 import info.bliki.wiki.model.IWikiModel;
 import info.bliki.wiki.namespaces.INamespace;
-import info.bliki.wiki.namespaces.Namespace;
 
 import java.io.IOException;
 import java.util.ArrayList;
