@@ -56,7 +56,7 @@ public class APIWikiModel extends WikiModel {
 	 *          which will be replaced by the topic title, to create links to
 	 *          other wiki topics.
 	 * @param imageDirectoryName
-	 *          a directory for storing dowloaded Wikipedia images. The directory
+	 *          a directory for storing downloaded Wikipedia images. The directory
 	 *          must already exist.
 	 */
 	public APIWikiModel(User user, WikiDB wikiDB, String imageBaseURL, String linkBaseURL, String imageDirectoryName) {
@@ -90,9 +90,12 @@ public class APIWikiModel extends WikiModel {
 		// if (result != null) {
 		// return result;
 		// }
-		if (MagicWord.isMagicWord(articleName)) {
-			return MagicWord.processMagicWord(articleName, this);
+		String result = super.getRawWikiContent(namespace, articleName, templateParameters);
+		if (result != null) {
+			// found magic word template
+			return result;
 		}
+
 		String name = articleName;
 		if (namespace.equals("Template")) {
 			String content = null;
