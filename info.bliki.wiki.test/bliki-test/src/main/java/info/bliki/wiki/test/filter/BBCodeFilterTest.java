@@ -1,5 +1,6 @@
 package info.bliki.wiki.test.filter;
 
+import info.bliki.wiki.filter.FilterTestSupport;
 import info.bliki.wiki.model.BBCodeModel;
 import junit.framework.Test;
 import junit.framework.TestSuite;

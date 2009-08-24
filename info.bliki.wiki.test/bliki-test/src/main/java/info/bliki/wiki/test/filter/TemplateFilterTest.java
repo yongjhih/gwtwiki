@@ -1,8 +1,8 @@
 package info.bliki.wiki.test.filter;
 
+import info.bliki.wiki.filter.FilterTestSupport;
 import junit.framework.Test;
 import junit.framework.TestSuite;
-import org.apache.commons.lang.StringEscapeUtils;
 
 public class TemplateFilterTest extends FilterTestSupport {
 	public TemplateFilterTest(String name) {

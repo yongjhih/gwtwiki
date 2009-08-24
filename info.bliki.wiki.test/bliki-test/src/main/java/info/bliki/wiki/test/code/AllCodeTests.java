@@ -1,5 +1,12 @@
 package info.bliki.wiki.test.code;
 
+import info.bliki.wiki.tags.code.ABAPTest;
+import info.bliki.wiki.tags.code.CSharpTest;
+import info.bliki.wiki.tags.code.GroovyTest;
+import info.bliki.wiki.tags.code.JavaScriptTest;
+import info.bliki.wiki.tags.code.JavaTest;
+import info.bliki.wiki.tags.code.PHPTest;
+import info.bliki.wiki.tags.code.XMLTest;
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;

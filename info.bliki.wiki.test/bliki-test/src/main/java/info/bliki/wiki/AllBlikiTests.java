@@ -1,10 +1,10 @@
 package info.bliki.wiki;
 
 import info.bliki.html.test.AllHTMLTests;
+import info.bliki.wiki.filter.AllFilterTests;
+import info.bliki.wiki.tags.code.AllCodeTests;
 import info.bliki.wiki.template.TemplateFunctionsTest;
 import info.bliki.wiki.template.expr.EvalDoubleTestCase;
-import info.bliki.wiki.test.code.AllCodeTests;
-import info.bliki.wiki.test.filter.AllFilterTests;
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;

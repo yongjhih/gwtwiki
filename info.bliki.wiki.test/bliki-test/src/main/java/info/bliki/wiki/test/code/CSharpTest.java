@@ -1,6 +1,6 @@
 package info.bliki.wiki.test.code;
 
-import info.bliki.wiki.test.filter.FilterTestSupport;
+import info.bliki.wiki.filter.FilterTestSupport;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 

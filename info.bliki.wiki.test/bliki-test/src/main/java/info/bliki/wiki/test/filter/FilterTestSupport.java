@@ -1,5 +1,6 @@
 package info.bliki.wiki.test.filter;
 
+import info.bliki.wiki.filter.WikiTestModel;
 import info.bliki.wiki.model.Configuration;
 import info.bliki.wiki.model.WikiModel;
 

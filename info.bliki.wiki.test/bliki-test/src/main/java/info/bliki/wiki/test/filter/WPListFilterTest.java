@@ -1,5 +1,6 @@
 package info.bliki.wiki.test.filter;
 
+import info.bliki.wiki.filter.FilterTestSupport;
 import info.bliki.wiki.filter.PlainTextConverter;
 import info.bliki.wiki.filter.WPList;
 import info.bliki.wiki.filter.WikipediaScanner;

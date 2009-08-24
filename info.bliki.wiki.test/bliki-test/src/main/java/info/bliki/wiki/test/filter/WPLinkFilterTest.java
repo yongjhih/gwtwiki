@@ -1,5 +1,7 @@
 package info.bliki.wiki.test.filter;
 
+import info.bliki.wiki.filter.FilterTestSupport;
+
 import java.util.Map;
 import java.util.Set;
 

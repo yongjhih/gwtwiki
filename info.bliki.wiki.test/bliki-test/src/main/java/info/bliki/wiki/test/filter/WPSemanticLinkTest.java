@@ -1,5 +1,6 @@
 package info.bliki.wiki.test.filter;
 
+import info.bliki.wiki.filter.FilterTestSupport;
 import info.bliki.wiki.model.SemanticAttribute;
 import info.bliki.wiki.model.SemanticRelation;
 
