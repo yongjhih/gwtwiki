@@ -198,7 +198,6 @@ public class WikiModel extends AbstractWikiModel {
 	 *          the raw image link text without the surrounding
 	 *          <code>[[...]]</code>
 	 */
-	@Override
 	public void parseInternalImageLink(String imageNamespace, String rawImageLink) {
 		if (fExternalImageBaseURL != null) {
 			String imageHref = fExternalWikiBaseURL;
