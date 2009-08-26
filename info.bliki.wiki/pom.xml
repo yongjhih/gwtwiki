@@ -4,14 +4,14 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>info.bliki.wiki</groupId>
 	<artifactId>bliki</artifactId>
-	<packaging>pom</packaging>
+	<packaging>pom</packaging> 
 	<name>Bliki POM</name>
-	<version>3.0.13</version>
+	<version>3.0.14-SNAPSHOT</version>
 	<description>The Bliki API is a Java-based Wiki to HTML renderer
 		with MediaWiki syntax support.</description>
 	<organization>
-		<name>MathEclipse</name>
-		<url>http://matheclipse.org/en/Java_Wikipedia_API</url>
+		<name>Java Wikipedia API (Bliki engine)</name>
+		<url>http://code.google.com/p/gwtwiki/</url>
 	</organization>
 	<scm>
 		<connection>scm:svn:http://gwtwiki.googlecode.com/svn/trunk/</connection>
@@ -45,17 +45,17 @@
 			<dependency>
 				<groupId>info.bliki.wiki</groupId>
 				<artifactId>bliki-core</artifactId>
-				<version>3.0.13</version>
+				<version>3.0.14-SNAPSHOT</version>
 			</dependency>
 			<dependency>
 				<groupId>info.bliki.wiki</groupId>
 				<artifactId>bliki-pdf</artifactId>
-				<version>3.0.13</version>
-			</dependency>
+				<version>3.0.14-SNAPSHOT</version>
+			</dependency> 
 			<dependency>
 				<groupId>info.bliki.wiki</groupId>
 				<artifactId>bliki-addons</artifactId>
-				<version>3.0.13</version>
+				<version>3.0.14-SNAPSHOT</version>
 			</dependency>
 			<dependency>
 				<groupId>commons-httpclient</groupId>

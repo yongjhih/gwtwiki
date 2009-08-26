@@ -268,6 +268,12 @@ public class WPTableFilterTest extends FilterTestSupport {
 				+ "\n" + "\n" + " \n" + "\n" + " ", wikiModel.render(new PlainTextConverter(), TEST));
 	}
 
+	public void testUmlauts01() {
+		assertEquals( 
+				"Eine große Überraschung", wikiModel.render(new PlainTextConverter(), "Eine große''' <del>Überraschung</del>"));
+	}
+
+	
 	// public void testWPTable02() {
 	// String WIKIPEDIA =
 	// "<table border=\"1\" cellspacing=\"0\" cellpadding=\"5\" align=\"center\">\n"
