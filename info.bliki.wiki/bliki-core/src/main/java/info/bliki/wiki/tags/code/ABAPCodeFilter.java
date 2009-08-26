@@ -367,6 +367,7 @@ public class ABAPCodeFilter implements SourceCodeFormatter {
             currentChar = source[currentPosition++];
             appendChar(result, currentChar);
             if (currentChar == '\n') {
+            	currentPosition--;
               break;
             }
           }
