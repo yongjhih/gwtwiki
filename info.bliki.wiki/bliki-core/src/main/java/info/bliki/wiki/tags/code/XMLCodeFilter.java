@@ -59,7 +59,6 @@ public class XMLCodeFilter extends AbstractCPPBasedCodeFilter implements SourceC
 
 						continue;
 					} else {
-						result.append("<b>");
 						result.append(FONT_KEYWORD);
 						appendChar(result, currentChar);
 						// start of identifier ?
@@ -79,7 +78,6 @@ public class XMLCodeFilter extends AbstractCPPBasedCodeFilter implements SourceC
 							currentPosition--;
 						}
 						result.append(FONT_END);
-						result.append("</b>");
 						continue; // while loop
 					}
 				} else if (currentChar == '/') { // closing tags
