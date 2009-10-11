@@ -23,7 +23,7 @@ import java.util.Map;
 
 /**
  * Wiki model implementation which uses the <code>info.bliki.api</code> package
- * for downloading templates ans images from a defined wiki.
+ * for downloading templates and images from a defined wiki.
  * 
  */
 public class APIWikiModel extends WikiModel {
@@ -63,9 +63,28 @@ public class APIWikiModel extends WikiModel {
 	}
 
 	/**
+	 * WikiModel which loads the templates and images through the <a
+	 * href="http://meta.wikimedia.org/w/api.php">Wikimedia API</a>
 	 * 
+	 * @param user
+	 *          a user for the <a
+	 *          href="http://meta.wikimedia.org/w/api.php">Wikimedia API</a>
+	 * @param wikiDB
+	 *          a wiki database to retrieve already downloaded topics and
+	 *          templates
+	 * @param locale
+	 *          a locale for loading language specific resources
 	 * @param imageBaseURL
+	 *          a url string which must contains a &quot;${image}&quot; variable
+	 *          which will be replaced by the image name, to create links to
+	 *          images.
 	 * @param linkBaseURL
+	 *          a url string which must contains a &quot;${title}&quot; variable
+	 *          which will be replaced by the topic title, to create links to
+	 *          other wiki topics.
+	 * @param imageDirectoryName
+	 *          a directory for storing downloaded Wikipedia images. The directory
+	 *          must already exist.
 	 */
 	public APIWikiModel(User user, WikiDB wikiDB, Locale locale, String imageBaseURL, String linkBaseURL, String imageDirectoryName) {
 		super(Configuration.DEFAULT_CONFIGURATION, locale, imageBaseURL, linkBaseURL);
@@ -82,6 +101,22 @@ public class APIWikiModel extends WikiModel {
 		}
 	}
 
+	/**
+	 * Get the raw wiki text for the given namespace and article name. This model
+	 * implementation uses a Derby database to cache downloaded wiki template texts.
+	 * 
+	 * @param namespace
+	 *          the namespace of this article
+	 * @param templateName
+	 *          the name of the template
+	 * @param templateParameters
+	 *          if the namespace is the <b>Template</b> namespace, the current
+	 *          template parameters are stored as <code>String</code>s in this map
+	 * 
+	 * @return <code>null</code> if no content was found
+	 * 
+	 * @see info.bliki.api.User#queryContent(String[])
+	 */
 	@Override
 	public String getRawWikiContent(String namespace, String articleName, Map<String, String> templateParameters) {
 		// String result = super.getRawWikiContent(namespace, articleName,

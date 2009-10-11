@@ -109,10 +109,24 @@ public class User {
 		return connector.login(this) != null;
 	}
 
+	/**
+	 * Get the content of Mediawiki wiki pages.
+	 * 
+	 * @param listOfTitleStrings
+	 *          a list of title Strings "ArticleA,ArticleB,..."
+	 * @return a list of downloaded Mediawiki pages.
+	 */
 	public List<Page> queryContent(List<String> listOfTitleStrings) {
 		return connector.queryContent(this, listOfTitleStrings);
 	}
 
+	/**
+	 * Get the content of Mediawiki wiki pages.
+	 * 
+	 * @param listOfTitleStrings
+	 *          a list of title Strings "ArticleA,ArticleB,..."
+	 * @return a list of downloaded Mediawiki pages.
+	 */
 	public List<Page> queryContent(String[] listOfTitleStrings) {
 		return queryContent(arrayToList(listOfTitleStrings));
 	}
