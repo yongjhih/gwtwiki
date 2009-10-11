@@ -22,6 +22,7 @@ import info.bliki.wiki.tags.code.GroovyCodeFilter;
 import info.bliki.wiki.tags.code.JavaCodeFilter;
 import info.bliki.wiki.tags.code.JavaScriptCodeFilter;
 import info.bliki.wiki.tags.code.PHPCodeFilter;
+import info.bliki.wiki.tags.code.PythonCodeFilter;
 import info.bliki.wiki.tags.code.SourceCodeFormatter;
 import info.bliki.wiki.tags.code.XMLCodeFilter;
 import info.bliki.wiki.template.Anchorencode;
@@ -415,6 +416,7 @@ public class Configuration implements IConfiguration {
 		CODE_FORMATTER_MAP.put("java", new JavaCodeFilter());
 		CODE_FORMATTER_MAP.put("javascript", new JavaScriptCodeFilter());
 		CODE_FORMATTER_MAP.put("php", new PHPCodeFilter());
+		CODE_FORMATTER_MAP.put("python", new PythonCodeFilter());
 		CODE_FORMATTER_MAP.put("html4strict", new XMLCodeFilter());
 		CODE_FORMATTER_MAP.put("xml", new XMLCodeFilter());
 

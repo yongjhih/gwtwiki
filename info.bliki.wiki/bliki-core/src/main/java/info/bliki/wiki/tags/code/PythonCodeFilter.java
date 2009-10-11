@@ -4,18 +4,20 @@ import java.util.HashMap;
 import java.util.HashSet;
 
 /**
- * Syntax highlighting support for JavaScript source codes
- *
+ * Syntax highlighting support for Python source codes
+ * 
  */
-public class JavaScriptCodeFilter extends AbstractCPPBasedCodeFilter implements SourceCodeFormatter {
+public class PythonCodeFilter extends AbstractCPPBasedCodeFilter implements SourceCodeFormatter {
 
 	private static HashMap<String, String> KEYWORD_SET = new HashMap<String, String>();
 
-	private static final String[] KEYWORDS = { "abstract", "boolean", "break", "byte", "case", "catch", "char", "class", "const",
-			"continue", "debugger", "default", "delete", "do", "double", "else", "enum", "export", "extends", "false", "final",
-			"finally", "float", "for", "function", "goto", "if", "implements", "import", "in", "instanceof", "int", "interface", "long",
-			"native", "new", "null", "package", "private", "protected", "public", "return", "short", "static", "super", "switch",
-			"synchronized", "this", "throw", "throws", "transient", "true", "try", "typeof", "var", "void", "volatile", "while", "with" };
+	private static final String[] KEYWORDS = { "False", "None", "True", "and", "as", "assert", "class", "break", "continue", "def",
+			"del", "else", "elif", "except", "finally", "for", "from", "global", "is", "import", "in", "if", "lambda", "nonlocal", "not",
+			"or", "pass", "print", "raise", "return", "try", "with", "while", "yield" };
+
+	// private static final String[] OBJECT_WORDS =
+	// {
+	// };
 
 	private static HashSet<String> OBJECT_SET = new HashSet<String>();
 
@@ -23,12 +25,14 @@ public class JavaScriptCodeFilter extends AbstractCPPBasedCodeFilter implements 
 		for (int i = 0; i < KEYWORDS.length; i++) {
 			createHashMap(KEYWORD_SET, KEYWORDS[i]);
 		}
+		// for (int i = 0; i < OBJECT_WORDS.length; i++) {
+		// OBJECT_SET.add(OBJECT_WORDS[i]);
+		// }
 	}
 
-	public JavaScriptCodeFilter() {
+	public PythonCodeFilter() {
 	}
 
-	@Override
 	public String filter(String input) {
 		char[] source = input.toCharArray();
 		int currentPosition = 0;
@@ -87,7 +91,8 @@ public class JavaScriptCodeFilter extends AbstractCPPBasedCodeFilter implements 
 					}
 					result.append(FONT_END);
 					continue;
-				} else if (currentChar == '/' && currentPosition < input.length() && source[currentPosition] == '/') {
+				} else if (currentChar == '#' && ((currentPosition > 1 && source[currentPosition - 2] == '\n') ||
+						                              (currentPosition == 1))) {
 					// line comment
 					result.append(FONT_COMMENT);
 					appendChar(result, currentChar);
@@ -96,25 +101,6 @@ public class JavaScriptCodeFilter extends AbstractCPPBasedCodeFilter implements 
 						currentChar = source[currentPosition++];
 						appendChar(result, currentChar);
 						if (currentChar == '\n') {
-							break;
-						}
-					}
-					result.append(FONT_END);
-					continue;
-				} else if (currentChar == '/' && currentPosition < input.length() && source[currentPosition] == '*') {
-					if (currentPosition < (input.length() - 1) && source[currentPosition + 1] == '*') {
-						// javadoc style
-						result.append(FONT_JAVADOC);
-					} else {
-						// multiline comment
-						result.append(FONT_COMMENT);
-					}
-					appendChar(result, currentChar);
-					appendChar(result, source[currentPosition++]);
-					while (currentPosition < input.length()) {
-						currentChar = source[currentPosition++];
-						appendChar(result, currentChar);
-						if (currentChar == '/' && source[currentPosition - 2] == '*') {
 							break;
 						}
 					}
@@ -139,6 +125,10 @@ public class JavaScriptCodeFilter extends AbstractCPPBasedCodeFilter implements 
 	@Override
 	public HashMap<String, String> getKeywordSet() {
 		return KEYWORD_SET;
+	}
+
+	public String getName() {
+		return "python";
 	}
 
 	/**
