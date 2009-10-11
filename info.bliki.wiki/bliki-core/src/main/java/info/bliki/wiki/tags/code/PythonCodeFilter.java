@@ -91,8 +91,7 @@ public class PythonCodeFilter extends AbstractCPPBasedCodeFilter implements Sour
 					}
 					result.append(FONT_END);
 					continue;
-				} else if (currentChar == '#' && ((currentPosition > 1 && source[currentPosition - 2] == '\n') ||
-						                              (currentPosition == 1))) {
+				} else if (currentChar == '#') {
 					// line comment
 					result.append(FONT_COMMENT);
 					appendChar(result, currentChar);
