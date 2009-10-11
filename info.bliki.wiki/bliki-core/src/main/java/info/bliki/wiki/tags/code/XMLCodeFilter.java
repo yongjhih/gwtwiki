@@ -1,7 +1,6 @@
 package info.bliki.wiki.tags.code;
 
 import java.util.HashMap;
-import java.util.HashSet;
 
 /**
  * Syntax highlighting support for XML/HTML source code
@@ -24,7 +23,7 @@ public class XMLCodeFilter extends AbstractCPPBasedCodeFilter implements SourceC
 	 * @return Returns the OBJECT_SET.
 	 */
 	@Override
-	public HashSet<String> getObjectSet() {
+	public HashMap<String, String> getObjectSet() {
 		return null;
 	}
 

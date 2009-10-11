@@ -17,7 +17,7 @@ public class JavaScriptCodeFilter extends AbstractCPPBasedCodeFilter implements 
 			"native", "new", "null", "package", "private", "protected", "public", "return", "short", "static", "super", "switch",
 			"synchronized", "this", "throw", "throws", "transient", "true", "try", "typeof", "var", "void", "volatile", "while", "with" };
 
-	private static HashSet<String> OBJECT_SET = new HashSet<String>();
+	private static HashMap<String, String> OBJECT_SET = new HashMap<String, String>();
 
 	static {
 		for (int i = 0; i < KEYWORDS.length; i++) {
@@ -36,7 +36,7 @@ public class JavaScriptCodeFilter extends AbstractCPPBasedCodeFilter implements 
 		char currentChar = ' ';
 
 		HashMap<String, String> keywordsSet = getKeywordSet();
-		HashSet<String> objectsSet = getObjectSet();
+		HashMap<String, String> objectsSet = getObjectSet();
 		StringBuilder result = new StringBuilder(input.length() + input.length() / 4);
 		boolean identFound = false;
 		// result.append("<font color=\"#000000\">");
@@ -145,7 +145,7 @@ public class JavaScriptCodeFilter extends AbstractCPPBasedCodeFilter implements 
 	 * @return Returns the OBJECT_SET.
 	 */
 	@Override
-	public HashSet<String> getObjectSet() {
+	public HashMap<String, String> getObjectSet() {
 		return OBJECT_SET;
 	}
 

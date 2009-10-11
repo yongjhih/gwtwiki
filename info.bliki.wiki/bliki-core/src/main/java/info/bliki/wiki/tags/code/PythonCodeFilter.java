@@ -13,21 +13,26 @@ public class PythonCodeFilter extends AbstractCPPBasedCodeFilter implements Sour
 
 	private static final String[] KEYWORDS = { "False", "None", "True", "and", "as", "assert", "class", "break", "continue", "def",
 			"del", "else", "elif", "except", "finally", "for", "from", "global", "is", "import", "in", "if", "lambda", "nonlocal", "not",
-			"or", "pass", "print", "raise", "return", "try", "with", "while", "yield" };
+			"or", "pass", "raise", "return", "try", "with", "while", "yield" };
 
-	// private static final String[] OBJECT_WORDS =
-	// {
-	// };
+	private static final String[] OBJECT_WORDS = {
+			// see http://docs.python.org/library/functions.html
+			"abs", "all", "any", "basestring", "bin", "bool", "callable", "chr", "classmethod", "cmp", "compile", "complex", "delattr",
+			"dict", "dir", "divmod", "enumerate", "eval", "execfile", "file", "filter", "float", "format", "frozenset", "getattr",
+			"globals", "hasattr", "hash", "help", "hex", "id", "input", "int", "isinstance", "issubclass", "iter", "len", "list",
+			"locals", "long", "map", "max", "min", "next", "object", "oct", "open", "ord", "pow", "print", "property", "range", "raw",
+			"reduce", "reload", "repr", "reversed", "round", "set", "setattr", "slice", "sorted", "staticmethod", "str", "sum", "super",
+			"tuple", "type", "unichr", "unicode", "vars", "xrange", "zip", "__import__", "apply", "buffer", "coerce", "intern" };
 
-	private static HashSet<String> OBJECT_SET = new HashSet<String>();
+	private static HashMap<String, String> OBJECT_SET = new HashMap<String, String>();
 
 	static {
 		for (int i = 0; i < KEYWORDS.length; i++) {
 			createHashMap(KEYWORD_SET, KEYWORDS[i]);
 		}
-		// for (int i = 0; i < OBJECT_WORDS.length; i++) {
-		// OBJECT_SET.add(OBJECT_WORDS[i]);
-		// }
+		for (int i = 0; i < OBJECT_WORDS.length; i++) {
+			createObjectsMap(OBJECT_SET, OBJECT_WORDS[i]);
+		}
 	}
 
 	public PythonCodeFilter() {
@@ -40,7 +45,7 @@ public class PythonCodeFilter extends AbstractCPPBasedCodeFilter implements Sour
 		char currentChar = ' ';
 
 		HashMap<String, String> keywordsSet = getKeywordSet();
-		HashSet<String> objectsSet = getObjectSet();
+		HashMap<String, String> objectsSet = getObjectSet();
 		StringBuilder result = new StringBuilder(input.length() + input.length() / 4);
 		boolean identFound = false;
 		// result.append("<font color=\"#000000\">");
@@ -134,7 +139,7 @@ public class PythonCodeFilter extends AbstractCPPBasedCodeFilter implements Sour
 	 * @return Returns the OBJECT_SET.
 	 */
 	@Override
-	public HashSet<String> getObjectSet() {
+	public HashMap<String, String> getObjectSet() {
 		return OBJECT_SET;
 	}
 

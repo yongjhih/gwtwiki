@@ -24,7 +24,7 @@ public class PythonTest extends FilterTestSupport {
 
 		assertEquals("<pre class=\"code\">\n" + 
 				"<span style=\"color:#3F7F5F; \"># Python: &#34;Hello, world!&#34;\n" + 
-				"</span><span style=\"color:#7F0055; font-weight: bold; \">print</span> <span style=\"color:#2A00FF; \">&#34;Hello, world!&#34;</span>\n" + 
+				"</span><span style=\"color:#7F0055; \">print</span> <span style=\"color:#2A00FF; \">&#34;Hello, world!&#34;</span>\n" + 
 				"<span style=\"color:#3F7F5F; \"># last comment line</span></pre>", result);
 	}
 

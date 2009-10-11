@@ -115,14 +115,14 @@ public class GroovyCodeFilter extends AbstractCPPBasedCodeFilter implements Sour
       "Void"
       };
 
-  private static HashSet<String> OBJECT_SET = new HashSet<String>();
+  private static HashMap<String, String> OBJECT_SET = new HashMap<String, String>();
 
   static {
     for (int i = 0; i < KEYWORDS.length; i++) {
       createHashMap(KEYWORD_SET, KEYWORDS[i]);
     }
     for (int i = 0; i < OBJECT_WORDS.length; i++) {
-      OBJECT_SET.add(OBJECT_WORDS[i]);
+      createObjectsMap(OBJECT_SET, OBJECT_WORDS[i]);
     }
   }
 
@@ -145,7 +145,7 @@ public class GroovyCodeFilter extends AbstractCPPBasedCodeFilter implements Sour
    * @return Returns the OBJECT_SET.
    */
   @Override
-	public HashSet<String> getObjectSet() {
+	public HashMap<String, String> getObjectSet() {
     return OBJECT_SET;
   }
 

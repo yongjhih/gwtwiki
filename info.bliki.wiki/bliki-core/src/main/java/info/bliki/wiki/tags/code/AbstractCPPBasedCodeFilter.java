@@ -1,7 +1,6 @@
 package info.bliki.wiki.tags.code;
 
 import java.util.HashMap;
-import java.util.HashSet;
 
 /**
  * Syntax highlighting support for C++ based source codes
@@ -9,6 +8,9 @@ import java.util.HashSet;
  */
 abstract public class AbstractCPPBasedCodeFilter implements SourceCodeFormatter {
 	public final static String FONT_KEYWORD = "<span style=\"color:#7F0055; font-weight: bold; \">";
+	// "<font color=\"#7F0055\">";
+
+	public final static String FONT_OBJECTS = "<span style=\"color:#7F0055; \">";
 	// "<font color=\"#7F0055\">";
 
 	public final static String FONT_COMMENT = "<span style=\"color:#3F7F5F; \">";
@@ -48,21 +50,34 @@ abstract public class AbstractCPPBasedCodeFilter implements SourceCodeFormatter 
 		map.put(str, FONT_KEYWORD + str + FONT_END);
 	}
 
+	public static void createObjectsMap(HashMap<String, String> map, String str) {
+		map.put(str, FONT_OBJECTS + str + FONT_END);
+	}
+
 	public AbstractCPPBasedCodeFilter() {
 	}
 
-	protected int appendIdentifier(String input, int identStart, int currentPosition, HashMap<String, String> keywords,
-			HashSet<String> objectWords, StringBuilder result) {
-		String originalIdent = input.substring(identStart, --currentPosition);
+	protected int appendIdentifier(String input, int identifierStart, int currentPosition, HashMap<String, String> keyWords,
+			HashMap<String, String> objectWords, StringBuilder result) {
+		String originalIdent = input.substring(identifierStart, --currentPosition);
 		String keywordIdent = originalIdent;
 		if (!isKeywordLowerCase()) {
 			keywordIdent = keywordIdent.toLowerCase();
 		}
-		String keywordValue = (String) keywords.get(keywordIdent);
+		String keywordValue = (String) keyWords.get(keywordIdent);
 		if (keywordValue != null) {
 			result.append(keywordValue);
 		} else {
-			result.append(originalIdent);
+			if (objectWords==null) {
+				result.append(originalIdent);
+				return currentPosition;
+			}
+			String objectValue = (String) objectWords.get(keywordIdent);
+			if (objectValue != null) {
+				result.append(objectValue);
+			} else {
+				result.append(originalIdent);
+			}
 		}
 		return currentPosition;
 	}
@@ -74,7 +89,7 @@ abstract public class AbstractCPPBasedCodeFilter implements SourceCodeFormatter 
 		char currentChar = ' ';
 
 		HashMap<String, String> keywordsSet = getKeywordSet();
-		HashSet<String> objectsSet = getObjectSet();
+		HashMap<String, String> objectsSet = getObjectSet();
 		StringBuilder result = new StringBuilder(input.length() + input.length() / 4);
 		boolean identFound = false;
 		// result.append("<font color=\"#000000\">");
@@ -190,7 +205,7 @@ abstract public class AbstractCPPBasedCodeFilter implements SourceCodeFormatter 
 	/**
 	 * @return Returns the OBJECT_SET.
 	 */
-	abstract public HashSet<String> getObjectSet();
+	abstract public HashMap<String, String> getObjectSet();
 
 	/**
 	 * @return Returns the KEYWORD_MAP.

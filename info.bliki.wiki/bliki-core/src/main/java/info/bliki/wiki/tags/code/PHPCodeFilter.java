@@ -100,7 +100,7 @@ public class PHPCodeFilter extends AbstractCPPBasedCodeFilter implements SourceC
    * @return Returns the OBJECT_SET.
    */
   @Override
-	public HashSet<String> getObjectSet() {
+	public HashMap<String, String> getObjectSet() {
     return null;
   }
 
@@ -112,7 +112,7 @@ public class PHPCodeFilter extends AbstractCPPBasedCodeFilter implements SourceC
     char currentChar = ' ';
 
     HashMap<String, String> keywordsSet = getKeywordSet();
-    HashSet<String> objectsSet = getObjectSet();
+    HashMap<String, String> objectsSet = getObjectSet();
     StringBuilder result = new StringBuilder(input.length() + input.length() / 4);
     boolean identFound = false;
 //    result.append("<font color=\"#000000\">");
