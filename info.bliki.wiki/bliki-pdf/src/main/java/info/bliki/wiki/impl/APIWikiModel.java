@@ -7,7 +7,6 @@ import info.bliki.api.creator.TopicData;
 import info.bliki.api.creator.WikiDB;
 import info.bliki.htmlcleaner.TagNode;
 import info.bliki.wiki.filter.Encoder;
-import info.bliki.wiki.filter.MagicWord;
 import info.bliki.wiki.filter.WikipediaParser;
 import info.bliki.wiki.model.Configuration;
 import info.bliki.wiki.model.ImageFormat;
