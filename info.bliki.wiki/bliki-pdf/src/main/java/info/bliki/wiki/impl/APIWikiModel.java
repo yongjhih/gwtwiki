@@ -103,7 +103,8 @@ public class APIWikiModel extends WikiModel {
 
 	/**
 	 * Get the raw wiki text for the given namespace and article name. This model
-	 * implementation uses a Derby database to cache downloaded wiki template texts.
+	 * implementation uses a Derby database to cache downloaded wiki template
+	 * texts.
 	 * 
 	 * @param namespace
 	 *          the namespace of this article
@@ -119,11 +120,6 @@ public class APIWikiModel extends WikiModel {
 	 */
 	@Override
 	public String getRawWikiContent(String namespace, String articleName, Map<String, String> templateParameters) {
-		// String result = super.getRawWikiContent(namespace, articleName,
-		// templateParameters);
-		// if (result != null) {
-		// return result;
-		// }
 		String result = super.getRawWikiContent(namespace, articleName, templateParameters);
 		if (result != null) {
 			// found magic word template

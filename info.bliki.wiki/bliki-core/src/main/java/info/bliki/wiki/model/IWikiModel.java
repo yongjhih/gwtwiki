@@ -769,7 +769,7 @@ public interface IWikiModel extends IConfiguration {
 	public boolean replaceColon();
 
 	/**
-	 * Set the title of the curretly rendered page data.
+	 * Set the title of the currently rendered page data.
 	 * 
 	 * @param pageTitle
 	 */
