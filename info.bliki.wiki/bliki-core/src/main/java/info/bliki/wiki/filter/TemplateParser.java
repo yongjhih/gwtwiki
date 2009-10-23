@@ -500,7 +500,7 @@ public class TemplateParser extends AbstractParser {
 			// if (function.contains("[[Template")) {
 			// System.out.println("Function: " + fStringSource);
 			// }
-			ITemplateFunction templateFunction = fWikiModel.getTemplateFunction(function.toLowerCase());
+			ITemplateFunction templateFunction = fWikiModel.getTemplateFunction(function);
 			if (templateFunction != null) {
 				// if (function.charAt(0) == '#') {
 				// #if:, #ifeq:,...

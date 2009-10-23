@@ -47,9 +47,9 @@ import info.bliki.wiki.template.UCFirst;
 import info.bliki.wiki.template.URLEncode;
 
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeMap;
 import java.util.TreeSet;
 import java.util.regex.Pattern;
 
@@ -372,7 +372,7 @@ public class Configuration implements IConfiguration {
 	/**
 	 * Map the template's function name to the TemplateFunction implementation
 	 */
-	protected static final HashMap<String, ITemplateFunction> TEMPLATE_FUNCTION_MAP = new HashMap<String, ITemplateFunction>();;
+	protected static final Map<String, ITemplateFunction> TEMPLATE_FUNCTION_MAP = new TreeMap<String, ITemplateFunction>(String.CASE_INSENSITIVE_ORDER);;
 
 	/**
 	 * Allowed URI schemes
