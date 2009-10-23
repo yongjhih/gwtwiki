@@ -1176,8 +1176,8 @@ public class WikipediaParser extends AbstractParser implements IParser {
 			try {
 				index = urlString.indexOf(':', 1);
 				if (index > 0) {
-					uriSchemeName = urlString.substring(0, index).toLowerCase();
-					if (uriSchemeName.equals("mailto")) {
+					uriSchemeName = urlString.substring(0, index);
+					if (uriSchemeName.equalsIgnoreCase("mailto")) {
 						isEmail = true;
 						foundUrl = true;
 					} else {

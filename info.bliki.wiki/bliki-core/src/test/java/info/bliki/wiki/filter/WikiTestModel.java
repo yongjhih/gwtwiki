@@ -938,7 +938,7 @@ public class WikiTestModel extends WikiModel {
 
 	@Override
 	public void appendExternalLink(String uriSchemeName, String link, String linkName, boolean withoutSquareBrackets) {
-		if (uriSchemeName.equals("tel")) {
+		if (uriSchemeName.equalsIgnoreCase("tel")) {
 			// example for a telephone link
 			link = Utils.escapeXml(link, true, false, false);
 			TagNode aTagNode = new TagNode("a");
