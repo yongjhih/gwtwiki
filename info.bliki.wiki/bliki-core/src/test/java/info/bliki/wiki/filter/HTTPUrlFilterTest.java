@@ -114,4 +114,10 @@ public class HTTPUrlFilterTest extends FilterTestSupport {
 				+ "<p>call <a class=\"telephonelink\" href=\"tel:+0815-4711\" title=\"tel:+0815-4711\">a phone number</a></p>", wikiModel
 				.render("call [tel:+0815-4711 a phone number]"));
 	}
+	
+	public void testUrlTEL03() {
+		assertEquals("\n"
+				+ "<p>call <a class=\"telephonelink\" href=\"tEl:+0815-4711\" title=\"tEl:+0815-4711\">a phone number</a></p>", wikiModel
+				.render("call [tEl:+0815-4711 a phone number]"));
+	}
 }
