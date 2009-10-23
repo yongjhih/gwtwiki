@@ -50,6 +50,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeSet;
 import java.util.regex.Pattern;
 
 /**
@@ -376,7 +377,7 @@ public class Configuration implements IConfiguration {
 	/**
 	 * Allowed URI schemes
 	 */
-	protected static final HashSet<String> URI_SCHEME_MAP = new HashSet<String>();
+	protected static final Set<String> URI_SCHEME_MAP = new TreeSet<String>(String.CASE_INSENSITIVE_ORDER);
 
 	public final static Pattern NOWIKI_OPEN_PATTERN = Pattern.compile("\\<nowiki\\>", Pattern.CASE_INSENSITIVE);
 

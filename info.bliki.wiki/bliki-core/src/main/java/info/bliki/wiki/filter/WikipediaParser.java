@@ -291,13 +291,13 @@ public class WikipediaParser extends AbstractParser implements IParser {
 						if (!isEmptyLine(1)) {
 							if (fWikiModel.stackSize() == 0) {
 								addParagraph();
-		//						if (fWikiModel.getRecursionLevel() == 1) {
-		//							addParagraph();
-		//						} else {
-		//							if (fCurrentPosition > 1) {
-		//								addParagraph();
-		//							}
-		//						}
+								// if (fWikiModel.getRecursionLevel() == 1) {
+								// addParagraph();
+								// } else {
+								// if (fCurrentPosition > 1) {
+								// addParagraph();
+								// }
+								// }
 							} else {
 								TagToken tag = fWikiModel.peekNode();
 								if (tag instanceof WPPreTag) {
@@ -657,8 +657,7 @@ public class WikipediaParser extends AbstractParser implements IParser {
 		try {
 			index = fStringSource.indexOf(':', fCurrentPosition);
 			if (index > 0) {
-				uriSchemeName = fStringSource.substring(fCurrentPosition - 1, index).toLowerCase();
-
+				uriSchemeName = fStringSource.substring(fCurrentPosition - 1, index);
 				if (fWikiModel.isValidUriScheme(uriSchemeName)) {
 					// found something like "ftp", "http", "https"
 					tempPosition += uriSchemeName.length() + 1;
