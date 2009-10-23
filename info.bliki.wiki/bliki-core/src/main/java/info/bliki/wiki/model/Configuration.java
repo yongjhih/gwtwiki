@@ -357,7 +357,7 @@ public class Configuration implements IConfiguration {
 	/**
 	 * Map from the interwiki shortcut to the real Interwiki-URL
 	 */
-	protected static final HashMap<String, String> INTERWIKI_MAP = new HashMap<String, String>();
+	protected static final Map<String, String> INTERWIKI_MAP = new TreeMap<String, String>(String.CASE_INSENSITIVE_ORDER);
 
 	/**
 	 * Map the HTML token string to the correspoding TagToken implementation

@@ -419,7 +419,7 @@ public abstract class AbstractWikiModel implements IWikiModel, IContext {
 	}
 
 	public void appendInterWikiLink(String namespace, String title, String linkText) {
-		String hrefLink = getInterwikiMap().get(namespace.toLowerCase());
+		String hrefLink = getInterwikiMap().get(namespace);
 		if (hrefLink == null) {
 			// shouldn't really happen
 			hrefLink = "#";
@@ -840,7 +840,7 @@ public abstract class AbstractWikiModel implements IWikiModel, IContext {
 	}
 
 	public boolean isInterWiki(String namespace) {
-		return getInterwikiMap().containsKey(namespace.toLowerCase());
+		return getInterwikiMap().containsKey(namespace);
 	}
 
 	public boolean isMathtranRenderer() {
