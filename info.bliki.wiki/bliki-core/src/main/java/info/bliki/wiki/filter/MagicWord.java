@@ -382,7 +382,7 @@ public class MagicWord {
 						// {{TALKPAGENAME:Template:Sandbox}}
 						String rest = namespace.substring(index + 1);
 						namespace = namespace.substring(0, index);
-						String talkspace = ns.getTalkspace(namespace.toLowerCase());
+						String talkspace = ns.getTalkspace(namespace);
 						if (talkspace != null) {
 							return talkspace + ":" + rest;
 						}

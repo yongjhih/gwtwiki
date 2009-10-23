@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 import java.util.ResourceBundle;
+import java.util.TreeMap;
 
 public class Namespace implements INamespace {
 
@@ -25,7 +26,7 @@ public class Namespace implements INamespace {
 
 	public final Map<String, String> NAMESPACE_MAP = new HashMap<String, String>();
 
-	public final Map<String, String> TALKSPACE_MAP = new HashMap<String, String>();
+	public final Map<String, String> TALKSPACE_MAP = new TreeMap<String, String>(String.CASE_INSENSITIVE_ORDER);
 
 	protected ResourceBundle fResourceBundle = null;
 

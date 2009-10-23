@@ -87,5 +87,11 @@ public interface INamespace {
 	
 	public String getUser2();
 	
+	/**
+	 * Get the Talk namespace.
+	 * 
+	 * @param namespace
+	 * @return
+	 */
 	public String getTalkspace(String namespace);
 }
