@@ -9,8 +9,6 @@ import info.bliki.wiki.tags.util.INoBodyParsingTag;
 import java.io.IOException;
 import java.util.Map;
 
-import org.junit.experimental.theories.Theories;
-
 /*
  * Allows source code to be syntax highlighted on the wiki pages.
  * 
