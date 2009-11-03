@@ -119,11 +119,11 @@ public class WPLinkFilterTest extends FilterTestSupport {
 	public void testLink12() {
 		assertEquals(
 				"\n" + 
-				"<p>kellereien wie <a href=\"http://www.bliki.info/wiki/Henkell_%26amp%3B_S%C3%B6hnlein\" title=\"Henkell &amp;amp; Söhnlein\">Henkell</a>, <a href=\"http://www.bliki.info/wiki/S%C3%B6hnlein\" title=\"Söhnlein\">Söhnlein</a></p>",
+				"<p>kellereien wie <a href=\"http://www.bliki.info/wiki/Henkell_%26_S%C3%B6hnlein\" title=\"Henkell &amp; Söhnlein\">Henkell</a>, <a href=\"http://www.bliki.info/wiki/S%C3%B6hnlein\" title=\"Söhnlein\">Söhnlein</a></p>",
 				wikiModel.render("kellereien wie [[Henkell & Söhnlein|Henkell]], [[Söhnlein]]"));
 		Set set = wikiModel.getLinks();
 		assertTrue(set.contains("Söhnlein"));
-		assertTrue(set.contains("Henkell &amp; Söhnlein"));
+		assertTrue(set.contains("Henkell & Söhnlein"));
 	}
 
 	public void testLink13() {

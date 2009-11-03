@@ -373,7 +373,7 @@ public abstract class AbstractWikiModel implements IWikiModel, IContext {
 			String altAttribute = imageFormat.getAlt();
 			if (altAttribute == null) {
 				altAttribute = captionTagNode.getBodyString();
-				imageFormat.setAlt(altAttribute);
+				imageFormat.setAlt(Encoder.encodeHtml(altAttribute));// see issue #25
 			}
 			pushNode(captionTagNode);
 			// WikipediaParser.parseRecursive(caption, this);
@@ -539,7 +539,7 @@ public abstract class AbstractWikiModel implements IWikiModel, IContext {
 				rawTopicName = rawTopicName.substring(0, trimRightIndex + 1);
 			}
 
-			rawTopicName = Encoder.encodeHtml(rawTopicName);
+			// rawTopicName = Encoder.encodeHtml(rawTopicName); // see issue #25
 			String viewableLinkDescription;
 			if (-1 != pipeIndex) {
 				viewableLinkDescription = alias + suffix;

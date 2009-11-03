@@ -356,7 +356,7 @@ public class Encoder {
 
 	/**
 	 * copy the text in the resulting buffer and escape special html characters
-	 * (&lt; &gt; &quot; &amp; &#39;)
+	 * (&lt; &gt; &#34; ( &quot; ) &amp; &#39;)
 	 * 
 	 * @param buffer
 	 *          add converted text into the resulting buffer
@@ -417,7 +417,7 @@ public class Encoder {
 				} else {
 					lastIndex++;
 				}
-				buffer.append("&quot;");
+				buffer.append("&#34;");
 				break;
 			}
 		}
