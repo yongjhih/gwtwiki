@@ -1556,6 +1556,11 @@ public class WikipediaParser extends AbstractParser implements IParser {
 		return parser.parseRecursiveInternal(wikiModel, createOnlyLocalStack, noTOC);
 	}
 
+	/**
+	 * Determine if the currently parsed wiki text is a template text.
+	 * 
+	 * @return <code>true</code> if the currently parsed wiki text is a template
+	 */
 	public boolean isTemplate() {
 		return fRenderTemplate;
 	}
