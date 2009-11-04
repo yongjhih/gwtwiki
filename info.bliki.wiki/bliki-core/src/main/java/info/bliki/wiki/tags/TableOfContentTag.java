@@ -1,6 +1,7 @@
 package info.bliki.wiki.tags;
 
 import info.bliki.Messages;
+import info.bliki.wiki.filter.Encoder;
 import info.bliki.wiki.filter.ITextConverter;
 import info.bliki.wiki.filter.StringPair;
 import info.bliki.wiki.model.ITableOfContent;
@@ -56,15 +57,10 @@ public class TableOfContentTag extends HTMLTag implements IBodyTag, ITableOfCont
 					counted = true;
 				}
 				StringPair pair = (StringPair) toc.get(i);
-				String head = pair.getFirst();
+				String head = Encoder.encodeHtml(pair.getFirst());
 				String anchor = pair.getSecond();
-				writer.append("\n<li class=\"toclevel-");
-				writer.append(Integer.toString(level));
-				writer.append("\"><a href=\"#");
-				writer.append(anchor);
-				writer.append("\">");
-				writer.append(head);
-				writer.append("</a>\n</li>");
+				writer.append("\n<li class=\"toclevel-").append(Integer.toString(level)).append("\"><a href=\"#").append(anchor).append(
+						"\">").append(head).append("</a>\n</li>");
 			} else {
 				renderToC(writer, (List<Object>) toc.get(i), level);
 			}
