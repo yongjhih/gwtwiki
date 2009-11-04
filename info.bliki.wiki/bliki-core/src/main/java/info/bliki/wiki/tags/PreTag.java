@@ -28,7 +28,7 @@ public class PreTag extends HTMLBlockTag implements INoBodyParsingTag {// implem
 			writer.append("\n<pre>");
 			content = Configuration.NOWIKI_OPEN_PATTERN.matcher(content).replaceAll("");
 			content = Configuration.NOWIKI_CLOSE_PATTERN.matcher(content).replaceAll("");
-			NowikiTag.copyPre(content, writer, false);
+			NowikiTag.copyPre(content, writer, true);
 			writer.append("</pre>");
 		}
 	}
