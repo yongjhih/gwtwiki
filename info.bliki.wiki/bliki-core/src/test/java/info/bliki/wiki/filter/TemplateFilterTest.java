@@ -383,7 +383,7 @@ public class TemplateFilterTest extends FilterTestSupport {
 	public void testIf_image_test() {
 		assertEquals(
 				"\n"
-						+ "<p>test <div style=\"width:220px\"><a class=\"internal\" href=\"http://www.bliki.info/wiki/File:220px-test.jpg\" ><img src=\"http://www.bliki.info/wiki/220px-test.jpg\" class=\"location-none\" width=\"220\" />\n"
+						+ "<p>test <div style=\"width:220px;\"><a class=\"internal\" href=\"http://www.bliki.info/wiki/File:220px-test.jpg\" ><img src=\"http://www.bliki.info/wiki/220px-test.jpg\" class=\"location-none\" width=\"220\" />\n"
 						+ "</a></div>\n" + " test123</p>", wikiModel.render("test {{If_image_test|  image =  test.jpg}} test123"));
 	}
 

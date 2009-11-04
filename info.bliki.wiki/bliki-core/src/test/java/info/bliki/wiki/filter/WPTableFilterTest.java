@@ -208,7 +208,7 @@ public class WPTableFilterTest extends FilterTestSupport {
 						+ "<th class=\"fn\" colspan=\"2\" style=\"text-align:center; font-size:larger;\">Chris Capuano</th></tr>\n"
 						+ "<tr>\n"
 						+ "<th colspan=\"2\" style=\"text-align:center;\">\n"
-						+ "<div style=\"width:300px\"><a class=\"internal\" href=\"http://www.bliki.info/wiki/Image:300px-Cap.jpg\" ><img src=\"http://www.bliki.info/wiki/300px-Cap.jpg\" class=\"location-none\" width=\"300\" />\n"
+						+ "<div style=\"width:300px;\"><a class=\"internal\" href=\"http://www.bliki.info/wiki/Image:300px-Cap.jpg\" ><img src=\"http://www.bliki.info/wiki/300px-Cap.jpg\" class=\"location-none\" width=\"300\" />\n"
 						+ "</a></div>\n"
 						+ "<br/>\n"
 						+ "</th></tr>\n"
@@ -284,7 +284,7 @@ public class WPTableFilterTest extends FilterTestSupport {
 				// this is the result of the malformed input
 				+ "<tr malformed=\"null\">\n" + "<td><b><a href=\"http://www.bliki.info/wiki/Testing\""
 				+ " title=\"testing\">testing</a></b></td>\n" + "<td>\nThis is a test of a malformed table.</td>\n"
-				+ "<td align=\"center\"><div style=\"width:140px\">" + "<a class=\"internal\""
+				+ "<td align=\"center\"><div style=\"width:140px;\">" + "<a class=\"internal\""
 				+ " href=\"http://www.bliki.info/wiki/Image:140px-test.png\" >" + "<img src=\"http://www.bliki.info/wiki/140px-test.png\""
 				+ " class=\"location-none\" width=\"140\" />\n</a></div>\n</td>" + "</tr></table></div>\n";
 		assertEquals(expected, wikiModel.render(raw));

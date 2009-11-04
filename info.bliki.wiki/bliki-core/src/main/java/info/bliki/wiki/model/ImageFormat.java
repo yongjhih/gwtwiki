@@ -1,5 +1,6 @@
 package info.bliki.wiki.model;
 
+import info.bliki.wiki.filter.Encoder;
 import info.bliki.wiki.filter.WikipediaScanner;
 
 import java.util.List;
@@ -42,7 +43,7 @@ public class ImageFormat {
 						}
 						if (token.equals("alt")) {
 							attrValue = caption.substring(defIndex + 1).trim();
-							img.setAlt(attrValue);
+							img.setAlt(Encoder.encodeHtml(attrValue));
 							continue;
 						}
 					} else {

@@ -103,7 +103,7 @@ public class HTMLConverter implements ITextConverter {
 			}
 		}
 
-		List children = node.getChildren();
+		List<Object> children = node.getChildren();
 		if (children.size() == 0 && !name.equals("a")) {
 			resultBuffer.append(" />");
 		} else {
@@ -133,56 +133,34 @@ public class HTMLConverter implements ITextConverter {
 		String type = imageFormat.getType();
 		int pxWidth = imageFormat.getWidth();
 		int pxHeight = imageFormat.getHeight();
-		if (pxHeight != -1) {
+		boolean hasDimensions = pxHeight != -1 || pxWidth != -1;
+		if (hasDimensions) {
 			resultBuffer.append("<div style=\"");
-			resultBuffer.append("height:");
-			resultBuffer.append(Integer.toString(pxHeight));
+			if (pxHeight != -1) {
+				resultBuffer.append("height:").append(Integer.toString(pxHeight)).append("px;");
+			}
 			if (pxWidth != -1) {
-				resultBuffer.append("px; width:");
-				resultBuffer.append(Integer.toString(pxWidth));
-				resultBuffer.append("px");
-			} else {
-				resultBuffer.append("px");
+				resultBuffer.append("width:").append(Integer.toString(pxWidth)).append("px;");
 			}
 			resultBuffer.append("\">");
-		} else {
-			if (pxWidth != -1) {
-				resultBuffer.append("<div style=\"");
-				resultBuffer.append("width:");
-				resultBuffer.append(Integer.toString(pxWidth));
-				resultBuffer.append("px");
-				resultBuffer.append("\">");
-			}
 		}
 		String href = map.get("href");
 		if (href != null) {
-			resultBuffer.append("<a class=\"internal\" href=\"");
-			resultBuffer.append(map.get("href"));
-			resultBuffer.append("\" ");
+			resultBuffer.append("<a class=\"internal\" href=\"").append(href).append("\" ");
 
 			if (caption != null && caption.length() > 0) {
-				resultBuffer.append("title=\"");
-				if (alt.length() == 0) {
-					resultBuffer.append(caption);
-				} else {
-					resultBuffer.append(alt);
-				}
-				resultBuffer.append('\"');
+				resultBuffer.append("title=\"").append((alt.length() == 0) ? caption : alt).append('"');
 			}
 			resultBuffer.append('>');
 		}
 
-		resultBuffer.append("<img src=\"");
-		resultBuffer.append(map.get("src"));
-		resultBuffer.append("\"");
+		resultBuffer.append("<img src=\"").append(map.get("src")).append('"');
 
 		if (caption != null && caption.length() > 0) {
 			if (alt.length() == 0) {
-				resultBuffer.append(" alt=\"").append(caption).append("\"");
-				resultBuffer.append(" title=\"").append(caption).append("\"");
+				resultBuffer.append(" alt=\"").append(caption).append('"').append(" title=\"").append(caption).append('"');
 			} else {
-				resultBuffer.append(" alt=\"").append(alt).append("\"");
-				resultBuffer.append(" title=\"").append(alt).append("\"");
+				resultBuffer.append(" alt=\"").append(alt).append('"').append(" title=\"").append(alt).append('"');
 			}
 		}
 
@@ -195,18 +173,13 @@ public class HTMLConverter implements ITextConverter {
 			if (type != null) {
 				clazz.append(" type-").append(type);
 			}
-			resultBuffer.append(clazz.toString().trim());
-			resultBuffer.append("\"");
+			resultBuffer.append(clazz.toString().trim()).append('"');
 		}
 		if (pxHeight != -1) {
-			resultBuffer.append(" height=\"").append(Integer.toString(pxHeight)).append("\" ");
-			if (pxWidth != -1) {
-				resultBuffer.append(" width=\"").append(Integer.toString(pxWidth)).append('\"');
-			}
-		} else {
-			if (pxWidth != -1) {
-				resultBuffer.append(" width=\"").append(Integer.toString(pxWidth)).append('\"');
-			}
+			resultBuffer.append(" height=\"").append(Integer.toString(pxHeight)).append('"');
+		}
+		if (pxWidth != -1) {
+			resultBuffer.append(" width=\"").append(Integer.toString(pxWidth)).append('\"');
 		}
 		resultBuffer.append(" />\n");
 
@@ -227,7 +200,7 @@ public class HTMLConverter implements ITextConverter {
 		// writer.append("</div>\n");
 		// }
 
-		if (pxHeight != -1 || pxWidth != -1) {
+		if (hasDimensions) {
 			resultBuffer.append("</div>\n");
 		}
 	}
