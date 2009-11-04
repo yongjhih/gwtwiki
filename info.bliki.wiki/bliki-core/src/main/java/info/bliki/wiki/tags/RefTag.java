@@ -1,6 +1,7 @@
 package info.bliki.wiki.tags;
 
 import info.bliki.htmlcleaner.TagNode;
+import info.bliki.wiki.filter.Encoder;
 import info.bliki.wiki.filter.ITextConverter;
 import info.bliki.wiki.model.IWikiModel;
 import info.bliki.wiki.tags.util.IBodyTag;
@@ -33,24 +34,15 @@ public class RefTag extends HTMLTag implements IBodyTag {
 		}
 		renderHTMLWithoutTag(converter, buf, model);
 		Map<String, String> map = getAttributes();
-		String value = (String) map.get("name");
+		String value = map.get("name");
 		String[] offset = model.addToReferences(buf.toString(), value);// getBodyString
-																																		// ());
-		writer.append("<sup id=\"_ref-");
-		if (offset[1] == null) {
-			writer.append(offset[0]);
-		} else {
-			writer.append(offset[1]);
+		if (null == value) {
+			value = offset[0];
 		}
-		writer.append("\" class=\"reference\"><a href=\"#_note-");
-		if (value == null) {
-			writer.append(offset[0]);
-		} else {
-			writer.append(value);
-		}
-		writer.append("\" title=\"\">[");
-		writer.append(offset[0]);
-		writer.append("]</a></sup>");
+		String ref = (null == offset[1]) ? offset[0] : offset[1];
+
+		writer.append("<sup id=\"_ref-").append(Encoder.encodeDotUrl(ref)).append("\" class=\"reference\"><a href=\"#_note-").append(
+				Encoder.encodeDotUrl(value)).append("\" title=\"\">[").append(offset[0]).append("]</a></sup>");
 	}
 
 	@Override
