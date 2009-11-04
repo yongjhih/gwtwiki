@@ -269,11 +269,27 @@ public class WPTableFilterTest extends FilterTestSupport {
 	}
 
 	public void testUmlauts01() {
-		assertEquals( 
-				"Eine große Überraschung", wikiModel.render(new PlainTextConverter(), "Eine große''' <del>Überraschung</del>"));
+		assertEquals("Eine große Überraschung", wikiModel.render(new PlainTextConverter(), "Eine große''' <del>Überraschung</del>"));
 	}
 
-	
+	public void testTableCross() {
+		// 2009-11-03, from enwiki page "Cross"
+		String raw = "{| class=\"wikitable\"\n" + "|-\n" + "! col1 !! col2 !! col3\n"
+				+ "|-| | '''[[lorem ipsum]]''' (test malformed table)\n" + "| | '''[[testing]]'''\n" + "|\n"
+				+ "This is a test of a malformed table.\n" + "|align=\"center\"|[[Image:test.png|140px]]\n" + "|}\n";
+		String expected = "\n"
+				+ "<div style=\"page-break-inside:\tavoid;\">\n"
+				+ "<table class=\"wikitable\">\n"
+				+ "<tr>\n<th>col1 </th>\n<th>col2 </th>\n<th>col3</th></tr>\n"
+				// this is the result of the malformed input
+				+ "<tr malformed=\"null\">\n" + "<td><b><a href=\"http://www.bliki.info/wiki/Testing\""
+				+ " title=\"testing\">testing</a></b></td>\n" + "<td>\nThis is a test of a malformed table.</td>\n"
+				+ "<td align=\"center\"><div style=\"width:140px\">" + "<a class=\"internal\""
+				+ " href=\"http://www.bliki.info/wiki/Image:140px-test.png\" >" + "<img src=\"http://www.bliki.info/wiki/140px-test.png\""
+				+ " class=\"location-none\" width=\"140\" />\n</a></div>\n</td>" + "</tr></table></div>\n";
+		assertEquals(expected, wikiModel.render(raw));
+	}
+
 	// public void testWPTable02() {
 	// String WIKIPEDIA =
 	// "<table border=\"1\" cellspacing=\"0\" cellpadding=\"5\" align=\"center\">\n"
