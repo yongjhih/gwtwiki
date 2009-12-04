@@ -49,9 +49,9 @@ public class Encoder {
 
 /**
 	 * Encode a string to the "x-www-form-urlencoded" form, enhanced with the
-	 * UTF-8-in-URL proposal. This is what happens: 8see
+	 * UTF-8-in-URL proposal. This is what happens: See
 	 * http://www.w3.org/International/URLUTF8Encoder.java ) Exception: a ' '
-	 * (space) will be replaced by a '_' (underscore) not '+' (plus)
+	 * (space) will be replaced by a '_' (underscore) not '+' (plus); a '#' remain the same.
 	 * 
 	 * <ul>
 	 * <li>
@@ -65,8 +65,12 @@ public class Encoder {
 	 * 
 	 * <li>
 	 * <p>
+	 * The '#' character remains the same.
+	 * 
+	 * <li>
+	 * <p>
 	 * The space character ' ' is converted into a underscore sign '_' (not a plus
-	 * sign '+').
+	 * sign '+'!).
 	 * 
 	 * <li>
 	 * <p>
@@ -110,6 +114,8 @@ public class Encoder {
 		} else if (ch == ' ') { // space
 			// sbuf.append('+');
 			sbuf.append('_'); // special for wiki syntax !
+		} else if (ch == '#') {
+			sbuf.append('#');
 		} else if (ch == '-' || ch == '_' || ch == '/' || ch == '.' || ch == ':' || ch == '!' || ch == '~' || ch == '\'' || ch == '('
 				|| ch == ')') {
 			sbuf.append((char) ch);
@@ -125,7 +131,7 @@ public class Encoder {
 		}
 	}
 
-	/**
+/**
 	 * Encode a string to the "x-www-form-urlencoded" form, enhanced with the
 	 * UTF-8-in-URL proposal. This is what happens: 8see
 	 * http://www.w3.org/International/URLUTF8Encoder.java ) Exception: a ' '
@@ -188,6 +194,8 @@ public class Encoder {
 		} else if (ch == ' ') { // space
 			// sbuf.append('+');
 			sbuf.append('_'); // special for wiki syntax !
+		} else if (ch == '#') {
+			sbuf.append('#');
 		} else if (ch == '-' || ch == '_' || ch == '/' || ch == '.' || ch == ':' || ch == '!' || ch == '~' || ch == '\'' || ch == '('
 				|| ch == ')') {
 			sbuf.append((char) ch);
@@ -202,7 +210,7 @@ public class Encoder {
 			sbuf.append(hex1[0x80 | (ch & 0x3F)]);
 		}
 	}
-	
+
 	/**
 	 * Encode character for local file system
 	 * 
@@ -312,7 +320,7 @@ public class Encoder {
 		}
 		return buffer.toString();
 	}
-	
+
 	/**
 	 * Encode name for local file system
 	 * 
