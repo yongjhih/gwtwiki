@@ -129,37 +129,33 @@ public class WPImageFilterTest extends FilterTestSupport {
 
 	public void testImage14() {
 		assertEquals(
-				"\n" + 
-				"<p><a class=\"internal\" href=\"http://www.bliki.info/wiki/Image:William_Fettes_Douglas_-_The_Alchemist.jpg\" title=\"&#34;Renel the Alchemist&#34;, by Sir William Douglas, 1853\"><img src=\"http://www.bliki.info/wiki/William_Fettes_Douglas_-_The_Alchemist.jpg\" alt=\"&#34;Renel the Alchemist&#34;, by Sir William Douglas, 1853\" title=\"&#34;Renel the Alchemist&#34;, by Sir William Douglas, 1853\" class=\"location-left type-thumb\" />\n" + 
-				"</a>\n" + 
-				"<div class=\"thumbcaption\">&#34;Renel the Alchemist&#34;, by Sir William Douglas, 1853</div></p>",
+				"\n"
+						+ "<p><a class=\"internal\" href=\"http://www.bliki.info/wiki/Image:William_Fettes_Douglas_-_The_Alchemist.jpg\" title=\"&#34;Renel the Alchemist&#34;, by Sir William Douglas, 1853\"><img src=\"http://www.bliki.info/wiki/William_Fettes_Douglas_-_The_Alchemist.jpg\" alt=\"&#34;Renel the Alchemist&#34;, by Sir William Douglas, 1853\" title=\"&#34;Renel the Alchemist&#34;, by Sir William Douglas, 1853\" class=\"location-left type-thumb\" />\n"
+						+ "</a>\n" + "<div class=\"thumbcaption\">&#34;Renel the Alchemist&#34;, by Sir William Douglas, 1853</div></p>",
 				wikiModel
 						.render("[[Image:William Fettes Douglas - The Alchemist.jpg|thumb|left|\"Renel the Alchemist\", by Sir William Douglas, 1853]]"));
 	}
 
 	public void testImage15() {
-        String raw = "[[Image:Bamfield (171).jpg|right|thumb"
-                + "|Tsunami hazard sign at [[Bamfield]], [[British Columbia]]"
-                + "|alt=Photo of sign reading "
-                + "\"Tsunami Hazard Zone...In case of earthquake,"
-                + " go to higher ground or inland\"]]";
-        String expected = "\n"
-                + "<p><a class=\"internal\""
-                + " href=\"http://www.bliki.info/wiki/Image:Bamfield_(171).jpg\""
-                + " title=\"Photo of sign reading &#34;Tsunami Hazard Zone..."
-                + "In case of earthquake, go to higher ground or inland&#34;\">"
-                + "<img src=\"http://www.bliki.info/wiki/Bamfield_(171).jpg\""
-                + " alt=\"Photo of sign reading &#34;Tsunami Hazard Zone..."
-                + "In case of earthquake, go to higher ground or inland&#34;\""
-                + " title=\"Photo of sign reading &#34;Tsunami Hazard Zone..."
-                + "In case of earthquake, go to higher ground or inland&#34;\""
-                + " class=\"location-right type-thumb\" />\n"
-                + "</a>\n"
-                + "<div class=\"thumbcaption\">Tsunami hazard sign at"
-                + " <a href=\"http://www.bliki.info/wiki/Bamfield\""
-                + " title=\"Bamfield\">Bamfield</a>,"
-                + " <a href=\"http://www.bliki.info/wiki/British_Columbia\""
-                + " title=\"British Columbia\">British Columbia</a></div></p>";
-	    assertEquals(expected, wikiModel.render(raw));
+		String raw = "[[Image:Bamfield (171).jpg|right|thumb" + "|Tsunami hazard sign at [[Bamfield]], [[British Columbia]]"
+				+ "|alt=Photo of sign reading " + "\"Tsunami Hazard Zone...In case of earthquake," + " go to higher ground or inland\"]]";
+		String expected = "\n" + "<p><a class=\"internal\"" + " href=\"http://www.bliki.info/wiki/Image:Bamfield_(171).jpg\""
+				+ " title=\"Photo of sign reading &#34;Tsunami Hazard Zone..."
+				+ "In case of earthquake, go to higher ground or inland&#34;\">"
+				+ "<img src=\"http://www.bliki.info/wiki/Bamfield_(171).jpg\"" + " alt=\"Photo of sign reading &#34;Tsunami Hazard Zone..."
+				+ "In case of earthquake, go to higher ground or inland&#34;\""
+				+ " title=\"Photo of sign reading &#34;Tsunami Hazard Zone..."
+				+ "In case of earthquake, go to higher ground or inland&#34;\"" + " class=\"location-right type-thumb\" />\n" + "</a>\n"
+				+ "<div class=\"thumbcaption\">Tsunami hazard sign at" + " <a href=\"http://www.bliki.info/wiki/Bamfield\""
+				+ " title=\"Bamfield\">Bamfield</a>," + " <a href=\"http://www.bliki.info/wiki/British_Columbia\""
+				+ " title=\"British Columbia\">British Columbia</a></div></p>";
+		assertEquals(expected, wikiModel.render(raw));
 	}
+
+	public void testImage16() {
+		assertEquals("\n" + 
+				"<p><a class=\"internal\" href=\"http://www.bliki.info/wiki/Sandbox:createNewPage#Section_Three\" ><img src=\"http://www.bliki.info/wiki/skull.jpg\" class=\"location-none\" />\n" + 
+				"</a></p>", wikiModel.render("[[Image:skull.jpg|link=sandbox:createNewPage#Section Three]]"));
+	}
+	
 }
