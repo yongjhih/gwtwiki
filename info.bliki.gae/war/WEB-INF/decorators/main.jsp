@@ -2,11 +2,11 @@
 <%@ include file="/WEB-INF/jsp/common/include.jsp" %>
 <html>
     <head>
-        <title>Bliki - <decorator:title default="${page.title}" /></title>
+        <title><decorator:title default="${page.title}" /> - <fmt:message key="common.sitename" /></title>
         <link href="/css/960/reset.css" rel="stylesheet"></link>
         <link href="/css/960/text.css" rel="stylesheet"></link>
         <link href="/css/960/960.css" rel="stylesheet"></link>
-        <link href="/css/minimalist/default.css" rel="stylesheet"></link>
+        <link href="bliki.css" rel="stylesheet"></link>
         <decorator:head />
     </head>
     <body>

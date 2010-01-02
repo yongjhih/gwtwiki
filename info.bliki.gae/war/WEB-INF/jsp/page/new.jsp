@@ -5,7 +5,7 @@
 <body>
 	<h3>Add new page</h3>
 	<form action="/page/new" method="post" name="frmNewPage" class="medium">
-		<div>
+		<div> 
 			<label for="title"><fmt:message key="frmNewPage.title"/></label>
 			<input type="text" name="title" value="${page.title}"/>
 		</div>
