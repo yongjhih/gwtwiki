@@ -1,8 +1,14 @@
 package info.bliki.gae.controller;
 
 import info.bliki.gae.db.PageService;
-import info.bliki.gae.model.BlikiUtil;
 import info.bliki.gae.model.Page;
+import info.bliki.gae.utils.BlikiBase;
+import info.bliki.gae.utils.BlikiUtil;
+
+import java.io.PrintWriter;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
@@ -13,7 +19,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-
 
 @Controller
 public class PageViewController {
@@ -29,6 +34,32 @@ public class PageViewController {
     }
     model.addAttribute("page", page);
     return "page/view";
+  }
+
+  @RequestMapping(value = "/bliki.css", method = RequestMethod.GET)
+  public String indexStylesheet(HttpServletRequest request,
+      HttpServletResponse response, Model model) {
+    try {
+      Page page = pageService.findByTitle(BlikiBase.SPECIAL_PAGE_STYLESHEET);
+      if (page != null) {
+        // model.addAttribute("page", page);
+        String stylesheet = page.getContent();
+        response.setContentType("text/css");
+        response.setCharacterEncoding("UTF-8");
+        // cache for 30 minutes (60 * 30 = 1800)
+        // FIXME - make configurable
+        response.setHeader("Cache-Control", "max-age=1800");
+        PrintWriter out = response.getWriter();
+        out.print(stylesheet);
+        out.close();
+
+      }
+    } catch (Exception e) {
+      // logger.severe("Failure while loading stylesheet for virtualWiki " +
+      // virtualWiki, e);
+    }
+    // do not load defaults or redirect - return as raw CSS
+    return null;
   }
 
   @RequestMapping(value = "/wiki/{key}", method = RequestMethod.GET)

@@ -41,10 +41,6 @@ public class Page implements Serializable {
   @NotPersistent
   private String htmlContent;
 
-  public final static String MAIN_PAGE = "Main Page";
-
-//  public static final Long HOME_PAGE_KEY = 1L;
-
   public Page() {
   }
   

@@ -1,8 +1,12 @@
 package info.bliki.gae.controller;
 
 import info.bliki.gae.db.PageService;
-import info.bliki.gae.model.BlikiUtil;
 import info.bliki.gae.model.Page;
+import info.bliki.gae.utils.BlikiBase;
+import info.bliki.gae.utils.BlikiUtil;
+
+import java.io.IOException;
+import java.util.Locale;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -125,17 +129,41 @@ public class PageController {
   }
 
   @RequestMapping(value = "/install", method = RequestMethod.GET)
-  private String install(Model model) {
+  public String install(Model model) {
     if (lameSecurityCheck() != null) {
       return lameSecurityCheck();
     }
-    // create completely new page
-    Page page = pageService.findByTitle(Page.MAIN_PAGE);
+    Page page = pageService.findByTitle(BlikiBase.SPECIAL_PAGE_STARTING_POINTS);
     if (page == null) {
-      page = new Page(Page.MAIN_PAGE, "The main page content");
-      page = pageService.save(page);
-      model.addAttribute("page", page);
+      // create special pages
+      Locale locale = Locale.ENGLISH;
+      setupSpecialPage(locale, BlikiBase.SPECIAL_PAGE_LEFT_MENU);
+      setupSpecialPage(locale, BlikiBase.SPECIAL_PAGE_BOTTOM_AREA);
+      setupSpecialPage(locale, BlikiBase.SPECIAL_PAGE_STYLESHEET);
+      page = setupSpecialPage(locale, BlikiBase.SPECIAL_PAGE_STARTING_POINTS);
     }
+    model.addAttribute("page", page);
     return "page/view";
+  }
+
+  private Page setupSpecialPage(Locale locale, String topicName) {
+    // logger.info("Setting up special page " + virtualWiki + " / " +
+    // topicName);
+    // if (user == null) {
+    // throw new IllegalArgumentException(
+    // "Cannot pass null WikiUser object to setupSpecialPage");
+    // }
+    String contents = null;
+    try {
+      contents = BlikiUtil.readSpecialPage(locale, topicName);
+      if (contents != null) {
+        Page page = new Page(topicName, contents);
+        page = pageService.save(page);
+        return page;
+
+      }
+    } catch (IOException e) {
+    }
+    return null;
   }
 }

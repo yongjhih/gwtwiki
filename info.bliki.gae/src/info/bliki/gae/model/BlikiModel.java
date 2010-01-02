@@ -2,6 +2,7 @@ package info.bliki.gae.model;
 
 import info.bliki.gae.db.PageService;
 import info.bliki.gae.db.PageServiceImpl;
+import info.bliki.gae.utils.BlikiUtil;
 import info.bliki.htmlcleaner.ContentToken;
 import info.bliki.wiki.filter.WikipediaParser;
 import info.bliki.wiki.model.WikiModel;

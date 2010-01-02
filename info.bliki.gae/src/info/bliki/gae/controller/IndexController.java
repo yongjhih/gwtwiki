@@ -2,6 +2,7 @@ package info.bliki.gae.controller;
 
 import info.bliki.gae.db.PageService;
 import info.bliki.gae.model.Page;
+import info.bliki.gae.utils.BlikiBase;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -25,8 +26,8 @@ public class IndexController {
   @RequestMapping(value = "/", method = RequestMethod.GET)
   public String get(Model model) {
     // Page page = pageService.findByKey(Page.HOME_PAGE_KEY);
-    Page page = pageService.findByTitle(Page.MAIN_PAGE);
+    Page page = pageService.findByTitle(BlikiBase.SPECIAL_PAGE_STARTING_POINTS);
     model.addAttribute("page", page);
-    return "redirect:/wiki/" + Page.MAIN_PAGE;
+    return "redirect:/wiki/" + BlikiBase.SPECIAL_PAGE_STARTING_POINTS;
   }
 }
