@@ -31,7 +31,7 @@ public class WPTableFilterTest extends FilterTestSupport {
 			+ "&lt;span style=&quot;font-size: 90%;&quot;&gt;{{CURRENTDAY}}. {{CURRENTMONTHNAMEGEN}} {{CURRENTYEAR}} {{CURRENTTIME}} UTC &lt;/span&gt;\n"
 			+ "|}";
 
-	public final String TEST3 = "=== Simple example ===\n"
+	public static final String TEST3 = "=== Simple example ===\n"
 			+ "Both of these generate the same output.  Choose a style based on the number of cells in each row and the total text inside each cell.\n"
 			+ "\n" + "\'\'\'Wiki markup\'\'\'\n"
 			+ "<blockquote style=\"background: white; border: 1px solid rgb(153, 153, 153); padding: 1em;\"><pre><nowiki>\n" + "{| \n"
@@ -42,13 +42,13 @@ public class WPTableFilterTest extends FilterTestSupport {
 			+ "<blockquote style=\"background: white; border: 1px solid rgb(153, 153, 153); padding: 1em;\">\n" + "{| \n" + "| A\n"
 			+ "| B\n" + "|- \n" + "| C\n" + "| D\n" + "|}\n" + "</blockquote>\n";
 
-	public final String TEST5 = "<table><tr></tr><tr><td>&#160;</td><td width=\"48%\">\n"
+	public static final String TEST5 = "<table><tr></tr><tr><td>&#160;</td><td width=\"48%\">\n"
 			+ "<blockquote style=\"background: white; border: 1px solid rgb(153, 153, 153); padding: 1em;\">\n"
 			+ "{| class=\"wikitable\"\n" + "|+Multiplication table\n" + "|-\n" + "! &times; !! 1 !! 2 !! 3\n" + "|-\n" + "! 1\n"
 			+ "| 1 || 2 || 3\n" + "|-\n" + "! 2\n" + "| 2 || 4 || 6\n" + "|-\n" + "! 3\n" + "| 3 || 6 || 9\n" + "|-\n" + "! 4\n"
 			+ "| 4 || 8 || 12\n" + "|-\n" + "! 5\n" + "| 5 || 10 || 15\n" + "|}\n" + "</blockquote></td></tr></table>\n";
 
-	public final String TEST6 = "=== Nested tables ===\n"
+	public static final String TEST6 = "=== Nested tables ===\n"
 			+ "This shows one table (in blue) nested inside another table\'s cell2.  \'\'Nested tables have to start on a new line.\'\'\n"
 			+ "\n"
 			+ "\'\'\'Wiki markup\'\'\'\n"
