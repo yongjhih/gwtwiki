@@ -40,6 +40,28 @@ public class Connector {
 
 	private HttpClient client;
 
+	/**
+	 * Format the response body as XML String. Especially for some obscure <a
+	 * href="http://en.wikipedia.org/wiki/Byte_order_mark ">byte order mark</a>
+	 * cases. See <a
+	 * href="http://code.google.com/p/gwtwiki/issues/detail?id=33">Issue #33</a>
+	 * 
+	 * @param method
+	 * @return
+	 * @throws IOException
+	 */
+	public static String getAsXmlString(HttpMethod method) throws IOException {
+		String responseBody = method.getResponseBodyAsString();
+		if (responseBody.length() > 0 && responseBody.charAt(0) != '<') {
+			// try to find XML. 
+			int indx = responseBody.indexOf("<?xml");
+			if (indx > 0) {
+				responseBody = responseBody.substring(indx);
+			}
+		}
+		return responseBody;
+	}
+
 	public Connector() {
 		manager = new MultiThreadedHttpConnectionManager();
 		// manager.setMaxConnectionsPerHost(6);
@@ -85,7 +107,7 @@ public class Connector {
 		try {
 			int responseCode = client.executeMethod(method);
 			if (responseCode == HttpStatus.SC_OK) {
-				String responseBody = method.getResponseBodyAsString();
+				String responseBody = getAsXmlString(method);
 				XMLUserParser parser = new XMLUserParser(user, responseBody);
 				parser.parse();
 				if (!user.getResult().equals(User.SUCCESS_ID)) {
@@ -106,11 +128,24 @@ public class Connector {
 		return null;
 	}
 
-
+	/**
+	 * Get the HttpClient.
+	 * 
+	 * @return
+	 */
 	public HttpClient getClient() {
 		return client;
 	}
-	
+
+	/**
+	 * Get the HttpConnection manager.
+	 * 
+	 * @return
+	 */
+	public MultiThreadedHttpConnectionManager getManager() {
+		return manager;
+	}
+
 	/**
 	 * Get the content of Mediawiki wiki pages.
 	 * 
@@ -338,7 +373,7 @@ public class Connector {
 		try {
 			int responseCode = client.executeMethod(method);
 			if (responseCode == HttpStatus.SC_OK) {
-				return method.getResponseBodyAsString();
+				return getAsXmlString(method);
 			}
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
