@@ -487,7 +487,7 @@ public class Configuration implements IConfiguration {
 	 * Limits the recursive call of the Wikipedia and Template parser to a depth
 	 * of PARSER_RECURSION_LIMIT
 	 */
-	public final static int PARSER_RECURSION_LIMIT = 16;
+	public final static int PARSER_RECURSION_LIMIT = 32;
 
 	/**
 	 * Limits the recursive call of the HTMLConverter renderer to a depth of
