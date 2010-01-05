@@ -1,15 +1,13 @@
 package info.bliki.api;
 
-import info.bliki.api.query.RequestBuilder;
 import info.bliki.api.query.Edit;
 import info.bliki.api.query.Query;
+import info.bliki.api.query.RequestBuilder;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpException;
@@ -108,6 +106,11 @@ public class Connector {
 		return null;
 	}
 
+
+	public HttpClient getClient() {
+		return client;
+	}
+	
 	/**
 	 * Get the content of Mediawiki wiki pages.
 	 * 
