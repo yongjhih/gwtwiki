@@ -159,8 +159,33 @@ public interface IWikiModel extends IConfiguration {
 	 * @param headCounter
 	 *          the total number of headers parsed
 	 * @return the &quot;table of content&quot; tag
+	 * 
+	 * @deprecated
 	 */
 	public ITableOfContent appendHead(String rawHead, int headLevel, boolean noToC, int headCounter);
+
+	/**
+	 * Add a single wiki head (i.e. ==...==, ===...===, ====...====,...) to the
+	 * table of content
+	 * 
+	 * @param rawHead
+	 *          the unparsed header string
+	 * @param headLevel
+	 *          level of header (i.e. h1, h2, h3, h4, 5h,..)
+	 * @param noToc
+	 *          don't show the &quot;table of content&quot;
+	 * @param headCounter
+	 *          the total number of headers parsed
+	 * @param startPosition
+	 *          the start index in the text where the header line of the section
+	 *          begins
+	 * @param endPosition
+	 *          the start index in the text where the header line of the section
+	 *          ends
+	 * @return the &quot;table of content&quot; tag
+	 */
+	public ITableOfContent appendHead(String rawHead, int headLevel, boolean noToC, int headCounter, int startPosition,
+			int endPosition);
 
 	/**
 	 * Append this internal wiki image link
@@ -494,6 +519,14 @@ public interface IWikiModel extends IConfiguration {
 	public List<SemanticRelation> getSemanticRelations();
 
 	/**
+	 * Get the parsed &quot;table of content&quot; data after parsing the
+	 * Wikipedia text.
+	 * 
+	 * @return
+	 */
+	public ITableOfContent getTableOfContent();
+
+	/**
 	 * Get a template parser function (i.e. <code>{{ #if: ... }}</code> )
 	 * implementation.
 	 * 
@@ -813,5 +846,5 @@ public interface IWikiModel extends IConfiguration {
 	public void tearDown();
 
 	public INamespace getNamespace();
-	
+
 }

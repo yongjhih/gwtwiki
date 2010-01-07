@@ -21,12 +21,12 @@ public class ParseTest extends BaseQueryTest {
 		User user = getAnonymousUser();
 		Connector connector = new Connector();
 		user = connector.login(user);
-		System.out.println(user.getToken());
+		// System.out.println(user.getToken());
 		RequestBuilder request = Parse.create().page("Main Page");
 		ParseData parseData = connector.parse(user, request);
 		assertNotNull(parseData);
 		assertNotNull(parseData.getText());
 		String html = StringEscapeUtils.unescapeHtml(parseData.getText());
-		System.out.println("Retrieved html text:\n" + html);
+		// System.out.println("Retrieved html text:\n" + html);
 	}
 }

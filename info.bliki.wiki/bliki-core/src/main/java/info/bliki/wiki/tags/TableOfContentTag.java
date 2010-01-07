@@ -3,7 +3,7 @@ package info.bliki.wiki.tags;
 import info.bliki.Messages;
 import info.bliki.wiki.filter.Encoder;
 import info.bliki.wiki.filter.ITextConverter;
-import info.bliki.wiki.filter.StringPair;
+import info.bliki.wiki.filter.SectionHeader;
 import info.bliki.wiki.model.ITableOfContent;
 import info.bliki.wiki.model.IWikiModel;
 import info.bliki.wiki.tags.util.IBodyTag;
@@ -51,12 +51,12 @@ public class TableOfContentTag extends HTMLTag implements IBodyTag, ITableOfCont
 		writer.append("\n<ul>");
 		boolean counted = false;
 		for (int i = 0; i < toc.size(); i++) {
-			if (toc.get(i) instanceof StringPair) {
+			if (toc.get(i) instanceof SectionHeader) {
 				if (!counted) {
 					level++;
 					counted = true;
 				}
-				StringPair pair = (StringPair) toc.get(i);
+				SectionHeader pair = (SectionHeader) toc.get(i);
 				String head = Encoder.encodeHtml(pair.getFirst());
 				String anchor = pair.getSecond();
 				writer.append("\n<li class=\"toclevel-").append(Integer.toString(level)).append("\"><a href=\"#").append(anchor).append(
@@ -115,4 +115,20 @@ public class TableOfContentTag extends HTMLTag implements IBodyTag, ITableOfCont
 		fIsTOCIdentifier = isTOCIdentifier;
 	}
 
+	public List<SectionHeader> getSectionHeaders() {
+		List<SectionHeader> resultList = new ArrayList<SectionHeader>();
+		extractSectionHeaders(fTableOfContent, resultList);
+		return resultList;
+	}
+
+	private void extractSectionHeaders(List<Object> toc, List<SectionHeader> resultList) {
+		for (int i = 0; i < toc.size(); i++) {
+			if (toc.get(i) instanceof SectionHeader) {
+				SectionHeader header = (SectionHeader) toc.get(i);
+				resultList.add(header);
+			} else {
+				extractSectionHeaders((List<Object>) toc.get(i), resultList);
+			}
+		}
+	}
 }

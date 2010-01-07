@@ -14,6 +14,10 @@ public class DefaultEventListener implements IEventListener {
 	public void onHeader(char[] src, int rawStart, int rawEnd, int level) {
 	}
 
+	public void onHeader(char[] src, int startPosition, int endPosition, int rawStart, int rawEnd, int level) {
+		onHeader(src, rawStart, rawEnd, level);
+	}
+
 	public void onWikiLink(char[] src, int rawStart, int rawEnd, String suffix) {
 	}
 

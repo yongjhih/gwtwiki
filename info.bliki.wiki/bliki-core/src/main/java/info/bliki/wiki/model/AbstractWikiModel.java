@@ -12,7 +12,7 @@ import info.bliki.wiki.filter.HTMLConverter;
 import info.bliki.wiki.filter.ITextConverter;
 import info.bliki.wiki.filter.MagicWord;
 import info.bliki.wiki.filter.PDFConverter;
-import info.bliki.wiki.filter.StringPair;
+import info.bliki.wiki.filter.SectionHeader;
 import info.bliki.wiki.filter.TemplateParser;
 import info.bliki.wiki.filter.WikipediaParser;
 import info.bliki.wiki.namespaces.INamespace;
@@ -74,6 +74,7 @@ public abstract class AbstractWikiModel implements IWikiModel, IContext {
 	 * 
 	 */
 	protected TableOfContentTag fTableOfContentTag = null;
+
 	/**
 	 * &quot;table of content&quot;
 	 * 
@@ -742,7 +743,10 @@ public abstract class AbstractWikiModel implements IWikiModel, IContext {
 	public List<SemanticRelation> getSemanticRelations() {
 		return null;
 	}
-
+	
+	public ITableOfContent getTableOfContent() {
+		return fTableOfContentTag;
+	}
 	// public TableOfContentTag getTableOfContentTag(boolean isTOCIdentifier) {
 	// if (fTableOfContentTag == null) {
 	// TableOfContentTag tableOfContentTag = new TableOfContentTag("div");
@@ -1232,13 +1236,18 @@ public abstract class AbstractWikiModel implements IWikiModel, IContext {
 		return aTagNode;
 	}
 
+	public ITableOfContent appendHead(String rawHead, int headLevel, boolean noToC, int headCounter) {
+		return appendHead(rawHead, headLevel, noToC, headCounter, 0, 0);
+	}
+
 	/**
-	 * handle head for table of content
+	 * Append a new head to the table of content
 	 * 
 	 * @param rawHead
 	 * @param headLevel
 	 */
-	public ITableOfContent appendHead(String rawHead, int headLevel, boolean noToC, int headCounter) {
+	public ITableOfContent appendHead(String rawHead, int headLevel, boolean noToC, int headCounter, int startPosition,
+			int endPosition) {
 		TagStack localStack = WikipediaParser.parseRecursive(rawHead.trim(), this, true, true);
 
 		WPTag headTagNode = new WPTag("h" + headLevel);
@@ -1259,7 +1268,8 @@ public abstract class AbstractWikiModel implements IWikiModel, IContext {
 			}
 			anchor = newAnchor;
 		}
-		addToTableOfContent(fTableOfContent, tocHead, anchor, headLevel);
+		SectionHeader strPair = new SectionHeader(headLevel, startPosition, endPosition, tocHead, anchor);
+		addToTableOfContent(fTableOfContent, strPair, headLevel);
 		if (getRecursionLevel() == 1) {
 			buildEditLinkUrl(fSectionCounter++);
 		}
@@ -1272,19 +1282,19 @@ public abstract class AbstractWikiModel implements IWikiModel, IContext {
 		return fTableOfContentTag;
 	}
 
-	private void addToTableOfContent(List<Object> toc, String head, String anchor, int headLevel) {
+	private void addToTableOfContent(List<Object> toc, SectionHeader strPair, int headLevel) {
 		if (headLevel == 1) {
-			toc.add(new StringPair(head, anchor));
+			toc.add(strPair);
 		} else {
 			if (toc.size() > 0) {
 				if (toc.get(toc.size() - 1) instanceof List) {
-					addToTableOfContent((List<Object>) toc.get(toc.size() - 1), head, anchor, --headLevel);
+					addToTableOfContent((List<Object>) toc.get(toc.size() - 1), strPair, --headLevel);
 					return;
 				}
 			}
 			ArrayList<Object> list = new ArrayList<Object>();
 			toc.add(list);
-			addToTableOfContent(list, head, anchor, --headLevel);
+			addToTableOfContent(list, strPair, --headLevel);
 		}
 	}
 

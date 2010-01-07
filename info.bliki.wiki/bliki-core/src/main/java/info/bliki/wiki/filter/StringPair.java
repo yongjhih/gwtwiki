@@ -6,9 +6,9 @@ package info.bliki.wiki.filter;
  *  
  */
 public class StringPair {
-	private String fFirst;
+	protected String fFirst;
 
-	private String fSecond;
+	protected String fSecond;
 
 	public StringPair(String one, String two) {
 		this.fFirst = one;

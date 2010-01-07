@@ -973,6 +973,8 @@ public class WikipediaParser extends AbstractParser implements IParser {
 				return false;
 			}
 			int level = 0;
+			int startPosition = headerStartPosition;
+			int endPosition = headerEndPosition + 1;
 			while (headerStartPosition < headerEndPosition) {
 				if (fSource[headerStartPosition] == '=' && fSource[headerEndPosition] == '=') {
 					level++;
@@ -999,11 +1001,11 @@ public class WikipediaParser extends AbstractParser implements IParser {
 			if (headerEndPosition > headerStartPosition) {
 				head = fStringSource.substring(headerStartPosition, headerEndPosition);
 			}
-			fEventListener.onHeader(fSource, headerStartPosition, headerEndPosition, level);
+			fEventListener.onHeader(fSource, startPosition, endPosition, headerStartPosition, headerEndPosition, level);
 			fCurrentPosition = endIndex;
 
 			if (head != null) {
-				fTableOfContentTag = fWikiModel.appendHead(head, level, fNoToC, ++fHeadCounter);
+				fTableOfContentTag = fWikiModel.appendHead(head, level, fNoToC, ++fHeadCounter, startPosition, endPosition);
 			}
 			return true;
 		}
