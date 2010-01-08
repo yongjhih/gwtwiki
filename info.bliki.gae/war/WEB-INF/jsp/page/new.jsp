@@ -13,7 +13,7 @@
 			<label for="content"><fmt:message key="frmNewPage.content"/></label>
 			<textarea rows="15" cols="70" name="content">${page.content}</textarea>
 		</div>
-		<input type="hidden" name="key" value="${page.key}"/>
+		
 		<div><input type="submit" name="Save" class="submit" value="Save"/></div>
 	</form>
 </body>

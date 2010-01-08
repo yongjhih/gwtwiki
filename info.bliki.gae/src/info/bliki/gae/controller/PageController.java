@@ -41,51 +41,49 @@ public class PageController {
   }
 
   @RequestMapping(value = "new", method = RequestMethod.POST)
-  public String createPost(String title, String content, Long key, Model model) {
-    return create(title, content, key, model);
+  public String createPost(String title, String content, Model model) {
+    return create(title, content, model);
   }
 
   @RequestMapping(value = "new", method = RequestMethod.GET)
-  public String createGet(String title, String content, Long key, Model model) {
-    return create(title, content, key, model);
+  public String createGet(String title, String content, Model model) {
+    return create(title, content, model);
   }
 
-  private String create(String title, String content, Long key, Model model) {
+  private String create(String title, String content, Model model) {
     if (lameSecurityCheck() != null) {
       return lameSecurityCheck();
     }
     Page page = null;
-    if (key != null) {
+    page = pageService.findByTitle(title);
+    if (page != null) {
       // update an existing page
-      page = pageService.findByKey(key);
-      if (page != null) {
-        page.setTitle(title);
-        page.setContent(content);
-        page = pageService.update(page);
-        model.addAttribute("page", page);
-        return "page/view";
-      }
-    } else {
-      // create completely new page
-      page = new Page(title, content);
-      page = pageService.save(page);
+      page.setTitle(title);
+      page.setContent(content);
+      page = pageService.update(page);
       model.addAttribute("page", page);
       return "page/view";
     }
-
-    model.addAttribute("pages", pageService.getAll());
-    return "redirect:/page/";
+    // create completely new page
+    page = new Page(title, content);
+    page = pageService.save(page);
+    model.addAttribute("page", page);
+    return "page/view";
+    // 
+    //
+    // model.addAttribute("pages", pageService.getAll());
+    // return "redirect:/page/";
   }
 
-  @RequestMapping(value = "/delkey/{key}", method = RequestMethod.GET)
-  public String delete(@PathVariable String key, Model model) {
+  @RequestMapping(value = "/delete/{title}", method = RequestMethod.GET)
+  public String delete(@PathVariable String title, Model model) {
     if (lameSecurityCheck() != null) {
       return lameSecurityCheck();
     }
     Page page = null;
-    if (key != null) {
+    if (title != null) {
       // delete an existing page
-      page = pageService.findByKey(Long.valueOf(key));
+      page = pageService.findByTitle(title);
       if (page != null) {
         pageService.delete(page);
       }
@@ -95,30 +93,30 @@ public class PageController {
     return "redirect:/page/";
   }
 
-  @RequestMapping(value = "/editkey/{key}", method = RequestMethod.GET)
-  public String editKey(@PathVariable String key, Model model) {
+  @RequestMapping(value = "/edit/{title}", method = RequestMethod.GET)
+  public String editKey(@PathVariable String title, Model model) {
     if (lameSecurityCheck() != null) {
       return lameSecurityCheck();
     }
-    Page page = pageService.findByKey(Long.valueOf(key));
+    Page page = pageService.findByTitle(title);
     model.addAttribute("page", page);
     return NEW_PAGE_URI;
   }
 
-  @RequestMapping(value = "/edit/{key}", method = RequestMethod.GET)
-  public String edit(@PathVariable String key, Model model) {
-    if (lameSecurityCheck() != null) {
-      return lameSecurityCheck();
-    }
-    String topicName = BlikiUtil.decodeTitle(key);
-    Page page = pageService.findByTitle(topicName);
-    if (page == null) {
-      model.addAttribute("page", new Page(topicName, ""));
-    } else {
-      model.addAttribute("page", page);
-    }
-    return NEW_PAGE_URI;
-  }
+  // @RequestMapping(value = "/edit/{key}", method = RequestMethod.GET)
+  // public String edit(@PathVariable String key, Model model) {
+  // if (lameSecurityCheck() != null) {
+  // return lameSecurityCheck();
+  // }
+  // String topicName = BlikiUtil.decodeTitle(key);
+  // Page page = pageService.findByTitle(topicName);
+  // if (page == null) {
+  // model.addAttribute("page", new Page(topicName, ""));
+  // } else {
+  // model.addAttribute("page", page);
+  // }
+  // return NEW_PAGE_URI;
+  // }
 
   private String lameSecurityCheck(String destinationUrl) {
     return BlikiUtil.securityCheck(destinationUrl);

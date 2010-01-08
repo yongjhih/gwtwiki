@@ -35,6 +35,9 @@ public class BlikiUtil {
   }
 
   public static boolean isUserEditor() {
+    if (!userService.isUserLoggedIn()) {
+      return false;
+    }
     return userService.isUserAdmin();
   }
   public static String securityCheck(String destinationUrl) {

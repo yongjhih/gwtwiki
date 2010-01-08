@@ -1,4 +1,4 @@
-<div style="text-align:center;font-weight:bold;color:green;font-size:150%">¡JAMWiki ha sido instalado con éxito!</div>
+<div style="text-align:center;font-weight:bold;color:green;font-size:150%">¡Bliki ha sido instalado con éxito!</div>
 
 Puede editar cualquier página haciendo clic en la pestaña "Editar" en la parte superior de la página.  La configuración de esta instalación puede modificarse en la página [[Special: Admin]].  Además, para cambiar el aspecto de su Wiki se pueden actualizar estos temas:
 
@@ -6,7 +6,7 @@ Puede editar cualquier página haciendo clic en la pestaña "Editar" en la parte
 * [[BottomArea]] - El pie de página que aparece en cada página.
 * [[StyleSheet]] - La hoja de estilos que contiene información de estilo CSS para su wiki.
 
-Por último, por favor contribuyan al proyecto JAMWiki presentando informes  del éxito o fracaso de su instalación en [http://jamwiki.org/ jamiki.org] de modo que JAMWiki pueda seguir mejorando.  Además, en [http://jamwiki.org/ jamwiki.org] se encuentra la documentación actualizada de JAMWiki,  incluyendo instrucciones para personalizar aún más su instalación.
+Por último, por favor contribuyan al proyecto Bliki presentando informes  del éxito o fracaso de su instalación en [http://code.google.com/p/gwtwiki/ Bliki Project] de modo que Bliki pueda seguir mejorando.  Además, en [http://jamwiki.org/ jamwiki.org] se encuentra la documentación actualizada de JAMWiki,  incluyendo instrucciones para personalizar aún más su instalación.
 
 Otras funciones útiles:
 

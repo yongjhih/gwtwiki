@@ -26,15 +26,15 @@ public class PageViewController {
   @Autowired
   private PageService pageService;
 
-  @RequestMapping(value = "/p/{key}", method = RequestMethod.GET)
-  public String indexP(@PathVariable String key, Model model) {
-    Page page = pageService.findByKey(Long.valueOf(key));
-    if (page == null) {
-      return "common/404";
-    }
-    model.addAttribute("page", page);
-    return "page/view";
-  }
+  // @RequestMapping(value = "/p/{key}", method = RequestMethod.GET)
+  // public String indexP(@PathVariable String key, Model model) {
+  // Page page = pageService.findByKey(Long.valueOf(key));
+  // if (page == null) {
+  // return "common/404";
+  // }
+  // model.addAttribute("page", page);
+  // return "page/view";
+  // }
 
   @RequestMapping(value = "/bliki.css", method = RequestMethod.GET)
   public String indexStylesheet(HttpServletRequest request,
@@ -67,6 +67,8 @@ public class PageViewController {
     if (StringUtils.isBlank(key)) {
       return "common/404";
     }
+    model.addAttribute("leftMenu", pageService.getHTMLContent("LeftMenu"));
+    model.addAttribute("bottomArea", pageService.getHTMLContent("BottomArea"));
     String topicName = BlikiUtil.decodeTitle(key);
     Page page = pageService.findByTitle(topicName);
     if (page == null) {

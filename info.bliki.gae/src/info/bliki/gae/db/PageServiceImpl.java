@@ -9,20 +9,21 @@ import javax.cache.Cache;
 import javax.cache.CacheException;
 import javax.cache.CacheFactory;
 import javax.cache.CacheManager;
-import javax.jdo.JDOObjectNotFoundException;
-import javax.jdo.PersistenceManager;
-import javax.jdo.Query;
 
 import org.springframework.stereotype.Repository;
 
+import com.google.appengine.api.datastore.EntityNotFoundException;
+import com.googlecode.objectify.OQuery;
+import com.googlecode.objectify.Objectify;
+import com.googlecode.objectify.ObjectifyFactory;
+
 @Repository
 public class PageServiceImpl implements PageService {
-  PersistenceManager pm = null;
-
   public static Cache cache = null;
 
   static {
     try {
+      ObjectifyFactory.register(Page.class);
       CacheFactory cacheFactory = CacheManager.getInstance().getCacheFactory();
       cache = cacheFactory.createCache(Collections.emptyMap());
     } catch (CacheException e) {
@@ -33,104 +34,65 @@ public class PageServiceImpl implements PageService {
 
   @Override
   public Page save(Page page) {
-    try {
-      pm = PMF.get().getPersistenceManager();
-      page = pm.makePersistent(page);
-    } finally {
-      pm.close();
-    }
+    Objectify ofy = ObjectifyFactory.begin();
+    ofy.put(page);
     return page;
   }
 
   @Override
   public Page update(Page page) {
-    Page existingEntity = null; 
+    Page existingEntity = null;
     try {
-      pm = PMF.get().getPersistenceManager();
-      existingEntity = pm.makePersistent(page);
+      Objectify ofy = ObjectifyFactory.begin();
+      existingEntity = ofy.get(Page.class, page.getTitle());
       existingEntity.setTitle(page.getTitle());
       existingEntity.setContent(page.getContent());
-      Page detachedPage = pm.detachCopy(existingEntity);
-      cache.put(detachedPage.getTitle(), detachedPage);
-    } finally {
-      pm.close();
+      ofy.put(existingEntity);
+      cache.put(existingEntity.getTitle(), existingEntity);
+    } catch (EntityNotFoundException enf) {
     }
     return existingEntity;
   }
 
   @Override
   public void delete(Page page) {
-    try {
-      cache.remove(page.getTitle());
-      pm = PMF.get().getPersistenceManager();
-      pm.deletePersistent(page);
-    } finally {
-      pm.close();
-    }
+    cache.remove(page.getTitle());
+    Objectify ofy = ObjectifyFactory.begin();
+    ofy.delete(page);
   }
 
   @Override
-  public Page findByKey(Long key) {
-    Page detachedPage = null, object = null;
-    try {
-      pm = PMF.get().getPersistenceManager();
-      object = pm.getObjectById(Page.class, key);
-      detachedPage = pm.detachCopy(object);
-      cache.put(detachedPage.getTitle(), detachedPage);
-    } catch (JDOObjectNotFoundException e) {
-      return null;
-    } finally {
-      pm.close();
-    }
-    return detachedPage;
-
-  }
-
-  @Override
-  public Page findByTitle(String topicName) {
-    Page page = (Page) cache.get(topicName);
+  public Page findByTitle(String title) {
+    Page page = (Page) cache.get(title);
     if (page != null) {
       return page;
     }
     try {
-      pm = PMF.get().getPersistenceManager();
-
-      Query query = pm.newQuery(Page.class);
-      query.setFilter("title == topicName");
-      query.declareParameters("String topicName");
-      try {
-        List<Page> results = (List<Page>) query.execute(topicName);
-        if (results.iterator().hasNext()) {
-          for (Page e : results) {
-            Page detachedPage = pm.detachCopy(e);
-            cache.put(detachedPage.getTitle(), detachedPage);
-            return e;
-          }
-        } else {
-          // ... no results ...
-        }
-      } finally {
-        query.closeAll();
-      }
-      return null;
-    } catch (JDOObjectNotFoundException e) {
-      return null;
-    } finally {
-      pm.close();
+      Objectify ofy = ObjectifyFactory.begin();
+      OQuery<Page> q = ObjectifyFactory.createQuery(Page.class);
+      q.filter("title", title);
+      page = ofy.prepare(q).asSingle();
+      cache.put(page.getTitle(), page);
+      return page;
+    } catch (NullPointerException npe) {
     }
+    return null;
+  }
+
+  @Override
+  public String getHTMLContent(String title) {
+    Page page = findByTitle(title);
+    if (page != null) {
+      return page.getHtmlContent();
+    }
+    return "";
   }
 
   public List<Page> getAll() {
-    List<Page> object = null;
-    try {
-      String query = "select from " + Page.class.getName();
-      pm = PMF.get().getPersistenceManager();
-      object = (List<Page>) pm.newQuery(query).execute();
-      object.size();
-      // detachedCopy = pm.detachCopy(object);
-      return object;
-    } finally {
-      pm.close();
-    }
+    List<Page> resultList = null;
+    Objectify ofy = ObjectifyFactory.begin();
+    OQuery<Page> q = ObjectifyFactory.createQuery(Page.class);
+    resultList = ofy.prepare(q).asList();
+    return resultList;
   }
 }

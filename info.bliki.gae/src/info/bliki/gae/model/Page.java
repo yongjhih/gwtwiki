@@ -5,45 +5,34 @@ import info.bliki.wiki.model.IWikiModel;
 import java.io.Serializable;
 import java.util.Date;
 
-import javax.jdo.annotations.IdGeneratorStrategy;
-import javax.jdo.annotations.IdentityType;
-import javax.jdo.annotations.NotPersistent;
-import javax.jdo.annotations.PersistenceCapable;
-import javax.jdo.annotations.Persistent;
-import javax.jdo.annotations.PrimaryKey;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Transient;
 
 import com.google.appengine.api.datastore.Text;
 import com.google.appengine.api.users.User;
- 
-@PersistenceCapable(identityType = IdentityType.APPLICATION, detachable = "true")
+
+@Entity
 public class Page implements Serializable {
   /**
    * 
    */
   private static final long serialVersionUID = 5518810488698138847L;
 
-  @PrimaryKey
-  @Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
-  private Long key;
-
-  @Persistent
-  private User author;
-
-  @Persistent
+  @Id
   private String title;
 
-  @Persistent(defaultFetchGroup = "true")
+  private User author;
+
   private Text content = null;
 
-  @Persistent
   private Date date;
 
-  @NotPersistent
+  @Transient
   private String htmlContent;
 
   public Page() {
   }
-  
 
   public Page(String title, String content) {
     this.title = title;
@@ -78,10 +67,6 @@ public class Page implements Serializable {
     return htmlContent;
   }
 
-  public Long getKey() {
-    return key;
-  }
-
   public String getTitle() {
     return title;
   }
@@ -104,16 +89,12 @@ public class Page implements Serializable {
     this.date = date;
   }
 
-  public void setKey(Long key) {
-    this.key = key;
-  }
-
   public void setTitle(String title) {
     this.title = title;
   }
 
   @Override
   public String toString() {
-    return this.key.toString() + this.title;
+    return this.title;
   }
 }

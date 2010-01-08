@@ -10,7 +10,7 @@ public interface PageService {
 	Page save(Page page);
 	Page update(Page page);
 	void delete(Page page);
-	Page findByKey(Long key);
 	Page findByTitle(String title);
+	String getHTMLContent(String title);
 	List<Page> getAll();
 }

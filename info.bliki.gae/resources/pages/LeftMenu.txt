@@ -1,11 +1,3 @@
 * [[MainPage|MainPage]]
-* [[Special:RecentChanges|Recent Changes]]
-* [[Special:Search|Search]]
-----
-* [[Special:Allpages|All Pages]]
-* [[Special:Specialpages|Special Pages]]
-* [[Special:Upload|Upload File]]
-----
-* [http://jamwiki.org/ JAMWiki]
-* [http://sourceforge.net/projects/jamwiki/ Sourceforge Page]
-* [http://mediawiki.org/ MediaWiki]
+* [http://code.google.com/p/gwtwiki/ Google Code]
+

@@ -1,26 +1,28 @@
-<%@ taglib uri="http://www.opensymphony.com/sitemesh/decorator" prefix="decorator" %>
-<%@ include file="/WEB-INF/jsp/common/include.jsp" %>
-<html>
-    <head>
-        <title><decorator:title default="${page.title}" /> - <fmt:message key="common.sitename" /></title>
-        <link href="/css/960/reset.css" rel="stylesheet"></link>
-        <link href="/css/960/text.css" rel="stylesheet"></link>
-        <link href="/css/960/960.css" rel="stylesheet"></link>
-        <link href="bliki.css" rel="stylesheet"></link>
-        <decorator:head />
-    </head>
-    <body>
-    	<div id="header">
-    		<%@ include file="common/header.jsp" %>
-    	</div>
-    	<div id="nav"><jsp:include page="common/nav.jsp" /></div>
-    	<div id="content">
-    		<div  class="container_12">
-        		<decorator:body />
-        	</div>
-        </div>
-        <div id="footer">
-        	<%@ include file="common/footer.jsp" %>
-        </div>
-    </body>
+<%@ taglib uri="http://www.opensymphony.com/sitemesh/decorator"
+	prefix="decorator"%>
+<%@ include file="/WEB-INF/jsp/common/include.jsp"%>
+<%@ include file="common/top.jsp"%>
+
+<div id="wiki-page">
+<div id="wiki-navigation">
+<div id="logo"></div>
+<br />
+<c:if test="${!empty leftMenu && leftMenu != '<br/><br/>'}">
+	<div id="nav-menu"><c:out value="${leftMenu}" escapeXml="false" />
+	</div>
+</c:if></div>
+</div>
+<div id="wiki-content">
+<jsp:include page="common/user-menu.jsp" />
+<jsp:include page="common/top-menu.jsp" />
+<div id="contents"><decorator:body /></div>
+</div>
+
+<div id="footer"></div>
+<div id="wiki-footer">
+<hr width="99%" />
+<c:out value="${bottomArea}" escapeXml="false" /> <br />
+<%@ include file="common/footer.jsp"%></div>
+</div>
+</body>
 </html>

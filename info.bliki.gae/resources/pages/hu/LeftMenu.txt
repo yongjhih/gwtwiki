@@ -1,11 +1,2 @@
 * [[MainPage|Kezdõlap]]
-* [[Special:RecentChanges|Friss válzotások]]
-* [[Special:Search|Keresés]]
-----
-* [[Special:Allpages|Minden oldal]]
-* [[Special:Specialpages|Speciális lapok]]
-* [[Special:Upload|Fájl feltöltése]]
-----
-* [http://jamwiki.org/ JAMWiki]
-* [http://sourceforge.net/projects/jamwiki/ Sourceforge oldal]
-* [http://mediawiki.org/ MediaWiki]
+* [http://code.google.com/p/gwtwiki/ Google Code]
