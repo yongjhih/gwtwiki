@@ -14,6 +14,7 @@
         <property name="basename" value="/WEB-INF/classes/ApplicationResources" />
         <property name="cacheSeconds" value="0" />
     </bean>
+    <bean id="wikiUserService" class="info.bliki.gae.db.WikiUserServiceImpl"></bean>
     <bean id="pageService" class="info.bliki.gae.db.PageServiceImpl"></bean>
     
     <!-- Configures Spring MVC -->

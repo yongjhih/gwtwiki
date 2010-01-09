@@ -1,16 +1,19 @@
 package info.bliki.gae.db;
 
-import info.bliki.gae.model.Page;
-
 import java.util.List;
 
-
+import org.jamwiki.model.Topic;
 
 public interface PageService {
-	Page save(Page page);
-	Page update(Page page);
-	void delete(Page page);
-	Page findByTitle(String title);
-	String getHTMLContent(String title);
-	List<Page> getAll();
+  Topic save(Topic page);
+
+  Topic update(Topic page);
+
+  void delete(Topic page);
+
+  Topic findByTitle(String title);
+
+  String getHTMLContent(String title);
+
+  List<Topic> getAll();
 }

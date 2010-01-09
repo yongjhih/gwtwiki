@@ -1,6 +1,5 @@
 package info.bliki.gae.servlets;
 
-import info.bliki.gae.model.Page;
 import info.bliki.gae.utils.BlikiBase;
 
 import java.io.PrintWriter;
@@ -8,6 +7,7 @@ import java.io.PrintWriter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.jamwiki.model.Topic;
 import org.springframework.web.servlet.ModelAndView;
 
 public class StylesheetServlet extends BlikiServlet {
@@ -20,9 +20,9 @@ public class StylesheetServlet extends BlikiServlet {
       // String stylesheet = ServletUtil.cachedContent(request.getContextPath(),
       // request.getLocale(), virtualWiki, WikiBase.SPECIAL_PAGE_STYLESHEET,
       // false);
-      Page page = pageService.findByTitle(BlikiBase.SPECIAL_PAGE_STYLESHEET);
+      Topic page = pageService.findByTitle(BlikiBase.SPECIAL_PAGE_STYLESHEET);
       if (page != null) {
-        String stylesheet = page.getContent();
+        String stylesheet = page.getTopicContent();
         response.setContentType("text/css");
         response.setCharacterEncoding("UTF-8");
         // cache for 30 minutes (60 * 30 = 1800)

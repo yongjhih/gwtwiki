@@ -15,7 +15,10 @@
 <div id="wiki-content">
 <jsp:include page="common/user-menu.jsp" />
 <jsp:include page="common/top-menu.jsp" />
-<div id="contents"><decorator:body /></div>
+  <div id="contents">
+  <h1 id="contents-header">${page.name}</h1>
+    <decorator:body />
+  </div>
 </div>
 
 <div id="footer"></div>

@@ -2,12 +2,12 @@ package info.bliki.gae.servlets;
 
 import info.bliki.gae.db.PageService;
 import info.bliki.gae.db.PageServiceImpl;
-import info.bliki.gae.model.Page;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang.StringUtils;
+import org.jamwiki.model.Topic;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.AbstractController;
 
@@ -314,7 +314,7 @@ public abstract class BlikiServlet extends AbstractController {
    *          The current WikiPageInfo object, containing basic page rendering
    *          information.
    */
-  private void loadLayout(HttpServletRequest request, ModelAndView next, Page pageInfo) throws Exception {
+  private void loadLayout(HttpServletRequest request, ModelAndView next, Topic pageInfo) throws Exception {
     if (next.getViewName() != null
         && next.getViewName().startsWith(SPRING_REDIRECT_PREFIX)) {
       // if this is a redirect, no need to load anything
@@ -322,7 +322,7 @@ public abstract class BlikiServlet extends AbstractController {
     }
     // load cached top area, nav bar, etc.
 //    this.buildLayout(request, next, pageInfo);
-    if (StringUtils.isBlank(pageInfo.getTitle())) {
+    if (StringUtils.isBlank(pageInfo.getName())) {
 //      pageInfo.setTopicName(WikiUtil.getTopicFromURI(request));
     }
 //    pageInfo.setUserMenu(this.buildUserMenu(pageInfo));

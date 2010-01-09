@@ -10,6 +10,8 @@ import info.bliki.wiki.tags.WPATag;
 
 import java.util.Map;
 
+import org.jamwiki.model.Topic;
+
 
 
 public class BlikiModel extends WikiModel {
@@ -49,7 +51,7 @@ public class BlikiModel extends WikiModel {
     String baseURL = fExternalWikiBaseURL;
     String style = "";
     if (!isExistingArticle(topic)) {
-      if (BlikiUtil.isUserEditor()) {
+      if (BlikiUtil.isTopicEditor()) {
         baseURL = fEditWikiBaseURL;
         style = "edit";
       }
@@ -92,7 +94,7 @@ public class BlikiModel extends WikiModel {
   public boolean isExistingArticle(String topicName) {
     try {
       String title = BlikiUtil.decodeTitle(topicName);
-      Page page = fPageService.findByTitle(title);
+      Topic page = fPageService.findByTitle(title);
       if (page != null) {
         return true;
       }
@@ -112,9 +114,9 @@ public class BlikiModel extends WikiModel {
     }
     try {
       String title = BlikiUtil.decodeTitle(topicName);
-      Page page = fPageService.findByTitle(title);
+      Topic page = fPageService.findByTitle(title);
       if (page != null) {
-        return page.getContent();
+        return page.getTopicContent();
       }
     } catch (Exception e) {
       e.printStackTrace();

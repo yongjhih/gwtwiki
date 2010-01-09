@@ -1,6 +1,5 @@
 package info.bliki.gae.db;
 
-import info.bliki.gae.model.Page;
 
 import java.util.Collections;
 import java.util.List;
@@ -10,6 +9,7 @@ import javax.cache.CacheException;
 import javax.cache.CacheFactory;
 import javax.cache.CacheManager;
 
+import org.jamwiki.model.Topic;
 import org.springframework.stereotype.Repository;
 
 import com.google.appengine.api.datastore.EntityNotFoundException;
@@ -23,7 +23,7 @@ public class PageServiceImpl implements PageService {
 
   static {
     try {
-      ObjectifyFactory.register(Page.class);
+      ObjectifyFactory.register(Topic.class);
       CacheFactory cacheFactory = CacheManager.getInstance().getCacheFactory();
       cache = cacheFactory.createCache(Collections.emptyMap());
     } catch (CacheException e) {
@@ -33,46 +33,46 @@ public class PageServiceImpl implements PageService {
   }
 
   @Override
-  public Page save(Page page) {
+  public Topic save(Topic page) {
     Objectify ofy = ObjectifyFactory.begin();
     ofy.put(page);
     return page;
   }
 
   @Override
-  public Page update(Page page) {
-    Page existingEntity = null;
+  public Topic update(Topic page) {
+    Topic existingEntity = null;
     try {
       Objectify ofy = ObjectifyFactory.begin();
-      existingEntity = ofy.get(Page.class, page.getTitle());
-      existingEntity.setTitle(page.getTitle());
-      existingEntity.setContent(page.getContent());
+      existingEntity = ofy.get(Topic.class, page.getName());
+      existingEntity.setName(page.getName());
+      existingEntity.setTopicContent(page.getTopicContent());
       ofy.put(existingEntity);
-      cache.put(existingEntity.getTitle(), existingEntity);
+      cache.put(existingEntity.getName(), existingEntity);
     } catch (EntityNotFoundException enf) {
     }
     return existingEntity;
   }
 
   @Override
-  public void delete(Page page) {
-    cache.remove(page.getTitle());
+  public void delete(Topic page) {
+    cache.remove(page.getName());
     Objectify ofy = ObjectifyFactory.begin();
     ofy.delete(page);
   }
 
   @Override
-  public Page findByTitle(String title) {
-    Page page = (Page) cache.get(title);
+  public Topic findByTitle(String title) {
+    Topic page = (Topic) cache.get(title);
     if (page != null) {
       return page;
     }
     try {
       Objectify ofy = ObjectifyFactory.begin();
-      OQuery<Page> q = ObjectifyFactory.createQuery(Page.class);
+      OQuery<Topic> q = ObjectifyFactory.createQuery(Topic.class);
       q.filter("title", title);
       page = ofy.prepare(q).asSingle();
-      cache.put(page.getTitle(), page);
+      cache.put(page.getName(), page);
       return page;
     } catch (NullPointerException npe) {
     }
@@ -81,17 +81,17 @@ public class PageServiceImpl implements PageService {
 
   @Override
   public String getHTMLContent(String title) {
-    Page page = findByTitle(title);
+    Topic page = findByTitle(title);
     if (page != null) {
       return page.getHtmlContent();
     }
     return "";
   }
 
-  public List<Page> getAll() {
-    List<Page> resultList = null;
+  public List<Topic> getAll() {
+    List<Topic> resultList = null;
     Objectify ofy = ObjectifyFactory.begin();
-    OQuery<Page> q = ObjectifyFactory.createQuery(Page.class);
+    OQuery<Topic> q = ObjectifyFactory.createQuery(Topic.class);
     resultList = ofy.prepare(q).asList();
     return resultList;
   }

@@ -1,10 +1,12 @@
 package info.bliki.gae.utils;
 
+import info.bliki.gae.db.WikiUserServiceImpl;
 
 import java.io.IOException;
 import java.util.Locale;
 
 import org.apache.commons.lang.StringUtils;
+import org.jamwiki.model.WikiUser;
 
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
@@ -34,22 +36,44 @@ public class BlikiUtil {
     return title.replaceAll(" ", "_");
   }
 
-  public static boolean isUserEditor() {
+  public static boolean isTopicEditor() {
     if (!userService.isUserLoggedIn()) {
       return false;
     }
-    return userService.isUserAdmin();
+    if (userService.isUserAdmin()) {
+      return true;
+    }
+    WikiUser wikiUser = WikiUserServiceImpl.getWikiUser();
+    if (wikiUser != null) {
+      return wikiUser.isTopicEditor();
+    }
+    return false;
   }
+
+  public static boolean isSystemAdmin() {
+    if (!userService.isUserLoggedIn()) {
+      return false;
+    }
+    if (userService.isUserAdmin()) {
+      return true;
+    }
+    WikiUser wikiUser = WikiUserServiceImpl.getWikiUser();
+    if (wikiUser != null) {
+      return wikiUser.isSystemAdmin();
+    }
+    return false;
+  }
+
   public static String securityCheck(String destinationUrl) {
     // logger.debug("destination url: " + destinationUrl);
     if (!userService.isUserLoggedIn()) {
       return "redirect:" + userService.createLoginURL("/" + destinationUrl);
-    } else if (!isUserEditor()) {
+    } else if (!isTopicEditor()) {
       return "common/403";
     }
     return destinationUrl;
   }
-  
+
   /**
    * Utility method for reading special topic values from files and returning
    * the file contents.
@@ -59,7 +83,8 @@ public class BlikiUtil {
    * @param pageName
    *          The name of the special page being retrieved.
    */
-  public static String readSpecialPage(Locale locale, String pageName) throws IOException {
+  public static String readSpecialPage(Locale locale, String pageName)
+      throws IOException {
     String contents = null;
     String filename = null;
     String language = null;
@@ -71,7 +96,8 @@ public class BlikiUtil {
     String subdirectory = "";
     if (!StringUtils.isBlank(language) && !StringUtils.isBlank(country)) {
       try {
-        subdirectory = "/" + BlikiBase.SPECIAL_PAGE_DIR + "/" + language + "_" + country;
+        subdirectory = "/" + BlikiBase.SPECIAL_PAGE_DIR + "/" + language + "_"
+            + country;
         filename = subdirectory + "/" + pageName + ".txt";
         // subdirectory = new File(WikiBase.SPECIAL_PAGE_DIR, language + "_" +
         // country).getPath();
@@ -79,16 +105,16 @@ public class BlikiUtil {
         // WikiUtil.encodeForFilename(pageName) + ".txt").getPath();
         contents = Utilities.readFile(filename);
       } catch (IOException e) {
-//        logger.info("File " + filename + " does not exist");
+        // logger.info("File " + filename + " does not exist");
       }
-    } 
+    }
     if (contents == null && !StringUtils.isBlank(language)) {
       try {
         subdirectory = "/" + BlikiBase.SPECIAL_PAGE_DIR + "/" + language;
         filename = subdirectory + "/" + pageName + ".txt";
         contents = Utilities.readFile(filename);
       } catch (IOException e) {
-//        logger.info("File " + filename + " does not exist");
+        // logger.info("File " + filename + " does not exist");
       }
     }
     if (contents == null) {
@@ -97,7 +123,7 @@ public class BlikiUtil {
         filename = subdirectory + "/" + pageName + ".txt";
         contents = Utilities.readFile(filename);
       } catch (IOException e) {
-//        logger.warning("File " + filename + " could not be read", e);
+        // logger.warning("File " + filename + " could not be read", e);
         throw e;
       }
     }
