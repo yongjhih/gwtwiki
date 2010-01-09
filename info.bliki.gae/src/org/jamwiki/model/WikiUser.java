@@ -34,7 +34,7 @@ import com.google.appengine.api.users.User;
  */
 @Entity
 public class WikiUser implements Serializable {
-
+  public static WikiUser ANONYOUS_WIKIUSER = new WikiUser("anonymous");
   /**
    * 
    */

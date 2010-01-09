@@ -1,7 +1,6 @@
 package info.bliki.gae.model;
 
 import info.bliki.gae.db.PageService;
-import info.bliki.gae.db.PageServiceImpl;
 import info.bliki.gae.utils.BlikiUtil;
 import info.bliki.htmlcleaner.ContentToken;
 import info.bliki.wiki.filter.WikipediaParser;
@@ -15,7 +14,7 @@ import org.jamwiki.model.Topic;
 
 
 public class BlikiModel extends WikiModel {
-  private final PageService fPageService;
+//  private final PageService fPageService;
 
   private String fEditWikiBaseURL;
 
@@ -27,7 +26,7 @@ public class BlikiModel extends WikiModel {
   public BlikiModel(String imageBaseURL, String linkBaseURL, String editBaseURL) {
     super(imageBaseURL, linkBaseURL);
     fEditWikiBaseURL = editBaseURL;
-    fPageService = new PageServiceImpl();
+//    fPageService = new PageServiceImpl();
   }
 
   public static BlikiModel get() {
@@ -94,7 +93,7 @@ public class BlikiModel extends WikiModel {
   public boolean isExistingArticle(String topicName) {
     try {
       String title = BlikiUtil.decodeTitle(topicName);
-      Topic page = fPageService.findByTitle(title);
+      Topic page = PageService.findByTitle(title);
       if (page != null) {
         return true;
       }
@@ -114,7 +113,7 @@ public class BlikiModel extends WikiModel {
     }
     try {
       String title = BlikiUtil.decodeTitle(topicName);
-      Topic page = fPageService.findByTitle(title);
+      Topic page = PageService.findByTitle(title);
       if (page != null) {
         return page.getTopicContent();
       }

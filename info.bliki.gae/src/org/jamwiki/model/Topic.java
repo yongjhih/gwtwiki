@@ -47,6 +47,8 @@ public class Topic implements Serializable {
 
   private Date date;
 
+  private String virtualWiki = "";
+
   @Transient
   private String htmlContent;
 
@@ -62,7 +64,7 @@ public class Topic implements Serializable {
 
   public Topic(String title, String content, WikiUser gaeUser) {
     this.title = title;
-    renderHtml(content);
+    // renderHtml(content);
     if (content == null) {
       this.content = new Text("");
     } else {
@@ -83,10 +85,6 @@ public class Topic implements Serializable {
     return null;
   }
 
-  public String getTopicContent() {
-    return content.getValue();
-  }
-
   public Date getDate() {
     return date;
   }
@@ -94,38 +92,69 @@ public class Topic implements Serializable {
   /**
    * @return the htmlContent
    */
-  public String getHtmlContent() {
-    if (htmlContent == null) {
-      renderHtml(content.getValue());
-    }
-    return htmlContent;
-  }
+  // public String getHtmlContent() {
+  // if (htmlContent == null) {
+  // renderHtml(content.getValue());
+  // }
+  // return htmlContent;
+  // }
 
   public String getName() {
     return title;
   }
 
-  private void renderHtml(String content) {
-    IWikiModel model = BlikiModel.get();
-    this.htmlContent = model.render(content);
+  public String getHtmlContent() {
+    return htmlContent;
   }
+  
+  public String getTopicContent() {
+    return content.getValue();
+  }
+
+  /**
+   * @return the virtualWiki
+   */
+  public String getVirtualWiki() {
+    return virtualWiki;
+  }
+
+  // private void renderHtml(String content) {
+  // IWikiModel model = BlikiModel.get();
+  // this.htmlContent = model.render(content);
+  // }
 
   public void setAuthor(WikiUser author) {
     Objectify ofy = ObjectifyFactory.begin();
     this.author = ObjectifyFactory.createKey(author);
   }
 
-  public void setTopicContent(String content) {
-    renderHtml(content);
-    this.content = new Text(content);
-  }
-
   public void setDate(Date date) {
     this.date = date;
   }
 
+  /**
+   * @param htmlContent
+   *          the htmlContent to set
+   */
+  public void setHtmlContent(String htmlContent) {
+    this.htmlContent = htmlContent;
+  }
+
   public void setName(String title) {
     this.title = title;
+  }
+
+  public void setTopicContent(String content) {
+    // renderHtml(content);
+    this.content = new Text(content);
+  }
+
+  /**
+   * @param virtualWiki
+   *          the virtualWiki to set
+   */
+  public void setVirtualWiki(String virtualWiki) {
+    this.virtualWiki = virtualWiki;
   }
 
   @Override

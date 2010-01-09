@@ -221,7 +221,8 @@ public class Environment {
 		defaults.setProperty(PROP_PARSER_ALLOW_HTML, Boolean.TRUE.toString());
 		defaults.setProperty(PROP_PARSER_ALLOW_JAVASCRIPT, Boolean.FALSE.toString());
 		defaults.setProperty(PROP_PARSER_ALLOW_TEMPLATES, Boolean.TRUE.toString());
-		defaults.setProperty(PROP_PARSER_CLASS, "org.jamwiki.parser.jflex.JFlexParser");
+		defaults.setProperty(PROP_PARSER_CLASS, "org.jamwiki.parser.bliki.BlikiParser");
+		    //"org.jamwiki.parser.jflex.JFlexParser");
 		defaults.setProperty(PROP_PARSER_SIGNATURE_DATE_PATTERN, "dd-MMM-yyyy HH:mm zzz");
 		defaults.setProperty(PROP_PARSER_SIGNATURE_USER_PATTERN, "[[{0}|{4}]]");
 		defaults.setProperty(PROP_PARSER_TOC, Boolean.TRUE.toString());

@@ -1,6 +1,6 @@
 package info.bliki.gae.utils;
 
-import info.bliki.gae.db.WikiUserServiceImpl;
+import info.bliki.gae.db.WikiUserService;
 
 import java.io.IOException;
 import java.util.Locale;
@@ -43,7 +43,7 @@ public class BlikiUtil {
     if (userService.isUserAdmin()) {
       return true;
     }
-    WikiUser wikiUser = WikiUserServiceImpl.getWikiUser();
+    WikiUser wikiUser = WikiUserService.getWikiUser();
     if (wikiUser != null) {
       return wikiUser.isTopicEditor();
     }
@@ -57,7 +57,7 @@ public class BlikiUtil {
     if (userService.isUserAdmin()) {
       return true;
     }
-    WikiUser wikiUser = WikiUserServiceImpl.getWikiUser();
+    WikiUser wikiUser = WikiUserService.getWikiUser();
     if (wikiUser != null) {
       return wikiUser.isSystemAdmin();
     }

@@ -1,7 +1,7 @@
 package info.bliki.gae.controller;
 
 import info.bliki.gae.db.PageService;
-import info.bliki.gae.db.WikiUserServiceImpl;
+import info.bliki.gae.db.WikiUserService;
 import info.bliki.gae.utils.BlikiBase;
 import info.bliki.gae.utils.BlikiUtil;
 
@@ -10,7 +10,6 @@ import java.util.Locale;
 
 import org.jamwiki.model.Topic;
 import org.jamwiki.model.WikiUser;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -27,15 +26,16 @@ public class PageController extends BlikiController {
   // private UserService userService = UserServiceFactory.getUserService();
   public final static String EDIT_PAGE_URI = "page/edit";
 
-  @Autowired
-  private PageService pageService;
+  public final static String TOPIC_PAGE_URI = "page/topic";
+  // @Autowired
+  // private PageService pageService;
 
   // @Autowired
   // private WikiUserService wikiUserService;
 
   @RequestMapping(value = "/", method = RequestMethod.GET)
   public String index(Model model) {
-    model.addAttribute("pages", pageService.getAll());
+    model.addAttribute("pages", PageService.getAll());
     return "page/index";
   }
 
@@ -56,27 +56,28 @@ public class PageController extends BlikiController {
   }
 
   private String create(String title, String contents, Model model) {
-    setUpModel(pageService, model);
+    // setUpModel(model);
     if (lameSecurityCheck() != null) {
       return lameSecurityCheck();
     }
-    WikiUser wikiUser = WikiUserServiceImpl.getWikiUser();
+    WikiUser wikiUser = WikiUserService.getWikiUser();
+    String encodedTitle = BlikiUtil.encodeTitle(title);
     Topic page = null;
-    page = pageService.findByTitle(title);
+    page = PageService.findByTitle(title);
     if (page != null) {
       // update an existing page
       page.setName(title);
       page.setTopicContent(contents);
       page.setAuthor(wikiUser);
-      page = pageService.update(page);
+      page = PageService.update(page);
       model.addAttribute("page", page);
-      return "page/view";
+      return "redirect:/wiki/" + encodedTitle;
     }
     // create completely new page
     page = new Topic(title, contents, wikiUser);
-    page = pageService.save(page);
+    page = PageService.save(page);
     model.addAttribute("page", page);
-    return "page/view";
+    return "redirect:/wiki/" + encodedTitle;
     // 
     //
     // model.addAttribute("pages", pageService.getAll());
@@ -85,32 +86,32 @@ public class PageController extends BlikiController {
 
   @RequestMapping(value = "/delete/{title}", method = RequestMethod.GET)
   public String delete(@PathVariable String title, Model model) {
-    setUpModel(pageService, model);
+    setUpModel(model);
     if (lameSecurityCheck() != null) {
       return lameSecurityCheck();
     }
     Topic page = null;
     if (title != null) {
       // delete an existing page
-      page = pageService.findByTitle(title);
+      page = PageService.findByTitle(title);
       if (page != null) {
-        pageService.delete(page);
+        PageService.delete(page);
       }
     }
-    page = pageService.findByTitle(BlikiBase.SPECIAL_PAGE_STARTING_POINTS);
+    page = PageService.findByTitle(BlikiBase.SPECIAL_PAGE_STARTING_POINTS);
     model.addAttribute("page", page);
-    return "page/view";
+    return TOPIC_PAGE_URI;
   }
 
   @RequestMapping(value = "/edit/{title}", method = RequestMethod.GET)
   public String editKey(@PathVariable String title, Model model) {
-    setUpModel(pageService, model);
+    setUpModel(model);
     if (lameSecurityCheck() != null) {
       return lameSecurityCheck();
     }
     String topicName = BlikiUtil.decodeTitle(title);
-    Topic page = pageService.findByTitle(topicName);
-    if (page==null){
+    Topic page = PageService.findByTitle(topicName);
+    if (page == null) {
       page = new Topic(topicName);
       model.addAttribute("page", page);
     }
@@ -140,17 +141,17 @@ public class PageController extends BlikiController {
 
   private String lameSecurityCheck() {
     return BlikiUtil.securityCheck(null);
-  }
+  } 
 
   @RequestMapping(value = "/install", method = RequestMethod.GET)
   public String install(Model model) {
     if (lameSecurityCheck() != null) {
       return lameSecurityCheck();
     }
-    Topic page = pageService
+    Topic page = PageService
         .findByTitle(BlikiBase.SPECIAL_PAGE_STARTING_POINTS);
     if (page == null) {
-      WikiUser wikiUser = WikiUserServiceImpl.getWikiUser();
+      WikiUser wikiUser = WikiUserService.getWikiUser();
       // create special pages
       Locale locale = Locale.ENGLISH;
       setupSpecialWikiTopics(wikiUser, locale, BlikiBase.SPECIAL_PAGE_LEFT_MENU);
@@ -161,9 +162,9 @@ public class PageController extends BlikiController {
       page = setupSpecialWikiTopics(wikiUser, locale,
           BlikiBase.SPECIAL_PAGE_STARTING_POINTS);
     }
-    setUpModel(pageService, model);
+    setUpModel(model);
     model.addAttribute("page", page);
-    return "page/view";
+    return TOPIC_PAGE_URI;
   }
 
   private Topic setupSpecialWikiTopics(WikiUser wikiUser, Locale locale,
@@ -179,7 +180,7 @@ public class PageController extends BlikiController {
       contents = BlikiUtil.readSpecialPage(locale, topicName);
       if (contents != null) {
         Topic page = new Topic(topicName, contents, wikiUser);
-        page = pageService.save(page);
+        page = PageService.save(page);
         return page;
 
       }
@@ -187,4 +188,4 @@ public class PageController extends BlikiController {
     }
     return null;
   }
-}
+} 

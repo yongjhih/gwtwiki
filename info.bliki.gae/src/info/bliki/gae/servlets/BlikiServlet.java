@@ -1,8 +1,5 @@
 package info.bliki.gae.servlets;
 
-import info.bliki.gae.db.PageService;
-import info.bliki.gae.db.PageServiceImpl;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -12,7 +9,7 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.AbstractController;
 
 public abstract class BlikiServlet extends AbstractController {
-  protected PageService pageService = new PageServiceImpl();
+//  protected PageService pageService = new PageServiceImpl();
   // private static final WikiLogger logger =
   // WikiLogger.getLogger(JAMWikiServlet.class.getName());
 
