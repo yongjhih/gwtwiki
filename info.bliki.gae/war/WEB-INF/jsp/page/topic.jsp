@@ -2,5 +2,5 @@
 <jsp:include page="/WEB-INF/jsp/common/googleuserservice.jsp"/>
  
 <div id="content-article">
-<p>${page.htmlContent}</p>
+<c:out value="${topicObject.htmlContent}" escapeXml="false" />
 </div>
