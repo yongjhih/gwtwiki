@@ -261,7 +261,7 @@ public class LinkUtil {
       text = topic;
     }
     if (!StringUtils.isBlank(topic) && StringUtils.isBlank(style)) {
-      if (InterWikiHandler.isInterWiki(virtualWiki)) {
+      if (!StringUtils.isEmpty(virtualWiki) && InterWikiHandler.isInterWiki(virtualWiki)) {
         style = "interwiki";
       } else if (!LinkUtil.isExistingArticle(virtualWiki, topic)) {
         style = "edit";

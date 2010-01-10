@@ -1,4 +1,4 @@
-<%@ page errorPage="/WEB-INF/jsp/error.jsp"
+<%@ page errorPage="/WEB-INF/jsp/page/error.jsp"
     contentType="text/html; charset=utf-8"
 %>
 
