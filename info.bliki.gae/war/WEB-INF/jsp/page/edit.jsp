@@ -1,4 +1,9 @@
-<%@ include file="/WEB-INF/jsp/common/include.jsp" %>
+<%@ page errorPage="/WEB-INF/jsp/error.jsp"
+    contentType="text/html; charset=utf-8"
+%>
+
+<%@ include file="page-init.jsp" %>
+ 
 <fieldset>
 <legend><fmt:message key="topic.caption.editlegend" /></legend>
 
