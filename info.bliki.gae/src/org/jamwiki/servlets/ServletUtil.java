@@ -18,20 +18,36 @@ package org.jamwiki.servlets;
 
 import info.bliki.gae.db.WikiUserService;
 
-import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Locale;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
+import org.apache.commons.lang.StringUtils;
 import org.jamwiki.DataAccessException;
 import org.jamwiki.Environment;
 import org.jamwiki.WikiBase;
 import org.jamwiki.WikiException;
 import org.jamwiki.WikiMessage;
+import org.jamwiki.authentication.JAMWikiAuthenticationConstants;
+import org.jamwiki.model.Category;
 import org.jamwiki.model.Topic;
 import org.jamwiki.model.VirtualWiki;
 import org.jamwiki.model.WikiUser;
+import org.jamwiki.parser.ParserException;
+import org.jamwiki.parser.ParserInput;
+import org.jamwiki.parser.ParserOutput;
+import org.jamwiki.parser.ParserUtil;
 import org.jamwiki.utils.LinkUtil;
+import org.jamwiki.utils.NamespaceHandler;
+import org.jamwiki.utils.Pagination;
 import org.jamwiki.utils.Utilities;
 import org.jamwiki.utils.WikiLink;
 import org.jamwiki.utils.WikiLogger;
+import org.jamwiki.utils.WikiUtil;
 import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -82,36 +98,41 @@ public class ServletUtil {
    * @return The parsed or unparsed (depending on the <code>cook</code>
    *         parameter) topic content.
    */
-  // protected static String cachedContent(String context, Locale locale, String
-  // virtualWiki, String topicName, boolean cook) {
-  // String content = null;
-  // String key = WikiCache.key(virtualWiki, topicName);
-  // Element cacheElement =
-  // WikiCache.retrieveFromCache(WikiBase.CACHE_PARSED_TOPIC_CONTENT, key);
-  // if (cacheElement != null) {
-  // content = (String)cacheElement.getObjectValue();
-  // return (content == null) ? null : content;
-  // }
-  // try {
-  // Topic topic = WikiBase.getDataHandler().lookupTopic(virtualWiki, topicName,
-  // false, null);
-  // content = topic.getTopicContent();
-  // if (cook) {
-  // ParserInput parserInput = new ParserInput();
-  // parserInput.setContext(context);
-  // parserInput.setLocale(locale);
-  // parserInput.setVirtualWiki(virtualWiki);
-  // parserInput.setTopicName(topicName);
-  // content = ParserUtil.parse(parserInput, null, content);
-  // }
-  // WikiCache.addToCache(WikiBase.CACHE_PARSED_TOPIC_CONTENT, key, content);
-  // } catch (Exception e) {
-  // logger.warning("error getting cached page " + virtualWiki + " / " +
-  // topicName, e);
-  // return null;
-  // }
-  // return content;
-  // }
+  protected static String cachedContent(String context, Locale locale,
+      String virtualWiki, String topicName, boolean cook) {
+    // return PageService.getHTMLContent(topicName);
+    String content = null;
+    // String key = WikiCache.key(virtualWiki, topicName);
+    // Element cacheElement = WikiCache.retrieveFromCache(
+    // WikiBase.CACHE_PARSED_TOPIC_CONTENT, key);
+    // if (cacheElement != null) {
+    // content = (String) cacheElement.getObjectValue();
+    // return (content == null) ? null : content;
+    // }
+    try {
+      Topic topic = WikiBase.getDataHandler().lookupTopic(virtualWiki,
+          topicName, false, null);
+      if (topic == null) {
+        return "";
+      }
+      content = topic.getTopicContent();
+      if (cook) {
+        ParserInput parserInput = new ParserInput();
+        parserInput.setContext(context);
+        parserInput.setLocale(locale);
+        parserInput.setVirtualWiki(virtualWiki);
+        parserInput.setTopicName(topicName);
+        content = ParserUtil.parse(parserInput, null, content);
+      }
+      // WikiCache.addToCache(WikiBase.CACHE_PARSED_TOPIC_CONTENT, key,
+      // content);
+    } catch (Exception e) {
+      logger.warning("error getting cached page " + virtualWiki + " / "
+          + topicName, e);
+      return null;
+    }
+    return content;
+  }
 
   /**
    * This is a utility method that will check topic content for spam, and return
@@ -321,6 +342,107 @@ public class ServletUtil {
     String namespace = wikiLink.getNamespace();
     // topic.setTopicType(WikiUtil.findTopicTypeForNamespace(namespace));
     return topic;
+  }
+  /**
+   * Examine the request object, and see if the requested topic or page
+   * matches a given value.
+   *
+   * @param request The servlet request object.
+   * @param value The value to match against the current topic or page name.
+   * @return <code>true</code> if the value matches the current topic or
+   *  page name, <code>false</code> otherwise.
+   */
+  protected static boolean isTopic(HttpServletRequest request, String value) {
+    String topic = WikiUtil.getTopicFromURI(request);
+    if (StringUtils.isBlank(topic)) {
+      return false;
+    }
+    if (value != null &&  topic.equals(value)) {
+      return true;
+    }
+    return false;
+  }
+  
+  /**
+   * Utility method for adding categories associated with the current topic to
+   * the ModelAndView object. This method adds a hashmap of category names and
+   * sort keys to the session that can then be retrieved for display during
+   * rendering.
+   * 
+   * @param next
+   *          The current ModelAndView object used to return rendering
+   *          information.
+   * @param virtualWiki
+   *          The virtual wiki name for the topic being rendered.
+   * @param topicName
+   *          The name of the topic that is being rendered.
+   * @throws WikiException
+   *           Thrown if any error occurs during processing.
+   */
+  protected static void loadCategoryContent(ModelAndView next,
+      String virtualWiki, String topicName) throws WikiException {
+    String categoryName = topicName
+        .substring(NamespaceHandler.NAMESPACE_CATEGORY.length()
+            + NamespaceHandler.NAMESPACE_SEPARATOR.length());
+    next.addObject("categoryName", categoryName);
+    List<Category> categoryTopics = null;
+    try {
+      categoryTopics = WikiBase.getDataHandler().lookupCategoryTopics(
+          virtualWiki, topicName);
+    } catch (DataAccessException e) {
+      throw new WikiException(new WikiMessage("error.unknown", e.getMessage()),
+          e);
+    }
+    List<Category> categoryImages = new ArrayList<Category>();
+    LinkedHashMap<String, String> subCategories = new LinkedHashMap<String, String>();
+    int i = 0;
+    // loop through the results and split out images and sub-categories
+    while (i < categoryTopics.size()) {
+      Category category = categoryTopics.get(i);
+      if (category.getTopicType() == Topic.TYPE_IMAGE) {
+        categoryTopics.remove(i);
+        categoryImages.add(category);
+        continue;
+      }
+      if (category.getTopicType() == Topic.TYPE_CATEGORY) {
+        categoryTopics.remove(i);
+        String value = category.getChildTopicName().substring(
+            NamespaceHandler.NAMESPACE_CATEGORY.length()
+                + NamespaceHandler.NAMESPACE_SEPARATOR.length());
+        subCategories.put(category.getChildTopicName(), value);
+        continue;
+      }
+      i++;
+    }
+    next.addObject("categoryTopics", categoryTopics);
+    next.addObject("numCategoryTopics", categoryTopics.size());
+    next.addObject("categoryImages", categoryImages);
+    next.addObject("numCategoryImages", categoryImages.size());
+    next.addObject("subCategories", subCategories);
+    next.addObject("numSubCategories", subCategories.size());
+  }
+
+  /**
+   * Create a Pagination object and load all necessary values into the request
+   * for processing by a JSP.
+   * 
+   * @param request
+   *          The servlet request object.
+   * @param next
+   *          A ModelAndView object corresponding to the page being constructed.
+   * @return A Pagination object constructed from parameters found in the
+   *         request object.
+   */
+  public static Pagination loadPagination(HttpServletRequest request,
+      ModelAndView next) {
+    if (next == null) {
+      throw new IllegalArgumentException(
+          "A non-null ModelAndView object must be specified when loading pagination values");
+    }
+    Pagination pagination = WikiUtil.buildPagination(request);
+    next.addObject("num", pagination.getNumResults());
+    next.addObject("offset", pagination.getOffset());
+    return pagination;
   }
 
   /**
@@ -622,11 +744,11 @@ public class ServletUtil {
     // change being made late in a release cycle. Revisit in a future
     // release & clean this up.
     if (Environment.getBooleanValue(Environment.PROP_BASE_INITIALIZED)) {
-      // try {
-      virtualWiki = WikiBase.getDataHandler()
-          .lookupVirtualWiki(virtualWikiName);
-      // } catch (DataAccessException e) {
-      // }
+      try {
+        virtualWiki = WikiBase.getDataHandler().lookupVirtualWiki(
+            virtualWikiName);
+      } catch (DataAccessException e) {
+      }
     }
     if (virtualWiki == null) {
       logger.severe("No virtual wiki found for " + virtualWikiName);
@@ -711,95 +833,64 @@ public class ServletUtil {
 
   /**
    * Utility method used when redirecting to a login page.
-   * 
-   * @param request
-   *          The servlet request object.
-   * @param pageInfo
-   *          The current WikiPageInfo object, which contains information needed
-   *          for rendering the final JSP page.
-   * @param topic
-   *          The topic to be redirected to. Valid examples are "Special:Admin",
-   *          "StartingPoints", etc.
-   * @param messageObject
-   *          A WikiMessage object to be displayed on the login page.
+   *
+   * @param request The servlet request object.
+   * @param pageInfo The current WikiPageInfo object, which contains
+   *  information needed for rendering the final JSP page.
+   * @param topic The topic to be redirected to.  Valid examples are
+   *  "Special:Admin", "StartingPoints", etc.
+   * @param messageObject A WikiMessage object to be displayed on the login
+   *  page.
    * @return Returns a ModelAndView object corresponding to the login page
-   *         display.
-   * @throws WikiException
-   *           Thrown if any error occurs during processing.
+   *  display.
+   * @throws WikiException Thrown if any error occurs during processing.
    */
-  // protected static ModelAndView viewLogin(HttpServletRequest request,
-  // WikiPageInfo pageInfo, String topic, WikiMessage messageObject)
-  // throws WikiException {
-  // ModelAndView next = new ModelAndView("wiki");
-  // pageInfo.reset();
-  // String virtualWikiName = pageInfo.getVirtualWikiName();
-  // String target = request
-  // .getParameter(JAMWikiAuthenticationConstants.SPRING_SECURITY_LOGIN_TARGET_URL_FIELD_NAME);
-  // if (StringUtils.isBlank(target)) {
-  // if (StringUtils.isBlank(topic)) {
-  // VirtualWiki virtualWiki = null;
-  // try {
-  // virtualWiki = WikiBase.getDataHandler().lookupVirtualWiki(
-  // virtualWikiName);
-  // } catch (DataAccessException e) {
-  // throw new WikiException(new WikiMessage("error.unknown", e
-  // .getMessage()), e);
-  // }
-  // topic = virtualWiki.getDefaultTopicName();
-  // }
-  // target = "/" + virtualWikiName + "/" + topic;
-  // if (!StringUtils.isBlank(request.getQueryString())) {
-  // target += "?" + request.getQueryString();
-  // }
-  // }
-  // next
-  // .addObject(
-  // "springSecurityTargetUrlField",
-  // JAMWikiAuthenticationConstants.SPRING_SECURITY_LOGIN_TARGET_URL_FIELD_NAME);
-  // HttpSession session = request.getSession(false);
-  // if (request.getRequestURL().indexOf(request.getRequestURI()) != -1
-  // && (session == null || session
-  // .getAttribute(JAMWikiAuthenticationConstants.SPRING_SECURITY_SAVED_REQUEST_SESSION_KEY)
-  // == null)) {
-  // // Only add a target URL if Spring Security has not saved a request in the
-  // // session. The request
-  // // URL vs URI check is needed due to the fact that the first time a user
-  // // is redirected by Spring
-  // // Security to the login page the saved request attribute is not yet
-  // // available in the session
-  // // due to weirdness and magic which I've thus far been unable to track
-  // // down, so comparing the URI
-  // // to the URL provides a way of determining if the user was redirected.
-  // // Anyone who can create
-  // // a check that reliably captures whether or not Spring Security has a
-  // // saved request should
-  // // feel free to modify the conditional above.
-  // next.addObject("springSecurityTargetUrl", target);
-  // }
-  // String springSecurityLoginUrl = "/" + virtualWikiName
-  // + JAMWikiAuthenticationConstants.SPRING_SECURITY_LOGIN_URL;
-  // next.addObject("springSecurityLoginUrl", springSecurityLoginUrl);
-  // next
-  // .addObject(
-  // "springSecurityUsernameField",
-  // JAMWikiAuthenticationConstants.SPRING_SECURITY_LOGIN_USERNAME_FIELD_NAME);
-  // next
-  // .addObject(
-  // "springSecurityPasswordField",
-  // JAMWikiAuthenticationConstants.SPRING_SECURITY_LOGIN_PASSWORD_FIELD_NAME);
-  // next
-  // .addObject(
-  // "springSecurityRememberMeField",
-  // JAMWikiAuthenticationConstants.SPRING_SECURITY_LOGIN_REMEMBER_ME_FIELD_NAME);
-  // pageInfo.setPageTitle(new WikiMessage("login.title"));
-  // pageInfo.setContentJsp(JSP_LOGIN);
-  // pageInfo.setSpecial(true);
-  // if (messageObject != null) {
-  // next.addObject("messageObject", messageObject);
-  // }
-  // return next;
-  // }
-
+  protected static ModelAndView viewLogin(HttpServletRequest request, WikiPageInfo pageInfo, String topic, WikiMessage messageObject) throws WikiException {
+    ModelAndView next = new ModelAndView("wiki");
+    pageInfo.reset();
+    String virtualWikiName = pageInfo.getVirtualWikiName();
+    String target = request.getParameter(JAMWikiAuthenticationConstants.SPRING_SECURITY_LOGIN_TARGET_URL_FIELD_NAME);
+    if (StringUtils.isBlank(target)) {
+      if (StringUtils.isBlank(topic)) {
+        VirtualWiki virtualWiki = null;
+        try {
+          virtualWiki = WikiBase.getDataHandler().lookupVirtualWiki(virtualWikiName);
+        } catch (DataAccessException e) {
+          throw new WikiException(new WikiMessage("error.unknown", e.getMessage()), e);
+        }
+        topic = virtualWiki.getDefaultTopicName();
+      }
+      target = "/" + virtualWikiName + "/" + topic;
+      if (!StringUtils.isBlank(request.getQueryString())) {
+        target += "?" + request.getQueryString();
+      }
+    }
+    next.addObject("springSecurityTargetUrlField", JAMWikiAuthenticationConstants.SPRING_SECURITY_LOGIN_TARGET_URL_FIELD_NAME);
+    HttpSession session = request.getSession(false);
+    if (request.getRequestURL().indexOf(request.getRequestURI()) != -1 && (session == null || session.getAttribute(JAMWikiAuthenticationConstants.SPRING_SECURITY_SAVED_REQUEST_SESSION_KEY) == null)) {
+      // Only add a target URL if Spring Security has not saved a request in the session.  The request
+      // URL vs URI check is needed due to the fact that the first time a user is redirected by Spring
+      // Security to the login page the saved request attribute is not yet available in the session
+      // due to weirdness and magic which I've thus far been unable to track down, so comparing the URI
+      // to the URL provides a way of determining if the user was redirected.  Anyone who can create
+      // a check that reliably captures whether or not Spring Security has a saved request should
+      // feel free to modify the conditional above.
+      next.addObject("springSecurityTargetUrl", target);
+    }
+    String springSecurityLoginUrl = "/" + virtualWikiName + JAMWikiAuthenticationConstants.SPRING_SECURITY_LOGIN_URL;
+    next.addObject("springSecurityLoginUrl", springSecurityLoginUrl);
+    next.addObject("springSecurityUsernameField", JAMWikiAuthenticationConstants.SPRING_SECURITY_LOGIN_USERNAME_FIELD_NAME);
+    next.addObject("springSecurityPasswordField", JAMWikiAuthenticationConstants.SPRING_SECURITY_LOGIN_PASSWORD_FIELD_NAME);
+    next.addObject("springSecurityRememberMeField", JAMWikiAuthenticationConstants.SPRING_SECURITY_LOGIN_REMEMBER_ME_FIELD_NAME);
+    pageInfo.setPageTitle(new WikiMessage("login.title"));
+    pageInfo.setContentJsp(JSP_LOGIN);
+    pageInfo.setSpecial(true);
+    if (messageObject != null) {
+      next.addObject("messageObject", messageObject);
+    }
+    return next;
+  }
+  
   /**
    * Utility method used when viewing a topic.
    * 
@@ -824,133 +915,132 @@ public class ServletUtil {
    * @throws WikiException
    *           Thrown if any error occurs while retrieving or parsing the topic.
    */
-  // protected static void viewTopic(HttpServletRequest request,
-  // ModelAndView next, WikiPageInfo pageInfo, WikiMessage pageTitle,
-  // Topic topic, boolean sectionEdit, boolean allowRedirect)
-  // throws WikiException {
-  // // FIXME - what should the default be for topics that don't exist?
-  // if (topic == null) {
-  // throw new WikiException(new WikiMessage("common.exception.notopic"));
-  // }
-  // WikiUtil.validateTopicName(topic.getName());
-  // if (allowRedirect
-  // && topic.getTopicType() == Topic.TYPE_REDIRECT
-  // && (request.getParameter("redirect") == null || !request.getParameter(
-  // "redirect").equalsIgnoreCase("no"))) {
-  // Topic child = null;
-  // try {
-  // child = WikiUtil.findRedirectedTopic(topic, 0);
-  // } catch (DataAccessException e) {
-  // throw new WikiException(
-  // new WikiMessage("error.unknown", e.getMessage()), e);
-  // }
-  // if (!child.getName().equals(topic.getName())) {
-  // String redirectUrl = null;
-  // try {
-  // redirectUrl = LinkUtil.buildTopicUrl(request.getContextPath(), topic
-  // .getVirtualWiki(), topic.getName(), true);
-  // } catch (DataAccessException e) {
-  // throw new WikiException(new WikiMessage("error.unknown", e
-  // .getMessage()), e);
-  // }
-  // // FIXME - hard coding
-  // redirectUrl += LinkUtil.appendQueryParam("", "redirect", "no");
-  // String redirectName = topic.getName();
-  // pageInfo.setRedirectInfo(redirectUrl, redirectName);
-  // pageTitle = new WikiMessage("topic.title", child.getName());
-  // topic = child;
-  // // update the page info's virtual wiki in case this redirect is to
-  // // another virtual wiki
-  // pageInfo.setVirtualWikiName(topic.getVirtualWiki());
-  // }
-  // }
-  // String virtualWiki = topic.getVirtualWiki();
-  // String topicName = topic.getName();
-  // WikiUserDetails userDetails = ServletUtil.currentUserDetails();
-  // if (sectionEdit
-  // && !ServletUtil.isEditable(virtualWiki, topicName, userDetails)) {
-  // sectionEdit = false;
-  // }
-  // WikiUser user = ServletUtil.currentWikiUser();
-  // ParserInput parserInput = new ParserInput();
-  // parserInput.setContext(request.getContextPath());
-  // parserInput.setLocale(request.getLocale());
-  // parserInput.setWikiUser(user);
-  // parserInput.setTopicName(topicName);
-  // parserInput.setUserDisplay(ServletUtil.getIpAddress(request));
-  // parserInput.setVirtualWiki(virtualWiki);
-  // parserInput.setAllowSectionEdit(sectionEdit);
-  // ParserOutput parserOutput = new ParserOutput();
-  // String content = null;
-  // try {
-  // content = ParserUtil.parse(parserInput, parserOutput, topic
-  // .getTopicContent());
-  // } catch (ParserException e) {
-  // throw new WikiException(new WikiMessage("error.unknown", e.getMessage()),
-  // e);
-  // }
-  // if (parserOutput.getCategories().size() > 0) {
-  // LinkedHashMap<String, String> categories = new LinkedHashMap<String,
-  // String>();
-  // for (String key : parserOutput.getCategories().keySet()) {
-  // String value = key.substring(NamespaceHandler.NAMESPACE_CATEGORY
-  // .length()
-  // + NamespaceHandler.NAMESPACE_SEPARATOR.length());
-  // categories.put(key, value);
-  // }
-  // next.addObject("categories", categories);
-  // }
-  // topic.setTopicContent(content);
-  // if (topic.getTopicType() == Topic.TYPE_CATEGORY) {
-  // loadCategoryContent(next, virtualWiki, topic.getName());
-  // }
-  // if (topic.getTopicType() == Topic.TYPE_IMAGE
-  // || topic.getTopicType() == Topic.TYPE_FILE) {
-  // List<WikiFileVersion> fileVersions = null;
-  // try {
-  // fileVersions = WikiBase.getDataHandler().getAllWikiFileVersions(
-  // virtualWiki, topicName, true);
-  // } catch (DataAccessException e) {
-  // throw new WikiException(
-  // new WikiMessage("error.unknown", e.getMessage()), e);
-  // }
-  // WikiUser wikiUser;
-  // for (WikiFileVersion fileVersion : fileVersions) {
-  // // update version urls to include web root path
-  // String url = FilenameUtils.normalize(Environment
-  // .getValue(Environment.PROP_FILE_DIR_RELATIVE_PATH)
-  // + "/" + fileVersion.getUrl());
-  // url = FilenameUtils.separatorsToUnix(url);
-  // fileVersion.setUrl(url);
-  // // make sure the authorDisplay field is equal to the login for
-  // // non-anonymous uploads
-  // if (fileVersion.getAuthorId() != null) {
-  // try {
-  // wikiUser = WikiBase.getDataHandler().lookupWikiUser(
-  // fileVersion.getAuthorId());
-  // } catch (DataAccessException e) {
-  // throw new WikiException(new WikiMessage("error.unknown", e
-  // .getMessage()), e);
-  // }
-  // if (wikiUser != null) {
-  // // wikiUser should never be null unless the data in the database is
-  // // somehow corrupt
-  // fileVersion.setAuthorDisplay(wikiUser.getUsername());
-  // }
-  // }
-  // }
-  // next.addObject("fileVersions", fileVersions);
-  // if (topic.getTopicType() == Topic.TYPE_IMAGE) {
-  // next.addObject("topicImage", true);
-  // } else {
-  // next.addObject("topicFile", true);
-  // }
-  // }
-  // pageInfo.setSpecial(false);
-  // pageInfo.setTopicName(topicName);
-  // next.addObject(ServletUtil.PARAMETER_TOPIC_OBJECT, topic);
-  // if (pageTitle != null) {
-  // pageInfo.setPageTitle(pageTitle);
-  // }
-  // }
+  protected static void viewTopic(HttpServletRequest request,
+      ModelAndView next, WikiPageInfo pageInfo, WikiMessage pageTitle,
+      Topic topic, boolean sectionEdit, boolean allowRedirect)
+      throws WikiException {
+    // FIXME - what should the default be for topics that don't exist?
+    if (topic == null) {
+      throw new WikiException(new WikiMessage("common.exception.notopic"));
+    }
+    // WikiUtil.validateTopicName(topic.getName());
+    // if (allowRedirect
+    // && topic.getTopicType() == Topic.TYPE_REDIRECT
+    // && (request.getParameter("redirect") == null || !request.getParameter(
+    // "redirect").equalsIgnoreCase("no"))) {
+    // Topic child = null;
+    // try {
+    // child = WikiUtil.findRedirectedTopic(topic, 0);
+    // } catch (DataAccessException e) {
+    // throw new WikiException(
+    // new WikiMessage("error.unknown", e.getMessage()), e);
+    // }
+    // if (!child.getName().equals(topic.getName())) {
+    // String redirectUrl = null;
+    // try {
+    // redirectUrl = LinkUtil.buildTopicUrl(request.getContextPath(), topic
+    // .getVirtualWiki(), topic.getName(), true);
+    // } catch (DataAccessException e) {
+    // throw new WikiException(new WikiMessage("error.unknown", e
+    // .getMessage()), e);
+    // }
+    // // FIXME - hard coding
+    // redirectUrl += LinkUtil.appendQueryParam("", "redirect", "no");
+    // String redirectName = topic.getName();
+    // pageInfo.setRedirectInfo(redirectUrl, redirectName);
+    // pageTitle = new WikiMessage("topic.title", child.getName());
+    // topic = child;
+    // // update the page info's virtual wiki in case this redirect is to
+    // // another virtual wiki
+    // pageInfo.setVirtualWikiName(topic.getVirtualWiki());
+    // }
+    // }
+    String virtualWiki = topic.getVirtualWiki();
+    String topicName = topic.getName();
+    // WikiUserDetails userDetails = ServletUtil.currentUserDetails();
+    // if (sectionEdit
+    // && !ServletUtil.isEditable(virtualWiki, topicName, userDetails)) {
+    // sectionEdit = false;
+    // }
+    WikiUser user = ServletUtil.currentWikiUser();
+    ParserInput parserInput = new ParserInput();
+    parserInput.setContext(request.getContextPath());
+    parserInput.setLocale(request.getLocale());
+    parserInput.setWikiUser(user);
+    parserInput.setTopicName(topicName);
+    parserInput.setUserDisplay(ServletUtil.getIpAddress(request));
+    parserInput.setVirtualWiki(virtualWiki);
+    parserInput.setAllowSectionEdit(sectionEdit);
+    ParserOutput parserOutput = new ParserOutput();
+    String content = null;
+    try {
+      content = ParserUtil.parse(parserInput, parserOutput, topic
+          .getTopicContent());
+    } catch (ParserException e) {
+      throw new WikiException(new WikiMessage("error.unknown", e.getMessage()),
+          e);
+    }
+    if (parserOutput.getCategories().size() > 0) {
+      LinkedHashMap<String, String> categories = new LinkedHashMap<String, String>();
+      for (String key : parserOutput.getCategories().keySet()) {
+        String value = key.substring(NamespaceHandler.NAMESPACE_CATEGORY
+            .length()
+            + NamespaceHandler.NAMESPACE_SEPARATOR.length());
+        categories.put(key, value);
+      }
+      next.addObject("categories", categories);
+    }
+    topic.setHtmlContent(content);
+    // if (topic.getTopicType() == Topic.TYPE_CATEGORY) {
+    // loadCategoryContent(next, virtualWiki, topic.getName());
+    // }
+    // if (topic.getTopicType() == Topic.TYPE_IMAGE
+    // || topic.getTopicType() == Topic.TYPE_FILE) {
+    // List<WikiFileVersion> fileVersions = null;
+    // try {
+    // fileVersions = WikiBase.getDataHandler().getAllWikiFileVersions(
+    // virtualWiki, topicName, true);
+    // } catch (DataAccessException e) {
+    // throw new WikiException(
+    // new WikiMessage("error.unknown", e.getMessage()), e);
+    // }
+    // WikiUser wikiUser;
+    // for (WikiFileVersion fileVersion : fileVersions) {
+    // // update version urls to include web root path
+    // String url = FilenameUtils.normalize(Environment
+    // .getValue(Environment.PROP_FILE_DIR_RELATIVE_PATH)
+    // + "/" + fileVersion.getUrl());
+    // url = FilenameUtils.separatorsToUnix(url);
+    // fileVersion.setUrl(url);
+    // // make sure the authorDisplay field is equal to the login for
+    // // non-anonymous uploads
+    // if (fileVersion.getAuthorId() != null) {
+    // try {
+    // wikiUser = WikiBase.getDataHandler().lookupWikiUser(
+    // fileVersion.getAuthorId());
+    // } catch (DataAccessException e) {
+    // throw new WikiException(new WikiMessage("error.unknown", e
+    // .getMessage()), e);
+    // }
+    // if (wikiUser != null) {
+    // // wikiUser should never be null unless the data in the database is
+    // // somehow corrupt
+    // fileVersion.setAuthorDisplay(wikiUser.getUsername());
+    // }
+    // }
+    // }
+    // next.addObject("fileVersions", fileVersions);
+    // if (topic.getTopicType() == Topic.TYPE_IMAGE) {
+    // next.addObject("topicImage", true);
+    // } else {
+    // next.addObject("topicFile", true);
+    // }
+    // }
+    pageInfo.setSpecial(false);
+    pageInfo.setTopicName(topicName);
+    next.addObject(ServletUtil.PARAMETER_TOPIC_OBJECT, topic);
+    if (pageTitle != null) {
+      pageInfo.setPageTitle(pageTitle);
+    }
+  }
 }

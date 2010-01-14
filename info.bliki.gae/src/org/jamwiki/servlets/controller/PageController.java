@@ -1,4 +1,4 @@
-package info.bliki.gae.controller;
+package org.jamwiki.servlets.controller;
 
 import info.bliki.gae.db.PageService;
 import info.bliki.gae.db.WikiUserService;
@@ -10,6 +10,7 @@ import java.util.Locale;
 
 import org.jamwiki.model.Topic;
 import org.jamwiki.model.WikiUser;
+import org.jamwiki.servlets.BlikiServlet;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -27,6 +28,9 @@ public class PageController extends BlikiController {
   public final static String EDIT_PAGE_URI = "page/edit";
 
   public final static String TOPIC_PAGE_URI = "page/topic";
+
+  public final static String ERROR_PAGE_URI = "page/error";
+
   // @Autowired
   // private PageService pageService;
 
@@ -69,13 +73,13 @@ public class PageController extends BlikiController {
       page.setName(title);
       page.setTopicContent(contents);
       page.setAuthor(wikiUser);
-      page = PageService.update(page);
+      page = PageService.update(page, null);
       model.addAttribute("page", page);
       return "redirect:/wiki/" + encodedTitle;
     }
     // create completely new page
     page = new Topic(title, contents, wikiUser);
-    page = PageService.save(page);
+    page = PageService.save(page, null);
     model.addAttribute("page", page);
     return "redirect:/wiki/" + encodedTitle;
     // 
@@ -141,7 +145,7 @@ public class PageController extends BlikiController {
 
   private String lameSecurityCheck() {
     return BlikiUtil.securityCheck(null);
-  } 
+  }
 
   @RequestMapping(value = "/install", method = RequestMethod.GET)
   public String install(Model model) {
@@ -149,7 +153,7 @@ public class PageController extends BlikiController {
       return lameSecurityCheck();
     }
     Topic page = PageService
-        .findByTitle(BlikiBase.SPECIAL_PAGE_STARTING_POINTS);
+        .findByTitle(BlikiBase.SPECIAL_PAGE_LEFT_MENU);
     if (page == null) {
       WikiUser wikiUser = WikiUserService.getWikiUser();
       // create special pages
@@ -180,7 +184,7 @@ public class PageController extends BlikiController {
       contents = BlikiUtil.readSpecialPage(locale, topicName);
       if (contents != null) {
         Topic page = new Topic(topicName, contents, wikiUser);
-        page = PageService.save(page);
+        page = PageService.save(page, null);
         return page;
 
       }
@@ -188,4 +192,4 @@ public class PageController extends BlikiController {
     }
     return null;
   }
-} 
+}

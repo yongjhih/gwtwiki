@@ -1,14 +1,13 @@
 package org.jamwiki.model;
 
-import info.bliki.gae.model.BlikiModel;
-import info.bliki.wiki.model.IWikiModel;
-
 import java.io.Serializable;
 import java.util.Date;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Transient;
+
+import org.jamwiki.WikiBase;
 
 import com.google.appengine.api.datastore.EntityNotFoundException;
 import com.google.appengine.api.datastore.Text;
@@ -19,7 +18,7 @@ import com.googlecode.objectify.ObjectifyFactory;
 @Entity
 public class Topic implements Serializable {
   /**
-   * 
+   *  
    */
   private static final long serialVersionUID = 5518810488698138847L;
 
@@ -44,6 +43,13 @@ public class Topic implements Serializable {
   private OKey<WikiUser> author;
 
   private Text content = null;
+
+  /**
+   * @return the content
+   */
+  public Text getContent() {
+    return content;
+  }
 
   private Date date;
 
@@ -70,7 +76,7 @@ public class Topic implements Serializable {
     } else {
       this.content = new Text(content);
     }
-    setAuthor(gaeUser);
+//    setAuthor(gaeUser);
     this.date = new Date();
   }
 
@@ -108,6 +114,9 @@ public class Topic implements Serializable {
   }
   
   public String getTopicContent() {
+    if (content==null) {
+      return "";
+    }
     return content.getValue();
   }
 
@@ -115,6 +124,9 @@ public class Topic implements Serializable {
    * @return the virtualWiki
    */
   public String getVirtualWiki() {
+    if (virtualWiki==null ||virtualWiki.length()==0){
+      return WikiBase.DEFAULT_VWIKI;
+    }
     return virtualWiki;
   }
 

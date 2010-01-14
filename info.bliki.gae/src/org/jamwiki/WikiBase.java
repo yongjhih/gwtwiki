@@ -45,7 +45,7 @@ public class WikiBase {
 	public static final String CACHE_PARSED_TOPIC_CONTENT = "org.jamwiki.WikiBase.CACHE_PARSED_TOPIC_CONTENT";
 	/** Name of the default wiki */
 	// FIXME - make this configurable
-	public static final String DEFAULT_VWIKI = "";
+	public static final String DEFAULT_VWIKI = "en";
 	/** Default group for registered users. */
 //	private static WikiGroup GROUP_REGISTERED_USER = null;
 	/** Data stored using an external database */

@@ -1,4 +1,4 @@
-package info.bliki.gae.controller;
+package org.jamwiki.servlets.controller;
 
 import info.bliki.gae.db.PageService;
 import info.bliki.gae.utils.BlikiBase;
@@ -13,7 +13,6 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.jamwiki.DataAccessException;
 import org.jamwiki.WikiException;
 import org.jamwiki.WikiMessage;
 import org.jamwiki.model.Topic;
@@ -22,12 +21,11 @@ import org.jamwiki.parser.ParserException;
 import org.jamwiki.parser.ParserInput;
 import org.jamwiki.parser.ParserOutput;
 import org.jamwiki.parser.ParserUtil;
+import org.jamwiki.servlets.CategoryServlet;
 import org.jamwiki.servlets.ServletUtil;
 import org.jamwiki.servlets.WikiPageInfo;
-import org.jamwiki.utils.LinkUtil;
 import org.jamwiki.utils.NamespaceHandler;
-import org.jamwiki.utils.WikiUtil;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.jamwiki.utils.PseudoTopicHandler;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -52,6 +50,10 @@ public class PageViewController extends BlikiController {
   // return "page/view";
   // }
 
+  /**
+   * Read the StyleSheet wiki text and use it as &quot;bliki.css&quot; cascading
+   * stylesheet.
+   */
   @RequestMapping(value = "/bliki.css", method = RequestMethod.GET)
   public String indexStylesheet(HttpServletRequest request,
       HttpServletResponse response, Model model) {
@@ -76,25 +78,42 @@ public class PageViewController extends BlikiController {
     }
     // do not load defaults or redirect - return as raw CSS
     return null;
-  }
+  } 
+//
+//  @RequestMapping(value = "/wiki/{key}", method = RequestMethod.GET)
+//  public String indexW(@PathVariable String key, HttpServletRequest request,HttpServletResponse response,
+//      Model model) {
+//    setUpModel(model);
+//    if (StringUtils.isBlank(key)) {
+//      return PageController.ERROR_PAGE_URI;
+//    }
+//    if (PseudoTopicHandler.isPseudoTopic(key)) {
+//      //
+//      if (key.equals("Special:Categories")) {
+//        categories(request, response, model);
+//      }
+//    }
+//    String topicName = BlikiUtil.decodeTitle(key);
+//    Topic topic = PageService.findByTitle(topicName);
+//    if (topic == null) {
+//      model.addAttribute("page", new Topic(topicName));
+//      return PageController.EDIT_PAGE_URI;
+//      // return "/page/new.jsp?title=" + key;
+//    }
+//    model.addAttribute("page", topic);
+//    viewTopic(request, model, topic, false);
+//    return PageController.TOPIC_PAGE_URI;// "page/view";
+//  }
 
-  @RequestMapping(value = "/wiki/{key}", method = RequestMethod.GET)
-  public String indexW(@PathVariable String key, HttpServletRequest request,
-      Model model) {
-    setUpModel(model);
-    if (StringUtils.isBlank(key)) {
-      return "common/404";
+  public static String categories(HttpServletRequest request, HttpServletResponse response, Model model) {
+    CategoryServlet cs = new CategoryServlet();
+    try {
+      ModelAndView mav = cs.handleRequest(request, response);
+    } catch (Exception e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
     }
-    String topicName = BlikiUtil.decodeTitle(key);
-    Topic topic = PageService.findByTitle(topicName);
-    if (topic == null) {
-      model.addAttribute("page", new Topic(topicName));
-      return PageController.EDIT_PAGE_URI;
-      // return "/page/new.jsp?title=" + key;
-    }
-    model.addAttribute("page", topic);
-    viewTopic(request, model, topic, false);
-    return PageController.TOPIC_PAGE_URI;//"page/view";
+    return "page/categories"; 
   }
 
   /**

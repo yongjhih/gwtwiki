@@ -1,4 +1,4 @@
-package info.bliki.gae.controller;
+package org.jamwiki.servlets.controller;
 
 import info.bliki.gae.db.PageService;
 

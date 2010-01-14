@@ -18,11 +18,9 @@ package org.jamwiki.utils;
 
 import java.io.IOException;
 
-import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.lang.StringUtils;
 import org.jamwiki.DataAccessException;
-import org.jamwiki.Environment;
 import org.jamwiki.WikiBase;
 import org.jamwiki.model.Topic;
 
@@ -108,13 +106,11 @@ public class LinkUtil {
     if (section > 0) {
       query += "&amp;section=" + section;
     }
+    WikiLink wikiLink = new WikiLink();
     // FIXME - hard coding
-    return "/page/edit/" + topic;
-    // WikiLink wikiLink = new WikiLink();
-    // // FIXME - hard coding
-    // wikiLink.setDestination("Special:Edit");
-    // wikiLink.setQuery(query);
-    // return LinkUtil.buildTopicUrl(context, virtualWiki, wikiLink);
+    wikiLink.setDestination("Special:Edit");
+    wikiLink.setQuery(query);
+    return LinkUtil.buildTopicUrl(context, virtualWiki, wikiLink);
   }
 
   /**
@@ -261,7 +257,8 @@ public class LinkUtil {
       text = topic;
     }
     if (!StringUtils.isBlank(topic) && StringUtils.isBlank(style)) {
-      if (!StringUtils.isEmpty(virtualWiki) && InterWikiHandler.isInterWiki(virtualWiki)) {
+      if (!StringUtils.isEmpty(virtualWiki)
+          && InterWikiHandler.isInterWiki(virtualWiki)) {
         style = "interwiki";
       } else if (!LinkUtil.isExistingArticle(virtualWiki, topic)) {
         style = "edit";
@@ -388,15 +385,13 @@ public class LinkUtil {
     if (context != null) {
       url.append(context);
     }
-//    // context never ends with a "/" per servlet specification
-//    url.append('/');
-//    // get the virtual wiki, which should have been set by the parent servlet
-//    url.append(Utilities.encodeAndEscapeTopicName(virtualWiki));
-//    url.append('/');
-//    url.append(Utilities.encodeAndEscapeTopicName(topicName));
-    
-    url.append("/wiki/");
+    // // context never ends with a "/" per servlet specification
+    url.append('/');
+    // get the virtual wiki, which should have been set by the parent servlet
+    url.append(Utilities.encodeAndEscapeTopicName(virtualWiki));
+    url.append('/');
     url.append(Utilities.encodeAndEscapeTopicName(topicName));
+
     if (!StringUtils.isBlank(queryString)) {
       if (queryString.charAt(0) != '?') {
         url.append('?');

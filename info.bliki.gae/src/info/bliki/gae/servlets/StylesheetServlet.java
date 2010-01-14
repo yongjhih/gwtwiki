@@ -11,7 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.jamwiki.model.Topic;
 import org.springframework.web.servlet.ModelAndView;
 
-public class StylesheetServlet extends BlikiServlet {
+public class StylesheetServlet extends BlikiOldServlet {
 
   protected ModelAndView handleBlikiRequest(HttpServletRequest request,
       HttpServletResponse response, ModelAndView next) throws Exception {

@@ -235,7 +235,7 @@
 		<name>Special:Diff</name>
 	</pseudotopic>
 	<pseudotopic>
-		<name>page/edit</name>
+		<name>Special:Edit</name>
 	</pseudotopic>
 	<pseudotopic>
 		<name>Special:Export</name>

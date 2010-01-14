@@ -19,7 +19,7 @@ public class BlikiModel extends WikiModel {
   private String fEditWikiBaseURL;
 
   public BlikiModel() {
-    this("/image/${image}", "/wiki/${title}", "/page/edit/${title}");
+    this("/image/${image}", "/en/${title}", "/en/Special:Edit?topic=${title}");
 
   }
 

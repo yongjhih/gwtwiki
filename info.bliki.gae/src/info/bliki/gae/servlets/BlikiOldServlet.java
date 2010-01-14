@@ -8,7 +8,7 @@ import org.jamwiki.model.Topic;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.AbstractController;
 
-public abstract class BlikiServlet extends AbstractController {
+public abstract class BlikiOldServlet extends AbstractController {
 //  protected PageService pageService = new PageServiceImpl();
   // private static final WikiLogger logger =
   // WikiLogger.getLogger(JAMWikiServlet.class.getName());

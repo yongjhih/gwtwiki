@@ -10,6 +10,7 @@ import javax.cache.CacheManager;
 
 import org.jamwiki.WikiException;
 import org.jamwiki.WikiMessage;
+import org.jamwiki.model.Category;
 import org.jamwiki.model.Topic;
 import org.jamwiki.model.WikiUser;
 import org.jamwiki.parser.ParserException;
@@ -30,6 +31,7 @@ public class PageService {
     try {
       ObjectifyFactory.register(Topic.class);
       ObjectifyFactory.register(WikiUser.class);
+      ObjectifyFactory.register(Category.class);
       CacheFactory cacheFactory = CacheManager.getInstance().getCacheFactory();
       cache = cacheFactory.createCache(Collections.emptyMap());
     } catch (CacheException e) {
@@ -38,13 +40,17 @@ public class PageService {
     }
   }
 
-  public static Topic save(Topic page) {
+  public static Topic save(Topic page, List<Category> catList) {
     Objectify ofy = ObjectifyFactory.begin();
     ofy.put(page);
+    if (catList != null && catList.size() > 0) {
+      ofy.put(catList);
+    }
+    cache.put(page.getName(), page);
     return page;
   }
 
-  public static Topic update(Topic page) {
+  public static Topic update(Topic page, List<Category> catList) {
     Topic existingEntity = null;
     try {
       Objectify ofy = ObjectifyFactory.begin();
@@ -52,7 +58,11 @@ public class PageService {
       existingEntity.setName(page.getName());
       existingEntity.setTopicContent(page.getTopicContent());
       ofy.put(existingEntity);
+      if (catList != null && catList.size() > 0) {
+        ofy.put(catList);
+      }
       cache.put(existingEntity.getName(), existingEntity);
+
     } catch (EntityNotFoundException enf) {
     }
     return existingEntity;

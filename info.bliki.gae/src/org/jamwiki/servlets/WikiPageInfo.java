@@ -55,7 +55,7 @@ public class WikiPageInfo {
 	 */
   public WikiPageInfo(HttpServletRequest request) {
     // TODO get virtual wiki
-    this.virtualWikiName = "";//WikiUtil.getVirtualWikiFromURI(request);
+    this.virtualWikiName = WikiUtil.getVirtualWikiFromURI(request);
     if (this.virtualWikiName == null) {
       logger.severe("No virtual wiki available for page request "
           + request.getRequestURI());
@@ -363,8 +363,9 @@ public class WikiPageInfo {
    */
   public String getVirtualWikiName() {
     if (StringUtils.isBlank(virtualWikiName)) {
-      throw new IllegalArgumentException(
-          "Cannot pass a null or empty virtual wiki name");
+      return "";
+//      throw new IllegalArgumentException(
+//          "Cannot pass a null or empty virtual wiki name");
     }
     return this.virtualWikiName;
   }
