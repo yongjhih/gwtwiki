@@ -1,33 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE web-app PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN" "http://java.sun.com/dtd/web-app_2_3.dtd">
 <web-app>
-    <filter>
+<!--  <filter>
         <filter-name>sitemesh</filter-name>
         <filter-class>com.opensymphony.sitemesh.webapp.SiteMeshFilter</filter-class>
     </filter>
     <filter-mapping>
         <filter-name>sitemesh</filter-name>
         <url-pattern>/*</url-pattern>
-    </filter-mapping>
+    </filter-mapping> -->
+    <filter>
+		<filter-name>JAMWikiFilter</filter-name>
+		<filter-class>org.jamwiki.servlets.JAMWikiFilter</filter-class>
+		<init-param>
+			<param-name>encoding</param-name>
+			<param-value>UTF-8</param-value>
+		</init-param>
+	</filter>
+	<filter-mapping>
+		<filter-name>JAMWikiFilter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
 	<servlet>
-        <servlet-name>springapp</servlet-name>
+        <servlet-name>jamwiki</servlet-name>
         <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
-        <init-param>
+ <!--        <init-param>
 			<param-name>contextConfigLocation</param-name>
 			<param-value>
 				/WEB-INF/spring/app-config.xml
 			</param-value>
 		</init-param>
+		 -->
         <load-on-startup>1</load-on-startup>
     </servlet>
     <servlet-mapping>
-        <servlet-name>springapp</servlet-name>
-        <url-pattern>/</url-pattern>
+        <servlet-name>jamwiki</servlet-name>
+        <url-pattern>/en/*</url-pattern>
     </servlet-mapping>
     <welcome-file-list>
 		<welcome-file>index.jsp</welcome-file>
 	</welcome-file-list>
     <!-- not required for containers that fully support JSP 1.2 -->
+    <!-- 
     <taglib>
       <taglib-uri>sitemesh-page</taglib-uri>
       <taglib-location>/WEB-INF/lib/sitemesh-page.tld</taglib-location>
@@ -40,4 +54,22 @@
     	<error-code>404</error-code>
     	<location>/WEB-INF/jsp/common/404.jsp</location>
     </error-page>
+     -->
+
+	<error-page>
+		<error-code>403</error-code>
+		<location>/403.jsp</location>
+	</error-page>
+
+	<jsp-config>
+		<taglib>
+			<taglib-uri>http://jamwiki.org/taglib</taglib-uri>
+			<taglib-location>/WEB-INF/jamwiki.tld</taglib-location>
+		</taglib>
+<!-- 	<taglib>
+			<taglib-uri>http://www.springframework.org/security/tags</taglib-uri>
+			<taglib-location>/WEB-INF/security.tld</taglib-location>
+		</taglib>
+ -->	
+	</jsp-config>
 </web-app>
