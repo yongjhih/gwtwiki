@@ -25,23 +25,23 @@ import com.google.appengine.api.datastore.Query.SortDirection;
 public class OQuery<T>
 {
 	/** We need this for lookups */
-	OFactory factory;
+	ObjectifyFactory factory;
 	
 	/** We need to track this because it enables the ability to filter/sort by id */
-	Class<?> classRestriction;
+	Class<T> classRestriction;
 	
 	/** The actual datastore query constructed by this object */
 	protected Query actual;
 	
 	/** */
-	protected OQuery(OFactory fact) 
+	protected OQuery(ObjectifyFactory fact) 
 	{
 		this.factory = fact;
 		this.actual = new Query();
 	}
 	
 	/** */
-	protected OQuery(OFactory fact, Class<T> clazz)
+	protected OQuery(ObjectifyFactory fact, Class<T> clazz)
 	{
 		this.factory = fact;
 		this.actual = new Query(this.factory.getKind(clazz));
@@ -86,7 +86,7 @@ public class OQuery<T>
 		// If we have a class restriction, check to see if the property is the @Id
 		if (this.classRestriction != null)
 		{
-			EntityMetadata meta = this.factory.getMetadata(this.classRestriction);
+			EntityMetadata<?> meta = this.factory.getMetadata(this.classRestriction);
 			if (meta.isIdField(prop) || meta.isNameField(prop))
 			{
 				if (meta.hasParentField())
@@ -162,7 +162,7 @@ public class OQuery<T>
 		// Check for @Id field
 		if (this.classRestriction != null)
 		{
-			EntityMetadata meta = this.factory.getMetadata(this.classRestriction);
+			EntityMetadata<?> meta = this.factory.getMetadata(this.classRestriction);
 			if (meta.isIdField(condition) || meta.isNameField(condition))
 				condition = "__key__";
 		}

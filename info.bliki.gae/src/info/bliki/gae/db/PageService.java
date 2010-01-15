@@ -11,6 +11,7 @@ import javax.cache.CacheManager;
 import org.jamwiki.WikiException;
 import org.jamwiki.WikiMessage;
 import org.jamwiki.model.Category;
+import org.jamwiki.model.OS;
 import org.jamwiki.model.Topic;
 import org.jamwiki.model.WikiUser;
 import org.jamwiki.parser.ParserException;
@@ -22,16 +23,12 @@ import org.jamwiki.servlets.ServletUtil;
 import com.google.appengine.api.datastore.EntityNotFoundException;
 import com.googlecode.objectify.OQuery;
 import com.googlecode.objectify.Objectify;
-import com.googlecode.objectify.ObjectifyFactory;
 
 public class PageService {
   public static Cache cache = null;
 
   static {
     try {
-      ObjectifyFactory.register(Topic.class);
-      ObjectifyFactory.register(WikiUser.class);
-      ObjectifyFactory.register(Category.class);
       CacheFactory cacheFactory = CacheManager.getInstance().getCacheFactory();
       cache = cacheFactory.createCache(Collections.emptyMap());
     } catch (CacheException e) {
@@ -41,7 +38,7 @@ public class PageService {
   }
 
   public static Topic save(Topic page, List<Category> catList) {
-    Objectify ofy = ObjectifyFactory.begin();
+    Objectify ofy = OS.begin();
     ofy.put(page);
     if (catList != null && catList.size() > 0) {
       ofy.put(catList);
@@ -53,7 +50,7 @@ public class PageService {
   public static Topic update(Topic page, List<Category> catList) {
     Topic existingEntity = null;
     try {
-      Objectify ofy = ObjectifyFactory.begin();
+      Objectify ofy = OS.begin();
       existingEntity = ofy.get(Topic.class, page.getName());
       existingEntity.setName(page.getName());
       existingEntity.setTopicContent(page.getTopicContent());
@@ -70,7 +67,7 @@ public class PageService {
 
   public static void delete(Topic page) {
     cache.remove(page.getName());
-    Objectify ofy = ObjectifyFactory.begin();
+    Objectify ofy = OS.begin();
     ofy.delete(page);
   }
 
@@ -80,8 +77,8 @@ public class PageService {
       return page;
     }
     try {
-      Objectify ofy = ObjectifyFactory.begin();
-      OQuery<Topic> q = ObjectifyFactory.createQuery(Topic.class);
+      Objectify ofy = OS.begin();
+      OQuery<Topic> q = OS.createQuery(Topic.class);
       q.filter("title", title);
       page = ofy.prepare(q).asSingle();
       cache.put(page.getName(), page);
@@ -128,8 +125,8 @@ public class PageService {
 
   public static List<Topic> getAll() {
     List<Topic> resultList = null;
-    Objectify ofy = ObjectifyFactory.begin();
-    OQuery<Topic> q = ObjectifyFactory.createQuery(Topic.class);
+    Objectify ofy = OS.begin();
+    OQuery<Topic> q = OS.createQuery(Topic.class);
     resultList = ofy.prepare(q).asList();
     return resultList;
   }

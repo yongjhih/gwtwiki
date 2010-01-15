@@ -8,6 +8,7 @@ import javax.cache.CacheException;
 import javax.cache.CacheFactory;
 import javax.cache.CacheManager;
 
+import org.jamwiki.model.OS;
 import org.jamwiki.model.WikiUser;
 
 import com.google.appengine.api.datastore.EntityNotFoundException;
@@ -31,7 +32,7 @@ public class WikiUserService {
   }
 
   public static WikiUser save(WikiUser wikiUser) {
-    Objectify ofy = ObjectifyFactory.begin();
+    Objectify ofy = OS.begin();
     ofy.put(wikiUser);
     WIKIUSER_CACHE.put(wikiUser.getEmail(), wikiUser);
     return wikiUser;
@@ -41,7 +42,7 @@ public class WikiUserService {
     WikiUser existingEntity = null;
     try {
 
-      Objectify ofy = ObjectifyFactory.begin();
+      Objectify ofy = OS.begin();
       existingEntity = ofy.get(WikiUser.class, wikiUser.getUserId());
       WIKIUSER_CACHE.remove(existingEntity.getEmail());
       existingEntity.setEmail(wikiUser.getEmail());
@@ -56,7 +57,7 @@ public class WikiUserService {
 
   public static void delete(WikiUser wikiUser) {
     WIKIUSER_CACHE.remove(wikiUser.getUserId());
-    Objectify ofy = ObjectifyFactory.begin();
+    Objectify ofy = OS.begin();
     ofy.delete(wikiUser);
   }
 
@@ -66,8 +67,8 @@ public class WikiUserService {
       return wikiUser;
     }
     try {
-      Objectify ofy = ObjectifyFactory.begin();
-      OQuery<WikiUser> q = ObjectifyFactory.createQuery(WikiUser.class);
+      Objectify ofy = OS.begin();
+      OQuery<WikiUser> q = OS.createQuery(WikiUser.class);
       q.filter("email", email);
       wikiUser = ofy.prepare(q).asSingle();
       WIKIUSER_CACHE.put(wikiUser.getEmail(), wikiUser);
@@ -93,9 +94,9 @@ public class WikiUserService {
       if (wikiUser != null) {
         return wikiUser;
       }
-      Objectify ofy = ObjectifyFactory.begin();
+      Objectify ofy = OS.begin();
       try {
-        OQuery<WikiUser> q = ObjectifyFactory.createQuery(WikiUser.class);
+        OQuery<WikiUser> q = OS.createQuery(WikiUser.class);
         q.filter("email", email);
         wikiUser = ofy.prepare(q).asSingle();
         WIKIUSER_CACHE.put(wikiUser.getEmail(), wikiUser);
@@ -122,8 +123,8 @@ public class WikiUserService {
   
   public static List<WikiUser> getAll() {
     List<WikiUser> resultList = null;
-    Objectify ofy = ObjectifyFactory.begin();
-    OQuery<WikiUser> q = ObjectifyFactory.createQuery(WikiUser.class);
+    Objectify ofy = OS.begin();
+    OQuery<WikiUser> q = OS.createQuery(WikiUser.class);
     resultList = ofy.prepare(q).asList();
     return resultList;
   }

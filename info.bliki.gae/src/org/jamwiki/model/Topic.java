@@ -81,7 +81,7 @@ public class Topic implements Serializable {
   }
 
   public WikiUser getAuthor() {
-    Objectify ofy = ObjectifyFactory.begin();
+    Objectify ofy = OS.begin();
     try {
       return ofy.get(author);
     } catch (EntityNotFoundException e) {
@@ -136,8 +136,8 @@ public class Topic implements Serializable {
   // }
 
   public void setAuthor(WikiUser author) {
-    Objectify ofy = ObjectifyFactory.begin();
-    this.author = ObjectifyFactory.createKey(author);
+    Objectify ofy = OS.begin();
+    this.author = OS.createKey(author);
   }
 
   public void setDate(Date date) {

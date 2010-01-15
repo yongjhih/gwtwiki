@@ -9,7 +9,7 @@ import javax.cache.CacheFactory;
 import javax.cache.CacheManager;
 
 import org.jamwiki.model.Category;
-import org.jamwiki.model.WikiUser;
+import org.jamwiki.model.OS;
 
 import com.google.appengine.api.datastore.EntityNotFoundException;
 import com.googlecode.objectify.OQuery;
@@ -30,7 +30,7 @@ public class CategoryService {
   }
 
   public static Category save(Category page) {
-    Objectify ofy = ObjectifyFactory.begin();
+    Objectify ofy = OS.begin();
     ofy.put(page);
     return page;
   }
@@ -38,7 +38,7 @@ public class CategoryService {
   public static Category update(Category page) {
     Category existingEntity = null;
     try {
-      Objectify ofy = ObjectifyFactory.begin();
+      Objectify ofy = OS.begin();
       existingEntity = ofy.get(Category.class, page.getName());
       existingEntity.setName(page.getName());
       ofy.put(existingEntity);
@@ -50,7 +50,7 @@ public class CategoryService {
 
   public static void delete(Category page) {
     cache.remove(page.getName());
-    Objectify ofy = ObjectifyFactory.begin();
+    Objectify ofy = OS.begin();
     ofy.delete(page);
   }
 
@@ -60,8 +60,8 @@ public class CategoryService {
       return page;
     }
     try {
-      Objectify ofy = ObjectifyFactory.begin();
-      OQuery<Category> q = ObjectifyFactory.createQuery(Category.class);
+      Objectify ofy = OS.begin();
+      OQuery<Category> q = OS.createQuery(Category.class);
       q.filter("title", name);
       page = ofy.prepare(q).asSingle();
       cache.put(page.getName(), page);
@@ -73,8 +73,8 @@ public class CategoryService {
 
   public static List<Category> getAll() {
     List<Category> resultList = null;
-    Objectify ofy = ObjectifyFactory.begin();
-    OQuery<Category> q = ObjectifyFactory.createQuery(Category.class);
+    Objectify ofy = OS.begin();
+    OQuery<Category> q = OS.createQuery(Category.class);
     resultList = ofy.prepare(q).asList();
     return resultList;
   }
