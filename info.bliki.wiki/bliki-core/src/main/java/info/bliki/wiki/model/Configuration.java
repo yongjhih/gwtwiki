@@ -561,7 +561,7 @@ public class Configuration implements IConfiguration {
 
 	/**
 	 * Set a cache map implementation. For example based on <a
-	 * href="http://jcp.org/en/jsr/detail?id=107">JSR 107>/a>. Template calls
+	 * href="http://jcp.org/en/jsr/detail?id=107">JSR 107</a>. Template calls
 	 * which use the same parameters over and over again do lookup this cache and
 	 * use the preparsed result if available.
 	 * 
