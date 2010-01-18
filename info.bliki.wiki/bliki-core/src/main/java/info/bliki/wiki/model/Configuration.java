@@ -150,6 +150,7 @@ public class Configuration implements IConfiguration {
 
 	final public static HTMLTag HTML_PRE_OPEN = new PreTag();
 
+	public static Map<String, String> TEMPLATE_CALLS_CACHE = null;
 	/**
 	 * Interwiki links pointing to other wikis in the web
 	 */
@@ -372,7 +373,8 @@ public class Configuration implements IConfiguration {
 	/**
 	 * Map the template's function name to the TemplateFunction implementation
 	 */
-	protected static final Map<String, ITemplateFunction> TEMPLATE_FUNCTION_MAP = new TreeMap<String, ITemplateFunction>(String.CASE_INSENSITIVE_ORDER);;
+	protected static final Map<String, ITemplateFunction> TEMPLATE_FUNCTION_MAP = new TreeMap<String, ITemplateFunction>(
+			String.CASE_INSENSITIVE_ORDER);;
 
 	/**
 	 * Allowed URI schemes
@@ -545,6 +547,29 @@ public class Configuration implements IConfiguration {
 
 	public ITemplateFunction addTemplateFunction(String key, ITemplateFunction value) {
 		return TEMPLATE_FUNCTION_MAP.put(key, value);
+	}
+
+	/**
+	 * Get the currently configured cache implementation for template calls.
+	 * 
+	 * @return <code>null</code> if no cache implementation is set.
+	 * @see #setTemplateCallsCache(Map)
+	 */
+	public Map<String, String> getTemplateCallsCache() {
+		return TEMPLATE_CALLS_CACHE;
+	}
+
+	/**
+	 * Set a cache map implementation. For example based on <a
+	 * href="http://jcp.org/en/jsr/detail?id=107">JSR 107>/a>. Template calls
+	 * which use the same parameters over and over again do lookup this cache and
+	 * use the preparsed result if available.
+	 * 
+	 * @param map
+	 *          the cache implementation
+	 */
+	public void setTemplateCallsCache(Map<String, String> map) {
+		TEMPLATE_CALLS_CACHE = map;
 	}
 
 	public Map<String, SourceCodeFormatter> getCodeFormatterMap() {

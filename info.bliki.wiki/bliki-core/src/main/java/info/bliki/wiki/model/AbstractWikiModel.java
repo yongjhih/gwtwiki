@@ -743,10 +743,11 @@ public abstract class AbstractWikiModel implements IWikiModel, IContext {
 	public List<SemanticRelation> getSemanticRelations() {
 		return null;
 	}
-	
+
 	public ITableOfContent getTableOfContent() {
 		return fTableOfContentTag;
 	}
+
 	// public TableOfContentTag getTableOfContentTag(boolean isTOCIdentifier) {
 	// if (fTableOfContentTag == null) {
 	// TableOfContentTag tableOfContentTag = new TableOfContentTag("div");
@@ -780,6 +781,14 @@ public abstract class AbstractWikiModel implements IWikiModel, IContext {
 
 	public Map<String, ITemplateFunction> getTemplateMap() {
 		return fConfiguration.getTemplateMap();
+	}
+
+	public Map<String, String> getTemplateCallsCache() {
+		return fConfiguration.getTemplateCallsCache();
+	}
+
+	public void setTemplateCallsCache(Map<String, String> map) {
+		fConfiguration.setTemplateCallsCache(map);
 	}
 
 	public String getTemplateNamespace() {

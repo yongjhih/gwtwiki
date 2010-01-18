@@ -254,4 +254,5 @@ public class WikiModel extends AbstractWikiModel {
 	public INamespace getNamespace() {
 		return fNamespace;
 	}
+
 }

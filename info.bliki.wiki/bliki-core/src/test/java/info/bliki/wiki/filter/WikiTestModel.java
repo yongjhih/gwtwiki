@@ -6,6 +6,7 @@ import info.bliki.htmlcleaner.Utils;
 import info.bliki.wiki.model.Configuration;
 import info.bliki.wiki.model.WikiModel;
 
+import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
@@ -818,6 +819,9 @@ public class WikiTestModel extends WikiModel {
 	 */
 	public WikiTestModel(Locale locale, String imageBaseURL, String linkBaseURL) {
 		super(Configuration.DEFAULT_CONFIGURATION, locale, imageBaseURL, linkBaseURL);
+		// set up a simple cache mock-up for JUnit tests. HashMap is not usable for
+		// production!
+		Configuration.DEFAULT_CONFIGURATION.setTemplateCallsCache(new HashMap());
 		fSemanticWebActive = false;
 	}
 
@@ -934,7 +938,6 @@ public class WikiTestModel extends WikiModel {
 		// }
 		return true;
 	}
-
 
 	@Override
 	public void appendExternalLink(String uriSchemeName, String link, String linkName, boolean withoutSquareBrackets) {

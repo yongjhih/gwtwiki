@@ -19,40 +19,15 @@ import java.util.Set;
  */
 public interface IConfiguration {
 	/**
-	 * Get the <a href="http://www.mediawiki.org/wiki/Interwiki">interwiki
-	 * links</a> map for converting interwiki links into external URLs.
+	 * Add a new <a
+	 * href="http://www.mediawiki.org/wiki/Extension:SyntaxHighlight_GeSHi">source
+	 * code formatter</a> to the configuration
 	 * 
-	 * Example: maps the interwiki shortcut &quot;de&quot; to
-	 * &quot;http://de.wikipedia.org/wiki/${title}&quot;
-	 * 
+	 * @param key
+	 * @param value
 	 * @return
 	 */
-	public Map<String, String> getInterwikiMap();
-
-	/**
-	 * Get the <a
-	 * href="http://www.mediawiki.org/wiki/Manual:Parser_functions">template
-	 * parser functions</a> map of built-in template functions
-	 * 
-	 * @return
-	 */
-	public Map<String, ITemplateFunction> getTemplateMap();
-
-	/**
-	 * Get the <a href="http://www.mediawiki.org/wiki/Manual:Tag_extensions">HTML
-	 * styled tag</a> map for built-in tags
-	 * 
-	 * @return
-	 */
-	public Map<String, TagToken> getTokenMap();
-
-	/**
-	 * Get the set of all allowed URI scheme shortcuts like http, https, ftp,...
-	 * 
-	 * See <a href="http://en.wikipedia.org/wiki/URI_scheme">URI scheme</a>
-	 * 
-	 */
-	public Set<String> getUriSchemeSet();
+	public SourceCodeFormatter addCodeFormatter(String key, SourceCodeFormatter value);
 
 	/**
 	 * Add another Interwiki link to the configuration. The value string must
@@ -99,13 +74,57 @@ public interface IConfiguration {
 	public Map<String, SourceCodeFormatter> getCodeFormatterMap();
 
 	/**
-	 * Add a new <a
-	 * href="http://www.mediawiki.org/wiki/Extension:SyntaxHighlight_GeSHi">source
-	 * code formatter</a> to the configuration
+	 * Get the <a href="http://www.mediawiki.org/wiki/Interwiki">interwiki
+	 * links</a> map for converting interwiki links into external URLs.
 	 * 
-	 * @param key
-	 * @param value
+	 * Example: maps the interwiki shortcut &quot;de&quot; to
+	 * &quot;http://de.wikipedia.org/wiki/${title}&quot;
+	 * 
 	 * @return
 	 */
-	public SourceCodeFormatter addCodeFormatter(String key, SourceCodeFormatter value);
+	public Map<String, String> getInterwikiMap();
+
+	/**
+	 * Get the currently configured cache implementation for template calls.
+	 * 
+	 * @return <code>null</code> if no cache implementation is set.
+	 * @see #setTemplateCallsCache(Map)
+	 */
+	public Map<String, String> getTemplateCallsCache();
+
+	/**
+	 * Get the <a
+	 * href="http://www.mediawiki.org/wiki/Manual:Parser_functions">template
+	 * parser functions</a> map of built-in template functions
+	 * 
+	 * @return
+	 */
+	public Map<String, ITemplateFunction> getTemplateMap();
+
+	/**
+	 * Get the <a href="http://www.mediawiki.org/wiki/Manual:Tag_extensions">HTML
+	 * styled tag</a> map for built-in tags
+	 * 
+	 * @return
+	 */
+	public Map<String, TagToken> getTokenMap();
+
+	/**
+	 * Get the set of all allowed URI scheme shortcuts like http, https, ftp,...
+	 * 
+	 * See <a href="http://en.wikipedia.org/wiki/URI_scheme">URI scheme</a>
+	 * 
+	 */
+	public Set<String> getUriSchemeSet();
+
+	/**
+	 * Set a cache map implementation. For example based on <a
+	 * href="http://jcp.org/en/jsr/detail?id=107">JSR 107</a>. Template calls
+	 * which use the same parameters over and over again do lookup this cache and
+	 * use the preparsed result if available.
+	 * 
+	 * @param map
+	 *          the cache implementation
+	 */
+	public void setTemplateCallsCache(Map<String, String> map);
 }

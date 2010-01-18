@@ -2,6 +2,7 @@ package info.bliki.wiki.filter;
 
 import info.bliki.htmlcleaner.Utils;
 import info.bliki.wiki.model.Configuration;
+import info.bliki.wiki.model.IConfiguration;
 import info.bliki.wiki.model.IWikiModel;
 import info.bliki.wiki.tags.util.WikiTagNode;
 import info.bliki.wiki.template.ITemplateFunction;
@@ -10,6 +11,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * A template parser for the first pass in the parsing of a Wikipedia text
@@ -52,7 +54,7 @@ public class TemplateParser extends AbstractParser {
 	 */
 	public static void parse(String rawWikitext, IWikiModel wikiModel, Appendable writer, boolean parseOnlySignature,
 			boolean renderTemplate) throws IOException {
-		parseRecursive(rawWikitext, wikiModel, writer, parseOnlySignature, renderTemplate, null);
+		parseRecursive(rawWikitext, wikiModel, writer, parseOnlySignature, renderTemplate);
 	}
 
 	// private static Pattern noinclude =
@@ -60,6 +62,11 @@ public class TemplateParser extends AbstractParser {
 	//
 	// private static Pattern INCLUDEONLY_PATTERN =
 	// Pattern.compile("<includeonly[^>]*>(.*?)<\\/includeonly[^>]*>");
+
+	protected static void parseRecursive(String rawWikitext, IWikiModel wikiModel, Appendable writer, boolean parseOnlySignature,
+			boolean renderTemplate) throws IOException {
+		parseRecursive(rawWikitext, wikiModel, writer, parseOnlySignature, renderTemplate, null);
+	}
 
 	protected static void parseRecursive(String rawWikitext, IWikiModel wikiModel, Appendable writer, boolean parseOnlySignature,
 			boolean renderTemplate, HashMap<String, String> templateParameterMap) throws IOException {
@@ -507,7 +514,7 @@ public class TemplateParser extends AbstractParser {
 				plainContent = templateFunction.parseFunction(fSource, fCurrentPosition, endOffset, fWikiModel);
 				fCurrentPosition = endPosition;
 				if (plainContent != null) {
-					TemplateParser.parseRecursive(plainContent, fWikiModel, writer, false, false, null);
+					TemplateParser.parseRecursive(plainContent, fWikiModel, writer, false, false);
 					return true;
 				}
 				return true;
@@ -517,9 +524,24 @@ public class TemplateParser extends AbstractParser {
 		Object[] objs = createParameterMap(fSource, startTemplatePosition, fCurrentPosition - startTemplatePosition - 2);
 		HashMap<String, String> map = (HashMap<String, String>) objs[0];
 		String templateName = ((String) objs[1]).trim();
-		// System.out.println("Template name: " + fCurrentPosition + "--" +
-		// templateName);
+		String cacheKey = templateName + objs[2];
+		Map<String, String> templateCallsCache = null;
+		if (cacheKey.length() < 256 && fWikiModel instanceof IConfiguration) {
+			IConfiguration config = (IConfiguration) fWikiModel;
+			templateCallsCache = config.getTemplateCallsCache();
+			if (templateCallsCache != null) {
+				String value = templateCallsCache.get(cacheKey);
+				if (value != null) {
+					// System.out.println("Cache key: " + cacheKey);
+					writer.append(value);
+					return true;
+				}
+			}
+		}
+
 		if (templateName.length() > 0 && templateName.charAt(0) == ':') {
+			// invalidate cache:
+			templateCallsCache = null;
 			plainContent = fWikiModel.getRawWikiContent("", templateName.substring(1), map);
 		} else {
 			fWikiModel.addTemplate(templateName);
@@ -528,7 +550,16 @@ public class TemplateParser extends AbstractParser {
 
 		fCurrentPosition = endPosition;
 		if (plainContent != null) {
-			TemplateParser.parseRecursive(plainContent.trim(), fWikiModel, writer, false, false, map);
+			StringBuilder templateBuffer = new StringBuilder(plainContent.length());
+			TemplateParser.parseRecursive(plainContent.trim(), fWikiModel, templateBuffer, false, false, map);
+			if (templateCallsCache != null) {
+				// save this template call in the cache
+				String cacheValue = templateBuffer.toString();
+				templateCallsCache.put(cacheKey, cacheValue);
+				writer.append(cacheValue);
+			} else {
+				writer.append(templateBuffer);
+			}
 			return true;
 		}
 		// if no template found insert plain template name string:
@@ -559,7 +590,7 @@ public class TemplateParser extends AbstractParser {
 				writer.append(plainContent);
 				return true;
 			}
-			TemplateParser.parseRecursive(plainBuffer.toString().trim(), fWikiModel, writer, false, false, null);
+			TemplateParser.parseRecursive(plainBuffer.toString().trim(), fWikiModel, writer, false, false);
 			return true;
 		}
 		return false;
@@ -573,8 +604,9 @@ public class TemplateParser extends AbstractParser {
 	 * 
 	 */
 	private static Object[] createParameterMap(char[] src, int startOffset, int len) {
-		Object[] objs = new Object[2];
+		Object[] objs = new Object[3];
 		HashMap<String, String> map = new HashMap<String, String>();
+		StringBuilder buf = new StringBuilder(len);
 		objs[0] = map;
 		int currOffset = startOffset;
 		int endOffset = startOffset + len;
@@ -583,18 +615,19 @@ public class TemplateParser extends AbstractParser {
 		if (resultList.size() <= 1) {
 			// set the templates name
 			objs[1] = new String(src, startOffset, len);
+			objs[2] = "";
 			return objs;
 		}
 		objs[1] = resultList.get(0);
 
 		for (int i = 1; i < resultList.size(); i++) {
 			if (i == resultList.size() - 1) {
-				createSingleParameter(i, resultList.get(i), map, true);
+				createSingleParameter(i, resultList.get(i), map, buf, true);
 			} else {
-				createSingleParameter(i, resultList.get(i), map, false);
+				createSingleParameter(i, resultList.get(i), map, buf, false);
 			}
 		}
-
+		objs[2] = buf.toString();
 		return objs;
 	}
 
@@ -603,7 +636,7 @@ public class TemplateParser extends AbstractParser {
 	 * parameters map
 	 * 
 	 */
-	private static void createSingleParameter(int parameterCounter, String srcString, HashMap<String, String> map,
+	private static void createSingleParameter(int parameterCounter, String srcString, HashMap<String, String> map, StringBuilder buf,
 			boolean trimNewlineRight) {
 		int currOffset = 0;
 		char[] src = srcString.toCharArray();
@@ -662,6 +695,7 @@ public class TemplateParser extends AbstractParser {
 				} else {
 					value = srcString.substring(lastOffset, currOffset).trim();
 				}
+				buf.append("|" + value);
 				map.put(Integer.toString(parameterCounter), value);
 				if (parameter != null) {
 					map.put(parameter, value);
