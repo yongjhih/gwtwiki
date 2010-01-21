@@ -20,7 +20,7 @@ public class ABAPTest extends FilterTestSupport {
 		assertEquals(
 				"\n" + 
 				"<p><b>ABAP Example</b>\n" + 
-				"</p><pre class=\"code\"><span style=\"color:#3F7F5F; \">\n" + 
+				"</p><pre name=\"code\" class=\"abap\"><span style=\"color:#3F7F5F; \">\n" + 
 				"*--- line comment\n" + 
 				"</span><span style=\"color:#3F7F5F; \">\n" + 
 				"*--- line comment\n" + 
@@ -37,7 +37,7 @@ public class ABAPTest extends FilterTestSupport {
 		assertEquals(
 				"\n" + 
 				"<p><b>ABAP Example</b>\n" + 
-				"</p><pre class=\"code\"> <span style=\"color:#7F0055; font-weight: bold; \">REPORT</span> ZZTEST00<span style=\"color:#3F7F5F; \">\n" + 
+				"</p><pre name=\"code\" class=\"abap\"> <span style=\"color:#7F0055; font-weight: bold; \">REPORT</span> ZZTEST00<span style=\"color:#3F7F5F; \">\n" + 
 				"*--- line comment\n" + 
 				"</span><span style=\"color:#3F7F5F; \">\n" + 
 				"*--- line comment\n" + 

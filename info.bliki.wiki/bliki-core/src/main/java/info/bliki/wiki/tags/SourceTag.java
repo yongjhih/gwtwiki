@@ -17,16 +17,17 @@ import java.util.Map;
  */
 public class SourceTag extends HTMLTag implements INoBodyParsingTag {
 
-	protected final static String SOURCE_START = "<pre class=\"code\">";
-
+	protected final static String SOURCE_START_1 = "<pre name=\"code\" class=\"";
+	protected final static String SOURCE_START_2 = "\">";
 	protected final static String SOURCE_END = "</pre>";
-
+ 
 	public SourceTag() {
 		super("source");
-	} 
+	}
 
 	@Override
-	public void renderHTML(ITextConverter converter, Appendable writer, IWikiModel model) throws IOException {
+	public void renderHTML(ITextConverter converter, Appendable writer,
+	    IWikiModel model) throws IOException {
 
 		String content = getBodyString();
 		if (content != null && content.length() > 0) {
@@ -38,17 +39,22 @@ public class SourceTag extends HTMLTag implements INoBodyParsingTag {
 			boolean show = model.showSyntax(sourceCodeLanguage);
 			if (show) {
 				String result;
-				SourceCodeFormatter formatter = model.getCodeFormatterMap().get(sourceCodeLanguage);
+				SourceCodeFormatter formatter = model.getCodeFormatterMap().get(
+				    sourceCodeLanguage);
 				if (formatter != null) {
 					result = formatter.filter(content);
-					writer.append(SOURCE_START);
+					writer.append(SOURCE_START_1);
+					writer.append(sourceCodeLanguage);
+					writer.append(SOURCE_START_2);
 					writer.append(result);
 					// writer.append(replace(result));
 					writer.append(SOURCE_END);
 				}
 			} else {
 				// show plain source code text
-				writer.append(SOURCE_START);
+				writer.append(SOURCE_START_1);
+				writer.append(sourceCodeLanguage);
+				writer.append(SOURCE_START_2);
 				writer.append(content);
 				writer.append(SOURCE_END);
 			}
@@ -87,11 +93,13 @@ public class SourceTag extends HTMLTag implements INoBodyParsingTag {
 						ch = src.charAt(i - 1);
 						if (i + 3 < src.length()) {
 							if (ch == 'x' || ch == 'X') {
-								if ((src.charAt(i) == 'm' || src.charAt(i) == 'M') && (src.charAt(i + 1) == 'l' || src.charAt(i + 1) == 'L')) {
+								if ((src.charAt(i) == 'm' || src.charAt(i) == 'M')
+								    && (src.charAt(i + 1) == 'l' || src.charAt(i + 1) == 'L')) {
 									return "xml";
 								}
 							} else if (ch == 'p' || ch == 'P') {
-								if ((src.charAt(i) == 'h' || src.charAt(i) == 'H') && (src.charAt(i + 1) == 'p' || src.charAt(i + 1) == 'P')) {
+								if ((src.charAt(i) == 'h' || src.charAt(i) == 'H')
+								    && (src.charAt(i + 1) == 'p' || src.charAt(i + 1) == 'P')) {
 									return "php";
 								}
 							}
@@ -101,8 +109,9 @@ public class SourceTag extends HTMLTag implements INoBodyParsingTag {
 				} else if (ch == 'p') {
 					if (i + 7 < src.length()) {
 						i++;
-						if (src.charAt(i) == 'a' && src.charAt(i + 1) == 'c' && src.charAt(i + 2) == 'k' && src.charAt(i + 3) == 'a'
-								&& src.charAt(i + 4) == 'g' && src.charAt(i + 5) == 'e') {
+						if (src.charAt(i) == 'a' && src.charAt(i + 1) == 'c'
+						    && src.charAt(i + 2) == 'k' && src.charAt(i + 3) == 'a'
+						    && src.charAt(i + 4) == 'g' && src.charAt(i + 5) == 'e') {
 							// found 'package'
 							return "java";
 						}
@@ -110,8 +119,9 @@ public class SourceTag extends HTMLTag implements INoBodyParsingTag {
 				} else if (ch == 'i') {
 					if (i + 7 < src.length()) {
 						i++;
-						if (src.charAt(i) == 'm' && src.charAt(i + 1) == 'p' && src.charAt(i + 2) == 'o' && src.charAt(i + 3) == 'r'
-								&& src.charAt(i + 4) == 't') {
+						if (src.charAt(i) == 'm' && src.charAt(i + 1) == 'p'
+						    && src.charAt(i + 2) == 'o' && src.charAt(i + 3) == 'r'
+						    && src.charAt(i + 4) == 't') {
 							// found 'import'
 							return "java";
 						}
@@ -119,10 +129,13 @@ public class SourceTag extends HTMLTag implements INoBodyParsingTag {
 				} else if (ch == 'f' || ch == 'F') {
 					i++;
 					if (i + 7 < src.length()) {
-						if ((src.charAt(i) == 'u' || src.charAt(i) == 'U') && (src.charAt(i + 1) == 'n' || src.charAt(i + 1) == 'N')
-								&& (src.charAt(i + 2) == 'c' || src.charAt(i + 2) == 'C') && (src.charAt(i + 3) == 't' || src.charAt(i + 3) == 'T')
-								&& (src.charAt(i + 4) == 'i' || src.charAt(i + 4) == 'I') && (src.charAt(i + 5) == 'o' || src.charAt(i + 5) == 'O')
-								&& (src.charAt(i + 6) == 'n' || src.charAt(i + 6) == 'N')) {
+						if ((src.charAt(i) == 'u' || src.charAt(i) == 'U')
+						    && (src.charAt(i + 1) == 'n' || src.charAt(i + 1) == 'N')
+						    && (src.charAt(i + 2) == 'c' || src.charAt(i + 2) == 'C')
+						    && (src.charAt(i + 3) == 't' || src.charAt(i + 3) == 'T')
+						    && (src.charAt(i + 4) == 'i' || src.charAt(i + 4) == 'I')
+						    && (src.charAt(i + 5) == 'o' || src.charAt(i + 5) == 'O')
+						    && (src.charAt(i + 6) == 'n' || src.charAt(i + 6) == 'N')) {
 							// found function
 							return "abap";
 						}
@@ -130,9 +143,11 @@ public class SourceTag extends HTMLTag implements INoBodyParsingTag {
 				} else if (ch == 'm' || ch == 'M') {
 					i++;
 					if (i + 5 < src.length()) {
-						if ((src.charAt(i) == 'e' || src.charAt(i) == 'E') && (src.charAt(i + 1) == 't' || src.charAt(i + 1) == 'T')
-								&& (src.charAt(i + 2) == 'h' || src.charAt(i + 2) == 'H') && (src.charAt(i + 3) == 'o' || src.charAt(i + 3) == 'O')
-								&& (src.charAt(i + 4) == 'd' || src.charAt(i + 4) == 'D')) {
+						if ((src.charAt(i) == 'e' || src.charAt(i) == 'E')
+						    && (src.charAt(i + 1) == 't' || src.charAt(i + 1) == 'T')
+						    && (src.charAt(i + 2) == 'h' || src.charAt(i + 2) == 'H')
+						    && (src.charAt(i + 3) == 'o' || src.charAt(i + 3) == 'O')
+						    && (src.charAt(i + 4) == 'd' || src.charAt(i + 4) == 'D')) {
 							// found function
 							return "abap";
 						}
@@ -140,9 +155,11 @@ public class SourceTag extends HTMLTag implements INoBodyParsingTag {
 				} else if (ch == 'r' || ch == 'R') {
 					i++;
 					if (i + 5 < src.length()) {
-						if ((src.charAt(i) == 'e' || src.charAt(i) == 'E') && (src.charAt(i + 1) == 'p' || src.charAt(i + 1) == 'P')
-								&& (src.charAt(i + 2) == 'o' || src.charAt(i + 2) == 'O') && (src.charAt(i + 3) == 'r' || src.charAt(i + 3) == 'R')
-								&& (src.charAt(i + 4) == 't' || src.charAt(i + 4) == 'T')) {
+						if ((src.charAt(i) == 'e' || src.charAt(i) == 'E')
+						    && (src.charAt(i + 1) == 'p' || src.charAt(i + 1) == 'P')
+						    && (src.charAt(i + 2) == 'o' || src.charAt(i + 2) == 'O')
+						    && (src.charAt(i + 3) == 'r' || src.charAt(i + 3) == 'R')
+						    && (src.charAt(i + 4) == 't' || src.charAt(i + 4) == 'T')) {
 							// found report
 							return "abap";
 						}

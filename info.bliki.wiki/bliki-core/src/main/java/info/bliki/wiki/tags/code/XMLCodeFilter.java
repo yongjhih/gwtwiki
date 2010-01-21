@@ -29,7 +29,7 @@ public class XMLCodeFilter extends AbstractCPPBasedCodeFilter implements SourceC
 
 	@Override
 	public String filter(String input) {
-		char[] source = input.toCharArray();
+		char[] source = input.toCharArray(); 
 		int currentPosition = 0;
 		char currentChar = ' ';
 		StringBuilder result = new StringBuilder(input.length() + input.length() / 4);
@@ -39,20 +39,20 @@ public class XMLCodeFilter extends AbstractCPPBasedCodeFilter implements SourceC
 				if (currentChar == '<') { // opening tags
 					if (source[currentPosition] == '!' && source[currentPosition + 1] == '-' && source[currentPosition + 2] == '-') {
 						// html comment
-						currentPosition++;
 						result.append(FONT_COMMENT);
-						appendChar(result, currentChar);
-						appendChar(result, source[currentPosition++]);
-						appendChar(result, source[currentPosition++]);
-						appendChar(result, source[currentPosition++]);
+						appendChar(result, currentChar);// '<'
+						appendChar(result, source[currentPosition++]); // '!'
+						appendChar(result, source[currentPosition++]); // '-'
+						appendChar(result, source[currentPosition++]); // '-'
 						while (currentPosition < input.length()) {
-							appendChar(result, currentChar);
+							currentChar = source[currentPosition++];
 							if (currentChar == '-' && source[currentPosition] == '-' && source[currentPosition + 1] == '>') {
+								appendChar(result, currentChar);
 								appendChar(result, source[currentPosition++]);
 								appendChar(result, source[currentPosition++]);
 								break;
 							}
-							currentChar = source[currentPosition++];
+							appendChar(result, currentChar);
 						}
 						result.append(FONT_END);
 

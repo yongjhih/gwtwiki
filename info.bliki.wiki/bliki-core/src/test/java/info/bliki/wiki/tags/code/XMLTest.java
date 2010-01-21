@@ -27,13 +27,13 @@ public class XMLTest extends FilterTestSupport
 		assertEquals(
 				"\n" + 
 				"<p><b>XML example:</b>\n" + 
-				"</p><pre class=\"code\">\n" + 
+				"</p><pre name=\"code\" class=\"xml\">\n" + 
 				"  <span style=\"color:#7F0055; font-weight: bold; \">&#60;extension</span>\n" + 
 				"           point=<span style=\"color:#2A00FF; \">&#34;org.eclipse.help.toc&#34;</span><span style=\"color:#7F0055; font-weight: bold; \">&#62;</span>\n" + 
 				"        <span style=\"color:#7F0055; font-weight: bold; \">&#60;toc</span>\n" + 
 				"              file=<span style=\"color:#2A00FF; \">&#34;phphelp.xml&#34;</span>\n" + 
 				"              primary=<span style=\"color:#2A00FF; \">&#34;true&#34;</span><span style=\"color:#7F0055; font-weight: bold; \">&#62;</span>\n" + 
-				"     <span style=\"color:#3F7F5F; \">&#60;-- &#60;simple comment --&#62;</span>                      \n" + 
+				"     <span style=\"color:#3F7F5F; \">&#60;!-- simple comment --&#62;</span>                      \n" + 
 				"        <span style=\"color:#7F0055; font-weight: bold; \">&#60;/toc&#62;</span>\n" + 
 				"  <span style=\"color:#7F0055; font-weight: bold; \">&#60;/extension&#62;</span>\n" + 
 				"</pre>", result);
@@ -49,13 +49,13 @@ public class XMLTest extends FilterTestSupport
 		assertEquals(
 				"\n" + 
 				"<p><b>XML example:</b>\n" + 
-				"</p><pre class=\"code\">\n" + 
+				"</p><pre name=\"code\" class=\"xml\">\n" + 
 				"  <span style=\"color:#7F0055; font-weight: bold; \">&#60;extension</span>\n" + 
 				"           point=<span style=\"color:#2A00FF; \">&#34;org.eclipse.help.toc&#34;</span><span style=\"color:#7F0055; font-weight: bold; \">&#62;</span>\n" + 
 				"        <span style=\"color:#7F0055; font-weight: bold; \">&#60;toc</span>\n" + 
 				"              file=<span style=\"color:#2A00FF; \">&#34;phphelp.xml&#34;</span>\n" + 
 				"              primary=<span style=\"color:#2A00FF; \">&#34;true&#34;</span><span style=\"color:#7F0055; font-weight: bold; \">&#62;</span>\n" + 
-				"     <span style=\"color:#3F7F5F; \">&#60;-- &#60;simple comment --&#62;</span>                      \n" + 
+				"     <span style=\"color:#3F7F5F; \">&#60;!-- simple comment --&#62;</span>                      \n" + 
 				"        <span style=\"color:#7F0055; font-weight: bold; \">&#60;/toc&#62;</span>\n" + 
 				"  <span style=\"color:#7F0055; font-weight: bold; \">&#60;/extension&#62;</span>\n" + 
 				"</pre>", result);
