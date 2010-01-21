@@ -351,6 +351,19 @@ public class HtmlTokenizer {
 				} else if (startsWith("<") && isIdentifierStartChar(_pos + 1)) {
 					_isLateForDoctype = true;
 					tagStart();
+				} else if (startsWith("<![")) {
+					// ignore MS Word HTML tags
+					_isLateForDoctype = true;
+					while (!isAllRead()) {
+						go();
+						if (isChar(']')) {
+							go();
+							if (isChar('>')) {
+								go();
+								break;
+							}
+						}
+					}
 				} else {
 					content();
 				}
@@ -360,7 +373,7 @@ public class HtmlTokenizer {
 		_reader.close();
 	}
 
-	/**
+/**
 	 * Parses start of the tag. It expects that current position is at the "<"
 	 * after which the tag's name follows.
 	 * 
@@ -404,7 +417,7 @@ public class HtmlTokenizer {
 		}
 	}
 
-	/**
+/**
 	 * Parses end of the tag. It expects that current position is at the "<"
 	 * after which "/" and the tag's name follows.
 	 * 

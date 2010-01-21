@@ -6,7 +6,6 @@ import info.bliki.htmlcleaner.TagNode;
 import java.util.ArrayList;
 import java.util.List;
 
-
 public class ListTag extends AbstractHTMLTag {
 	String fListChar;
 
@@ -14,19 +13,21 @@ public class ListTag extends AbstractHTMLTag {
 		this.fListChar = listChar;
 	}
 
-	public List getListLines(String listChar, AbstractHTMLToWiki w, TagNode listNode) {
-		List list = new ArrayList();
-		List subList;
-		List children = listNode.getChildren();
+	public List<String> getListLines(String listChar, AbstractHTMLToWiki w,
+	    TagNode listNode) {
+		List<String> list = new ArrayList<String>();
+		List<String> subList;
+		List<Object> children = listNode.getChildren();
 		TagNode subNode;
-		List subChildren;
+		List<Object> subChildren;
 		TagNode subSubNode;
 		StringBuilder subBuffer;
 		String subString;
 		if (children.size() != 0) {
 			for (int i = 0; i < children.size(); i++) {
 				if (children.get(i) != null) {
-					if (children.get(i) instanceof TagNode && ((TagNode) children.get(i)).getName().equals("li")) {
+					if (children.get(i) instanceof TagNode
+					    && ((TagNode) children.get(i)).getName().equals("li")) {
 						subNode = ((TagNode) children.get(i));
 						subChildren = subNode.getChildren();
 						subBuffer = new StringBuilder(" ");
@@ -35,7 +36,8 @@ public class ListTag extends AbstractHTMLTag {
 							if (subChildren.get(j) != null) {
 								if (subChildren.get(j) instanceof TagNode) {
 									subSubNode = ((TagNode) subChildren.get(j));
-									if (subSubNode.getName().equals("ol") || subSubNode.getName().equals("ul")) {
+									if (subSubNode.getName().equals("ol")
+									    || subSubNode.getName().equals("ul")) {
 										if (subBuffer.length() > 1) {
 											subString = subBuffer.toString();
 											subString = subString.replaceAll(" \\n", " ");
@@ -65,7 +67,7 @@ public class ListTag extends AbstractHTMLTag {
 							subString = subBuffer.toString();
 							subString = subString.replaceAll(" \\n", " ");
 							subString = subString.replaceAll("\\n", " ");
-							list.add(listChar + subString);
+							list.add(listChar + ' ' + subString.trim());
 							subBuffer = null;
 						}
 
@@ -77,7 +79,8 @@ public class ListTag extends AbstractHTMLTag {
 	}
 
 	@Override
-	public void content(AbstractHTMLToWiki w, TagNode node, StringBuilder resultBuffer, boolean showWithoutTag) {
+	public void content(AbstractHTMLToWiki w, TagNode node,
+	    StringBuilder resultBuffer, boolean showWithoutTag) {
 		List listLines = getListLines(fListChar, w, node);
 		if (listLines.size() > 0) {
 			resultBuffer.append("\n");

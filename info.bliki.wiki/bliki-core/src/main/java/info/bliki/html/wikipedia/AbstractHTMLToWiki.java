@@ -12,7 +12,7 @@ import java.util.Map;
 import org.apache.commons.lang.StringUtils;
 
 /**
- * Base class for all HTML to wiki tet converters.
+ * Base class for all HTML to wiki text converters.
  * 
  * @see info.bliki.html.wikipedia.ToWikipedia
  * @see info.bliki.html.googlecode.ToGoogleCode
@@ -24,11 +24,20 @@ public class AbstractHTMLToWiki {
 
 	final boolean fNoFont;
 
-	public AbstractHTMLToWiki(Map<String, HTMLTag> map, boolean noDiv, boolean noFont) {
+	final boolean fNoMSWordTags;
+
+	public AbstractHTMLToWiki(Map<String, HTMLTag> map, boolean noDiv,
+	    boolean noFont, boolean noMSWordTags) {
 		super();
 		fHashMap = map;
 		fNoDiv = noDiv;
 		fNoFont = noFont;
+		fNoMSWordTags = noMSWordTags;
+	}
+
+	public AbstractHTMLToWiki(Map<String, HTMLTag> map, boolean noDiv,
+	    boolean noFont) {
+		this(map, noDiv, noFont, false);
 	}
 
 	public void nodesToText(List nodes, StringBuilder resultBuffer) {
@@ -77,9 +86,15 @@ public class AbstractHTMLToWiki {
 				}
 				tag.content(this, tagNode, wikiText, showWithoutTag);
 			} else {
-				List children = tagNode.getChildren();
-				if (children.size() != 0) {
-					nodesToText(children, wikiText);
+				if (name.equals("br")) {
+					wikiText.append("<br>");
+				} else if (name.equals("hr")) {
+					wikiText.append("\n----\n");
+				} else {
+					List children = tagNode.getChildren();
+					if (children.size() != 0) {
+						nodesToText(children, wikiText);
+					}
 				}
 			}
 		}
@@ -111,8 +126,14 @@ public class AbstractHTMLToWiki {
 	public void nodesToPlainText(BaseToken node, StringBuilder plainText) {
 		if (node instanceof ContentToken) {
 			ContentToken contentToken = (ContentToken) node;
+			// TODO refactor this:
 			String content = contentToken.getContent();
 			content = content.replaceAll("&nbsp;", " ");
+			content = content.replaceAll("&lt;", "<");
+			content = content.replaceAll("&gt;", ">");
+			content = content.replaceAll("&quot;", "\"");
+			content = content.replaceAll("&amp;", "&");
+			content = content.replaceAll("&apos;", "'");
 			plainText.append(content);
 		} else if (node instanceof TagNode) {
 			TagNode tagNode = (TagNode) node;

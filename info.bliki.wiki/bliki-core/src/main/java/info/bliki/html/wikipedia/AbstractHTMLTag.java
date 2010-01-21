@@ -7,7 +7,7 @@ import info.bliki.htmlcleaner.TagNode;
 import java.util.List;
 
 public abstract class AbstractHTMLTag implements HTMLTag {
-	boolean fconvertPlainText;
+	protected boolean fconvertPlainText;
 
 	public AbstractHTMLTag() {
 		this(false);
@@ -25,11 +25,13 @@ public abstract class AbstractHTMLTag implements HTMLTag {
 		// do nothing by default
 	}
 
-	public void emptyContent(AbstractHTMLToWiki html2WikiConverter, TagNode node, StringBuilder resultBuffer, boolean showWithoutTag) {
+	public void emptyContent(AbstractHTMLToWiki html2WikiConverter, TagNode node,
+	    StringBuilder resultBuffer, boolean showWithoutTag) {
 		// do nothing by default
 	}
 
-	public void content(AbstractHTMLToWiki w, TagNode node, StringBuilder resultBuffer, boolean showWithoutTag) {
+	public void content(AbstractHTMLToWiki w, TagNode node,
+	    StringBuilder resultBuffer, boolean showWithoutTag) {
 		List<Object> children = node.getChildren();
 		if (children.size() == 0) {
 			emptyContent(w, node, resultBuffer, showWithoutTag);
@@ -59,13 +61,22 @@ public abstract class AbstractHTMLTag implements HTMLTag {
 		}
 	}
 
-	public BaseToken getFirstContent(List children, String tagName) {
+	/**
+	 * Get the first ContentToken or TagNode with the given <code>tagName</code>.
+	 * 
+	 * @param children
+	 * @param tagName
+	 * @return
+	 */
+	public BaseToken getFirstContent(List<Object> children, String tagName) {
 		if (children.size() != 0) {
 			for (int i = 0; i < children.size(); i++) {
 				if (children.get(i) != null) {
-					if (children.get(i) instanceof ContentToken && ((ContentToken) children.get(i)).getContent().length() > 0) {
+					if (children.get(i) instanceof ContentToken
+					    && ((ContentToken) children.get(i)).getContent().length() > 0) {
 						return ((ContentToken) children.get(i));
-					} else if (children.get(i) instanceof TagNode && ((TagNode) children.get(i)).getName().equals(tagName)) {
+					} else if (children.get(i) instanceof TagNode
+					    && ((TagNode) children.get(i)).getName().equals(tagName)) {
 						return ((TagNode) children.get(i));
 					}
 				}

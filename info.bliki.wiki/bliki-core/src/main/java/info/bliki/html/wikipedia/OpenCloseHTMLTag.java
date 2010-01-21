@@ -2,7 +2,6 @@ package info.bliki.html.wikipedia;
 
 import info.bliki.htmlcleaner.TagNode;
 
-import java.util.Iterator;
 import java.util.Map;
 
 
@@ -15,9 +14,9 @@ public class OpenCloseHTMLTag extends OpenCloseTag {
 	public void open(TagNode node, StringBuilder resultBuffer) {
 		resultBuffer.append(openStr);
 
-		Map<String, String> tagAtttributes = node.getAttributes();
+		Map<String, String> tagAttributes = node.getAttributes();
 		boolean first = true;
-		for (Map.Entry<String, String> currEntry : tagAtttributes.entrySet()) {
+		for (Map.Entry<String, String> currEntry : tagAttributes.entrySet()) {
 			if (first) {
 				resultBuffer.append(" ");
 				first = false;

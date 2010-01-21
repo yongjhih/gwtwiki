@@ -6,6 +6,7 @@ import java.util.Map;
 public class ToWikipedia extends AbstractHTMLToWiki implements IHTMLToWiki {
 	static private final Map<String, HTMLTag> TAG_MAP = new HashMap<String, HTMLTag>();
 	static {
+		TAG_MAP.put("body", new OpenCloseTag("", ""));
 		TAG_MAP.put("a", new ATag());
 		TAG_MAP.put("b", new OpenCloseTag("'''", "'''"));
 		TAG_MAP.put("strong", new OpenCloseTag("'''", "'''"));
@@ -17,17 +18,18 @@ public class ToWikipedia extends AbstractHTMLToWiki implements IHTMLToWiki {
 		TAG_MAP.put("td", new TdTag());
 		TAG_MAP.put("th", new ThTag());
 		TAG_MAP.put("img", new ImgTag());
-		TAG_MAP.put("p", new OpenCloseTag("\n", "\n\n"));
+		TAG_MAP.put("p", new OpenCloseTag("\n", "\n\n", false, true));
 		TAG_MAP.put("code", new OpenCloseTag("<code>", "</code>"));
-		TAG_MAP.put("blockquote", new OpenCloseTag("<blockquote>", "</blockquote>"));
+		TAG_MAP
+		    .put("blockquote", new OpenCloseTag("<blockquote>", "</blockquote>"));
 		TAG_MAP.put("u", new OpenCloseTag("<u>", "</u>"));
 		TAG_MAP.put("del", new OpenCloseTag("<s>", "</s>"));
 		TAG_MAP.put("s", new OpenCloseTag("<s>", "</s>"));
 		TAG_MAP.put("sub", new OpenCloseTag("<sub>", "</sub>"));
 		TAG_MAP.put("sup", new OpenCloseTag("<sup>", "</sup>"));
 		TAG_MAP.put("div", new OpenCloseHTMLTag("\n<div", "\n</div>"));
-		TAG_MAP.put("font", new OpenCloseHTMLTag("<font", "</font>"));
-		TAG_MAP.put("pre", new OpenCloseTag("\n<pre>", "\n</pre>\n"));
+		TAG_MAP.put("font", new FontTag("<font", "</font>"));
+		TAG_MAP.put("pre", new PreTag());
 		TAG_MAP.put("h1", new OpenCloseTag("\n= ", " =\n", true));
 		TAG_MAP.put("h2", new OpenCloseTag("\n== ", " ==\n", true));
 		TAG_MAP.put("h3", new OpenCloseTag("\n=== ", " ===\n", true));
@@ -39,12 +41,14 @@ public class ToWikipedia extends AbstractHTMLToWiki implements IHTMLToWiki {
 		TAG_MAP.put("script", new NoOutputTag());
 	}
 
-	public ToWikipedia(boolean noDiv, boolean noFont) {
-		super(TAG_MAP, noDiv, noFont);
+	public ToWikipedia(boolean noDiv, boolean noFont, boolean noMSWordTags) {
+		super(TAG_MAP, noDiv, noFont, noMSWordTags);
 	}
-
+	public ToWikipedia(boolean noDiv, boolean noFont) {
+		this(noDiv, noFont, false);
+	}
 	public ToWikipedia() {
-		this(false, false);
+		this(false, false, false);
 	}
 
 }

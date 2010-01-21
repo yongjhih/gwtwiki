@@ -4,22 +4,39 @@ import info.bliki.htmlcleaner.TagNode;
 
 import java.util.List;
 
-
 public class OpenCloseTag extends AbstractHTMLTag {
 	protected final String openStr;
 
 	protected final String closeStr;
 
-	public OpenCloseTag(String opener, String closer, boolean convertPlainText) {
+	protected final boolean formatContent;
+
+	/**
+	 * 
+	 * @param opener
+	 *          opening string for this tag
+	 * @param closer
+	 *          closing string for this tag
+	 * @param convertPlainText
+	 *          create plain text output without wiki tags
+	 * @param formatContent
+	 *          format the intermediate resulting wiki content by reducing
+	 *          multiple spaces to only one space ' ' character
+	 */
+	public OpenCloseTag(String opener, String closer, boolean convertPlainText,
+	    boolean formatContent) {
 		super(convertPlainText);
-		openStr = opener;
-		closeStr = closer;
+		this.openStr = opener;
+		this.closeStr = closer;
+		this.formatContent = formatContent;
+	}
+
+	public OpenCloseTag(String opener, String closer, boolean convertPlainText) {
+		this(opener, closer, convertPlainText, false);
 	}
 
 	public OpenCloseTag(String opener, String closer) {
-		super(false);
-		openStr = opener;
-		closeStr = closer;
+		this(opener, closer, false, false);
 	}
 
 	@Override
@@ -28,8 +45,9 @@ public class OpenCloseTag extends AbstractHTMLTag {
 	}
 
 	@Override
-	public void content(AbstractHTMLToWiki w, TagNode node, StringBuilder resultBuffer, boolean showWithoutTag) {
-		List children = node.getChildren();
+	public void content(AbstractHTMLToWiki w, TagNode node,
+	    StringBuilder resultBuffer, boolean showWithoutTag) {
+		List<Object> children = node.getChildren();
 		if (children.size() != 0) {
 
 			StringBuilder buf = new StringBuilder();
@@ -57,12 +75,37 @@ public class OpenCloseTag extends AbstractHTMLTag {
 			if (fconvertPlainText) {
 				resultBuffer.append(trimmedStr);
 			} else {
-				resultBuffer.append(str);
+				if (formatContent) {
+					formatContent(trimmedStr, resultBuffer);
+				} else {
+					resultBuffer.append(str);
+				}
 			}
 			if (!showWithout) {
 				close(node, resultBuffer);
 			}
 
+		}
+	}
+
+	public void formatContent(String str, StringBuilder resultBuffer) {
+		char lastCh = 'X';
+		char currentCh = 'X';
+		boolean appendCh = true;
+		for (int i = 0; i < str.length(); i++) {
+			currentCh = str.charAt(i);
+			if (currentCh != ' ') {
+				if (lastCh == ' ' && appendCh) {
+					resultBuffer.append(' ');
+				}
+				resultBuffer.append(currentCh);
+				if (currentCh == '\n') {
+					appendCh = false;
+				} else {
+					appendCh = true;
+				}
+			}
+			lastCh = currentCh;
 		}
 	}
 
