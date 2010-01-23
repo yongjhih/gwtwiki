@@ -37,7 +37,7 @@
 
 <%-- new user --%>
 
-<c:if test="${newuser.userId < 1}">
+<c:if test="${newuser.userId == null}">
 <div class="formentry">
 	<span class="formcaption"><label for="registerLogin"><fmt:message key="login.username" /></label>:</span>
 	<span class="formelement"><input type="text" name="login" value="<c:out value="${newuser.username}" />" id="registerLogin" size="50" /></span>
@@ -54,7 +54,7 @@
 
 <%-- existing user --%>
 
-<c:if test="${newuser.userId > 0}">
+<c:if test="${newuser.userId != null}">
 <div class="formentry">
 	<input type="hidden" name="login" value="<c:out value="${newuser.username}" />" />
 	<span class="formcaption"><fmt:message key="login.username" />:</span>
@@ -108,7 +108,7 @@
 
 <%-- existing user --%>
 
-<c:if test="${newuser.userId > 0}">
+<c:if test="${newuser.userId != null}">
 <fieldset>
 <legend><fmt:message key="register.caption.changepassword" /></legend>
 <div class="formentry">
