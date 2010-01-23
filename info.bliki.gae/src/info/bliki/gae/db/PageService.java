@@ -1,6 +1,7 @@
 package info.bliki.gae.db;
 
 import java.util.Collections;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 import javax.cache.Cache;
@@ -37,17 +38,18 @@ public class PageService {
     }
   }
 
-  public static Topic save(Topic page, List<Category> catList) {
+  public static Topic save(Topic page, LinkedHashMap<String, String> categories) {
     Objectify ofy = OS.begin();
     ofy.put(page);
-    if (catList != null && catList.size() > 0) {
-      ofy.put(catList);
-    }
+    // if (catList != null && catList.size() > 0) {
+    // ofy.put(catList);
+    // }
     cache.put(page.getName(), page);
     return page;
   }
 
-  public static Topic update(Topic page, List<Category> catList) {
+  public static Topic update(Topic page,
+      LinkedHashMap<String, String> categories) {
     Topic existingEntity = null;
     try {
       Objectify ofy = OS.begin();
@@ -55,9 +57,9 @@ public class PageService {
       existingEntity.setName(page.getName());
       existingEntity.setTopicContent(page.getTopicContent());
       ofy.put(existingEntity);
-      if (catList != null && catList.size() > 0) {
-        ofy.put(catList);
-      }
+      // if (catList != null && catList.size() > 0) {
+      // ofy.put(catList);
+      // }
       cache.put(existingEntity.getName(), existingEntity);
 
     } catch (EntityNotFoundException enf) {

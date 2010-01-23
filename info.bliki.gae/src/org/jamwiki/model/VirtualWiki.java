@@ -17,24 +17,33 @@
 package org.jamwiki.model;
 
 import java.io.Serializable;
+
+import javax.persistence.Entity;
+import javax.persistence.Id;
+
 import org.jamwiki.utils.WikiLogger;
 
 /**
  * Provides an object representing a virtual wiki.
  */
+@Entity
 public class VirtualWiki implements Serializable {
 
 	private static final WikiLogger logger = WikiLogger.getLogger(VirtualWiki.class.getName());
+	@Id
+	private Long virtualWikiId;
 	private String name = "";
 	private String defaultTopicName = "";
-	private int virtualWikiId = -1;
 
 	/**
 	 *
 	 */
 	public VirtualWiki() {
 	}
-
+	public VirtualWiki(String name, String defaultTopicName) {
+	  this.name=name;
+	  this.defaultTopicName = defaultTopicName;
+  }
 	/**
 	 *
 	 */
@@ -66,14 +75,14 @@ public class VirtualWiki implements Serializable {
 	/**
 	 *
 	 */
-	public int getVirtualWikiId() {
+	public Long getVirtualWikiId() {
 		return this.virtualWikiId;
 	}
 
 	/**
 	 *
 	 */
-	public void setVirtualWikiId(int virtualWikiId) {
+	public void setVirtualWikiId(Long virtualWikiId) {
 		this.virtualWikiId = virtualWikiId;
 	}
 }

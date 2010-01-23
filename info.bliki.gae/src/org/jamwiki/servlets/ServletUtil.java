@@ -22,10 +22,13 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Properties;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.lang.ClassUtils;
+import org.apache.commons.lang.LocaleUtils;
 import org.apache.commons.lang.StringUtils;
 import org.jamwiki.DataAccessException;
 import org.jamwiki.Environment;
@@ -33,6 +36,8 @@ import org.jamwiki.WikiBase;
 import org.jamwiki.WikiException;
 import org.jamwiki.WikiMessage;
 import org.jamwiki.authentication.JAMWikiAuthenticationConstants;
+import org.jamwiki.authentication.RoleImpl;
+import org.jamwiki.authentication.WikiUserDetails;
 import org.jamwiki.model.Category;
 import org.jamwiki.model.Topic;
 import org.jamwiki.model.VirtualWiki;
@@ -49,6 +54,8 @@ import org.jamwiki.utils.WikiLink;
 import org.jamwiki.utils.WikiLogger;
 import org.jamwiki.utils.WikiUtil;
 import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.servlet.ModelAndView;
 
 /**
@@ -177,12 +184,12 @@ public class ServletUtil {
    * @throws AuthenticationCredentialsNotFoundException
    *           If authentication credentials are unavailable.
    */
-  // public static WikiUserDetails currentUserDetails()
-  // throws AuthenticationCredentialsNotFoundException {
-  // Authentication auth = SecurityContextHolder.getContext()
-  // .getAuthentication();
-  // return WikiUserDetails.initWikiUserDetails(auth);
-  // }
+  public static WikiUserDetails currentUserDetails()
+      throws AuthenticationCredentialsNotFoundException {
+    Authentication auth = SecurityContextHolder.getContext()
+        .getAuthentication();
+    return WikiUserDetails.initWikiUserDetails(auth);
+  }
 
   /**
    * Retrieve the current <code>WikiUser</code> using the
@@ -343,26 +350,29 @@ public class ServletUtil {
     // topic.setTopicType(WikiUtil.findTopicTypeForNamespace(namespace));
     return topic;
   }
+
   /**
-   * Examine the request object, and see if the requested topic or page
-   * matches a given value.
-   *
-   * @param request The servlet request object.
-   * @param value The value to match against the current topic or page name.
-   * @return <code>true</code> if the value matches the current topic or
-   *  page name, <code>false</code> otherwise.
+   * Examine the request object, and see if the requested topic or page matches
+   * a given value.
+   * 
+   * @param request
+   *          The servlet request object.
+   * @param value
+   *          The value to match against the current topic or page name.
+   * @return <code>true</code> if the value matches the current topic or page
+   *         name, <code>false</code> otherwise.
    */
   protected static boolean isTopic(HttpServletRequest request, String value) {
     String topic = WikiUtil.getTopicFromURI(request);
     if (StringUtils.isBlank(topic)) {
       return false;
     }
-    if (value != null &&  topic.equals(value)) {
+    if (value != null && topic.equals(value)) {
       return true;
     }
     return false;
   }
-  
+
   /**
    * Utility method for adding categories associated with the current topic to
    * the ModelAndView object. This method adds a hashmap of category names and
@@ -460,38 +470,38 @@ public class ServletUtil {
    * @throws WikiException
    *           Thrown if any error occurs during processing.
    */
-  // protected static boolean isEditable(String virtualWiki, String topicName,
-  // WikiUserDetails user) throws WikiException {
-  // if (user == null || !user.hasRole(RoleImpl.ROLE_EDIT_EXISTING)) {
-  // // user does not have appropriate permissions
-  // return false;
-  // }
-  // Topic topic = null;
-  // try {
-  // if (!user.hasRole(RoleImpl.ROLE_EDIT_NEW)
-  // && WikiBase.getDataHandler().lookupTopic(virtualWiki, topicName,
-  // false, null) == null) {
-  // // user does not have appropriate permissions
-  // return false;
-  // }
-  // topic = WikiBase.getDataHandler().lookupTopic(virtualWiki, topicName,
-  // false, null);
-  // } catch (DataAccessException e) {
-  // throw new WikiException(new WikiMessage("error.unknown", e.getMessage()),
-  // e);
-  // }
-  // if (topic == null) {
-  // // new topic, edit away...
-  // return true;
-  // }
-  // if (topic.getAdminOnly() && !user.hasRole(RoleImpl.ROLE_ADMIN)) {
-  // return false;
-  // }
-  // if (topic.getReadOnly()) {
-  // return false;
-  // }
-  // return true;
-  // }
+  protected static boolean isEditable(String virtualWiki, String topicName,
+      WikiUserDetails user) throws WikiException {
+    if (user == null || !user.hasRole(RoleImpl.ROLE_EDIT_EXISTING)) {
+      // user does not have appropriate permissions
+      return false;
+    }
+    Topic topic = null;
+    try {
+      if (!user.hasRole(RoleImpl.ROLE_EDIT_NEW)
+          && WikiBase.getDataHandler().lookupTopic(virtualWiki, topicName,
+              false, null) == null) {
+        // user does not have appropriate permissions
+        return false;
+      }
+      topic = WikiBase.getDataHandler().lookupTopic(virtualWiki, topicName,
+          false, null);
+    } catch (Exception e) {
+      throw new WikiException(new WikiMessage("error.unknown", e.getMessage()),
+          e);
+    }
+    if (topic == null) {
+      // new topic, edit away...
+      return true;
+    }
+    if (topic.isAdminOnly() && !user.hasRole(RoleImpl.ROLE_ADMIN)) {
+      return false;
+    }
+    if (topic.isReadOnly()) {
+      return false;
+    }
+    return true;
+  }
 
   /**
    * Determine if a user has permission to move a topic.
@@ -712,17 +722,17 @@ public class ServletUtil {
    * @return Either the user's default locale (for logged-in users) or the
    *         locale specified in the request if no default locale is available.
    */
-  // public static Locale retrieveUserLocale(HttpServletRequest request) {
-  // try {
-  // WikiUser user = ServletUtil.currentWikiUser();
-  // if (user.getDefaultLocale() != null) {
-  // return LocaleUtils.toLocale(user.getDefaultLocale());
-  // }
-  // } catch (AuthenticationCredentialsNotFoundException e) {
-  // // ignore
-  // }
-  // return request.getLocale();
-  // }
+  public static Locale retrieveUserLocale(HttpServletRequest request) {
+    try {
+      WikiUser user = ServletUtil.currentWikiUser();
+      if (user.getDefaultLocale() != null) {
+        return LocaleUtils.toLocale(user.getDefaultLocale());
+      }
+    } catch (AuthenticationCredentialsNotFoundException e) {
+      // ignore
+    }
+    return request.getLocale();
+  }
 
   /**
    * Given a virtual wiki name, return a <code>VirtualWiki</code> object. If
@@ -752,9 +762,7 @@ public class ServletUtil {
     }
     if (virtualWiki == null) {
       logger.severe("No virtual wiki found for " + virtualWikiName);
-      virtualWiki = new VirtualWiki();
-      virtualWiki.setName(WikiBase.DEFAULT_VWIKI);
-      virtualWiki.setDefaultTopicName(Environment
+      virtualWiki = new VirtualWiki(WikiBase.DEFAULT_VWIKI, Environment
           .getValue(Environment.PROP_BASE_DEFAULT_TOPIC));
     }
     return virtualWiki;
@@ -769,94 +777,104 @@ public class ServletUtil {
    * @return A list of WikiMessage objects containing any errors encountered, or
    *         an empty list if no errors are encountered.
    */
-  // protected static List<WikiMessage> validateSystemSettings(Properties props)
-  // {
-  // List<WikiMessage> errors = new ArrayList<WikiMessage>();
-  // // test directory permissions & existence
-  // WikiMessage baseDirError = WikiUtil.validateDirectory(props
-  // .getProperty(Environment.PROP_BASE_FILE_DIR));
-  // if (baseDirError != null) {
-  // errors.add(baseDirError);
-  // }
-  // WikiMessage fullDirError = WikiUtil.validateDirectory(props
-  // .getProperty(Environment.PROP_FILE_DIR_FULL_PATH));
-  // if (fullDirError != null) {
-  // errors.add(fullDirError);
-  // }
-  // String classesDir = null;
-  // try {
-  // classesDir = Utilities.getClassLoaderRoot().getPath();
-  // WikiMessage classesDirError = WikiUtil.validateDirectory(classesDir);
-  // if (classesDirError != null) {
-  // errors.add(classesDirError);
-  // }
-  // } catch (FileNotFoundException e) {
-  // errors.add(new WikiMessage("error.directorywrite", classesDir, e
-  // .getMessage()));
-  // }
-  // // test database
-  // String driver = props.getProperty(Environment.PROP_DB_DRIVER);
-  // String url = props.getProperty(Environment.PROP_DB_URL);
-  // String userName = props.getProperty(Environment.PROP_DB_USERNAME);
-  // String password = Encryption.getEncryptedProperty(
-  // Environment.PROP_DB_PASSWORD, props);
-  // try {
-  // DatabaseConnection.testDatabase(driver, url, userName, password, false);
-  // } catch (ClassNotFoundException e) {
-  // logger.severe("Invalid database settings", e);
-  // errors.add(new WikiMessage("error.databaseconnection", e.getMessage()));
-  // } catch (SQLException e) {
-  // logger.severe("Invalid database settings", e);
-  // errors.add(new WikiMessage("error.databaseconnection", e.getMessage()));
-  // }
-  // // verify valid parser class
-  // String parserClass = props.getProperty(Environment.PROP_PARSER_CLASS);
-  // String abstractParserClass = "org.jamwiki.parser.AbstractParser";
-  // boolean validParser = (parserClass != null && !parserClass
-  // .equals(abstractParserClass));
-  // if (validParser) {
-  // try {
-  // Class parent = ClassUtils.getClass(parserClass);
-  // Class child = ClassUtils.getClass(abstractParserClass);
-  // if (!child.isAssignableFrom(parent)) {
-  // validParser = false;
-  // }
-  // } catch (ClassNotFoundException e) {
-  // validParser = false;
-  // }
-  // }
-  // if (!validParser) {
-  // errors.add(new WikiMessage("error.parserclass", parserClass));
-  // }
-  // return errors;
-  // }
+  protected static List<WikiMessage> validateSystemSettings(Properties props) {
+    List<WikiMessage> errors = new ArrayList<WikiMessage>();
+    // test directory permissions & existence
+    // WikiMessage baseDirError = WikiUtil.validateDirectory(props
+    // .getProperty(Environment.PROP_BASE_FILE_DIR));
+    // if (baseDirError != null) {
+    // errors.add(baseDirError);
+    // }
+    // WikiMessage fullDirError = WikiUtil.validateDirectory(props
+    // .getProperty(Environment.PROP_FILE_DIR_FULL_PATH));
+    // if (fullDirError != null) {
+    // errors.add(fullDirError);
+    // }
+    // String classesDir = null;
+    // try {
+    // classesDir = Utilities.getClassLoaderRoot().getPath();
+    // WikiMessage classesDirError = WikiUtil.validateDirectory(classesDir);
+    // if (classesDirError != null) {
+    // errors.add(classesDirError);
+    // }
+    // } catch (FileNotFoundException e) {
+    // errors.add(new WikiMessage("error.directorywrite", classesDir, e
+    // .getMessage()));
+    // }
+
+    // test database
+    // String driver = props.getProperty(Environment.PROP_DB_DRIVER);
+    // String url = props.getProperty(Environment.PROP_DB_URL);
+    // String userName = props.getProperty(Environment.PROP_DB_USERNAME);
+    // String password = Encryption.getEncryptedProperty(
+    // Environment.PROP_DB_PASSWORD, props);
+    // try {
+    // DatabaseConnection.testDatabase(driver, url, userName, password, false);
+    // } catch (ClassNotFoundException e) {
+    // logger.severe("Invalid database settings", e);
+    // errors.add(new WikiMessage("error.databaseconnection", e.getMessage()));
+    // } catch (SQLException e) {
+    // logger.severe("Invalid database settings", e);
+    // errors.add(new WikiMessage("error.databaseconnection", e.getMessage()));
+    // }
+
+    // verify valid parser class
+    String parserClass = props.getProperty(Environment.PROP_PARSER_CLASS);
+    String abstractParserClass = "org.jamwiki.parser.AbstractParser";
+    boolean validParser = (parserClass != null && !parserClass
+        .equals(abstractParserClass));
+    if (validParser) {
+      try {
+        Class parent = ClassUtils.getClass(parserClass);
+        Class child = ClassUtils.getClass(abstractParserClass);
+        if (!child.isAssignableFrom(parent)) {
+          validParser = false;
+        }
+      } catch (ClassNotFoundException e) {
+        validParser = false;
+      }
+    }
+    if (!validParser) {
+      errors.add(new WikiMessage("error.parserclass", parserClass));
+    }
+    return errors;
+  }
 
   /**
    * Utility method used when redirecting to a login page.
-   *
-   * @param request The servlet request object.
-   * @param pageInfo The current WikiPageInfo object, which contains
-   *  information needed for rendering the final JSP page.
-   * @param topic The topic to be redirected to.  Valid examples are
-   *  "Special:Admin", "StartingPoints", etc.
-   * @param messageObject A WikiMessage object to be displayed on the login
-   *  page.
+   * 
+   * @param request
+   *          The servlet request object.
+   * @param pageInfo
+   *          The current WikiPageInfo object, which contains information needed
+   *          for rendering the final JSP page.
+   * @param topic
+   *          The topic to be redirected to. Valid examples are "Special:Admin",
+   *          "StartingPoints", etc.
+   * @param messageObject
+   *          A WikiMessage object to be displayed on the login page.
    * @return Returns a ModelAndView object corresponding to the login page
-   *  display.
-   * @throws WikiException Thrown if any error occurs during processing.
+   *         display.
+   * @throws WikiException
+   *           Thrown if any error occurs during processing.
    */
-  protected static ModelAndView viewLogin(HttpServletRequest request, WikiPageInfo pageInfo, String topic, WikiMessage messageObject) throws WikiException {
+  protected static ModelAndView viewLogin(HttpServletRequest request,
+      WikiPageInfo pageInfo, String topic, WikiMessage messageObject)
+      throws WikiException {
     ModelAndView next = new ModelAndView("wiki");
     pageInfo.reset();
     String virtualWikiName = pageInfo.getVirtualWikiName();
-    String target = request.getParameter(JAMWikiAuthenticationConstants.SPRING_SECURITY_LOGIN_TARGET_URL_FIELD_NAME);
+    String target = request
+        .getParameter(JAMWikiAuthenticationConstants.SPRING_SECURITY_LOGIN_TARGET_URL_FIELD_NAME);
     if (StringUtils.isBlank(target)) {
       if (StringUtils.isBlank(topic)) {
         VirtualWiki virtualWiki = null;
         try {
-          virtualWiki = WikiBase.getDataHandler().lookupVirtualWiki(virtualWikiName);
+          virtualWiki = WikiBase.getDataHandler().lookupVirtualWiki(
+              virtualWikiName);
         } catch (DataAccessException e) {
-          throw new WikiException(new WikiMessage("error.unknown", e.getMessage()), e);
+          throw new WikiException(new WikiMessage("error.unknown", e
+              .getMessage()), e);
         }
         topic = virtualWiki.getDefaultTopicName();
       }
@@ -865,23 +883,44 @@ public class ServletUtil {
         target += "?" + request.getQueryString();
       }
     }
-    next.addObject("springSecurityTargetUrlField", JAMWikiAuthenticationConstants.SPRING_SECURITY_LOGIN_TARGET_URL_FIELD_NAME);
+    next
+        .addObject(
+            "springSecurityTargetUrlField",
+            JAMWikiAuthenticationConstants.SPRING_SECURITY_LOGIN_TARGET_URL_FIELD_NAME);
     HttpSession session = request.getSession(false);
-    if (request.getRequestURL().indexOf(request.getRequestURI()) != -1 && (session == null || session.getAttribute(JAMWikiAuthenticationConstants.SPRING_SECURITY_SAVED_REQUEST_SESSION_KEY) == null)) {
-      // Only add a target URL if Spring Security has not saved a request in the session.  The request
-      // URL vs URI check is needed due to the fact that the first time a user is redirected by Spring
-      // Security to the login page the saved request attribute is not yet available in the session
-      // due to weirdness and magic which I've thus far been unable to track down, so comparing the URI
-      // to the URL provides a way of determining if the user was redirected.  Anyone who can create
-      // a check that reliably captures whether or not Spring Security has a saved request should
+    if (request.getRequestURL().indexOf(request.getRequestURI()) != -1
+        && (session == null || session
+            .getAttribute(JAMWikiAuthenticationConstants.SPRING_SECURITY_SAVED_REQUEST_SESSION_KEY) == null)) {
+      // Only add a target URL if Spring Security has not saved a request in the
+      // session. The request
+      // URL vs URI check is needed due to the fact that the first time a user
+      // is redirected by Spring
+      // Security to the login page the saved request attribute is not yet
+      // available in the session
+      // due to weirdness and magic which I've thus far been unable to track
+      // down, so comparing the URI
+      // to the URL provides a way of determining if the user was redirected.
+      // Anyone who can create
+      // a check that reliably captures whether or not Spring Security has a
+      // saved request should
       // feel free to modify the conditional above.
       next.addObject("springSecurityTargetUrl", target);
     }
-    String springSecurityLoginUrl = "/" + virtualWikiName + JAMWikiAuthenticationConstants.SPRING_SECURITY_LOGIN_URL;
+    String springSecurityLoginUrl = "/" + virtualWikiName
+        + JAMWikiAuthenticationConstants.SPRING_SECURITY_LOGIN_URL;
     next.addObject("springSecurityLoginUrl", springSecurityLoginUrl);
-    next.addObject("springSecurityUsernameField", JAMWikiAuthenticationConstants.SPRING_SECURITY_LOGIN_USERNAME_FIELD_NAME);
-    next.addObject("springSecurityPasswordField", JAMWikiAuthenticationConstants.SPRING_SECURITY_LOGIN_PASSWORD_FIELD_NAME);
-    next.addObject("springSecurityRememberMeField", JAMWikiAuthenticationConstants.SPRING_SECURITY_LOGIN_REMEMBER_ME_FIELD_NAME);
+    next
+        .addObject(
+            "springSecurityUsernameField",
+            JAMWikiAuthenticationConstants.SPRING_SECURITY_LOGIN_USERNAME_FIELD_NAME);
+    next
+        .addObject(
+            "springSecurityPasswordField",
+            JAMWikiAuthenticationConstants.SPRING_SECURITY_LOGIN_PASSWORD_FIELD_NAME);
+    next
+        .addObject(
+            "springSecurityRememberMeField",
+            JAMWikiAuthenticationConstants.SPRING_SECURITY_LOGIN_REMEMBER_ME_FIELD_NAME);
     pageInfo.setPageTitle(new WikiMessage("login.title"));
     pageInfo.setContentJsp(JSP_LOGIN);
     pageInfo.setSpecial(true);
@@ -890,7 +929,7 @@ public class ServletUtil {
     }
     return next;
   }
-  
+
   /**
    * Utility method used when viewing a topic.
    * 

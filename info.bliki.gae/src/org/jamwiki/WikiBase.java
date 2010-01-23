@@ -18,6 +18,7 @@ package org.jamwiki;
 
 import java.util.Locale;
 
+import org.jamwiki.model.WikiGroup;
 import org.jamwiki.model.WikiUser;
 import org.jamwiki.utils.WikiLogger;
 import org.jamwiki.utils.WikiUtil;
@@ -47,7 +48,7 @@ public class WikiBase {
 	// FIXME - make this configurable
 	public static final String DEFAULT_VWIKI = "en";
 	/** Default group for registered users. */
-//	private static WikiGroup GROUP_REGISTERED_USER = null;
+	private static WikiGroup GROUP_REGISTERED_USER = null;
 	/** Data stored using an external database */
 	public static final String PERSISTENCE_EXTERNAL = "DATABASE";
 	/** Data stored using an internal copy of the HSQL database */
@@ -98,7 +99,24 @@ public class WikiBase {
 	public static DataHandler getDataHandler() {
 		return WikiBase.dataHandler;
 	}
-
+	
+  /**
+  *
+  */
+ public static WikiGroup getGroupRegisteredUser() {
+   if (WikiUtil.isFirstUse() || WikiUtil.isUpgrade()) {
+     throw new IllegalStateException("Cannot retrieve group information prior to completing setup/upgrade");
+   }
+   if (WikiBase.GROUP_REGISTERED_USER == null) {
+     try {
+       WikiBase.GROUP_REGISTERED_USER = WikiBase.getDataHandler().lookupWikiGroup(WikiGroup.GROUP_REGISTERED_USER);
+     } catch (Exception e) {
+       throw new RuntimeException("Unable to retrieve registered users group", e);
+     }
+   }
+   return WikiBase.GROUP_REGISTERED_USER;
+ }
+ 
 	/**
 	 * Reload the data handler, user handler, and other basic wiki
 	 * data structures.

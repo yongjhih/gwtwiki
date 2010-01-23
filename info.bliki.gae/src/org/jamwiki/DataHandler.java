@@ -16,6 +16,7 @@
  */
 package org.jamwiki;
 
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 
@@ -23,7 +24,9 @@ import org.jamwiki.model.Category;
 import org.jamwiki.model.Role;
 import org.jamwiki.model.RoleMap;
 import org.jamwiki.model.Topic;
+import org.jamwiki.model.TopicVersion;
 import org.jamwiki.model.VirtualWiki;
+import org.jamwiki.model.WikiGroup;
 import org.jamwiki.model.WikiUser;
 import org.jamwiki.utils.Pagination;
 
@@ -37,25 +40,20 @@ import org.jamwiki.utils.Pagination;
  */
 public interface DataHandler {
 
-  /** Ansi data handler class */
-  public static final String DATA_HANDLER_ANSI = "org.jamwiki.db.AnsiDataHandler";
-  /** DB2 data handler class */
-  public static final String DATA_HANDLER_DB2 = "org.jamwiki.db.DB2DataHandler";
-  /** DB2/400 data handler class */
-  public static final String DATA_HANDLER_DB2400 = "org.jamwiki.db.DB2400DataHandler";
-  /** HSql data handler class */
-  public static final String DATA_HANDLER_HSQL = "org.jamwiki.db.HSqlDataHandler";
-  /** MSSql data handler class */
-  public static final String DATA_HANDLER_MSSQL = "org.jamwiki.db.MSSqlDataHandler";
-  /** MySql data handler class */
-  public static final String DATA_HANDLER_MYSQL = "org.jamwiki.db.MySqlDataHandler";
-  /** Oracle data handler class */
-  public static final String DATA_HANDLER_ORACLE = "org.jamwiki.db.OracleDataHandler";
-  /** Postgres data handler class */
-  public static final String DATA_HANDLER_POSTGRES = "org.jamwiki.db.PostgresDataHandler";
-  /** Sybase ASA data handler class */
-  public static final String DATA_HANDLER_ASA = "org.jamwiki.db.SybaseASADataHandler";
+  /**
+   * Determine if a value matching the given username and password exists in
+   * the data store.
+   *
+   * @param username The username that is being validated against.
+   * @param password The password that is being validated against.
+   * @return <code>true</code> if the username / password combination matches
+   *  an existing record in the data store, <code>false</code> otherwise.
+   * @throws DataAccessException Thrown if an error occurs while accessing the data
+   *  store.
+   */
+  boolean authenticate(String username, String password) throws DataAccessException;
 
+  
   /**
    * Return a List of all Category objects for a given virtual wiki.
    * 
@@ -72,6 +70,14 @@ public interface DataHandler {
       throws DataAccessException;
 
 
+  /**
+   * Return a List of all Role objects for the wiki.
+   *
+   * @return A List of all Role objects for the wiki.
+   * @throws DataAccessException Thrown if any error occurs during method execution.
+   */
+  List<Role> getAllRoles() throws DataAccessException;
+  
   /**
    * Retrieve a List of RoleMap objects for all users whose login
    * contains the given login fragment.
@@ -137,6 +143,15 @@ public interface DataHandler {
   List<Role> getRoleMapUser(String login) throws DataAccessException;
 
   /**
+   * Return a List of all VirtualWiki objects that exist for the wiki.
+   *
+   * @return A List of all VirtualWiki objects that exist for the
+   *  wiki.
+   * @throws DataAccessException Thrown if any error occurs during method execution.
+   */
+  List<VirtualWiki> getVirtualWikiList() throws DataAccessException;
+
+  /**
    * Retrieve a List of Category objects corresponding to all topics that belong
    * to the category, sorted by either the topic name, or category sort key (if
    * specified).
@@ -178,6 +193,30 @@ public interface DataHandler {
       Object transactionObject);
 
   /**
+   * Given a virtual wiki name, return the corresponding VirtualWiki object.
+   * 
+   * @param virtualWikiName
+   *          The name of the VirtualWiki object that is being retrieved.
+   * @return The VirtualWiki object that corresponds to the virtual wiki name
+   *         being queried, or <code>null</code> if no matching VirtualWiki can
+   *         be found.
+   * @throws DataAccessException
+   *           Thrown if any error occurs during method execution.
+   */
+  VirtualWiki lookupVirtualWiki(String virtualWikiName)
+      throws DataAccessException;
+  
+  /**
+   * Retrieve a WikiGroup object for a given group name.
+   *
+   * @param groupName The group name for the group being queried.
+   * @return The WikiGroup object for the given group name, or
+   *  <code>null</code> if no matching group exists.
+   * @throws DataAccessException Thrown if any error occurs during method execution.
+   */
+  WikiGroup lookupWikiGroup(String groupName) throws DataAccessException;
+
+  /**
    * Retrieve a WikiUser object matching a given user ID.
    *
    * @param userId The ID of the WikiUser being retrieved.
@@ -185,7 +224,7 @@ public interface DataHandler {
    *  <code>null</code> if no matching WikiUser exists.
    * @throws DataAccessException Thrown if any error occurs during method execution.
    */
-  WikiUser lookupWikiUser(int userId) throws DataAccessException;
+  WikiUser lookupWikiUser(Long userId) throws DataAccessException;
 
   /**
    * Retrieve a WikiUser object matching a given username.
@@ -224,7 +263,7 @@ public interface DataHandler {
    * @throws DataAccessException Thrown if any error occurs during method execution.
    */
   List<String> lookupWikiUsers(Pagination pagination) throws DataAccessException;
-
+  
   /**
    * Perform any required setup steps for the DataHandler instance.
    * 
@@ -246,22 +285,98 @@ public interface DataHandler {
    *           Thrown if a setup failure occurs.
    */
   void setup(Locale locale, WikiUser user, String username,
-      String encryptedPassword);
+      String encryptedPassword) throws DataAccessException, WikiException;
 
   /**
-   * Given a virtual wiki name, return the corresponding VirtualWiki object.
-   * 
-   * @param virtualWikiName
-   *          The name of the VirtualWiki object that is being retrieved.
-   * @return The VirtualWiki object that corresponds to the virtual wiki name
-   *         being queried, or <code>null</code> if no matching VirtualWiki can
-   *         be found.
-   * @throws DataAccessException
-   *           Thrown if any error occurs during method execution.
+   * Add or update a Role object.  This method will add a new record if
+   * the role does not yet exist, otherwise the role will be updated.
+   *
+   * @param role The Role to add or update.  If the Role does not yet
+   *  exist then a new record is created, otherwise an update is
+   *  performed.
+   * @param update A boolean value indicating whether this transaction is
+   *  updating an existing role or not.
+   * @throws DataAccessException Thrown if any error occurs during method execution.
+   * @throws WikiException Thrown if the role information is invalid.
    */
-  VirtualWiki lookupVirtualWiki(String virtualWikiName)
-      throws DataAccessException;
+  // FIXME - the update flag should not be necessary
+  void writeRole(Role role, boolean update) throws DataAccessException, WikiException;
+
+  /**
+   * Add a set of group role mappings.  This method will first delete all
+   * existing role mappings for the specified group, and will then create
+   * a mapping for each specified role.
+   *
+   * @param groupId The group id for whom role mappings are being modified.
+   * @param groupName the name/description of the group
+   * @param roles A List of String role names for all roles that are
+   *  to be assigned to this group.
+   * @throws DataAccessException Thrown if any error occurs during method execution.
+   * @throws WikiException Thrown if the role information is invalid.
+   */
+  void writeRoleMapGroup(Long groupId, String groupName, List<String> roles) throws DataAccessException, WikiException;
+
+  /**
+   * Add a set of user role mappings.  This method will first delete all
+   * existing role mappings for the specified user, and will then create
+   * a mapping for each specified role.
+   *
+   * @param username The username for whom role mappings are being modified.
+   * @param roles A List of String role names for all roles that are
+   *  to be assigned to this user.
+   * @throws DataAccessException Thrown if any error occurs during method execution.
+   * @throws WikiException Thrown if the role information is invalid.
+   */
+  void writeRoleMapUser(String username, List<String> roles) throws DataAccessException, WikiException;
+
+  /**
+   * Add or update a Topic object.  This method will add a new record if
+   * the Topic does not have a topic ID, otherwise it will perform an update.
+   * A TopicVersion object will also be created to capture the author, date,
+   * and other parameters for the topic.
+   *
+   * @param topic The Topic to add or update.  If the Topic does not have
+   *  a topic ID then a new record is created, otherwise an update is
+   *  performed.
+   * @param topicVersion A TopicVersion containing the author, date, and
+   *  other information about the version being added.  If this value is <code>null</code>
+   *  then no version is saved and no recent change record is created.
+   * @param categories A mapping of categories and their associated sort keys (if any)
+   *  for all categories that are associated with the current topic.
+   * @param links A List of all topic names that are linked to from the
+   *  current topic.  These will be passed to the search engine to create
+   *  searchable metadata.
+   * @throws DataAccessException Thrown if any error occurs during method execution.
+   * @throws WikiException Thrown if the topic information is invalid.
+   */
+  void writeTopic(Topic topic, TopicVersion topicVersion, LinkedHashMap<String, String> categories, List<String> links) throws DataAccessException, WikiException;
+
+
+  /**
+   * Add or update a VirtualWiki object.  This method will add a new record
+   * if the VirtualWiki does not have a virtual wiki ID, otherwise it will
+   * perform an update.
+   *
+   * @param virtualWiki The VirtualWiki to add or update.  If the
+   *  VirtualWiki does not have a virtual wiki ID then a new record is
+   *  created, otherwise an update is performed.
+   * @throws DataAccessException Thrown if any error occurs during method execution.
+   * @throws WikiException Thrown if the virtual wiki information is invalid.
+   */
+  void writeVirtualWiki(VirtualWiki virtualWiki) throws DataAccessException, WikiException;
   
+  /**
+   * Add or update a WikiGroup object.  This method will add a new record if
+   * the group does not have a group ID, otherwise it will perform an update.
+   *
+   * @param group The WikiGroup to add or update.  If the group does not have
+   *  a group ID then a new record is created, otherwise an update is
+   *  performed.
+   * @throws DataAccessException Thrown if any error occurs during method execution.
+   * @throws WikiException Thrown if the group information is invalid.
+   */
+  void writeWikiGroup(WikiGroup group) throws DataAccessException, WikiException;
+
   /**
    * Add or update a WikiUser object.  This method will add a new record
    * if the WikiUser does not have a user ID, otherwise it will perform an

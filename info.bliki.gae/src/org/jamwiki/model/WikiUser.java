@@ -44,7 +44,7 @@ public class WikiUser implements Serializable {
       .getName());
 
   @Id
-  private Long userId;
+  private Long userId=null;
   private String username = null;
   private String email = null;
   private Date createDate = new Date(System.currentTimeMillis());

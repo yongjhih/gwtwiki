@@ -29,10 +29,10 @@ import org.jamwiki.utils.WikiLogger;
 public class RoleMap {
 
 	private static final WikiLogger logger = WikiLogger.getLogger(RoleMap.class.getName());
-	private Integer groupId = null;
+	private Long groupId = null;
 	private String groupName = null;
 	private List<String> roleNames = null;
-	private Integer userId = null;
+	private Long userId = null;
 	private String userLogin = null;
 
 	/**
@@ -44,14 +44,14 @@ public class RoleMap {
 	/**
 	 *
 	 */
-	public Integer getGroupId() {
+	public Long getGroupId() {
 		return this.groupId;
 	}
 
 	/**
 	 *
 	 */
-	public void setGroupId(Integer groupId) {
+	public void setGroupId(Long groupId) {
 		this.groupId = groupId;
 	}
 
@@ -96,14 +96,14 @@ public class RoleMap {
 	/**
 	 *
 	 */
-	public Integer getUserId() {
+	public Long getUserId() {
 		return this.userId;
 	}
 
 	/**
 	 *
 	 */
-	public void setUserId(Integer userId) {
+	public void setUserId(Long userId) {
 		this.userId = userId;
 	}
 

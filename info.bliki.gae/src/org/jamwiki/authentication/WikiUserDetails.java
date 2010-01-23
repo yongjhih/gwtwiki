@@ -18,6 +18,11 @@ package org.jamwiki.authentication;
 
 import java.util.ArrayList;
 import java.util.Collection;
+
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Transient;
+
 import org.apache.commons.lang.StringUtils;
 import org.jamwiki.utils.WikiLogger;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
@@ -32,25 +37,34 @@ import org.springframework.security.core.userdetails.UserDetails;
  * verifying user credentials.  Spring Security will use this object to determine
  * access rights.
  */
+@Entity
 public class WikiUserDetails implements UserDetails {
 
 	private static final WikiLogger logger = WikiLogger.getLogger(WikiUserDetails.class.getName());
 	/** The default anonymous username.  This value should match the Spring Security <code>AnonymousBeanDefinitionParser.DEF_USERNAME</code> value, which unfortunately is not public. */
 	public static final String ANONYMOUS_USER_USERNAME = "roleAnonymous";
 	private static final long serialVersionUID = -2818435399240684581L;
+	@Id
 	private String username = null;
 	private String password = null;
+	private boolean accountNonExpired = true;
+  private boolean accountNonLocked = true;
+  private boolean credentialsNonExpired = true;
+  private boolean enabled = true;
+  
 	/**
 	 * GrantedAuthority is used by Spring Security to support several authorities
 	 * (roles). Anonymous users are assigned ROLE_ANONYMOUS by the Spring Security
 	 * filters.
 	 */
-	private Collection<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
-	private boolean accountNonExpired = true;
-	private boolean accountNonLocked = true;
-	private boolean credentialsNonExpired = true;
-	private boolean enabled = true;
-
+  @Transient 
+  private Collection<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
+	
+  public WikiUserDetails(){
+    if (authorities == null) {
+      authorities = new ArrayList<GrantedAuthority>();
+    }
+  }
 	/**
 	 * Construct the <code>User</code> with the details required by Spring Security
 	 * <code>org.springframework.security.providers.dao.DaoAuthenticationProvider</code>.  This

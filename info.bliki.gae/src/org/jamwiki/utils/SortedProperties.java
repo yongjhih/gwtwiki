@@ -16,46 +16,77 @@
  */
 package org.jamwiki.utils;
 
+import info.bliki.gae.db.PropertyService;
+import info.bliki.gae.model.PropertyEntity;
+
 import java.util.Collections;
 import java.util.Enumeration;
+import java.util.List;
 import java.util.Properties;
 import java.util.Vector;
 
 /**
- * This class acts as a utility class for providing the capability of a property file
- * that is sorted alphabetically by key value.  It is useful for things like translation
- * files where having the file in a logical order is useful for maintainers.
+ * This class acts as a utility class for providing the capability of a property
+ * file that is sorted alphabetically by key value. It is useful for things like
+ * translation files where having the file in a logical order is useful for
+ * maintainers.
  */
 public class SortedProperties extends Properties {
 
-	/** Logger */
-	public static final WikiLogger logger = WikiLogger.getLogger(SortedProperties.class.getName());
+  /**
+   * 
+   */
+  private static final long serialVersionUID = 4517413327492115930L;
 
-	/**
-	 * Standard constructor for creating a sorted properties file.
-	 */
-	public SortedProperties() {
-		super();
-	}
+  /** Logger */
+  public static final WikiLogger logger = WikiLogger
+      .getLogger(SortedProperties.class.getName());
 
-	/**
-	 * Copy constructor used to create a sorted properties file.
-	 */
-	public SortedProperties(Properties properties) {
-		super();
-		this.putAll(properties);
-	}
+  /**
+   * Standard constructor for creating a sorted properties file.
+   */
+  public SortedProperties() {
+    super();
+  }
 
-	/**
-	 * Override the Properties.keys() method so that the keyset returned is sorted.
-	 */
-	public Enumeration<java.lang.Object> keys() {
-		Enumeration keyEnum = super.keys();
-		Vector keys = new Vector();
-		while (keyEnum.hasMoreElements()) {
-			keys.add(keyEnum.nextElement());
-		}
-		Collections.sort(keys);
-		return keys.elements();
-	}
+  /**
+   * Copy constructor used to create a sorted properties file.
+   */
+  public SortedProperties(Properties properties) {
+    super();
+
+    this.putAll(properties);
+  }
+
+  public void loadFromDatastore() {
+    // load additional properties from datastore
+    List<PropertyEntity> list = PropertyService.getAll();
+    if (list != null) {
+      for (PropertyEntity propertyEntity : list) {
+        super.setProperty(propertyEntity.getKey(), propertyEntity.getValue());
+      }
+    }
+  }
+
+  /**
+   * Override the Properties.keys() method so that the keyset returned is
+   * sorted.
+   */
+  @Override
+  public Enumeration<java.lang.Object> keys() {
+    Enumeration keyEnum = super.keys();
+    Vector keys = new Vector();
+    while (keyEnum.hasMoreElements()) {
+      keys.add(keyEnum.nextElement());
+    }
+    Collections.sort(keys);
+    return keys.elements();
+  }
+
+  @Override
+  public synchronized Object setProperty(String key, String value) {
+    PropertyEntity pe = new PropertyEntity(key, value);
+    PropertyService.save(pe);
+    return super.put(key, value);
+  }
 }

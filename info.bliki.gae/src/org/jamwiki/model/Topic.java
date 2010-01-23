@@ -44,17 +44,16 @@ public class Topic implements Serializable {
 
   private Text content = null;
 
-  /**
-   * @return the content
-   */
-  public Text getContent() {
-    return content;
-  }
-
+  private String redirect;
+  
+  private boolean adminOnly = false;
+  
   private Date date;
 
   private String virtualWiki = "";
 
+  private boolean readOnly = false;
+  
   @Transient
   private String htmlContent;
 
@@ -91,8 +90,19 @@ public class Topic implements Serializable {
     return null;
   }
 
+  /**
+   * @return the content
+   */
+  public Text getContent() {
+    return content;
+  }
+
   public Date getDate() {
     return date;
+  }
+
+  public String getHtmlContent() {
+    return htmlContent;
   }
 
   /**
@@ -109,10 +119,10 @@ public class Topic implements Serializable {
     return title;
   }
 
-  public String getHtmlContent() {
-    return htmlContent;
+  public String getRedirectTo() {
+    return redirect;
   }
-  
+
   public String getTopicContent() {
     if (content==null) {
       return "";
@@ -130,15 +140,35 @@ public class Topic implements Serializable {
     return virtualWiki;
   }
 
-  // private void renderHtml(String content) {
-  // IWikiModel model = BlikiModel.get();
-  // this.htmlContent = model.render(content);
-  // }
+  /**
+   * @return the adminOnly
+   */
+  public boolean isAdminOnly() {
+    return adminOnly;
+  }
+  
+  /**
+   * @return the readOnly
+   */
+  public boolean isReadOnly() {
+    return readOnly;
+  }
 
+  /**
+   * @param adminOnly the adminOnly to set
+   */
+  public void setAdminOnly(boolean adminOnly) {
+    this.adminOnly = adminOnly;
+  }
   public void setAuthor(WikiUser author) {
     Objectify ofy = OS.begin();
     this.author = OS.createKey(author);
   }
+
+  // private void renderHtml(String content) {
+  // IWikiModel model = BlikiModel.get();
+  // this.htmlContent = model.render(content);
+  // }
 
   public void setDate(Date date) {
     this.date = date;
@@ -154,6 +184,13 @@ public class Topic implements Serializable {
 
   public void setName(String title) {
     this.title = title;
+  }
+
+  /**
+   * @param readOnly the readOnly to set
+   */
+  public void setReadOnly(boolean readOnly) {
+    this.readOnly = readOnly;
   }
 
   public void setTopicContent(String content) {

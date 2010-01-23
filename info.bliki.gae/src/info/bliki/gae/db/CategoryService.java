@@ -14,7 +14,6 @@ import org.jamwiki.model.OS;
 import com.google.appengine.api.datastore.EntityNotFoundException;
 import com.googlecode.objectify.OQuery;
 import com.googlecode.objectify.Objectify;
-import com.googlecode.objectify.ObjectifyFactory;
 
 public class CategoryService {
   public static Cache cache = null;
@@ -35,12 +34,15 @@ public class CategoryService {
     return page;
   }
 
-  public static Category update(Category page) {
+  public static Category update(Category category) {
     Category existingEntity = null;
     try {
       Objectify ofy = OS.begin();
-      existingEntity = ofy.get(Category.class, page.getName());
-      existingEntity.setName(page.getName());
+      existingEntity = ofy.get(Category.class, category.getName());
+      existingEntity.setChildTopicName(category.getChildTopicName());
+      existingEntity.setSortKey(category.getSortKey());
+      existingEntity.setVirtualWiki(category.getVirtualWiki());
+      existingEntity.setTopicType(category.getTopicType());
       ofy.put(existingEntity);
       cache.put(existingEntity.getName(), existingEntity);
     } catch (EntityNotFoundException enf) {
@@ -55,20 +57,29 @@ public class CategoryService {
   }
 
   public static Category findByName(String name) {
-    Category page = (Category) cache.get(name);
-    if (page != null) {
-      return page;
+    Category category = (Category) cache.get(name);
+    if (category != null) {
+      return category;
     }
     try {
       Objectify ofy = OS.begin();
       OQuery<Category> q = OS.createQuery(Category.class);
       q.filter("title", name);
-      page = ofy.prepare(q).asSingle();
-      cache.put(page.getName(), page);
-      return page;
+      category = ofy.prepare(q).asSingle();
+      cache.put(category.getName(), category);
+      return category;
     } catch (NullPointerException npe) {
     }
     return null;
+  }
+
+  public static List<Category> getAll(String virtualWiki) {
+    List<Category> resultList = null;
+    Objectify ofy = OS.begin();
+    OQuery<Category> q = OS.createQuery(Category.class);
+    q.filter("virtualWiki", virtualWiki);
+    resultList = ofy.prepare(q).asList();
+    return resultList;
   }
 
   public static List<Category> getAll() {

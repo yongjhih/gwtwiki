@@ -19,7 +19,12 @@ package org.jamwiki.utils;
 
 import info.bliki.gae.db.GAEDataHandler;
 
+import java.io.File;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+import java.util.Locale;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
@@ -30,7 +35,10 @@ import org.jamwiki.DataAccessException;
 import org.jamwiki.DataHandler;
 import org.jamwiki.Environment;
 import org.jamwiki.WikiBase;
+import org.jamwiki.WikiException;
+import org.jamwiki.WikiMessage;
 import org.jamwiki.WikiVersion;
+import org.jamwiki.model.Role;
 import org.jamwiki.model.VirtualWiki;
 
 /**
@@ -103,6 +111,31 @@ public class WikiUtil {
   public static DataHandler dataHandlerInstance() throws IOException {
     return new GAEDataHandler();
   }
+  
+  /**
+   * Convert a topic name or other value into a value suitable for use as a
+   * file name.  This method replaces spaces with underscores, and then URL
+   * encodes the value.
+   *
+   * @param name The value that is to be encoded for use as a file name.
+   * @return The encoded value.
+   */
+  public static String encodeForFilename(String name) {
+    if (StringUtils.isBlank(name)) {
+      throw new IllegalArgumentException("File name not specified in encodeForFilename");
+    }
+    // replace spaces with underscores
+    String result = Utilities.encodeTopicName(name);
+    // URL encode the rest of the name
+    try {
+      result = URLEncoder.encode(result, "UTF-8");
+    } catch (UnsupportedEncodingException e) {
+      // this should never happen
+      throw new IllegalStateException("Unsupporting encoding UTF-8");
+    }
+    return result;
+  }
+  
   /**
    * Given an article name, return the appropriate comments topic article name.
    * For example, if the article name is "Topic" then the return value is
@@ -347,7 +380,7 @@ public class WikiUtil {
    *  <code>false</code> otherwise.
    */
   public static boolean isFirstUse() {
-    return false;//!Environment.getBooleanValue(Environment.PROP_BASE_INITIALIZED);
+    return !Environment.getBooleanValue(Environment.PROP_BASE_INITIALIZED);
   }
 
   /**
@@ -365,6 +398,55 @@ public class WikiUtil {
     WikiVersion currentVersion = new WikiVersion(WikiVersion.CURRENT_WIKI_VERSION);
     return false; //oldVersion.before(currentVersion);
   }
+  
+  /**
+   * Utility method for reading special topic values from files and returning
+   * the file contents.
+   *
+   * @param locale The locale for the user viewing the special page.
+   * @param pageName The name of the special page being retrieved.
+   */
+  public static String readSpecialPage(Locale locale, String pageName) throws IOException {
+    String contents = null;
+    String filename = null;
+    String language = null;
+    String country = null;
+    if (locale != null) {
+      language = locale.getLanguage();
+      country = locale.getCountry();
+    }
+    String subdirectory = "";
+    if (!StringUtils.isBlank(language) && !StringUtils.isBlank(country)) {
+      try {
+        subdirectory = new File(WikiBase.SPECIAL_PAGE_DIR, language + "_" + country).getPath();
+        filename = new File(subdirectory, WikiUtil.encodeForFilename(pageName) + ".txt").getPath();
+        contents = Utilities.readFile(filename);
+      } catch (IOException e) {
+        logger.info("File " + filename + " does not exist");
+      }
+    }
+    if (contents == null && !StringUtils.isBlank(language)) {
+      try {
+        subdirectory = new File(WikiBase.SPECIAL_PAGE_DIR, language).getPath();
+        filename = new File(subdirectory, WikiUtil.encodeForFilename(pageName) + ".txt").getPath();
+        contents = Utilities.readFile(filename);
+      } catch (IOException e) {
+        logger.info("File " + filename + " does not exist");
+      }
+    }
+    if (contents == null) {
+      try {
+        subdirectory = new File(WikiBase.SPECIAL_PAGE_DIR).getPath();
+        filename = new File(subdirectory, WikiUtil.encodeForFilename(pageName) + ".txt").getPath();
+        contents = Utilities.readFile(filename);
+      } catch (IOException e) {
+        logger.warning("File " + filename + " could not be read", e);
+        throw e;
+      }
+    }
+    return contents;
+  }
+  
   /**
    * Utility method for retrieving values from the URI. This method will attempt
    * to properly convert the URI encoding, and then offers a way to return
@@ -405,5 +487,88 @@ public class WikiUtil {
       i++;
     }
     return uri;
+  }
+  
+  /**
+   * Utility method for determining if a topic name is valid for use on the Wiki,
+   * meaning that it is not empty and does not contain any invalid characters.
+   *
+   * @param name The topic name to validate.
+   * @throws WikiException Thrown if the user name is invalid.
+   */
+  public static void validateTopicName(String name) throws WikiException {
+    if (StringUtils.isBlank(name)) {
+      throw new WikiException(new WikiMessage("common.exception.notopic"));
+    }
+    if (PseudoTopicHandler.isPseudoTopic(name)) {
+      throw new WikiException(new WikiMessage("common.exception.pseudotopic", name));
+    }
+    WikiLink wikiLink = LinkUtil.parseWikiLink(name);
+    String namespace = StringUtils.trimToNull(wikiLink.getNamespace());
+    String article = StringUtils.trimToNull(wikiLink.getArticle());
+    if (StringUtils.startsWith(namespace, "/") || StringUtils.startsWith(article, "/")) {
+      throw new WikiException(new WikiMessage("common.exception.name", name));
+    }
+    if (namespace != null && namespace.toLowerCase().equals(NamespaceHandler.NAMESPACE_SPECIAL.toLowerCase())) {
+      throw new WikiException(new WikiMessage("common.exception.name", name));
+    }
+    Matcher m = WikiUtil.INVALID_TOPIC_NAME_PATTERN.matcher(name);
+    if (m.find()) {
+      throw new WikiException(new WikiMessage("common.exception.name", name));
+    }
+  }
+  
+  /**
+   * Utility method for determining if the parameters of a Role are valid
+   * or not.
+   *
+   * @param role The Role to validate.
+   * @throws WikiException Thrown if the role is invalid.
+   */
+  public static void validateRole(Role role) throws WikiException {
+    Matcher m = WikiUtil.INVALID_ROLE_NAME_PATTERN.matcher(role.getAuthority());
+    if (!m.matches()) {
+      throw new WikiException(new WikiMessage("roles.error.name", role.getAuthority()));
+    }
+    if (!StringUtils.isBlank(role.getDescription()) && role.getDescription().length() > 200) {
+      throw new WikiException(new WikiMessage("roles.error.description"));
+    }
+    // FIXME - throw a user-friendly error if the role name is already in use
+  }
+
+  /**
+   * Utility method for determining if a password is valid for use on the wiki.
+   *
+   * @param password The password value.
+   * @param confirmPassword Passwords must be entered twice to avoid tying errors.
+   *  This field represents the confirmed password entry.
+   */
+  public static void validatePassword(String password, String confirmPassword) throws WikiException {
+    if (StringUtils.isBlank(password)) {
+      throw new WikiException(new WikiMessage("error.newpasswordempty"));
+    }
+    if (StringUtils.isBlank(confirmPassword)) {
+      throw new WikiException(new WikiMessage("error.passwordconfirm"));
+    }
+    if (!password.equals(confirmPassword)) {
+      throw new WikiException(new WikiMessage("admin.message.passwordsnomatch"));
+    }
+  }
+
+  /**
+   * Utility method for determining if a username is valid for use on the Wiki,
+   * meaning that it is not empty and does not contain any invalid characters.
+   *
+   * @param name The username to validate.
+   * @throws WikiException Thrown if the user name is invalid.
+   */
+  public static void validateUserName(String name) throws WikiException {
+    if (StringUtils.isBlank(name)) {
+      throw new WikiException(new WikiMessage("error.loginempty"));
+    }
+    Matcher m = WikiUtil.VALID_USER_LOGIN_PATTERN.matcher(name);
+    if (!m.matches()) {
+      throw new WikiException(new WikiMessage("common.exception.name", name));
+    }
   }
 }

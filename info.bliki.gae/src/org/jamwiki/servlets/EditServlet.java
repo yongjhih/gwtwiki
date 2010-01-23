@@ -16,13 +16,15 @@
  */
 package org.jamwiki.servlets;
 
-import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
 import org.apache.commons.lang.StringUtils;
 import org.jamwiki.WikiBase;
 import org.jamwiki.WikiException;
 import org.jamwiki.WikiMessage;
+import org.jamwiki.authentication.RoleImpl;
+import org.jamwiki.authentication.WikiUserDetails;
 import org.jamwiki.model.Topic;
 import org.jamwiki.model.WikiUser;
 import org.jamwiki.parser.ParserInput;
@@ -198,22 +200,22 @@ public class EditServlet extends JAMWikiServlet {
       WikiPageInfo pageInfo) throws Exception {
     String topicName = WikiUtil.getTopicFromRequest(request);
     String virtualWiki = pageInfo.getVirtualWikiName();
-    // WikiUserDetails user = ServletUtil.currentUserDetails();
-    // if (ServletUtil.isEditable(virtualWiki, topicName, user)) {
-    // return null;
-    // }
-    // if (!user.hasRole(RoleImpl.ROLE_EDIT_EXISTING)) {
-    // WikiMessage messageObject = new WikiMessage("login.message.edit");
-    // return ServletUtil.viewLogin(request, pageInfo,
-    // WikiUtil.getTopicFromURI(request), messageObject);
-    // }
-    // if (!user.hasRole(RoleImpl.ROLE_EDIT_NEW) &&
-    // WikiBase.getDataHandler().lookupTopic(virtualWiki, topicName, false,
-    // null) == null) {
-    // WikiMessage messageObject = new WikiMessage("login.message.editnew");
-    // return ServletUtil.viewLogin(request, pageInfo,
-    // WikiUtil.getTopicFromURI(request), messageObject);
-    // }
+    WikiUserDetails user = ServletUtil.currentUserDetails();
+    if (ServletUtil.isEditable(virtualWiki, topicName, user)) {
+      return null;
+    }
+    if (!user.hasRole(RoleImpl.ROLE_EDIT_EXISTING)) {
+      WikiMessage messageObject = new WikiMessage("login.message.edit");
+      return ServletUtil.viewLogin(request, pageInfo, WikiUtil
+          .getTopicFromURI(request), messageObject);
+    }
+    if (!user.hasRole(RoleImpl.ROLE_EDIT_NEW)
+        && WikiBase.getDataHandler().lookupTopic(virtualWiki, topicName, false,
+            null) == null) {
+      WikiMessage messageObject = new WikiMessage("login.message.editnew");
+      return ServletUtil.viewLogin(request, pageInfo, WikiUtil
+          .getTopicFromURI(request), messageObject);
+    }
     Topic topic = WikiBase.getDataHandler().lookupTopic(virtualWiki, topicName,
         false, null);
     if (topic == null) {
