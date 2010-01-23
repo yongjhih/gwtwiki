@@ -36,30 +36,7 @@ function onPersistenceType() {
 	}
 }
 var DATABASE_SAMPLE_VALUES = new Array();
-DATABASE_SAMPLE_VALUES["<%= DataHandler.DATA_HANDLER_DB2 %>"] ={
-	<%= Environment.PROP_DB_DRIVER %>: "com.ibm.db2.jdbc.app.DB2Driver", <%= Environment.PROP_DB_URL %>: "jdbc:db2j:net://localhost:1527/database"
-};
-DATABASE_SAMPLE_VALUES["<%= DataHandler.DATA_HANDLER_DB2400 %>"] ={
-	<%= Environment.PROP_DB_DRIVER %>: "com.ibm.db2.jdbc.app.DB2Driver", <%= Environment.PROP_DB_URL %>: "jdbc:db2j:net://localhost:1527/database"
-};
-DATABASE_SAMPLE_VALUES["<%= DataHandler.DATA_HANDLER_HSQL %>"] ={
-	<%= Environment.PROP_DB_DRIVER %>: "org.hsqldb.jdbcDriver", <%= Environment.PROP_DB_URL %>: "jdbc:hsqldb:file:\database\path;shutdown=true"
-};
-DATABASE_SAMPLE_VALUES["<%= DataHandler.DATA_HANDLER_MSSQL %>"] ={
-	<%= Environment.PROP_DB_DRIVER %>: "com.microsoft.jdbc.sqlserver.SQLServerDriver", <%= Environment.PROP_DB_URL %>: "jdbc:microsoft:sqlserver://localhost:1433;DatabaseName=database"
-};
-DATABASE_SAMPLE_VALUES["<%= DataHandler.DATA_HANDLER_MYSQL %>"] ={
-	<%= Environment.PROP_DB_DRIVER %>: "com.mysql.jdbc.Driver", <%= Environment.PROP_DB_URL %>: "jdbc:mysql://localhost:3306/database"
-};
-DATABASE_SAMPLE_VALUES["<%= DataHandler.DATA_HANDLER_ORACLE %>"] ={
-	<%= Environment.PROP_DB_DRIVER %>: "oracle.jdbc.driver.OracleDriver", <%= Environment.PROP_DB_URL %>: " jdbc:oracle:thin:@localhost:1521:sid"
-};
-DATABASE_SAMPLE_VALUES["<%= DataHandler.DATA_HANDLER_POSTGRES %>"] = {
-	<%= Environment.PROP_DB_DRIVER %>: "org.postgresql.Driver", <%= Environment.PROP_DB_URL %>: "jdbc:postgresql://localhost:5432/database"
-};
-DATABASE_SAMPLE_VALUES["<%= DataHandler.DATA_HANDLER_ASA %>"] = {
-	<%= Environment.PROP_DB_DRIVER %>: "com.sybase.jdbc2.jdbc.SybDriver", <%= Environment.PROP_DB_URL %>: "jdbc:sybase:Tds:localhost:2048/database"
-};
+ 
 function onDatabaseType() {
 	var databaseType = (document.getElementById("<%= Environment.PROP_DB_TYPE %>").options[document.getElementById("<%= Environment.PROP_DB_TYPE %>").selectedIndex].value);
 	var sampleDriver = ((DATABASE_SAMPLE_VALUES[databaseType]) ? DATABASE_SAMPLE_VALUES[databaseType]["<%= Environment.PROP_DB_DRIVER %>"] : "");

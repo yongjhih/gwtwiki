@@ -90,6 +90,7 @@ td.formhelp {
 <tr><td colspan="2" align="center"><input type="submit" name="override" value="<fmt:message key="common.continue" />" /></td></tr>
 </c:if>
 <tr><td colspan="2">&#160;</td></tr>
+<%--
 <tr>
 	<td class="formcaption"><label for="<%= Environment.PROP_BASE_FILE_DIR %>"><fmt:message key="admin.caption.filedir" /></label>:</td>
 	<td><input type="text" name="<%= Environment.PROP_BASE_FILE_DIR %>" value="<%= Environment.getValue(Environment.PROP_BASE_FILE_DIR) %>" size="50" id="<%= Environment.PROP_BASE_FILE_DIR %>" /></td>
@@ -108,18 +109,7 @@ td.formhelp {
 		</select>
 	</td>
 </tr>
-<tr>
-	<td class="formcaption"><label for="<%= Environment.PROP_DB_TYPE %>"><fmt:message key="admin.persistence.caption.type" /></label>:</td>
-	<td class="formelement">
-		<select name="<%= Environment.PROP_DB_TYPE %>" id="<%= Environment.PROP_DB_TYPE %>" onchange="onDatabaseType()">
-		<option value=""></option>
-		<c:set var="selectedDataHandler"><%= Environment.getValue(Environment.PROP_DB_TYPE) %></c:set>
-		<c:forEach items="${dataHandlers}" var="dataHandler">
-		<option value="<c:out value="${dataHandler.clazz}" />"<c:if test="${selectedDataHandler == dataHandler.clazz}"> selected</c:if>><c:if test="${!empty dataHandler.key}"><fmt:message key="${dataHandler.key}" /></c:if><c:if test="${empty dataHandler.key}"><c:out value="${dataHandler.name}" /></c:if><c:if test="${dataHandler.experimental}"> (<fmt:message key="common.caption.experimental" />)</c:if></option>
-		</c:forEach>
-		</select>
-	</td>
-</tr>
+
 <tr>
 	<td class="formcaption"><label for="<%= Environment.PROP_DB_DRIVER %>"><fmt:message key="admin.persistence.caption.driver" /></label>:</td>
 	<td class="formelement"><input type="text" name="<%= Environment.PROP_DB_DRIVER %>" id="<%= Environment.PROP_DB_DRIVER %>" value="<%= Environment.getValue(Environment.PROP_DB_DRIVER) %>" size="50"></td>
@@ -148,6 +138,7 @@ td.formhelp {
 </tr>
 <tr><td colspan="2" class="formhelp"><fmt:message key="admin.upload.help.uploaddirrel" /></td></tr>
 <tr><td colspan="2">&#160;</td></tr>
+--%>
 <tr>
 	<td class="formcaption"><label for="setupLogin"><fmt:message key="setup.caption.adminlogin"/></label>:</td>
 	<td class="formelement"><input type="text" name="username" value="<c:out value="${username}" />" id="setupLogin" /></td>
