@@ -11,7 +11,7 @@
 		</property>   
 		<property name="mappings">
 			<props>
-	<!-- 		<prop key="/**/Special:Account">Register</prop>
+	<!-- 		
 				<prop key="/**/Special:Admin">Admin</prop>
 				<prop key="/**/Special:Allpages">Items</prop>
 				<prop key="/**/Special:Categories">Category</prop>
@@ -36,7 +36,6 @@
 				<prop key="/**/Special:Print">Printable</prop>
 				<prop key="/**/Special:RecentChanges">RecentChanges</prop>
 				<prop key="/**/Special:RecentChangesFeed">RecentChangesFeed</prop>
-				<prop key="/**/Special:Roles">Roles</prop>
 				<prop key="/**/Special:Search">Search</prop>
 				
 				<prop key="/**/Special:Specialpages">SpecialPages</prop>
@@ -46,10 +45,12 @@
 				<prop key="/**/Special:Upload">Upload</prop>
 				<prop key="/**/Special:Watchlist">Watchlist</prop>
 				-->
+				<prop key="/**/Special:Account">Register</prop>
 				<prop key="/**/Special:Edit">Edit</prop>
 				<prop key="/**/Special:Login">Login</prop>
 				<prop key="/**/Special:Logout">Login</prop>
 				<prop key="/**/Special:Print">Printable</prop>
+				<prop key="/**/Special:Roles">Roles</prop>
 				<prop key="/**/Special:Setup">Setup</prop>
 				<prop key="/**/jamwiki.css">Stylesheet</prop>
 				<prop key="/**/*">Topic</prop>
@@ -78,8 +79,6 @@
 		<property name="defaultFeedType" value="rss_2.0"/>
 		<property name="defaultIncludeMinorEdits" value="false"/>
 	</bean>
-	<bean id="Register" class="org.jamwiki.servlets.RegisterServlet" />
-	<bean id="Roles" class="org.jamwiki.servlets.RolesServlet" />
 	<bean id="Search" class="org.jamwiki.servlets.SearchServlet" />
 	<bean id="SpecialPages" class="org.jamwiki.servlets.SpecialPagesServlet" />
 	
@@ -92,7 +91,9 @@
     <bean id="Edit" class="org.jamwiki.servlets.EditServlet" />
     <bean id="Login" class="org.jamwiki.servlets.LoginServlet" />
     <bean id="Printable" class="org.jamwiki.servlets.PrintableServlet" />
-    <bean id="Setup" class="org.jamwiki.servlets.SetupServlet" />
+    <bean id="Register" class="org.jamwiki.servlets.RegisterServlet" />
+    <bean id="Roles" class="org.jamwiki.servlets.RolesServlet" />
+	<bean id="Setup" class="org.jamwiki.servlets.SetupServlet" />
     <bean id="Stylesheet" class="org.jamwiki.servlets.StylesheetServlet" />
     <bean id="Topic" class="org.jamwiki.servlets.TopicServlet" />
 	
