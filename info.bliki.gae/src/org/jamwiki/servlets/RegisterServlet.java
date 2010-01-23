@@ -108,7 +108,7 @@ public class RegisterServlet extends JAMWikiServlet {
 	private void register(HttpServletRequest request, ModelAndView next, WikiPageInfo pageInfo) throws Exception {
 		String virtualWikiName = pageInfo.getVirtualWikiName();
 		WikiUser user = this.setWikiUser(request);
-		boolean isUpdate = (user.getUserId() != -1);
+		boolean isUpdate = (user.getUserId() != null);
 		next.addObject("newuser", user);
 		List<WikiMessage> errors = validate(request, user);
 		if (!errors.isEmpty()) {
@@ -163,7 +163,7 @@ public class RegisterServlet extends JAMWikiServlet {
 		String userIdString = request.getParameter("userId");
 		if (!StringUtils.isBlank(userIdString)) {
 			Long userId = Long.valueOf(userIdString);
-			if (userId > 0) {
+			if (userId != null) {
 				user = WikiBase.getDataHandler().lookupWikiUser(userId);
 			}
 		}
@@ -189,16 +189,16 @@ public class RegisterServlet extends JAMWikiServlet {
 			errors.add(e.getWikiMessage());
 		}
 		String oldPassword = request.getParameter("oldPassword");
-		if (user.getUserId() > 0 && !StringUtils.isBlank(oldPassword) && !WikiBase.getDataHandler().authenticate(user.getUsername(), oldPassword)) {
+		if (user.getUserId() != null && !StringUtils.isBlank(oldPassword) && !WikiBase.getDataHandler().authenticate(user.getUsername(), oldPassword)) {
 			errors.add(new WikiMessage("register.error.oldpasswordinvalid"));
 		}
 		String newPassword = request.getParameter("newPassword");
 		String confirmPassword = request.getParameter("confirmPassword");
-		if (user.getUserId() < 1 && StringUtils.isBlank(newPassword)) {
+		if (user.getUserId() == null && StringUtils.isBlank(newPassword)) {
 			errors.add(new WikiMessage("register.error.passwordempty"));
 		}
 		if (!StringUtils.isBlank(newPassword) || !StringUtils.isBlank(confirmPassword)) {
-			if (user.getUserId() > 0 && StringUtils.isBlank(oldPassword)) {
+			if (user.getUserId() != null && StringUtils.isBlank(oldPassword)) {
 				errors.add(new WikiMessage("register.error.oldpasswordinvalid"));
 			}
 			try {
@@ -207,7 +207,7 @@ public class RegisterServlet extends JAMWikiServlet {
 				errors.add(e.getWikiMessage());
 			}
 		}
-		if (user.getUserId() < 1 && WikiBase.getDataHandler().lookupWikiUser(user.getUsername()) != null) {
+		if (user.getUserId() == null && WikiBase.getDataHandler().lookupWikiUser(user.getUsername()) != null) {
 			errors.add(new WikiMessage("register.error.logininvalid", user.getUsername()));
 		}
 		return errors;

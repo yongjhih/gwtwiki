@@ -203,40 +203,36 @@ public class ServletUtil {
    */
   public static WikiUser currentWikiUser()
       throws AuthenticationCredentialsNotFoundException {
-    WikiUser user = WikiUserService.getWikiUser();
-    if (user == null) {
-      return WikiUser.ANONYOUS_WIKIUSER;
+    WikiUserDetails userDetails = ServletUtil.currentUserDetails();
+    WikiUser user = new WikiUser();
+    String username = userDetails.getUsername();
+    if (username.equals(WikiUserDetails.ANONYMOUS_USER_USERNAME)) {
+      return user;
     }
-    // WikiUserDetails userDetails = ServletUtil.currentUserDetails();
-    // WikiUser user = new WikiUser();
-    // String username = userDetails.getUsername();
-    // if (username.equals(WikiUserDetails.ANONYMOUS_USER_USERNAME)) {
-    // return user;
-    // }
-    // if (!WikiUtil.isFirstUse() && !WikiUtil.isUpgrade()) {
-    // try {
-    // // FIXME - do not lookup the user every time this method is called, that
-    // // will kill performance
-    // user = WikiBase.getDataHandler().lookupWikiUser(username);
-    // } catch (DataAccessException e) {
-    // logger.severe(
-    // "Failure while retrieving user from database with login: "
-    // + username, e);
-    // return user;
-    // }
-    // if (user == null) {
-    // // invalid user. someone has either spoofed a cookie or the user account
-    // // is no longer in
-    // // the database.
-    // logger
-    // .warning("No user exists for principal found in security context authentication: "
-    // + username);
-    // SecurityContextHolder.clearContext();
-    // throw new AuthenticationCredentialsNotFoundException(
-    // "Invalid user credentials found - username " + username
-    // + " does not exist in this wiki installation");
-    // }
-    // }
+    if (!WikiUtil.isFirstUse() && !WikiUtil.isUpgrade()) {
+      try {
+        // FIXME - do not lookup the user every time this method is called, that
+        // will kill performance
+        user = WikiBase.getDataHandler().lookupWikiUser(username);
+      } catch (DataAccessException e) {
+        logger.severe(
+            "Failure while retrieving user from database with login: "
+                + username, e);
+        return user;
+      }
+      if (user == null) {
+        // invalid user. someone has either spoofed a cookie or the user account
+        // is no longer in
+        // the database.
+        logger
+            .warning("No user exists for principal found in security context authentication: "
+                + username);
+        SecurityContextHolder.clearContext();
+        throw new AuthenticationCredentialsNotFoundException(
+            "Invalid user credentials found - username " + username
+                + " does not exist in this wiki installation");
+      }
+    }
     return user;
   }
 
