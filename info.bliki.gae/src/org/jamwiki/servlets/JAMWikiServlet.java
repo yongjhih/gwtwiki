@@ -120,20 +120,20 @@ public abstract class JAMWikiServlet extends AbstractController {
   private LinkedHashMap buildTabMenu(HttpServletRequest request,
       WikiPageInfo pageInfo) {
     LinkedHashMap<String, WikiMessage> links = new LinkedHashMap<String, WikiMessage>();
-    // WikiUserDetails userDetails = ServletUtil.currentUserDetails();
+    WikiUserDetails userDetails = ServletUtil.currentUserDetails();
     String pageName = pageInfo.getTopicName();
     String virtualWiki = pageInfo.getVirtualWikiName();
     if (pageInfo.getAdmin()) {
-      // if (userDetails.hasRole(RoleImpl.ROLE_SYSADMIN)) {
-      // links.put("Special:Admin", new WikiMessage("tab.admin.configuration"));
-      // links.put("Special:Maintenance", new
-      // WikiMessage("tab.admin.maintenance"));
-      // links.put("Special:Roles", new WikiMessage("tab.admin.roles"));
-      // }
-      // if (userDetails.hasRole(RoleImpl.ROLE_TRANSLATE)) {
-      // links.put("Special:Translation", new
-      // WikiMessage("tab.admin.translations"));
-      // }
+      if (userDetails.hasRole(RoleImpl.ROLE_SYSADMIN)) {
+        links.put("Special:Admin", new WikiMessage("tab.admin.configuration"));
+        links.put("Special:Maintenance", new WikiMessage(
+            "tab.admin.maintenance"));
+        links.put("Special:Roles", new WikiMessage("tab.admin.roles"));
+      }
+      if (userDetails.hasRole(RoleImpl.ROLE_TRANSLATE)) {
+        links.put("Special:Translation", new WikiMessage(
+            "tab.admin.translations"));
+      }
     } else if (pageInfo.getSpecial()) {
       // append query params for pages such as Special:Contributions that need
       // it
@@ -148,31 +148,31 @@ public abstract class JAMWikiServlet extends AbstractController {
         String comments = WikiUtil.extractCommentsLink(pageName);
         links.put(article, new WikiMessage("tab.common.article"));
         links.put(comments, new WikiMessage("tab.common.comments"));
-        // if (ServletUtil.isEditable(virtualWiki, pageName, userDetails)) {
-        // String editLink = "Special:Edit?topic=" +
-        // Utilities.encodeAndEscapeTopicName(pageName);
-        // if (!StringUtils.isBlank(request.getParameter("topicVersionId"))) {
-        // editLink += "&topicVersionId=" +
-        // request.getParameter("topicVersionId");
-        // }
-        // links.put(editLink, new WikiMessage("tab.common.edit"));
-        // }
+        if (ServletUtil.isEditable(virtualWiki, pageName, userDetails)) {
+          String editLink = "Special:Edit?topic="
+              + Utilities.encodeAndEscapeTopicName(pageName);
+          if (!StringUtils.isBlank(request.getParameter("topicVersionId"))) {
+            editLink += "&topicVersionId="
+                + request.getParameter("topicVersionId");
+          }
+          links.put(editLink, new WikiMessage("tab.common.edit"));
+        }
         String historyLink = "Special:History?topic="
             + Utilities.encodeAndEscapeTopicName(pageName);
         links.put(historyLink, new WikiMessage("tab.common.history"));
         // if (ServletUtil.isMoveable(virtualWiki, pageName, userDetails)) {
-        // String moveLink = "Special:Move?topic=" +
-        // Utilities.encodeAndEscapeTopicName(pageName);
+        // String moveLink = "Special:Move?topic="
+        // + Utilities.encodeAndEscapeTopicName(pageName);
         // links.put(moveLink, new WikiMessage("tab.common.move"));
         // }
         // if (!userDetails.hasRole(RoleImpl.ROLE_ANONYMOUS)) {
         // Watchlist watchlist = ServletUtil.currentWatchlist(request,
         // virtualWiki);
         // boolean watched = watchlist.containsTopic(pageName);
-        // String watchlistLabel = (watched) ? "tab.common.unwatch" :
-        // "tab.common.watch";
-        // String watchlistLink = "Special:Watchlist?topic=" +
-        // Utilities.encodeAndEscapeTopicName(pageName);
+        // String watchlistLabel = (watched) ? "tab.common.unwatch"
+        // : "tab.common.watch";
+        // String watchlistLink = "Special:Watchlist?topic="
+        // + Utilities.encodeAndEscapeTopicName(pageName);
         // links.put(watchlistLink, new WikiMessage(watchlistLabel));
         // }
         if (pageInfo.isUserPage()) {

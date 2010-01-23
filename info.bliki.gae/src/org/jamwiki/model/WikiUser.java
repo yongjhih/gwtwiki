@@ -60,10 +60,10 @@ public class WikiUser implements Serializable {
   /** The user's custom signature (if any). */
   private String signature = null;
 
-  private User gaeUser;
-
-  private boolean topicEditor = false;
-  private boolean systemAdmin = false;
+//  private User gaeUser;
+//
+//  private boolean topicEditor = false;
+//  private boolean systemAdmin = false;
 
   /**
 	 *
@@ -125,9 +125,9 @@ public class WikiUser implements Serializable {
   /**
    * @return the google appengine user
    */
-  public User getGAEUser() {
-    return gaeUser;
-  }
+//  public User getGAEUser() {
+//    return gaeUser;
+//  }
 
   /**
 	 *
@@ -169,18 +169,18 @@ public class WikiUser implements Serializable {
    * 
    * @return the systemAdmin
    */
-  public boolean isSystemAdmin() {
-    return systemAdmin;
-  }
+//  public boolean isSystemAdmin() {
+//    return systemAdmin;
+//  }
 
   /**
    * Is this user allowed to edit topics?
    * 
    * @return the topicEditor
    */
-  public boolean isTopicEditor() {
-    return topicEditor;
-  }
+//  public boolean isTopicEditor() {
+//    return topicEditor;
+//  }
 
   /**
 	 *
@@ -228,9 +228,9 @@ public class WikiUser implements Serializable {
    * @param gaeUser
    *          the google appengine user
    */
-  public void setGAEUser(User gaeUser) {
-    this.gaeUser = gaeUser;
-  }
+//  public void setGAEUser(User gaeUser) {
+//    this.gaeUser = gaeUser;
+//  }
 
   /**
 	 *
@@ -257,17 +257,17 @@ public class WikiUser implements Serializable {
    * @param systemAdmin
    *          the systemAdmin to set
    */
-  public void setSystemAdmin(boolean systemAdmin) {
-    this.systemAdmin = systemAdmin;
-  }
+//  public void setSystemAdmin(boolean systemAdmin) {
+//    this.systemAdmin = systemAdmin;
+//  }
 
   /**
    * @param topicEditor
    *          the topicEditor to set
    */
-  public void setTopicEditor(boolean topicEditor) {
-    this.topicEditor = topicEditor;
-  }
+//  public void setTopicEditor(boolean topicEditor) {
+//    this.topicEditor = topicEditor;
+//  }
 
   /**
 	 *

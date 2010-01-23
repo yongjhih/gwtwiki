@@ -26,6 +26,7 @@ import org.jamwiki.WikiMessage;
 import org.jamwiki.authentication.RoleImpl;
 import org.jamwiki.authentication.WikiUserDetails;
 import org.jamwiki.model.Topic;
+import org.jamwiki.model.TopicVersion;
 import org.jamwiki.model.WikiUser;
 import org.jamwiki.parser.ParserInput;
 import org.jamwiki.parser.ParserOutput;
@@ -357,24 +358,25 @@ public class EditServlet extends JAMWikiServlet {
     // }
     int charactersChanged = StringUtils.length(contents)
         - StringUtils.length(lastTopicContent);
-    // TopicVersion topicVersion = new TopicVersion(user, ServletUtil
-    // .getIpAddress(request), request.getParameter("editComment"), contents,
-    // charactersChanged);
-    // if (request.getParameter("minorEdit") != null) {
-    // topicVersion.setEditType(TopicVersion.EDIT_MINOR);
-    // }
-    // WikiBase.getDataHandler().writeTopic(topic, topicVersion,
-    // parserOutput.getCategories(), parserOutput.getLinks());
+    TopicVersion topicVersion = new TopicVersion(user, ServletUtil
+        .getIpAddress(request), request.getParameter("editComment"), contents,
+        charactersChanged);
+    if (request.getParameter("minorEdit") != null) {
+      topicVersion.setEditType(TopicVersion.EDIT_MINOR);
+    }
+    WikiBase.getDataHandler().writeTopic(topic, topicVersion,
+        parserOutput.getCategories(), parserOutput.getLinks());
     // // update watchlist
-    // WikiUserDetails userDetails = ServletUtil.currentUserDetails();
-    // if (!userDetails.hasRole(RoleImpl.ROLE_ANONYMOUS)) {
-    // Watchlist watchlist = ServletUtil.currentWatchlist(request, virtualWiki);
-    // boolean watchTopic = (request.getParameter("watchTopic") != null);
-    // if (watchlist.containsTopic(topicName) != watchTopic) {
-    // WikiBase.getDataHandler().writeWatchlistEntry(watchlist, virtualWiki,
-    // topicName, user.getUserId());
-    // }
-    // }
+    WikiUserDetails userDetails = ServletUtil.currentUserDetails();
+    if (!userDetails.hasRole(RoleImpl.ROLE_ANONYMOUS)) {
+      // Watchlist watchlist = ServletUtil.currentWatchlist(request,
+      // virtualWiki);
+      // boolean watchTopic = (request.getParameter("watchTopic") != null);
+      // if (watchlist.containsTopic(topicName) != watchTopic) {
+      // WikiBase.getDataHandler().writeWatchlistEntry(watchlist, virtualWiki,
+      // topicName, user.getUserId());
+      // }
+    }
     // redirect to prevent user from refreshing and re-submitting
     String target = topic.getName();
     if (!StringUtils.isBlank(sectionName)) {

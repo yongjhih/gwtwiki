@@ -18,8 +18,6 @@ import com.google.appengine.api.users.UserServiceFactory;
 import com.googlecode.objectify.OQuery;
 import com.googlecode.objectify.Objectify;
 
-
-
 public class WikiUserService {
   public static Cache WIKIUSER_CACHE = null;
 
@@ -49,7 +47,7 @@ public class WikiUserService {
       WIKIUSER_CACHE.remove(existingEntity.getUsername());
       existingEntity.setEmail(wikiUser.getEmail());
       existingEntity.setUsername(wikiUser.getUsername());
-      existingEntity.setGAEUser(wikiUser.getGAEUser());
+      // existingEntity.setGAEUser(wikiUser.getGAEUser());
       ofy.put(existingEntity);
       WIKIUSER_CACHE.put(existingEntity.getUsername(), existingEntity);
     } catch (EntityNotFoundException enf) {
@@ -64,7 +62,7 @@ public class WikiUserService {
   }
 
   public static WikiUser findById(Long userId) {
-    if (userId==null) {
+    if (userId == null) {
       return null;
     }
     Objectify ofy = OS.begin();
@@ -79,7 +77,7 @@ public class WikiUserService {
     resultList = ofy.prepare(q).asList();
     return resultList;
   }
-  
+
   public static WikiUser findByName(String username) {
     WikiUser wikiUser = (WikiUser) WIKIUSER_CACHE.get(username);
     if (wikiUser != null) {
@@ -96,7 +94,7 @@ public class WikiUserService {
     }
     return null;
   }
-  
+
   public static WikiUser findByEMail(String email) {
     WikiUser wikiUser = null;
     try {
@@ -139,7 +137,7 @@ public class WikiUserService {
 
       if (wikiUser == null) {
         wikiUser = new WikiUser();
-        wikiUser.setGAEUser(gaeUser);
+        // wikiUser.setGAEUser(gaeUser);
         wikiUser.setEmail(email);
         String username = gaeUser.getNickname();
         if (username == null) {
