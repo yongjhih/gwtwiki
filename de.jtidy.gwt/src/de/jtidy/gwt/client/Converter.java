@@ -48,16 +48,18 @@ public class Converter implements EntryPoint {
 
   private final Button fToggleButton = new Button("Toggle Output View");
   private int fCounter;
-  private String fConvertType = "wiki";
+  private String fConvertType = "wiki2html";
   private static final int WIKI_INDEX = 3;
   private static final String[] CONVERTER_TYPES_DESCRIPTION = {
-      "Convert to Wikipedia", "Convert to Google Code wiki",
-      "Convert to Trac wiki", "Convert to MoinMoin wiki", "Highlight Java",
-      "Highlight PHP", "Highlight C#", "Highlight Python", "Highlight XML/HTML",
+      "Wikipedia text to HTML", "Wikipedia text to plain text",
+      "HTML to Wikipedia", "HTML to Google Code wiki", "HTML to Trac wiki",
+      "HTML to MoinMoin wiki", "Highlight Java", "Highlight PHP",
+      "Highlight C#", "Highlight Python", "Highlight XML/HTML",
       "Highlight JavaScript", "Highlight ABAP" };
 
-  private static final String[] CONVERTER_TYPES = { "wiki", "googlecode",
-      "trac", "moinmoin", "java", "php", "csharp", "python", "xml", "javascript", "abap" };
+  private static final String[] CONVERTER_TYPES = { "wiki2html", "wiki2plain",
+      "wiki", "googlecode", "trac", "moinmoin", "java", "php", "csharp",
+      "python", "xml", "javascript", "abap" };
 
   private final ListBox fConverterTypeCombo = new ListBox();
   public static ConverterServiceAsync CONVERT_SERVICE;
@@ -66,13 +68,13 @@ public class Converter implements EntryPoint {
     CONVERT_SERVICE = (ConverterServiceAsync) GWT
         .create(ConverterService.class);
     ServiceDefTarget target = (ServiceDefTarget) CONVERT_SERVICE;
-//    if (GWT.isScript()) {
-      String url = GWT.getModuleBaseURL();
-      url = url + "jtidy";
-      target.setServiceEntryPoint(url);
-//    } else {
-//      target.setServiceEntryPoint(GWT.getModuleBaseURL() + "/jtidy");
-//    }
+    // if (GWT.isScript()) {
+    String url = GWT.getModuleBaseURL();
+    url = url + "jtidy";
+    target.setServiceEntryPoint(url);
+    // } else {
+    // target.setServiceEntryPoint(GWT.getModuleBaseURL() + "/jtidy");
+    // }
 
     this.fConvertButton.addClickListener(new ClickListener() {
       public void onClick(Widget sender) {
