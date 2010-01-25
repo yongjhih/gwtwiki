@@ -181,6 +181,9 @@ public class WPLinkFilterTest extends FilterTestSupport {
 		assertEquals("Official position", wikiModel.getRedirectLink());
 	}
 
+	public void testPlainTextConverter001() {
+		assertEquals("An external link.", wikiModel.render(new PlainTextConverter(), "An [http://www.example.com external link]."));
+	}
 	// public static void main(String[] args) {
 	// String test = Encoder.encode("erreäöü öüä++", ".");
 	// System.out.println(test);

@@ -37,6 +37,8 @@
 
 package info.bliki.htmlcleaner;
 
+import info.bliki.wiki.addon.model.AddonConfiguration;
+import info.bliki.wiki.model.ImageFormat;
 import info.bliki.wiki.tags.HTMLTag;
 
 import java.io.IOException;
@@ -122,6 +124,18 @@ public class TagNode extends TagToken {
 		return attributes;
 	}
 
+	/**
+	 * Get a special object for this TagNode which contains original information
+	 * from the parsed wiki object (for example the ImageFormat or original wiki
+	 * topic string).
+	 * 
+	 * @param attName
+	 *          the attribute name
+	 * @param attValue
+	 *          the attribute value
+	 * @see #addObjectAttribute(String, Object)
+	 * @see info.bliki.wiki.model.ImageFormat
+	 */
 	public Map<String, Object> getObjectAttributes() {
 		return objectAttributes;
 	}
@@ -171,6 +185,18 @@ public class TagNode extends TagToken {
 		return false;
 	}
 
+	/**
+	 * Add a special object to this TagNode which contains original information
+	 * from the parsed wiki object (for example the ImageFormat or original wiki
+	 * topic string)
+	 * 
+	 * @param attName
+	 *          the attribute name
+	 * @param attValue
+	 *          the attribute value
+	 * @see #getObjectAttributes()
+	 * @see info.bliki.wiki.model.ImageFormat
+	 */
 	public void addObjectAttribute(String attName, Object attValue) {
 		if (attName != null && attValue != null) {
 			if (objectAttributes == null) {
@@ -269,6 +295,13 @@ public class TagNode extends TagToken {
 						buf.append(((ContentToken) children.get(i)).getContent());
 					} else if (children.get(i) instanceof HTMLTag) {
 						((HTMLTag) children.get(i)).getBodyString(buf);
+					} else if (children.get(i) instanceof TagNode) {
+						TagNode node = (TagNode) children.get(i);
+						Map<String, Object> map = node.getObjectAttributes();
+						if (map != null && map.size() > 0) {
+						} else {
+							node.getBodyString(buf);
+						}
 					}
 				}
 			}
