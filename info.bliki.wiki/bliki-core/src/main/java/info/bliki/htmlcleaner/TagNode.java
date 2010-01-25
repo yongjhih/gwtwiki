@@ -325,6 +325,13 @@ public class TagNode extends TagToken {
 						buf.append(((ContentToken) children.get(i)).getContent());
 					} else if (children.get(i) instanceof HTMLTag) {
 						buf.append(((HTMLTag) children.get(i)).getBodyString());
+					} else if (children.get(i) instanceof TagNode) {
+						TagNode node = (TagNode) children.get(i);
+						Map<String, Object> map = node.getObjectAttributes();
+						if (map != null && map.size() > 0) {
+						} else {
+							buf.append(node.getBodyString());
+						}
 					}
 				}
 				return buf.toString();
