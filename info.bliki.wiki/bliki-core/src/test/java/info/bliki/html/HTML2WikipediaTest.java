@@ -57,11 +57,11 @@ public class HTML2WikipediaTest extends TestCase {
 				+ "<td><i><a href=\"/wiki/Art_%28Biologie%29\" title=\"Art (Biologie)\">Art</a>:</i></td>\n"
 				+ "<td>Afrikanischer Strauß</td>\n" + "</tr>\n" + "</table>");
 		String result = conv.toWiki(new ToWikipedia());
-		assertEquals(result, "                         \n" + "{| border=\"1\"\n" + "|-\n" + "|\'\'[[Klasse]]:\'\'\n" + "|[[Vögel]] (Aves)\n"
-				+ "|-\n" + "|\'\'[[Unterklasse]]:\'\'\n" + "|[[Urkiefervögel]] (Palaeognathae)\n" + "|-\n" + "|\'\'[[Ordnung]]:\'\'\n"
-				+ "|[[Laufvögel]] (Struthioniformes)\n" + "|-\n" + "|\'\'[[Familie]]:\'\'\n" + "|Strauße (Struthionidae)\n" + "|-\n"
-				+ "|\'\'[[Gattung]]:\'\'\n" + "|Strauße (\'\'Struthio\'\')\n" + "|-\n" + "|\'\'[[Art]]:\'\'\n" + "|Afrikanischer Strauß\n"
-				+ "|}");
+		assertEquals(result, "                         \n" + "{| border=\"1\"\n" + "|-\n" + "|\'\'[[Klasse]]:\'\'\n"
+				+ "|[[Vögel]] (Aves)\n" + "|-\n" + "|\'\'[[Unterklasse]]:\'\'\n" + "|[[Urkiefervögel]] (Palaeognathae)\n" + "|-\n"
+				+ "|\'\'[[Ordnung]]:\'\'\n" + "|[[Laufvögel]] (Struthioniformes)\n" + "|-\n" + "|\'\'[[Familie]]:\'\'\n"
+				+ "|Strauße (Struthionidae)\n" + "|-\n" + "|\'\'[[Gattung]]:\'\'\n" + "|Strauße (\'\'Struthio\'\')\n" + "|-\n"
+				+ "|\'\'[[Art]]:\'\'\n" + "|Afrikanischer Strauß\n" + "|}");
 	}
 
 	public void test6() {
@@ -123,57 +123,49 @@ public class HTML2WikipediaTest extends TestCase {
 	public void test14() {
 		HTML2WikiConverter conv = new HTML2WikiConverter();
 		// invalid nested html test
-		conv.setInputHTML("<h2>the <a href=\"http://good\">good</a></h2><h3>the <div>bad</div></h3><h2>and <b><i>the</i> ugly</b></h2>");
+		conv
+				.setInputHTML("<h2>the <a href=\"http://good\">good</a></h2><h3>the <div>bad</div></h3><h2>and <b><i>the</i> ugly</b></h2>");
 		String result = conv.toWiki(new ToWikipedia());
 		assertEquals(result, "\n" + "== the good ==\n" + "\n" + "=== the bad ===\n" + "\n" + "== and the ugly ==\n");
 	}
-	
+
 	public void test15() {
 		HTML2WikiConverter conv = new HTML2WikiConverter();
 		// invalid nested html test
 		conv.setInputHTML("The <a href=\"http://good\">good</a> the <div>bad</div> and <b><i>the</i> ugly</b>");
 		String result = conv.toWiki(new ToWikipedia());
-		assertEquals(result, "The [[good]] the \n" + 
-				"<div>bad\n" + 
-				"</div> and '''''the'' ugly'''");
+		assertEquals(result, "The [[good]] the \n" + "<div>bad\n" + "</div> and '''''the'' ugly'''");
 	}
-	
+
 	public void test16() {
 		HTML2WikiConverter conv = new HTML2WikiConverter();
-		conv.setInputHTML(" <table>\n<tr>\n" + 
-				"                    <td align=\"left\" valign=\"top\">accesskey</td>\n" + 
-				"                    <td align=\"left\" valign=\"top\">false</td>\n" + 
-				"                    <td align=\"left\" valign=\"top\"></td>              <!----  empty cell -->\n" + 
-				"                    <td align=\"left\" valign=\"top\">false</td>\n" + 
-				"                    <td align=\"left\" valign=\"top\">String</td>\n" + 
-				"                    <td align=\"left\" valign=\"top\">Set the html accesskey attribute on rendered html element</td>\n" + 
-				"   </tr></table>");
+		conv.setInputHTML(" <table>\n<tr>\n" + "                    <td align=\"left\" valign=\"top\">accesskey</td>\n"
+				+ "                    <td align=\"left\" valign=\"top\">false</td>\n"
+				+ "                    <td align=\"left\" valign=\"top\"></td>              <!----  empty cell -->\n"
+				+ "                    <td align=\"left\" valign=\"top\">false</td>\n"
+				+ "                    <td align=\"left\" valign=\"top\">String</td>\n"
+				+ "                    <td align=\"left\" valign=\"top\">Set the html accesskey attribute on rendered html element</td>\n"
+				+ "   </tr></table>");
 		String result = conv.toWiki(new ToWikipedia());
-		assertEquals(result, "          \n" + 
-				"{| border=\"1\"\n" + 
-				"|-\n" + 
-				"|accesskey\n" + 
-				"|false\n" + 
-				"| \n" + 
-				"|false\n" + 
-				"|String\n" + 
-				"|Set the html accesskey attribute on rendered html element\n" + 
-				"|}");
+		assertEquals(result, "          \n" + "{| border=\"1\"\n" + "|-\n" + "|accesskey\n" + "|false\n" + "| \n" + "|false\n"
+				+ "|String\n" + "|Set the html accesskey attribute on rendered html element\n" + "|}");
 	}
-	
+
 	public void test17() {
 		HTML2WikiConverter conv = new HTML2WikiConverter();
-		conv.setInputHTML(" <table>\n<tr>\n" + 
-				"                    <td align=\"left\" valign=\"top\"></td>             \n" + 
-				"   </tr></table>");
+		conv.setInputHTML(" <table>\n<tr>\n" + "                    <td align=\"left\" valign=\"top\"></td>             \n"
+				+ "   </tr></table>");
 		String result = conv.toWiki(new ToWikipedia());
-		assertEquals(result, "    \n" + 
-				"{| border=\"1\"\n" + 
-				"|-\n" + 
-				"| \n" + 
-				"|}");
+		assertEquals(result, "    \n" + "{| border=\"1\"\n" + "|-\n" + "| \n" + "|}");
 	}
-	
+
+	public void test18() {
+		HTML2WikiConverter conv = new HTML2WikiConverter();
+		conv.setInputHTML("<a href=\"http://www.example.com\"><b><font color=red>A tag text</font></b></a>");
+		String result = conv.toWiki(new ToWikipedia());
+		assertEquals(result, "[[A tag text]]");
+	}
+
 	public static void main(String[] args) {
 		try {
 			HTML2WikiConverter conv = new HTML2WikiConverter();

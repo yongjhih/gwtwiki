@@ -42,8 +42,12 @@ public class BlikiConverter extends JFrame {
 			String strData = input.getText();
 			WikiModel wikiModel = new WikiModel(Configuration.DEFAULT_CONFIGURATION, Locale.ENGLISH, "${image}", "${title}");
 			wikiModel.setUp();
+      try {
 			String result = wikiModel.render(strData);
 			output.setText(result);
+      } finally {
+        wikiModel.tearDown();
+      }
 		}
 	}
 
@@ -51,10 +55,14 @@ public class BlikiConverter extends JFrame {
 
 		public void actionPerformed(java.awt.event.ActionEvent event) {
 			String strData = input.getText();
-			WikiModel wikiModel = new WikiModel(Configuration.DEFAULT_CONFIGURATION, Locale.GERMAN, "${image}", "${title}");
+			WikiModel wikiModel = new WikiModel(Configuration.DEFAULT_CONFIGURATION, Locale.ENGLISH, "${image}", "${title}");
 			wikiModel.setUp();
+      try {
 			String result = wikiModel.render(new PlainTextConverter(), strData);
 			output.setText(result);
+      } finally {
+        wikiModel.tearDown();
+      }
 		}
 	}
 
