@@ -37,8 +37,6 @@
 
 package info.bliki.htmlcleaner;
 
-import info.bliki.wiki.addon.model.AddonConfiguration;
-import info.bliki.wiki.model.ImageFormat;
 import info.bliki.wiki.tags.HTMLTag;
 
 import java.io.IOException;
