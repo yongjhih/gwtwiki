@@ -799,6 +799,36 @@ public class WikiTestModel extends WikiModel {
 
 	public final static String IF_IMAGE_TEST = "{{#if:{{{image|}}}|[[File:{{{image|}}}|{{#if:{{{image_size|{{{imagesize|}}}}}}|{{{image_size|{{{imagesize|}}}}}}|220px}}|alt={{{alt|}}}]]}}";
 
+	public final static String IPA_FR = "<onlyinclude><small>{{#if: {{{2|}}}|{{#switch: {{{2}}}|lang=French:&nbsp;|pron=pronounced:&nbsp;|IPA=IPA:&nbsp;|=|French pronunciation:&nbsp;}}|{{#if: {{{2}}}|French pronunciation:&nbsp;}}}}</small><span title=\"Pronunciation in IPA\" class=\"IPA\">[[WP:IPA for French|[{{{1}}}]]]</span><small>{{#if:{{{3|}}}|&nbsp; {{nowrap|([[File:Speaker Icon.svg|13px|link=|alt=]] [[:Media:{{{3|}}}|listen]])}}}}</small></onlyinclude>\n"
+			+ "{{pp-template|small=yes}}\n"
+			+ "\n"
+			+ "==Usage==\n"
+			+ "This template formats IPA transcriptions and links them to [[WP:IPA for French]]. The transcription should match the conventions of that key; for narrower dialect transcriptions, use {{tl|IPA-all}}, which links to a more complete IPA key. \n"
+			+ "\n"
+			+ "The first cell in the template is for the transcription, and a second optional cell is a switch that controls the lede. With no second value, the lede ''French pronunciation:'' appears: \n"
+			+ "*<code><nowiki>{{IPA-fr|o}}</nowiki></code> → {{IPA-fr|o}}\n"
+			+ "*<code><nowiki>{{IPA-fr|o|pron}}</nowiki></code> → {{IPA-fr|o|pron}}\n"
+			+ "*<code><nowiki>{{IPA-fr|o|lang}}</nowiki></code> → {{IPA-fr|o|lang}}\n"
+			+ "*<code><nowiki>{{IPA-fr|o|IPA}}</nowiki></code> → {{IPA-fr|o|IPA}}\n"
+			+ "*<code><nowiki>{{IPA-fr|o|}}</nowiki></code> → {{IPA-fr|o|}}\n"
+			+ "\n"
+			+ "Any of these may be combined with a sound file in an optional third cell:\n"
+			+ "*<code><nowiki>{{IPA-fr|o|IPA|Fr-eau.ogg}}</nowiki></code> → {{IPA-fr|o|IPA|Fr-eau.ogg}}\n"
+			+ "\n"
+			+ "For the default lede, however, the placeholder ‹-› is required in the second cell: \n"
+			+ "*<code><nowiki>{{IPA-fr|o|-|Fr-eau.ogg}}</nowiki></code> → {{IPA-fr|o|-|Fr-eau.ogg}}\n"
+			+ "\n"
+			+ "{{usage of IPA templates}}\n"
+			+ "\n"
+			+ "\n"
+			+ "\n"
+			+ "<!-- PLEASE ADD CATEGORIES BELOW THIS LINE, THANKS. -->\n"
+			+ "\n"
+			+ "[[Category:IPA templates|{{PAGENAME}}]]\n"
+			+ "\n"
+			+ "<!-- PLEASE ADD INTERWIKIS BELOW THIS LINE, THANKS. -->\n"
+			+ "[[id:Templat:IPA-fr]]";
+
 	boolean fSemanticWebActive;
 
 	static {
@@ -900,6 +930,8 @@ public class WikiTestModel extends WikiModel {
 				return AGE;
 			} else if (name.equals("Born_data")) {
 				return BORN_DATA;
+			} else if (name.equals("IPA-fr")) {
+				return IPA_FR;
 			}
 		} else {
 			if (name.equals("Include_Page")) {
