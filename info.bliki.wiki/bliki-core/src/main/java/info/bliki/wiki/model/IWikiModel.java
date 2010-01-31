@@ -427,6 +427,8 @@ public interface IWikiModel extends IConfiguration {
 	 */
 	public Set<String> getLinks();
 
+	public INamespace getNamespace();
+
 	/**
 	 * Get the next unique number
 	 * 
@@ -552,6 +554,8 @@ public interface IWikiModel extends IConfiguration {
 	 */
 	public IEventListener getWikiListener();
 
+	public int incrementParserRecursionCount();
+
 	/**
 	 * Increment the current recursion level of the parser. The recursion level is
 	 * used to prevent infinite nesting of templates, tables, lists and other
@@ -560,6 +564,8 @@ public interface IWikiModel extends IConfiguration {
 	 * @return the current recursion level counter
 	 */
 	public int incrementRecursionLevel();
+
+	public int incrementTemplateRecursionCount();
 
 	/**
 	 * Checks if <a href="http://en.wikipedia.org/wiki/CamelCase">CamelCase</a>
@@ -844,7 +850,5 @@ public interface IWikiModel extends IConfiguration {
 	 * 
 	 */
 	public void tearDown();
-
-	public INamespace getNamespace();
 
 }

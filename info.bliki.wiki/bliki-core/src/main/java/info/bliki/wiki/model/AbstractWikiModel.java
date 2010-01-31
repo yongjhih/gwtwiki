@@ -49,6 +49,10 @@ public abstract class AbstractWikiModel implements IWikiModel, IContext {
 
 	protected int fRecursionLevel;
 
+	protected int fParserRecursionCount;
+	
+	protected int fTemplateRecursionCount;
+	
 	protected boolean fReplaceColon;
 
 	protected TagStack fTagStack;
@@ -803,10 +807,18 @@ public abstract class AbstractWikiModel implements IWikiModel, IContext {
 		return fWikiListener;
 	}
 
+	public int incrementParserRecursionCount(){
+		return ++fParserRecursionCount;
+	}
+	
 	public int incrementRecursionLevel() {
 		return ++fRecursionLevel;
 	}
-
+	
+	public int incrementTemplateRecursionCount(){
+		return ++fTemplateRecursionCount;
+	}
+	
 	protected void initialize() {
 		if (!fInitialized) {
 			fWikiListener = null;
@@ -815,7 +827,9 @@ public abstract class AbstractWikiModel implements IWikiModel, IContext {
 			fTagStack = new TagStack();
 			fReferences = null;
 			fReferenceNames = null;
+			fParserRecursionCount = 0;
 			fRecursionLevel = 0;
+			fTemplateRecursionCount = 0;
 			fSectionCounter = 0;
 			fReplaceColon = false;
 			fInitialized = true;
@@ -968,7 +982,9 @@ public abstract class AbstractWikiModel implements IWikiModel, IContext {
 	}
 
 	public void setUp() {
+		fParserRecursionCount = 0;
 		fRecursionLevel = 0;
+		fTemplateRecursionCount = 0;
 	}
 
 	public boolean showSyntax(String tagName) {

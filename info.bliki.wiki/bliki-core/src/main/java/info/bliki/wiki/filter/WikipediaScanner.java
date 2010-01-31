@@ -749,12 +749,6 @@ public class WikipediaScanner {
 									} else {
 										buffer.append(value);
 									}
-
-									if (buffer.length() > Configuration.TEMPLATE_BUFFER_LIMIT) {
-										// Controls the scanner, when infinite recursion occurs the
-										// buffer grows out of control.
-										return buffer;
-									}
 									bufferStart = fScannerPosition;
 								}
 							}
@@ -763,7 +757,11 @@ public class WikipediaScanner {
 						parameterStart = -1;
 					}
 				}
-
+				if (buffer != null && buffer.length() > Configuration.TEMPLATE_BUFFER_LIMIT) {
+					// Controls the scanner, when infinite recursion occurs the
+					// buffer grows out of control.
+					return buffer;
+				}
 			}
 		} catch (IndexOutOfBoundsException e) {
 			// ignore

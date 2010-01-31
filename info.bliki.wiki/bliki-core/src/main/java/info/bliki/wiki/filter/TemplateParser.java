@@ -76,6 +76,16 @@ public class TemplateParser extends AbstractParser {
 				writer.append("Error - recursion limit exceeded parsing templates.");
 				return;
 			}
+
+			// recursion limit on level is not sufficient as it is possible to recurse
+			// indefinitely at fixed level upper bound
+			if (wikiModel.incrementTemplateRecursionCount() > Configuration.TEMPLATE_RECURSION_LIMIT) {
+				// writer.append("Error - total recursion count limit (" +
+				// wikiModel.getTemplateRecursionCount() +
+				// ") exceeded parsing templates.");
+				return;
+			}
+			
 			TemplateParser parser = new TemplateParser(rawWikitext, parseOnlySignature, renderTemplate);
 			parser.setModel(wikiModel);
 			StringBuilder sb = new StringBuilder(rawWikitext.length());
