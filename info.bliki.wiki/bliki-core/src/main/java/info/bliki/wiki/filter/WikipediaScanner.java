@@ -733,23 +733,30 @@ public class WikipediaScanner {
 								value = list.get(1);
 							}
 							if (value != null) {
-								if (buffer == null) {
-									buffer = new StringBuilder(template.length() + 128);
-								}
-								if (bufferStart < fScannerPosition) {
-									buffer.append(fSource, bufferStart, parameterStart - bufferStart - 3);
-								}
+								if (value.length() <= Configuration.TEMPLATE_VALUE_LIMIT) {
+									if (buffer == null) {
+										buffer = new StringBuilder(template.length() + 128);
+									}
+									if (bufferStart < fScannerPosition) {
+										buffer.append(fSource, bufferStart, parameterStart - bufferStart - 3);
+									}
 
-								WikipediaScanner scanner = new WikipediaScanner(value);
-								scanner.setModel(fWikiModel);
-								recursiveResult = scanner.replaceTemplateParameters(value, templateParameters);
-								if (recursiveResult != null) {
-									buffer.append(recursiveResult);
-								} else {
-									buffer.append(value);
-								}
+									WikipediaScanner scanner = new WikipediaScanner(value);
+									scanner.setModel(fWikiModel);
+									recursiveResult = scanner.replaceTemplateParameters(value, templateParameters);
+									if (recursiveResult != null) {
+										buffer.append(recursiveResult);
+									} else {
+										buffer.append(value);
+									}
 
-								bufferStart = fScannerPosition;
+									if (buffer.length() > Configuration.TEMPLATE_BUFFER_LIMIT) {
+										// Controls the scanner, when infinite recursion occurs the
+										// buffer grows out of control.
+										return buffer;
+									}
+									bufferStart = fScannerPosition;
+								}
 							}
 						}
 						fScannerPosition = temp[0];

@@ -497,6 +497,28 @@ public class Configuration implements IConfiguration {
 	 */
 	public final static int RENDERER_RECURSION_LIMIT = 256;
 
+	/**
+	 * Limits the recursive call of the Template parser to a depth of
+	 * TEMPLATE_RECURSION_LIMIT
+	 */
+	public final static int TEMPLATE_RECURSION_LIMIT = 100000;
+
+	/**
+	 * Limits the Scanner buffer.
+	 */
+	public final static int TEMPLATE_BUFFER_LIMIT = 65536;
+
+	/**
+	 * Limits the template parameter value length
+	 */
+	public final static int TEMPLATE_VALUE_LIMIT = 4096;
+
+	/**
+	 * Limits the recursive call of the AbstractParser parser to a depth of
+	 * GLOBAL_RECURSION_LIMIT
+	 */
+	public final static int GLOBAL_RECURSION_LIMIT = 100000;
+
 	public Configuration() {
 	}
 
