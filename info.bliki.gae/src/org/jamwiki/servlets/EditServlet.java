@@ -276,13 +276,12 @@ public class EditServlet extends JAMWikiServlet {
   /**
 	 *
 	 */
-  // private Integer retrieveLastTopicVersionId(HttpServletRequest request,
-  // Topic topic) throws Exception {
-  // return (!StringUtils.isBlank(request.getParameter("lastTopicVersionId"))) ?
-  // Integer
-  // .valueOf(request.getParameter("lastTopicVersionId"))
-  // : topic.getCurrentVersionId();
-  // }
+  private Long retrieveLastTopicVersionId(HttpServletRequest request,
+      Topic topic) throws Exception {
+    return (!StringUtils.isBlank(request.getParameter("lastTopicVersionId"))) ? Long
+        .valueOf(request.getParameter("lastTopicVersionId"))
+        : topic.getCurrentVersionId();
+  }
 
   /**
    * Functionality to handle the "Save" button being clicked.
@@ -294,13 +293,13 @@ public class EditServlet extends JAMWikiServlet {
     Topic topic = loadTopic(virtualWiki, topicName);
     Topic lastTopic = WikiBase.getDataHandler().lookupTopic(virtualWiki,
         topicName, false, null);
-    // if (lastTopic != null
-    // && !lastTopic.getCurrentVersionId().equals(
-    // retrieveLastTopicVersionId(request, topic))) {
-    // // someone else has edited the topic more recently
-    // resolve(request, next, pageInfo);
-    // return;
-    // }
+    if (lastTopic != null
+        && !lastTopic.getCurrentVersionId().equals(
+            retrieveLastTopicVersionId(request, topic))) {
+      // someone else has edited the topic more recently
+      resolve(request, next, pageInfo);
+      return;
+    }
     String contents = request.getParameter("contents");
     String sectionName = "";
     if (!StringUtils.isBlank(request.getParameter("section"))) {
@@ -390,7 +389,7 @@ public class EditServlet extends JAMWikiServlet {
    */
   private void showChanges(HttpServletRequest request, ModelAndView next,
       WikiPageInfo pageInfo, String virtualWiki, String topicName,
-      Integer lastTopicVersionId) throws Exception {
+      Long lastTopicVersionId) throws Exception {
     String contents1 = request.getParameter("contents");
     String contents2 = "";
     if (!StringUtils.isBlank(request.getParameter("section"))) {
@@ -401,9 +400,9 @@ public class EditServlet extends JAMWikiServlet {
       contents2 = sliceResults[1];
     } else if (lastTopicVersionId != null) {
       // get the full topic version
-      // TopicVersion lastTopicVersion = WikiBase.getDataHandler()
-      // .lookupTopicVersion(lastTopicVersionId);
-      // contents2 = lastTopicVersion.getVersionContent();
+      TopicVersion lastTopicVersion = WikiBase.getDataHandler()
+          .lookupTopicVersion(lastTopicVersionId);
+      contents2 = lastTopicVersion.getVersionContent();
     }
     this.loadDiff(request, next, pageInfo, contents1, contents2);
     next.addObject("editShowChanges", "true");

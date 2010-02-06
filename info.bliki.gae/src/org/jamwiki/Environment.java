@@ -16,18 +16,20 @@
  */
 package org.jamwiki;
 
+import info.bliki.gae.db.PropertyService;
+
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileInputStream;
-import java.io.FileOutputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Enumeration;
 import java.util.Properties;
-import org.apache.commons.lang.math.NumberUtils; // FIXME - remove this import
+
+import org.apache.commons.lang.math.NumberUtils;
 import org.apache.commons.pool.impl.GenericObjectPool;
 import org.jamwiki.utils.SortedProperties;
-import org.jamwiki.utils.WikiLogger;
 import org.jamwiki.utils.Utilities;
+import org.jamwiki.utils.WikiLogger;
 
 /**
  * The <code>Environment</code> class is instantiated as a singleton to provides
@@ -454,9 +456,9 @@ public class Environment {
    * @throws IOException
    *           Thrown if the file cannot be found or if an I/O error occurs.
    */
-  // public static void saveProperties() throws IOException {
-  // Environment.saveProperties(PROPERTY_FILE_NAME, props, null);
-  // }
+  public static void saveProperties() throws IOException {
+    Environment.saveProperties(PROPERTY_FILE_NAME, props, null);
+  }
 
   /**
    * Save the specified property values to the filesystem.
@@ -470,23 +472,24 @@ public class Environment {
    * @throws IOException
    *           Thrown if the file cannot be found or if an I/O error occurs.
    */
-  // public static void saveProperties(String propertyFile,
-  // SortedProperties properties, String comments) throws IOException {
-  // File file = findProperties(propertyFile);
-  // FileOutputStream out = null;
-  // try {
-  // out = new FileOutputStream(file);
-  // properties.store(out, comments);
-  // } finally {
-  // if (out != null) {
-  // try {
-  // out.close();
-  // } catch (IOException e) {
-  // // NOPMD ignore, unimportant if a close fails
-  // }
-  // }
-  // }
-  // }
+  public static void saveProperties(String propertyFile,
+      SortedProperties properties, String comments) throws IOException {
+    PropertyService.saveAll(properties);
+//    File file = findProperties(propertyFile);
+//    FileOutputStream out = null;
+//    try {
+//      out = new FileOutputStream(file);
+//      properties.store(out, comments);
+//    } finally {
+//      if (out != null) {
+//        try {
+//          out.close();
+//        } catch (IOException e) {
+//          // NOPMD ignore, unimportant if a close fails
+//        }
+//      }
+//    }
+  }
 
   /**
    * Set a new boolean value for the given property name.

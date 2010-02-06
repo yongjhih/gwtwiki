@@ -16,8 +16,6 @@
  */
 package org.jamwiki.servlets;
 
-import info.bliki.gae.db.WikiUserService;
-
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -41,6 +39,7 @@ import org.jamwiki.authentication.WikiUserDetails;
 import org.jamwiki.model.Category;
 import org.jamwiki.model.Topic;
 import org.jamwiki.model.VirtualWiki;
+import org.jamwiki.model.Watchlist;
 import org.jamwiki.model.WikiUser;
 import org.jamwiki.parser.ParserException;
 import org.jamwiki.parser.ParserInput;
@@ -249,37 +248,37 @@ public class ServletUtil {
    * @throws WikiException
    *           Thrown if any error occurs during processing.
    */
-  // public static Watchlist currentWatchlist(HttpServletRequest request,
-  // String virtualWiki) throws WikiException {
-  // // try to get watchlist stored in session
-  // if (request.getSession(false) != null) {
-  // Watchlist watchlist = (Watchlist) request.getSession(false).getAttribute(
-  // WikiUtil.PARAMETER_WATCHLIST);
-  // if (watchlist != null) {
-  // return watchlist;
-  // }
-  // }
-  // // no watchlist in session, retrieve from database
-  // WikiUserDetails userDetails = ServletUtil.currentUserDetails();
-  // Watchlist watchlist = new Watchlist();
-  // if (userDetails.hasRole(RoleImpl.ROLE_ANONYMOUS)) {
-  // return watchlist;
-  // }
-  // WikiUser user = ServletUtil.currentWikiUser();
-  // try {
-  // watchlist = WikiBase.getDataHandler().getWatchlist(virtualWiki,
-  // user.getUserId());
-  // } catch (DataAccessException e) {
-  // throw new WikiException(new WikiMessage("error.unknown", e.getMessage()),
-  // e);
-  // }
-  // if (request.getSession(false) != null) {
-  // // add watchlist to session
-  // request.getSession(false).setAttribute(WikiUtil.PARAMETER_WATCHLIST,
-  // watchlist);
-  // }
-  // return watchlist;
-  // }
+  public static Watchlist currentWatchlist(HttpServletRequest request,
+      String virtualWiki) throws WikiException {
+    // try to get watchlist stored in session
+    if (request.getSession(false) != null) {
+      Watchlist watchlist = (Watchlist) request.getSession(false).getAttribute(
+          WikiUtil.PARAMETER_WATCHLIST);
+      if (watchlist != null) {
+        return watchlist;
+      }
+    }
+    // no watchlist in session, retrieve from database
+    WikiUserDetails userDetails = ServletUtil.currentUserDetails();
+    Watchlist watchlist = new Watchlist();
+    if (userDetails.hasRole(RoleImpl.ROLE_ANONYMOUS)) {
+      return watchlist;
+    }
+    WikiUser user = ServletUtil.currentWikiUser();
+    try {
+      watchlist = WikiBase.getDataHandler().getWatchlist(virtualWiki,
+          user.getUserId());
+    } catch (DataAccessException e) {
+      throw new WikiException(new WikiMessage("error.unknown", e.getMessage()),
+          e);
+    }
+    if (request.getSession(false) != null) {
+      // add watchlist to session
+      request.getSession(false).setAttribute(WikiUtil.PARAMETER_WATCHLIST,
+          watchlist);
+    }
+    return watchlist;
+  }
 
   /**
    * Duplicate the functionality of the request.getRemoteAddr() method, but for
@@ -514,32 +513,32 @@ public class ServletUtil {
    * @throws WikiException
    *           Thrown if any error occurs during processing.
    */
-  // protected static boolean isMoveable(String virtualWiki, String topicName,
-  // WikiUserDetails user) throws WikiException {
-  // if (user == null || !user.hasRole(RoleImpl.ROLE_MOVE)) {
-  // // no permission granted to move pages
-  // return false;
-  // }
-  // Topic topic = null;
-  // try {
-  // topic = WikiBase.getDataHandler().lookupTopic(virtualWiki, topicName,
-  // false, null);
-  // } catch (DataAccessException e) {
-  // throw new WikiException(new WikiMessage("error.unknown", e.getMessage()),
-  // e);
-  // }
-  // if (topic == null) {
-  // // cannot move a topic that doesn't exist
-  // return false;
-  // }
-  // if (topic.getReadOnly()) {
-  // return false;
-  // }
-  // if (topic.getAdminOnly() && !user.hasRole(RoleImpl.ROLE_ADMIN)) {
-  // return false;
-  // }
-  // return true;
-  // }
+  protected static boolean isMoveable(String virtualWiki, String topicName,
+      WikiUserDetails user) throws WikiException {
+    if (user == null || !user.hasRole(RoleImpl.ROLE_MOVE)) {
+      // no permission granted to move pages
+      return false;
+    }
+    Topic topic = null;
+    // try {
+    topic = WikiBase.getDataHandler().lookupTopic(virtualWiki, topicName,
+        false, null);
+    // } catch (DataAccessException e) {
+    // throw new WikiException(new WikiMessage("error.unknown", e.getMessage()),
+    // e);
+    // }
+    if (topic == null) {
+      // cannot move a topic that doesn't exist
+      return false;
+    }
+    if (topic.isReadOnly()) {
+      return false;
+    }
+    if (topic.isAdminOnly() && !user.hasRole(RoleImpl.ROLE_ADMIN)) {
+      return false;
+    }
+    return true;
+  }
 
   /**
    * Examine the request object, and see if the requested topic or page matches

@@ -10,6 +10,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 
+import org.apache.commons.lang.NotImplementedException;
 import org.apache.commons.lang.StringUtils;
 import org.jamwiki.DataAccessException;
 import org.jamwiki.DataHandler;
@@ -22,11 +23,14 @@ import org.jamwiki.authentication.RoleImpl;
 import org.jamwiki.authentication.WikiUserDetails;
 import org.jamwiki.db.WikiDatabase;
 import org.jamwiki.model.Category;
+import org.jamwiki.model.LogItem;
+import org.jamwiki.model.RecentChange;
 import org.jamwiki.model.Role;
 import org.jamwiki.model.RoleMap;
 import org.jamwiki.model.Topic;
 import org.jamwiki.model.TopicVersion;
 import org.jamwiki.model.VirtualWiki;
+import org.jamwiki.model.Watchlist;
 import org.jamwiki.model.WikiGroup;
 import org.jamwiki.model.WikiUser;
 import org.jamwiki.utils.LinkUtil;
@@ -39,16 +43,77 @@ public class GAEDataHandler implements DataHandler {
   /**
   *
   */
+  private static void checkLength(String value, int maxLength)
+      throws WikiException {
+    if (value != null && value.length() > maxLength) {
+      throw new WikiException(new WikiMessage("error.fieldlength", value,
+          Integer.valueOf(maxLength).toString()));
+    }
+  }
+
+  private void addCategory(Category category, Topic topic)
+      throws DataAccessException, WikiException {
+    // TODO Auto-generated method stub
+    // int virtualWikiId = this.lookupVirtualWikiId(category.getVirtualWiki());
+    this.validateCategory(category);
+    // try {
+    // this.queryHandler()
+    // .insertCategory(category, virtualWikiId, topicId, conn);
+    // } catch (SQLException e) {
+    // throw new DataAccessException(e);
+    // }
+  }
+
+  /**
+  * 
+  */
   private void addGroupMember(String username, Long groupId)
       throws DataAccessException {
     GroupMemberEntity group = new GroupMemberEntity(username, groupId);
     GroupMemberService.save(group);
   }
 
+  private void addTopic(Topic topic, LinkedHashMap<String, String> categories)
+      throws DataAccessException, WikiException {
+    this.validateTopic(topic);
+    PageService.save(topic, categories);
+  }
+
+  private void addTopicVersion(TopicVersion topicVersion)
+      throws DataAccessException, WikiException {
+    this.validateTopicVersion(topicVersion);
+    TopicVersionService.save(topicVersion);
+  }
+
   @Override
   public boolean authenticate(String username, String password)
       throws DataAccessException {
     return UserService.isAuthenticated(username, password);
+  }
+
+  @Override
+  public boolean canMoveTopic(Topic fromTopic, String destination)
+      throws DataAccessException {
+    // TODO Auto-generated method stub
+    throw new NotImplementedException("canMoveTopic");
+//    return false;
+  }
+
+  @Override
+  public void deleteTopic(Topic topic, TopicVersion topicVersion)
+      throws DataAccessException, WikiException {
+    // TODO Auto-generated method stub
+    throw new NotImplementedException("deleteTopic");
+  }
+
+  private void deleteTopicCategories(Topic topic) throws DataAccessException {
+    // TODO Auto-generated method stub
+    // try {
+    // this.queryHandler().deleteTopicCategories(topic.getTopicId(), conn);
+    // } catch (SQLException e) {
+    // throw new DataAccessException(e);
+    // }
+//    throw new NotImplementedException("deleteTopicCategories");
   }
 
   @Override
@@ -68,6 +133,30 @@ public class GAEDataHandler implements DataHandler {
       return roles;
     }
     return null;
+  }
+
+  @Override
+  public List<String> getAllTopicNames(String virtualWiki)
+      throws DataAccessException {
+    // TODO Auto-generated method stub
+    throw new NotImplementedException("getAllTopicNames");
+//    return null;
+  }
+
+  @Override
+  public List<LogItem> getLogItems(String virtualWiki, int logType,
+      Pagination pagination, boolean descending) throws DataAccessException {
+    // TODO Auto-generated method stub
+    throw new NotImplementedException("getLogItems");
+//    return null;
+  }
+
+  @Override
+  public List<RecentChange> getRecentChanges(String virtualWiki,
+      Pagination pagination, boolean descending) throws DataAccessException {
+    // TODO Auto-generated method stub
+    throw new NotImplementedException("getRecentChanges");
+//    return null;
   }
 
   @Override
@@ -109,7 +198,8 @@ public class GAEDataHandler implements DataHandler {
   public List<RoleMap> getRoleMapByRole(String roleName)
       throws DataAccessException {
     // TODO Auto-generated method stub
-    return null;
+    throw new NotImplementedException("getRoleMapByRole");
+//    return null;
   }
 
   @Override
@@ -166,6 +256,50 @@ public class GAEDataHandler implements DataHandler {
     return null;
   }
 
+  // private TopicVersion initTopicVersion(ResultSet rs) throws SQLException {
+  // TopicVersion topicVersion = new TopicVersion();
+  // topicVersion.setTopicVersionId(rs.getInt("topic_version_id"));
+  // topicVersion.setTopicId(rs.getInt("topic_id"));
+  // topicVersion.setEditComment(rs.getString("edit_comment"));
+  // topicVersion.setVersionContent(rs.getString("version_content"));
+  // // FIXME - Oracle cannot store an empty string - it converts them
+  // // to null - so add a hack to work around the problem.
+  // if (topicVersion.getVersionContent() == null) {
+  // topicVersion.setVersionContent("");
+  // }
+  // int previousTopicVersionId = rs.getInt("previous_topic_version_id");
+  // if (previousTopicVersionId > 0) {
+  // topicVersion.setPreviousTopicVersionId(previousTopicVersionId);
+  // }
+  // int userId = rs.getInt("wiki_user_id");
+  // if (userId > 0) {
+  // topicVersion.setAuthorId(userId);
+  // }
+  // topicVersion.setCharactersChanged(rs.getInt("characters_changed"));
+  // topicVersion.setVersionParamString(rs.getString("version_params"));
+  // topicVersion.setEditDate(rs.getTimestamp("edit_date"));
+  // topicVersion.setEditType(rs.getInt("edit_type"));
+  // topicVersion.setAuthorDisplay(rs.getString("wiki_user_display"));
+  // return topicVersion;
+  // }
+
+  @Override
+  public List<RecentChange> getTopicHistory(String virtualWiki,
+      String topicName, Pagination pagination, boolean descending)
+      throws DataAccessException {
+    // TODO Auto-generated method stub
+    throw new NotImplementedException("getTopicHistory");
+//    return null;
+  }
+
+  @Override
+  public List<String> getTopicsAdmin(String virtualWiki, Pagination pagination)
+      throws DataAccessException {
+    // TODO Auto-generated method stub
+    throw new NotImplementedException("getTopicsAdmin");
+//    return null;
+  }
+
   @Override
   public List<VirtualWiki> getVirtualWikiList() throws DataAccessException {
     List<VirtualWiki> results = VirualWikiService.getAll();
@@ -180,6 +314,22 @@ public class GAEDataHandler implements DataHandler {
     return results;
   }
 
+  @Override
+  public Watchlist getWatchlist(String virtualWiki, Long userId)
+      throws DataAccessException {
+    // TODO Auto-generated method stub
+    throw new NotImplementedException("getWatchlist");
+//    return null;
+  }
+
+  @Override
+  public List<RecentChange> getWatchlist(String virtualWiki, Long userId,
+      Pagination pagination) throws DataAccessException {
+    // TODO Auto-generated method stub
+    throw new NotImplementedException("getWatchlist");
+//    return null;
+  }
+
   private Role initRole(RoleEntity rs) {
     Role role = new RoleImpl(rs.getName());
     role.setDescription(rs.getDescription());
@@ -190,7 +340,8 @@ public class GAEDataHandler implements DataHandler {
   public List<Category> lookupCategoryTopics(String virtualWiki,
       String categoryName) throws DataAccessException {
     // TODO Auto-generated method stub
-    return null;
+    throw new NotImplementedException("lookupCategoryTopics");
+//    return null;
   }
 
   @Override
@@ -242,6 +393,26 @@ public class GAEDataHandler implements DataHandler {
   }
 
   @Override
+  public List<String> lookupTopicByType(String virtualWiki, int topicType1,
+      int topicType2, Pagination pagination) throws DataAccessException {
+    // TODO Auto-generated method stub
+    throw new NotImplementedException("lookupTopicByType");
+//    return null;
+  }
+
+  public TopicVersion lookupTopicVersion(Long topicVersionId)
+      throws DataAccessException {
+    // Element cacheElement = WikiCache.retrieveFromCache(CACHE_TOPIC_VERSIONS,
+    // topicVersionId);
+    // if (cacheElement != null) {
+    // return (TopicVersion)cacheElement.getObjectValue();
+    // }
+    TopicVersion topicVersion = TopicVersionService.findById(topicVersionId);
+    // WikiCache.addToCache(CACHE_TOPIC_VERSIONS, topicVersionId, topicVersion);
+    return topicVersion;
+  }
+
+  @Override
   public VirtualWiki lookupVirtualWiki(String virtualWikiName)
       throws DataAccessException {
     // TODO allow multiple virtual wikis
@@ -279,7 +450,8 @@ public class GAEDataHandler implements DataHandler {
   @Override
   public int lookupWikiUserCount() throws org.jamwiki.DataAccessException {
     // TODO Auto-generated method stub
-    return 0;
+    throw new NotImplementedException("lookupWikiUserCount");
+//    return 0;
   }
 
   @Override
@@ -296,8 +468,51 @@ public class GAEDataHandler implements DataHandler {
   public List<String> lookupWikiUsers(Pagination pagination)
       throws org.jamwiki.DataAccessException {
     // TODO Auto-generated method stub
-    return null;
+    throw new NotImplementedException("lookupWikiUsers");
+//    return null;
   }
+
+  /**
+  *
+  */
+  // protected void validateLogItem(LogItem logItem) throws WikiException {
+  // checkLength(logItem.getUserDisplayName(), 200);
+  // checkLength(logItem.getLogParamString(), 500);
+  // logItem.setLogComment(StringUtils.substring(logItem.getLogComment(), 0,
+  // 200));
+  // }
+
+  @Override
+  public void moveTopic(Topic fromTopic, TopicVersion fromVersion,
+      String destination) throws DataAccessException, WikiException {
+    // TODO Auto-generated method stub
+    
+  }
+
+  @Override
+  public void reloadLogItems() throws DataAccessException {
+    // TODO Auto-generated method stub
+    
+  }
+
+  @Override
+  public void reloadRecentChanges() throws DataAccessException {
+    // TODO Auto-generated method stub
+    throw new NotImplementedException("reloadRecentChanges");
+  }
+
+  /**
+  *
+  */
+  // protected void validateRecentChange(RecentChange change) throws
+  // WikiException {
+  // checkLength(change.getTopicName(), 200);
+  // checkLength(change.getAuthorName(), 200);
+  // checkLength(change.getVirtualWiki(), 100);
+  // change.setChangeComment(StringUtils.substring(change.getChangeComment(), 0,
+  // 200));
+  // checkLength(change.getParamString(), 500);
+  // }
 
   @Override
   public void setup(Locale locale, WikiUser user, String username,
@@ -308,133 +523,17 @@ public class GAEDataHandler implements DataHandler {
   }
 
   @Override
-  public void writeRole(Role role, boolean update) throws DataAccessException,
-      WikiException {
-    this.validateRole(role);
-    RoleEntity re = new RoleEntity();
-    re.setDescription(role.getDescription());
-    re.setName(role.getAuthority());
-    // if (update) {
-    // RoleService.update(re);
-    // } else {
-    RoleService.save(re);
-    // }
-
+  public void setupSpecialPages(Locale locale, WikiUser user,
+      VirtualWiki virtualWiki) throws DataAccessException, WikiException {
+    // TODO Auto-generated method stub
+    throw new NotImplementedException("setupSpecialPages");
   }
 
   @Override
-  public void writeRoleMapGroup(Long groupId, String groupName,
-      List<String> roles) throws DataAccessException, WikiException {
-    try {
-      // status = DatabaseConnection.startTransaction();
-      GroupAuthorityService.deleteByGroupId(groupId);
-      for (String authority : roles) {
-        this.validateAuthority(authority);
-        // this.queryHandler().insertUserAuthority(username, authority, conn);
-        GroupAuthorityService.save(new GroupAuthorityEntity(groupId, groupName,
-            authority));
-      }
-      // refresh the current role requirements
-      JAMWikiAuthenticationConfiguration.resetJamwikiAnonymousAuthorities();
-      JAMWikiAuthenticationConfiguration.resetDefaultGroupRoles();
-    } catch (WikiException e) {
-      // DatabaseConnection.rollbackOnException(status, e);
-      throw e;
-    }
-  }
-
-  @Override
-  public void writeRoleMapUser(String username, List<String> roles)
-      throws DataAccessException, WikiException {
-    try {
-      // status = DatabaseConnection.startTransaction();
-      AuthorityService.deleteByName(username);
-      for (String authority : roles) {
-        this.validateAuthority(authority);
-        // this.queryHandler().insertUserAuthority(username, authority, conn);
-        AuthorityService.save(new AuthorityEntity(username, authority));
-      }
-    } catch (WikiException e) {
-      // DatabaseConnection.rollbackOnException(status, e);
-      throw e;
-    }
-  }
-
-  @Override
-  public void writeTopic(Topic topic, TopicVersion topicVersion,
-      LinkedHashMap<String, String> categories, List<String> links)
+  public void undeleteTopic(Topic topic, TopicVersion topicVersion)
       throws DataAccessException, WikiException {
     // TODO Auto-generated method stub
-    PageService.save(topic, categories);
-  }
-
-  @Override
-  public void writeVirtualWiki(VirtualWiki virtualWiki)
-      throws DataAccessException, WikiException {
-    VirualWikiService.save(virtualWiki);
-  }
-
-  @Override
-  public void writeWikiGroup(WikiGroup group) throws DataAccessException,
-      WikiException {
-    WikiGroupService.save(group);
-  }
-
-  @Override
-  public void writeWikiUser(WikiUser user, String username,
-      String encryptedPassword) throws org.jamwiki.DataAccessException,
-      WikiException {
-    WikiUtil.validateUserName(user.getUsername());
-
-    try {
-      // status = DatabaseConnection.startTransaction();
-      if (user.getUserId() == null) {
-        WikiUserDetails userDetails = new WikiUserDetails(username,
-            encryptedPassword, true, true, true, true,
-            JAMWikiAuthenticationConfiguration.getDefaultGroupRoles());
-        WikiUserDetailsService.save(userDetails);
-        WikiUserService.save(user);
-        // this.addWikiUser(user, conn);
-        // add all users to the registered user group
-        this.addGroupMember(user.getUsername(), WikiBase
-            .getGroupRegisteredUser().getGroupId());
-        // FIXME - reconsider this approach of separate entries for every
-        // virtual wiki
-        // List<VirtualWiki> virtualWikis = this.getVirtualWikiList();
-        // for (VirtualWiki virtualWiki : virtualWikis) {
-        // LogItem logItem = LogItem.initLogItem(user, virtualWiki.getName());
-        // this.addLogItem(logItem, conn);
-        // RecentChange change = RecentChange.initRecentChange(logItem);
-        // this.addRecentChange(change, conn);
-        // }
-      } else {
-        if (!StringUtils.isBlank(encryptedPassword)) {
-          WikiUserDetails userDetails = new WikiUserDetails(username,
-              encryptedPassword, true, true, true, true,
-              JAMWikiAuthenticationConfiguration.getDefaultGroupRoles());
-          // this.updateUserDetails(userDetails, conn);
-        }
-        // this.updateWikiUser(user, conn);
-        WikiUserService.update(user);
-      }
-      // } catch (DataAccessException e) {
-      // DatabaseConnection.rollbackOnException(status, e);
-      // throw e;
-    } catch (WikiException e) {
-      // DatabaseConnection.rollbackOnException(status, e);
-      throw e;
-    }
-  }
-
-  /**
-  *
-  */
-  private static void checkLength(String value, int maxLength)
-      throws WikiException {
-    if (value != null && value.length() > maxLength) {
-      throw new WikiException(new WikiMessage("error.fieldlength", value,
-          Integer.valueOf(maxLength).toString()));
-    }
+    throw new NotImplementedException("undeleteTopic");
   }
 
   /**
@@ -451,29 +550,6 @@ public class GAEDataHandler implements DataHandler {
     checkLength(category.getName(), 200);
     checkLength(category.getSortKey(), 200);
   }
-
-  /**
-  *
-  */
-  // protected void validateLogItem(LogItem logItem) throws WikiException {
-  // checkLength(logItem.getUserDisplayName(), 200);
-  // checkLength(logItem.getLogParamString(), 500);
-  // logItem.setLogComment(StringUtils.substring(logItem.getLogComment(), 0,
-  // 200));
-  // }
-
-  /**
-  *
-  */
-  // protected void validateRecentChange(RecentChange change) throws
-  // WikiException {
-  // checkLength(change.getTopicName(), 200);
-  // checkLength(change.getAuthorName(), 200);
-  // checkLength(change.getVirtualWiki(), 100);
-  // change.setChangeComment(StringUtils.substring(change.getChangeComment(), 0,
-  // 200));
-  // checkLength(change.getParamString(), 500);
-  // }
 
   /**
   *
@@ -534,27 +610,6 @@ public class GAEDataHandler implements DataHandler {
   /**
   *
   */
-  // protected void validateWikiFile(WikiFile wikiFile) throws WikiException {
-  // checkLength(wikiFile.getFileName(), 200);
-  // checkLength(wikiFile.getUrl(), 200);
-  // checkLength(wikiFile.getMimeType(), 100);
-  // }
-
-  /**
-  *
-  */
-  // protected void validateWikiFileVersion(WikiFileVersion wikiFileVersion)
-  // throws WikiException {
-  // checkLength(wikiFileVersion.getUrl(), 200);
-  // checkLength(wikiFileVersion.getMimeType(), 100);
-  // checkLength(wikiFileVersion.getAuthorDisplay(), 100);
-  // wikiFileVersion.setUploadComment(StringUtils.substring(wikiFileVersion.getUploadComment(),
-  // 0, 200));
-  // }
-
-  /**
-  *
-  */
   protected void validateWikiGroup(WikiGroup group) throws WikiException {
     checkLength(group.getName(), 30);
     group.setDescription(StringUtils.substring(group.getDescription(), 0, 200));
@@ -572,5 +627,195 @@ public class GAEDataHandler implements DataHandler {
     checkLength(user.getEmail(), 100);
     checkLength(user.getEditor(), 50);
     checkLength(user.getSignature(), 255);
+  }
+
+  @Override
+  public void writeRole(Role role, boolean update) throws DataAccessException,
+      WikiException {
+    this.validateRole(role);
+    RoleEntity re = new RoleEntity();
+    re.setDescription(role.getDescription());
+    re.setName(role.getAuthority());
+    // if (update) {
+    // RoleService.update(re);
+    // } else {
+    RoleService.save(re);
+    // }
+
+  }
+
+  /**
+  *
+  */
+  // protected void validateWikiFile(WikiFile wikiFile) throws WikiException {
+  // checkLength(wikiFile.getFileName(), 200);
+  // checkLength(wikiFile.getUrl(), 200);
+  // checkLength(wikiFile.getMimeType(), 100);
+  // }
+
+  @Override
+  public void writeRoleMapGroup(Long groupId, String groupName,
+      List<String> roles) throws DataAccessException, WikiException {
+    try {
+      // status = DatabaseConnection.startTransaction();
+      GroupAuthorityService.deleteByGroupId(groupId);
+      for (String authority : roles) {
+        this.validateAuthority(authority);
+        // this.queryHandler().insertUserAuthority(username, authority, conn);
+        GroupAuthorityService.save(new GroupAuthorityEntity(groupId, groupName,
+            authority));
+      }
+      // refresh the current role requirements
+      JAMWikiAuthenticationConfiguration.resetJamwikiAnonymousAuthorities();
+      JAMWikiAuthenticationConfiguration.resetDefaultGroupRoles();
+    } catch (WikiException e) {
+      // DatabaseConnection.rollbackOnException(status, e);
+      throw e;
+    }
+  }
+
+  @Override
+  public void writeRoleMapUser(String username, List<String> roles)
+      throws DataAccessException, WikiException {
+    try {
+      // status = DatabaseConnection.startTransaction();
+      AuthorityService.deleteByName(username);
+      for (String authority : roles) {
+        this.validateAuthority(authority);
+        // this.queryHandler().insertUserAuthority(username, authority, conn);
+        AuthorityService.save(new AuthorityEntity(username, authority));
+      }
+    } catch (WikiException e) {
+      // DatabaseConnection.rollbackOnException(status, e);
+      throw e;
+    }
+  }
+
+  @Override
+  public void writeTopic(Topic topic, TopicVersion topicVersion,
+      LinkedHashMap<String, String> categories, List<String> links)
+      throws DataAccessException, WikiException {
+    WikiUtil.validateTopicName(topic.getName());
+    addTopic(topic, categories);
+    if (topicVersion != null) {
+      if (topicVersion.getPreviousTopicVersionId() == null
+          && topic.getCurrentVersionId() != null) {
+        topicVersion.setPreviousTopicVersionId(topic.getCurrentVersionId());
+      }
+      topicVersion.setTopicId(topic);
+      topicVersion.initializeVersionParams(topic);
+      // write version
+      addTopicVersion(topicVersion);
+      topic.setCurrentVersionId(topicVersion.getTopicVersionId());
+      // update the topic AFTER creating the version so that the
+      // current_topic_version_id parameter is set properly
+      // this.updateTopic(topic, conn);
+      PageService.save(topic, categories);
+      // String authorName = this.authorName(topicVersion.getAuthorId(),
+      // topicVersion.getAuthorDisplay());
+      // LogItem logItem = LogItem.initLogItem(topic, topicVersion, authorName);
+      // RecentChange change = null;
+      // if (logItem != null) {
+      // this.addLogItem(logItem, conn);
+      // change = RecentChange.initRecentChange(logItem);
+      // } else {
+      // change = RecentChange.initRecentChange(topic, topicVersion,
+      // authorName);
+      // }
+      // if (topicVersion.isRecentChangeAllowed()) {
+      // this.addRecentChange(change, conn);
+      // }
+    }
+    if (categories != null) {
+      // add / remove categories associated with the topic
+      this.deleteTopicCategories(topic);
+      if (topic.getDeleteDate() == null) {
+        for (String categoryName : categories.keySet()) {
+          Category category = new Category();
+          category.setName(categoryName);
+          category.setSortKey(categories.get(categoryName));
+          category.setVirtualWiki(topic.getVirtualWiki());
+          category.setChildTopicName(topic.getName());
+          this.addCategory(category, topic);
+        }
+      }
+    }
+  }
+
+  /**
+  *
+  */
+  // protected void validateWikiFileVersion(WikiFileVersion wikiFileVersion)
+  // throws WikiException {
+  // checkLength(wikiFileVersion.getUrl(), 200);
+  // checkLength(wikiFileVersion.getMimeType(), 100);
+  // checkLength(wikiFileVersion.getAuthorDisplay(), 100);
+  // wikiFileVersion.setUploadComment(StringUtils.substring(wikiFileVersion.getUploadComment(),
+  // 0, 200));
+  // }
+
+  @Override
+  public void writeVirtualWiki(VirtualWiki virtualWiki)
+      throws DataAccessException, WikiException {
+    VirualWikiService.save(virtualWiki);
+  }
+
+  @Override
+  public void writeWatchlistEntry(Watchlist watchlist, String virtualWiki,
+      String topicName, Long userId) throws DataAccessException, WikiException {
+    // TODO Auto-generated method stub
+    throw new NotImplementedException("writeWatchlistEntry");
+  }
+
+  @Override
+  public void writeWikiGroup(WikiGroup group) throws DataAccessException,
+      WikiException {
+    WikiGroupService.save(group);
+  }
+
+  @Override
+  public void writeWikiUser(WikiUser user, String username,
+      String encryptedPassword) throws org.jamwiki.DataAccessException,
+      WikiException {
+    WikiUtil.validateUserName(user.getUsername());
+
+    try {
+      // status = DatabaseConnection.startTransaction();
+      if (user.getUserId() == null) {
+        WikiUserDetails userDetails = new WikiUserDetails(username,
+            encryptedPassword, true, true, true, true,
+            JAMWikiAuthenticationConfiguration.getDefaultGroupRoles());
+        WikiUserDetailsService.save(userDetails);
+        WikiUserService.save(user);
+        // this.addWikiUser(user, conn);
+        // add all users to the registered user group
+        this.addGroupMember(user.getUsername(), WikiBase
+            .getGroupRegisteredUser().getGroupId());
+        // FIXME - reconsider this approach of separate entries for every
+        // virtual wiki
+        // List<VirtualWiki> virtualWikis = this.getVirtualWikiList();
+        // for (VirtualWiki virtualWiki : virtualWikis) {
+        // LogItem logItem = LogItem.initLogItem(user, virtualWiki.getName());
+        // this.addLogItem(logItem, conn);
+        // RecentChange change = RecentChange.initRecentChange(logItem);
+        // this.addRecentChange(change, conn);
+        // }
+      } else {
+        if (!StringUtils.isBlank(encryptedPassword)) {
+          WikiUserDetails userDetails = new WikiUserDetails(username,
+              encryptedPassword, true, true, true, true,
+              JAMWikiAuthenticationConfiguration.getDefaultGroupRoles());
+          // this.updateUserDetails(userDetails, conn);
+        }
+        // this.updateWikiUser(user, conn);
+        WikiUserService.update(user);
+      }
+      // } catch (DataAccessException e) {
+      // DatabaseConnection.rollbackOnException(status, e);
+      // throw e;
+    } catch (WikiException e) {
+      // DatabaseConnection.rollbackOnException(status, e);
+      throw e;
+    }
   }
 }

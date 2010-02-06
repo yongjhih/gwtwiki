@@ -371,6 +371,29 @@ public class WikiUtil {
     }
     return Utilities.decodeAndEscapeTopicName(virtualWiki, true);
   }
+  
+  /**
+   * Given a topic name, determine if that name corresponds to a comments
+   * page.
+   *
+   * @param topicName The topic name (non-null) to examine to determine if it
+   *  is a comments page or not.
+   * @return <code>true</code> if the page is a comments page, <code>false</code>
+   *  otherwise.
+   */
+  public static boolean isCommentsPage(String topicName) {
+    WikiLink wikiLink = LinkUtil.parseWikiLink(topicName);
+    if (StringUtils.isBlank(wikiLink.getNamespace())) {
+      return false;
+    }
+    String namespace = wikiLink.getNamespace();
+    if (namespace.equals(NamespaceHandler.NAMESPACE_SPECIAL)) {
+      return false;
+    }
+    String commentNamespace = NamespaceHandler.getCommentsNamespace(namespace);
+    return namespace.equals(commentNamespace);
+  }
+  
   /**
    * Determine if the system properties file exists and has been initialized.
    * This method is primarily used to determine whether or not to display

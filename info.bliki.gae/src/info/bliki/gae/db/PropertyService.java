@@ -2,7 +2,10 @@ package info.bliki.gae.db;
 
 import info.bliki.gae.model.PropertyEntity;
 
+import java.util.Enumeration;
 import java.util.List;
+import java.util.Properties;
+import java.util.Vector;
 
 import org.jamwiki.model.OS;
 
@@ -40,4 +43,18 @@ public class PropertyService {
     return resultList;
   }
 
+  public static void saveAll(Properties properties) {
+    PropertyEntity page;
+    Objectify ofy = OS.begin();
+
+    Enumeration<Object> keyEnum = properties.keys();
+    while (keyEnum.hasMoreElements()) {
+      String key = (String) keyEnum.nextElement();
+      String value = (String) properties.get(key.toString());
+      if (value != null) {
+        page = new PropertyEntity(key, value);
+        ofy.put(page);
+      }
+    }
+  }
 }

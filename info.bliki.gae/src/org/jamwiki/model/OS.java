@@ -20,6 +20,7 @@ public class OS extends ObjectifyService {
     factory.register(PropertyEntity.class);
     factory.register(RoleEntity.class);
     factory.register(Topic.class);
+    factory.register(TopicVersion.class);
     // not used anymore:
     // factory.register(UserAuthorityEntity.class);
     factory.register(UserEntity.class);

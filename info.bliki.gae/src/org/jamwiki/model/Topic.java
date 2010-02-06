@@ -13,7 +13,6 @@ import com.google.appengine.api.datastore.EntityNotFoundException;
 import com.google.appengine.api.datastore.Text;
 import com.googlecode.objectify.OKey;
 import com.googlecode.objectify.Objectify;
-import com.googlecode.objectify.ObjectifyFactory;
 
 @Entity
 public class Topic implements Serializable {
@@ -45,15 +44,21 @@ public class Topic implements Serializable {
   private Text content = null;
 
   private String redirect;
-  
+
   private boolean adminOnly = false;
-  
+
   private Date date;
+
+  private Date deleteDate = null;
+
+  private int topicType = TYPE_ARTICLE;
 
   private String virtualWiki = "";
 
   private boolean readOnly = false;
-  
+
+  private Long currentVersionId;
+
   @Transient
   private String htmlContent;
 
@@ -75,7 +80,7 @@ public class Topic implements Serializable {
     } else {
       this.content = new Text(content);
     }
-//    setAuthor(gaeUser);
+    // setAuthor(gaeUser);
     this.date = new Date();
   }
 
@@ -97,8 +102,26 @@ public class Topic implements Serializable {
     return content;
   }
 
+  public Long getCurrentVersionId() {
+    return currentVersionId;
+  }
+
   public Date getDate() {
     return date;
+  }
+
+  /**
+  *
+  */
+  public boolean getDeleted() {
+    return (this.deleteDate != null);
+  }
+
+  /**
+   * @return the deleteDate
+   */
+  public Date getDeleteDate() {
+    return deleteDate;
   }
 
   public String getHtmlContent() {
@@ -124,17 +147,24 @@ public class Topic implements Serializable {
   }
 
   public String getTopicContent() {
-    if (content==null) {
+    if (content == null) {
       return "";
     }
     return content.getValue();
   }
 
   /**
+   * @return the topicType
+   */
+  public int getTopicType() {
+    return topicType;
+  }
+
+  /**
    * @return the virtualWiki
    */
   public String getVirtualWiki() {
-    if (virtualWiki==null ||virtualWiki.length()==0){
+    if (virtualWiki == null || virtualWiki.length() == 0) {
       return WikiBase.DEFAULT_VWIKI;
     }
     return virtualWiki;
@@ -146,7 +176,7 @@ public class Topic implements Serializable {
   public boolean isAdminOnly() {
     return adminOnly;
   }
-  
+
   /**
    * @return the readOnly
    */
@@ -155,24 +185,38 @@ public class Topic implements Serializable {
   }
 
   /**
-   * @param adminOnly the adminOnly to set
+   * @param adminOnly
+   *          the adminOnly to set
    */
   public void setAdminOnly(boolean adminOnly) {
     this.adminOnly = adminOnly;
   }
+
   public void setAuthor(WikiUser author) {
     Objectify ofy = OS.begin();
     this.author = OS.createKey(author);
+  }
+
+  public void setCurrentVersionId(Long currentVersionId) {
+    this.currentVersionId = currentVersionId;
+  }
+
+  public void setDate(Date date) {
+    this.date = date;
+  }
+
+  /**
+   * @param deleteDate
+   *          the deleteDate to set
+   */
+  public void setDeleteDate(Date deleteDate) {
+    this.deleteDate = deleteDate;
   }
 
   // private void renderHtml(String content) {
   // IWikiModel model = BlikiModel.get();
   // this.htmlContent = model.render(content);
   // }
-
-  public void setDate(Date date) {
-    this.date = date;
-  }
 
   /**
    * @param htmlContent
@@ -187,7 +231,8 @@ public class Topic implements Serializable {
   }
 
   /**
-   * @param readOnly the readOnly to set
+   * @param readOnly
+   *          the readOnly to set
    */
   public void setReadOnly(boolean readOnly) {
     this.readOnly = readOnly;
@@ -196,6 +241,14 @@ public class Topic implements Serializable {
   public void setTopicContent(String content) {
     // renderHtml(content);
     this.content = new Text(content);
+  }
+
+  /**
+   * @param topicType
+   *          the topicType to set
+   */
+  public void setTopicType(int topicType) {
+    this.topicType = topicType;
   }
 
   /**
