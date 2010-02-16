@@ -41,20 +41,23 @@ public class HTML2WikiConverter {
 		}
 		int indx = resultBuffer.indexOf("<br>");
 		char ch;
-		if (indx > 0) {
+		if (indx >= 0) {
 			int lastIndx = 0;
-			StringBuilder tempBuffer = new StringBuilder(resultBuffer.length()
-			    + resultBuffer.length() / 10);
-			while (indx > 0) { 
+			StringBuilder tempBuffer = new StringBuilder(resultBuffer.length() + resultBuffer.length() / 10);
+			while (indx > 0) {
 				indx += 4;
 				tempBuffer.append(resultBuffer.substring(lastIndx, indx));
-				ch = resultBuffer.charAt(indx);
-				if (ch != '\n' && ch != '\r' && ch != ' ' && ch != '#' && ch != '='
-				    && ch != '*' && ch != ':' && ch != ';' && ch != '{' && ch != '|') {
-					tempBuffer.append('\n');
+				if (indx < resultBuffer.length()) {
+					ch = resultBuffer.charAt(indx);
+					if (ch != '\n' && ch != '\r' && ch != ' ' && ch != '#' && ch != '=' && ch != '*' && ch != ':' && ch != ';' && ch != '{'
+							&& ch != '|') {
+						tempBuffer.append('\n');
+					}
+					lastIndx = indx;
+					indx = resultBuffer.indexOf("<br>", lastIndx);
+				} else {
+					break;
 				}
-				lastIndx = indx;
-				indx = resultBuffer.indexOf("<br>", lastIndx);
 			}
 			if (lastIndx < resultBuffer.length()) {
 				tempBuffer.append(resultBuffer.substring(lastIndx));

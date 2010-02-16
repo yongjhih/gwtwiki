@@ -166,6 +166,14 @@ public class HTML2WikipediaTest extends TestCase {
 		assertEquals(result, "[[A tag text]]");
 	}
 
+	public void test19() {
+		HTML2WikiConverter conv = new HTML2WikiConverter();
+		conv.setInputHTML("<br>fsafds\n<br>");
+		String result = conv.toWiki(new ToWikipedia());
+		assertEquals(result, "<br>fsafds\n" + 
+				"<br>");
+	}
+	
 	public static void main(String[] args) {
 		try {
 			HTML2WikiConverter conv = new HTML2WikiConverter();
