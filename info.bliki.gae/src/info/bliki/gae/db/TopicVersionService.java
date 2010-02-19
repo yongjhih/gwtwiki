@@ -3,6 +3,7 @@ package info.bliki.gae.db;
 import java.util.List;
 
 import org.jamwiki.model.OS;
+import org.jamwiki.model.Topic;
 import org.jamwiki.model.TopicVersion;
 
 import com.googlecode.objectify.OQuery;
@@ -29,6 +30,13 @@ public class TopicVersionService {
     return ofy.find(TopicVersion.class, versionId);
   }
 
+  public static List<TopicVersion> findByTopic(Topic topic) {
+    Objectify ofy = OS.begin();
+    OQuery<TopicVersion> q = OS.createQuery(TopicVersion.class);
+    q.filter("topicId", OS.createKey(topic));
+    return ofy.prepare(q).asList();
+  }
+  
   public static List<TopicVersion> getAll() {
     List<TopicVersion> resultList = null;
     Objectify ofy = OS.begin();

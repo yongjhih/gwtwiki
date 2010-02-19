@@ -343,6 +343,9 @@ public class RecentChange {
     this.topicId = OS.createKey(topicId);
   }
 
+  public void setTopicOKey(OKey<Topic> topicId) {
+    this.topicId = topicId;
+  }
   /**
 	 *
 	 */

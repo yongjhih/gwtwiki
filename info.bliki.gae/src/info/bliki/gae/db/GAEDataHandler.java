@@ -39,6 +39,8 @@ import org.jamwiki.utils.Pagination;
 import org.jamwiki.utils.WikiLink;
 import org.jamwiki.utils.WikiUtil;
 
+import com.googlecode.objectify.OKey;
+
 public class GAEDataHandler implements DataHandler {
   /**
   *
@@ -96,7 +98,7 @@ public class GAEDataHandler implements DataHandler {
       throws DataAccessException {
     // TODO Auto-generated method stub
     throw new NotImplementedException("canMoveTopic");
-//    return false;
+    // return false;
   }
 
   @Override
@@ -113,7 +115,7 @@ public class GAEDataHandler implements DataHandler {
     // } catch (SQLException e) {
     // throw new DataAccessException(e);
     // }
-//    throw new NotImplementedException("deleteTopicCategories");
+    // throw new NotImplementedException("deleteTopicCategories");
   }
 
   @Override
@@ -140,7 +142,7 @@ public class GAEDataHandler implements DataHandler {
       throws DataAccessException {
     // TODO Auto-generated method stub
     throw new NotImplementedException("getAllTopicNames");
-//    return null;
+    // return null;
   }
 
   @Override
@@ -148,7 +150,7 @@ public class GAEDataHandler implements DataHandler {
       Pagination pagination, boolean descending) throws DataAccessException {
     // TODO Auto-generated method stub
     throw new NotImplementedException("getLogItems");
-//    return null;
+    // return null;
   }
 
   @Override
@@ -156,7 +158,7 @@ public class GAEDataHandler implements DataHandler {
       Pagination pagination, boolean descending) throws DataAccessException {
     // TODO Auto-generated method stub
     throw new NotImplementedException("getRecentChanges");
-//    return null;
+    // return null;
   }
 
   @Override
@@ -199,7 +201,7 @@ public class GAEDataHandler implements DataHandler {
       throws DataAccessException {
     // TODO Auto-generated method stub
     throw new NotImplementedException("getRoleMapByRole");
-//    return null;
+    // return null;
   }
 
   @Override
@@ -283,13 +285,52 @@ public class GAEDataHandler implements DataHandler {
   // return topicVersion;
   // }
 
+  private RecentChange initRecentChange(TopicVersion rs) {
+    RecentChange change = new RecentChange();
+
+    change.setTopicVersionId(rs.getTopicVersionId());
+    change.setPreviousTopicVersionId(rs.getPreviousTopicVersionId());
+    OKey<Topic> topicId = rs.getTopicOKey();
+    change.setTopicOKey(topicId);
+
+    Topic topic = rs.getTopicId();
+    change.setTopicName(topic.getName());
+    change.setCharactersChanged(rs.getCharactersChanged());
+    change.setChangeDate(rs.getEditDate());
+    change.setChangeComment(rs.getEditComment());
+
+    change.setAuthorId(rs.getAuthorId());
+
+    change.setAuthorName(rs.getAuthorDisplay());
+    int editType = rs.getEditType();
+    if (editType > 0) {
+      change.setEditType(editType);
+      // change.initChangeWikiMessageForVersion(editType,
+      // .getString("log_params"));
+    }
+    // int logType = rs.getInt("log_type");
+    // if (logType > 0) {
+    // change.setLogType(logType);
+    // change.initChangeWikiMessageForLog(logType, rs.getString("log_params"));
+    // }
+    change.setVirtualWiki(topic.getVirtualWiki());
+    return change;
+  }
+
   @Override
   public List<RecentChange> getTopicHistory(String virtualWiki,
       String topicName, Pagination pagination, boolean descending)
       throws DataAccessException {
-    // TODO Auto-generated method stub
-    throw new NotImplementedException("getTopicHistory");
-//    return null;
+    Topic topic = this.lookupTopic(virtualWiki, topicName, true, null);
+    if (topic == null) {
+      return new ArrayList<RecentChange>();
+    }
+    List<TopicVersion> list = TopicVersionService.findByTopic(topic);
+    List<RecentChange> recentChanges = new ArrayList<RecentChange>();
+    for (TopicVersion topicVersion : list) {
+      recentChanges.add(this.initRecentChange(topicVersion));
+    }
+    return recentChanges;
   }
 
   @Override
@@ -297,7 +338,7 @@ public class GAEDataHandler implements DataHandler {
       throws DataAccessException {
     // TODO Auto-generated method stub
     throw new NotImplementedException("getTopicsAdmin");
-//    return null;
+    // return null;
   }
 
   @Override
@@ -319,7 +360,7 @@ public class GAEDataHandler implements DataHandler {
       throws DataAccessException {
     // TODO Auto-generated method stub
     throw new NotImplementedException("getWatchlist");
-//    return null;
+    // return null;
   }
 
   @Override
@@ -327,7 +368,7 @@ public class GAEDataHandler implements DataHandler {
       Pagination pagination) throws DataAccessException {
     // TODO Auto-generated method stub
     throw new NotImplementedException("getWatchlist");
-//    return null;
+    // return null;
   }
 
   private Role initRole(RoleEntity rs) {
@@ -341,7 +382,7 @@ public class GAEDataHandler implements DataHandler {
       String categoryName) throws DataAccessException {
     // TODO Auto-generated method stub
     throw new NotImplementedException("lookupCategoryTopics");
-//    return null;
+    // return null;
   }
 
   @Override
@@ -397,7 +438,7 @@ public class GAEDataHandler implements DataHandler {
       int topicType2, Pagination pagination) throws DataAccessException {
     // TODO Auto-generated method stub
     throw new NotImplementedException("lookupTopicByType");
-//    return null;
+    // return null;
   }
 
   public TopicVersion lookupTopicVersion(Long topicVersionId)
@@ -451,7 +492,7 @@ public class GAEDataHandler implements DataHandler {
   public int lookupWikiUserCount() throws org.jamwiki.DataAccessException {
     // TODO Auto-generated method stub
     throw new NotImplementedException("lookupWikiUserCount");
-//    return 0;
+    // return 0;
   }
 
   @Override
@@ -469,7 +510,7 @@ public class GAEDataHandler implements DataHandler {
       throws org.jamwiki.DataAccessException {
     // TODO Auto-generated method stub
     throw new NotImplementedException("lookupWikiUsers");
-//    return null;
+    // return null;
   }
 
   /**
@@ -486,13 +527,13 @@ public class GAEDataHandler implements DataHandler {
   public void moveTopic(Topic fromTopic, TopicVersion fromVersion,
       String destination) throws DataAccessException, WikiException {
     // TODO Auto-generated method stub
-    
+
   }
 
   @Override
   public void reloadLogItems() throws DataAccessException {
     // TODO Auto-generated method stub
-    
+
   }
 
   @Override

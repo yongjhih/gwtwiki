@@ -272,6 +272,10 @@ public class TopicVersion implements Serializable {
     return null;
   }
 
+  public OKey<Topic> getTopicOKey() {
+    return this.topicId;
+  }
+  
   /**
 	 *
 	 */
