@@ -28,7 +28,7 @@ import org.jamwiki.utils.Utilities;
 import org.jamwiki.utils.WikiLogger;
 
 import com.google.appengine.api.datastore.EntityNotFoundException;
-import com.googlecode.objectify.OKey;
+import com.googlecode.objectify.Key;
 import com.googlecode.objectify.Objectify;
 
 /**
@@ -61,7 +61,7 @@ public class LogItem {
   private List<String> logParams = null;
   private int logType = -1;
   // private Long topicId = null;
-  private OKey<Topic> topicId = null;
+  private Key<Topic> topicId = null;
   private Long topicVersionId = null;
   private String userDisplayName = null;
   private Long userId = null;
@@ -293,7 +293,7 @@ public class LogItem {
   public void setTopicId(Topic topicId) {
     // this.topicId = topicId;
     Objectify ofy = OS.begin();
-    this.topicId = OS.createKey(topicId);
+    this.topicId = new Key<Topic>(Topic.class, topicId.getName());
   }
 
   /**

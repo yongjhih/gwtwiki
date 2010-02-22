@@ -2,14 +2,12 @@ package info.bliki.gae.db;
 
 import info.bliki.gae.model.GroupAuthorityEntity;
 
-import java.util.List;
-
 import org.jamwiki.model.OS;
-import org.jamwiki.model.WikiGroup;
 
 import com.google.appengine.api.datastore.EntityNotFoundException;
-import com.googlecode.objectify.OQuery;
+import com.google.appengine.api.datastore.QueryResultIterable;
 import com.googlecode.objectify.Objectify;
+import com.googlecode.objectify.Query;
 
 public class GroupAuthorityService {
 
@@ -39,38 +37,44 @@ public class GroupAuthorityService {
   }
 
   public static void deleteByGroupId(Long groupId) {
-    GroupAuthorityEntity role;
+    // GroupAuthorityEntity role;
     try {
       Objectify ofy = OS.begin();
-      OQuery<GroupAuthorityEntity> q = OS
-          .createQuery(GroupAuthorityEntity.class);
+      // OQuery<GroupAuthorityEntity> q = OS
+      // .createQuery(GroupAuthorityEntity.class);
+      Query<GroupAuthorityEntity> q = ofy.query(GroupAuthorityEntity.class);
       q.filter("groupId", groupId);
-      Iterable<GroupAuthorityEntity> it = ofy.prepare(q).asIterable();
-      for (GroupAuthorityEntity groupAuthorityEntity : it) {
-        ofy.delete(groupAuthorityEntity);
-      }
+      // Iterable<GroupAuthorityEntity> it = ofy.prepare(q).asIterable();
+      ofy.delete(q);
+      // for (GroupAuthorityEntity groupAuthorityEntity : q) {
+      // ofy.delete(groupAuthorityEntity);
+      // }
     } catch (NullPointerException npe) {
     }
   }
 
-  public static List<GroupAuthorityEntity> getByGroupname(String groupName) {
+  public static QueryResultIterable<GroupAuthorityEntity> getByGroupname(
+      String groupName) {
     try {
       Objectify ofy = OS.begin();
-      OQuery<GroupAuthorityEntity> q = OS
-          .createQuery(GroupAuthorityEntity.class);
+      // OQuery<GroupAuthorityEntity> q = OS
+      // .createQuery(GroupAuthorityEntity.class);
+      Query<GroupAuthorityEntity> q = ofy.query(GroupAuthorityEntity.class);
       q.filter("groupName", groupName);
-      return ofy.prepare(q).asList();
+      return q;// ofy.prepare(q).asList();
     } catch (NullPointerException npe) {
     }
     return null;
   }
 
-  public static List<GroupAuthorityEntity> getAll() {
-    List<GroupAuthorityEntity> resultList = null;
+  public static QueryResultIterable<GroupAuthorityEntity> getAll() {
+    // List<GroupAuthorityEntity> resultList = null;
     Objectify ofy = OS.begin();
-    OQuery<GroupAuthorityEntity> q = OS.createQuery(GroupAuthorityEntity.class);
-    resultList = ofy.prepare(q).asList();
-    return resultList;
+    // OQuery<GroupAuthorityEntity> q =
+    // OS.createQuery(GroupAuthorityEntity.class);
+    Query<GroupAuthorityEntity> q = ofy.query(GroupAuthorityEntity.class);
+    // resultList = ofy.prepare(q).asList();
+    return q;
   }
 
 }

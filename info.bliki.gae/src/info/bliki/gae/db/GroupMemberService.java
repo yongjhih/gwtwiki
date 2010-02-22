@@ -6,8 +6,9 @@ import java.util.List;
 
 import org.jamwiki.model.OS;
 
-import com.googlecode.objectify.OQuery;
+import com.google.appengine.api.datastore.QueryResultIterable;
 import com.googlecode.objectify.Objectify;
+import com.googlecode.objectify.Query;
 
 public class GroupMemberService {
 
@@ -22,25 +23,27 @@ public class GroupMemberService {
     ofy.delete(role);
   }
 
-  public static GroupMemberEntity findByName(String name) {
-    GroupMemberEntity role = null;
+  public static QueryResultIterable<GroupMemberEntity> findByName(String name) {
+    // GroupMemberEntity role = null;
     try {
       Objectify ofy = OS.begin();
-      OQuery<GroupMemberEntity> q = OS.createQuery(GroupMemberEntity.class);
+      // OQuery<GroupMemberEntity> q = OS.createQuery(GroupMemberEntity.class);
+      Query<GroupMemberEntity> q = ofy.query(GroupMemberEntity.class);
       q.filter("username", name);
-      role = ofy.prepare(q).asSingle();
-      return role;
+      // role = ofy.prepare(q).asSingle();
+      return q;
     } catch (NullPointerException npe) {
     }
     return null;
   }
 
-  public static List<GroupMemberEntity> getAll() {
+  public static QueryResultIterable<GroupMemberEntity> getAll() {
     List<GroupMemberEntity> resultList = null;
     Objectify ofy = OS.begin();
-    OQuery<GroupMemberEntity> q = OS.createQuery(GroupMemberEntity.class);
-    resultList = ofy.prepare(q).asList();
-    return resultList;
+    // OQuery<GroupMemberEntity> q = OS.createQuery(GroupMemberEntity.class);
+    Query<GroupMemberEntity> q = ofy.query(GroupMemberEntity.class);
+    // resultList = ofy.prepare(q).asList();
+    return q;
   }
 
 }

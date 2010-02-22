@@ -30,7 +30,7 @@ import org.jamwiki.utils.WikiLogger;
 
 import com.google.appengine.api.datastore.EntityNotFoundException;
 import com.google.appengine.api.datastore.Text;
-import com.googlecode.objectify.OKey;
+import com.googlecode.objectify.Key;
 import com.googlecode.objectify.Objectify;
 
 /**
@@ -70,7 +70,7 @@ public class TopicVersion implements Serializable {
    */
   private boolean recentChangeAllowed = true;
   // private int topicId = -1;
-  private OKey<Topic> topicId = null;
+  private Key<Topic> topicId = null;
 
   private Text versionContent = null;
   private List<String> versionParams = null;
@@ -272,7 +272,7 @@ public class TopicVersion implements Serializable {
     return null;
   }
 
-  public OKey<Topic> getTopicOKey() {
+  public Key<Topic> getTopicOKey() {
     return this.topicId;
   }
   
@@ -281,7 +281,7 @@ public class TopicVersion implements Serializable {
 	 */
   public void setTopicId(Topic topic) {
     Objectify ofy = OS.begin();
-    this.topicId = OS.createKey(topic);
+    this.topicId = new Key<Topic>(Topic.class,topic.getName());
   }
 
   /**

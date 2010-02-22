@@ -3,15 +3,14 @@ package info.bliki.gae.db;
 import info.bliki.gae.model.PropertyEntity;
 
 import java.util.Enumeration;
-import java.util.List;
 import java.util.Properties;
-import java.util.Vector;
 
 import org.jamwiki.model.OS;
 
 import com.google.appengine.api.datastore.EntityNotFoundException;
-import com.googlecode.objectify.OQuery;
+import com.google.appengine.api.datastore.QueryResultIterable;
 import com.googlecode.objectify.Objectify;
+import com.googlecode.objectify.Query;
 
 public class PropertyService {
 
@@ -35,12 +34,10 @@ public class PropertyService {
     return null;
   }
 
-  public static List<PropertyEntity> getAll() {
-    List<PropertyEntity> resultList = null;
+  public static QueryResultIterable<PropertyEntity> getAll() {
     Objectify ofy = OS.begin();
-    OQuery<PropertyEntity> q = OS.createQuery(PropertyEntity.class);
-    resultList = ofy.prepare(q).asList();
-    return resultList;
+    Query<PropertyEntity> q = ofy.query(PropertyEntity.class);
+    return q;
   }
 
   public static void saveAll(Properties properties) {

@@ -1,5 +1,6 @@
 package info.bliki.gae.db;
 
+import info.bliki.gae.model.UserAuthorityEntity;
 import info.bliki.gae.model.UserEntity;
 
 import java.util.Collections;
@@ -14,7 +15,8 @@ import org.jamwiki.model.OS;
 import org.jamwiki.model.WikiUser;
 
 import com.google.appengine.api.datastore.EntityNotFoundException;
-import com.googlecode.objectify.OQuery;
+import com.google.appengine.api.datastore.QueryResultIterable;
+import com.googlecode.objectify.Query;
 import com.googlecode.objectify.Objectify;
 
 public class UserService {
@@ -45,31 +47,33 @@ public class UserService {
   public static boolean isAuthenticated(String username,
       String encryptedPassword) {
     Objectify ofy = OS.begin();
-    OQuery<WikiUser> q = OS.createQuery(WikiUser.class);
+    // OQuery<WikiUser> q = OS.createQuery(WikiUser.class);
+    Query<WikiUser> q = ofy.query(WikiUser.class);
+
     q.filter("username", username);
     q.filter("password", encryptedPassword);
-    return ofy.prepare(q).asSingle() != null;
+    return q.countAll() > 0;
+    // return ofy.prepare(q).asSingle() != null;
   }
 
   public static UserEntity findByName(String name) {
     UserEntity role = null;
     try {
       Objectify ofy = OS.begin();
-      OQuery<UserEntity> q = OS.createQuery(UserEntity.class);
-      q.filter("username", name);
-      role = ofy.prepare(q).asSingle();
-      return role;
-    } catch (NullPointerException npe) {
+      // OQuery<UserEntity> q = OS.createQuery(UserEntity.class);
+      Query<WikiUser> q = ofy.query(WikiUser.class);
+      return ofy.get(UserEntity.class, name);
+      // q.filter("username", name);
+      // role = ofy.prepare(q).asSingle();
+      // return role;
+    } catch (EntityNotFoundException enfe) {
     }
     return null;
   }
 
-  public static List<UserEntity> getAll() {
-    List<UserEntity> resultList = null;
+  public static QueryResultIterable<UserEntity> getAll() {
     Objectify ofy = OS.begin();
-    OQuery<UserEntity> q = OS.createQuery(UserEntity.class);
-    resultList = ofy.prepare(q).asList();
-    return resultList;
+    Query<UserEntity> q = ofy.query(UserEntity.class);
+    return q;
   }
-
 }

@@ -1,7 +1,6 @@
 package info.bliki.gae.db;
 
 import java.util.Collections;
-import java.util.List;
 
 import javax.cache.Cache;
 import javax.cache.CacheException;
@@ -12,8 +11,10 @@ import org.jamwiki.model.Category;
 import org.jamwiki.model.OS;
 
 import com.google.appengine.api.datastore.EntityNotFoundException;
-import com.googlecode.objectify.OQuery;
+import com.google.appengine.api.datastore.QueryResultIterable;
+import com.googlecode.objectify.Key;
 import com.googlecode.objectify.Objectify;
+import com.googlecode.objectify.Query;
 
 public class CategoryService {
   public static Cache cache = null;
@@ -63,31 +64,32 @@ public class CategoryService {
     }
     try {
       Objectify ofy = OS.begin();
-      OQuery<Category> q = OS.createQuery(Category.class);
-      q.filter("title", name);
-      category = ofy.prepare(q).asSingle();
-      cache.put(category.getName(), category);
-      return category;
-    } catch (NullPointerException npe) {
+      return ofy.get(new Key<Category>(Category.class, name));
+      // Query<Category> q = ofy.query(Category.class);
+      // q.filter("name", name);
+      // category = ofy.prepare(q).asSingle();
+      // cache.put(category.getName(), category);
+      // return category;
+    } catch (EntityNotFoundException enfe) {
     }
     return null;
   }
 
-  public static List<Category> getAll(String virtualWiki) {
-    List<Category> resultList = null;
+  public static QueryResultIterable<Category> getAll(String virtualWiki) {
+//    List<Category> resultList = null;
     Objectify ofy = OS.begin();
-    OQuery<Category> q = OS.createQuery(Category.class);
+    Query<Category> q = ofy.query(Category.class);
     q.filter("virtualWiki", virtualWiki);
-    resultList = ofy.prepare(q).asList();
-    return resultList;
+//    resultList = ofy.prepare(q).asList();
+    return q;
   }
 
-  public static List<Category> getAll() {
-    List<Category> resultList = null;
+  public static QueryResultIterable<Category> getAll() {
+//    List<Category> resultList = null;
     Objectify ofy = OS.begin();
-    OQuery<Category> q = OS.createQuery(Category.class);
-    resultList = ofy.prepare(q).asList();
-    return resultList;
+    Query<Category> q = ofy.query(Category.class);
+//    resultList = ofy.prepare(q).asList();
+    return q;
   }
 
   // Category save(Category page);

@@ -1,9 +1,9 @@
 package info.bliki.gae.db;
 
+import info.bliki.gae.model.PropertyEntity;
 import info.bliki.gae.model.RoleEntity;
 
 import java.util.Collections;
-import java.util.List;
 
 import javax.cache.Cache;
 import javax.cache.CacheException;
@@ -13,8 +13,9 @@ import javax.cache.CacheManager;
 import org.jamwiki.model.OS;
 
 import com.google.appengine.api.datastore.EntityNotFoundException;
-import com.googlecode.objectify.OQuery;
+import com.google.appengine.api.datastore.QueryResultIterable;
 import com.googlecode.objectify.Objectify;
+import com.googlecode.objectify.Query;
 
 public class RoleService {
   public static Cache cache = null;
@@ -61,22 +62,21 @@ public class RoleService {
     }
     try {
       Objectify ofy = OS.begin();
-      OQuery<RoleEntity> q = OS.createQuery(RoleEntity.class);
-      q.filter("name", name);
-      role = ofy.prepare(q).asSingle();
+      role = ofy.get(RoleEntity.class, name);
+      // Query<PropertyEntity> q = ofy.query(PropertyEntity.class);
+      // q.filter("name", name);
+      // role = ofy.prepare(q).asSingle();
       cache.put(role.getName(), role);
       return role;
-    } catch (NullPointerException npe) {
+    } catch (EntityNotFoundException enfe) {
     }
     return null;
   }
 
-  public static List<RoleEntity> getAll() {
-    List<RoleEntity> resultList = null;
+  public static QueryResultIterable<RoleEntity> getAll() {
     Objectify ofy = OS.begin();
-    OQuery<RoleEntity> q = OS.createQuery(RoleEntity.class);
-    resultList = ofy.prepare(q).asList();
-    return resultList;
+    Query<RoleEntity> q = ofy.query(RoleEntity.class);
+    return q;
   }
 
 }

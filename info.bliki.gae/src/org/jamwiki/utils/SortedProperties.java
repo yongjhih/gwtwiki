@@ -25,6 +25,8 @@ import java.util.List;
 import java.util.Properties;
 import java.util.Vector;
 
+import com.google.appengine.api.datastore.QueryResultIterable;
+
 /**
  * This class acts as a utility class for providing the capability of a property
  * file that is sorted alphabetically by key value. It is useful for things like
@@ -60,11 +62,9 @@ public class SortedProperties extends Properties {
 
   public void loadFromDatastore() {
     // load additional properties from datastore
-    List<PropertyEntity> list = PropertyService.getAll();
-    if (list != null) {
-      for (PropertyEntity propertyEntity : list) {
-        super.setProperty(propertyEntity.getKey(), propertyEntity.getValue());
-      }
+    QueryResultIterable<PropertyEntity> list = PropertyService.getAll();
+    for (PropertyEntity propertyEntity : list) {
+      super.setProperty(propertyEntity.getKey(), propertyEntity.getValue());
     }
   }
 

@@ -2,7 +2,6 @@ package info.bliki.gae.db;
 
 import java.util.Collections;
 import java.util.LinkedHashMap;
-import java.util.List;
 
 import javax.cache.Cache;
 import javax.cache.CacheException;
@@ -11,7 +10,6 @@ import javax.cache.CacheManager;
 
 import org.jamwiki.WikiException;
 import org.jamwiki.WikiMessage;
-import org.jamwiki.model.Category;
 import org.jamwiki.model.OS;
 import org.jamwiki.model.Topic;
 import org.jamwiki.model.WikiUser;
@@ -22,8 +20,10 @@ import org.jamwiki.parser.ParserUtil;
 import org.jamwiki.servlets.ServletUtil;
 
 import com.google.appengine.api.datastore.EntityNotFoundException;
-import com.googlecode.objectify.OQuery;
+import com.google.appengine.api.datastore.QueryResultIterable;
+import com.googlecode.objectify.Key;
 import com.googlecode.objectify.Objectify;
+import com.googlecode.objectify.Query;
 
 public class PageService {
   public static Cache cache = null;
@@ -80,12 +80,13 @@ public class PageService {
     }
     try {
       Objectify ofy = OS.begin();
-      OQuery<Topic> q = OS.createQuery(Topic.class);
-      q.filter("title", title);
-      page = ofy.prepare(q).asSingle();
+      page = ofy.get(new Key<Topic>(Topic.class, title));
+      // Query<Topic> q = ofy.query(Topic.class);
+      // q.filter("title", title);
+      // page = ofy.prepare(q).asSingle();
       cache.put(page.getName(), page);
       return page;
-    } catch (NullPointerException npe) {
+    } catch (EntityNotFoundException enfe) {
     }
     return null;
   }
@@ -125,12 +126,13 @@ public class PageService {
     return "";
   }
 
-  public static List<Topic> getAll() {
-    List<Topic> resultList = null;
+  public static QueryResultIterable<Topic> getAll() {
+    // List<Topic> resultList = null;
     Objectify ofy = OS.begin();
-    OQuery<Topic> q = OS.createQuery(Topic.class);
-    resultList = ofy.prepare(q).asList();
-    return resultList;
+    // OQuery<Topic> q = OS.createQuery(Topic.class);
+    Query<Topic> q = ofy.query(Topic.class);
+    // resultList = ofy.prepare(q).asList();
+    return q;
   }
 
   // Topic save(Topic page);

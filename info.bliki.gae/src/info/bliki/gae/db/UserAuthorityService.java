@@ -2,12 +2,11 @@ package info.bliki.gae.db;
 
 import info.bliki.gae.model.UserAuthorityEntity;
 
-import java.util.List;
-
 import org.jamwiki.model.OS;
 
-import com.googlecode.objectify.OQuery;
+import com.google.appengine.api.datastore.QueryResultIterable;
 import com.googlecode.objectify.Objectify;
+import com.googlecode.objectify.Query;
 
 public class UserAuthorityService {
 
@@ -17,18 +16,19 @@ public class UserAuthorityService {
     return page;
   }
 
-//  public static UserAuthorityEntity update(UserAuthorityEntity role) {
-//    UserAuthorityEntity existingEntity = null;
-//    try {
-//      Objectify ofy = OS.begin();
-//      existingEntity = ofy.get(UserAuthorityEntity.class, role.getUserAuthorityId());
-//      existingEntity.setGroupId(role.getGroupId());
-//      existingEntity.setAuthority(role.getAuthority());
-//      ofy.put(existingEntity);
-//    } catch (EntityNotFoundException enf) {
-//    }
-//    return existingEntity;
-//  }
+  // public static UserAuthorityEntity update(UserAuthorityEntity role) {
+  // UserAuthorityEntity existingEntity = null;
+  // try {
+  // Objectify ofy = OS.begin();
+  // existingEntity = ofy.get(UserAuthorityEntity.class,
+  // role.getUserAuthorityId());
+  // existingEntity.setGroupId(role.getGroupId());
+  // existingEntity.setAuthority(role.getAuthority());
+  // ofy.put(existingEntity);
+  // } catch (EntityNotFoundException enf) {
+  // }
+  // return existingEntity;
+  // }
 
   public static void delete(UserAuthorityEntity role) {
     Objectify ofy = OS.begin();
@@ -39,23 +39,22 @@ public class UserAuthorityService {
     UserAuthorityEntity role;
     try {
       Objectify ofy = OS.begin();
-      OQuery<UserAuthorityEntity> q = OS.createQuery(UserAuthorityEntity.class);
+      // OQuery<UserAuthorityEntity> q =
+      // OS.createQuery(UserAuthorityEntity.class);
+      Query<UserAuthorityEntity> q = ofy.query(UserAuthorityEntity.class);
       q.filter("username", username);
-      Iterable<UserAuthorityEntity> it = ofy.prepare(q).asIterable();
-      for (UserAuthorityEntity groupAuthorityEntity : it) {
-        ofy.delete(groupAuthorityEntity);
-      }
+      ofy.delete(q);
+      // Iterable<UserAuthorityEntity> it = ofy.prepare(q).asIterable();
+      // for (UserAuthorityEntity groupAuthorityEntity : it) {
+      // ofy.delete(groupAuthorityEntity);
+      // }
     } catch (NullPointerException npe) {
     }
   }
 
-
-  public static List<UserAuthorityEntity> getAll() {
-    List<UserAuthorityEntity> resultList = null;
+  public static QueryResultIterable<UserAuthorityEntity> getAll() {
     Objectify ofy = OS.begin();
-    OQuery<UserAuthorityEntity> q = OS.createQuery(UserAuthorityEntity.class);
-    resultList = ofy.prepare(q).asList();
-    return resultList;
+    Query<UserAuthorityEntity> q = ofy.query(UserAuthorityEntity.class);
+    return q;
   }
-
 }

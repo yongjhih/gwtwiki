@@ -1,7 +1,6 @@
 package info.bliki.gae.db;
 
 import java.util.Collections;
-import java.util.List;
 
 import javax.cache.Cache;
 import javax.cache.CacheException;
@@ -12,8 +11,9 @@ import org.jamwiki.model.OS;
 import org.jamwiki.model.VirtualWiki;
 
 import com.google.appengine.api.datastore.EntityNotFoundException;
-import com.googlecode.objectify.OQuery;
+import com.google.appengine.api.datastore.QueryResultIterable;
 import com.googlecode.objectify.Objectify;
+import com.googlecode.objectify.Query;
 
 public class VirualWikiService {
   public static Cache cache = null;
@@ -61,22 +61,20 @@ public class VirualWikiService {
     }
     try {
       Objectify ofy = OS.begin();
-      OQuery<VirtualWiki> q = OS.createQuery(VirtualWiki.class);
+      // OQuery<VirtualWiki> q = OS.createQuery(VirtualWiki.class);
+      Query<VirtualWiki> q = ofy.query(VirtualWiki.class);
       q.filter("title", name);
-      role = ofy.prepare(q).asSingle();
-      cache.put(role.getName(), role);
-      return role;
+      // role = ofy.prepare(q).asSingle();
+      // cache.put(role.getName(), role);
+      return q.get();
     } catch (NullPointerException npe) {
     }
     return null;
   }
 
-  public static List<VirtualWiki> getAll() {
-    List<VirtualWiki> resultList = null;
+  public static QueryResultIterable<VirtualWiki> getAll() {
     Objectify ofy = OS.begin();
-    OQuery<VirtualWiki> q = OS.createQuery(VirtualWiki.class);
-    resultList = ofy.prepare(q).asList();
-    return resultList;
+    Query<VirtualWiki> q = ofy.query(VirtualWiki.class);
+    return q;
   }
-
 }

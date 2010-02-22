@@ -17,7 +17,6 @@
 package org.jamwiki.servlets;
 
 import java.util.LinkedHashMap;
-import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -28,8 +27,9 @@ import org.jamwiki.model.Category;
 import org.jamwiki.utils.NamespaceHandler;
 import org.jamwiki.utils.Pagination;
 import org.jamwiki.utils.WikiLogger;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.servlet.ModelAndView;
+
+import com.google.appengine.api.datastore.QueryResultIterable;
 
 /**
  * Used for display a list of all categories that are currently in use for a
@@ -56,7 +56,7 @@ public class CategoryServlet extends JAMWikiServlet {
 	private void viewCategories(HttpServletRequest request, ModelAndView next, WikiPageInfo pageInfo) throws Exception {
 		String virtualWiki = pageInfo.getVirtualWikiName();
 		Pagination pagination = ServletUtil.loadPagination(request, next);
-		List<Category> categoryObjects = WikiBase.getDataHandler().getAllCategories(virtualWiki, pagination);
+		Iterable<Category> categoryObjects = WikiBase.getDataHandler().getAllCategories(virtualWiki, pagination);
 		LinkedHashMap<String, String> categories = new LinkedHashMap<String, String>();
 		for (Category category : categoryObjects) {
 			String key = category.getName();

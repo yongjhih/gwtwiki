@@ -1,7 +1,6 @@
 package info.bliki.gae.db;
 
 import java.util.Collections;
-import java.util.List;
 
 import javax.cache.Cache;
 import javax.cache.CacheException;
@@ -12,8 +11,9 @@ import org.jamwiki.model.OS;
 import org.jamwiki.model.WikiGroup;
 
 import com.google.appengine.api.datastore.EntityNotFoundException;
-import com.googlecode.objectify.OQuery;
+import com.google.appengine.api.datastore.QueryResultIterable;
 import com.googlecode.objectify.Objectify;
+import com.googlecode.objectify.Query;
 
 public class WikiGroupService {
   public static Cache cache = null;
@@ -61,9 +61,11 @@ public class WikiGroupService {
     }
     try {
       Objectify ofy = OS.begin();
-      OQuery<WikiGroup> q = OS.createQuery(WikiGroup.class);
+      // OQuery<WikiGroup> q = OS.createQuery(WikiGroup.class);
+      Query<WikiGroup> q = ofy.query(WikiGroup.class);
       q.filter("name", name);
-      role = ofy.prepare(q).asSingle();
+      // role = ofy.prepare(q).asSingle();
+      role = q.get();
       cache.put(role.getName(), role);
       return role;
     } catch (NullPointerException npe) {
@@ -71,12 +73,10 @@ public class WikiGroupService {
     return null;
   }
 
-  public static List<WikiGroup> getAll() {
-    List<WikiGroup> resultList = null;
+  public static QueryResultIterable<WikiGroup> getAll() {
     Objectify ofy = OS.begin();
-    OQuery<WikiGroup> q = OS.createQuery(WikiGroup.class);
-    resultList = ofy.prepare(q).asList();
-    return resultList;
+    Query<WikiGroup> q = ofy.query(WikiGroup.class);
+    return q;
   }
 
 }

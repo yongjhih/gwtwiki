@@ -11,7 +11,7 @@ import org.jamwiki.WikiBase;
 
 import com.google.appengine.api.datastore.EntityNotFoundException;
 import com.google.appengine.api.datastore.Text;
-import com.googlecode.objectify.OKey;
+import com.googlecode.objectify.Key;
 import com.googlecode.objectify.Objectify;
 
 @Entity
@@ -20,7 +20,7 @@ public class Topic implements Serializable {
    *  
    */
   private static final long serialVersionUID = 5518810488698138847L;
-
+ 
   /* Standard topic type. */
   public static final int TYPE_ARTICLE = 1;
   /* Topic redirects to another topic. */
@@ -39,7 +39,7 @@ public class Topic implements Serializable {
   @Id
   private String title;
 
-  private OKey<WikiUser> author;
+  private Key<WikiUser> author; 
 
   private Text content = null;
 
@@ -194,7 +194,7 @@ public class Topic implements Serializable {
 
   public void setAuthor(WikiUser author) {
     Objectify ofy = OS.begin();
-    this.author = OS.createKey(author);
+    this.author = new Key<WikiUser>(WikiUser.class, author.getUserId());
   }
 
   public void setCurrentVersionId(Long currentVersionId) {

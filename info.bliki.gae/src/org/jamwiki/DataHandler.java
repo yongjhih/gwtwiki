@@ -109,7 +109,7 @@ public interface DataHandler {
    * @throws DataAccessException
    *           Thrown if any error occurs during method execution.
    */
-  List<Category> getAllCategories(String virtualWiki, Pagination pagination)
+  Iterable<Category> getAllCategories(String virtualWiki, Pagination pagination)
       throws DataAccessException;
 
   /**

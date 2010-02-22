@@ -1,13 +1,17 @@
 package info.bliki.gae.db;
 
+import info.bliki.gae.model.RoleEntity;
+
 import java.util.List;
 
 import org.jamwiki.model.OS;
 import org.jamwiki.model.Topic;
 import org.jamwiki.model.TopicVersion;
 
-import com.googlecode.objectify.OQuery;
+import com.google.appengine.api.datastore.QueryResultIterable;
+import com.googlecode.objectify.Key;
 import com.googlecode.objectify.Objectify;
+import com.googlecode.objectify.Query;
 
 public class TopicVersionService {
 
@@ -30,19 +34,19 @@ public class TopicVersionService {
     return ofy.find(TopicVersion.class, versionId);
   }
 
-  public static List<TopicVersion> findByTopic(Topic topic) {
+  public static QueryResultIterable<TopicVersion> findByTopic(Topic topic) {
     Objectify ofy = OS.begin();
-    OQuery<TopicVersion> q = OS.createQuery(TopicVersion.class);
-    q.filter("topicId", OS.createKey(topic));
-    return ofy.prepare(q).asList();
+    // OQuery<TopicVersion> q = OS.createQuery(TopicVersion.class);
+    Query<TopicVersion> q = ofy.query(TopicVersion.class);
+    q.filter("topicId", new Key<Topic>(Topic.class, topic.getName()));
+    // return ofy.prepare(q).asList();
+    return q;
   }
-  
-  public static List<TopicVersion> getAll() {
-    List<TopicVersion> resultList = null;
+
+  public static QueryResultIterable<TopicVersion> getAll() {
     Objectify ofy = OS.begin();
-    OQuery<TopicVersion> q = OS.createQuery(TopicVersion.class);
-    resultList = ofy.prepare(q).asList();
-    return resultList;
+    Query<TopicVersion> q = ofy.query(TopicVersion.class);
+    return q;
   }
 
 }

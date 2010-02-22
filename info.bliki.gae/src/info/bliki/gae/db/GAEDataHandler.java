@@ -39,7 +39,8 @@ import org.jamwiki.utils.Pagination;
 import org.jamwiki.utils.WikiLink;
 import org.jamwiki.utils.WikiUtil;
 
-import com.googlecode.objectify.OKey;
+import com.google.appengine.api.datastore.QueryResultIterable;
+import com.googlecode.objectify.Key;
 
 public class GAEDataHandler implements DataHandler {
   /**
@@ -119,22 +120,19 @@ public class GAEDataHandler implements DataHandler {
   }
 
   @Override
-  public List<Category> getAllCategories(String virtualWiki,
+  public Iterable<Category> getAllCategories(String virtualWiki,
       Pagination pagination) throws DataAccessException {
     return CategoryService.getAll(virtualWiki);
   }
 
   @Override
   public List<Role> getAllRoles() throws DataAccessException {
-    List<RoleEntity> rs = RoleService.getAll();
-    if (rs != null) {
-      List<Role> roles = new ArrayList<Role>();
-      for (int i = 0; i < rs.size(); i++) {
-        roles.add(initRole(rs.get(i)));
-      }
-      return roles;
+    QueryResultIterable<RoleEntity> rs = RoleService.getAll();
+    List<Role> roles = new ArrayList<Role>();
+    for (RoleEntity roleEntity : rs) {
+      roles.add(initRole(roleEntity));
     }
-    return null;
+    return roles;
   }
 
   @Override
@@ -158,7 +156,17 @@ public class GAEDataHandler implements DataHandler {
       Pagination pagination, boolean descending) throws DataAccessException {
     // TODO Auto-generated method stub
     throw new NotImplementedException("getRecentChanges");
-    // return null;
+    // Topic topic = this.lookupTopic(virtualWiki, topicName, true, null);
+    // if (topic == null) {
+    // return new ArrayList<RecentChange>();
+    // }
+    // QueryResultIterable<TopicVersion> list = TopicVersionService
+    // .findByTopic(topic);
+    // List<RecentChange> recentChanges = new ArrayList<RecentChange>();
+    // for (TopicVersion topicVersion : list) {
+    // recentChanges.add(this.initRecentChange(topicVersion));
+    // }
+    // return recentChanges;
   }
 
   @Override
@@ -207,7 +215,7 @@ public class GAEDataHandler implements DataHandler {
   @Override
   public List<Role> getRoleMapGroup(String groupName)
       throws DataAccessException {
-    List<GroupAuthorityEntity> list = GroupAuthorityService
+    QueryResultIterable<GroupAuthorityEntity> list = GroupAuthorityService
         .getByGroupname(groupName);
     if (list != null) {
       List<Role> roles = new ArrayList<Role>();
@@ -225,7 +233,8 @@ public class GAEDataHandler implements DataHandler {
   @Override
   public List<RoleMap> getRoleMapGroups() throws DataAccessException {
     LinkedHashMap<Long, RoleMap> roleMaps = new LinkedHashMap<Long, RoleMap>();
-    List<GroupAuthorityEntity> list = GroupAuthorityService.getAll();
+    QueryResultIterable<GroupAuthorityEntity> list = GroupAuthorityService
+        .getAll();
     for (GroupAuthorityEntity groupAuthorityEntity : list) {
       Long groupId = groupAuthorityEntity.getGroupId();
       RoleMap roleMap = new RoleMap();
@@ -245,17 +254,15 @@ public class GAEDataHandler implements DataHandler {
   @Override
   public List<Role> getRoleMapUser(String login) throws DataAccessException {
     // TODO Auto-generated method stub
-    List<AuthorityEntity> list = AuthorityService.findByName(login);
-    if (list != null) {
-      RoleImpl roleImpl;
-      List<Role> roles = new ArrayList<Role>();
-      for (AuthorityEntity authorityEntity : list) {
-        roleImpl = new RoleImpl(authorityEntity.getAuthority());
-        roleImpl.setDescription(roleImpl.getDescription());
-      }
-      return roles;
+    QueryResultIterable<AuthorityEntity> list = AuthorityService
+        .findByName(login);
+    RoleImpl roleImpl;
+    List<Role> roles = new ArrayList<Role>();
+    for (AuthorityEntity authorityEntity : list) {
+      roleImpl = new RoleImpl(authorityEntity.getAuthority());
+      roleImpl.setDescription(roleImpl.getDescription());
     }
-    return null;
+    return roles;
   }
 
   // private TopicVersion initTopicVersion(ResultSet rs) throws SQLException {
@@ -290,7 +297,7 @@ public class GAEDataHandler implements DataHandler {
 
     change.setTopicVersionId(rs.getTopicVersionId());
     change.setPreviousTopicVersionId(rs.getPreviousTopicVersionId());
-    OKey<Topic> topicId = rs.getTopicOKey();
+    Key<Topic> topicId = rs.getTopicOKey();
     change.setTopicOKey(topicId);
 
     Topic topic = rs.getTopicId();
@@ -325,7 +332,8 @@ public class GAEDataHandler implements DataHandler {
     if (topic == null) {
       return new ArrayList<RecentChange>();
     }
-    List<TopicVersion> list = TopicVersionService.findByTopic(topic);
+    QueryResultIterable<TopicVersion> list = TopicVersionService
+        .findByTopic(topic);
     List<RecentChange> recentChanges = new ArrayList<RecentChange>();
     for (TopicVersion topicVersion : list) {
       recentChanges.add(this.initRecentChange(topicVersion));
@@ -343,16 +351,19 @@ public class GAEDataHandler implements DataHandler {
 
   @Override
   public List<VirtualWiki> getVirtualWikiList() throws DataAccessException {
-    List<VirtualWiki> results = VirualWikiService.getAll();
-    if (results == null || results.size() == 0) {
+    QueryResultIterable<VirtualWiki> results = VirualWikiService.getAll();
+    ArrayList<VirtualWiki> list = new ArrayList<VirtualWiki>();
+    for (VirtualWiki virtualWiki : results) {
+      list.add(virtualWiki);
+    }
+    if (list.size() == 0) {
       // TODO allow multiple virtual wikis
       VirtualWiki vw = new VirtualWiki(WikiBase.DEFAULT_VWIKI, Environment
           .getValue(Environment.PROP_BASE_DEFAULT_TOPIC));
-      ArrayList<VirtualWiki> list = new ArrayList<VirtualWiki>();
       list.add(vw);
       return list;
     }
-    return results;
+    return list;
   }
 
   @Override

@@ -10,8 +10,10 @@ import javax.cache.CacheManager;
 
 import org.jamwiki.authentication.WikiUserDetails;
 import org.jamwiki.model.OS;
+import org.jamwiki.model.WikiGroup;
 
-import com.googlecode.objectify.OQuery;
+import com.google.appengine.api.datastore.QueryResultIterable;
+import com.googlecode.objectify.Query;
 import com.googlecode.objectify.Objectify;
 
 
@@ -50,12 +52,10 @@ public class WikiUserDetailsService {
     return ofy.find(WikiUserDetails.class, username);
   }
 
-  public static List<WikiUserDetails> getAll() {
-    List<WikiUserDetails> resultList = null;
+  public static QueryResultIterable<WikiUserDetails> getAll() {
     Objectify ofy = OS.begin();
-    OQuery<WikiUserDetails> q = OS.createQuery(WikiUserDetails.class);
-    resultList = ofy.prepare(q).asList();
-    return resultList;
+    Query<WikiUserDetails> q = ofy.query(WikiUserDetails.class);
+    return q;
   }
 }
 

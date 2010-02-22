@@ -8,15 +8,17 @@ import javax.cache.CacheException;
 import javax.cache.CacheFactory;
 import javax.cache.CacheManager;
 
+import org.jamwiki.authentication.WikiUserDetails;
 import org.jamwiki.model.OS;
 import org.jamwiki.model.WikiUser;
 
 import com.google.appengine.api.datastore.EntityNotFoundException;
+import com.google.appengine.api.datastore.QueryResultIterable;
 import com.google.appengine.api.users.User;
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
-import com.googlecode.objectify.OQuery;
 import com.googlecode.objectify.Objectify;
+import com.googlecode.objectify.Query;
 
 public class WikiUserService {
   public static Cache WIKIUSER_CACHE = null;
@@ -69,13 +71,15 @@ public class WikiUserService {
     return ofy.find(WikiUser.class, userId);
   }
 
-  public static List<WikiUser> findByFragment(String usernameFragment) {
-    List<WikiUser> resultList = null;
+  public static QueryResultIterable<WikiUser> findByFragment(
+      String usernameFragment) {
+    // List<WikiUser> resultList = null;
     Objectify ofy = OS.begin();
-    OQuery<WikiUser> q = OS.createQuery(WikiUser.class);
+    // OQuery<WikiUser> q = OS.createQuery(WikiUser.class);
+    Query<WikiUser> q = ofy.query(WikiUser.class);
     q.filter("username in", usernameFragment);
-    resultList = ofy.prepare(q).asList();
-    return resultList;
+    // resultList = ofy.prepare(q).asList();
+    return q;
   }
 
   public static WikiUser findByName(String username) {
@@ -85,9 +89,10 @@ public class WikiUserService {
     }
     try {
       Objectify ofy = OS.begin();
-      OQuery<WikiUser> q = OS.createQuery(WikiUser.class);
+      // OQuery<WikiUser> q = OS.createQuery(WikiUser.class);
+      Query<WikiUser> q = ofy.query(WikiUser.class);
       q.filter("username", username);
-      wikiUser = ofy.prepare(q).asSingle();
+      wikiUser = q.get();// ofy.prepare(q).asSingle();
       WIKIUSER_CACHE.put(wikiUser.getUsername(), wikiUser);
       return wikiUser;
     } catch (NullPointerException npe) {
@@ -99,9 +104,10 @@ public class WikiUserService {
     WikiUser wikiUser = null;
     try {
       Objectify ofy = OS.begin();
-      OQuery<WikiUser> q = OS.createQuery(WikiUser.class);
+      // OQuery<WikiUser> q = OS.createQuery(WikiUser.class);
+      Query<WikiUser> q = ofy.query(WikiUser.class);
       q.filter("email", email);
-      wikiUser = ofy.prepare(q).asSingle();
+      wikiUser = q.get();// ofy.prepare(q).asSingle();
       WIKIUSER_CACHE.put(wikiUser.getUsername(), wikiUser);
       return wikiUser;
     } catch (NullPointerException npe) {
@@ -127,9 +133,10 @@ public class WikiUserService {
       }
       Objectify ofy = OS.begin();
       try {
-        OQuery<WikiUser> q = OS.createQuery(WikiUser.class);
+        // OQuery<WikiUser> q = OS.createQuery(WikiUser.class);
+        Query<WikiUser> q = ofy.query(WikiUser.class);
         q.filter("email", email);
-        wikiUser = ofy.prepare(q).asSingle();
+        wikiUser = q.get();// ofy.prepare(q).asSingle();
         WIKIUSER_CACHE.put(wikiUser.getUsername(), wikiUser);
         return wikiUser;
       } catch (NullPointerException npe) {
@@ -151,12 +158,10 @@ public class WikiUserService {
     return null;
   }
 
-  public static List<WikiUser> getAll() {
-    List<WikiUser> resultList = null;
+  public static QueryResultIterable<WikiUser> getAll() {
     Objectify ofy = OS.begin();
-    OQuery<WikiUser> q = OS.createQuery(WikiUser.class);
-    resultList = ofy.prepare(q).asList();
-    return resultList;
+    Query<WikiUser> q = ofy.query(WikiUser.class);
+    return q;
   }
 }
 // WikiUser save(WikiUser user);
