@@ -4,6 +4,7 @@ import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.ConnectException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -225,6 +226,8 @@ public class Page {
 					}
 				}
 				// System.out.println(statusCode);
+			} catch (ConnectException e) {
+			  e.printStackTrace();
 			} catch (HttpException e) {
 				e.printStackTrace();
 			} catch (IOException e) {
