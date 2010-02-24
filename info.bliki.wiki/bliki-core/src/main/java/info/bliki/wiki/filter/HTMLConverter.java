@@ -48,8 +48,7 @@ public class HTMLConverter implements ITextConverter {
 						} else if (item instanceof ContentToken) {
 							ContentToken contentToken = (ContentToken) item;
 							String content = contentToken.getContent();
-							content = Utils.escapeXml(content, true, true, true);
-							resultBuffer.append(content);
+							Utils.escapeXmlToBuffer(content, resultBuffer, true, true, true);
 						} else if (item instanceof HTMLTag) {
 							((HTMLTag) item).renderHTML(this, resultBuffer, model);
 						} else if (item instanceof TagNode) {
