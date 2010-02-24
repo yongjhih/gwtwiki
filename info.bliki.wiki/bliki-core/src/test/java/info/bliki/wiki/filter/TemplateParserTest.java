@@ -346,6 +346,52 @@ public class TemplateParserTest extends FilterTestSupport {
 		assertTrue(currentSeconds > 1212598361);
 	}
 
+  /**
+   * See <a href="http://en.wikipedia.org/wiki/Help:Substitution">Wikipedia-Help:Substitution</a>
+   */
+  public void testSubst001() {
+    assertEquals("{{}}", wikiModel.parseTemplates("{{subst:}}", false));
+    assertEquals("a nested template text", wikiModel.parseTemplates(
+        "{{subst:Nested}}", false));
+  }
+
+  /**
+   * See <a href="http://en.wikipedia.org/wiki/Help:Substitution">Wikipedia-Help:Substitution</a>
+   */
+  public void testSubst002() {
+    assertEquals("Image", wikiModel.parseTemplates(
+        "{{subst:ns:{{subst:#expr:2*3}}}}", false));
+  }
+
+  /**
+   * See <a href="http://en.wikipedia.org/wiki/Help:Substitution">Wikipedia-Help:Substitution</a>
+   */
+  public void testSubst003() {
+    assertEquals("Image", wikiModel.parseTemplates(
+        "{{ns:{{subst:#expr:2*3}}}}", false));
+  }
+
+  /**
+   * See <a href="http://en.wikipedia.org/wiki/Help:Substitution">Wikipedia-Help:Substitution</a>
+   */
+  public void testSubst004() {
+    assertEquals("1.0e-5", wikiModel.parseTemplates(
+        "{{subst:LC:{{subst:#expr:1/100000}}}}", false));
+  }
+
+  /**
+   * See <a href="http://en.wikipedia.org/wiki/Help:Substitution">Wikipedia-Help:Substitution</a>
+   */
+  public void testSubst005() {
+    assertEquals("IN", wikiModel.parseTemplates("{{subst:UC:{{subst:tc}}}}",
+        false));
+  }
+  
+  public void testSubst006() {
+    assertEquals("{{[[Template:{{subst:NAMESPACE}}|{{subst:NAMESPACE}}]]}}", wikiModel.parseTemplates("{{subst:tl|{{subst:NAMESPACE}}}}",
+        false));
+  }
+  
 	public void testPipe001() {
 		assertEquals("hello worldhello world ", wikiModel.parseTemplates("{{2x|hello world" + "}} ", false));
 	}

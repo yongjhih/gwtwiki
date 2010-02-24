@@ -16,6 +16,9 @@ import java.util.Map;
  * 
  */
 public class WikiTestModel extends WikiModel {
+  public final static String TC = "<noinclude>\n"
+    + "This template is used in various tutorial pages and should not be altered; it should say 'in' and nothing else.\n"
+    + "----\n" + "[[Category:Demo template]]\n" + "</noinclude>in\n" + "";
 	public final static String BIRTH_DATE_AND_AGE = "<includeonly>{{#if:{{{df|}}}|{{#expr:{{{3|{{{day}}}}}}}} {{MONTHNAME|{{{2|{{{month}}}}}}}}|{{MONTHNAME|{{{2|{{{month}}}}}}}} {{#expr:{{{3|{{{day}}}}}}}},}} {{{1|{{{year}}}}}}<span style=\"display:none\"> (<span class=\"bday\">{{{1|{{{year}}}}}}-{{padleft:{{{2|{{{month}}}}}}|2|0}}-{{padleft:{{{3|{{{day}}}}}}|2|0}}</span>)</span><span class=\"noprint\"> (age&nbsp;{{age | {{{1|{{{year}}}}}} | {{{2|{{{month}}}}}} | {{{3|{{{day}}}}}} }})</span></includeonly><noinclude>\n"
 			+ "{{pp-template|small=yes}}\n" + "{{documentation}}\n" + "</noinclude>";
 	public final static String MONTHNAME = "<includeonly>{{#if:{{{1|}}}|{{#switch:{{MONTHNUMBER|{{{1}}}}}|1=January|2=February|3=March|4=April|5=May|6=June|7=July|8=August|9=September|10=October|11=November|12=December|Incorrect required parameter 1=''month''!}}|Missing required parameter 1=''month''!}}</includeonly><noinclude>\n"
@@ -906,6 +909,8 @@ public class WikiTestModel extends WikiModel {
 				return IFEQ_TEST;
 			} else if (name.equals("Further")) {
 				return FURTHER;
+			} else if (name.equals("Tc")) {
+        return TC;
 			} else if (name.equals("Tl")) {
 				return TL;
 			} else if (name.equals("PronEng")) {
