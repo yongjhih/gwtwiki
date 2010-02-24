@@ -64,10 +64,10 @@ public class WPImageFilterTest extends FilterTestSupport {
 
 	public void testImage06() {
 		assertEquals(
-				"\n"
-						+ "<p><a class=\"internal\" href=\"http://www.bliki.info/wiki/Image:Henkell-Schl%C3%B6sschen.JPG\" title=\"Henkell-Schlösschen der Sektkellerei Henkell &amp; Söhnlein KG\"><img src=\"http://www.bliki.info/wiki/Henkell-Schl%C3%B6sschen.JPG\" alt=\"Henkell-Schlösschen der Sektkellerei Henkell &amp; Söhnlein KG\" title=\"Henkell-Schlösschen der Sektkellerei Henkell &amp; Söhnlein KG\" class=\"location-none type-thumb\" />\n"
-						+ "</a>\n"
-						+ "<div class=\"thumbcaption\"><i>Henkell-Schlösschen</i> der Sektkellerei <a href=\"http://www.bliki.info/wiki/Henkell_%26_S%C3%B6hnlein_KG\" title=\"Henkell &amp; Söhnlein KG\">Henkell &#38; Söhnlein KG</a></div> Wiesbaden</p>",
+				"\n" + 
+				"<p><a class=\"internal\" href=\"http://www.bliki.info/wiki/Image:Henkell-Schl%C3%B6sschen.JPG\" title=\"Henkell-Schlösschen der Sektkellerei Henkell &#38; Söhnlein KG\"><img src=\"http://www.bliki.info/wiki/Henkell-Schl%C3%B6sschen.JPG\" alt=\"Henkell-Schlösschen der Sektkellerei Henkell &#38; Söhnlein KG\" title=\"Henkell-Schlösschen der Sektkellerei Henkell &#38; Söhnlein KG\" class=\"location-none type-thumb\" />\n" + 
+				"</a>\n" + 
+				"<div class=\"thumbcaption\"><i>Henkell-Schlösschen</i> der Sektkellerei <a href=\"http://www.bliki.info/wiki/Henkell_%26_S%C3%B6hnlein_KG\" title=\"Henkell &amp; Söhnlein KG\">Henkell &#38; Söhnlein KG</a></div> Wiesbaden</p>",
 				wikiModel
 						.render("[[Image:Henkell-Schlösschen.JPG|thumb|\'\'Henkell-Schlösschen\'\' der Sektkellerei [[Henkell & Söhnlein KG]]]] Wiesbaden"));
 	}

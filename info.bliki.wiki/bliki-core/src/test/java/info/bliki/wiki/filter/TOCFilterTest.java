@@ -15,7 +15,7 @@ public class TOCFilterTest extends FilterTestSupport {
 	}
 
 	public void testTOC01() {
-		assertEquals("\n" + "<div style=\"page-break-inside:	avoid;\">\n" + "<table align=\"right\">\n" + "<tr>\n"
+		assertEquals("\n" + "<div style=\"page-break-inside: avoid;\">\n" + "<table align=\"right\">\n" + "<tr>\n"
 				+ "<td><table id=\"toc\" class=\"toc\" summary=\"Contents\">\n" + "<tr>\n" + "<td>\n" + "<div id=\"toctitle\">\n"
 				+ "<h2>Contents</h2>\n" + "</div>\n" + "<ul>\n" + "<ul>\n"
 				+ "<li class=\"toclevel-1\"><a href=\"#hello_world_2\">hello world 2</a>\n" + "</li>\n" + "<ul>\n"
@@ -28,7 +28,7 @@ public class TOCFilterTest extends FilterTestSupport {
 	}
 
 	public void testTOC02() {
-		assertEquals("\n" + "<div style=\"page-break-inside:	avoid;\">\n" + "<table align=\"right\">\n" + "<tr>\n"
+		assertEquals("\n" + "<div style=\"page-break-inside: avoid;\">\n" + "<table align=\"right\">\n" + "<tr>\n"
 				+ "<td><table id=\"toc\" class=\"toc\" summary=\"Contents\">\n" + "<tr>\n" + "<td>\n" + "<div id=\"toctitle\">\n"
 				+ "<h2>Contents</h2>\n" + "</div>\n" + "<ul>\n" + "<li class=\"toclevel-1\"><a href=\"#hello_world_1\">hello world 1</a>\n"
 				+ "</li>\n" + "<ul>\n" + "<li class=\"toclevel-2\"><a href=\"#hello_world_2\">hello world 2</a>\n" + "</li>\n"

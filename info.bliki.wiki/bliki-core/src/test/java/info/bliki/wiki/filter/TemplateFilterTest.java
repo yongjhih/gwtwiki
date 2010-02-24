@@ -110,7 +110,7 @@ public class TemplateFilterTest extends FilterTestSupport {
 	public void testTemplate12() {
 		assertEquals(
 				"\n"
-						+ "<div style=\"page-break-inside:	avoid;\">\n"
+						+ "<div style=\"page-break-inside: avoid;\">\n"
 						+ "<table cellspacing=\"5\" class=\"infobox\" style=\"width: 21em; font-size: 90%; text-align: left;\">\n"
 						+ "<tr>\n"
 						+ "<th colspan=\"2\" style=\"text-align: center; font-size: 130%;\">JAMWiki</th></tr>\n"
@@ -284,7 +284,7 @@ public class TemplateFilterTest extends FilterTestSupport {
 				"<th class=\"navbox-title\" colspan=\"2\" style=\";background: #EEDD82\">\n" + 
 				"\n" + 
 				"<div style=\"float:left; width:6em;text-align:left;\">\n" + 
-				"<div class=\"noprint plainlinksneverexpand\" style=\"background-color:transparent; padding:0; white-space:nowrap; font-weight:normal; font-size:xx-small; ;background: #EEDD82;border:none;;  \"><a href=\"http://www.bliki.info/wiki/Template:AcademyAwardBestActor_1981-2000\" title=\"Template:AcademyAwardBestActor 1981-2000\"><span style=\";background: #EEDD82;border:none;;\" title=\"View this template\">v</span></a>&#160;<span style=\"font-size:80%;\">•</span>&#160;<a href=\"http://www.bliki.info/wiki/Template_talk:AcademyAwardBestActor_1981-2000\" title=\"Template talk:AcademyAwardBestActor 1981-2000\"><span style=\"color:#002bb8;;background: #EEDD82;border:none;;\" title=\"Discussion about this template\">d</span></a>&#160;<span style=\"font-size:80%;\">•</span>&#160;<a class=\"externallink\" href=\"http://en.wikipedia.org/w/index.php?title=Template%3AAcademyAwardBestActor+1981-2000&#38;action=edit\" rel=\"nofollow\" title=\"http://en.wikipedia.org/w/index.php?title=Template%3AAcademyAwardBestActor+1981-2000&#38;action=edit\"><span style=\"color:#002bb8;;background: #EEDD82;border:none;;\" title=\"You can edit this template. Please use the preview button before saving.\">e</span></a></div></div><span style=\"font-size:110%;\"><a href=\"http://www.bliki.info/wiki/Academy_Award_for_Best_Actor\" title=\"Academy Award for Best Actor\">Academy Award for</a> <a href=\"http://www.bliki.info/wiki/Academy_Award_for_Best_Actor#1980s\" title=\"Academy Award for Best Actor\">Best Actor</a></span>\n" + 
+				"<div class=\"noprint plainlinksneverexpand\" style=\"background-color:transparent; padding:0; white-space:nowrap; font-weight:normal; font-size:xx-small; ;background: #EEDD82;border:none;;  \"><a href=\"http://www.bliki.info/wiki/Template:AcademyAwardBestActor_1981-2000\" title=\"Template:AcademyAwardBestActor 1981-2000\"><span style=\";background: #EEDD82;border:none;;\" title=\"View this template\">v</span></a> <span style=\"font-size:80%;\">•</span> <a href=\"http://www.bliki.info/wiki/Template_talk:AcademyAwardBestActor_1981-2000\" title=\"Template talk:AcademyAwardBestActor 1981-2000\"><span style=\"color:#002bb8;;background: #EEDD82;border:none;;\" title=\"Discussion about this template\">d</span></a> <span style=\"font-size:80%;\">•</span> <a class=\"externallink\" href=\"http://en.wikipedia.org/w/index.php?title=Template%3AAcademyAwardBestActor+1981-2000&#38;action=edit\" rel=\"nofollow\" title=\"http://en.wikipedia.org/w/index.php?title=Template%3AAcademyAwardBestActor+1981-2000&#38;action=edit\"><span style=\"color:#002bb8;;background: #EEDD82;border:none;;\" title=\"You can edit this template. Please use the preview button before saving.\">e</span></a></div></div><span style=\"font-size:110%;\"><a href=\"http://www.bliki.info/wiki/Academy_Award_for_Best_Actor\" title=\"Academy Award for Best Actor\">Academy Award for</a> <a href=\"http://www.bliki.info/wiki/Academy_Award_for_Best_Actor#1980s\" title=\"Academy Award for Best Actor\">Best Actor</a></span>\n" + 
 				"</th>\n" + 
 				"</tr>\n" + 
 				"<tr style=\"height:2px;\">\n" + 
@@ -342,20 +342,20 @@ public class TemplateFilterTest extends FilterTestSupport {
 	}
 
 	public void testPipe002() {
-		assertEquals("\n" + "<div style=\"page-break-inside:	avoid;\">\n" + "<table>\n" + "<tr>\n" + "<td>A </td>\n"
+		assertEquals("\n" + "<div style=\"page-break-inside: avoid;\">\n" + "<table>\n" + "<tr>\n" + "<td>A </td>\n"
 				+ "<td>B</td></tr>\n" + "<tr>\n" + "<td>C</td>\n" + "<td>D</td></tr></table></div>\n" + "\n"
-				+ "<div style=\"page-break-inside:	avoid;\">\n" + "<table>\n" + "<tr>\n" + "<td>A </td>\n" + "<td>B</td></tr>\n" + "<tr>\n"
+				+ "<div style=\"page-break-inside: avoid;\">\n" + "<table>\n" + "<tr>\n" + "<td>A </td>\n" + "<td>B</td></tr>\n" + "<tr>\n"
 				+ "<td>C</td>\n" + "<td>D</td></tr></table></div>\n" + "", wikiModel.render("{{2x|{{{!}} \n" + "{{!}} A \n" + "{{!}} B\n"
 				+ "{{!}}- \n" + "{{!}} C\n" + "{{!}} D\n" + "{{!}}}\n" + "}}"));
 	}
 
 	public void testPipe003() {
-		assertEquals("\n" + "<div style=\"page-break-inside:	avoid;\">\n" + "<table>\n" + "<tr>\n" + "<td>A </td>\n"
+		assertEquals("\n" + "<div style=\"page-break-inside: avoid;\">\n" + "<table>\n" + "<tr>\n" + "<td>A </td>\n"
 				+ "<td>B</td></tr>\n" + "<tr>\n" + "<td>C</td>\n" + "<td>D</td></tr></table></div>\n" + "\n"
-				+ "<div style=\"page-break-inside:	avoid;\">\n" + "<table>\n" + "<tr>\n" + "<td>A </td>\n" + "<td>B</td></tr>\n" + "<tr>\n"
-				+ "<td>C</td>\n" + "<td>D</td></tr></table></div>\n" + "\n" + "<div style=\"page-break-inside:	avoid;\">\n" + "<table>\n"
+				+ "<div style=\"page-break-inside: avoid;\">\n" + "<table>\n" + "<tr>\n" + "<td>A </td>\n" + "<td>B</td></tr>\n" + "<tr>\n"
+				+ "<td>C</td>\n" + "<td>D</td></tr></table></div>\n" + "\n" + "<div style=\"page-break-inside: avoid;\">\n" + "<table>\n"
 				+ "<tr>\n" + "<td>A </td>\n" + "<td>B</td></tr>\n" + "<tr>\n" + "<td>C</td>\n" + "<td>D</td></tr></table></div>\n" + "\n"
-				+ "<div style=\"page-break-inside:	avoid;\">\n" + "<table>\n" + "<tr>\n" + "<td>A </td>\n" + "<td>B</td></tr>\n" + "<tr>\n"
+				+ "<div style=\"page-break-inside: avoid;\">\n" + "<table>\n" + "<tr>\n" + "<td>A </td>\n" + "<td>B</td></tr>\n" + "<tr>\n"
 				+ "<td>C</td>\n" + "<td>D</td></tr></table></div>\n" + "", wikiModel.render("{{2x|{{2x|{{{!}} \n" + "{{!}} A \n"
 				+ "{{!}} B\n" + "{{!}}- \n" + "{{!}} C\n" + "{{!}} D\n" + "{{!}}}\n" + "}}}}"));
 	}
@@ -396,9 +396,9 @@ public class TemplateFilterTest extends FilterTestSupport {
 	}
 
 	public void testbirth_date_and_age() {
-		assertEquals(
-				"\n"
-						+ "<p>test July 9, 1956<span style=\"display:none\"> (<span class=\"bday\">1956-07-09</span>)</span><span class=\"noprint\"> (age&#160;53)</span> test123</p>",
+		assertEquals( 
+				"\n" + 
+				"<p>test July 9, 1956<span style=\"display:none\"> (<span class=\"bday\">1956-07-09</span>)</span><span class=\"noprint\"> (age 53)</span> test123</p>",
 				wikiModel.render("test {{birth date and age|1956|7|9}} test123"));
 	}
 }

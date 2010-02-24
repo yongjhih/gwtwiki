@@ -77,7 +77,7 @@ public class WPTable extends WPTag {
 	@Override
 	public void renderHTML(ITextConverter converter, Appendable buf, IWikiModel wikiModel) throws IOException {
 		if (fRows.size() > 0) {
-			buf.append("\n<div style=\"page-break-inside:	avoid;\">");
+			buf.append("\n<div style=\"page-break-inside: avoid;\">");
 			if (NEW_LINES) {
 				buf.append("\n<table");
 			} else {

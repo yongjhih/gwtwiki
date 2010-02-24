@@ -19,7 +19,7 @@ public class EntityFilterTest extends FilterTestSupport {
 
   public void testEntity1() {
     assertEquals("\n" + 
-    		"<p>jkl&#246;&#228;&#252;poi&#223;utz</p>", wikiModel.render("jkl&ouml;&auml;&uuml;poi&szlig;utz"));
+    		"<p>jklöäüpoißutz</p>", wikiModel.render("jkl&ouml;&auml;&uuml;poi&szlig;utz"));
   }
   public void testEntity2() {
     assertEquals("\n" + 
