@@ -3,6 +3,7 @@ package info.bliki.gae.db;
 import info.bliki.gae.model.AuthorityEntity;
 import info.bliki.gae.model.GroupAuthorityEntity;
 import info.bliki.gae.model.GroupMemberEntity;
+import info.bliki.gae.model.RecentChangeEntity;
 import info.bliki.gae.model.RoleEntity;
 
 import java.util.ArrayList;
@@ -74,6 +75,59 @@ public class GAEDataHandler implements DataHandler {
       throws DataAccessException {
     GroupMemberEntity group = new GroupMemberEntity(username, groupId);
     GroupMemberService.save(group);
+  }
+
+  private void addRecentChangeEntity(RecentChangeEntity change)  {
+    RecentChangeService.save(change);
+    // PreparedStatement stmt = null;
+    // try {
+    // stmt = conn.prepareStatement(STATEMENT_INSERT_RECENT_CHANGE);
+    // if (change.getTopicVersionId() == null) {
+    // stmt.setNull(1, Types.INTEGER);
+    // } else {
+    // stmt.setInt(1, change.getTopicVersionId());
+    // }
+    // if (change.getPreviousTopicVersionId() == null) {
+    // stmt.setNull(2, Types.INTEGER);
+    // } else {
+    // stmt.setInt(2, change.getPreviousTopicVersionId());
+    // }
+    // if (change.getTopicId() == null) {
+    // stmt.setNull(3, Types.INTEGER);
+    // } else {
+    // stmt.setInt(3, change.getTopicId());
+    // }
+    // stmt.setString(4, change.getTopicName());
+    // stmt.setTimestamp(5, change.getChangeDate());
+    // stmt.setString(6, change.getChangeComment());
+    // if (change.getAuthorId() == null) {
+    // stmt.setNull(7, Types.INTEGER);
+    // } else {
+    // stmt.setInt(7, change.getAuthorId());
+    // }
+    // stmt.setString(8, change.getAuthorName());
+    // if (change.getEditType() == null) {
+    // stmt.setNull(9, Types.INTEGER);
+    // } else {
+    // stmt.setInt(9, change.getEditType());
+    // }
+    // stmt.setInt(10, virtualWikiId);
+    // stmt.setString(11, change.getVirtualWiki());
+    // if (change.getCharactersChanged() == null) {
+    // stmt.setNull(12, Types.INTEGER);
+    // } else {
+    // stmt.setInt(12, change.getCharactersChanged());
+    // }
+    // if (change.getLogType() == null) {
+    // stmt.setNull(13, Types.INTEGER);
+    // } else {
+    // stmt.setInt(13, change.getLogType());
+    // }
+    // stmt.setString(14, change.getParamString());
+    // stmt.executeUpdate();
+    // } finally {
+    // DatabaseConnection.closeStatement(stmt);
+    // }
   }
 
   private void addTopic(Topic topic, LinkedHashMap<String, String> categories)
@@ -155,18 +209,15 @@ public class GAEDataHandler implements DataHandler {
   public List<RecentChange> getRecentChanges(String virtualWiki,
       Pagination pagination, boolean descending) throws DataAccessException {
     // TODO Auto-generated method stub
-    throw new NotImplementedException("getRecentChanges");
-    // Topic topic = this.lookupTopic(virtualWiki, topicName, true, null);
-    // if (topic == null) {
-    // return new ArrayList<RecentChange>();
-    // }
-    // QueryResultIterable<TopicVersion> list = TopicVersionService
-    // .findByTopic(topic);
-    // List<RecentChange> recentChanges = new ArrayList<RecentChange>();
-    // for (TopicVersion topicVersion : list) {
-    // recentChanges.add(this.initRecentChange(topicVersion));
-    // }
-    // return recentChanges;
+    // throw new NotImplementedException("getRecentChanges");
+
+    QueryResultIterable<RecentChangeEntity> list = RecentChangeService
+        .findRecentChanges(pagination, descending);
+    List<RecentChange> recentChanges = new ArrayList<RecentChange>();
+    for (RecentChangeEntity recentChangeEntity : list) {
+      recentChanges.add(this.initRecentChange(recentChangeEntity));
+    }
+    return recentChanges;
   }
 
   @Override
@@ -291,6 +342,38 @@ public class GAEDataHandler implements DataHandler {
   // topicVersion.setAuthorDisplay(rs.getString("wiki_user_display"));
   // return topicVersion;
   // }
+
+  private RecentChange initRecentChange(RecentChangeEntity rs) {
+    RecentChange change = new RecentChange();
+
+    change.setTopicVersionId(rs.getTopicVersionId());
+    change.setPreviousTopicVersionId(rs.getPreviousTopicVersionId());
+    Key<Topic> topicId = rs.getTopicKey();
+    change.setTopicOKey(topicId);
+
+    Topic topic = rs.getTopicId();
+    change.setTopicName(topic.getName());
+    change.setCharactersChanged(rs.getCharactersChanged());
+    change.setChangeDate(rs.getChangeDate());
+    change.setChangeComment(rs.getChangeComment());
+
+    change.setAuthorId(rs.getAuthorId());
+
+    change.setAuthorName(rs.getAuthorName());
+    int editType = rs.getEditType();
+    if (editType > 0) {
+      change.setEditType(editType);
+      // change.initChangeWikiMessageForVersion(editType,
+      // .getString("log_params"));
+    }
+    // int logType = rs.getInt("log_type");
+    // if (logType > 0) {
+    // change.setLogType(logType);
+    // change.initChangeWikiMessageForLog(logType, rs.getString("log_params"));
+    // }
+    change.setVirtualWiki(topic.getVirtualWiki());
+    return change;
+  }
 
   private RecentChange initRecentChange(TopicVersion rs) {
     RecentChange change = new RecentChange();
@@ -763,20 +846,21 @@ public class GAEDataHandler implements DataHandler {
       // current_topic_version_id parameter is set properly
       // this.updateTopic(topic, conn);
       PageService.save(topic, categories);
+      String authorName = topicVersion.getAuthorDisplay();
       // String authorName = this.authorName(topicVersion.getAuthorId(),
       // topicVersion.getAuthorDisplay());
       // LogItem logItem = LogItem.initLogItem(topic, topicVersion, authorName);
-      // RecentChange change = null;
+      RecentChangeEntity change = null;
       // if (logItem != null) {
       // this.addLogItem(logItem, conn);
       // change = RecentChange.initRecentChange(logItem);
       // } else {
-      // change = RecentChange.initRecentChange(topic, topicVersion,
-      // authorName);
+      change = RecentChangeEntity.initRecentChangeEntity(topic, topicVersion,
+          authorName);
       // }
-      // if (topicVersion.isRecentChangeAllowed()) {
-      // this.addRecentChange(change, conn);
-      // }
+      if (topicVersion.isRecentChangeAllowed()) {
+        addRecentChangeEntity(change);
+      }
     }
     if (categories != null) {
       // add / remove categories associated with the topic

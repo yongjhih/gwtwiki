@@ -285,7 +285,7 @@
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
 	</tag>
-<!-- <tag>
+    <tag>
 		<name>watchlist</name>
 		<tag-class>org.jamwiki.taglib.WatchlistTag</tag-class>
 		<body-content>JSP</body-content>
@@ -295,7 +295,6 @@
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
 	</tag>
- -->
 	<tag>
 		<name>wiki-version</name>
 		<tag-class>org.jamwiki.taglib.WikiVersionTag</tag-class>

@@ -280,7 +280,6 @@ public class TopicVersion implements Serializable {
 	 *
 	 */
   public void setTopicId(Topic topic) {
-    Objectify ofy = OS.begin();
     this.topicId = new Key<Topic>(Topic.class,topic.getName());
   }
 
