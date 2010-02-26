@@ -50,7 +50,6 @@ public class DefinitionListFilterTest extends FilterTestSupport {
 				"<dd>a simple test<span class=\"math\">ein text</span></dd></dl>\n" + 
 				"<pre>\n" + 
 				" x+y\n" + 
-				"  \n" + 
 				"</pre>\n" + 
 				"<p>test test</p>", wikiModel.render(":a simple test<math>ein text\n" + "  x+y\n" + "  \n" + "test test"));
 	}
