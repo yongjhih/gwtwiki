@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
-
 public class Util {
 
 	private Util() {
@@ -63,7 +62,7 @@ public class Util {
 		}
 		return map;
 	}
-	
+
 	/**
 	 * Returns the index within the seachable string of the first occurrence of
 	 * the concatenated <i>start</i> and <i>end</i> substring. The end substring
@@ -81,21 +80,23 @@ public class Util {
 	 *         specified substring, starting at the specified index.
 	 */
 	public static int indexOfIgnoreCase(String searchableString, String startPattern, String endPattern, int fromIndex) {
-//		return indexOfIgnoreCase(searchableString, startPattern, null, endPattern, fromIndex);
-		 int n = endPattern.length();
-		 int index;
-		 int len = startPattern.length();
-		 while (searchableString.length() > ((fromIndex + n) - 1)) {
-		 index = searchableString.indexOf(startPattern, fromIndex);
-		 if (index >= 0) {
-		 fromIndex = index + len;
-		 if (searchableString.regionMatches(true, fromIndex, endPattern, 0, n)) {
-		 return fromIndex - len;
-		 }
-		 }
-		 fromIndex++;
-		 }
-		
-		 return -1;
+		// return indexOfIgnoreCase(searchableString, startPattern, null,
+		// endPattern, fromIndex);
+		int n = endPattern.length();
+		int index;
+		int len = startPattern.length();
+		while (searchableString.length() > ((fromIndex + n) - 1)) {
+			index = searchableString.indexOf(startPattern, fromIndex);
+			if (index >= 0) {
+				fromIndex = index + len;
+				if (searchableString.regionMatches(true, fromIndex, endPattern, 0, n)) {
+					return fromIndex - len;
+				}
+			}
+			fromIndex++;
+		}
+
+		return -1;
 	}
+
 }

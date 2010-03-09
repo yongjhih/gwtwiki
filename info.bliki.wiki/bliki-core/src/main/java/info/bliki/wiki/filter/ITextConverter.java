@@ -1,6 +1,5 @@
 package info.bliki.wiki.filter;
 
-import info.bliki.htmlcleaner.BaseToken;
 import info.bliki.htmlcleaner.TagNode;
 import info.bliki.wiki.model.IWikiModel;
 import info.bliki.wiki.model.ImageFormat;

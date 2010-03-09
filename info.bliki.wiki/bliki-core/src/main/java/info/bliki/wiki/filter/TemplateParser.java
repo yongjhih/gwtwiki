@@ -85,15 +85,21 @@ public class TemplateParser extends AbstractParser {
 				// ") exceeded parsing templates.");
 				return;
 			}
-			
+
 			TemplateParser parser = new TemplateParser(rawWikitext, parseOnlySignature, renderTemplate);
 			parser.setModel(wikiModel);
 			StringBuilder sb = new StringBuilder(rawWikitext.length());
-			parser.runPreprocessParser(sb);
+			parser.runPreprocessParser(sb, false);
 			if (parseOnlySignature) {
 				writer.append(sb);
 				return;
 			}
+
+			int len = sb.length();
+			parser = new TemplateParser(sb.toString(), false, renderTemplate);
+			parser.setModel(wikiModel);
+			sb = new StringBuilder(len);
+			parser.runPreprocessParser(sb, true);
 
 			StringBuilder parameterBuffer = sb;
 			StringBuilder plainBuffer = sb;
@@ -127,9 +133,11 @@ public class TemplateParser extends AbstractParser {
 	 * <code>&lt;onlyinclude&gt;</code> and <code>&lt;noinclude&gt;</code> tags
 	 * 
 	 * @param writer
+	 * @param ignoreTemplateTags
+	 *          TODO
 	 * @throws IOException
 	 */
-	protected void runPreprocessParser(StringBuilder writer) throws IOException {
+	protected void runPreprocessParser(StringBuilder writer, boolean ignoreTemplateTags) throws IOException {
 		fWhiteStart = true;
 		fWhiteStartPosition = fCurrentPosition;
 		try {
@@ -140,7 +148,7 @@ public class TemplateParser extends AbstractParser {
 				switch (fCurrentCharacter) {
 				case '<':
 					int htmlStartPosition = fCurrentPosition;
-					if (!fParseOnlySignature && parseIncludeWikiTags(writer)) {
+					if (!fParseOnlySignature && parseIncludeWikiTags(writer, ignoreTemplateTags)) {
 						continue;
 					}
 					fCurrentPosition = htmlStartPosition;
@@ -264,10 +272,12 @@ public class TemplateParser extends AbstractParser {
 	 * >Help:Template#Controlling what gets transcluded</a>
 	 * 
 	 * @param writer
+	 * @param ignoreTemplateTags
+	 *          TODO
 	 * @return
 	 * @throws IOException
 	 */
-	protected boolean parseIncludeWikiTags(StringBuilder writer) throws IOException {
+	protected boolean parseIncludeWikiTags(StringBuilder writer, boolean ignoreTemplateTags) throws IOException {
 		try {
 			switch (fSource[fCurrentPosition]) {
 			case '!': // <!-- html comment -->
@@ -297,6 +307,9 @@ public class TemplateParser extends AbstractParser {
 							if (readUntilIgnoreCase("</", "math>")) {
 								return true;
 							}
+						}
+						if (ignoreTemplateTags) {
+							return false;
 						}
 						if (!isTemplate()) {
 							// not rendering a Template namespace directly
