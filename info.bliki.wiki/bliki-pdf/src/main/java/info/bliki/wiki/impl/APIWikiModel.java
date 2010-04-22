@@ -90,14 +90,18 @@ public class APIWikiModel extends WikiModel {
 		super(Configuration.DEFAULT_CONFIGURATION, locale, imageBaseURL, linkBaseURL);
 		fUser = user;
 		fWikiDB = wikiDB;
-		if (imageDirectoryName.charAt(imageDirectoryName.length() - 1) == '/') {
-			fImageDirectoryName = imageDirectoryName;
+		if (imageDirectoryName != null) {
+			if (imageDirectoryName.charAt(imageDirectoryName.length() - 1) == '/') {
+				fImageDirectoryName = imageDirectoryName;
+			} else {
+				fImageDirectoryName = imageDirectoryName + "/";
+			}
+			File file = new File(fImageDirectoryName);
+			if (!file.exists()) {
+				file.mkdir();
+			}
 		} else {
-			fImageDirectoryName = imageDirectoryName + "/";
-		}
-		File file = new File(fImageDirectoryName);
-		if (!file.exists()) {
-			file.mkdir();
+			fImageDirectoryName = null;
 		}
 	}
 
@@ -235,13 +239,15 @@ public class APIWikiModel extends WikiModel {
 							urlImageName = imageUrl.substring(index + 1);
 						}
 					}
-					String filename = fImageDirectoryName + urlImageName;
-					os = new FileOutputStream(filename);
-					page.downloadImageUrl(os, imageUrl);
-					imageData.setUrl(imageUrl);
-					imageData.setFilename(filename);
-					fWikiDB.insertImage(imageData);
-					super.appendInternalImageLink(hrefImageLink, "file:///" + filename, imageFormat);
+					if (fImageDirectoryName != null) {
+						String filename = fImageDirectoryName + urlImageName;
+						os = new FileOutputStream(filename);
+						page.downloadImageUrl(os, imageUrl);
+						imageData.setUrl(imageUrl);
+						imageData.setFilename(filename);
+						fWikiDB.insertImage(imageData);
+						super.appendInternalImageLink(hrefImageLink, "file:///" + filename, imageFormat);
+					}
 					return;
 				} catch (FileNotFoundException e) {
 					e.printStackTrace();
