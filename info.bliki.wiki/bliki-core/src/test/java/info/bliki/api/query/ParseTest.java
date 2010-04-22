@@ -29,4 +29,5 @@ public class ParseTest extends BaseQueryTest {
 		String html = StringEscapeUtils.unescapeHtml(parseData.getText());
 		// System.out.println("Retrieved html text:\n" + html);
 	}
+	
 }

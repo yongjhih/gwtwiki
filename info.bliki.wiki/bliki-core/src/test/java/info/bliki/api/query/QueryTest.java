@@ -15,4 +15,10 @@ public class QueryTest extends BaseQueryTest {
 		RequestBuilder request = Query.create().list("allpages").apfrom("Java").aplimit(20).format("json");
 		assertEquals("action=query&amp;apfrom=20&amp;format=json&amp;list=allpages", request.toString());
 	}
+	
+	public void test003() {
+		RequestBuilder request = Query.create().list("categorymembers");
+		request.put("cmtitle", "Category:Physics");
+		assertEquals("action=query&amp;cmtitle=Category:Physics&amp;format=xml&amp;list=categorymembers", request.toString());
+	}
 }
