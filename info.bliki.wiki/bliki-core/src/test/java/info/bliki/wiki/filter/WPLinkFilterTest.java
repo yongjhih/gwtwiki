@@ -177,10 +177,22 @@ public class WPLinkFilterTest extends FilterTestSupport {
 	}
 
 	public void testRedirect02() {
-		assertEquals("", wikiModel.render(" \r \n  #REDIRECT[[Official position]] bla \n other blabls"));
+		assertEquals("", wikiModel.render(" \n  #REDIRECT[[Official position]] bla \n other blabls"));
 		assertEquals("Official position", wikiModel.getRedirectLink());
 	}
 
+	public void testRedirect03() {
+		assertEquals(" \n" + 
+				"<p>Hello World!</p>", wikiModel.render(" \n{{TestRedirect1}}"));
+	}
+	
+	public void testRedirect04() {
+		assertEquals(" \n" + 
+				"<pre>\n" + 
+				"Hello World! \n" + 
+				"</pre>", wikiModel.render(" \n {{TestRedirect1}} "));
+	}
+	
 	public void testPlainTextConverter001() {
 		assertEquals("An external link.", wikiModel.render(new PlainTextConverter(), "An [http://www.example.com external link]."));
 	}

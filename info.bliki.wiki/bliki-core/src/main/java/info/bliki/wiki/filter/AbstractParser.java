@@ -1,5 +1,7 @@
 package info.bliki.wiki.filter;
 
+import java.util.Map;
+
 import info.bliki.htmlcleaner.ContentToken;
 import info.bliki.htmlcleaner.TagNode;
 import info.bliki.wiki.model.Configuration;
@@ -501,7 +503,7 @@ public abstract class AbstractParser extends WikipediaScanner {
 				localStack.append(error);
 				return localStack;
 			}
-			
+
 			int level = wikiModel.incrementRecursionLevel();
 
 			if (level > Configuration.PARSER_RECURSION_LIMIT) {
@@ -593,5 +595,72 @@ public abstract class AbstractParser extends WikipediaScanner {
 	public abstract void setNoToC(boolean noToC);
 
 	public abstract void runParser();
+
+	public static String getRedirectedTemplateContent(IWikiModel wikiModel, String redirectedLink,
+			Map<String, String> templateParameters) {
+		String redirNamespace = "";
+		String redirArticle = redirectedLink;
+		int index = redirectedLink.indexOf(":");
+		if (index > 0) {
+			redirNamespace = redirectedLink.substring(0, index);
+			if (wikiModel.isTemplateNamespace(redirNamespace)) {
+				redirArticle = redirectedLink.substring(index + 1);
+				try {
+					int level = wikiModel.incrementRecursionLevel();
+					if (level > Configuration.PARSER_RECURSION_LIMIT) {
+						return "Error - getting content of redirected template link: " + redirNamespace + ":" + redirArticle;
+					}
+					return wikiModel.getRawWikiContent(redirNamespace, redirArticle, templateParameters);
+				} finally {
+					wikiModel.decrementRecursionLevel();
+				}
+			}
+		}
+		return null;
+	}
+ 
+
+	/**
+	 * Check the text for a <code>#REDIRECT [[...]]</code> or
+	 * <code>#redirect [[...]]</code> link
+	 * 
+	 * @param rawWikiText
+	 *          the wiki text
+	 * @param wikiModel
+	 * @return <code>null</code> if a redirect was found and further parsing
+	 *         should be canceled according to the model.
+	 */
+	public static String parseRedirect(String rawWikiText, IWikiModel wikiModel) {
+		int redirectStart = -1;
+		int redirectEnd = -1;
+		for (int i = 0; i < rawWikiText.length(); i++) {
+			if (rawWikiText.charAt(i) == '#') {
+				boolean isRedirect = rawWikiText.startsWith("redirect", i + 1);
+				if (!isRedirect) {
+					isRedirect = rawWikiText.startsWith("REDIRECT", i + 1);
+				}
+				if (isRedirect) {
+					redirectStart = rawWikiText.indexOf("[[", i + 8);
+					if (redirectStart > i + 8) {
+						redirectStart += 2;
+						redirectEnd = rawWikiText.indexOf("]]", redirectStart);
+					}
+				}
+				break;
+			}
+			if (Character.isWhitespace(rawWikiText.charAt(i))) {
+				continue;
+			}
+			break;
+		}
+
+		if (redirectEnd >= 0) {
+			String redirectedLink = rawWikiText.substring(redirectStart, redirectEnd);
+			if (wikiModel.appendRedirectLink(redirectedLink)) {
+				return redirectedLink;
+			}
+		}
+		return null;
+	}
 
 }

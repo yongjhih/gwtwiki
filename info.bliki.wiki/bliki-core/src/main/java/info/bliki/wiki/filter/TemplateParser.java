@@ -115,7 +115,20 @@ public class TemplateParser extends AbstractParser {
 			parser = new TemplateParser(plainBuffer.toString(), parseOnlySignature, renderTemplate);
 			parser.setModel(wikiModel);
 			// parser.initialize(plainBuffer.toString());
-			parser.runParser(writer);
+			sb = new StringBuilder(plainBuffer.length());
+			parser.runParser(sb);
+			
+			if (!renderTemplate) {
+				String redirectedLink = AbstractParser.parseRedirect(sb.toString(), wikiModel);
+				if (redirectedLink!=null){
+					String redirectedContent = AbstractParser.getRedirectedTemplateContent(wikiModel, redirectedLink, null);
+					if (redirectedContent!=null) {
+						parseRecursive(redirectedContent, wikiModel, writer, parseOnlySignature, renderTemplate);
+						return;
+					}
+				}
+			}
+			writer.append(sb);
 			return;
 		} catch (Exception e) {
 			e.printStackTrace();
