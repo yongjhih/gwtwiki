@@ -12,34 +12,45 @@ import junit.framework.TestCase;
  * 
  */
 public class FilterTestSupport extends TestCase {
-	public static final String WINDOWS_NEWLINE = "\r\n";
+  public static final String WINDOWS_NEWLINE = "\r\n";
 
-	public static final String UNIX_NEWLINE = "\n";
+  public static final String UNIX_NEWLINE = "\n";
 
-	public static final String NEWLINE = WINDOWS_NEWLINE;
+  public static final String NEWLINE = WINDOWS_NEWLINE;
 
-	protected WikiModel wikiModel = null;
-	
-	public FilterTestSupport(String s) {
-		super(s);
-	}
+  protected WikiModel wikiModel = null;
 
-	/**
-	 * Set up a test model, which contains predefined templates
-	 */
-	@Override
-	protected void setUp() throws Exception {
-		super.setUp();
-		wikiModel = new WikiTestModel(Locale.ENGLISH,"http://www.bliki.info/wiki/${image}", "http://www.bliki.info/wiki/${title}");
-		wikiModel.setUp();
-	}
+  public FilterTestSupport(String s) {
+    super(s);
+  }
 
-	/**
-	 * simple example
-	 */
-	public static void main(String[] args) {
-		WikiModel wikiModel = new WikiModel(Configuration.DEFAULT_CONFIGURATION,Locale.GERMAN,"http://www.bliki.info/wiki/${image}", "http://www.bliki.info/wiki/${title}");
-		String htmlStr = wikiModel.render("This is a simple [[Hello World]] wiki tag");
-		System.out.print(htmlStr);
-	}
+  /**
+   * Set up a test model, which contains predefined templates
+   */
+  @Override
+  protected void setUp() throws Exception {
+    super.setUp();
+    wikiModel = new WikiTestModel(Locale.ENGLISH,
+        "http://www.bliki.info/wiki/${image}",
+        "http://www.bliki.info/wiki/${title}");
+    wikiModel.setUp();
+  }
+
+  /**
+   * simple example
+   */
+  public static void main(String[] args) {
+    WikiModel wikiModel = new WikiModel(Configuration.DEFAULT_CONFIGURATION,
+        Locale.GERMAN, "http://www.bliki.info/wiki/${image}",
+        "http://www.bliki.info/wiki/${title}");
+    try {
+      wikiModel.setUp();
+
+      String htmlStr = wikiModel
+          .render("This is a simple [[Hello World]] wiki tag");
+      System.out.print(htmlStr);
+    } finally {
+      wikiModel.tearDown();
+    }
+  }
 }
