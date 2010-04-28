@@ -308,7 +308,7 @@ public class Encoder {
       if (whiteSpace) {
         whiteSpace = false;
         if (firstCharacterAsUpperCase) {
-          buffer.append(Character.toUpperCase(ch));
+        	Encoder.encodeUrl(buffer, Character.toUpperCase(ch));
           continue;
         }
       }
@@ -342,7 +342,7 @@ public class Encoder {
       if (whiteSpace) {
         whiteSpace = false;
         if (firstCharacterAsUpperCase) {
-          buffer.append(Character.toUpperCase(ch));
+        	Encoder.encodeDotUrl(buffer, Character.toUpperCase(ch));
           continue;
         }
       }
