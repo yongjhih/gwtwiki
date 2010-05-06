@@ -715,7 +715,8 @@ public class WikipediaScanner {
 			StringBuilder recursiveResult;
 			while (true) {
 				ch = fSource[fScannerPosition++];
-				if (ch == '{' && fSource[fScannerPosition] == '{' && fSource[fScannerPosition + 1] == '{') {
+				if (ch == '{' && fSource[fScannerPosition] == '{' && fSource[fScannerPosition + 1] == '{'
+						&& fSource[fScannerPosition + 2] != '{') {
 					fScannerPosition += 2;
 					parameterStart = fScannerPosition;
 
@@ -817,7 +818,7 @@ public class WikipediaScanner {
 					}
 				} else if (ch == '{' && srcArray[currOffset] == '{') {
 					currOffset++;
-					if (srcArray[currOffset] == '{') {
+					if (srcArray[currOffset] == '{' && srcArray[currOffset + 1] != '{') {
 						currOffset++;
 						temp = findNestedParamEnd(srcArray, currOffset);
 						if (temp[0] >= 0) {
@@ -939,7 +940,7 @@ public class WikipediaScanner {
 				if (ch == '{') {
 					if (sourceArray[parameterPosition] == '{') {
 						parameterPosition++;
-						if ((len > parameterPosition) && sourceArray[parameterPosition] == '{') {
+						if ((len > parameterPosition) && sourceArray[parameterPosition] == '{' && sourceArray[parameterPosition + 1] != '{') {
 							// template parameter beginning
 							parameterPosition++;
 							int[] temp = findNestedParamEnd(sourceArray, parameterPosition);
