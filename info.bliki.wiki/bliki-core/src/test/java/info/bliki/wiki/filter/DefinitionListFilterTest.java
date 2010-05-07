@@ -33,6 +33,13 @@ public class DefinitionListFilterTest extends FilterTestSupport {
 				"<dt>name </dt>\n" + 
 				"<dd>Definition</dd></dl>", wikiModel.render("; name : Definition"));
 	}
+	 
+	public void testDefinitionList3() {
+		assertEquals("\n" + 
+				"<dl>\n" + 
+				"<dt>foo</dt>\n" + 
+				"<dd>12:30</dd></dl>", wikiModel.render(";foo:12:30"));
+	}
 
 	public void testDefinitionList10() {
 		assertEquals("\n" + 
