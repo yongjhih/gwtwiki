@@ -344,7 +344,7 @@ public class WikipediaScanner {
 							break;
 						}
 					}
-
+					lastCh = ' ';
 				}
 				if (ch == '\n' || fScannerPosition == 0) {
 					startPosition = fScannerPosition;
