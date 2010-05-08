@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 /**
  * A template parser for the first pass in the parsing of a Wikipedia text
@@ -19,6 +20,8 @@ import java.util.Map;
  * @see WikipediaParser for the second pass
  */
 public class TemplateParser extends AbstractParser {
+	private static final Pattern HTML_COMMENT_PATTERN = Pattern.compile("<!--(.*?)-->");
+	
 	public final boolean fParseOnlySignature;
 
 	private final boolean fRenderTemplate;
@@ -117,12 +120,12 @@ public class TemplateParser extends AbstractParser {
 			// parser.initialize(plainBuffer.toString());
 			sb = new StringBuilder(plainBuffer.length());
 			parser.runParser(sb);
-			
+
 			if (!renderTemplate) {
 				String redirectedLink = AbstractParser.parseRedirect(sb.toString(), wikiModel);
-				if (redirectedLink!=null){
+				if (redirectedLink != null) {
 					String redirectedContent = AbstractParser.getRedirectedTemplateContent(wikiModel, redirectedLink, null);
-					if (redirectedContent!=null) {
+					if (redirectedContent != null) {
 						parseRecursive(redirectedContent, wikiModel, writer, parseOnlySignature, renderTemplate);
 						return;
 					}
@@ -482,9 +485,9 @@ public class TemplateParser extends AbstractParser {
 				final int whiteEndPosition = fCurrentPosition - diff;
 				int count = whiteEndPosition - whiteStartPosition;
 				if (count > 0) {
-					writer.append(fStringSource, whiteStartPosition, whiteEndPosition); // count
-					// )
-					// ;
+					writer.append(HTML_COMMENT_PATTERN.matcher(fStringSource.substring(whiteStartPosition, whiteEndPosition)).replaceAll(""));
+//					
+//					writer.append(fStringSource, whiteStartPosition, whiteEndPosition);  
 				}
 			} finally {
 				fWhiteStart = false;
@@ -496,14 +499,7 @@ public class TemplateParser extends AbstractParser {
 		if (fSource[fCurrentPosition] == '{') {
 			appendContent(writer, fWhiteStart, fWhiteStartPosition, 1);
 			int startTemplatePosition = ++fCurrentPosition;
-			if (fSource[fCurrentPosition] != '{') {
-				int templateEndPosition = findNestedTemplateEnd(fSource, fCurrentPosition);
-				if (templateEndPosition < 0) {
-					fCurrentPosition--;
-				} else {
-					return parseTemplate(writer, startTemplatePosition, templateEndPosition);
-				}
-			} else {
+			if (fSource[fCurrentPosition] == '{' && fSource[fCurrentPosition+1] != '{') {
 				// parse template parameters
 				int[] templateEndPosition = findNestedParamEnd(fSource, fCurrentPosition + 1);
 				if (templateEndPosition[0] < 0) {
@@ -516,6 +512,13 @@ public class TemplateParser extends AbstractParser {
 					}
 				} else {
 					return parseTemplateParameter(writer, startTemplatePosition, templateEndPosition[0]);
+				}
+			} else {
+				int templateEndPosition = findNestedTemplateEnd(fSource, fCurrentPosition);
+				if (templateEndPosition < 0) {
+					fCurrentPosition--;
+				} else {
+					return parseTemplate(writer, startTemplatePosition, templateEndPosition);
 				}
 			}
 		}
@@ -695,7 +698,7 @@ public class TemplateParser extends AbstractParser {
 					}
 				} else if (ch == '{' && src[currOffset] == '{') {
 					currOffset++;
-					if (src[currOffset] == '{') {
+					if (src[currOffset] == '{' && src[currOffset + 1] != '{') {
 						currOffset++;
 						temp = findNestedParamEnd(src, currOffset);
 						if (temp[0] >= 0) {

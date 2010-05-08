@@ -36,10 +36,16 @@ public class TemplateFilterTest extends FilterTestSupport {
 	}
 
 	public void testTemplateCall4() {
-		// see method WikiTestModel#getRawWikiContent()
+		// see method WikiTestModel#getRawWikiContent() for template tl
 		assertEquals(
 				"\n" + "<p>{{<a href=\"http://www.bliki.info/wiki/Template:example\" title=\"Template:example\">example</a>}}</p>",
 				wikiModel.render("{{tl|example}}"));
+	}
+
+	public void testTemplateCall4a() {
+		// see method WikiTestModel#getRawWikiContent() for template tl
+		assertEquals("\n" + 
+				"<p>{{[[Template:{{{1}}}|{{{1}}}]]}}</p>", wikiModel.render("{{tl}}"));
 	}
 
 	public void testTemplateCall5() {
@@ -224,19 +230,6 @@ public class TemplateFilterTest extends FilterTestSupport {
 		assertEquals("\n" + "<pre>\nan\n</pre>\n" + "<p>article on:\n" + "</p>" + "", wikiModel.render(TEST_STRING_02));
 	}
 
-	// public void testTemplate12() {
-	// assertEquals("", wikiModel.render("{| valign=\"top\"\n" +
-	// "|-\n" +
-	// "| valign=\"top\" | <ul><ol start=\"{{{1}}}\"
-	// style=\"list-style-type:{{{lst|decimal}}}\"><li>{{{2}}}</ol></ul>\n" +
-	// "| valign=\"top\" | <ul><ol start=\"{{#expr:{{{1}}}+{{{3}}}}}\"
-	// style=\"list-style-type:{{{lst|decimal}}}\">{{{4}}}</ol></ul>\n" +
-	// "{{#if:{{{5|}}}|{{!}} valign=\"top\" {{!}} <ul><ol
-	// start=\"{{#expr:{{{1}}}+{{{3}}}+{{{5}}}}}\"
-	// style=\"list-style-type:{{{lst|decimal}}}\">{{{6}}}</ol></ul>}}\n" +
-	// "|}\n" +
-	// ""));
-	// }
 	public void testParserFunctionLC001() {
 		assertEquals("\n" + "<p>A lower case text</p>", wikiModel.render("A {{lc: Lower Case}} text"));
 	}
@@ -271,62 +264,29 @@ public class TemplateFilterTest extends FilterTestSupport {
 
 	public void testNavbox() {
 		assertEquals(
-				"\n" + 
-				"<table cellspacing=\"0\" class=\"navbox\" style=\";\">\n" + 
-				"\n" + 
-				"<tr>\n" + 
-				"\n" + 
-				"<td style=\"padding:2px;\">\n" + 
-				"<table cellspacing=\"0\" class=\"nowraplinks collapsible autocollapse \" style=\"width:100%;background:transparent;color:inherit;;\">\n" + 
-				"\n" + 
-				"<tr>\n" + 
-				"\n" + 
-				"<th class=\"navbox-title\" colspan=\"2\" style=\";background: #EEDD82\">\n" + 
-				"\n" + 
-				"<div style=\"float:left; width:6em;text-align:left;\">\n" + 
-				"<div class=\"noprint plainlinksneverexpand\" style=\"background-color:transparent; padding:0; white-space:nowrap; font-weight:normal; font-size:xx-small; ;background: #EEDD82;border:none;;  \"><a href=\"http://www.bliki.info/wiki/Template:AcademyAwardBestActor_1981-2000\" title=\"Template:AcademyAwardBestActor 1981-2000\"><span style=\";background: #EEDD82;border:none;;\" title=\"View this template\">v</span></a> <span style=\"font-size:80%;\">•</span> <a href=\"http://www.bliki.info/wiki/Template_talk:AcademyAwardBestActor_1981-2000\" title=\"Template talk:AcademyAwardBestActor 1981-2000\"><span style=\"color:#002bb8;;background: #EEDD82;border:none;;\" title=\"Discussion about this template\">d</span></a> <span style=\"font-size:80%;\">•</span> <a class=\"externallink\" href=\"http://en.wikipedia.org/w/index.php?title=Template%3AAcademyAwardBestActor+1981-2000&#38;action=edit\" rel=\"nofollow\" title=\"http://en.wikipedia.org/w/index.php?title=Template%3AAcademyAwardBestActor+1981-2000&#38;action=edit\"><span style=\"color:#002bb8;;background: #EEDD82;border:none;;\" title=\"You can edit this template. Please use the preview button before saving.\">e</span></a></div></div><span style=\"font-size:110%;\"><a href=\"http://www.bliki.info/wiki/Academy_Award_for_Best_Actor\" title=\"Academy Award for Best Actor\">Academy Award for</a> <a href=\"http://www.bliki.info/wiki/Academy_Award_for_Best_Actor#1980s\" title=\"Academy Award for Best Actor\">Best Actor</a></span>\n" + 
-				"</th>\n" + 
-				"</tr>\n" + 
-				"<tr style=\"height:2px;\">\n" + 
-				"\n" + 
-				"<td />\n" + 
-				"</tr>\n" + 
-				"<tr>\n" + 
-				"\n" + 
-				"<td class=\"navbox-list navbox-odd\" colspan=\"2\" style=\"width:100%;padding:0px;;;\">\n" + 
-				"<div style=\"padding:0em 0.25em\">\n" + 
-				"<div>\n" + 
-				"<p>{{nowrap}}{{·}}\n" + 
-				"{{nowrap}}{{·}}\n" + 
-				"{{nowrap}}{{·}}\n" + 
-				"{{nowrap}}{{·}}\n" + 
-				"{{nowrap}}{{·}}\n" + 
-				"{{nowrap}}{{·}}\n" + 
-				"{{nowrap}}{{·}}\n" + 
-				"{{nowrap}}{{·}}\n" + 
-				"{{nowrap}}{{·}}\n" + 
-				"{{nowrap}}{{·}}\n" + 
-				"{{nowrap}}{{·}}\n" + 
-				"{{nowrap}}{{·}}\n" + 
-				"{{nowrap}}{{·}}\n" + 
-				"{{nowrap}}{{·}}\n" + 
-				"{{nowrap}}{{·}}\n" + 
-				"{{nowrap}}{{·}}\n" + 
-				"{{nowrap}}{{·}}\n" + 
-				"{{nowrap}}{{·}}\n" + 
-				"{{nowrap}}{{·}}\n" + 
-				"{{nowrap}}</p><hr/>\n" + 
-				"<p>{{nowrap}}{{·}}\n" + 
-				"{{nowrap}}{{·}}\n" + 
-				"{{nowrap}}{{·}}\n" + 
-				"{{nowrap}}{{·}}\n" + 
-				"{{nowrap}}{{·}}\n" + 
-				"{{nowrap}}\n" + 
-				"</p></div></div></td>\n" + 
-				"</tr>\n" + 
-				"</table></td>\n" + 
-				"</tr>\n" + 
-				"</table>", wikiModel.render(NAVBOX_STRING));
+				"\n"
+						+ "<table cellspacing=\"0\" class=\"navbox\" style=\";\">\n"
+						+ "\n"
+						+ "<tr>\n"
+						+ "\n"
+						+ "<td style=\"padding:2px;\">\n"
+						+ "<table cellspacing=\"0\" class=\"nowraplinks collapsible autocollapse \" style=\"width:100%;background:transparent;color:inherit;;\">\n"
+						+ "\n"
+						+ "<tr>\n"
+						+ "\n"
+						+ "<th class=\"navbox-title\" colspan=\"2\" style=\";background: #EEDD82\">\n"
+						+ "\n"
+						+ "<div style=\"float:left; width:6em;text-align:left;\">\n"
+						+ "<div class=\"noprint plainlinksneverexpand\" style=\"background-color:transparent; padding:0; white-space:nowrap; font-weight:normal; font-size:xx-small; ;background: #EEDD82;border:none;;  \"><a href=\"http://www.bliki.info/wiki/Template:AcademyAwardBestActor_1981-2000\" title=\"Template:AcademyAwardBestActor 1981-2000\"><span style=\";background: #EEDD82;border:none;;\" title=\"View this template\">v</span></a> <span style=\"font-size:80%;\">•</span> <a href=\"http://www.bliki.info/wiki/Template_talk:AcademyAwardBestActor_1981-2000\" title=\"Template talk:AcademyAwardBestActor 1981-2000\"><span style=\"color:#002bb8;;background: #EEDD82;border:none;;\" title=\"Discussion about this template\">d</span></a> <span style=\"font-size:80%;\">•</span> <a class=\"externallink\" href=\"http://en.wikipedia.org/w/index.php?title=Template%3AAcademyAwardBestActor+1981-2000&#38;action=edit\" rel=\"nofollow\" title=\"http://en.wikipedia.org/w/index.php?title=Template%3AAcademyAwardBestActor+1981-2000&#38;action=edit\"><span style=\"color:#002bb8;;background: #EEDD82;border:none;;\" title=\"You can edit this template. Please use the preview button before saving.\">e</span></a></div></div><span style=\"font-size:110%;\"><a href=\"http://www.bliki.info/wiki/Academy_Award_for_Best_Actor\" title=\"Academy Award for Best Actor\">Academy Award for</a> <a href=\"http://www.bliki.info/wiki/Academy_Award_for_Best_Actor#1980s\" title=\"Academy Award for Best Actor\">Best Actor</a></span>\n"
+						+ "</th>\n" + "</tr>\n" + "<tr style=\"height:2px;\">\n" + "\n" + "<td />\n" + "</tr>\n" + "<tr>\n" + "\n"
+						+ "<td class=\"navbox-list navbox-odd\" colspan=\"2\" style=\"width:100%;padding:0px;;;\">\n"
+						+ "<div style=\"padding:0em 0.25em\">\n" + "<div>\n" + "<p>{{nowrap}}{{·}}\n" + "{{nowrap}}{{·}}\n"
+						+ "{{nowrap}}{{·}}\n" + "{{nowrap}}{{·}}\n" + "{{nowrap}}{{·}}\n" + "{{nowrap}}{{·}}\n" + "{{nowrap}}{{·}}\n"
+						+ "{{nowrap}}{{·}}\n" + "{{nowrap}}{{·}}\n" + "{{nowrap}}{{·}}\n" + "{{nowrap}}{{·}}\n" + "{{nowrap}}{{·}}\n"
+						+ "{{nowrap}}{{·}}\n" + "{{nowrap}}{{·}}\n" + "{{nowrap}}{{·}}\n" + "{{nowrap}}{{·}}\n" + "{{nowrap}}{{·}}\n"
+						+ "{{nowrap}}{{·}}\n" + "{{nowrap}}{{·}}\n" + "{{nowrap}}</p><hr/>\n" + "<p>{{nowrap}}{{·}}\n" + "{{nowrap}}{{·}}\n"
+						+ "{{nowrap}}{{·}}\n" + "{{nowrap}}{{·}}\n" + "{{nowrap}}{{·}}\n" + "{{nowrap}}\n" + "</p></div></div></td>\n"
+						+ "</tr>\n" + "</table></td>\n" + "</tr>\n" + "</table>", wikiModel.render(NAVBOX_STRING));
 	}
 
 	public void test11() {
@@ -396,9 +356,9 @@ public class TemplateFilterTest extends FilterTestSupport {
 	}
 
 	public void testbirth_date_and_age() {
-		assertEquals( 
-				"\n" + 
-				"<p>test July 9, 1956<span style=\"display:none\"> (<span class=\"bday\">1956-07-09</span>)</span><span class=\"noprint\"> (age 53)</span> test123</p>",
+		assertEquals(
+				"\n"
+						+ "<p>test July 9, 1956<span style=\"display:none\"> (<span class=\"bday\">1956-07-09</span>)</span><span class=\"noprint\"> (age 53)</span> test123</p>",
 				wikiModel.render("test {{birth date and age|1956|7|9}} test123"));
 	}
 }
