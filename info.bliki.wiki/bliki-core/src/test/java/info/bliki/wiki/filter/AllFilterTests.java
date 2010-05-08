@@ -1,5 +1,6 @@
 package info.bliki.wiki.filter;
 
+import info.bliki.wiki.template.TemplateFunctionsTest;
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
@@ -40,6 +41,8 @@ public class AllFilterTests extends TestCase {
 		s.addTestSuite(WrongTagFilterTest.class);
 		s.addTestSuite(WPSemanticLinkTest.class);
 		s.addTestSuite(TemplateParserTest.class);
+		
+		s.addTestSuite(TemplateFunctionsTest.class);
 		return s;
 	}
 

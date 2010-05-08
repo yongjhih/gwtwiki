@@ -32,6 +32,30 @@ public class TemplateFunctionsTest extends TestCase {
 		assertEquals("blank", wikiModel.parseTemplates("{{ #if: {{{x| }}} | not blank | blank }}", false));
 	}
 
+	public void testIferror01() {
+		assertEquals("correct", wikiModel.parseTemplates("{{#iferror: {{#expr: 1 + 2 }} | error | correct }}", false));
+	}
+
+	public void testIferror02() {
+		assertEquals("error", wikiModel.parseTemplates("{{#iferror: {{#expr: 1 + X }} | error | correct }}", false));
+	}
+
+	public void testIferror03() {
+		assertEquals("3", wikiModel.parseTemplates("{{#iferror: {{#expr: 1 + 2 }} | error }}", false));
+	}
+
+	public void testIferror04() {
+		assertEquals("error", wikiModel.parseTemplates("{{#iferror: {{#expr: 1 * }} | error }}", false));
+	}
+
+	public void testIferror05() {
+		assertEquals("3", wikiModel.parseTemplates("{{#iferror: {{#expr: 1 + 2 }} }}", false));
+	}
+
+	public void testIferror06() {
+		assertEquals("", wikiModel.parseTemplates("{{#iferror: {{#expr: 1 + X }} }}", false));
+	}
+
 	public void testIfEq01() {
 		// {{ #ifeq: +07 | 007 | 1 | 0 }} gives 1
 		assertEquals("1", wikiModel.parseTemplates("{{ #ifeq: +07 | 007 | 1 | 0 }}", false));
@@ -60,18 +84,17 @@ public class TemplateFunctionsTest extends TestCase {
 	public void testIfEq07() {
 		// {{ #ifeq: {{{x}}} | {{concat| {|{|{x}|}|} }} | 1 | 0 }} = 1
 		assertEquals("{{{x}}}", wikiModel.parseTemplates("{{concat| {|{|{x}|}|} }}", false));
-		
+
 		assertEquals("1", wikiModel.parseTemplates("{{ #ifeq: {{{x}}} | {{concat| {|{|{x}|}|} }} | 1 | 0 }}", false));
 	}
-	
+
 	public void testRendererForST() throws Exception {
-		wikiModel.setAttribute("created",
-						new GregorianCalendar(2005, 07-1, 05));
+		wikiModel.setAttribute("created", new GregorianCalendar(2005, 07 - 1, 05));
 		wikiModel.registerRenderer(GregorianCalendar.class, wikiModel.new DateRenderer());
 		String expecting = "date: 2005.07.05";
 		assertEquals(expecting, wikiModel.parseTemplates("date: {{#$:created}}"));
 	}
-	
+
 	public void testRendererWithFormatAndList() throws Exception {
 		wikiModel.setAttribute("names", "ter");
 		wikiModel.setAttribute("names", "tom");
@@ -80,7 +103,7 @@ public class TemplateFunctionsTest extends TestCase {
 		String expecting = "The names: TERTOMSRIRAM";
 		assertEquals(expecting, wikiModel.parseTemplates("The names: {{#$:names|upper}}"));
 	}
-	
+
 	public void testRendererWithFormatAndSeparator() throws Exception {
 		wikiModel.setAttribute("names", "ter");
 		wikiModel.setAttribute("names", "tom");

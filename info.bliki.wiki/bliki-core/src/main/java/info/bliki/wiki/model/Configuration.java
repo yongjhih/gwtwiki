@@ -31,6 +31,7 @@ import info.bliki.wiki.template.Fullurl;
 import info.bliki.wiki.template.ITemplateFunction;
 import info.bliki.wiki.template.If;
 import info.bliki.wiki.template.Ifeq;
+import info.bliki.wiki.template.Iferror;
 import info.bliki.wiki.template.Ifexist;
 import info.bliki.wiki.template.Ifexpr;
 import info.bliki.wiki.template.LC;
@@ -408,6 +409,7 @@ public class Configuration implements IConfiguration {
 		TEMPLATE_FUNCTION_MAP.put("subst", Subst.CONST);
 		TEMPLATE_FUNCTION_MAP.put("#expr", Expr.CONST);
 		TEMPLATE_FUNCTION_MAP.put("#if", If.CONST);
+		TEMPLATE_FUNCTION_MAP.put("#iferror", Iferror.CONST);
 		TEMPLATE_FUNCTION_MAP.put("#ifeq", Ifeq.CONST);
 		TEMPLATE_FUNCTION_MAP.put("#ifexist", Ifexist.CONST);
 		TEMPLATE_FUNCTION_MAP.put("#ifexpr", Ifexpr.CONST);
