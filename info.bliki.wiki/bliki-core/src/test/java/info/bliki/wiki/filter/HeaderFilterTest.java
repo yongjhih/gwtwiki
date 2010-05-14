@@ -40,7 +40,7 @@ public class HeaderFilterTest extends FilterTestSupport {
 
 	public void testH2Apostrophe() {
 		assertEquals(
-				"<a id=\"Wikipedia\'s_sister_projects\" name=\"Wikipedia\'s_sister_projects\"></a><h2>Wikipedia&#39;s sister projects</h2>",
+				"<a id=\"Wikipedia.27s_sister_projects\" name=\"Wikipedia.27s_sister_projects\"></a><h2>Wikipedia&#39;s sister projects</h2>",
 				wikiModel.render("==Wikipedia's sister projects=="));
 	}
 

@@ -78,6 +78,25 @@ public class TOCFilterTest extends FilterTestSupport {
 				+ "==hello world 2==\n" + "hello world 2\n" + "\n" + "==hello world Übersicht==\n" + "hello world Übersicht\n"));
 	}
 
+	public void testTOC07() { 
+		assertEquals("\n" + 
+				"\n" + 
+				"<table id=\"toc\" class=\"toc\" summary=\"Contents\">\n" + 
+				"<tr>\n" + 
+				"<td>\n" + 
+				"<div id=\"toctitle\">\n" + 
+				"<h2>Contents</h2>\n" + 
+				"</div>\n" + 
+				"<ul>\n" + 
+				"<ul>\n" + 
+				"<li class=\"toclevel-1\"><a href=\"#-_.2F.:.21.7E.27.28.29\">-_/.:!~&#39;()</a>\n" + 
+				"</li>\n" + 
+				"</ul>\n" + 
+				"</ul></td></tr></table><hr/>\n" + 
+				"<a id=\"-_.2F.:.21.7E.27.28.29\" name=\"-_.2F.:.21.7E.27.28.29\"></a><h2>-_/.:!~&#39;()</h2>", wikiModel.render("\n" + 
+				"__FORCETOC__\n" + 
+				"== -_/.:!~'() =="));
+	}
 	public void testTOC_Listener() {
 		String rawWikiText = wikiModel.parseTemplates("=hello world 1=\n" + "hello world 1\n" + "\n" + "==hello world 2==\n"
 				+ "hello world 2\n");
