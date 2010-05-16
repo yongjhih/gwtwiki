@@ -602,7 +602,6 @@ public class WikipediaScanner {
 	public int indexEndOfTable() {
 		// check nowiki and html comments?
 		int count = 1;
-		// boolean whitespace;
 		int oldPosition;
 		char ch;
 		try {
@@ -623,17 +622,10 @@ public class WikipediaScanner {
 					if (fScannerPosition == (-1)) {
 						return -1;
 					}
-					// } else if (ch == '\n' && fSource[fScannerPosition] == '|' &&
-					// fSource[fScannerPosition + 1] == '}') {
-					// count--;
-					// if (count == 0) {
-					// return fScannerPosition + 2;
-					// }
 				} else if (ch == '\n' && fSource[fScannerPosition] == '{' && fSource[fScannerPosition + 1] == '|') {
 					// assume nested table
 					count++;
 				} else if (ch == '\n') {
-					// whitespace = false;
 					oldPosition = fScannerPosition;
 					ch = fSource[fScannerPosition++];
 					// ignore SPACES and TABs at the beginning of the line
