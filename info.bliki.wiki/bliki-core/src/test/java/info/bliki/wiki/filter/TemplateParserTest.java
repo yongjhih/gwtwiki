@@ -107,7 +107,7 @@ public class TemplateParserTest extends FilterTestSupport {
   public void testTemplateParameter02() {
     // see method WikiTestModel#getTemplateContent()
     assertEquals(
-        "start- [http://www.etymonline.com/index.php?search=hello&searchmode=none Online Etymology Dictionary] -end",
+        "start- ''[http://www.etymonline.com/index.php?search=hello&searchmode=none Online Etymology Dictionary]''. -end",
         wikiModel
             .parseTemplates(
                 "start- {{cite web|url=http://www.etymonline.com/index.php?search=hello&searchmode=none|title=Online Etymology Dictionary}} -end",

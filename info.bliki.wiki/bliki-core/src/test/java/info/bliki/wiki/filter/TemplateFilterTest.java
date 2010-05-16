@@ -69,7 +69,8 @@ public class TemplateFilterTest extends FilterTestSupport {
 	public void testTemplateParameter02() {
 		// see method WikiTestModel#getTemplateContent()
 		assertEquals(
-				"\n<p>start- <a class=\"externallink\" href=\"http://www.etymonline.com/index.php?search=hello&#38;searchmode=none\" rel=\"nofollow\" title=\"http://www.etymonline.com/index.php?search=hello&#38;searchmode=none\">Online Etymology Dictionary</a> -end</p>",
+				"\n" + 
+				"<p>start- <i><a class=\"externallink\" href=\"http://www.etymonline.com/index.php?search=hello&#38;searchmode=none\" rel=\"nofollow\" title=\"http://www.etymonline.com/index.php?search=hello&#38;searchmode=none\">Online Etymology Dictionary</a></i>. -end</p>",
 				wikiModel
 						.render("start- {{cite web|url=http://www.etymonline.com/index.php?search=hello&searchmode=none|title=Online Etymology Dictionary}} -end"));
 	}
@@ -146,6 +147,33 @@ public class TemplateFilterTest extends FilterTestSupport {
 						+ "|website = [http://www.jamwiki.org/ JAMWiki wiki]\n" + "}}\n"));
 	}
 
+	public void testTemplateParameter13() {
+		// see method WikiTestModel#getTemplateContent()
+		assertEquals(
+				"\n" + 
+				"<div style=\"page-break-inside: avoid;\">\n" + 
+				"<table class=\"wikitable\">\n" + 
+				"<caption>Versionsgeschichte von JavaScript<sup id=\"_ref-1\" class=\"reference\"><a href=\"#_note-1\" title=\"\">[1]</a></sup></caption>\n" + 
+				"<tr>\n" + 
+				"<th>Version </th>\n" + 
+				"<th>Release </th>\n" + 
+				"<th>Entsprechung </th>\n" + 
+				"<th>Netscape Navigator </th>\n" + 
+				"<th>Mozilla Firefox </th>\n" + 
+				"<th>Internet Explorer </th>\n" + 
+				"<th>Opera </th>\n" + 
+				"<th>Safari </th>\n" + 
+				"<th>Google Chrome</th></tr></table></div>\n" + 
+				"<pre /><ol class=\"references\">\n" + 
+				"<li id=\"_note-1\"><b><a href=\"#_ref-1\" title=\"\">&#8593;</a></b> John Resig. <i><a class=\"externallink\" href=\"http://ejohn.org/blog/versions-of-javascript\" rel=\"nofollow\" title=\"http://ejohn.org/blog/versions-of-javascript\">Versions of JavaScript</a></i>. Ejohn.org. Abgerufen am {{FormatDate}}.</li></ol>",
+				wikiModel
+						.render("{| class=\"wikitable\"\n" + 
+								"|+Versionsgeschichte von JavaScript<ref>{{cite web|author=John Resig |url=http://ejohn.org/blog/versions-of-javascript |title=Versions of JavaScript |publisher=Ejohn.org |date= |accessdate=2009-05-19}}</ref>\n" + 
+								"|-\n" + 
+								"! Version !! Release !! Entsprechung !! Netscape Navigator !! Mozilla Firefox !! Internet Explorer !! Opera !! Safari !! Google Chrome\n" +
+								"|}\n" +
+								" <references/>\n"));
+	}
 	// private final String TEST_STRING_01 =
 	// "[[Category:Interwiki templates|wikipedia]]\n" +
 	// "[[zh:Template:Wikipedia]]\n"
@@ -355,6 +383,52 @@ public class TemplateFilterTest extends FilterTestSupport {
 		assertEquals("\n" + "<p>test 10 test123</p>", wikiModel.render("test {{MONTHNUMBER | OctoBer }} test123"));
 	}
 
+	public void testProgrammiersprachen() {
+		assertEquals("\n" + 
+				"<div style=\"page-break-inside: avoid;\">\n" + 
+				"<table class=\"prettytable float-right\" style=\"font-size:90%; width:21em;\">\n" + 
+				"<tr class=\"hintergrundfarbe6\">\n" + 
+				"<th colspan=\"2\" style=\"font-size:105%; text-align: center;\"><big>JavaScript</big></th></tr>\n" + 
+				"<tr valign=\"top\">\n" + 
+				"<td><b><a href=\"http://www.bliki.info/wiki/Programmierparadigma\" title=\"Programmierparadigma\">Paradigmen</a>:</b>\n" + 
+				" </td>\n" + 
+				"<td>multiparadigmatisch</td></tr>\n" + 
+				"<tr valign=\"top\">\n" + 
+				"<td><b>Erscheinungsjahr:</b>\n" + 
+				" </td>\n" + 
+				"<td>1995</td></tr>\n" + 
+				"<tr valign=\"top\">\n" + 
+				"<td><b>Entwickler:</b>\n" + 
+				" </td>\n" + 
+				"<td><a href=\"http://www.bliki.info/wiki/Brendan_Eich\" title=\"Brendan Eich\">Brendan Eich</a></td></tr>\n" + 
+				"<tr valign=\"top\">\n" + 
+				"<td><b>Aktuelle <a href=\"http://www.bliki.info/wiki/Versionierung\" title=\"Versionierung\">Version</a>:</b>\n" + 
+				" </td>\n" + 
+				"<td style=\"white-space:nowrap;\">1.8  <small>(2008)</small></td></tr>\n" + 
+				"<tr valign=\"top\">\n" + 
+				"<td><b><a href=\"http://www.bliki.info/wiki/Typisierung_(Informatik)\" title=\"Typisierung (Informatik)\">Typisierung</a>:</b>\n" + 
+				" </td>\n" + 
+				"<td><a href=\"http://www.bliki.info/wiki/Schwache_Typisierung\" title=\"Schwache Typisierung\">schwach</a>, <a href=\"http://www.bliki.info/wiki/Dynamische_Typisierung\" title=\"Dynamische Typisierung\">dynamisch</a>, <a href=\"http://www.bliki.info/wiki/Duck_Typing\" title=\"Duck Typing\">duck</a></td></tr>\n" + 
+				"<tr valign=\"top\">\n" + 
+				"<td><b>wichtige <a href=\"http://www.bliki.info/wiki/Implementierung\" title=\"Implementierung\">Implementierungen</a>:</b>\n" + 
+				" </td>\n" + 
+				"<td><a href=\"http://www.bliki.info/wiki/SpiderMonkey\" title=\"SpiderMonkey\">SpiderMonkey</a>, <a href=\"http://www.bliki.info/wiki/Rhino\" title=\"Rhino\">Rhino</a>, <a href=\"http://www.bliki.info/wiki/SquirrelFish\" title=\"SquirrelFish\">SquirrelFish</a>, <a href=\"http://www.bliki.info/wiki/V8_(JavaScript-Engine)\" title=\"V8 (JavaScript-Engine)\">V8</a></td></tr>\n" + 
+				"<tr valign=\"top\">\n" + 
+				"<td><b>Einflüsse:</b>\n" + 
+				" </td>\n" + 
+				"<td><a href=\"http://www.bliki.info/wiki/Self_(Programmiersprache)\" title=\"Self (Programmiersprache)\">Self</a>, <a href=\"http://www.bliki.info/wiki/C_(Programmiersprache)\" title=\"C (Programmiersprache)\">C</a>, <a href=\"http://www.bliki.info/wiki/Scheme\" title=\"Scheme\">Scheme</a>, <a href=\"http://www.bliki.info/wiki/Perl_(Programmiersprache)\" title=\"Perl (Programmiersprache)\">Perl</a>, <a href=\"http://www.bliki.info/wiki/Python_(Programmiersprache)\" title=\"Python (Programmiersprache)\">Python</a>, <a href=\"http://www.bliki.info/wiki/Java_(Programmiersprache)\" title=\"Java (Programmiersprache)\">Java</a></td></tr></table></div>", wikiModel.render("{{Infobox Programmiersprache" + 
+				"|Name = JavaScript" + 
+				"|Beschreibung = Skriptsprache" + 
+				"|Paradigma = multiparadigmatisch" + 
+				"|Erscheinungsjahr = 1995" + 
+				"|Entwickler = [[Brendan Eich]]" + 
+				"|AktuelleVersion = 1.8" + 
+				"|AktuelleVersionFreigabeDatum = 2008" + 
+				"|Typisierung = [[Schwache Typisierung|schwach]], [[Dynamische Typisierung|dynamisch]], [[Duck Typing|duck]]" + 
+				"|Implementierung = [[SpiderMonkey]], [[Rhino]], [[SquirrelFish]], [[V8 (JavaScript-Engine)|V8]]" + 
+				"|Beeinflusst_von = [[Self (Programmiersprache)|Self]], [[C (Programmiersprache)|C]], [[Scheme]], [[Perl (Programmiersprache)|Perl]], [[Python (Programmiersprache)|Python]], [[Java (Programmiersprache)|Java]]" + 
+				"}}"));
+	}
 	public void testbirth_date_and_age() {
 		assertEquals(
 				"\n"

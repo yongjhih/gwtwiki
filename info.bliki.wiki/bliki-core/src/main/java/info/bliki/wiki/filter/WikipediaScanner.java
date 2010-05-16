@@ -96,8 +96,12 @@ public class WikipediaScanner {
 				switch (ch) {
 				case '\n':
 					ch = fSource[fScannerPosition++];
+					// ignore whitespace at the beginning of the line
+					while (ch == ' ' || ch == '\t') {
+						ch = fSource[fScannerPosition++];
+					}
 					switch (ch) {
-					case '|': // "\n|"
+					case '|': // "\n |"
 						if (cell != null) {
 							cell.createTagStack(table, fStringSource, fWikiModel, fScannerPosition - 2);
 							cell = null;
@@ -139,7 +143,7 @@ public class WikipediaScanner {
 						}
 
 						break;
-					case '!': // "\n!"
+					case '!': // "\n !"
 						if (cell != null) {
 							cell.createTagStack(table, fStringSource, fWikiModel, fScannerPosition - 2);
 							cell = null;
@@ -150,9 +154,9 @@ public class WikipediaScanner {
 						cells.add(cell);
 
 						break;
-					case '{': // "\n{"
+					case '{': // "\n {"
 						if (fSource[fScannerPosition] == '|') {
-							// nested table
+							// start of nested table?
 							fScannerPosition = indexEndOfTable();
 							break;
 						}

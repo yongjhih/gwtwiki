@@ -1143,8 +1143,158 @@ public class WikiTestModel extends WikiModel {
 			+ "\'\'\'Example\'\'\':\n" + "<pre>\n" + "{{Cat|stubs}}\n" + "</pre>\n" + "{{Cat|stubs}}\n" + "\n" + "==See also==\n"
 			+ "* {{Tl|Cl}}\n" + "* {{Tl|Ccl}}\n" + "* {{Tl|Lcs}}\n" + "\n" + "[[sl:predloga:kat]]\n" + "</noinclude>\n" + "";
 
-	public final static String CITE_WEB_TEXT = "[{{{url}}} {{{title}}}]";
+	public final static String CITE_WEB_TEXT = "<includeonly>{{\n" + 
+			"#if: {{#if: {{{url|}}} | {{#if: {{{title|}}} |1}}}}\n" + 
+			"  ||Fehler beim Aufruf der [[Vorlage:cite web]]: Die Parameter '''url''' und '''title''' müssen vorhanden sein.\n" + 
+			"}}{{\n" + 
+			"#if: {{{archiveurl|}}}{{{archivedate|}}}\n" + 
+			"  | {{#if: {{#if: {{{archiveurl|}}}| {{#if: {{{archivedate|}}} |1}}}}\n" + 
+			"    ||Fehler beim Aufruf der [[Vorlage:cite web]]: Die Parameter '''archiveurl''' und '''archivedate''' müssen beide vorhanden sein oder müssen beide fehlen.\n" + 
+			"}}\n" + 
+			"}}{{#if: {{{author|}}}{{{last|}}}\n" + 
+			"  | {{#if: {{{authorlink|}}}\n" + 
+			"    | [[{{{authorlink}}}|{{#if: {{{last|}}}\n" + 
+			"      | {{{last}}}{{#if: {{{first|}}} | , {{{first}}} }}\n" + 
+			"      | {{{author}}}\n" + 
+			"    }}]]\n" + 
+			"    | {{#if: {{{last|}}}\n" + 
+			"      | {{{last}}}{{#if: {{{first|}}} | , {{{first}}} }}\n" + 
+			"      | {{{author}}}\n" + 
+			"    }}\n" + 
+			"  }}\n" + 
+			"}}{{#if: {{{author|}}}{{{last|}}}\n" + 
+			"  | {{#if: {{{coauthors|}}}| <nowiki>;</nowiki>&#32;{{{coauthors}}} }}\n" + 
+			"}}{{#if: {{{author|}}}{{{last|}}}|\n" + 
+			"    {{#if: {{{date|}}}\n" + 
+			"    | &#32;({{#iferror:{{FormatDate|{{{date}}}}}|{{{date}}}}})\n" + 
+			"    | {{#if: {{{year|}}}\n" + 
+			"      | {{#if: {{{month|}}}\n" + 
+			"        | &#32;({{{month}}} {{{year}}})\n" + 
+			"        | &#32;({{{year}}})\n" + 
+			"      }}\n" + 
+			"    }}\n" + 
+			"  |}}\n" + 
+			"}}{{#if: {{{last|}}}{{{author|}}}\n" + 
+			"  | .&#32;}}{{#if: {{{archiveurl|}}}\n" + 
+			"    | {{#if: {{{archiveurl|}}} | {{#if: {{{title|}}} | ''[{{{archiveurl}}} {{{title}}}]'' }}}}\n" + 
+			"    | {{#if: {{{url|}}} | {{#if: {{{title|}}} | ''[{{{url}}} {{{title}}}]'' }}}}\n" + 
+			"}}{{#if: {{{language|}}} | &#32;<span style=\"font-size: 0.90em; color:#555;\">({{{language}}})</span>\n" + 
+			"}}{{#if: {{{format|}}}\n" + 
+			"  | &#32;({{{format|}}})\n" + 
+			"}}{{#if: {{{work|}}}\n" + 
+			"  | .&#32;''{{{work}}}''\n" + 
+			"}}{{#if: {{{pages|}}}\n" + 
+			"  | &#32;S. {{{pages}}}\n" + 
+			"}}{{#if: {{{publisher|}}}\n" + 
+			"  | .&#32;{{{publisher}}}{{#if: {{{author|}}}{{{last|}}}\n" + 
+			"    |\n" + 
+			"    | {{#if: {{{date|}}}{{{year|}}}{{{month|}}} || }}\n" + 
+			"  }}\n" + 
+			"}}{{#if: {{{author|}}}{{{last|}}}\n" + 
+			"  ||{{#if: {{{date|}}}\n" + 
+			"    | &#32;({{#iferror:{{FormatDate|{{{date}}}}}|{{{date}}}}})\n" + 
+			"    | {{#if: {{{year|}}}\n" + 
+			"      | {{#if: {{{month|}}}\n" + 
+			"        | &#32;({{{month}}} {{{year}}})\n" + 
+			"        | &#32;({{{year}}})\n" + 
+			"      }}\n" + 
+			"    }}\n" + 
+			"  }}\n" + 
+			"}}.{{#if: {{{archivedate|}}}\n" + 
+			"  | &#32;Archiviert vom [{{{url}}} Original] am {{#iferror: {{FormatDate|{{{archivedate}}} }} | {{{archivedate}}} }}.\n" + 
+			"}}{{#if: {{{accessdate|}}}\n" + 
+			"  | &#32;Abgerufen am {{#iferror: {{FormatDate|{{{accessdate}}} }} | {{{accessdate}}} }}.\n" + 
+			"}}{{#if: {{{quote|}}}\n" + 
+			"  | &nbsp;„{{{quote}}}“\n" + 
+			"}}{{#if:{{{accessmonthday|}}}{{{accessyear|}}}|[[Kategorie:Seiten, die ignorierte Vorlagenargumente enthalten|{{PAGENAME}}]]}}</includeonly><noinclude>\n" + 
+			"{{Dokumentation}}</noinclude>";
 
+	public final static String INFOBOX_PROGRAMMIERSPRACHE = "{| class=\"prettytable float-right\" style=\"font-size:90%; width:21em;\"\n" + 
+			"|- class=\"hintergrundfarbe6\"\n" + 
+			"  ! colspan=\"2\" style=\"font-size:105%; text-align: center;\" | <big>{{{Name<includeonly>|{{PAGENAME}}</includeonly>}}}</big>\n" + 
+			"|-\n" + 
+			"  {{#if:{{{Logo<includeonly>|</includeonly>}}}|\n" + 
+			"  {{!}} colspan=\"2\" style=\"text-align:center\" {{!}} {{{Logo}}}{{#if:{{{Beschreibung<includeonly>|</includeonly>}}}|<br />{{{Beschreibung}}}\n" + 
+			"  }}\n" + 
+			"  {{!~}} colspan=\"2\" class=\"hintergrundfarbe5\" style=\"font-size: 105%; text-align:center\" {{!}} Basisdaten\n" + 
+			"  }}\n" + 
+			"|- valign=\"top\"\n" + 
+			"  {{#if:{{{Paradigma<includeonly>|</includeonly>}}}|\n" + 
+			"  {{!}} '''[[Programmierparadigma|Paradigmen]]:'''\n" + 
+			"  {{!}} {{{Paradigma}}}\n" + 
+			"  }}\n" + 
+			"|- valign=\"top\"\n" + 
+			"  {{#if:{{{Erscheinungsjahr<includeonly>|</includeonly>}}}|\n" + 
+			"  {{!}} '''Erscheinungsjahr:'''\n" + 
+			"  {{!}} {{{Erscheinungsjahr}}}\n" + 
+			"  }}\n" + 
+			"|- valign=\"top\"\n" + 
+			"  {{#if:{{{Designer<includeonly>|</includeonly>}}}|\n" + 
+			"  {{!}} '''Designer:'''\n" + 
+			"  {{!}} {{{Designer}}}\n" + 
+			"  }}\n" + 
+			"|- valign=\"top\"\n" + 
+			"  {{#if:{{{Entwickler<includeonly>|</includeonly>}}}|\n" + 
+			"  {{!}} '''Entwickler:'''\n" + 
+			"  {{!}} {{{Entwickler}}}\n" + 
+			"  }}\n" + 
+			"|- valign=\"top\"\n" + 
+			"  {{#if:{{{AktuelleVersion<includeonly>|</includeonly>}}}|\n" + 
+			"  {{!}} '''Aktuelle&nbsp;[[Versionierung|Version]]:'''\n" + 
+			"  {{!}} style=\"white-space:nowrap;\" {{!}} {{{AktuelleVersion}}} &nbsp;<small>({{{AktuelleVersionFreigabeDatum}}})</small>\n" + 
+			"  }}\n" + 
+			"|- valign=\"top\"\n" + 
+			"  {{#if:{{{AktuelleVorabVersion<includeonly>|</includeonly>}}}|\n" + 
+			"  {{!}} '''Aktuelle&nbsp;Vorabversion:'''\n" + 
+			"  {{!}} style=\"white-space:nowrap;\" {{!}} {{{AktuelleVorabVersion}}} &nbsp;<small>({{{AktuelleVorabVersionFreigabeDatum}}})</small>\n" + 
+			"  }}\n" + 
+			"|- valign=\"top\"\n" + 
+			"  {{#if:{{{Typisierung<includeonly>|</includeonly>}}}|\n" + 
+			"  {{!}} '''[[Typisierung (Informatik)|Typisierung]]:'''\n" + 
+			"  {{!}} {{{Typisierung}}}\n" + 
+			"  }}\n" + 
+			"|- valign=\"top\"\n" + 
+			"  {{#if:{{{Implementierung<includeonly>|</includeonly>}}}|\n" + 
+			"  {{!}} '''wichtige [[Implementierung]]en:'''\n" + 
+			"  {{!}} {{{Implementierung}}}\n" + 
+			"  }}\n" + 
+			"|- valign=\"top\"\n" + 
+			"  {{#if:{{{Dialekte<includeonly>|</includeonly>}}}|\n" + 
+			"  {{!}} '''Dialekte:'''\n" + 
+			"  {{!}} {{{Dialekte}}}\n" + 
+			"  }}\n" + 
+			"\n" + 
+			"|- valign=\"top\"\n" + 
+			"  {{#if:{{{Standardisierungen<includeonly>|</includeonly>}}}|\n" + 
+			"  {{!}} '''Standardisierungen:'''\n" + 
+			"  {{!}} {{{Standardisierungen}}}\n" + 
+			"  }}\n" + 
+			"|- valign=\"top\"\n" + 
+			"  {{#if:{{{Beeinflusst_von<includeonly>|</includeonly>}}}|\n" + 
+			"  {{!}} '''Einflüsse:'''\n" + 
+			"  {{!}} {{{Beeinflusst_von}}}\n" + 
+			"  }}\n" + 
+			"|- valign=\"top\"\n" + 
+			"  {{#if:{{{Beeinflusste<includeonly>|</includeonly>}}}|\n" + 
+			"  {{!}} '''Beeinflusste:'''\n" + 
+			"  {{!}} {{{Beeinflusste}}}\n" + 
+			"  }}\n" + 
+			"|- valign=\"top\"\n" + 
+			"  {{#if:{{{Betriebssystem<includeonly>|</includeonly>}}}|\n" + 
+			"  {{!}} '''[[Betriebssystem]]:'''\n" + 
+			"  {{!}} {{{Betriebssystem}}}\n" + 
+			"  }}\n" + 
+			"|- valign=\"top\"\n" + 
+			"  {{#if:{{{Lizenz<includeonly>|</includeonly>}}}|\n" + 
+			"  {{!}} '''[[Lizenz]]:'''\n" + 
+			"  {{!}} {{{Lizenz}}}\n" + 
+			"  }}\n" + 
+			"|- style=\"text-align:center;\" class=\"hintergrundfarbe5\"\n" + 
+			"  {{#if:{{{Website<includeonly>|</includeonly>}}}|\n" + 
+			"  {{!}} colspan=\"2\" {{!}} {{{Website}}}\n" + 
+			"  }}\n" + 
+			"|}<noinclude>{{Dokumentation}}</noinclude>";
+	
 	public final static String NESTED_TEMPLATE_TEST = "test a {{nested}} template";
 
 	public final static String NESTED = "a nested template text";
@@ -1953,6 +2103,8 @@ public class WikiTestModel extends WikiModel {
 				return INFOBOX_SOFTWARE_TEXT;
 			} else if (name.equals("Cite_web")) {
 				return CITE_WEB_TEXT;
+			} else if (name.equals("Infobox_Programmiersprache")) {
+				return INFOBOX_PROGRAMMIERSPRACHE;
 			} else if (name.equals("Navbox")) {
 				return NAVBOX_TEXT;
 			} else if (name.equals("Tnavbar")) {
