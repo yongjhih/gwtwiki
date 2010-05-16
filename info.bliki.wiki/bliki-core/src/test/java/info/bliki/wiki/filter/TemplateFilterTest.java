@@ -416,7 +416,7 @@ public class TemplateFilterTest extends FilterTestSupport {
 		assertEquals("\n" + "<p>test 10 test123</p>", wikiModel.render("test {{MONTHNUMBER | OctoBer }} test123"));
 	}
 
-	public void testProgrammiersprachen() {
+	public void testInfoboxProgrammiersprachen() {
 		assertEquals("\n" + 
 				"<div style=\"page-break-inside: avoid;\">\n" + 
 				"<table class=\"prettytable float-right\" style=\"font-size:90%; width:21em;\">\n" + 
@@ -449,7 +449,8 @@ public class TemplateFilterTest extends FilterTestSupport {
 				"<tr valign=\"top\">\n" + 
 				"<td><b>Einflüsse:</b>\n" + 
 				" </td>\n" + 
-				"<td><a href=\"http://www.bliki.info/wiki/Self_(Programmiersprache)\" title=\"Self (Programmiersprache)\">Self</a>, <a href=\"http://www.bliki.info/wiki/C_(Programmiersprache)\" title=\"C (Programmiersprache)\">C</a>, <a href=\"http://www.bliki.info/wiki/Scheme\" title=\"Scheme\">Scheme</a>, <a href=\"http://www.bliki.info/wiki/Perl_(Programmiersprache)\" title=\"Perl (Programmiersprache)\">Perl</a>, <a href=\"http://www.bliki.info/wiki/Python_(Programmiersprache)\" title=\"Python (Programmiersprache)\">Python</a>, <a href=\"http://www.bliki.info/wiki/Java_(Programmiersprache)\" title=\"Java (Programmiersprache)\">Java</a></td></tr></table></div>", wikiModel.render("{{Infobox Programmiersprache" + 
+				"<td><a href=\"http://www.bliki.info/wiki/Self_(Programmiersprache)\" title=\"Self (Programmiersprache)\">Self</a>, <a href=\"http://www.bliki.info/wiki/C_(Programmiersprache)\" title=\"C (Programmiersprache)\">C</a>, <a href=\"http://www.bliki.info/wiki/Scheme\" title=\"Scheme\">Scheme</a>, <a href=\"http://www.bliki.info/wiki/Perl_(Programmiersprache)\" title=\"Perl (Programmiersprache)\">Perl</a>, <a href=\"http://www.bliki.info/wiki/Python_(Programmiersprache)\" title=\"Python (Programmiersprache)\">Python</a>, <a href=\"http://www.bliki.info/wiki/Java_(Programmiersprache)\" title=\"Java (Programmiersprache)\">Java</a></td></tr></table></div>", 
+				wikiModel.render("{{Infobox Programmiersprache" + 
 				"|Name = JavaScript" + 
 				"|Beschreibung = Skriptsprache" + 
 				"|Paradigma = multiparadigmatisch" + 
@@ -462,6 +463,205 @@ public class TemplateFilterTest extends FilterTestSupport {
 				"|Beeinflusst_von = [[Self (Programmiersprache)|Self]], [[C (Programmiersprache)|C]], [[Scheme]], [[Perl (Programmiersprache)|Perl]], [[Python (Programmiersprache)|Python]], [[Java (Programmiersprache)|Java]]" + 
 				"}}"));
 	}
+	
+	public void testProgrammiersprachen() {
+		assertEquals("<a id=\"Versionsgeschichte\" name=\"Versionsgeschichte\"></a><h3>Versionsgeschichte</h3>\n" + 
+				"\n" + 
+				"<div style=\"page-break-inside: avoid;\">\n" + 
+				"<table class=\"wikitable\">\n" + 
+				"<caption>Versionsgeschichte von JavaScript<sup id=\"_ref-1\" class=\"reference\"><a href=\"#_note-1\" title=\"\">[1]</a></sup></caption>\n" + 
+				"<tr>\n" + 
+				"<th>Version </th>\n" + 
+				"<th>Release </th>\n" + 
+				"<th>Entsprechung </th>\n" + 
+				"<th>Netscape Navigator </th>\n" + 
+				"<th>Mozilla Firefox </th>\n" + 
+				"<th>Internet Explorer </th>\n" + 
+				"<th>Opera </th>\n" + 
+				"<th>Safari </th>\n" + 
+				"<th>Google Chrome </th></tr>\n" + 
+				"<tr>\n" + 
+				"<td>1.0 </td>\n" + 
+				"<td>März 1996 </td>\n" + 
+				"<td />\n" + 
+				"<td>2.0 </td>\n" + 
+				"<td />\n" + 
+				"<td>3.0 </td>\n" + 
+				"<td />\n" + 
+				"<td />\n" + 
+				"<td /></tr>\n" + 
+				"<tr>\n" + 
+				"<td>1.1 </td>\n" + 
+				"<td>August 1996 </td>\n" + 
+				"<td />\n" + 
+				"<td>3.0 </td>\n" + 
+				"<td />\n" + 
+				"<td />\n" + 
+				"<td />\n" + 
+				"<td />\n" + 
+				"<td /></tr>\n" + 
+				"<tr>\n" + 
+				"<td>1.2 </td>\n" + 
+				"<td>Juni 1997 </td>\n" + 
+				"<td />\n" + 
+				"<td>4.0-4.05 </td>\n" + 
+				"<td />\n" + 
+				"<td />\n" + 
+				"<td />\n" + 
+				"<td />\n" + 
+				"<td /></tr>\n" + 
+				"<tr>\n" + 
+				"<td>1.3 </td>\n" + 
+				"<td>Oktober 1998 </td>\n" + 
+				"<td>ECMA-262 1<sup>st</sup> edition / ECMA-262 2<sup>nd</sup> edition </td>\n" + 
+				"<td>4.06-4.7x </td>\n" + 
+				"<td />\n" + 
+				"<td>4.0 </td>\n" + 
+				"<td />\n" + 
+				"<td />\n" + 
+				"<td /></tr>\n" + 
+				"<tr>\n" + 
+				"<td>1.4 </td>\n" + 
+				"<td />\n" + 
+				"<td />\n" + 
+				"<td>Netscape Server </td>\n" + 
+				"<td />\n" + 
+				"<td />\n" + 
+				"<td />\n" + 
+				"<td />\n" + 
+				"<td /></tr>\n" + 
+				"<tr>\n" + 
+				"<td>1.5 </td>\n" + 
+				"<td>November 2000 </td>\n" + 
+				"<td>ECMA-262 3<sup>rd</sup> edition </td>\n" + 
+				"<td>6.0 </td>\n" + 
+				"<td>1.0</td>\n" + 
+				"<td>\n" + 
+				"\n" + 
+				"<ul>\n" + 
+				"<li>5.5 (JScript 5.5)</li>\n" + 
+				"<li>6 (JScript 5.6)</li>\n" + 
+				"<li>7 (JScript 5.7)</li>\n" + 
+				"<li>8 (JScript 6)</li></ul></td>\n" + 
+				"<td>\n" + 
+				"\n" + 
+				"<ul>\n" + 
+				"<li>6.0</li>\n" + 
+				"<li>7.0</li>\n" + 
+				"<li>8.0</li>\n" + 
+				"<li>9.0</li></ul></td>\n" + 
+				"<td />\n" + 
+				"<td /></tr>\n" + 
+				"<tr>\n" + 
+				"<td>1.6 </td>\n" + 
+				"<td>November 2005 </td>\n" + 
+				"<td>1.5 + Array extras + Array &#38; String generics + E4X </td>\n" + 
+				"<td />\n" + 
+				"<td>1.5 </td>\n" + 
+				"<td />\n" + 
+				"<td></td>\n" + 
+				"<td>\n" + 
+				"\n" + 
+				"<ul>\n" + 
+				"<li>3.0</li>\n" + 
+				"<li>3.1</li></ul></td>\n" + 
+				"<td /></tr>\n" + 
+				"<tr>\n" + 
+				"<td>1.7 </td>\n" + 
+				"<td>Oktober 2006 </td>\n" + 
+				"<td>1.6 + Pythonic generators + Iterators + let + destructuring assignments </td>\n" + 
+				"<td />\n" + 
+				"<td>2.0 </td>\n" + 
+				"<td />\n" + 
+				"<td></td>\n" + 
+				"<td>\n" + 
+				"\n" + 
+				"<ul>\n" + 
+				"<li>3.2</li>\n" + 
+				"<li>4.0</li></ul></td>\n" + 
+				"<td>1.0</td></tr>\n" + 
+				"<tr>\n" + 
+				"<td>1.8 </td>\n" + 
+				"<td>Juni 2008 </td>\n" + 
+				"<td>1.7 + Generator expressions + Expression closures </td>\n" + 
+				"<td />\n" + 
+				"<td>3.0 </td>\n" + 
+				"<td />\n" + 
+				"<td />\n" + 
+				"<td />\n" + 
+				"<td /></tr>\n" + 
+				"<tr>\n" + 
+				"<td>1.8.1 </td>\n" + 
+				"<td />\n" + 
+				"<td>1.8 + geringfügige Updates </td>\n" + 
+				"<td />\n" + 
+				"<td>3.5 </td>\n" + 
+				"<td />\n" + 
+				"<td />\n" + 
+				"<td />\n" + 
+				"<td /></tr>\n" + 
+				"<tr>\n" + 
+				"<td>1.9 </td>\n" + 
+				"<td />\n" + 
+				"<td>1.8.1 + ECMAScript 5 Compliance </td>\n" + 
+				"<td />\n" + 
+				"<td>4 </td>\n" + 
+				"<td />\n" + 
+				"<td />\n" + 
+				"<td />\n" + 
+				"<td /></tr></table></div>\n" + 
+				"<ol class=\"references\">\n" + 
+				"<li id=\"_note-1\"><b><a href=\"#_ref-1\" title=\"\">&#8593;</a></b> John Resig. <i><a class=\"externallink\" href=\"http://ejohn.org/blog/versions-of-javascript\" rel=\"nofollow\" title=\"http://ejohn.org/blog/versions-of-javascript\">Versions of JavaScript</a></i>. Ejohn.org. Abgerufen am {{FormatDate}}.</li></ol>", wikiModel.render("=== Versionsgeschichte ===\n"+
+				"{| class=\"wikitable\"\n" + 
+				"|+Versionsgeschichte von JavaScript<ref>{{cite web|author=John Resig |url=http://ejohn.org/blog/versions-of-javascript |title=Versions of JavaScript |publisher=Ejohn.org |date= |accessdate=2009-05-19}}</ref>\n" + 
+				"|-\n" + 
+				"! Version !! Release !! Entsprechung !! Netscape Navigator !! Mozilla Firefox !! Internet Explorer !! Opera !! Safari !! Google Chrome \n" + 
+				"|-\n" + 
+				"| 1.0 || März 1996 ||  || 2.0 ||  || 3.0 ||  || || \n" + 
+				"|-\n" + 
+				"| 1.1 || August 1996 ||  || 3.0 ||  ||  ||  || || \n" + 
+				"|-\n" + 
+				"| 1.2 || Juni 1997 ||  || 4.0-4.05 ||  ||  ||  || || \n" + 
+				"|-\n" + 
+				"| 1.3 || Oktober 1998 || ECMA-262 1<sup>st</sup> edition / ECMA-262 2<sup>nd</sup> edition || 4.06-4.7x ||  || 4.0 ||  || || \n" + 
+				"|-\n" + 
+				"| 1.4 ||  ||  || Netscape Server ||  ||  ||  || || \n" + 
+				"|-\n" + 
+				"| 1.5 || November 2000 || ECMA-262 3<sup>rd</sup> edition || 6.0 || 1.0\n" + 
+				"|\n" + 
+				"*5.5 (JScript 5.5)\n" + 
+				"*6 (JScript 5.6)\n" + 
+				"*7 (JScript 5.7)\n" + 
+				"*8 (JScript 6)\n" + 
+				"|\n" + 
+				"*6.0\n" + 
+				"*7.0\n" + 
+				"*8.0\n" + 
+				"*9.0\n" + 
+				"| || \n" + 
+				"|-\n" + 
+				"| 1.6 || November 2005 || 1.5 + Array extras + Array & String generics + E4X ||  || 1.5 ||  ||\n" + 
+				"|\n" + 
+				"*3.0\n" + 
+				"*3.1\n" + 
+				"| \n" + 
+				"|-\n" + 
+				"| 1.7 || Oktober 2006 || 1.6 + Pythonic generators + Iterators + let + destructuring assignments ||  || 2.0 ||  ||\n" + 
+				"|\n" + 
+				"* 3.2\n" + 
+				"* 4.0\n" + 
+				"| 1.0\n" + 
+				"|-\n" + 
+				"| 1.8 || Juni 2008 || 1.7 + Generator expressions + Expression closures ||  || 3.0 ||  ||  || || \n" + 
+				"|-\n" + 
+				"| 1.8.1 ||  || 1.8 + geringfügige Updates ||  || 3.5 ||  ||  || || \n" + 
+				"|-\n" + 
+				"| 1.9 ||  || 1.8.1 + ECMAScript 5 Compliance ||  || 4 ||  ||  || || \n" + 
+				"|}\n"+
+				"\n"+
+				"<references/>\n"));
+	}
+	
 	public void testbirth_date_and_age() {
 		assertEquals(
 				"\n"
