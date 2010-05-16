@@ -16,9 +16,13 @@ public class HTMLCreatorExample {
 	}
 
 	public static void testWikipediaENAPI(String title) {
+		testWikipediaENAPI(title, "http://en.wikipedia.org/w/api.php");
+	}
+
+	public static void testWikipediaENAPI(String title, String apiLink) {
 		String[] listOfTitleStrings = { title };
 		String titleURL = Encoder.encodeTitleLocalUrl(title);
-		User user = new User("", "", "http://en.wikipedia.org/w/api.php");
+		User user = new User("", "", apiLink);
 		user.login();
 		String mainDirectory = "c:/temp/";
 		// the following subdirectory should not exist if you would like to create a
@@ -78,8 +82,10 @@ public class HTMLCreatorExample {
 	public static void testCreator006() {
 		testWikipediaENAPI("Anarchism");
 	}
-
+	public static void testCreator007() {
+		testWikipediaENAPI("JavaScript","http://de.wikipedia.org/w/api.php");
+	}
 	public static void main(String[] args) {
-		testCreator001();
+		testCreator007();
 	}
 }
