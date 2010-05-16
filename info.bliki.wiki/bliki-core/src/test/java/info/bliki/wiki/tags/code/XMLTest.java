@@ -27,7 +27,7 @@ public class XMLTest extends FilterTestSupport
 		assertEquals(
 				"\n" + 
 				"<p><b>XML example:</b>\n" + 
-				"</p><pre name=\"code\" class=\"xml\">\n" + 
+				"</p><pre class=\"xml\">\n" + 
 				"  <span style=\"color:#7F0055; font-weight: bold; \">&#60;extension</span>\n" + 
 				"           point=<span style=\"color:#2A00FF; \">&#34;org.eclipse.help.toc&#34;</span><span style=\"color:#7F0055; font-weight: bold; \">&#62;</span>\n" + 
 				"        <span style=\"color:#7F0055; font-weight: bold; \">&#60;toc</span>\n" + 
@@ -49,7 +49,7 @@ public class XMLTest extends FilterTestSupport
 		assertEquals(
 				"\n" + 
 				"<p><b>XML example:</b>\n" + 
-				"</p><pre name=\"code\" class=\"xml\">\n" + 
+				"</p><pre class=\"xml\">\n" + 
 				"  <span style=\"color:#7F0055; font-weight: bold; \">&#60;extension</span>\n" + 
 				"           point=<span style=\"color:#2A00FF; \">&#34;org.eclipse.help.toc&#34;</span><span style=\"color:#7F0055; font-weight: bold; \">&#62;</span>\n" + 
 				"        <span style=\"color:#7F0055; font-weight: bold; \">&#60;toc</span>\n" + 

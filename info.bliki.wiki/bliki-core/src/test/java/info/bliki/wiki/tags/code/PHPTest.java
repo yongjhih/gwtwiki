@@ -23,7 +23,7 @@ public class PHPTest extends FilterTestSupport
 				+ "if ( $choice == 1 )\n" + "{\n" + "  echo \"Hello world\";\n" + "}\n" + "# end of script\n" + "?>\n" + "</source>");
 
 		assertEquals( 
-				"<pre name=\"code\" class=\"php\">\n" + 
+				"<pre class=\"php\">\n" + 
 				"<span style=\"color:#7F0055; font-weight: bold; \">&#60;?php</span>\n" + 
 				"<span style=\"color:#3F7F5F; \">/* A simple php script */</span>\n" + 
 				" \n" + 

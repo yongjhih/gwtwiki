@@ -17,7 +17,7 @@ import java.util.Map;
  */
 public class SourceTag extends HTMLTag implements INoBodyParsingTag {
 
-	protected final static String SOURCE_START_1 = "<pre name=\"code\" class=\"";
+	protected final static String SOURCE_START_1 = "<pre class=\"";
 	protected final static String SOURCE_START_2 = "\">";
 	protected final static String SOURCE_END = "</pre>";
  
