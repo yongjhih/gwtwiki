@@ -602,12 +602,15 @@ public class WikipediaScanner {
 	public int indexEndOfTable() {
 		// check nowiki and html comments?
 		int count = 1;
+		// boolean whitespace;
+		int oldPosition;
 		char ch;
 		try {
 			while (true) {
 				ch = fSource[fScannerPosition++];
 				if (ch == '<' && fSource[fScannerPosition] == '!' && fSource[fScannerPosition + 1] == '-'
 						&& fSource[fScannerPosition + 2] == '-') {
+					// start of HTML comment
 					fScannerPosition = indexEndOfComment();
 					if (fScannerPosition == (-1)) {
 						return -1;
@@ -615,18 +618,35 @@ public class WikipediaScanner {
 				} else if (ch == '<' && fSource[fScannerPosition] == 'n' && fSource[fScannerPosition + 1] == 'o'
 						&& fSource[fScannerPosition + 2] == 'w' && fSource[fScannerPosition + 3] == 'i' && fSource[fScannerPosition + 4] == 'k'
 						&& fSource[fScannerPosition + 5] == 'i' && fSource[fScannerPosition + 6] == '>') {
+					// <nowiki>
 					fScannerPosition = indexEndOfNowiki();
 					if (fScannerPosition == (-1)) {
 						return -1;
 					}
-				} else if (ch == '\n' && fSource[fScannerPosition] == '|' && fSource[fScannerPosition + 1] == '}') {
-					count--;
-					if (count == 0) {
-						return fScannerPosition + 2;
-					}
+					// } else if (ch == '\n' && fSource[fScannerPosition] == '|' &&
+					// fSource[fScannerPosition + 1] == '}') {
+					// count--;
+					// if (count == 0) {
+					// return fScannerPosition + 2;
+					// }
 				} else if (ch == '\n' && fSource[fScannerPosition] == '{' && fSource[fScannerPosition + 1] == '|') {
 					// assume nested table
 					count++;
+				} else if (ch == '\n') {
+					// whitespace = false;
+					oldPosition = fScannerPosition;
+					ch = fSource[fScannerPosition++];
+					// ignore SPACES and TABs at the beginning of the line
+					while (ch == ' ' || ch == '\t') {
+						ch = fSource[fScannerPosition++];
+					}
+					if (ch == '|' && fSource[fScannerPosition] == '}') {
+						count--;
+						if (count == 0) {
+							return fScannerPosition + 1;
+						}
+					}
+					fScannerPosition = oldPosition;
 				}
 			}
 		} catch (IndexOutOfBoundsException e) {
