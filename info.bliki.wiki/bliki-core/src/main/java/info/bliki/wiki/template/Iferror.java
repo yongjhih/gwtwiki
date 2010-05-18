@@ -6,7 +6,6 @@ import info.bliki.wiki.model.IWikiModel;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.regex.Pattern;
 
 /**
  * A template parser function for <code>{{ #iferror: ... }}</code> syntax. See
@@ -16,7 +15,7 @@ import java.util.regex.Pattern;
  * 
  */
 public class Iferror extends AbstractTemplateFunction {
-	private final static Pattern CLASS_ERROR_PATTERN = Pattern.compile("class=\"error\"");
+
 	public final static ITemplateFunction CONST = new Iferror();
 
 	public Iferror() {
@@ -30,7 +29,7 @@ public class Iferror extends AbstractTemplateFunction {
 			boolean error = false;
 			String iferrorCondition = parse(list.get(0), model);
 			if (iferrorCondition.length() > 0) {
-				error = CLASS_ERROR_PATTERN.matcher(iferrorCondition).find();
+				error = iferrorCondition.indexOf(" class=\"error\"") > 0;
 			}
 			if (error) {
 				// &lt;then text&gt;
