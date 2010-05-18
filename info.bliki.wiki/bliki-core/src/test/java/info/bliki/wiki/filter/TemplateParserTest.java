@@ -21,20 +21,75 @@ public class TemplateParserTest extends FilterTestSupport {
         wikiModel
             .parseTemplates("start{{      #if:   \n    |{{#ifeq:{{{seperator}}}|;|;|. }}     }}end"));
   }
-
-//  public void testIf02() {
-//    assertEquals(
-//        "",
-//        wikiModel
-//            .parseTemplates("{{Citation |title=Television listings |url=http://books.google.com/books?id=Uek4AAAAIAAJ&q=Tom+Hanks+Family+Ties&dq=Tom+Hanks+Family+Ties&pgis=1 |publisher=''[[TV Guide (magazine)|TV Guide]]'' |date=2003-11-27 |accessdate=2009-01-20}}."));
-//  }
-//  
-//  public void testIf03() {
-//    assertEquals(
-//        "",
-//        wikiModel
-//            .render("<ref>{{Citation |title=Television listings |url=http://books.google.com/books?id=Uek4AAAAIAAJ&q=Tom+Hanks+Family+Ties&dq=Tom+Hanks+Family+Ties&pgis=1 |publisher=''[[TV Guide (magazine)|TV Guide]]'' |date=2003-11-27 |accessdate=2009-01-20}}.</ref>\n<references/>"));
-//  }
+  
+  public void testIf02() {
+    assertEquals(
+        "startnoend",
+        wikiModel
+            .parseTemplates("start{{#if:\n" + 
+            		"\n" + 
+            		"\n" + 
+            		"| yes | no}}end"));
+  }
+  
+  public void testIf03() {
+    assertEquals(
+        "startyesend",
+        wikiModel
+            .parseTemplates("start{{#if:string\n" + 
+            		"\n" + 
+            		"\n" + 
+            		"| yes | no}}end"));
+  }
+  
+  public void testIf04() {
+    assertEquals(
+        "startend",
+        wikiModel
+            .parseTemplates("start{{#if: | yes }}end"));
+  }
+  
+  public void testIfeq01() {
+    assertEquals(
+        "startyesend",
+        wikiModel
+            .parseTemplates("start{{#ifeq: 01 | 1 | yes | no}}end"));
+  }
+  
+  public void testIfeq02() {
+    assertEquals(
+        "startyesend",
+        wikiModel
+            .parseTemplates("start{{#ifeq: 0 | -0 | yes | no}}end"));
+  }
+  
+  public void testIfeq03() {
+    assertEquals(
+        "startnoend",
+        wikiModel
+            .parseTemplates("start{{#ifeq: \"01\" | \"1\" | yes | no}}end"));
+  }
+  
+  public void testIf05() {
+    assertEquals(
+        "startend",
+        wikiModel
+            .parseTemplates("start{{#if: foo | | no}}end"));
+  }
+  
+  public void testIfexpr01() {
+    assertEquals(
+        "startnoend",
+        wikiModel
+            .parseTemplates("start{{#ifexpr: 1 < 0 | | no}}end"));
+  }
+  
+  public void testIfexpr02() {
+    assertEquals(
+        "startend",
+        wikiModel
+            .parseTemplates("start{{#ifexpr: 1 > 0 | | no}}end"));
+  }
   
   public void testBORN_DATA() {
     assertEquals(
