@@ -38,30 +38,30 @@ public class Category implements Serializable {
       .getName());
 
   @Id
+  private Long categoryId = null;
   private String name = null;
-  private String childTopicName = null;
-  private String sortKey = null;
+	private String childTopicName = null;
+
+	private String sortKey = null;
   private int topicType = -1;
   private String virtualWiki = null;
-
   /**
 	 *
 	 */
   public Category() {
   }
+  /**
+	 * @return the categoryId
+	 */
+	public Long getCategoryId() {
+		return categoryId;
+	}
 
   /**
 	 *
 	 */
   public String getChildTopicName() {
     return this.childTopicName;
-  }
-
-  /**
-	 *
-	 */
-  public void setChildTopicName(String childTopicName) {
-    this.childTopicName = childTopicName;
   }
 
   /**
@@ -74,22 +74,8 @@ public class Category implements Serializable {
   /**
 	 *
 	 */
-  public void setName(String name) {
-    this.name = name;
-  }
-
-  /**
-	 *
-	 */
   public String getSortKey() {
     return this.sortKey;
-  }
-
-  /**
-	 *
-	 */
-  public void setSortKey(String sortKey) {
-    this.sortKey = sortKey;
   }
 
   /**
@@ -102,15 +88,43 @@ public class Category implements Serializable {
   /**
 	 *
 	 */
-  public void setTopicType(int topicType) {
-    this.topicType = topicType;
+  public String getVirtualWiki() {
+    return this.virtualWiki;
+  }
+
+  /**
+	 * @param categoryId the categoryId to set
+	 */
+	public void setCategoryId(Long categoryId) {
+		this.categoryId = categoryId;
+	}
+
+  /**
+	 *
+	 */
+  public void setChildTopicName(String childTopicName) {
+    this.childTopicName = childTopicName;
   }
 
   /**
 	 *
 	 */
-  public String getVirtualWiki() {
-    return this.virtualWiki;
+  public void setName(String name) {
+    this.name = name;
+  }
+
+  /**
+	 *
+	 */
+  public void setSortKey(String sortKey) {
+    this.sortKey = sortKey;
+  }
+
+  /**
+	 *
+	 */
+  public void setTopicType(int topicType) {
+    this.topicType = topicType;
   }
 
   /**

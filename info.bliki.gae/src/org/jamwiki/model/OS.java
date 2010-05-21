@@ -5,6 +5,7 @@ import info.bliki.gae.model.GroupAuthorityEntity;
 import info.bliki.gae.model.GroupMemberEntity;
 import info.bliki.gae.model.PropertyEntity;
 import info.bliki.gae.model.RecentChangeEntity;
+import info.bliki.gae.model.RoleEntity;
 import info.bliki.gae.model.UserEntity;
 
 import org.jamwiki.authentication.WikiUserDetails;
@@ -19,6 +20,7 @@ public class OS extends ObjectifyService {
     factory.register(GroupMemberEntity.class);
     factory.register(PropertyEntity.class);
     factory.register(RecentChangeEntity.class);
+    factory.register(RoleEntity.class);
     factory.register(TopicVersion.class);
     factory.register(TopicVersion.class);
     factory.register(Topic.class);

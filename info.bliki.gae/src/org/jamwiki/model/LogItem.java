@@ -22,6 +22,9 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.persistence.Entity;
+import javax.persistence.Id;
+
 import org.apache.commons.lang.StringUtils;
 import org.jamwiki.WikiMessage;
 import org.jamwiki.utils.Utilities;
@@ -34,6 +37,7 @@ import com.googlecode.objectify.Objectify;
 /**
  * Provides an object representing a Wiki log entry.
  */
+@Entity
 public class LogItem {
 
   private static final WikiLogger logger = WikiLogger.getLogger(LogItem.class
@@ -54,23 +58,6 @@ public class LogItem {
     LOG_TYPES.put(LOG_TYPE_PERMISSION, "log.caption.log.permission");
     LOG_TYPES.put(LOG_TYPE_UPLOAD, "log.caption.log.upload");
     LOG_TYPES.put(LOG_TYPE_USER_CREATION, "log.caption.log.user");
-  }
-
-  private String logComment = null;
-  private Date logDate = null;
-  private List<String> logParams = null;
-  private int logType = -1;
-  // private Long topicId = null;
-  private Key<Topic> topicId = null;
-  private Long topicVersionId = null;
-  private String userDisplayName = null;
-  private Long userId = null;
-  private String virtualWiki = null;
-
-  /**
-	 *
-	 */
-  public LogItem() {
   }
 
   /**
@@ -127,7 +114,6 @@ public class LogItem {
     logItem.setVirtualWiki(topic.getVirtualWiki());
     return logItem;
   }
-
   /**
    * Create a log item from a wiki user.
    */
@@ -175,32 +161,24 @@ public class LogItem {
     return logWikiMessage;
   }
 
-  /**
-	 *
-	 */
-  public String getLogComment() {
-    return this.logComment;
-  }
+  @Id
+  private Long logItemId = null;
+  private String logComment = null;
+  private Date logDate = null;
+  private List<String> logParams = null;
+  private int logType = -1;
+  // private Long topicId = null;
+  private Key<Topic> topicId = null;
+  private Long topicVersionId = null;
+  private String userDisplayName = null;
+  private Long userId = null;
+
+  private String virtualWiki = null;
 
   /**
 	 *
 	 */
-  public void setLogComment(String logComment) {
-    this.logComment = logComment;
-  }
-
-  /**
-	 *
-	 */
-  public Date getLogDate() {
-    return this.logDate;
-  }
-
-  /**
-	 *
-	 */
-  public void setLogDate(Date logDate) {
-    this.logDate = logDate;
+  public LogItem() {
   }
 
   /**
@@ -216,15 +194,29 @@ public class LogItem {
   /**
 	 *
 	 */
-  public List<String> getLogParams() {
-    return this.logParams;
+  public String getLogComment() {
+    return this.logComment;
   }
 
   /**
 	 *
 	 */
-  public void setLogParams(List<String> logParams) {
-    this.logParams = logParams;
+  public Date getLogDate() {
+    return this.logDate;
+  }
+
+  /**
+   * @return the logItemId
+   */
+  public Long getLogItemId() {
+    return logItemId;
+  }
+
+  /**
+	 *
+	 */
+  public List<String> getLogParams() {
+    return this.logParams;
   }
 
   /**
@@ -235,24 +227,10 @@ public class LogItem {
   }
 
   /**
-   * Utility method for converting a log params pipe-delimited string to a list.
-   */
-  public void setLogParamString(String logParamsString) {
-    this.setLogParams(Utilities.delimitedStringToList(logParamsString, "|"));
-  }
-
-  /**
 	 *
 	 */
   public int getLogType() {
     return this.logType;
-  }
-
-  /**
-	 *
-	 */
-  public void setLogType(int logType) {
-    this.logType = logType;
   }
 
   /**
@@ -290,24 +268,8 @@ public class LogItem {
   /**
 	 *
 	 */
-  public void setTopicId(Topic topicId) {
-    // this.topicId = topicId;
-    Objectify ofy = OS.begin();
-    this.topicId = new Key<Topic>(Topic.class, topicId.getName());
-  }
-
-  /**
-	 *
-	 */
   public Long getTopicVersionId() {
     return this.topicVersionId;
-  }
-
-  /**
-	 *
-	 */
-  public void setTopicVersionId(Long topicVersionId) {
-    this.topicVersionId = topicVersionId;
   }
 
   /**
@@ -320,13 +282,6 @@ public class LogItem {
   /**
 	 *
 	 */
-  public void setUserDisplayName(String userDisplayName) {
-    this.userDisplayName = userDisplayName;
-  }
-
-  /**
-	 *
-	 */
   public Long getUserId() {
     return this.userId;
   }
@@ -334,22 +289,8 @@ public class LogItem {
   /**
 	 *
 	 */
-  public void setUserId(Long userId) {
-    this.userId = userId;
-  }
-
-  /**
-	 *
-	 */
   public String getVirtualWiki() {
     return this.virtualWiki;
-  }
-
-  /**
-	 *
-	 */
-  public void setVirtualWiki(String virtualWiki) {
-    this.virtualWiki = virtualWiki;
   }
 
   /**
@@ -392,5 +333,84 @@ public class LogItem {
 	 */
   public boolean isUser() {
     return this.logType == LOG_TYPE_USER_CREATION;
+  }
+
+  /**
+	 *
+	 */
+  public void setLogComment(String logComment) {
+    this.logComment = logComment;
+  }
+
+  /**
+	 *
+	 */
+  public void setLogDate(Date logDate) {
+    this.logDate = logDate;
+  }
+
+  /**
+   * @param logItemId the logItemId to set
+   */
+  public void setLogItemId(Long logItemId) {
+    this.logItemId = logItemId;
+  }
+
+  /**
+	 *
+	 */
+  public void setLogParams(List<String> logParams) {
+    this.logParams = logParams;
+  }
+
+  /**
+   * Utility method for converting a log params pipe-delimited string to a list.
+   */
+  public void setLogParamString(String logParamsString) {
+    this.setLogParams(Utilities.delimitedStringToList(logParamsString, "|"));
+  }
+
+  /**
+	 *
+	 */
+  public void setLogType(int logType) {
+    this.logType = logType;
+  }
+
+  /**
+	 *
+	 */
+  public void setTopicId(Topic topicId) {
+    // this.topicId = topicId;
+    Objectify ofy = OS.begin();
+    this.topicId = new Key<Topic>(Topic.class, topicId.getName());
+  }
+
+  /**
+	 *
+	 */
+  public void setTopicVersionId(Long topicVersionId) {
+    this.topicVersionId = topicVersionId;
+  }
+
+  /**
+	 *
+	 */
+  public void setUserDisplayName(String userDisplayName) {
+    this.userDisplayName = userDisplayName;
+  }
+
+  /**
+	 *
+	 */
+  public void setUserId(Long userId) {
+    this.userId = userId;
+  }
+
+  /**
+	 *
+	 */
+  public void setVirtualWiki(String virtualWiki) {
+    this.virtualWiki = virtualWiki;
   }
 }
