@@ -25,9 +25,9 @@
 				
 						
 				<prop key="/**/Special:Search">Search</prop>
-				
+		-->			
 				<prop key="/**/Special:Specialpages">SpecialPages</prop>
-				
+		<!-- 		
 				<prop key="/**/Special:Upgrade">Upgrade</prop>
 				<prop key="/**/Special:Upload">Upload</prop>
 				
@@ -73,8 +73,9 @@
 	<bean id="ImportTiddly" class="org.jamwiki.servlets.ImportTiddlyWikiServlet" />
 	
 	<bean id="Search" class="org.jamwiki.servlets.SearchServlet" />
-	<bean id="SpecialPages" class="org.jamwiki.servlets.SpecialPagesServlet" />
-	
+-->
+ 	<bean id="SpecialPages" class="org.jamwiki.servlets.SpecialPagesServlet" />
+<!-- 	
 	<bean id="Upgrade" class="org.jamwiki.servlets.UpgradeServlet" />
 	<bean id="Upload" class="org.jamwiki.servlets.UploadServlet" />
 	
