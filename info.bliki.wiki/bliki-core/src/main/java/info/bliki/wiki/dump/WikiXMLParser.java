@@ -2,6 +2,7 @@ package info.bliki.wiki.dump;
 
 import info.bliki.api.Connector;
 
+import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -9,7 +10,9 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.io.UnsupportedEncodingException;
+import java.util.zip.GZIPInputStream;
 
+import org.apache.commons.compress.compressors.bzip2.BZip2CompressorInputStream;
 import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
@@ -21,8 +24,9 @@ import org.xml.sax.helpers.XMLReaderFactory;
  * A Wikipedia XML dump file parser
  * 
  * Original version with permission from Marco Schmidt. See: <a
- * href="http://schmidt.devlib.org/software/lucene-wikipedia.html">http://schmidt.devlib.org/software/lucene-wikipedia.html</a>
- *  
+ * href="http://schmidt.devlib.org/software/lucene-wikipedia.html"
+ * >http://schmidt.devlib.org/software/lucene-wikipedia.html</a>
+ * 
  * @author Marco Schmidt
  * 
  */
@@ -37,11 +41,11 @@ public class WikiXMLParser extends DefaultHandler {
 
 	private static final String WIKIPEDIA_TIMESTAMP = "timestamp";
 
+	private static final String WIKIPEDIA_ID = "id";
+
 	private WikiArticle fArticle;
 
-	// private Attributes fAttributes;
-
-	private StringBuffer fData;
+	private StringBuilder fData;
 
 	private XMLReader fXMLReader;
 
@@ -49,8 +53,9 @@ public class WikiXMLParser extends DefaultHandler {
 
 	private IArticleFilter fArticleFilter;
 
-	public WikiXMLParser(String filename, IArticleFilter filter) throws SAXException, FileNotFoundException {
-		this(new FileInputStream(filename), filter);
+	public WikiXMLParser(String filename, IArticleFilter filter) throws UnsupportedEncodingException, IOException, SAXException,
+			FileNotFoundException {
+		this(getBufferedReader(filename), filter);
 	}
 
 	public WikiXMLParser(InputStream inputStream, IArticleFilter filter) throws SAXException {
@@ -60,10 +65,43 @@ public class WikiXMLParser extends DefaultHandler {
 			fXMLReader = XMLReaderFactory.createXMLReader();
 			fXMLReader.setContentHandler(this);
 			fXMLReader.setErrorHandler(this);
-			fReader = new InputStreamReader(inputStream, Connector.UTF8_CHARSET);
+			fReader = new BufferedReader(new InputStreamReader(inputStream, Connector.UTF8_CHARSET));
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
 		}
+	}
+
+	public WikiXMLParser(Reader reader, IArticleFilter filter) throws SAXException {
+		super();
+		fArticleFilter = filter;
+		fXMLReader = XMLReaderFactory.createXMLReader();
+		fXMLReader.setContentHandler(this);
+		fXMLReader.setErrorHandler(this);
+		fReader = reader;
+	}
+
+	/**
+	 * 
+	 * @return a BufferedReader created from wikiDumpFilename
+	 * @throws UnsupportedEncodingException
+	 * 
+	 */
+	public static BufferedReader getBufferedReader(String wikiDumpFilename) throws UnsupportedEncodingException,
+			FileNotFoundException, IOException {
+		BufferedReader br = null;
+
+		if (wikiDumpFilename.endsWith(".gz")) {
+
+			br = new BufferedReader(new InputStreamReader(new GZIPInputStream(new FileInputStream(wikiDumpFilename)), "UTF-8"));
+
+		} else if (wikiDumpFilename.endsWith(".bz2")) {
+			FileInputStream fis = new FileInputStream(wikiDumpFilename);
+			br = new BufferedReader(new InputStreamReader(new BZip2CompressorInputStream(fis), "UTF-8"));
+		} else {
+			br = new BufferedReader(new InputStreamReader(new FileInputStream(wikiDumpFilename), "UTF-8"));
+		}
+
+		return br;
 	}
 
 	private String getString() {
@@ -110,6 +148,8 @@ public class WikiXMLParser extends DefaultHandler {
 				fArticle.setTitle(getString());
 			} else if (WIKIPEDIA_TIMESTAMP.equals(qName)) {
 				fArticle.setTimeStamp(getString());
+			} else if (WIKIPEDIA_ID.equals(qName)) {
+				fArticle.setId(getString());
 			}
 
 			fData = null;
@@ -128,7 +168,7 @@ public class WikiXMLParser extends DefaultHandler {
 	@Override
 	public void characters(char[] ch, int start, int length) throws SAXException {
 		if (fData == null) {
-			fData = new StringBuffer(length);
+			fData = new StringBuilder(length);
 		}
 		fData.append(ch, start, length);
 	}

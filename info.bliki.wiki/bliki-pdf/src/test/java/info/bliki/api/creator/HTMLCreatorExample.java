@@ -86,6 +86,6 @@ public class HTMLCreatorExample {
 		testWikipediaENAPI("JavaScript","http://de.wikipedia.org/w/api.php");
 	}
 	public static void main(String[] args) {
-		testCreator007();
+		testCreator001();
 	}
 }

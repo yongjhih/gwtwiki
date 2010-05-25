@@ -1,8 +1,5 @@
 package info.bliki.wiki.dump;
 
-import java.io.IOException;
-
-import info.bliki.api.Connector;
 import info.bliki.wiki.model.WikiModel;
 
 /**

@@ -9,7 +9,7 @@
 	<artifactId>bliki-core</artifactId>
 	<groupId>info.bliki.wiki</groupId>
 	<packaging>jar</packaging>
-	<name>Bliki (Core)</name> 
+	<name>Bliki (Core)</name>
 	<version>3.0.15-SNAPSHOT</version>
 	<description> This is core project. </description>
 	<dependencies>
@@ -33,6 +33,11 @@
 		<dependency>
 			<groupId>commons-lang</groupId>
 			<artifactId>commons-lang</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-compress</artifactId>
+			<version>1.0</version>
 		</dependency>
 	</dependencies>
 	<build>

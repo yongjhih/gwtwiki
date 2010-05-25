@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>info.bliki.wiki</groupId>
 	<artifactId>bliki</artifactId>
-	<packaging>pom</packaging> 
+	<packaging>pom</packaging>
 	<name>Bliki POM</name>
 	<version>3.0.15-SNAPSHOT</version>
 	<description>The Bliki API is a Java-based Wiki to HTML renderer
@@ -51,7 +51,7 @@
 				<groupId>info.bliki.wiki</groupId>
 				<artifactId>bliki-pdf</artifactId>
 				<version>3.0.15-SNAPSHOT</version>
-			</dependency> 
+			</dependency>
 			<dependency>
 				<groupId>info.bliki.wiki</groupId>
 				<artifactId>bliki-addons</artifactId>
@@ -73,10 +73,15 @@
 				<version>2.4</version>
 			</dependency>
 			<dependency>
-			    <groupId>org.apache.derby</groupId>
-			    <artifactId>derby</artifactId>
-		    	<version>10.4.2.0</version>
-	    	</dependency>
+				<groupId>org.apache.commons</groupId>
+				<artifactId>commons-compress</artifactId>
+				<version>1.0</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.derby</groupId>
+				<artifactId>derby</artifactId>
+				<version>10.4.2.0</version>
+			</dependency>
 			<dependency>
 				<groupId>junit</groupId>
 				<artifactId>junit</artifactId>
