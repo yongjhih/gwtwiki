@@ -15,7 +15,9 @@ public class XMLUserParser extends AbstractXMLParser {
 
 	private static final String USER_NAME_ID = "lgusername";
 
-	private static final String TOKEN_ID = "lgtoken";
+	private static final String LG_TOKEN_ID = "lgtoken";
+
+	private static final String TOKEN_ID = "token";
 
 	private User fUser;
 
@@ -29,10 +31,16 @@ public class XMLUserParser extends AbstractXMLParser {
 		fAttributes = atts;
 
 		if (LOGIN_ID.equals(qName)) {
-			fUser.setResult(fAttributes.getValue(RESULT_ID));
-			fUser.setUserid(fAttributes.getValue(USER_ID));
-			fUser.setNormalizedUsername(fAttributes.getValue(USER_NAME_ID));
-			fUser.setToken(fAttributes.getValue(TOKEN_ID));
+            String result = fAttributes.getValue(RESULT_ID);
+            if (result.equalsIgnoreCase(User.NEED_TOKEN_ID)) {
+                fUser.setResult(fAttributes.getValue(RESULT_ID));
+                fUser.setToken(fAttributes.getValue(TOKEN_ID));
+            } else {
+                fUser.setResult(fAttributes.getValue(RESULT_ID));
+                fUser.setUserid(fAttributes.getValue(USER_ID));
+                fUser.setNormalizedUsername(fAttributes.getValue(USER_NAME_ID));
+                fUser.setToken(fAttributes.getValue(LG_TOKEN_ID));
+            }
 //			System.out.println(fUser.toString());
 		}
 		fData = null;

@@ -9,6 +9,8 @@ import java.util.List;
  */
 public class User {
 	public static final String SUCCESS_ID = "Success";
+    
+	public static final String NEED_TOKEN_ID = "NeedToken";
 
 	public static final String ILLEGAL_ID = "Illegal";
 
