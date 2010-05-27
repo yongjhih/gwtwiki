@@ -5,11 +5,14 @@ import java.util.List;
 
 /**
  * Manages user data from the <a
- * href="http://meta.wikimedia.org/w/api.php">Wikimedia API</a>
+ * href="http://meta.wikimedia.org/w/api.php">Wikimedia API</a>.
+ * 
+ * See also <a href="http://www.mediawiki.org/wiki/API:Login">Mediawiki
+ * API:Login</a>
  */
 public class User {
 	public static final String SUCCESS_ID = "Success";
-    
+
 	public static final String NEED_TOKEN_ID = "NeedToken";
 
 	public static final String ILLEGAL_ID = "Illegal";
@@ -107,6 +110,15 @@ public class User {
 		return normalizedUsername.hashCode();
 	}
 
+	/**
+	 * Complete the users login information. The user must contain a username,
+	 * password and actionURL. See <a
+	 * href="http://www.mediawiki.org/wiki/API:Login">Mediawiki API:Login</a>
+	 * 
+	 * @return <code>true</code> if th login was successful; <code>false</code>
+	 *         otherwise.
+	 * @see User#getActionUrl()
+	 */
 	public boolean login() {
 		return connector.login(this) != null;
 	}
@@ -205,10 +217,20 @@ public class User {
 		this.userid = userid;
 	}
 
+	/**
+	 * Get the user name defined for this user.
+	 * 
+	 * @return
+	 */
 	public String getUsername() {
 		return username;
 	}
 
+	/**
+	 * Get the Mediawiki API Url defined for this user(example: <a
+	 * href="http://meta.wikimedia.org/w/api.php"
+	 * >http://meta.wikimedia.org/w/api.php</a>)
+	 */
 	public String getActionUrl() {
 		return actionUrl;
 	}
@@ -216,7 +238,12 @@ public class User {
 	public String getDomain() {
 		return domain;
 	}
-	
+
+	/**
+	 * Get the password defined for this user.
+	 * 
+	 * @return
+	 */
 	public String getPassword() {
 		return password;
 	}

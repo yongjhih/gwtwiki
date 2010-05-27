@@ -126,69 +126,71 @@ public class Connector {
 	}
 
 	/**
-	 * Complete the Users login information The user must contain a username,
-	 * password and actionURL
+	 * Complete the users login information. The user must contain a username,
+	 * password and actionURL. See <a
+	 * href="http://www.mediawiki.org/wiki/API:Login">Mediawiki API:Login</a>
 	 * 
 	 * @param user
-	 *          the completed user information or <code>null</code>, if the login
-	 *          fails
-	 * @return
+	 *          a user account from a Mediawiki installation with filled out user
+	 *          name, password and the installations API url.
+	 * @return the completed user information or <code>null</code>, if the login
+	 *         fails
 	 */
 	public User login(User user) {
-        // The first pass gets the secret token and the second logs the user in
-        for (int i =0; i < 2; i++) {
-            PostMethod method = new PostMethod(user.getActionUrl());
-            String userName = user.getUsername();
+		// The first pass gets the secret token and the second logs the user in
+		for (int i = 0; i < 2; i++) {
+			PostMethod method = new PostMethod(user.getActionUrl());
+			String userName = user.getUsername();
 
-            if (userName == null || userName.trim().length() == 0) {
-                // no nothing for dummy users
-                return user;
-            }
+			if (userName == null || userName.trim().length() == 0) {
+				// no nothing for dummy users
+				return user;
+			}
 
-            method.setFollowRedirects(false);
-            method.addRequestHeader("User-Agent", USER_AGENT);
-            String lgDomain = user.getDomain();
-            List<NameValuePair> params = new ArrayList<NameValuePair>();
+			method.setFollowRedirects(false);
+			method.addRequestHeader("User-Agent", USER_AGENT);
+			String lgDomain = user.getDomain();
+			List<NameValuePair> params = new ArrayList<NameValuePair>();
 
-            method.addParameter("action", "login");
-            method.addParameter("format", "xml");
-            method.addParameter("lgname", userName);
-            method.addParameter("lgpassword", user.getPassword());
-            if (lgDomain.length() > 0) {
-                method.addParameter("lgdomain", user.getDomain());
-            }
-            if (i > 0) {
-                method.addParameter("lgtoken", user.getToken());
-            }
+			method.addParameter("action", "login");
+			method.addParameter("format", "xml");
+			method.addParameter("lgname", userName);
+			method.addParameter("lgpassword", user.getPassword());
+			if (lgDomain.length() > 0) {
+				method.addParameter("lgdomain", user.getDomain());
+			}
+			if (i > 0) {
+				method.addParameter("lgtoken", user.getToken());
+			}
 
-            try {
-                int responseCode = client.executeMethod(method);
-                if (responseCode == HttpStatus.SC_OK) {
-                    String responseBody = getAsXmlString(method);
-                    XMLUserParser parser = new XMLUserParser(user, responseBody);
-                    parser.parse();
-                    if (i == 0 && user.getResult().equals(User.NEED_TOKEN_ID)) {
-                        ;   // try again
-                    } else if (user.getResult().equals(User.SUCCESS_ID)) {
-                        return user;
-                    } else {
-                        break;
-                    }
-                }
-            } catch (HttpException e) {
-                e.printStackTrace();
-                return null;
-            } catch (IOException e) {
-                e.printStackTrace();
-                return null;
-            } catch (SAXException e) {
-                e.printStackTrace();
-                return null;
-            } finally {
-                method.releaseConnection();
-            }
-        }
-        // What's the correct way to log a message here?
+			try {
+				int responseCode = client.executeMethod(method);
+				if (responseCode == HttpStatus.SC_OK) {
+					String responseBody = getAsXmlString(method);
+					XMLUserParser parser = new XMLUserParser(user, responseBody);
+					parser.parse();
+					if (i == 0 && user.getResult().equals(User.NEED_TOKEN_ID)) {
+						; // try again
+					} else if (user.getResult().equals(User.SUCCESS_ID)) {
+						return user;
+					} else {
+						break;
+					}
+				}
+			} catch (HttpException e) {
+				e.printStackTrace();
+				return null;
+			} catch (IOException e) {
+				e.printStackTrace();
+				return null;
+			} catch (SAXException e) {
+				e.printStackTrace();
+				return null;
+			} finally {
+				method.releaseConnection();
+			}
+		}
+		// What's the correct way to log a message here?
 
 		return null;
 	}
