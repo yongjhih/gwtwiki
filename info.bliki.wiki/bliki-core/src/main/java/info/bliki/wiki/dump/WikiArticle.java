@@ -66,6 +66,15 @@ public class WikiArticle {
 	}
 
 	/**
+	 * &quot;Real&quot; content articles (i.e. the title has no namespace prefix)?
+	 * 
+	 * @return
+	 */
+	public boolean isMain() {
+		return integerNamespace.equals(INamespace.MAIN_NAMESPACE_KEY);
+	}
+
+	/**
 	 * Does the title belong to the <i>Template</i> namespace?
 	 * 
 	 * @return
