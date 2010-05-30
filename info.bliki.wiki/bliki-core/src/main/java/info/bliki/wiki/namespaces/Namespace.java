@@ -8,6 +8,12 @@ import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.TreeMap;
 
+/**
+ * Mediawiki Namespaces. See <a
+ * href="http://www.mediawiki.org/wiki/Manual:Namespace#Built-in_namespaces"
+ * >Mediawiki - Manual:Namespace</a>
+ * 
+ */
 public class Namespace implements INamespace {
 
 	protected final String[] fNamespaces1 = { "Media", "Special", "", "Talk", "User", "User_talk", "Meta", "Meta_talk", "Image",

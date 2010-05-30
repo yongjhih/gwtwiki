@@ -1,16 +1,47 @@
 package info.bliki.wiki.dump;
 
+import info.bliki.wiki.namespaces.INamespace;
+
+/**
+ * Represents a single wiki page from a Mediawiki dump.
+ * 
+ */
 public class WikiArticle {
 	private String text;
 	private String title;
 	private String timeStamp;
 	private String id = null;
+	private String namespace = "";
+	private Integer integerNamespace = 0;
+
+	public WikiArticle() {
+
+	}
 
 	/**
 	 * @return the id
 	 */
 	public String getId() {
 		return id;
+	}
+
+	/**
+	 * Get the integer key of the namespace or <code>0</code> if no namespace is
+	 * associated. For example in an english Mediawiki installation <i>10</i> is
+	 * typically the <i>Template</i> namespace and <i>14</i> is typically the
+	 * <i>Category</i> namespace.
+	 * 
+	 * @return the integerNamespace
+	 */
+	public Integer getIntegerNamespace() {
+		return integerNamespace;
+	}
+
+	/**
+	 * @return the namespace.
+	 */
+	public String getNamespace() {
+		return namespace;
 	}
 
 	public String getText() {
@@ -26,11 +57,45 @@ public class WikiArticle {
 	}
 
 	/**
+	 * Does the title belong to the <i>Category</i> namespace?
+	 * 
+	 * @return
+	 */
+	public boolean isCategory() {
+		return integerNamespace.equals(INamespace.CATEGORY_NAMESPACE_KEY);
+	}
+
+	/**
+	 * Does the title belong to the <i>Template</i> namespace?
+	 * 
+	 * @return
+	 */
+	public boolean isTemplate() {
+		return integerNamespace.equals(INamespace.TEMPLATE_NAMESPACE_KEY);
+	}
+
+	/**
 	 * @param id
 	 *          the id to set
 	 */
 	public void setId(String id) {
 		this.id = id;
+	}
+
+	/**
+	 * @param integerNamespace
+	 *          the integerNamespace to set
+	 */
+	public void setIntegerNamespace(Integer integerNamespace) {
+		this.integerNamespace = integerNamespace;
+	}
+
+	/**
+	 * @param namespace
+	 *          the namespace to set
+	 */
+	public void setNamespace(String namespace) {
+		this.namespace = namespace;
 	}
 
 	public void setText(String newText) {
@@ -41,8 +106,28 @@ public class WikiArticle {
 		this.timeStamp = timeStamp;
 	}
 
+	/**
+	 * 
+	 * @param newTitle
+	 * @deprecated
+	 */
 	public void setTitle(String newTitle) {
+		setTitle(newTitle, null);
+	}
+
+	public void setTitle(String newTitle, Siteinfo siteinfo) {
 		title = newTitle;
+		if (siteinfo != null) {
+			int index = newTitle.indexOf(":");
+			if (index > 0) {
+				Integer key = siteinfo.getIntegerNamespace(newTitle.substring(0, index));
+				if (key != null) {
+					integerNamespace = key;
+					setNamespace(siteinfo.getNamespace(key));
+				}
+			}
+
+		}
 	}
 
 	@Override

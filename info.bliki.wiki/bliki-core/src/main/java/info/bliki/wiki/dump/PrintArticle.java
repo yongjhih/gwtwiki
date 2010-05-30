@@ -2,6 +2,8 @@ package info.bliki.wiki.dump;
 
 import info.bliki.wiki.model.WikiModel;
 
+import org.xml.sax.SAXException;
+
 /**
  * Example filter which prints the rendered HTML articles to System.out
  * 
@@ -28,10 +30,10 @@ public class PrintArticle implements IArticleFilter {
 		max_counter = max_count;
 	}
 
-	public boolean process(WikiArticle article) {
+	public void process(WikiArticle article, Siteinfo siteinfo) throws SAXException {
 		counter++;
 		if (counter >= max_counter) {
-			return false;
+			throw new SAXException("\nLimit reached after " + max_counter + " entries.");
 		}
 		String htmlText = "";
 		htmlText = wikiModel.render(article.getText());
@@ -40,7 +42,6 @@ public class PrintArticle implements IArticleFilter {
 		} else {
 			System.out.println(htmlText);
 		}
-		return true;
 	}
 
 	public static void main(String args[]) throws Exception {

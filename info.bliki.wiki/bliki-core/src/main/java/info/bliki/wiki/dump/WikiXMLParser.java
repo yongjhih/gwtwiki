@@ -31,11 +31,15 @@ import org.xml.sax.helpers.XMLReaderFactory;
  * 
  */
 public class WikiXMLParser extends DefaultHandler {
+	private static final String WIKIPEDIA_SITEINFO = "siteinfo";
+
 	private static final String WIKIPEDIA_TITLE = "title";
 
 	private static final String WIKIPEDIA_TEXT = "text";
 
 	private static final String WIKIPEDIA_PAGE = "page";
+
+	private static final String WIKIPEDIA_REVISION = "revision";
 
 	private static final String WIKIPEDIA_NAMESPACE = "namespace";
 
@@ -43,7 +47,13 @@ public class WikiXMLParser extends DefaultHandler {
 
 	private static final String WIKIPEDIA_ID = "id";
 
+	private Siteinfo fSiteinfo = null;
+
+	private String fNamespaceKey = null;
+
 	private WikiArticle fArticle;
+
+	private boolean fRevision;
 
 	private StringBuilder fData;
 
@@ -127,31 +137,54 @@ public class WikiXMLParser extends DefaultHandler {
 	@Override
 	public void startElement(String namespaceURI, String localName, String qName, Attributes atts) {
 		// fAttributes = atts;
+		fData = null;
+		if (WIKIPEDIA_SITEINFO.equals(qName)) {
+			fSiteinfo = new Siteinfo();
+			return;
+		}
+		if (fArticle == null) {
+			fNamespaceKey = null;
+			if (fSiteinfo != null) {
+				if (WIKIPEDIA_NAMESPACE.equals(qName)) {
+					fNamespaceKey = atts.getValue("key");
+					return;
+				}
+			}
+		}
 
 		if (WIKIPEDIA_PAGE.equals(qName)) {
 			fArticle = new WikiArticle();
+			fRevision = false;
 		}
-		fData = null;
+		if (WIKIPEDIA_REVISION.equals(qName)) {
+			fRevision = true;
+		}
 	}
 
 	@Override
-	public void endElement(String uri, String name, String qName) {
+	public void endElement(String uri, String name, String qName) throws SAXException {
 		try {
-			if (WIKIPEDIA_PAGE.equals(qName)) {
-				if (fArticle != null) {
+			if (fArticle == null) {
+				if (fSiteinfo != null) {
+					if (WIKIPEDIA_NAMESPACE.equals(qName) && fNamespaceKey != null) {
+						fSiteinfo.addNamespace(fNamespaceKey, getString());
+					}
 				}
-			} else if (WIKIPEDIA_TEXT.equals(qName)) {
-				fArticle.setText(getString());
-				fArticleFilter.process(fArticle);
-				// emit(wikiText);
-			} else if (WIKIPEDIA_TITLE.equals(qName)) {
-				fArticle.setTitle(getString());
-			} else if (WIKIPEDIA_TIMESTAMP.equals(qName)) {
-				fArticle.setTimeStamp(getString());
-			} else if (WIKIPEDIA_ID.equals(qName)) {
-				fArticle.setId(getString());
+			} else {
+				if (WIKIPEDIA_PAGE.equals(qName)) {
+				} else if (WIKIPEDIA_TEXT.equals(qName)) {
+					fArticle.setText(getString());
+					fArticleFilter.process(fArticle, fSiteinfo);
+					// emit(wikiText);
+				} else if (WIKIPEDIA_TITLE.equals(qName)) {
+					fArticle.setTitle(getString(), fSiteinfo);
+				} else if (WIKIPEDIA_TIMESTAMP.equals(qName)) {
+					fArticle.setTimeStamp(getString());
+				} else if (!fRevision && WIKIPEDIA_ID.equals(qName)) {
+					// get the id from wiki page, not the id from the revision
+					fArticle.setId(getString());
+				}
 			}
-
 			fData = null;
 			// fAttributes = null;
 
