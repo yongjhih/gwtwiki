@@ -168,6 +168,14 @@ public class WikiXMLParser extends DefaultHandler {
 				if (fSiteinfo != null) {
 					if (WIKIPEDIA_NAMESPACE.equals(qName) && fNamespaceKey != null) {
 						fSiteinfo.addNamespace(fNamespaceKey, getString());
+					} else if ("sitename".equals(qName)) {
+						fSiteinfo.setSitename(getString());
+					} else if ("base".equals(qName)) {
+						fSiteinfo.setBase(getString());
+					} else if ("generator".equals(qName)) {
+						fSiteinfo.setGenerator(getString());
+					} else if ("case".equals(qName)) {
+						fSiteinfo.setCharacterCase(getString());
 					}
 				}
 			} else {

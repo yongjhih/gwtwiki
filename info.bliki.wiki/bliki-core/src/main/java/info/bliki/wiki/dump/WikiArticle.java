@@ -65,6 +65,10 @@ public class WikiArticle {
 		return integerNamespace.equals(INamespace.CATEGORY_NAMESPACE_KEY);
 	}
 
+	public boolean isFile() {
+		return integerNamespace.equals(INamespace.FILE_NAMESPACE_KEY);
+	}
+
 	/**
 	 * &quot;Real&quot; content articles (i.e. the title has no namespace prefix)?
 	 * 
@@ -72,6 +76,10 @@ public class WikiArticle {
 	 */
 	public boolean isMain() {
 		return integerNamespace.equals(INamespace.MAIN_NAMESPACE_KEY);
+	}
+
+	public boolean isProject() {
+		return integerNamespace.equals(INamespace.PROJECT_NAMESPACE_KEY);
 	}
 
 	/**
