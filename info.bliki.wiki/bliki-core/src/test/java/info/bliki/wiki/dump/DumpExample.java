@@ -13,7 +13,7 @@ public class DumpExample {
 	 * Print title an content of all the wiki pages in the dump.
 	 * 
 	 */
-	static class DemoSAXHandler implements IArticleFilter {
+	static class DemoArticleFilter implements IArticleFilter {
 
 		public void process(WikiArticle page, Siteinfo siteinfo) throws SAXException {
 			System.out.println("----------------------------------------");
@@ -27,7 +27,7 @@ public class DumpExample {
 	 * Print all titles of the wiki pages which have &quot;Real&quot; content
 	 * (i.e. the title has no namespace prefix) (key == 0).
 	 */
-	static class DemoMainSAXHandler implements IArticleFilter {
+	static class DemoMainArticleFilter implements IArticleFilter {
 
 		public void process(WikiArticle page, Siteinfo siteinfo) throws SAXException {
 			if (page.isMain()) {
@@ -40,7 +40,7 @@ public class DumpExample {
 	/**
 	 * Print all titles of the wiki pages which are templates (key == 10).
 	 */
-	static class DemoTemplateSAXHandler implements IArticleFilter {
+	static class DemoTemplateArticleFilter implements IArticleFilter {
 
 		public void process(WikiArticle page, Siteinfo siteinfo) throws SAXException {
 			if (page.isTemplate()) {
@@ -53,7 +53,7 @@ public class DumpExample {
 	/**
 	 * Print all titles of the wiki pages which are categories (key == 14).
 	 */
-	static class DemoCategorySAXHandler implements IArticleFilter {
+	static class DemoCategoryArticleFilter implements IArticleFilter {
 
 		public void process(WikiArticle page, Siteinfo siteinfo) throws SAXException {
 			if (page.isCategory()) {
@@ -75,7 +75,7 @@ public class DumpExample {
 		// "c:\\temp\\dewikiversity-20100401-pages-articles.xml.bz2";
 		String bz2Filename = args[0];
 		try {
-			IArticleFilter handler = new DemoSAXHandler();
+			IArticleFilter handler = new DemoArticleFilter();
 			WikiXMLParser wxp = new WikiXMLParser(bz2Filename, handler);
 			wxp.parse();
 		} catch (Exception e) {
