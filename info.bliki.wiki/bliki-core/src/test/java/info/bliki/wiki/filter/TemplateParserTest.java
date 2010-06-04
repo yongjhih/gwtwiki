@@ -137,7 +137,7 @@ public class TemplateParserTest extends FilterTestSupport {
     // see method WikiTestModel#getRawWikiContent()
     assertEquals("b) First: Test1 Second: c) First: sdfsf Second: klj \n"
         + "\n" + "", wikiModel.parseTemplates("{{templ1\n" + " | a = Test1\n"
-        + " | b ={{templ2|sdfsf|klj}} \n" + "}}\n" + "", false));
+        + " |{{templ2|sdfsf|klj}} \n" + "}}\n" + "", false));
   }
 
   public void testTemplateCall4() {

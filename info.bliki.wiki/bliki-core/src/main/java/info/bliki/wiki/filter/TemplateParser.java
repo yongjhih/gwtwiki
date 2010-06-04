@@ -9,9 +9,10 @@ import info.bliki.wiki.template.ITemplateFunction;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
+import java.util.Map.Entry;
 import java.util.regex.Pattern;
 
 /**
@@ -72,7 +73,7 @@ public class TemplateParser extends AbstractParser {
 	}
 
 	protected static void parseRecursive(String rawWikitext, IWikiModel wikiModel, Appendable writer, boolean parseOnlySignature,
-			boolean renderTemplate, HashMap<String, String> templateParameterMap) throws IOException {
+			boolean renderTemplate, Map<String, String> templateParameterMap) throws IOException {
 		try {
 			int level = wikiModel.incrementRecursionLevel();
 			if (level > Configuration.PARSER_RECURSION_LIMIT) {
@@ -529,7 +530,17 @@ public class TemplateParser extends AbstractParser {
 	}
 
 	/**
-	 * Parse a single template {{...}}
+	 * Parse a single template call {{...}}. There are 3 main steps:
+	 * <ol>
+	 * <li>Check if the call is a parser function in the
+	 * <code>checkParserFunction()</code> method; if <code>true</code> execute the
+	 * parser function and return</li>
+	 * <li>Split the template call in the <code>createParameterMap()</code method
+	 * into a <code>templateName</code> and a parameter/value map.</li>
+	 * <li>Substitute the raw template text into th existing text and replace all
+	 * template parameters with their value in
+	 * <code>TemplateParser.parseRecursive()</code method.</li>
+	 * </ol>
 	 * 
 	 * @param writer
 	 * @param startTemplatePosition
@@ -564,7 +575,7 @@ public class TemplateParser extends AbstractParser {
 			fCurrentPosition = endOffset + 2;
 		}
 		Object[] objs = createParameterMap(fSource, startTemplatePosition, fCurrentPosition - startTemplatePosition - 2);
-		HashMap<String, String> map = (HashMap<String, String>) objs[0];
+		TreeMap<String, String> map = (TreeMap<String, String>) objs[0];
 		String templateName = ((String) objs[1]).trim();
 		String cacheKey = templateName + objs[2];
 		Map<String, String> templateCallsCache = null;
@@ -641,14 +652,15 @@ public class TemplateParser extends AbstractParser {
 	/**
 	 * Create a map from the parameters defined in a template call
 	 * 
-	 * @return the templates parameter map at index [0] and the template name at
-	 *         index [1]
+	 * @return the templates parameter <code>java.util.Map</code> at index [0];
+	 *         the template name at index [1] and a key for a template cache map
+	 *         at index [2]
 	 * 
 	 */
 	private static Object[] createParameterMap(char[] src, int startOffset, int len) {
 		Object[] objs = new Object[3];
-		HashMap<String, String> map = new HashMap<String, String>();
-		StringBuilder buf = new StringBuilder(len);
+		TreeMap<String, String> map = new TreeMap<String, String>();
+		StringBuilder cacheKeyBuffer = new StringBuilder(len);
 		objs[0] = map;
 		int currOffset = startOffset;
 		int endOffset = startOffset + len;
@@ -664,12 +676,18 @@ public class TemplateParser extends AbstractParser {
 
 		for (int i = 1; i < resultList.size(); i++) {
 			if (i == resultList.size() - 1) {
-				createSingleParameter(i, resultList.get(i), map, buf, true);
+				createSingleParameter(i, resultList.get(i), map, true);
 			} else {
-				createSingleParameter(i, resultList.get(i), map, buf, false);
+				createSingleParameter(i, resultList.get(i), map, false);
 			}
 		}
-		objs[2] = buf.toString();
+		for (Entry<String, String> entry : map.entrySet()) {
+			cacheKeyBuffer.append(entry.getKey());
+			cacheKeyBuffer.append("=");
+			cacheKeyBuffer.append(entry.getValue());
+			cacheKeyBuffer.append("|");
+		}
+		objs[2] = cacheKeyBuffer.toString();
 		return objs;
 	}
 
@@ -678,7 +696,7 @@ public class TemplateParser extends AbstractParser {
 	 * parameters map
 	 * 
 	 */
-	private static void createSingleParameter(int parameterCounter, String srcString, HashMap<String, String> map, StringBuilder buf,
+	private static void createSingleParameter(int parameterCounter, String srcString, TreeMap<String, String> map,
 			boolean trimNewlineRight) {
 		int currOffset = 0;
 		char[] src = srcString.toCharArray();
@@ -737,10 +755,11 @@ public class TemplateParser extends AbstractParser {
 				} else {
 					value = srcString.substring(lastOffset, currOffset).trim();
 				}
-				buf.append("|" + value);
-				map.put(Integer.toString(parameterCounter), value);
 				if (parameter != null) {
 					map.put(parameter, value);
+				} else {
+					String intParameter = Integer.toString(parameterCounter);
+					map.put(intParameter, value);
 				}
 			}
 		}

@@ -12,6 +12,12 @@ public class TemplateFilterTest extends FilterTestSupport {
 		return new TestSuite(TemplateFilterTest.class);
 	}
 
+	public void testTemplateCall3() {
+		// see method WikiTestModel#getRawWikiContent()
+		assertEquals("\n" + "<p>b) First: Test1 Second: c) First: sdfsf Second: klj </p>\n" + "", wikiModel.render("{{templ1\n"
+				+ " | a = Test1\n" + " | {{templ2|sdfsf|klj}} \n" + "}}\n" + ""));
+	}
+	
 	public void testNonExistentTemplate() {
 		assertEquals("<a id=\"Other_areas_of_Wikipedia\" name=\"Other_areas_of_Wikipedia\"></a><h2>Other areas of Wikipedia</h2>\n"
 				+ "<p>{{WikipediaOther}}</p>", wikiModel.render("==Other areas of Wikipedia==\n"
@@ -29,11 +35,7 @@ public class TemplateFilterTest extends FilterTestSupport {
 				.render("start-{{templ1|a=3|b}}-end start-{{templ2|sdfsf|klj}}-end"));
 	}
 
-	public void testTemplateCall3() {
-		// see method WikiTestModel#getRawWikiContent()
-		assertEquals("\n" + "<p>b) First: Test1 Second: c) First: sdfsf Second: klj </p>\n" + "", wikiModel.render("{{templ1\n"
-				+ " | a = Test1\n" + " | b ={{templ2|sdfsf|klj}} \n" + "}}\n" + ""));
-	}
+	
 
 	public void testTemplateCall4() {
 		// see method WikiTestModel#getRawWikiContent() for template tl
