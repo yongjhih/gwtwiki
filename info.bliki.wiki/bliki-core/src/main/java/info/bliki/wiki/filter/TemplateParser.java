@@ -1,8 +1,8 @@
 package info.bliki.wiki.filter;
 
 import info.bliki.htmlcleaner.Utils;
+import info.bliki.wiki.model.AbstractWikiModel;
 import info.bliki.wiki.model.Configuration;
-import info.bliki.wiki.model.IConfiguration;
 import info.bliki.wiki.model.IWikiModel;
 import info.bliki.wiki.tags.util.WikiTagNode;
 import info.bliki.wiki.template.ITemplateFunction;
@@ -12,7 +12,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
-import java.util.Map.Entry;
 import java.util.regex.Pattern;
 
 /**
@@ -72,7 +71,7 @@ public class TemplateParser extends AbstractParser {
 		parseRecursive(rawWikitext, wikiModel, writer, parseOnlySignature, renderTemplate, null);
 	}
 
-	protected static void parseRecursive(String rawWikitext, IWikiModel wikiModel, Appendable writer, boolean parseOnlySignature,
+	public static void parseRecursive(String rawWikitext, IWikiModel wikiModel, Appendable writer, boolean parseOnlySignature,
 			boolean renderTemplate, Map<String, String> templateParameterMap) throws IOException {
 		try {
 			int level = wikiModel.incrementRecursionLevel();
@@ -575,50 +574,11 @@ public class TemplateParser extends AbstractParser {
 			fCurrentPosition = endOffset + 2;
 		}
 		Object[] objs = createParameterMap(fSource, startTemplatePosition, fCurrentPosition - startTemplatePosition - 2);
-		TreeMap<String, String> map = (TreeMap<String, String>) objs[0];
+		TreeMap<String, String> parameterMap = (TreeMap<String, String>) objs[0];
 		String templateName = ((String) objs[1]).trim();
-		String cacheKey = templateName + objs[2];
-		Map<String, String> templateCallsCache = null;
-		if (cacheKey.length() < 256 && fWikiModel instanceof IConfiguration) {
-			IConfiguration config = (IConfiguration) fWikiModel;
-			templateCallsCache = config.getTemplateCallsCache();
-			if (templateCallsCache != null) {
-				String value = templateCallsCache.get(cacheKey);
-				if (value != null) {
-					// System.out.println("Cache key: " + cacheKey);
-					writer.append(value);
-					return true;
-				}
-			}
-		}
-
-		if (templateName.length() > 0 && templateName.charAt(0) == ':') {
-			// invalidate cache:
-			templateCallsCache = null;
-			plainContent = fWikiModel.getRawWikiContent("", templateName.substring(1), map);
-		} else {
-			fWikiModel.addTemplate(templateName);
-			plainContent = fWikiModel.getRawWikiContent(fWikiModel.getTemplateNamespace(), templateName, map);
-		}
-
+		// String cacheKey = templateName + objs[2];
 		fCurrentPosition = endPosition;
-		if (plainContent != null) {
-			StringBuilder templateBuffer = new StringBuilder(plainContent.length());
-			TemplateParser.parseRecursive(plainContent.trim(), fWikiModel, templateBuffer, false, false, map);
-			if (templateCallsCache != null) {
-				// save this template call in the cache
-				String cacheValue = templateBuffer.toString();
-				templateCallsCache.put(cacheKey, cacheValue);
-				writer.append(cacheValue);
-			} else {
-				writer.append(templateBuffer);
-			}
-			return true;
-		}
-		// if no template found insert plain template name string:
-		// writer.append("[[" + fWikiModel.getTemplateNamespace() + ":" +
-		// templateName + "]]");
-		writer.append("{{" + templateName + "}}");
+		fWikiModel.substituteTemplateCall(templateName, parameterMap, writer);
 		return true;
 	}
 
@@ -653,14 +613,13 @@ public class TemplateParser extends AbstractParser {
 	 * Create a map from the parameters defined in a template call
 	 * 
 	 * @return the templates parameter <code>java.util.Map</code> at index [0];
-	 *         the template name at index [1] and a key for a template cache map
-	 *         at index [2]
+	 *         the template name at index [1]
 	 * 
 	 */
 	private static Object[] createParameterMap(char[] src, int startOffset, int len) {
 		Object[] objs = new Object[3];
 		TreeMap<String, String> map = new TreeMap<String, String>();
-		StringBuilder cacheKeyBuffer = new StringBuilder(len);
+		// StringBuilder cacheKeyBuffer = new StringBuilder(len);
 		objs[0] = map;
 		int currOffset = startOffset;
 		int endOffset = startOffset + len;
@@ -681,13 +640,13 @@ public class TemplateParser extends AbstractParser {
 				createSingleParameter(i, resultList.get(i), map, false);
 			}
 		}
-		for (Entry<String, String> entry : map.entrySet()) {
-			cacheKeyBuffer.append(entry.getKey());
-			cacheKeyBuffer.append("=");
-			cacheKeyBuffer.append(entry.getValue());
-			cacheKeyBuffer.append("|");
-		}
-		objs[2] = cacheKeyBuffer.toString();
+		// for (Entry<String, String> entry : map.entrySet()) {
+		// cacheKeyBuffer.append(entry.getKey());
+		// cacheKeyBuffer.append("=");
+		// cacheKeyBuffer.append(entry.getValue());
+		// cacheKeyBuffer.append("|");
+		// }
+		// objs[2] = cacheKeyBuffer.toString();
 		return objs;
 	}
 

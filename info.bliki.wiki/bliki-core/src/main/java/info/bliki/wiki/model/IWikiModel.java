@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.Set;
+import java.util.TreeMap;
 
 /**
  * Interface for rendering a wiki model
@@ -224,7 +225,9 @@ public interface IWikiModel extends IConfiguration {
 	 * described in <a
 	 * href="http://en.wikipedia.org/wiki/Wikipedia:ISBN">Wikipedia:ISBN</a>
 	 * 
-	 * <br/><br/><b>Note:</b> The default implementation in the
+	 * <br/>
+	 * <br/>
+	 * <b>Note:</b> The default implementation in the
 	 * <code>AbstractWikiModel</code> class creates a link to <a
 	 * href="http://amazon.com">Amazon.com</a>.
 	 * 
@@ -711,9 +714,11 @@ public interface IWikiModel extends IConfiguration {
 	public void parseEvents(IEventListener listener, String rawWikiText);
 
 	/**
-	 * Append the internal wiki image link to this model. <br/><br/>See <a
-	 * href="http://en.wikipedia.org/wiki/Image_markup">Image markup</a> and see
-	 * <a href="http://www.mediawiki.org/wiki/Help:Images">Help:Images</a>.
+	 * Append the internal wiki image link to this model. <br/>
+	 * <br/>
+	 * See <a href="http://en.wikipedia.org/wiki/Image_markup">Image markup</a>
+	 * and see <a
+	 * href="http://www.mediawiki.org/wiki/Help:Images">Help:Images</a>.
 	 * 
 	 * @param imageNamespace
 	 *          the image namespace
@@ -841,6 +846,23 @@ public interface IWikiModel extends IConfiguration {
 	 * @return
 	 */
 	public int stackSize();
+
+	/**
+	 * Substitute the template name by the template content and parameters and
+	 * append the new content to the writer.
+	 * 
+	 * @param templateName
+	 *          the name of the template
+	 * @param parameterMap
+	 *          the templates parameter <code>java.util.TreeMap</code>
+	 * @param cacheKey
+	 *          a key for using in a cache
+	 * @param writer
+	 *          the buffer to append the substituted template content
+	 * @throws IOException
+	 */
+	public void substituteTemplateCall(String templateName, TreeMap<String, String> parameterMap, Appendable writer)
+			throws IOException;
 
 	public TagStack swapStack(TagStack stack);
 

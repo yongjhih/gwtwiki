@@ -667,7 +667,7 @@ public class TemplateFilterTest extends FilterTestSupport {
 	public void testbirth_date_and_age() {
 		assertEquals(
 				"\n"
-						+ "<p>test July 9, 1956<span style=\"display:none\"> (<span class=\"bday\">1956-07-09</span>)</span><span class=\"noprint\"> (age 53)</span> test123</p>",
+						+ "<p>test July 9, 1956<span style=\"display:none\"> (<span class=\"bday\">1956-07-09</span>)</span><span class=\"noprint\"> (age 54)</span> test123</p>",
 				wikiModel.render("test {{birth date and age|1956|7|9}} test123"));
 	}
 }

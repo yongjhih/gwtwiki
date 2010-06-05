@@ -35,6 +35,8 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.Set;
+import java.util.TreeMap;
+import java.util.Map.Entry;
 
 /**
  * Standard model implementation for the Wikipedia syntax
@@ -50,9 +52,9 @@ public abstract class AbstractWikiModel implements IWikiModel, IContext {
 	protected int fRecursionLevel;
 
 	protected int fParserRecursionCount;
-	
+
 	protected int fTemplateRecursionCount;
-	
+
 	protected boolean fReplaceColon;
 
 	protected TagStack fTagStack;
@@ -243,6 +245,22 @@ public abstract class AbstractWikiModel implements IWikiModel, IContext {
 		return result;
 	}
 
+	private void addToTableOfContent(List<Object> toc, SectionHeader strPair, int headLevel) {
+		if (headLevel == 1) {
+			toc.add(strPair);
+		} else {
+			if (toc.size() > 0) {
+				if (toc.get(toc.size() - 1) instanceof List) {
+					addToTableOfContent((List<Object>) toc.get(toc.size() - 1), strPair, --headLevel);
+					return;
+				}
+			}
+			ArrayList<Object> list = new ArrayList<Object>();
+			toc.add(list);
+			addToTableOfContent(list, strPair, --headLevel);
+		}
+	}
+
 	public void append(BaseToken contentNode) {
 		fTagStack.append(contentNode);
 	}
@@ -330,6 +348,52 @@ public abstract class AbstractWikiModel implements IWikiModel, IContext {
 		}
 	}
 
+	public ITableOfContent appendHead(String rawHead, int headLevel, boolean noToC, int headCounter) {
+		return appendHead(rawHead, headLevel, noToC, headCounter, 0, 0);
+	}
+
+	/**
+	 * Append a new head to the table of content
+	 * 
+	 * @param rawHead
+	 * @param headLevel
+	 */
+	public ITableOfContent appendHead(String rawHead, int headLevel, boolean noToC, int headCounter, int startPosition,
+			int endPosition) {
+		TagStack localStack = WikipediaParser.parseRecursive(rawHead.trim(), this, true, true);
+
+		WPTag headTagNode = new WPTag("h" + headLevel);
+		headTagNode.addChildren(localStack.getNodeList());
+		String tocHead = headTagNode.getBodyString();
+		String anchor = Encoder.encodeDotUrl(tocHead);
+		createTableOfContent(false);
+		if (!noToC && (headCounter > 3)) {
+			fTableOfContentTag.setShowToC(true);
+		}
+		if (fToCSet.contains(anchor)) {
+			String newAnchor = anchor;
+			for (int i = 2; i < Integer.MAX_VALUE; i++) {
+				newAnchor = anchor + '_' + Integer.toString(i);
+				if (!fToCSet.contains(newAnchor)) {
+					break;
+				}
+			}
+			anchor = newAnchor;
+		}
+		SectionHeader strPair = new SectionHeader(headLevel, startPosition, endPosition, tocHead, anchor);
+		addToTableOfContent(fTableOfContent, strPair, headLevel);
+		if (getRecursionLevel() == 1) {
+			buildEditLinkUrl(fSectionCounter++);
+		}
+		TagNode aTagNode = new TagNode("a");
+		aTagNode.addAttribute("name", anchor, true);
+		aTagNode.addAttribute("id", anchor, true);
+		append(aTagNode);
+
+		append(headTagNode);
+		return fTableOfContentTag;
+	}
+
 	public void appendInternalImageLink(String hrefImageLink, String srcImageLink, ImageFormat imageFormat) {
 		int pxWidth = imageFormat.getWidth();
 		int pxHeight = imageFormat.getHeight();
@@ -387,14 +451,6 @@ public abstract class AbstractWikiModel implements IWikiModel, IContext {
 
 		popNode(); // div
 
-	}
-
-	public String encodeTitleToUrl(String wikiTitle, boolean firstCharacterAsUpperCase) {
-		return Encoder.encodeTitleToUrl(wikiTitle, firstCharacterAsUpperCase);
-	}
-
-	public String encodeTitleDotUrl(String wikiTitle, boolean firstCharacterAsUpperCase) {
-		return Encoder.encodeTitleDotUrl(wikiTitle, firstCharacterAsUpperCase);
 	}
 
 	public void appendInternalLink(String topic, String hashSection, String topicDescription, String cssClass, boolean parseRecursive) {
@@ -486,6 +542,60 @@ public abstract class AbstractWikiModel implements IWikiModel, IContext {
 		aTagNode.addAttribute("title", link, true);
 		aTagNode.addAttribute("rel", "nofollow", true);
 		aTagNode.addChild(new ContentToken(linkName));
+	}
+
+	public boolean appendRawNamespaceLinks(String rawNamespaceTopic, String viewableLinkDescription, boolean containsNoPipe) {
+		int colonIndex = rawNamespaceTopic.indexOf(':');
+
+		if (colonIndex != (-1)) {
+			String nameSpace = rawNamespaceTopic.substring(0, colonIndex);
+
+			if (isSemanticWebActive() && (rawNamespaceTopic.length() > colonIndex + 1)) {
+				// See <a
+				// href="http://en.wikipedia.org/wiki/Semantic_MediaWiki">Semantic
+				// MediaWiki</a> for more information.
+				if (rawNamespaceTopic.charAt(colonIndex + 1) == ':') {
+					// found an SMW relation
+					String relationValue = rawNamespaceTopic.substring(colonIndex + 2);
+
+					if (addSemanticRelation(nameSpace, relationValue)) {
+						if (containsNoPipe) {
+							viewableLinkDescription = relationValue;
+						}
+						if (viewableLinkDescription.trim().length() > 0) {
+							appendInternalLink(relationValue, null, viewableLinkDescription, "interwiki", true);
+						}
+						return true;
+					}
+				} else if (rawNamespaceTopic.charAt(colonIndex + 1) == '=') {
+					// found an SMW attribute
+					String attributeValue = rawNamespaceTopic.substring(colonIndex + 2);
+					if (addSemanticAttribute(nameSpace, attributeValue)) {
+						append(new ContentToken(attributeValue));
+						return true;
+					}
+				}
+
+			}
+			if (isCategoryNamespace(nameSpace)) {
+				// add the category to this texts metadata
+				String category = rawNamespaceTopic.substring(colonIndex + 1).trim();
+				if (category != null && category.length() > 0) {
+					// TODO implement more sort-key behaviour
+					// http://en.wikipedia.org/wiki/Wikipedia:Categorization#
+					// Category_sorting
+					addCategory(category, viewableLinkDescription);
+					return true;
+				}
+			} else if (isInterWiki(nameSpace)) {
+				String title = rawNamespaceTopic.substring(colonIndex + 1);
+				if (title != null && title.length() > 0) {
+					appendInterWikiLink(nameSpace, title, viewableLinkDescription);
+					return true;
+				}
+			}
+		}
+		return false;
 	}
 
 	public void appendRawWikipediaLink(String rawLinkText, String suffix) {
@@ -585,60 +695,6 @@ public abstract class AbstractWikiModel implements IWikiModel, IContext {
 		}
 	}
 
-	public boolean appendRawNamespaceLinks(String rawNamespaceTopic, String viewableLinkDescription, boolean containsNoPipe) {
-		int colonIndex = rawNamespaceTopic.indexOf(':');
-
-		if (colonIndex != (-1)) {
-			String nameSpace = rawNamespaceTopic.substring(0, colonIndex);
-
-			if (isSemanticWebActive() && (rawNamespaceTopic.length() > colonIndex + 1)) {
-				// See <a
-				// href="http://en.wikipedia.org/wiki/Semantic_MediaWiki">Semantic
-				// MediaWiki</a> for more information.
-				if (rawNamespaceTopic.charAt(colonIndex + 1) == ':') {
-					// found an SMW relation
-					String relationValue = rawNamespaceTopic.substring(colonIndex + 2);
-
-					if (addSemanticRelation(nameSpace, relationValue)) {
-						if (containsNoPipe) {
-							viewableLinkDescription = relationValue;
-						}
-						if (viewableLinkDescription.trim().length() > 0) {
-							appendInternalLink(relationValue, null, viewableLinkDescription, "interwiki", true);
-						}
-						return true;
-					}
-				} else if (rawNamespaceTopic.charAt(colonIndex + 1) == '=') {
-					// found an SMW attribute
-					String attributeValue = rawNamespaceTopic.substring(colonIndex + 2);
-					if (addSemanticAttribute(nameSpace, attributeValue)) {
-						append(new ContentToken(attributeValue));
-						return true;
-					}
-				}
-
-			}
-			if (isCategoryNamespace(nameSpace)) {
-				// add the category to this texts metadata
-				String category = rawNamespaceTopic.substring(colonIndex + 1).trim();
-				if (category != null && category.length() > 0) {
-					// TODO implement more sort-key behaviour
-					// http://en.wikipedia.org/wiki/Wikipedia:Categorization#
-					// Category_sorting
-					addCategory(category, viewableLinkDescription);
-					return true;
-				}
-			} else if (isInterWiki(nameSpace)) {
-				String title = rawNamespaceTopic.substring(colonIndex + 1);
-				if (title != null && title.length() > 0) {
-					appendInterWikiLink(nameSpace, title, viewableLinkDescription);
-					return true;
-				}
-			}
-		}
-		return false;
-	}
-
 	public boolean appendRedirectLink(String redirectLink) {
 		fRedirectLink = redirectLink;
 		return true;
@@ -664,11 +720,70 @@ public abstract class AbstractWikiModel implements IWikiModel, IContext {
 		}
 	}
 
+	public TagNode appendToCAnchor(String anchor) {
+		TagNode aTagNode = new TagNode("a");
+		aTagNode.addAttribute("name", anchor, true);
+		aTagNode.addAttribute("id", anchor, true);
+		return aTagNode;
+	}
+
 	public void buildEditLinkUrl(int section) {
+	}
+
+	public AbstractParser createNewInstance(String rawWikitext) {
+		return new WikipediaParser(rawWikitext, isTemplateTopic(), getWikiListener());
+	}
+
+	/**
+	 * 
+	 * @param isTOCIdentifier
+	 *          <code>true</code> if the __TOC__ keyword was parsed
+	 */
+	public ITableOfContent createTableOfContent(boolean isTOCIdentifier) {
+		if (fTableOfContentTag == null) {
+			TableOfContentTag tableOfContentTag = new TableOfContentTag("div");
+			tableOfContentTag.addAttribute("id", "tableofcontent", true);
+			tableOfContentTag.setShowToC(false);
+			tableOfContentTag.setTOCIdentifier(isTOCIdentifier);
+			fTableOfContentTag = tableOfContentTag;
+			this.append(fTableOfContentTag);
+		} else {
+			if (isTOCIdentifier) {
+				// try {
+				TableOfContentTag tableOfContentTag = (TableOfContentTag) fTableOfContentTag.clone();
+				fTableOfContentTag.setShowToC(false);
+				tableOfContentTag.setShowToC(true);
+				tableOfContentTag.setTOCIdentifier(isTOCIdentifier);
+				fTableOfContentTag = tableOfContentTag;
+				// } catch (CloneNotSupportedException e) {
+				// e.printStackTrace();
+				// }
+				this.append(fTableOfContentTag);
+			} else {
+			}
+		}
+
+		if (fTableOfContentTag != null) {
+			if (fTableOfContent == null) {
+				fTableOfContent = fTableOfContentTag.getTableOfContent();
+			}
+		}
+		if (fToCSet == null) {
+			fToCSet = new HashSet<String>();
+		}
+		return fTableOfContentTag;
 	}
 
 	public int decrementRecursionLevel() {
 		return --fRecursionLevel;
+	}
+
+	public String encodeTitleDotUrl(String wikiTitle, boolean firstCharacterAsUpperCase) {
+		return Encoder.encodeTitleDotUrl(wikiTitle, firstCharacterAsUpperCase);
+	}
+
+	public String encodeTitleToUrl(String wikiTitle, boolean firstCharacterAsUpperCase) {
+		return Encoder.encodeTitleToUrl(wikiTitle, firstCharacterAsUpperCase);
 	}
 
 	public String get2ndCategoryNamespace() {
@@ -681,354 +796,6 @@ public abstract class AbstractWikiModel implements IWikiModel, IContext {
 
 	public String get2ndTemplateNamespace() {
 		return fNamespace.getTemplate2();
-	}
-
-	public String getCategoryNamespace() {
-		return fNamespace.getCategory();
-	}
-
-	public Map<String, SourceCodeFormatter> getCodeFormatterMap() {
-		return fConfiguration.getCodeFormatterMap();
-	}
-
-	public String getImageNamespace() {
-		return fNamespace.getImage();
-	}
-
-	public Map<String, String> getInterwikiMap() {
-		return fConfiguration.getInterwikiMap();
-	}
-
-	public Set<String> getUriSchemeSet() {
-		return fConfiguration.getUriSchemeSet();
-	}
-
-	public synchronized int getNextNumber() {
-		return fNextNumberCounter++;
-	}
-
-	public TagToken getNode(int offset) {
-		return fTagStack.get(offset);
-	}
-
-	public String getRawWikiContent(String namespace, String templateName, Map<String, String> templateParameters) {
-		// String name = Encoder.encodeTitleUrl(articleName);
-		if (isTemplateNamespace(namespace)) {
-			String magicWord = templateName;
-			String parameter = "";
-			int index = magicWord.indexOf(':');
-			if (index > 0) {
-				parameter = magicWord.substring(index + 1).trim();
-				magicWord = magicWord.substring(0, index);
-			}
-			if (MagicWord.isMagicWord(magicWord)) {
-				return MagicWord.processMagicWord(magicWord, parameter, this);
-			}
-		}
-		return null;
-	}
-
-	public int getRecursionLevel() {
-		return fRecursionLevel;
-	}
-
-	public String getRedirectLink() {
-		return fRedirectLink;
-	}
-
-	public List<Reference> getReferences() {
-		return fReferences;
-	}
-
-	public List<SemanticAttribute> getSemanticAttributes() {
-		return null;
-	}
-
-	public List<SemanticRelation> getSemanticRelations() {
-		return null;
-	}
-
-	public ITableOfContent getTableOfContent() {
-		return fTableOfContentTag;
-	}
-
-	// public TableOfContentTag getTableOfContentTag(boolean isTOCIdentifier) {
-	// if (fTableOfContentTag == null) {
-	// TableOfContentTag tableOfContentTag = new TableOfContentTag("div");
-	// tableOfContentTag.addAttribute("id", "tableofcontent", true);
-	// tableOfContentTag.setShowToC(false);
-	// tableOfContentTag.setTOCIdentifier(isTOCIdentifier);
-	// fTableOfContentTag = tableOfContentTag;
-	// } else {
-	// if (isTOCIdentifier) {
-	// // try {
-	// TableOfContentTag tableOfContentTag = (TableOfContentTag)
-	// fTableOfContentTag.clone();
-	// fTableOfContentTag.setShowToC(false);
-	// tableOfContentTag.setShowToC(true);
-	// tableOfContentTag.setTOCIdentifier(isTOCIdentifier);
-	// fTableOfContentTag = tableOfContentTag;
-	// // } catch (CloneNotSupportedException e) {
-	// // e.printStackTrace();
-	// // }
-	// } else {
-	// return fTableOfContentTag;
-	// }
-	// }
-	// this.append(fTableOfContentTag);
-	// return fTableOfContentTag;
-	// }
-
-	public ITemplateFunction getTemplateFunction(String name) {
-		return getTemplateMap().get(name);
-	}
-
-	public Map<String, ITemplateFunction> getTemplateMap() {
-		return fConfiguration.getTemplateMap();
-	}
-
-	public Map<String, String> getTemplateCallsCache() {
-		return fConfiguration.getTemplateCallsCache();
-	}
-
-	public void setTemplateCallsCache(Map<String, String> map) {
-		fConfiguration.setTemplateCallsCache(map);
-	}
-
-	public String getTemplateNamespace() {
-		return fNamespace.getTemplate();
-	}
-
-	public Map<String, TagToken> getTokenMap() {
-		return fConfiguration.getTokenMap();
-	}
-
-	public IEventListener getWikiListener() {
-		return fWikiListener;
-	}
-
-	public int incrementParserRecursionCount(){
-		return ++fParserRecursionCount;
-	}
-	
-	public int incrementRecursionLevel() {
-		return ++fRecursionLevel;
-	}
-	
-	public int incrementTemplateRecursionCount(){
-		return ++fTemplateRecursionCount;
-	}
-	
-	protected void initialize() {
-		if (!fInitialized) {
-			fWikiListener = null;
-			fToCSet = null;
-			fTableOfContent = null;
-			fTagStack = new TagStack();
-			fReferences = null;
-			fReferenceNames = null;
-			fParserRecursionCount = 0;
-			fRecursionLevel = 0;
-			fTemplateRecursionCount = 0;
-			fSectionCounter = 0;
-			fReplaceColon = false;
-			fInitialized = true;
-		}
-	}
-
-	public boolean isCamelCaseEnabled() {
-		return false;
-	}
-
-	public boolean isCategoryNamespace(String namespace) {
-		return namespace.equalsIgnoreCase(fNamespace.getCategory()) || namespace.equalsIgnoreCase(fNamespace.getCategory2());
-	}
-
-	public boolean isEditorMode() {
-		return false;
-	}
-
-	public boolean isImageNamespace(String namespace) {
-		return namespace.equalsIgnoreCase(fNamespace.getImage()) || namespace.equalsIgnoreCase(fNamespace.getImage2());
-	}
-
-	public boolean isValidUriScheme(String uriScheme) {
-		return getUriSchemeSet().contains(uriScheme);
-	}
-
-	public boolean isValidUriSchemeSpecificPart(String uriScheme, String uriSchemeSpecificPart) {
-		if (uriScheme.equals("ftp") || uriScheme.equals("http") || uriScheme.equals("https")) {
-			if (uriSchemeSpecificPart.length() >= 2 && uriSchemeSpecificPart.substring(0, 2).equals("//")) {
-				return true;
-			}
-			return false;
-		}
-		return true;
-	}
-
-	public boolean isInterWiki(String namespace) {
-		return getInterwikiMap().containsKey(namespace);
-	}
-
-	public boolean isMathtranRenderer() {
-		return false;
-	}
-
-	public boolean isNamespace(String namespace) {
-		return isImageNamespace(namespace) || isTemplateNamespace(namespace) || isCategoryNamespace(namespace);
-	}
-
-	public boolean isPreviewMode() {
-		return false;
-	}
-
-	public boolean isSemanticWebActive() {
-		return false;
-	}
-
-	public boolean isTemplateNamespace(String namespace) {
-		return namespace.equalsIgnoreCase(fNamespace.getTemplate()) || namespace.equalsIgnoreCase(fNamespace.getTemplate2());
-	}
-
-	public boolean isTemplateTopic() {
-		return false;
-	}
-
-	public boolean parseBBCodes() {
-		return false;
-	}
-
-	public void parseEvents(IEventListener listener, String rawWikiText) {
-		initialize();
-		if (rawWikiText == null) {
-			return;
-		}
-		fWikiListener = listener;
-		WikipediaParser.parse(rawWikiText, this, false, null);
-		fInitialized = false;
-	}
-
-	public String parseTemplates(String rawWikiText) {
-		return parseTemplates(rawWikiText, false);
-	}
-
-	public String parseTemplates(String rawWikiText, boolean parseOnlySignature) {
-		if (rawWikiText == null) {
-			return "";
-		}
-		if (!parseOnlySignature) {
-			initialize();
-		}
-		StringBuilder buf = new StringBuilder(rawWikiText.length() + rawWikiText.length() / 10);
-		try {
-			TemplateParser.parse(rawWikiText, this, buf, parseOnlySignature, true);
-		} catch (Exception ioe) {
-			ioe.printStackTrace();
-			buf.append("<span class=\"error\">TemplateParser exception: " + ioe.getClass().getSimpleName() + "</span>");
-		}
-		return buf.toString();
-	}
-
-	public TagToken peekNode() {
-		return fTagStack.peek();
-	}
-
-	public TagToken popNode() {
-		return fTagStack.pop();
-	}
-
-	public boolean pushNode(TagToken node) {
-		return fTagStack.push(node);
-	}
-
-	public String render(ITextConverter converter, String rawWikiText) {
-		initialize();
-		if (rawWikiText == null) {
-			return "";
-		}
-		WikipediaParser.parse(rawWikiText, this, true, null);
-		if (converter != null) {
-			StringBuilder buf = new StringBuilder(rawWikiText.length() + rawWikiText.length() / 10);
-			List<BaseToken> list = fTagStack.getNodeList();
-
-			try {
-				converter.nodesToText(list, buf, this);
-			} catch (IOException e) {
-				e.printStackTrace();
-				return null;
-			} finally {
-				fInitialized = false;
-			}
-			return buf.toString();
-		}
-		fInitialized = false;
-		return null;
-	}
-
-	public String render(String rawWikiText) {
-		return render(new HTMLConverter(), rawWikiText);
-	}
-
-	public String renderPDF(String rawWikiText) {
-		return render(new PDFConverter(), rawWikiText);
-	}
-
-	public boolean replaceColon() {
-		return true;
-	}
-
-	public void setSemanticWebActive(boolean semanticWeb) {
-
-	}
-
-	public void setUp() {
-		fParserRecursionCount = 0;
-		fRecursionLevel = 0;
-		fTemplateRecursionCount = 0;
-	}
-
-	public boolean showSyntax(String tagName) {
-		return true;
-	}
-
-	public int stackSize() {
-		return fTagStack.size();
-	}
-
-	public TagStack swapStack(TagStack stack) {
-		TagStack temp = fTagStack;
-		fTagStack = stack;
-		return temp;
-	}
-
-	public void tearDown() {
-
-	}
-
-	public List<BaseToken> toNodeList(String rawWikiText) {
-		initialize();
-		if (rawWikiText == null) {
-			return new ArrayList<BaseToken>();
-		}
-		WikipediaParser.parse(rawWikiText, this, true, null);
-		fInitialized = false;
-		return fTagStack.getNodeList();
-	}
-
-	public ResourceBundle getResourceBundle() {
-		return fNamespace.getResourceBundle();
-	}
-
-	public AbstractParser createNewInstance(String rawWikitext) {
-		return new WikipediaParser(rawWikitext, isTemplateTopic(), getWikiListener());
-	}
-
-	public void setPageName(String pageTitle) {
-		fPageTitle = pageTitle;
-	}
-
-	public String getPageName() {
-		return fPageTitle;
 	}
 
 	/**
@@ -1059,7 +826,7 @@ public abstract class AbstractWikiModel implements IWikiModel, IContext {
 	 */
 	public Object getAttribute(String attribute) { // StringTemplate self, String
 		// attribute) {
-		//System.out.println("### get("+self.getEnclosingInstanceStackString()+", "+
+		// System.out.println("### get("+self.getEnclosingInstanceStackString()+", "+
 		// attribute+")");
 		// System.out.println("attributes="+(self.attributes!=null?self.attributes.
 		// keySet().toString():"none"));
@@ -1119,6 +886,292 @@ public abstract class AbstractWikiModel implements IWikiModel, IContext {
 	}
 
 	/**
+	 * What renderer is registered for this attributeClassType for this template.
+	 * If not found, the template's group is queried.
+	 */
+	public AttributeRenderer getAttributeRenderer(Class attributeClassType) {
+		AttributeRenderer renderer = null;
+		if (attributeRenderers != null) {
+			renderer = (AttributeRenderer) attributeRenderers.get(attributeClassType);
+		}
+		if (renderer != null) {
+			// found it!
+			return renderer;
+		}
+
+		// we have no renderer overrides for the template or none for class arg
+		// check parent template if we are embedded
+		// if ( enclosingInstance!=null ) {
+		// return enclosingInstance.getAttributeRenderer(attributeClassType);
+		// }
+		// // else check group
+		// return group.getAttributeRenderer(attributeClassType);
+		return null;
+	}
+
+	public String getCategoryNamespace() {
+		return fNamespace.getCategory();
+	}
+
+	public Map<String, SourceCodeFormatter> getCodeFormatterMap() {
+		return fConfiguration.getCodeFormatterMap();
+	}
+
+	public String getImageNamespace() {
+		return fNamespace.getImage();
+	}
+
+	public Map<String, String> getInterwikiMap() {
+		return fConfiguration.getInterwikiMap();
+	}
+
+	public synchronized int getNextNumber() {
+		return fNextNumberCounter++;
+	}
+
+	public TagToken getNode(int offset) {
+		return fTagStack.get(offset);
+	}
+
+	// public TableOfContentTag getTableOfContentTag(boolean isTOCIdentifier) {
+	// if (fTableOfContentTag == null) {
+	// TableOfContentTag tableOfContentTag = new TableOfContentTag("div");
+	// tableOfContentTag.addAttribute("id", "tableofcontent", true);
+	// tableOfContentTag.setShowToC(false);
+	// tableOfContentTag.setTOCIdentifier(isTOCIdentifier);
+	// fTableOfContentTag = tableOfContentTag;
+	// } else {
+	// if (isTOCIdentifier) {
+	// // try {
+	// TableOfContentTag tableOfContentTag = (TableOfContentTag)
+	// fTableOfContentTag.clone();
+	// fTableOfContentTag.setShowToC(false);
+	// tableOfContentTag.setShowToC(true);
+	// tableOfContentTag.setTOCIdentifier(isTOCIdentifier);
+	// fTableOfContentTag = tableOfContentTag;
+	// // } catch (CloneNotSupportedException e) {
+	// // e.printStackTrace();
+	// // }
+	// } else {
+	// return fTableOfContentTag;
+	// }
+	// }
+	// this.append(fTableOfContentTag);
+	// return fTableOfContentTag;
+	// }
+
+	public String getPageName() {
+		return fPageTitle;
+	}
+
+	public String getRawWikiContent(String namespace, String templateName, Map<String, String> templateParameters) {
+		// String name = Encoder.encodeTitleUrl(articleName);
+		if (isTemplateNamespace(namespace)) {
+			String magicWord = templateName;
+			String parameter = "";
+			int index = magicWord.indexOf(':');
+			if (index > 0) {
+				parameter = magicWord.substring(index + 1).trim();
+				magicWord = magicWord.substring(0, index);
+			}
+			if (MagicWord.isMagicWord(magicWord)) {
+				return MagicWord.processMagicWord(magicWord, parameter, this);
+			}
+		}
+		return null;
+	}
+
+	public int getRecursionLevel() {
+		return fRecursionLevel;
+	}
+
+	public String getRedirectLink() {
+		return fRedirectLink;
+	}
+
+	public List<Reference> getReferences() {
+		return fReferences;
+	}
+
+	public ResourceBundle getResourceBundle() {
+		return fNamespace.getResourceBundle();
+	}
+
+	public List<SemanticAttribute> getSemanticAttributes() {
+		return null;
+	}
+
+	public List<SemanticRelation> getSemanticRelations() {
+		return null;
+	}
+
+	public ITableOfContent getTableOfContent() {
+		return fTableOfContentTag;
+	}
+
+	public Map<String, String> getTemplateCallsCache() {
+		return fConfiguration.getTemplateCallsCache();
+	}
+
+	public ITemplateFunction getTemplateFunction(String name) {
+		return getTemplateMap().get(name);
+	}
+
+	public Map<String, ITemplateFunction> getTemplateMap() {
+		return fConfiguration.getTemplateMap();
+	}
+
+	public String getTemplateNamespace() {
+		return fNamespace.getTemplate();
+	}
+
+	public Map<String, TagToken> getTokenMap() {
+		return fConfiguration.getTokenMap();
+	}
+
+	public Set<String> getUriSchemeSet() {
+		return fConfiguration.getUriSchemeSet();
+	}
+
+	public IEventListener getWikiListener() {
+		return fWikiListener;
+	}
+
+	public int incrementParserRecursionCount() {
+		return ++fParserRecursionCount;
+	}
+
+	public int incrementRecursionLevel() {
+		return ++fRecursionLevel;
+	}
+
+	public int incrementTemplateRecursionCount() {
+		return ++fTemplateRecursionCount;
+	}
+
+	protected void initialize() {
+		if (!fInitialized) {
+			fWikiListener = null;
+			fToCSet = null;
+			fTableOfContent = null;
+			fTagStack = new TagStack();
+			fReferences = null;
+			fReferenceNames = null;
+			fParserRecursionCount = 0;
+			fRecursionLevel = 0;
+			fTemplateRecursionCount = 0;
+			fSectionCounter = 0;
+			fReplaceColon = false;
+			fInitialized = true;
+		}
+	}
+
+	public boolean isCamelCaseEnabled() {
+		return false;
+	}
+
+	public boolean isCategoryNamespace(String namespace) {
+		return namespace.equalsIgnoreCase(fNamespace.getCategory()) || namespace.equalsIgnoreCase(fNamespace.getCategory2());
+	}
+
+	public boolean isEditorMode() {
+		return false;
+	}
+
+	public boolean isImageNamespace(String namespace) {
+		return namespace.equalsIgnoreCase(fNamespace.getImage()) || namespace.equalsIgnoreCase(fNamespace.getImage2());
+	}
+
+	public boolean isInterWiki(String namespace) {
+		return getInterwikiMap().containsKey(namespace);
+	}
+
+	public boolean isMathtranRenderer() {
+		return false;
+	}
+
+	public boolean isNamespace(String namespace) {
+		return isImageNamespace(namespace) || isTemplateNamespace(namespace) || isCategoryNamespace(namespace);
+	}
+
+	public boolean isPreviewMode() {
+		return false;
+	}
+
+	public boolean isSemanticWebActive() {
+		return false;
+	}
+
+	public boolean isTemplateNamespace(String namespace) {
+		return namespace.equalsIgnoreCase(fNamespace.getTemplate()) || namespace.equalsIgnoreCase(fNamespace.getTemplate2());
+	}
+
+	public boolean isTemplateTopic() {
+		return false;
+	}
+
+	public boolean isValidUriScheme(String uriScheme) {
+		return getUriSchemeSet().contains(uriScheme);
+	}
+
+	public boolean isValidUriSchemeSpecificPart(String uriScheme, String uriSchemeSpecificPart) {
+		if (uriScheme.equals("ftp") || uriScheme.equals("http") || uriScheme.equals("https")) {
+			if (uriSchemeSpecificPart.length() >= 2 && uriSchemeSpecificPart.substring(0, 2).equals("//")) {
+				return true;
+			}
+			return false;
+		}
+		return true;
+	}
+
+	public boolean parseBBCodes() {
+		return false;
+	}
+
+	public void parseEvents(IEventListener listener, String rawWikiText) {
+		initialize();
+		if (rawWikiText == null) {
+			return;
+		}
+		fWikiListener = listener;
+		WikipediaParser.parse(rawWikiText, this, false, null);
+		fInitialized = false;
+	}
+
+	public String parseTemplates(String rawWikiText) {
+		return parseTemplates(rawWikiText, false);
+	}
+
+	public String parseTemplates(String rawWikiText, boolean parseOnlySignature) {
+		if (rawWikiText == null) {
+			return "";
+		}
+		if (!parseOnlySignature) {
+			initialize();
+		}
+		StringBuilder buf = new StringBuilder(rawWikiText.length() + rawWikiText.length() / 10);
+		try {
+			TemplateParser.parse(rawWikiText, this, buf, parseOnlySignature, true);
+		} catch (Exception ioe) {
+			ioe.printStackTrace();
+			buf.append("<span class=\"error\">TemplateParser exception: " + ioe.getClass().getSimpleName() + "</span>");
+		}
+		return buf.toString();
+	}
+
+	public TagToken peekNode() {
+		return fTagStack.peek();
+	}
+
+	public TagToken popNode() {
+		return fTagStack.pop();
+	}
+
+	public boolean pushNode(TagToken node) {
+		return fTagStack.push(node);
+	}
+
+	/**
 	 * Map a value to a named attribute. Throw NoSuchElementException if the named
 	 * attribute is not formally defined in self's specific template and a formal
 	 * argument list exists.
@@ -1136,6 +1189,53 @@ public abstract class AbstractWikiModel implements IWikiModel, IContext {
 			return;
 		}
 		attributes.put(name, value);
+	}
+
+	/**
+	 * Register a renderer for all objects of a particular type. This overrides
+	 * any renderer set in the group for this class type.
+	 */
+	public void registerRenderer(Class attributeClassType, AttributeRenderer renderer) {
+		if (attributeRenderers == null) {
+			attributeRenderers = new HashMap();
+		}
+		attributeRenderers.put(attributeClassType, renderer);
+	}
+
+	public String render(ITextConverter converter, String rawWikiText) {
+		initialize();
+		if (rawWikiText == null) {
+			return "";
+		}
+		WikipediaParser.parse(rawWikiText, this, true, null);
+		if (converter != null) {
+			StringBuilder buf = new StringBuilder(rawWikiText.length() + rawWikiText.length() / 10);
+			List<BaseToken> list = fTagStack.getNodeList();
+
+			try {
+				converter.nodesToText(list, buf, this);
+			} catch (IOException e) {
+				e.printStackTrace();
+				return null;
+			} finally {
+				fInitialized = false;
+			}
+			return buf.toString();
+		}
+		fInitialized = false;
+		return null;
+	}
+
+	public String render(String rawWikiText) {
+		return render(new HTMLConverter(), rawWikiText);
+	}
+
+	public String renderPDF(String rawWikiText) {
+		return render(new PDFConverter(), rawWikiText);
+	}
+
+	public boolean replaceColon() {
+		return true;
 	}
 
 	/**
@@ -1212,30 +1312,6 @@ public abstract class AbstractWikiModel implements IWikiModel, IContext {
 	}
 
 	/**
-	 * What renderer is registered for this attributeClassType for this template.
-	 * If not found, the template's group is queried.
-	 */
-	public AttributeRenderer getAttributeRenderer(Class attributeClassType) {
-		AttributeRenderer renderer = null;
-		if (attributeRenderers != null) {
-			renderer = (AttributeRenderer) attributeRenderers.get(attributeClassType);
-		}
-		if (renderer != null) {
-			// found it!
-			return renderer;
-		}
-
-		// we have no renderer overrides for the template or none for class arg
-		// check parent template if we are embedded
-		// if ( enclosingInstance!=null ) {
-		// return enclosingInstance.getAttributeRenderer(attributeClassType);
-		// }
-		// // else check group
-		// return group.getAttributeRenderer(attributeClassType);
-		return null;
-	}
-
-	/**
 	 * Specify a complete map of what object classes should map to which renderer
 	 * objects.
 	 */
@@ -1243,124 +1319,121 @@ public abstract class AbstractWikiModel implements IWikiModel, IContext {
 		this.attributeRenderers = renderers;
 	}
 
+	public void setPageName(String pageTitle) {
+		fPageTitle = pageTitle;
+	}
+
+	public void setSemanticWebActive(boolean semanticWeb) {
+
+	}
+
+	public void setTemplateCallsCache(Map<String, String> map) {
+		fConfiguration.setTemplateCallsCache(map);
+	}
+
+	public void setUp() {
+		fParserRecursionCount = 0;
+		fRecursionLevel = 0;
+		fTemplateRecursionCount = 0;
+	}
+
+	public boolean showSyntax(String tagName) {
+		return true;
+	}
+
+	public int stackSize() {
+		return fTagStack.size();
+	}
+
 	/**
-	 * Register a renderer for all objects of a particular type. This overrides
-	 * any renderer set in the group for this class type.
-	 */
-	public void registerRenderer(Class attributeClassType, AttributeRenderer renderer) {
-		if (attributeRenderers == null) {
-			attributeRenderers = new HashMap();
-		}
-		attributeRenderers.put(attributeClassType, renderer);
-	}
-
-	public TagNode appendToCAnchor(String anchor) {
-		TagNode aTagNode = new TagNode("a");
-		aTagNode.addAttribute("name", anchor, true);
-		aTagNode.addAttribute("id", anchor, true);
-		return aTagNode;
-	}
-
-	public ITableOfContent appendHead(String rawHead, int headLevel, boolean noToC, int headCounter) {
-		return appendHead(rawHead, headLevel, noToC, headCounter, 0, 0);
-	}
-
-	/**
-	 * Append a new head to the table of content
+	 * Substitute the template name by the template content and parameters and
+	 * append the new content to the writer.
 	 * 
-	 * @param rawHead
-	 * @param headLevel
+	 * @param templateName
+	 *          the name of the template
+	 * @param parameterMap
+	 *          the templates parameter <code>java.util.TreeMap</code>
+	 * @param cacheKey
+	 *          a key for using in a cache
+	 * @param writer
+	 *          the buffer to append the substituted template content
+	 * @throws IOException
 	 */
-	public ITableOfContent appendHead(String rawHead, int headLevel, boolean noToC, int headCounter, int startPosition,
-			int endPosition) {
-		TagStack localStack = WikipediaParser.parseRecursive(rawHead.trim(), this, true, true);
-
-		WPTag headTagNode = new WPTag("h" + headLevel);
-		headTagNode.addChildren(localStack.getNodeList());
-		String tocHead = headTagNode.getBodyString();
-		String anchor = Encoder.encodeDotUrl(tocHead);
-		createTableOfContent(false);
-		if (!noToC && (headCounter > 3)) {
-			fTableOfContentTag.setShowToC(true);
-		}
-		if (fToCSet.contains(anchor)) {
-			String newAnchor = anchor;
-			for (int i = 2; i < Integer.MAX_VALUE; i++) {
-				newAnchor = anchor + '_' + Integer.toString(i);
-				if (!fToCSet.contains(newAnchor)) {
-					break;
+	public void substituteTemplateCall(String templateName, TreeMap<String, String> parameterMap, Appendable writer)
+			throws IOException {
+		String plainContent;
+		Map<String, String> templateCallsCache = null;
+		String cacheKey = null;
+		if (this instanceof IConfiguration) {
+			IConfiguration config = (IConfiguration) this;
+			templateCallsCache = config.getTemplateCallsCache();
+			if (templateCallsCache != null) {
+				StringBuilder cacheKeyBuffer = new StringBuilder();
+				for (Entry<String, String> entry : parameterMap.entrySet()) {
+					cacheKeyBuffer.append(entry.getKey());
+					cacheKeyBuffer.append("=");
+					cacheKeyBuffer.append(entry.getValue());
+					cacheKeyBuffer.append("|");
+				}
+				cacheKey = cacheKeyBuffer.toString();
+				if (cacheKey.length() < 256) {
+					String value = templateCallsCache.get(cacheKey);
+					if (value != null) {
+						// System.out.println("Cache key: " + cacheKey);
+						writer.append(value);
+						return;
+					}
 				}
 			}
-			anchor = newAnchor;
 		}
-		SectionHeader strPair = new SectionHeader(headLevel, startPosition, endPosition, tocHead, anchor);
-		addToTableOfContent(fTableOfContent, strPair, headLevel);
-		if (getRecursionLevel() == 1) {
-			buildEditLinkUrl(fSectionCounter++);
-		}
-		TagNode aTagNode = new TagNode("a");
-		aTagNode.addAttribute("name", anchor, true);
-		aTagNode.addAttribute("id", anchor, true);
-		append(aTagNode);
 
-		append(headTagNode);
-		return fTableOfContentTag;
-	}
-
-	private void addToTableOfContent(List<Object> toc, SectionHeader strPair, int headLevel) {
-		if (headLevel == 1) {
-			toc.add(strPair);
+		if (templateName.length() > 0 && templateName.charAt(0) == ':') {
+			// invalidate cache:
+			templateCallsCache = null;
+			plainContent = getRawWikiContent("", templateName.substring(1), parameterMap);
 		} else {
-			if (toc.size() > 0) {
-				if (toc.get(toc.size() - 1) instanceof List) {
-					addToTableOfContent((List<Object>) toc.get(toc.size() - 1), strPair, --headLevel);
-					return;
-				}
-			}
-			ArrayList<Object> list = new ArrayList<Object>();
-			toc.add(list);
-			addToTableOfContent(list, strPair, --headLevel);
+			addTemplate(templateName);
+			plainContent = getRawWikiContent(getTemplateNamespace(), templateName, parameterMap);
 		}
-	}
 
-	/**
-	 * 
-	 * @param isTOCIdentifier
-	 *          <code>true</code> if the __TOC__ keyword was parsed
-	 */
-	public ITableOfContent createTableOfContent(boolean isTOCIdentifier) {
-		if (fTableOfContentTag == null) {
-			TableOfContentTag tableOfContentTag = new TableOfContentTag("div");
-			tableOfContentTag.addAttribute("id", "tableofcontent", true);
-			tableOfContentTag.setShowToC(false);
-			tableOfContentTag.setTOCIdentifier(isTOCIdentifier);
-			fTableOfContentTag = tableOfContentTag;
-			this.append(fTableOfContentTag);
-		} else {
-			if (isTOCIdentifier) {
-				// try {
-				TableOfContentTag tableOfContentTag = (TableOfContentTag) fTableOfContentTag.clone();
-				fTableOfContentTag.setShowToC(false);
-				tableOfContentTag.setShowToC(true);
-				tableOfContentTag.setTOCIdentifier(isTOCIdentifier);
-				fTableOfContentTag = tableOfContentTag;
-				// } catch (CloneNotSupportedException e) {
-				// e.printStackTrace();
-				// }
-				this.append(fTableOfContentTag);
+		if (plainContent != null) {
+			StringBuilder templateBuffer = new StringBuilder(plainContent.length());
+			TemplateParser.parseRecursive(plainContent.trim(), this, templateBuffer, false, false, parameterMap);
+			if (templateCallsCache != null && cacheKey != null && cacheKey.length() < 256) {
+				// save this template call in the cache
+				String cacheValue = templateBuffer.toString();
+				templateCallsCache.put(cacheKey, cacheValue);
+				writer.append(cacheValue);
 			} else {
+				writer.append(templateBuffer);
 			}
+			return;
 		}
+		// if no template found insert plain template name string:
+		writer.append("{{");
+		writer.append(templateName);
+		writer.append("}}");
+		return;
+	}
 
-		if (fTableOfContentTag != null) {
-			if (fTableOfContent == null) {
-				fTableOfContent = fTableOfContentTag.getTableOfContent();
-			}
+	public TagStack swapStack(TagStack stack) {
+		TagStack temp = fTagStack;
+		fTagStack = stack;
+		return temp;
+	}
+
+	public void tearDown() {
+
+	}
+
+	public List<BaseToken> toNodeList(String rawWikiText) {
+		initialize();
+		if (rawWikiText == null) {
+			return new ArrayList<BaseToken>();
 		}
-		if (fToCSet == null) {
-			fToCSet = new HashSet<String>();
-		}
-		return fTableOfContentTag;
+		WikipediaParser.parse(rawWikiText, this, true, null);
+		fInitialized = false;
+		return fTagStack.getNodeList();
 	}
 
 }
