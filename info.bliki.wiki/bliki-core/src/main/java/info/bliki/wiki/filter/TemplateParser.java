@@ -1,7 +1,6 @@
 package info.bliki.wiki.filter;
 
 import info.bliki.htmlcleaner.Utils;
-import info.bliki.wiki.model.AbstractWikiModel;
 import info.bliki.wiki.model.Configuration;
 import info.bliki.wiki.model.IWikiModel;
 import info.bliki.wiki.tags.util.WikiTagNode;
@@ -555,10 +554,6 @@ public class TemplateParser extends AbstractParser {
 		int endOffset = fCurrentPosition - 2;
 		String function = checkParserFunction(startTemplatePosition, endOffset);
 		if (function != null) {
-			// System.out.println("Function: " + function);
-			// if (function.contains("[[Template")) {
-			// System.out.println("Function: " + fStringSource);
-			// }
 			ITemplateFunction templateFunction = fWikiModel.getTemplateFunction(function);
 			if (templateFunction != null) {
 				// if (function.charAt(0) == '#') {
@@ -576,7 +571,6 @@ public class TemplateParser extends AbstractParser {
 		Object[] objs = createParameterMap(fSource, startTemplatePosition, fCurrentPosition - startTemplatePosition - 2);
 		TreeMap<String, String> parameterMap = (TreeMap<String, String>) objs[0];
 		String templateName = ((String) objs[1]).trim();
-		// String cacheKey = templateName + objs[2];
 		fCurrentPosition = endPosition;
 		fWikiModel.substituteTemplateCall(templateName, parameterMap, writer);
 		return true;
@@ -612,14 +606,13 @@ public class TemplateParser extends AbstractParser {
 	/**
 	 * Create a map from the parameters defined in a template call
 	 * 
-	 * @return the templates parameter <code>java.util.Map</code> at index [0];
+	 * @return the templates parameter <code>java.util.TreeMap</code> at index [0];
 	 *         the template name at index [1]
 	 * 
 	 */
 	private static Object[] createParameterMap(char[] src, int startOffset, int len) {
 		Object[] objs = new Object[3];
 		TreeMap<String, String> map = new TreeMap<String, String>();
-		// StringBuilder cacheKeyBuffer = new StringBuilder(len);
 		objs[0] = map;
 		int currOffset = startOffset;
 		int endOffset = startOffset + len;
@@ -640,13 +633,7 @@ public class TemplateParser extends AbstractParser {
 				createSingleParameter(i, resultList.get(i), map, false);
 			}
 		}
-		// for (Entry<String, String> entry : map.entrySet()) {
-		// cacheKeyBuffer.append(entry.getKey());
-		// cacheKeyBuffer.append("=");
-		// cacheKeyBuffer.append(entry.getValue());
-		// cacheKeyBuffer.append("|");
-		// }
-		// objs[2] = cacheKeyBuffer.toString();
+
 		return objs;
 	}
 

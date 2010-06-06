@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.Set;
-import java.util.TreeMap;
+import java.util.SortedMap;
 
 /**
  * Interface for rendering a wiki model
@@ -854,14 +854,14 @@ public interface IWikiModel extends IConfiguration {
 	 * @param templateName
 	 *          the name of the template
 	 * @param parameterMap
-	 *          the templates parameter <code>java.util.TreeMap</code>
+	 *          the templates parameter <code>java.util.SortedMap</code>
 	 * @param cacheKey
 	 *          a key for using in a cache
 	 * @param writer
 	 *          the buffer to append the substituted template content
 	 * @throws IOException
 	 */
-	public void substituteTemplateCall(String templateName, TreeMap<String, String> parameterMap, Appendable writer)
+	public void substituteTemplateCall(String templateName, SortedMap<String, String> parameterMap, Appendable writer)
 			throws IOException;
 
 	public TagStack swapStack(TagStack stack);

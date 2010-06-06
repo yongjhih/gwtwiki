@@ -35,7 +35,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.Set;
-import java.util.TreeMap;
+import java.util.SortedMap;
 import java.util.Map.Entry;
 
 /**
@@ -1352,14 +1352,14 @@ public abstract class AbstractWikiModel implements IWikiModel, IContext {
 	 * @param templateName
 	 *          the name of the template
 	 * @param parameterMap
-	 *          the templates parameter <code>java.util.TreeMap</code>
+	 *          the templates parameter <code>java.util.SortedMap</code>
 	 * @param cacheKey
 	 *          a key for using in a cache
 	 * @param writer
 	 *          the buffer to append the substituted template content
 	 * @throws IOException
 	 */
-	public void substituteTemplateCall(String templateName, TreeMap<String, String> parameterMap, Appendable writer)
+	public void substituteTemplateCall(String templateName, SortedMap<String, String> parameterMap, Appendable writer)
 			throws IOException {
 		String plainContent;
 		Map<String, String> templateCallsCache = null;
