@@ -3,6 +3,7 @@ package info.bliki.wiki.template;
 import info.bliki.wiki.model.IWikiModel;
 
 import java.io.IOException;
+import java.util.List;
 
 /**
  * A template parser function for <code>{{subst: ... }}</code>. See <a
@@ -17,8 +18,11 @@ public class Subst extends AbstractTemplateFunction {
 
 	}
 
-	public String parseFunction(char[] src, int beginIndex, int endIndex,
-	    IWikiModel model) throws IOException {
+	public String parseFunction(char[] src, int beginIndex, int endIndex, IWikiModel model) throws IOException {
+		return parseFunction(null, model, src, beginIndex, endIndex);
+	}
+
+	public String parseFunction(List<String> parts, IWikiModel model, char[] src, int beginIndex, int endIndex) {
 		StringBuilder template = new StringBuilder(endIndex - beginIndex + 4);
 		template.append("{{");
 		template.append(src, beginIndex, endIndex - beginIndex);

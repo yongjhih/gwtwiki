@@ -552,26 +552,41 @@ public class TemplateParser extends AbstractParser {
 		int endPosition = fCurrentPosition;
 		String plainContent = null;
 		int endOffset = fCurrentPosition - 2;
-		String function = checkParserFunction(startTemplatePosition, endOffset);
-		if (function != null) {
-			ITemplateFunction templateFunction = fWikiModel.getTemplateFunction(function);
-			if (templateFunction != null) {
-				// if (function.charAt(0) == '#') {
-				// #if:, #ifeq:,...
-				plainContent = templateFunction.parseFunction(fSource, fCurrentPosition, endOffset, fWikiModel);
-				fCurrentPosition = endPosition;
-				if (plainContent != null) {
-					TemplateParser.parseRecursive(plainContent, fWikiModel, writer, false, false);
+		Object[] objs = createParameterMap(fSource, startTemplatePosition, fCurrentPosition - startTemplatePosition - 2);
+		List<String> parts = (List<String>) objs[0];
+		String templateName = ((String) objs[1]).trim();
+		StringBuilder buf = new StringBuilder((templateName.length()) + (templateName.length() / 10));
+		TemplateParser.parse(templateName, fWikiModel, buf, false);
+		templateName = buf.toString();
+		int currOffset = checkParserFunction(templateName);
+		if (currOffset > 0) {
+			String function = templateName.substring(0, currOffset - 1).trim();
+			if (function != null) {
+				ITemplateFunction templateFunction = fWikiModel.getTemplateFunction(function);
+				if (templateFunction != null) {
+					// if (function.charAt(0) == '#') {
+					// #if:, #ifeq:,...
+					parts.set(0, templateName.substring(currOffset));
+					plainContent = templateFunction.parseFunction(parts, fWikiModel, fSource, startTemplatePosition + currOffset, endOffset);
+					fCurrentPosition = endPosition;
+					if (plainContent != null) {
+						TemplateParser.parseRecursive(plainContent, fWikiModel, writer, false, false);
+						return true;
+					}
 					return true;
 				}
-				return true;
+				fCurrentPosition = endOffset + 2;
 			}
-			fCurrentPosition = endOffset + 2;
 		}
-		Object[] objs = createParameterMap(fSource, startTemplatePosition, fCurrentPosition - startTemplatePosition - 2);
-		TreeMap<String, String> parameterMap = (TreeMap<String, String>) objs[0];
-		String templateName = ((String) objs[1]).trim();
 		fCurrentPosition = endPosition;
+		TreeMap<String, String> parameterMap = new TreeMap<String, String>();
+		for (int i = 1; i < parts.size(); i++) {
+			if (i == parts.size() - 1) {
+				createSingleParameter(i, parts.get(i), parameterMap, true);
+			} else {
+				createSingleParameter(i, parts.get(i), parameterMap, false);
+			}
+		}
 		fWikiModel.substituteTemplateCall(templateName, parameterMap, writer);
 		return true;
 	}
@@ -606,34 +621,23 @@ public class TemplateParser extends AbstractParser {
 	/**
 	 * Create a map from the parameters defined in a template call
 	 * 
-	 * @return the templates parameter <code>java.util.TreeMap</code> at index [0];
+	 * @return the templates parameters <code>java.util.List</code> at index [0];
 	 *         the template name at index [1]
 	 * 
 	 */
 	private static Object[] createParameterMap(char[] src, int startOffset, int len) {
-		Object[] objs = new Object[3];
-		TreeMap<String, String> map = new TreeMap<String, String>();
-		objs[0] = map;
+		Object[] objs = new Object[2];
 		int currOffset = startOffset;
 		int endOffset = startOffset + len;
 		List<String> resultList = new ArrayList<String>();
+		objs[0] = resultList;
 		resultList = splitByPipe(src, currOffset, endOffset, resultList);
 		if (resultList.size() <= 1) {
-			// set the templates name
+			// set the template name
 			objs[1] = new String(src, startOffset, len);
-			objs[2] = "";
-			return objs;
+		} else {
+			objs[1] = resultList.get(0);
 		}
-		objs[1] = resultList.get(0);
-
-		for (int i = 1; i < resultList.size(); i++) {
-			if (i == resultList.size() - 1) {
-				createSingleParameter(i, resultList.get(i), map, true);
-			} else {
-				createSingleParameter(i, resultList.get(i), map, false);
-			}
-		}
-
 		return objs;
 	}
 
@@ -723,28 +727,69 @@ public class TemplateParser extends AbstractParser {
 	 *         <code>null</code> if no parser function can be found in this
 	 *         template
 	 */
-	private String checkParserFunction(int startOffset, int endOffset) {
+	// private String checkParserFunction(int startOffset, int endOffset) {
+	// // String function = null;
+	// int currOffset = startOffset;
+	// int functionStart = startOffset;
+	// char ch;
+	// while (currOffset < endOffset) {
+	// ch = fSource[currOffset++];
+	// if (Character.isLetter(ch) || ch == '#' || ch == '$') {
+	// functionStart = currOffset - 1;
+	// while (currOffset < endOffset) {
+	// ch = fSource[currOffset++];
+	// if (ch == ':') {
+	// fCurrentPosition = currOffset;
+	// return fStringSource.substring(functionStart, currOffset - 1);
+	// } else if (!Character.isLetterOrDigit(ch) && ch != '$') {
+	// return null;
+	// }
+	// }
+	// break;
+	// } else if (!Character.isWhitespace(ch)) {
+	// return null;
+	// }
+	// }
+	// return null;
+	// }
+
+	/**
+	 * Check if this template contains a template function
+	 * 
+	 * Note: repositions this#fCurrentPosition behind the parser function string
+	 * if possible
+	 * 
+	 * @param plainContent
+	 * @return the offset behind the &acute;:&acute; character at the end of the
+	 *         parser function name or <code>-1</code> if no parser function can
+	 *         be found in this template.
+	 */
+	private int checkParserFunction(String plainContent) {
 		// String function = null;
-		int currOffset = startOffset;
-		int functionStart = startOffset;
+		int currOffset = 0;
+		// int functionStart = 0;
+		int len = plainContent.length();
 		char ch;
-		while (currOffset < endOffset) {
-			ch = fSource[currOffset++];
+		while (currOffset < len) {
+			ch = plainContent.charAt(currOffset++);
 			if (Character.isLetter(ch) || ch == '#' || ch == '$') {
-				functionStart = currOffset - 1;
-				while (currOffset < endOffset) {
-					ch = fSource[currOffset++];
+				// functionStart = currOffset - 1;
+				while (currOffset < len) {
+					ch = plainContent.charAt(currOffset++);
 					if (ch == ':') {
-						fCurrentPosition = currOffset;
-						return fStringSource.substring(functionStart, currOffset - 1);
+						// fCurrentPosition = currOffset;
+						// return plainContent.substring(functionStart, currOffset - 1);
+						return currOffset;
 					} else if (!Character.isLetterOrDigit(ch) && ch != '$') {
-						return null;
+						return -1;
 					}
 				}
 				break;
+			} else if (!Character.isWhitespace(ch)) {
+				return -1;
 			}
 		}
-		return null;
+		return -1;
 	}
 
 	protected boolean parseHTMLCommentTags(Appendable writer) throws IOException {

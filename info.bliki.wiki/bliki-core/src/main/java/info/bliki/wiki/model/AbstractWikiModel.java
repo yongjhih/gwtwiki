@@ -1361,7 +1361,7 @@ public abstract class AbstractWikiModel implements IWikiModel, IContext {
 	 */
 	public void substituteTemplateCall(String templateName, SortedMap<String, String> parameterMap, Appendable writer)
 			throws IOException {
-		String plainContent;
+		
 		Map<String, String> templateCallsCache = null;
 		String cacheKey = null;
 		if (this instanceof IConfiguration) {
@@ -1386,7 +1386,7 @@ public abstract class AbstractWikiModel implements IWikiModel, IContext {
 				}
 			}
 		}
-
+		String plainContent;
 		if (templateName.length() > 0 && templateName.charAt(0) == ':') {
 			// invalidate cache:
 			templateCallsCache = null;

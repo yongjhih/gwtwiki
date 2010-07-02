@@ -855,8 +855,6 @@ public interface IWikiModel extends IConfiguration {
 	 *          the name of the template
 	 * @param parameterMap
 	 *          the templates parameter <code>java.util.SortedMap</code>
-	 * @param cacheKey
-	 *          a key for using in a cache
 	 * @param writer
 	 *          the buffer to append the substituted template content
 	 * @throws IOException

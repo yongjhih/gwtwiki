@@ -4,13 +4,14 @@ import info.bliki.wiki.filter.TemplateParser;
 import info.bliki.wiki.model.IWikiModel;
 
 import java.io.IOException;
+import java.util.List;
 
 /**
  * A template parser function for <code>{{ #if: ... }}</code> syntax
  * 
  */
-public class AbstractTemplateFunction implements ITemplateFunction {
-	public final static ITemplateFunction CONST = new AbstractTemplateFunction();
+public abstract class AbstractTemplateFunction implements ITemplateFunction {
+//	public final static ITemplateFunction CONST = new AbstractTemplateFunction();
 
 	public AbstractTemplateFunction() {
 
@@ -24,6 +25,8 @@ public class AbstractTemplateFunction implements ITemplateFunction {
 		return null;
 	}
 
+	public abstract String parseFunction(List<String> parts, IWikiModel model, char[] src, int beginIndex, int endIndex) throws IOException;
+	
 	/**
 	 * Parse the given plain content string with the template parser.
 	 * 

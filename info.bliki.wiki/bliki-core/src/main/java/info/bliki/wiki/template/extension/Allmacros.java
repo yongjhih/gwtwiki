@@ -5,6 +5,7 @@ import info.bliki.wiki.template.AbstractTemplateFunction;
 import info.bliki.wiki.template.ITemplateFunction;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -31,6 +32,10 @@ public class Allmacros extends AbstractTemplateFunction {
 
 	@Override
 	public String parseFunction(char[] src, int beginIndex, int endIndex, IWikiModel model) throws IOException {
+		return parseFunction(null, model, null, 0, 0);
+	}
+
+	public String parseFunction(List<String> parts, IWikiModel model, char[] src, int beginIndex, int endIndex) throws IOException {
 		Map<String, ITemplateFunction> t = model.getTemplateMap();
 		StringBuilder sb = new StringBuilder();
 		String doc;
@@ -40,7 +45,7 @@ public class Allmacros extends AbstractTemplateFunction {
 			sb.append(e.getKey());
 			sb.append("</td><td>");
 			ITemplateFunction tf = e.getValue();
-			Class cl1 = tf.getClass().getEnclosingClass();
+			Class<?> cl1 = tf.getClass().getEnclosingClass();
 			if (cl1 == null)
 				cl1 = tf.getClass();
 			String s1 = cl1.getCanonicalName();

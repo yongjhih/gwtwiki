@@ -22,6 +22,10 @@ public class LCFirst extends AbstractTemplateFunction {
 	public String parseFunction(char[] src, int beginIndex, int endIndex, IWikiModel model) throws IOException {
 		List<String> list = new ArrayList<String>();
 		WikipediaScanner.splitByPipe(src, beginIndex, endIndex, list);
+		return parseFunction(list, model, null, 0, 0);
+	}
+
+	public String parseFunction(List<String> list, IWikiModel model, char[] src, int beginIndex, int endIndex) {
 		if (list.size() > 0) {
 			String word = parse(list.get(0), model);
 			if (word.length() > 0) {

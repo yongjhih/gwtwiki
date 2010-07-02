@@ -15,6 +15,7 @@ import java.util.List;
  * syntax: <code>{{#$:object|formatstring|separator|null-value}}</code>.
  * 
  * Example:
+ * 
  * <pre>
  * public void testRendererForST() throws Exception {
  * 	wikiModel.setAttribute(&quot;created&quot;, new GregorianCalendar(2005, 07 - 1, 05));
@@ -44,9 +45,17 @@ public class DollarContext extends AbstractTemplateFunction {
 
 	public String parseFunction(char[] src, int beginIndex, int endIndex, IWikiModel model) throws IOException {
 		if (model instanceof IContext) {
-			IContext context = (IContext) model;
+			// IContext context = (IContext) model;
 			List<String> list = new ArrayList<String>();
 			WikipediaScanner.splitByPipe(src, beginIndex, endIndex, list);
+			parseFunction(list, model, null, 0, 0);
+		}
+		return null;
+	}
+
+	public String parseFunction(List<String> list, IWikiModel model, char[] src, int beginIndex, int endIndex)  throws IOException {
+		if (model instanceof IContext) {
+			IContext context = (IContext) model;
 			if (list.size() > 0) {
 				// name of the attribute
 				String attribute = parse(list.get(0), model);
