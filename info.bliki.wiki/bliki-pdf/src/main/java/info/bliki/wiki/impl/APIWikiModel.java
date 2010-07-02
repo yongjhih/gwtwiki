@@ -130,11 +130,12 @@ public class APIWikiModel extends WikiModel {
 			return result;
 		}
 
+		String templateNS = getTemplateNamespace() + ":";
 		String name = articleName;
-		if (namespace.equals("Template")) {
+		if (namespace.equals(getTemplateNamespace())) {
 			String content = null;
 			try {
-				TopicData topicData = fWikiDB.selectTopic("Template:" + name);
+				TopicData topicData = fWikiDB.selectTopic(templateNS + name);
 				if (topicData != null) {
 					content = topicData.getContent();
 					content = getRedirectedWikiContent(content, templateParameters);
@@ -145,13 +146,16 @@ public class APIWikiModel extends WikiModel {
 					}
 				}
 
-				String[] listOfTitleStrings = { "Template:" + name };
+				String[] listOfTitleStrings = { templateNS + name };
 				fUser.login();
 				List<Page> listOfPages = fUser.queryContent(listOfTitleStrings);
 				for (Page page : listOfPages) {
 					content = page.getCurrentContent();
 					if (content != null) {
-						topicData = new TopicData("Template:" + name, content);
+						// System.out.println(name);
+						// System.out.println(content);
+						System.out.println("-----------------------");
+						topicData = new TopicData(templateNS + name, content);
 						fWikiDB.insertTopic(topicData);
 						content = getRedirectedWikiContent(content, templateParameters);
 						if (content != null) {
@@ -160,10 +164,10 @@ public class APIWikiModel extends WikiModel {
 					}
 					break;
 				}
+				return content;
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-			return content;
 		}
 		return null;
 	}

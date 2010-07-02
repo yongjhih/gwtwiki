@@ -82,9 +82,15 @@ public class HTMLCreatorExample {
 	public static void testCreator006() {
 		testWikipediaENAPI("Anarchism");
 	}
+
 	public static void testCreator007() {
-		testWikipediaENAPI("JavaScript","http://de.wikipedia.org/w/api.php");
+		testWikipediaENAPI("JavaScript", "http://de.wikipedia.org/w/api.php");
 	}
+
+	public static void testCreator008() {
+		testWikipediaENAPI("libero", "http://en.wiktionary.org/w/api.php");
+	}
+
 	public static void main(String[] args) {
 		testCreator001();
 	}

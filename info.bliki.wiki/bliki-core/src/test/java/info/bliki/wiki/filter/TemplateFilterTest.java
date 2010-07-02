@@ -11,11 +11,25 @@ public class TemplateFilterTest extends FilterTestSupport {
 	public static Test suite() {
 		return new TestSuite(TemplateFilterTest.class);
 	}
-
+	
+	public void testTemplate06() {
+		assertEquals("\n" + "<p>start- 5.0 equals +5 -end</p>", wikiModel.render("start- {{ifeq|5.0|+5}} -end"));
+	}
+	
+	public void testTemplate09() {
+		assertEquals("\n" + "<p>start- test is not equal Test -end</p>", wikiModel.render("start- {{ifeq|test|Test}} -end"));
+	}
+	
 	public void testTemplateCall3() {
 		// see method WikiTestModel#getRawWikiContent()
 		assertEquals("\n" + "<p>b) First: Test1 Second: c) First: sdfsf Second: klj </p>\n" + "", wikiModel.render("{{templ1\n"
 				+ " | a = Test1\n" + " | {{templ2|sdfsf|klj}} \n" + "}}\n" + ""));
+	}
+
+	public void testSwitch001() {
+		assertEquals("\n" + 
+				"<p>{{Templ1/ind&#38;}}</p>", wikiModel
+				.render("{{Templ1/{{ #switch: imperative  | ind | ind&}}}}"));
 	}
 	
 	public void testNonExistentTemplate() {
@@ -35,8 +49,6 @@ public class TemplateFilterTest extends FilterTestSupport {
 				.render("start-{{templ1|a=3|b}}-end start-{{templ2|sdfsf|klj}}-end"));
 	}
 
-	
-
 	public void testTemplateCall4() {
 		// see method WikiTestModel#getRawWikiContent() for template tl
 		assertEquals(
@@ -46,8 +58,7 @@ public class TemplateFilterTest extends FilterTestSupport {
 
 	public void testTemplateCall4a() {
 		// see method WikiTestModel#getRawWikiContent() for template tl
-		assertEquals("\n" + 
-				"<p>{{[[Template:{{{1}}}|{{{1}}}]]}}</p>", wikiModel.render("{{tl}}"));
+		assertEquals("\n" + "<p>{{[[Template:{{{1}}}|{{{1}}}]]}}</p>", wikiModel.render("{{tl}}"));
 	}
 
 	public void testTemplateCall5() {
@@ -71,8 +82,8 @@ public class TemplateFilterTest extends FilterTestSupport {
 	public void testTemplateParameter02() {
 		// see method WikiTestModel#getTemplateContent()
 		assertEquals(
-				"\n" + 
-				"<p>start- <i><a class=\"externallink\" href=\"http://www.etymonline.com/index.php?search=hello&#38;searchmode=none\" rel=\"nofollow\" title=\"http://www.etymonline.com/index.php?search=hello&#38;searchmode=none\">Online Etymology Dictionary</a></i>. -end</p>",
+				"\n"
+						+ "<p>start- <i><a class=\"externallink\" href=\"http://www.etymonline.com/index.php?search=hello&#38;searchmode=none\" rel=\"nofollow\" title=\"http://www.etymonline.com/index.php?search=hello&#38;searchmode=none\">Online Etymology Dictionary</a></i>. -end</p>",
 				wikiModel
 						.render("start- {{cite web|url=http://www.etymonline.com/index.php?search=hello&searchmode=none|title=Online Etymology Dictionary}} -end"));
 	}
@@ -92,10 +103,6 @@ public class TemplateFilterTest extends FilterTestSupport {
 		assertEquals("\n" + "<p>start- A is not equal B -end</p>", wikiModel.render("start- {{ifeq|A|B}} -end"));
 	}
 
-	public void testTemplate06() {
-		assertEquals("\n" + "<p>start- 5.0 equals +5 -end</p>", wikiModel.render("start- {{ifeq|5.0|+5}} -end"));
-	}
-
 	public void testTemplate07() {
 		assertEquals("\n" + "<p>start- 5.001 is not equal +5 -end</p>", wikiModel.render("start- {{ifeq|5.001|+5}} -end"));
 	}
@@ -104,9 +111,6 @@ public class TemplateFilterTest extends FilterTestSupport {
 		assertEquals("\n" + "<p>start- test equals test -end</p>", wikiModel.render("start- {{ifeq|test|test}} -end"));
 	}
 
-	public void testTemplate09() {
-		assertEquals("\n" + "<p>start- test is not equal Test -end</p>", wikiModel.render("start- {{ifeq|test|Test}} -end"));
-	}
 
 	public void testTemplate10() {
 		assertEquals("", wikiModel.render("{{{x| }}}"));
@@ -152,30 +156,30 @@ public class TemplateFilterTest extends FilterTestSupport {
 	public void testTemplateParameter13() {
 		// see method WikiTestModel#getTemplateContent()
 		assertEquals(
-				"\n" + 
-				"<div style=\"page-break-inside: avoid;\">\n" + 
-				"<table class=\"wikitable\">\n" + 
-				"<caption>Versionsgeschichte von JavaScript<sup id=\"_ref-1\" class=\"reference\"><a href=\"#_note-1\" title=\"\">[1]</a></sup></caption>\n" + 
-				"<tr>\n" + 
-				"<th>Version </th>\n" + 
-				"<th>Release </th>\n" + 
-				"<th>Entsprechung </th>\n" + 
-				"<th>Netscape Navigator </th>\n" + 
-				"<th>Mozilla Firefox </th>\n" + 
-				"<th>Internet Explorer </th>\n" + 
-				"<th>Opera </th>\n" + 
-				"<th>Safari </th>\n" + 
-				"<th>Google Chrome</th></tr></table></div>\n" + 
-				"<pre /><ol class=\"references\">\n" + 
-				"<li id=\"_note-1\"><b><a href=\"#_ref-1\" title=\"\">&#8593;</a></b> John Resig. <i><a class=\"externallink\" href=\"http://ejohn.org/blog/versions-of-javascript\" rel=\"nofollow\" title=\"http://ejohn.org/blog/versions-of-javascript\">Versions of JavaScript</a></i>. Ejohn.org. Abgerufen am {{FormatDate}}.</li></ol>",
+				"\n"
+						+ "<div style=\"page-break-inside: avoid;\">\n"
+						+ "<table class=\"wikitable\">\n"
+						+ "<caption>Versionsgeschichte von JavaScript<sup id=\"_ref-1\" class=\"reference\"><a href=\"#_note-1\" title=\"\">[1]</a></sup></caption>\n"
+						+ "<tr>\n"
+						+ "<th>Version </th>\n"
+						+ "<th>Release </th>\n"
+						+ "<th>Entsprechung </th>\n"
+						+ "<th>Netscape Navigator </th>\n"
+						+ "<th>Mozilla Firefox </th>\n"
+						+ "<th>Internet Explorer </th>\n"
+						+ "<th>Opera </th>\n"
+						+ "<th>Safari </th>\n"
+						+ "<th>Google Chrome</th></tr></table></div>\n"
+						+ "<pre /><ol class=\"references\">\n"
+						+ "<li id=\"_note-1\"><b><a href=\"#_ref-1\" title=\"\">&#8593;</a></b> John Resig. <i><a class=\"externallink\" href=\"http://ejohn.org/blog/versions-of-javascript\" rel=\"nofollow\" title=\"http://ejohn.org/blog/versions-of-javascript\">Versions of JavaScript</a></i>. Ejohn.org. Abgerufen am {{FormatDate}}.</li></ol>",
 				wikiModel
-						.render("{| class=\"wikitable\"\n" + 
-								"|+Versionsgeschichte von JavaScript<ref>{{cite web|author=John Resig |url=http://ejohn.org/blog/versions-of-javascript |title=Versions of JavaScript |publisher=Ejohn.org |date= |accessdate=2009-05-19}}</ref>\n" + 
-								"|-\n" + 
-								"! Version !! Release !! Entsprechung !! Netscape Navigator !! Mozilla Firefox !! Internet Explorer !! Opera !! Safari !! Google Chrome\n" +
-								"|}\n" +
-								" <references/>\n"));
+						.render("{| class=\"wikitable\"\n"
+								+ "|+Versionsgeschichte von JavaScript<ref>{{cite web|author=John Resig |url=http://ejohn.org/blog/versions-of-javascript |title=Versions of JavaScript |publisher=Ejohn.org |date= |accessdate=2009-05-19}}</ref>\n"
+								+ "|-\n"
+								+ "! Version !! Release !! Entsprechung !! Netscape Navigator !! Mozilla Firefox !! Internet Explorer !! Opera !! Safari !! Google Chrome\n"
+								+ "|}\n" + " <references/>\n"));
 	}
+
 	// private final String TEST_STRING_01 =
 	// "[[Category:Interwiki templates|wikipedia]]\n" +
 	// "[[zh:Template:Wikipedia]]\n"
@@ -294,62 +298,58 @@ public class TemplateFilterTest extends FilterTestSupport {
 
 	public void testNavbox() {
 		assertEquals(
-				"\n" + 
-				"<table cellspacing=\"0\" class=\"navbox\" style=\";\">\n" + 
-				"\n" + 
-				"<tr>\n" + 
-				"\n" + 
-				"<td style=\"padding:2px;\">\n" + 
-				"<table cellspacing=\"0\" class=\"nowraplinks collapsible autocollapse \" style=\"width:100%;background:transparent;color:inherit;;\">\n" + 
-				"\n" + 
-				"<tr>\n" + 
-				"\n" + 
-				"<th class=\"navbox-title\" colspan=\"2\" style=\";background: #EEDD82\">\n" + 
-				"\n" + 
-				"<div style=\"float:left; width:6em;text-align:left;\">\n" + 
-				"<div class=\"noprint plainlinksneverexpand\" style=\"background-color:transparent; padding:0; white-space:nowrap; font-weight:normal; font-size:xx-small; ;background: #EEDD82;border:none;;  \"><a href=\"http://www.bliki.info/wiki/Template:AcademyAwardBestActor_1981-2000\" title=\"Template:AcademyAwardBestActor 1981-2000\"><span style=\";background: #EEDD82;border:none;;\" title=\"View this template\">v</span></a> <span style=\"font-size:80%;\">•</span> <a href=\"http://www.bliki.info/wiki/Template_talk:AcademyAwardBestActor_1981-2000\" title=\"Template talk:AcademyAwardBestActor 1981-2000\"><span style=\"color:#002bb8;;background: #EEDD82;border:none;;\" title=\"Discussion about this template\">d</span></a> <span style=\"font-size:80%;\">•</span> <a class=\"externallink\" href=\"http://en.wikipedia.org/w/index.php?title=Template%3AAcademyAwardBestActor+1981-2000&#38;action=edit\" rel=\"nofollow\" title=\"http://en.wikipedia.org/w/index.php?title=Template%3AAcademyAwardBestActor+1981-2000&#38;action=edit\"><span style=\"color:#002bb8;;background: #EEDD82;border:none;;\" title=\"You can edit this template. Please use the preview button before saving.\">e</span></a></div></div><span style=\"font-size:110%;\"><a href=\"http://www.bliki.info/wiki/Academy_Award_for_Best_Actor\" title=\"Academy Award for Best Actor\">Academy Award for</a> <a href=\"http://www.bliki.info/wiki/Academy_Award_for_Best_Actor#1980s\" title=\"Academy Award for Best Actor\">Best Actor</a></span>\n" + 
-				"</th>\n" + 
-				"</tr>\n" + 
-				"<tr style=\"height:2px;\">\n" + 
-				"\n" + 
-				"<td />\n" + 
-				"</tr>\n" + 
-				"<tr>\n" + 
-				"\n" + 
-				"<td class=\"navbox-list navbox-odd\" colspan=\"2\" style=\"width:100%;padding:0px;;;\">\n" + 
-				"<div style=\"padding:0em 0.25em\">\n" + 
-				"<div>\n" + 
-				"<p><span style=\"white-space:nowrap;\"><a href=\"http://www.bliki.info/wiki/Henry_Fonda\" title=\"Henry Fonda\">Henry Fonda</a> (1981)</span><span style=\"font-weight:bold;\"> ·</span> \n" + 
-				"<span style=\"white-space:nowrap;\"><a href=\"http://www.bliki.info/wiki/Ben_Kingsley\" title=\"Ben Kingsley\">Ben Kingsley</a> (1982)</span><span style=\"font-weight:bold;\"> ·</span> \n" + 
-				"<span style=\"white-space:nowrap;\"><a href=\"http://www.bliki.info/wiki/Robert_Duvall\" title=\"Robert Duvall\">Robert Duvall</a> (1983)</span><span style=\"font-weight:bold;\"> ·</span> \n" + 
-				"<span style=\"white-space:nowrap;\"><a href=\"http://www.bliki.info/wiki/F._Murray_Abraham\" title=\"F. Murray Abraham\">F. Murray Abraham</a> (1984)</span><span style=\"font-weight:bold;\"> ·</span> \n" + 
-				"<span style=\"white-space:nowrap;\"><a href=\"http://www.bliki.info/wiki/William_Hurt\" title=\"William Hurt\">William Hurt</a> (1985)</span><span style=\"font-weight:bold;\"> ·</span> \n" + 
-				"<span style=\"white-space:nowrap;\"><a href=\"http://www.bliki.info/wiki/Paul_Newman\" title=\"Paul Newman\">Paul Newman</a> (1986)</span><span style=\"font-weight:bold;\"> ·</span> \n" + 
-				"<span style=\"white-space:nowrap;\"><a href=\"http://www.bliki.info/wiki/Michael_Douglas\" title=\"Michael Douglas\">Michael Douglas</a> (1987)</span><span style=\"font-weight:bold;\"> ·</span> \n" + 
-				"<span style=\"white-space:nowrap;\"><a href=\"http://www.bliki.info/wiki/Dustin_Hoffman\" title=\"Dustin Hoffman\">Dustin Hoffman</a> (1988)</span><span style=\"font-weight:bold;\"> ·</span> \n" + 
-				"<span style=\"white-space:nowrap;\"><a href=\"http://www.bliki.info/wiki/Daniel_Day-Lewis\" title=\"Daniel Day-Lewis\">Daniel Day-Lewis</a> (1989)</span><span style=\"font-weight:bold;\"> ·</span> \n" + 
-				"<span style=\"white-space:nowrap;\"><a href=\"http://www.bliki.info/wiki/Jeremy_Irons\" title=\"Jeremy Irons\">Jeremy Irons</a> (1990)</span><span style=\"font-weight:bold;\"> ·</span> \n" + 
-				"<span style=\"white-space:nowrap;\"><a href=\"http://www.bliki.info/wiki/Anthony_Hopkins\" title=\"Anthony Hopkins\">Anthony Hopkins</a> (1991)</span><span style=\"font-weight:bold;\"> ·</span> \n" + 
-				"<span style=\"white-space:nowrap;\"><a href=\"http://www.bliki.info/wiki/Al_Pacino\" title=\"Al Pacino\">Al Pacino</a> (1992)</span><span style=\"font-weight:bold;\"> ·</span> \n" + 
-				"<span style=\"white-space:nowrap;\"><a href=\"http://www.bliki.info/wiki/Tom_Hanks\" title=\"Tom Hanks\">Tom Hanks</a> (1993)</span><span style=\"font-weight:bold;\"> ·</span> \n" + 
-				"<span style=\"white-space:nowrap;\"><a href=\"http://www.bliki.info/wiki/Tom_Hanks\" title=\"Tom Hanks\">Tom Hanks</a> (1994)</span><span style=\"font-weight:bold;\"> ·</span> \n" + 
-				"<span style=\"white-space:nowrap;\"><a href=\"http://www.bliki.info/wiki/Nicolas_Cage\" title=\"Nicolas Cage\">Nicolas Cage</a> (1995)</span><span style=\"font-weight:bold;\"> ·</span> \n" + 
-				"<span style=\"white-space:nowrap;\"><a href=\"http://www.bliki.info/wiki/Geoffrey_Rush\" title=\"Geoffrey Rush\">Geoffrey Rush</a> (1996)</span><span style=\"font-weight:bold;\"> ·</span> \n" + 
-				"<span style=\"white-space:nowrap;\"><a href=\"http://www.bliki.info/wiki/Jack_Nicholson\" title=\"Jack Nicholson\">Jack Nicholson</a> (1997)</span><span style=\"font-weight:bold;\"> ·</span> \n" + 
-				"<span style=\"white-space:nowrap;\"><a href=\"http://www.bliki.info/wiki/Roberto_Benigni\" title=\"Roberto Benigni\">Roberto Benigni</a> (1998)</span><span style=\"font-weight:bold;\"> ·</span> \n" + 
-				"<span style=\"white-space:nowrap;\"><a href=\"http://www.bliki.info/wiki/Kevin_Spacey\" title=\"Kevin Spacey\">Kevin Spacey</a> (1999)</span><span style=\"font-weight:bold;\"> ·</span> \n" + 
-				"<span style=\"white-space:nowrap;\"><a href=\"http://www.bliki.info/wiki/Russell_Crowe\" title=\"Russell Crowe\">Russell Crowe</a> (2000)</span></p><hr/>\n" + 
-				"<p><span style=\"white-space:nowrap;\"><a href=\"http://www.bliki.info/wiki/Template:Academy_Award_Best_Actor\" title=\"Template:Academy Award Best Actor\">Complete List</a></span><span style=\"font-weight:bold;\"> ·</span> \n" + 
-				"<span style=\"white-space:nowrap;\"><a href=\"http://www.bliki.info/wiki/Template:AcademyAwardBestActor_1927-1940\" title=\"Template:AcademyAwardBestActor 1927-1940\">(1928–1940)</a></span><span style=\"font-weight:bold;\"> ·</span> \n" + 
-				"<span style=\"white-space:nowrap;\"><a href=\"http://www.bliki.info/wiki/Template:AcademyAwardBestActor_1941-1960\" title=\"Template:AcademyAwardBestActor 1941-1960\">(1941–1960)</a></span><span style=\"font-weight:bold;\"> ·</span> \n" + 
-				"<span style=\"white-space:nowrap;\"><a href=\"http://www.bliki.info/wiki/Template:AcademyAwardBestActor_1961-1980\" title=\"Template:AcademyAwardBestActor 1961-1980\">(1961–1980)</a></span><span style=\"font-weight:bold;\"> ·</span> \n" + 
-				"<span style=\"white-space:nowrap;\"><a href=\"http://www.bliki.info/wiki/Template:AcademyAwardBestActor_1981-2000\" title=\"Template:AcademyAwardBestActor 1981-2000\"><b>(1981–2000)</b></a></span><span style=\"font-weight:bold;\"> ·</span> \n" + 
-				"<span style=\"white-space:nowrap;\"><a href=\"http://www.bliki.info/wiki/Template:AcademyAwardBestActor_2001-2020\" title=\"Template:AcademyAwardBestActor 2001-2020\">(2001-present)</a></span>\n" + 
-				"</p></div></div></td>\n" + 
-				"</tr>\n" + 
-				"</table></td>\n" + 
-				"</tr>\n" + 
-				"</table>", wikiModel.render(NAVBOX_STRING));
+				"\n"
+						+ "<table cellspacing=\"0\" class=\"navbox\" style=\";\">\n"
+						+ "\n"
+						+ "<tr>\n"
+						+ "\n"
+						+ "<td style=\"padding:2px;\">\n"
+						+ "<table cellspacing=\"0\" class=\"nowraplinks collapsible autocollapse \" style=\"width:100%;background:transparent;color:inherit;;\">\n"
+						+ "\n"
+						+ "<tr>\n"
+						+ "\n"
+						+ "<th class=\"navbox-title\" colspan=\"2\" style=\";background: #EEDD82\">\n"
+						+ "\n"
+						+ "<div style=\"float:left; width:6em;text-align:left;\">\n"
+						+ "<div class=\"noprint plainlinksneverexpand\" style=\"background-color:transparent; padding:0; white-space:nowrap; font-weight:normal; font-size:xx-small; ;background: #EEDD82;border:none;;  \"><a href=\"http://www.bliki.info/wiki/Template:AcademyAwardBestActor_1981-2000\" title=\"Template:AcademyAwardBestActor 1981-2000\"><span style=\";background: #EEDD82;border:none;;\" title=\"View this template\">v</span></a> <span style=\"font-size:80%;\">•</span> <a href=\"http://www.bliki.info/wiki/Template_talk:AcademyAwardBestActor_1981-2000\" title=\"Template talk:AcademyAwardBestActor 1981-2000\"><span style=\"color:#002bb8;;background: #EEDD82;border:none;;\" title=\"Discussion about this template\">d</span></a> <span style=\"font-size:80%;\">•</span> <a class=\"externallink\" href=\"http://en.wikipedia.org/w/index.php?title=Template%3AAcademyAwardBestActor+1981-2000&#38;action=edit\" rel=\"nofollow\" title=\"http://en.wikipedia.org/w/index.php?title=Template%3AAcademyAwardBestActor+1981-2000&#38;action=edit\"><span style=\"color:#002bb8;;background: #EEDD82;border:none;;\" title=\"You can edit this template. Please use the preview button before saving.\">e</span></a></div></div><span style=\"font-size:110%;\"><a href=\"http://www.bliki.info/wiki/Academy_Award_for_Best_Actor\" title=\"Academy Award for Best Actor\">Academy Award for</a> <a href=\"http://www.bliki.info/wiki/Academy_Award_for_Best_Actor#1980s\" title=\"Academy Award for Best Actor\">Best Actor</a></span>\n"
+						+ "</th>\n"
+						+ "</tr>\n"
+						+ "<tr style=\"height:2px;\">\n"
+						+ "\n"
+						+ "<td />\n"
+						+ "</tr>\n"
+						+ "<tr>\n"
+						+ "\n"
+						+ "<td class=\"navbox-list navbox-odd\" colspan=\"2\" style=\"width:100%;padding:0px;;;\">\n"
+						+ "<div style=\"padding:0em 0.25em\">\n"
+						+ "<div>\n"
+						+ "<p><span style=\"white-space:nowrap;\"><a href=\"http://www.bliki.info/wiki/Henry_Fonda\" title=\"Henry Fonda\">Henry Fonda</a> (1981)</span><span style=\"font-weight:bold;\"> ·</span> \n"
+						+ "<span style=\"white-space:nowrap;\"><a href=\"http://www.bliki.info/wiki/Ben_Kingsley\" title=\"Ben Kingsley\">Ben Kingsley</a> (1982)</span><span style=\"font-weight:bold;\"> ·</span> \n"
+						+ "<span style=\"white-space:nowrap;\"><a href=\"http://www.bliki.info/wiki/Robert_Duvall\" title=\"Robert Duvall\">Robert Duvall</a> (1983)</span><span style=\"font-weight:bold;\"> ·</span> \n"
+						+ "<span style=\"white-space:nowrap;\"><a href=\"http://www.bliki.info/wiki/F._Murray_Abraham\" title=\"F. Murray Abraham\">F. Murray Abraham</a> (1984)</span><span style=\"font-weight:bold;\"> ·</span> \n"
+						+ "<span style=\"white-space:nowrap;\"><a href=\"http://www.bliki.info/wiki/William_Hurt\" title=\"William Hurt\">William Hurt</a> (1985)</span><span style=\"font-weight:bold;\"> ·</span> \n"
+						+ "<span style=\"white-space:nowrap;\"><a href=\"http://www.bliki.info/wiki/Paul_Newman\" title=\"Paul Newman\">Paul Newman</a> (1986)</span><span style=\"font-weight:bold;\"> ·</span> \n"
+						+ "<span style=\"white-space:nowrap;\"><a href=\"http://www.bliki.info/wiki/Michael_Douglas\" title=\"Michael Douglas\">Michael Douglas</a> (1987)</span><span style=\"font-weight:bold;\"> ·</span> \n"
+						+ "<span style=\"white-space:nowrap;\"><a href=\"http://www.bliki.info/wiki/Dustin_Hoffman\" title=\"Dustin Hoffman\">Dustin Hoffman</a> (1988)</span><span style=\"font-weight:bold;\"> ·</span> \n"
+						+ "<span style=\"white-space:nowrap;\"><a href=\"http://www.bliki.info/wiki/Daniel_Day-Lewis\" title=\"Daniel Day-Lewis\">Daniel Day-Lewis</a> (1989)</span><span style=\"font-weight:bold;\"> ·</span> \n"
+						+ "<span style=\"white-space:nowrap;\"><a href=\"http://www.bliki.info/wiki/Jeremy_Irons\" title=\"Jeremy Irons\">Jeremy Irons</a> (1990)</span><span style=\"font-weight:bold;\"> ·</span> \n"
+						+ "<span style=\"white-space:nowrap;\"><a href=\"http://www.bliki.info/wiki/Anthony_Hopkins\" title=\"Anthony Hopkins\">Anthony Hopkins</a> (1991)</span><span style=\"font-weight:bold;\"> ·</span> \n"
+						+ "<span style=\"white-space:nowrap;\"><a href=\"http://www.bliki.info/wiki/Al_Pacino\" title=\"Al Pacino\">Al Pacino</a> (1992)</span><span style=\"font-weight:bold;\"> ·</span> \n"
+						+ "<span style=\"white-space:nowrap;\"><a href=\"http://www.bliki.info/wiki/Tom_Hanks\" title=\"Tom Hanks\">Tom Hanks</a> (1993)</span><span style=\"font-weight:bold;\"> ·</span> \n"
+						+ "<span style=\"white-space:nowrap;\"><a href=\"http://www.bliki.info/wiki/Tom_Hanks\" title=\"Tom Hanks\">Tom Hanks</a> (1994)</span><span style=\"font-weight:bold;\"> ·</span> \n"
+						+ "<span style=\"white-space:nowrap;\"><a href=\"http://www.bliki.info/wiki/Nicolas_Cage\" title=\"Nicolas Cage\">Nicolas Cage</a> (1995)</span><span style=\"font-weight:bold;\"> ·</span> \n"
+						+ "<span style=\"white-space:nowrap;\"><a href=\"http://www.bliki.info/wiki/Geoffrey_Rush\" title=\"Geoffrey Rush\">Geoffrey Rush</a> (1996)</span><span style=\"font-weight:bold;\"> ·</span> \n"
+						+ "<span style=\"white-space:nowrap;\"><a href=\"http://www.bliki.info/wiki/Jack_Nicholson\" title=\"Jack Nicholson\">Jack Nicholson</a> (1997)</span><span style=\"font-weight:bold;\"> ·</span> \n"
+						+ "<span style=\"white-space:nowrap;\"><a href=\"http://www.bliki.info/wiki/Roberto_Benigni\" title=\"Roberto Benigni\">Roberto Benigni</a> (1998)</span><span style=\"font-weight:bold;\"> ·</span> \n"
+						+ "<span style=\"white-space:nowrap;\"><a href=\"http://www.bliki.info/wiki/Kevin_Spacey\" title=\"Kevin Spacey\">Kevin Spacey</a> (1999)</span><span style=\"font-weight:bold;\"> ·</span> \n"
+						+ "<span style=\"white-space:nowrap;\"><a href=\"http://www.bliki.info/wiki/Russell_Crowe\" title=\"Russell Crowe\">Russell Crowe</a> (2000)</span></p><hr/>\n"
+						+ "<p><span style=\"white-space:nowrap;\"><a href=\"http://www.bliki.info/wiki/Template:Academy_Award_Best_Actor\" title=\"Template:Academy Award Best Actor\">Complete List</a></span><span style=\"font-weight:bold;\"> ·</span> \n"
+						+ "<span style=\"white-space:nowrap;\"><a href=\"http://www.bliki.info/wiki/Template:AcademyAwardBestActor_1927-1940\" title=\"Template:AcademyAwardBestActor 1927-1940\">(1928–1940)</a></span><span style=\"font-weight:bold;\"> ·</span> \n"
+						+ "<span style=\"white-space:nowrap;\"><a href=\"http://www.bliki.info/wiki/Template:AcademyAwardBestActor_1941-1960\" title=\"Template:AcademyAwardBestActor 1941-1960\">(1941–1960)</a></span><span style=\"font-weight:bold;\"> ·</span> \n"
+						+ "<span style=\"white-space:nowrap;\"><a href=\"http://www.bliki.info/wiki/Template:AcademyAwardBestActor_1961-1980\" title=\"Template:AcademyAwardBestActor 1961-1980\">(1961–1980)</a></span><span style=\"font-weight:bold;\"> ·</span> \n"
+						+ "<span style=\"white-space:nowrap;\"><a href=\"http://www.bliki.info/wiki/Template:AcademyAwardBestActor_1981-2000\" title=\"Template:AcademyAwardBestActor 1981-2000\"><b>(1981–2000)</b></a></span><span style=\"font-weight:bold;\"> ·</span> \n"
+						+ "<span style=\"white-space:nowrap;\"><a href=\"http://www.bliki.info/wiki/Template:AcademyAwardBestActor_2001-2020\" title=\"Template:AcademyAwardBestActor 2001-2020\">(2001-present)</a></span>\n"
+						+ "</p></div></div></td>\n" + "</tr>\n" + "</table></td>\n" + "</tr>\n" + "</table>", wikiModel.render(NAVBOX_STRING));
 	}
 
 	public void test11() {
@@ -419,255 +419,252 @@ public class TemplateFilterTest extends FilterTestSupport {
 	}
 
 	public void testInfoboxProgrammiersprachen() {
-		assertEquals("\n" + 
-				"<div style=\"page-break-inside: avoid;\">\n" + 
-				"<table class=\"prettytable float-right\" style=\"font-size:90%; width:21em;\">\n" + 
-				"<tr class=\"hintergrundfarbe6\">\n" + 
-				"<th colspan=\"2\" style=\"font-size:105%; text-align: center;\"><big>JavaScript</big></th></tr>\n" + 
-				"<tr valign=\"top\">\n" + 
-				"<td><b><a href=\"http://www.bliki.info/wiki/Programmierparadigma\" title=\"Programmierparadigma\">Paradigmen</a>:</b>\n" + 
-				" </td>\n" + 
-				"<td>multiparadigmatisch</td></tr>\n" + 
-				"<tr valign=\"top\">\n" + 
-				"<td><b>Erscheinungsjahr:</b>\n" + 
-				" </td>\n" + 
-				"<td>1995</td></tr>\n" + 
-				"<tr valign=\"top\">\n" + 
-				"<td><b>Entwickler:</b>\n" + 
-				" </td>\n" + 
-				"<td><a href=\"http://www.bliki.info/wiki/Brendan_Eich\" title=\"Brendan Eich\">Brendan Eich</a></td></tr>\n" + 
-				"<tr valign=\"top\">\n" + 
-				"<td><b>Aktuelle <a href=\"http://www.bliki.info/wiki/Versionierung\" title=\"Versionierung\">Version</a>:</b>\n" + 
-				" </td>\n" + 
-				"<td style=\"white-space:nowrap;\">1.8  <small>(2008)</small></td></tr>\n" + 
-				"<tr valign=\"top\">\n" + 
-				"<td><b><a href=\"http://www.bliki.info/wiki/Typisierung_(Informatik)\" title=\"Typisierung (Informatik)\">Typisierung</a>:</b>\n" + 
-				" </td>\n" + 
-				"<td><a href=\"http://www.bliki.info/wiki/Schwache_Typisierung\" title=\"Schwache Typisierung\">schwach</a>, <a href=\"http://www.bliki.info/wiki/Dynamische_Typisierung\" title=\"Dynamische Typisierung\">dynamisch</a>, <a href=\"http://www.bliki.info/wiki/Duck_Typing\" title=\"Duck Typing\">duck</a></td></tr>\n" + 
-				"<tr valign=\"top\">\n" + 
-				"<td><b>wichtige <a href=\"http://www.bliki.info/wiki/Implementierung\" title=\"Implementierung\">Implementierungen</a>:</b>\n" + 
-				" </td>\n" + 
-				"<td><a href=\"http://www.bliki.info/wiki/SpiderMonkey\" title=\"SpiderMonkey\">SpiderMonkey</a>, <a href=\"http://www.bliki.info/wiki/Rhino\" title=\"Rhino\">Rhino</a>, <a href=\"http://www.bliki.info/wiki/SquirrelFish\" title=\"SquirrelFish\">SquirrelFish</a>, <a href=\"http://www.bliki.info/wiki/V8_(JavaScript-Engine)\" title=\"V8 (JavaScript-Engine)\">V8</a></td></tr>\n" + 
-				"<tr valign=\"top\">\n" + 
-				"<td><b>Einflüsse:</b>\n" + 
-				" </td>\n" + 
-				"<td><a href=\"http://www.bliki.info/wiki/Self_(Programmiersprache)\" title=\"Self (Programmiersprache)\">Self</a>, <a href=\"http://www.bliki.info/wiki/C_(Programmiersprache)\" title=\"C (Programmiersprache)\">C</a>, <a href=\"http://www.bliki.info/wiki/Scheme\" title=\"Scheme\">Scheme</a>, <a href=\"http://www.bliki.info/wiki/Perl_(Programmiersprache)\" title=\"Perl (Programmiersprache)\">Perl</a>, <a href=\"http://www.bliki.info/wiki/Python_(Programmiersprache)\" title=\"Python (Programmiersprache)\">Python</a>, <a href=\"http://www.bliki.info/wiki/Java_(Programmiersprache)\" title=\"Java (Programmiersprache)\">Java</a></td></tr></table></div>", 
-				wikiModel.render("{{Infobox Programmiersprache" + 
-				"|Name = JavaScript" + 
-				"|Beschreibung = Skriptsprache" + 
-				"|Paradigma = multiparadigmatisch" + 
-				"|Erscheinungsjahr = 1995" + 
-				"|Entwickler = [[Brendan Eich]]" + 
-				"|AktuelleVersion = 1.8" + 
-				"|AktuelleVersionFreigabeDatum = 2008" + 
-				"|Typisierung = [[Schwache Typisierung|schwach]], [[Dynamische Typisierung|dynamisch]], [[Duck Typing|duck]]" + 
-				"|Implementierung = [[SpiderMonkey]], [[Rhino]], [[SquirrelFish]], [[V8 (JavaScript-Engine)|V8]]" + 
-				"|Beeinflusst_von = [[Self (Programmiersprache)|Self]], [[C (Programmiersprache)|C]], [[Scheme]], [[Perl (Programmiersprache)|Perl]], [[Python (Programmiersprache)|Python]], [[Java (Programmiersprache)|Java]]" + 
-				"}}"));
+		assertEquals(
+				"\n"
+						+ "<div style=\"page-break-inside: avoid;\">\n"
+						+ "<table class=\"prettytable float-right\" style=\"font-size:90%; width:21em;\">\n"
+						+ "<tr class=\"hintergrundfarbe6\">\n"
+						+ "<th colspan=\"2\" style=\"font-size:105%; text-align: center;\"><big>JavaScript</big></th></tr>\n"
+						+ "<tr valign=\"top\">\n"
+						+ "<td><b><a href=\"http://www.bliki.info/wiki/Programmierparadigma\" title=\"Programmierparadigma\">Paradigmen</a>:</b>\n"
+						+ " </td>\n"
+						+ "<td>multiparadigmatisch</td></tr>\n"
+						+ "<tr valign=\"top\">\n"
+						+ "<td><b>Erscheinungsjahr:</b>\n"
+						+ " </td>\n"
+						+ "<td>1995</td></tr>\n"
+						+ "<tr valign=\"top\">\n"
+						+ "<td><b>Entwickler:</b>\n"
+						+ " </td>\n"
+						+ "<td><a href=\"http://www.bliki.info/wiki/Brendan_Eich\" title=\"Brendan Eich\">Brendan Eich</a></td></tr>\n"
+						+ "<tr valign=\"top\">\n"
+						+ "<td><b>Aktuelle <a href=\"http://www.bliki.info/wiki/Versionierung\" title=\"Versionierung\">Version</a>:</b>\n"
+						+ " </td>\n"
+						+ "<td style=\"white-space:nowrap;\">1.8  <small>(2008)</small></td></tr>\n"
+						+ "<tr valign=\"top\">\n"
+						+ "<td><b><a href=\"http://www.bliki.info/wiki/Typisierung_(Informatik)\" title=\"Typisierung (Informatik)\">Typisierung</a>:</b>\n"
+						+ " </td>\n"
+						+ "<td><a href=\"http://www.bliki.info/wiki/Schwache_Typisierung\" title=\"Schwache Typisierung\">schwach</a>, <a href=\"http://www.bliki.info/wiki/Dynamische_Typisierung\" title=\"Dynamische Typisierung\">dynamisch</a>, <a href=\"http://www.bliki.info/wiki/Duck_Typing\" title=\"Duck Typing\">duck</a></td></tr>\n"
+						+ "<tr valign=\"top\">\n"
+						+ "<td><b>wichtige <a href=\"http://www.bliki.info/wiki/Implementierung\" title=\"Implementierung\">Implementierungen</a>:</b>\n"
+						+ " </td>\n"
+						+ "<td><a href=\"http://www.bliki.info/wiki/SpiderMonkey\" title=\"SpiderMonkey\">SpiderMonkey</a>, <a href=\"http://www.bliki.info/wiki/Rhino\" title=\"Rhino\">Rhino</a>, <a href=\"http://www.bliki.info/wiki/SquirrelFish\" title=\"SquirrelFish\">SquirrelFish</a>, <a href=\"http://www.bliki.info/wiki/V8_(JavaScript-Engine)\" title=\"V8 (JavaScript-Engine)\">V8</a></td></tr>\n"
+						+ "<tr valign=\"top\">\n"
+						+ "<td><b>Einflüsse:</b>\n"
+						+ " </td>\n"
+						+ "<td><a href=\"http://www.bliki.info/wiki/Self_(Programmiersprache)\" title=\"Self (Programmiersprache)\">Self</a>, <a href=\"http://www.bliki.info/wiki/C_(Programmiersprache)\" title=\"C (Programmiersprache)\">C</a>, <a href=\"http://www.bliki.info/wiki/Scheme\" title=\"Scheme\">Scheme</a>, <a href=\"http://www.bliki.info/wiki/Perl_(Programmiersprache)\" title=\"Perl (Programmiersprache)\">Perl</a>, <a href=\"http://www.bliki.info/wiki/Python_(Programmiersprache)\" title=\"Python (Programmiersprache)\">Python</a>, <a href=\"http://www.bliki.info/wiki/Java_(Programmiersprache)\" title=\"Java (Programmiersprache)\">Java</a></td></tr></table></div>",
+				wikiModel
+						.render("{{Infobox Programmiersprache"
+								+ "|Name = JavaScript"
+								+ "|Beschreibung = Skriptsprache"
+								+ "|Paradigma = multiparadigmatisch"
+								+ "|Erscheinungsjahr = 1995"
+								+ "|Entwickler = [[Brendan Eich]]"
+								+ "|AktuelleVersion = 1.8"
+								+ "|AktuelleVersionFreigabeDatum = 2008"
+								+ "|Typisierung = [[Schwache Typisierung|schwach]], [[Dynamische Typisierung|dynamisch]], [[Duck Typing|duck]]"
+								+ "|Implementierung = [[SpiderMonkey]], [[Rhino]], [[SquirrelFish]], [[V8 (JavaScript-Engine)|V8]]"
+								+ "|Beeinflusst_von = [[Self (Programmiersprache)|Self]], [[C (Programmiersprache)|C]], [[Scheme]], [[Perl (Programmiersprache)|Perl]], [[Python (Programmiersprache)|Python]], [[Java (Programmiersprache)|Java]]"
+								+ "}}"));
 	}
-	
+
 	public void testProgrammiersprachen() {
-		assertEquals("<a id=\"Versionsgeschichte\" name=\"Versionsgeschichte\"></a><h3>Versionsgeschichte</h3>\n" + 
-				"\n" + 
-				"<div style=\"page-break-inside: avoid;\">\n" + 
-				"<table class=\"wikitable\">\n" + 
-				"<caption>Versionsgeschichte von JavaScript<sup id=\"_ref-1\" class=\"reference\"><a href=\"#_note-1\" title=\"\">[1]</a></sup></caption>\n" + 
-				"<tr>\n" + 
-				"<th>Version </th>\n" + 
-				"<th>Release </th>\n" + 
-				"<th>Entsprechung </th>\n" + 
-				"<th>Netscape Navigator </th>\n" + 
-				"<th>Mozilla Firefox </th>\n" + 
-				"<th>Internet Explorer </th>\n" + 
-				"<th>Opera </th>\n" + 
-				"<th>Safari </th>\n" + 
-				"<th>Google Chrome </th></tr>\n" + 
-				"<tr>\n" + 
-				"<td>1.0 </td>\n" + 
-				"<td>März 1996 </td>\n" + 
-				"<td />\n" + 
-				"<td>2.0 </td>\n" + 
-				"<td />\n" + 
-				"<td>3.0 </td>\n" + 
-				"<td />\n" + 
-				"<td />\n" + 
-				"<td /></tr>\n" + 
-				"<tr>\n" + 
-				"<td>1.1 </td>\n" + 
-				"<td>August 1996 </td>\n" + 
-				"<td />\n" + 
-				"<td>3.0 </td>\n" + 
-				"<td />\n" + 
-				"<td />\n" + 
-				"<td />\n" + 
-				"<td />\n" + 
-				"<td /></tr>\n" + 
-				"<tr>\n" + 
-				"<td>1.2 </td>\n" + 
-				"<td>Juni 1997 </td>\n" + 
-				"<td />\n" + 
-				"<td>4.0-4.05 </td>\n" + 
-				"<td />\n" + 
-				"<td />\n" + 
-				"<td />\n" + 
-				"<td />\n" + 
-				"<td /></tr>\n" + 
-				"<tr>\n" + 
-				"<td>1.3 </td>\n" + 
-				"<td>Oktober 1998 </td>\n" + 
-				"<td>ECMA-262 1<sup>st</sup> edition / ECMA-262 2<sup>nd</sup> edition </td>\n" + 
-				"<td>4.06-4.7x </td>\n" + 
-				"<td />\n" + 
-				"<td>4.0 </td>\n" + 
-				"<td />\n" + 
-				"<td />\n" + 
-				"<td /></tr>\n" + 
-				"<tr>\n" + 
-				"<td>1.4 </td>\n" + 
-				"<td />\n" + 
-				"<td />\n" + 
-				"<td>Netscape Server </td>\n" + 
-				"<td />\n" + 
-				"<td />\n" + 
-				"<td />\n" + 
-				"<td />\n" + 
-				"<td /></tr>\n" + 
-				"<tr>\n" + 
-				"<td>1.5 </td>\n" + 
-				"<td>November 2000 </td>\n" + 
-				"<td>ECMA-262 3<sup>rd</sup> edition </td>\n" + 
-				"<td>6.0 </td>\n" + 
-				"<td>1.0</td>\n" + 
-				"<td>\n" + 
-				"\n" + 
-				"<ul>\n" + 
-				"<li>5.5 (JScript 5.5)</li>\n" + 
-				"<li>6 (JScript 5.6)</li>\n" + 
-				"<li>7 (JScript 5.7)</li>\n" + 
-				"<li>8 (JScript 6)</li></ul></td>\n" + 
-				"<td>\n" + 
-				"\n" + 
-				"<ul>\n" + 
-				"<li>6.0</li>\n" + 
-				"<li>7.0</li>\n" + 
-				"<li>8.0</li>\n" + 
-				"<li>9.0</li></ul></td>\n" + 
-				"<td />\n" + 
-				"<td /></tr>\n" + 
-				"<tr>\n" + 
-				"<td>1.6 </td>\n" + 
-				"<td>November 2005 </td>\n" + 
-				"<td>1.5 + Array extras + Array &#38; String generics + E4X </td>\n" + 
-				"<td />\n" + 
-				"<td>1.5 </td>\n" + 
-				"<td />\n" + 
-				"<td></td>\n" + 
-				"<td>\n" + 
-				"\n" + 
-				"<ul>\n" + 
-				"<li>3.0</li>\n" + 
-				"<li>3.1</li></ul></td>\n" + 
-				"<td /></tr>\n" + 
-				"<tr>\n" + 
-				"<td>1.7 </td>\n" + 
-				"<td>Oktober 2006 </td>\n" + 
-				"<td>1.6 + Pythonic generators + Iterators + let + destructuring assignments </td>\n" + 
-				"<td />\n" + 
-				"<td>2.0 </td>\n" + 
-				"<td />\n" + 
-				"<td></td>\n" + 
-				"<td>\n" + 
-				"\n" + 
-				"<ul>\n" + 
-				"<li>3.2</li>\n" + 
-				"<li>4.0</li></ul></td>\n" + 
-				"<td>1.0</td></tr>\n" + 
-				"<tr>\n" + 
-				"<td>1.8 </td>\n" + 
-				"<td>Juni 2008 </td>\n" + 
-				"<td>1.7 + Generator expressions + Expression closures </td>\n" + 
-				"<td />\n" + 
-				"<td>3.0 </td>\n" + 
-				"<td />\n" + 
-				"<td />\n" + 
-				"<td />\n" + 
-				"<td /></tr>\n" + 
-				"<tr>\n" + 
-				"<td>1.8.1 </td>\n" + 
-				"<td />\n" + 
-				"<td>1.8 + geringfügige Updates </td>\n" + 
-				"<td />\n" + 
-				"<td>3.5 </td>\n" + 
-				"<td />\n" + 
-				"<td />\n" + 
-				"<td />\n" + 
-				"<td /></tr>\n" + 
-				"<tr>\n" + 
-				"<td>1.9 </td>\n" + 
-				"<td />\n" + 
-				"<td>1.8.1 + ECMAScript 5 Compliance </td>\n" + 
-				"<td />\n" + 
-				"<td>4 </td>\n" + 
-				"<td />\n" + 
-				"<td />\n" + 
-				"<td />\n" + 
-				"<td /></tr></table></div>\n" + 
-				"<ol class=\"references\">\n" + 
-				"<li id=\"_note-1\"><b><a href=\"#_ref-1\" title=\"\">&#8593;</a></b> John Resig. <i><a class=\"externallink\" href=\"http://ejohn.org/blog/versions-of-javascript\" rel=\"nofollow\" title=\"http://ejohn.org/blog/versions-of-javascript\">Versions of JavaScript</a></i>. Ejohn.org. Abgerufen am {{FormatDate}}.</li></ol>", wikiModel.render("=== Versionsgeschichte ===\n"+
-				"{| class=\"wikitable\"\n" + 
-				"|+Versionsgeschichte von JavaScript<ref>{{cite web|author=John Resig |url=http://ejohn.org/blog/versions-of-javascript |title=Versions of JavaScript |publisher=Ejohn.org |date= |accessdate=2009-05-19}}</ref>\n" + 
-				"|-\n" + 
-				"! Version !! Release !! Entsprechung !! Netscape Navigator !! Mozilla Firefox !! Internet Explorer !! Opera !! Safari !! Google Chrome \n" + 
-				"|-\n" + 
-				"| 1.0 || März 1996 ||  || 2.0 ||  || 3.0 ||  || || \n" + 
-				"|-\n" + 
-				"| 1.1 || August 1996 ||  || 3.0 ||  ||  ||  || || \n" + 
-				"|-\n" + 
-				"| 1.2 || Juni 1997 ||  || 4.0-4.05 ||  ||  ||  || || \n" + 
-				"|-\n" + 
-				"| 1.3 || Oktober 1998 || ECMA-262 1<sup>st</sup> edition / ECMA-262 2<sup>nd</sup> edition || 4.06-4.7x ||  || 4.0 ||  || || \n" + 
-				"|-\n" + 
-				"| 1.4 ||  ||  || Netscape Server ||  ||  ||  || || \n" + 
-				"|-\n" + 
-				"| 1.5 || November 2000 || ECMA-262 3<sup>rd</sup> edition || 6.0 || 1.0\n" + 
-				"|\n" + 
-				"*5.5 (JScript 5.5)\n" + 
-				"*6 (JScript 5.6)\n" + 
-				"*7 (JScript 5.7)\n" + 
-				"*8 (JScript 6)\n" + 
-				"|\n" + 
-				"*6.0\n" + 
-				"*7.0\n" + 
-				"*8.0\n" + 
-				"*9.0\n" + 
-				"| || \n" + 
-				"|-\n" + 
-				"| 1.6 || November 2005 || 1.5 + Array extras + Array & String generics + E4X ||  || 1.5 ||  ||\n" + 
-				"|\n" + 
-				"*3.0\n" + 
-				"*3.1\n" + 
-				"| \n" + 
-				"|-\n" + 
-				"| 1.7 || Oktober 2006 || 1.6 + Pythonic generators + Iterators + let + destructuring assignments ||  || 2.0 ||  ||\n" + 
-				"|\n" + 
-				"* 3.2\n" + 
-				"* 4.0\n" + 
-				"| 1.0\n" + 
-				"|-\n" + 
-				"| 1.8 || Juni 2008 || 1.7 + Generator expressions + Expression closures ||  || 3.0 ||  ||  || || \n" + 
-				"|-\n" + 
-				"| 1.8.1 ||  || 1.8 + geringfügige Updates ||  || 3.5 ||  ||  || || \n" + 
-				"|-\n" + 
-				"| 1.9 ||  || 1.8.1 + ECMAScript 5 Compliance ||  || 4 ||  ||  || || \n" + 
-				"|}\n"+
-				"\n"+
-				"<references/>\n"));
+		assertEquals(
+				"<a id=\"Versionsgeschichte\" name=\"Versionsgeschichte\"></a><h3>Versionsgeschichte</h3>\n"
+						+ "\n"
+						+ "<div style=\"page-break-inside: avoid;\">\n"
+						+ "<table class=\"wikitable\">\n"
+						+ "<caption>Versionsgeschichte von JavaScript<sup id=\"_ref-1\" class=\"reference\"><a href=\"#_note-1\" title=\"\">[1]</a></sup></caption>\n"
+						+ "<tr>\n"
+						+ "<th>Version </th>\n"
+						+ "<th>Release </th>\n"
+						+ "<th>Entsprechung </th>\n"
+						+ "<th>Netscape Navigator </th>\n"
+						+ "<th>Mozilla Firefox </th>\n"
+						+ "<th>Internet Explorer </th>\n"
+						+ "<th>Opera </th>\n"
+						+ "<th>Safari </th>\n"
+						+ "<th>Google Chrome </th></tr>\n"
+						+ "<tr>\n"
+						+ "<td>1.0 </td>\n"
+						+ "<td>März 1996 </td>\n"
+						+ "<td />\n"
+						+ "<td>2.0 </td>\n"
+						+ "<td />\n"
+						+ "<td>3.0 </td>\n"
+						+ "<td />\n"
+						+ "<td />\n"
+						+ "<td /></tr>\n"
+						+ "<tr>\n"
+						+ "<td>1.1 </td>\n"
+						+ "<td>August 1996 </td>\n"
+						+ "<td />\n"
+						+ "<td>3.0 </td>\n"
+						+ "<td />\n"
+						+ "<td />\n"
+						+ "<td />\n"
+						+ "<td />\n"
+						+ "<td /></tr>\n"
+						+ "<tr>\n"
+						+ "<td>1.2 </td>\n"
+						+ "<td>Juni 1997 </td>\n"
+						+ "<td />\n"
+						+ "<td>4.0-4.05 </td>\n"
+						+ "<td />\n"
+						+ "<td />\n"
+						+ "<td />\n"
+						+ "<td />\n"
+						+ "<td /></tr>\n"
+						+ "<tr>\n"
+						+ "<td>1.3 </td>\n"
+						+ "<td>Oktober 1998 </td>\n"
+						+ "<td>ECMA-262 1<sup>st</sup> edition / ECMA-262 2<sup>nd</sup> edition </td>\n"
+						+ "<td>4.06-4.7x </td>\n"
+						+ "<td />\n"
+						+ "<td>4.0 </td>\n"
+						+ "<td />\n"
+						+ "<td />\n"
+						+ "<td /></tr>\n"
+						+ "<tr>\n"
+						+ "<td>1.4 </td>\n"
+						+ "<td />\n"
+						+ "<td />\n"
+						+ "<td>Netscape Server </td>\n"
+						+ "<td />\n"
+						+ "<td />\n"
+						+ "<td />\n"
+						+ "<td />\n"
+						+ "<td /></tr>\n"
+						+ "<tr>\n"
+						+ "<td>1.5 </td>\n"
+						+ "<td>November 2000 </td>\n"
+						+ "<td>ECMA-262 3<sup>rd</sup> edition </td>\n"
+						+ "<td>6.0 </td>\n"
+						+ "<td>1.0</td>\n"
+						+ "<td>\n"
+						+ "\n"
+						+ "<ul>\n"
+						+ "<li>5.5 (JScript 5.5)</li>\n"
+						+ "<li>6 (JScript 5.6)</li>\n"
+						+ "<li>7 (JScript 5.7)</li>\n"
+						+ "<li>8 (JScript 6)</li></ul></td>\n"
+						+ "<td>\n"
+						+ "\n"
+						+ "<ul>\n"
+						+ "<li>6.0</li>\n"
+						+ "<li>7.0</li>\n"
+						+ "<li>8.0</li>\n"
+						+ "<li>9.0</li></ul></td>\n"
+						+ "<td />\n"
+						+ "<td /></tr>\n"
+						+ "<tr>\n"
+						+ "<td>1.6 </td>\n"
+						+ "<td>November 2005 </td>\n"
+						+ "<td>1.5 + Array extras + Array &#38; String generics + E4X </td>\n"
+						+ "<td />\n"
+						+ "<td>1.5 </td>\n"
+						+ "<td />\n"
+						+ "<td></td>\n"
+						+ "<td>\n"
+						+ "\n"
+						+ "<ul>\n"
+						+ "<li>3.0</li>\n"
+						+ "<li>3.1</li></ul></td>\n"
+						+ "<td /></tr>\n"
+						+ "<tr>\n"
+						+ "<td>1.7 </td>\n"
+						+ "<td>Oktober 2006 </td>\n"
+						+ "<td>1.6 + Pythonic generators + Iterators + let + destructuring assignments </td>\n"
+						+ "<td />\n"
+						+ "<td>2.0 </td>\n"
+						+ "<td />\n"
+						+ "<td></td>\n"
+						+ "<td>\n"
+						+ "\n"
+						+ "<ul>\n"
+						+ "<li>3.2</li>\n"
+						+ "<li>4.0</li></ul></td>\n"
+						+ "<td>1.0</td></tr>\n"
+						+ "<tr>\n"
+						+ "<td>1.8 </td>\n"
+						+ "<td>Juni 2008 </td>\n"
+						+ "<td>1.7 + Generator expressions + Expression closures </td>\n"
+						+ "<td />\n"
+						+ "<td>3.0 </td>\n"
+						+ "<td />\n"
+						+ "<td />\n"
+						+ "<td />\n"
+						+ "<td /></tr>\n"
+						+ "<tr>\n"
+						+ "<td>1.8.1 </td>\n"
+						+ "<td />\n"
+						+ "<td>1.8 + geringfügige Updates </td>\n"
+						+ "<td />\n"
+						+ "<td>3.5 </td>\n"
+						+ "<td />\n"
+						+ "<td />\n"
+						+ "<td />\n"
+						+ "<td /></tr>\n"
+						+ "<tr>\n"
+						+ "<td>1.9 </td>\n"
+						+ "<td />\n"
+						+ "<td>1.8.1 + ECMAScript 5 Compliance </td>\n"
+						+ "<td />\n"
+						+ "<td>4 </td>\n"
+						+ "<td />\n"
+						+ "<td />\n"
+						+ "<td />\n"
+						+ "<td /></tr></table></div>\n"
+						+ "<ol class=\"references\">\n"
+						+ "<li id=\"_note-1\"><b><a href=\"#_ref-1\" title=\"\">&#8593;</a></b> John Resig. <i><a class=\"externallink\" href=\"http://ejohn.org/blog/versions-of-javascript\" rel=\"nofollow\" title=\"http://ejohn.org/blog/versions-of-javascript\">Versions of JavaScript</a></i>. Ejohn.org. Abgerufen am {{FormatDate}}.</li></ol>",
+				wikiModel
+						.render("=== Versionsgeschichte ===\n"
+								+ "{| class=\"wikitable\"\n"
+								+ "|+Versionsgeschichte von JavaScript<ref>{{cite web|author=John Resig |url=http://ejohn.org/blog/versions-of-javascript |title=Versions of JavaScript |publisher=Ejohn.org |date= |accessdate=2009-05-19}}</ref>\n"
+								+ "|-\n"
+								+ "! Version !! Release !! Entsprechung !! Netscape Navigator !! Mozilla Firefox !! Internet Explorer !! Opera !! Safari !! Google Chrome \n"
+								+ "|-\n"
+								+ "| 1.0 || März 1996 ||  || 2.0 ||  || 3.0 ||  || || \n"
+								+ "|-\n"
+								+ "| 1.1 || August 1996 ||  || 3.0 ||  ||  ||  || || \n"
+								+ "|-\n"
+								+ "| 1.2 || Juni 1997 ||  || 4.0-4.05 ||  ||  ||  || || \n"
+								+ "|-\n"
+								+ "| 1.3 || Oktober 1998 || ECMA-262 1<sup>st</sup> edition / ECMA-262 2<sup>nd</sup> edition || 4.06-4.7x ||  || 4.0 ||  || || \n"
+								+ "|-\n"
+								+ "| 1.4 ||  ||  || Netscape Server ||  ||  ||  || || \n"
+								+ "|-\n"
+								+ "| 1.5 || November 2000 || ECMA-262 3<sup>rd</sup> edition || 6.0 || 1.0\n"
+								+ "|\n"
+								+ "*5.5 (JScript 5.5)\n"
+								+ "*6 (JScript 5.6)\n"
+								+ "*7 (JScript 5.7)\n"
+								+ "*8 (JScript 6)\n"
+								+ "|\n"
+								+ "*6.0\n"
+								+ "*7.0\n"
+								+ "*8.0\n"
+								+ "*9.0\n"
+								+ "| || \n"
+								+ "|-\n"
+								+ "| 1.6 || November 2005 || 1.5 + Array extras + Array & String generics + E4X ||  || 1.5 ||  ||\n"
+								+ "|\n"
+								+ "*3.0\n"
+								+ "*3.1\n"
+								+ "| \n"
+								+ "|-\n"
+								+ "| 1.7 || Oktober 2006 || 1.6 + Pythonic generators + Iterators + let + destructuring assignments ||  || 2.0 ||  ||\n"
+								+ "|\n" + "* 3.2\n" + "* 4.0\n" + "| 1.0\n" + "|-\n"
+								+ "| 1.8 || Juni 2008 || 1.7 + Generator expressions + Expression closures ||  || 3.0 ||  ||  || || \n" + "|-\n"
+								+ "| 1.8.1 ||  || 1.8 + geringfügige Updates ||  || 3.5 ||  ||  || || \n" + "|-\n"
+								+ "| 1.9 ||  || 1.8.1 + ECMAScript 5 Compliance ||  || 4 ||  ||  || || \n" + "|}\n" + "\n" + "<references/>\n"));
 	}
-	
+
 	public void testbirth_date_and_age() {
 		assertEquals(
 				"\n"
 						+ "<p>test July 9, 1956<span style=\"display:none\"> (<span class=\"bday\">1956-07-09</span>)</span><span class=\"noprint\"> (age 54)</span> test123</p>",
 				wikiModel.render("test {{birth date and age|1956|7|9}} test123"));
 	}
+
 }
