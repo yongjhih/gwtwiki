@@ -154,7 +154,7 @@ public class APIWikiModel extends WikiModel {
 					if (content != null) {
 						// System.out.println(name);
 						// System.out.println(content);
-						System.out.println("-----------------------");
+						// System.out.println("-----------------------");
 						topicData = new TopicData(templateNS + name, content);
 						fWikiDB.insertTopic(topicData);
 						content = getRedirectedWikiContent(content, templateParameters);
