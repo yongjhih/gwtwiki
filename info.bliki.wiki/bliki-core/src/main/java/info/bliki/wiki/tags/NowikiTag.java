@@ -26,7 +26,7 @@ public class NowikiTag extends HTMLTag implements INoBodyParsingTag {
 	 * (&lt; &gt; &quot; &amp; &#39;) Additionally every newline will be replaced
 	 * by &lt;br/&gt;
 	 */
-	public static void copyNowikiNewLine(String text, StringBuffer writer) {
+	public static void copyNowikiNewLine(String text, Appendable writer) throws IOException {
 		final int len = text.length();
 		int currentIndex = 0;
 		int lastIndex = currentIndex;
