@@ -1,13 +1,11 @@
 package info.bliki.wiki.template.extension;
 
-import info.bliki.wiki.filter.WikipediaScanner;
 import info.bliki.wiki.model.IContext;
 import info.bliki.wiki.model.IWikiModel;
 import info.bliki.wiki.template.AbstractTemplateFunction;
 import info.bliki.wiki.template.ITemplateFunction;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -43,17 +41,7 @@ public class DollarContext extends AbstractTemplateFunction {
 
 	}
 
-	public String parseFunction(char[] src, int beginIndex, int endIndex, IWikiModel model) throws IOException {
-		if (model instanceof IContext) {
-			// IContext context = (IContext) model;
-			List<String> list = new ArrayList<String>();
-			WikipediaScanner.splitByPipe(src, beginIndex, endIndex, list);
-			parseFunction(list, model, null, 0, 0);
-		}
-		return null;
-	}
-
-	public String parseFunction(List<String> list, IWikiModel model, char[] src, int beginIndex, int endIndex)  throws IOException {
+	public String parseFunction(List<String> list, IWikiModel model, char[] src, int beginIndex, int endIndex) throws IOException {
 		if (model instanceof IContext) {
 			IContext context = (IContext) model;
 			if (list.size() > 0) {
@@ -89,7 +77,6 @@ public class DollarContext extends AbstractTemplateFunction {
 					// get the assigned value of the attribute
 					Object value = context.getAttribute(attribute);
 					if (value != null) {
-						AttributeRenderer renderer;
 						StringBuilder builder;
 						if (value instanceof AttributeList && ((AttributeList) value).size() > 0) {
 							// multiple attribute values assigned

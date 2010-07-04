@@ -1,13 +1,10 @@
 package info.bliki.wiki.template;
 
 import info.bliki.api.Connector;
-import info.bliki.wiki.filter.WikipediaScanner;
 import info.bliki.wiki.model.IWikiModel;
 
-import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -21,13 +18,8 @@ public class Localurl extends AbstractTemplateFunction {
 
 	}
 
-	public String parseFunction(char[] src, int beginIndex, int endIndex, IWikiModel model) throws IOException {
-		List<String> list = new ArrayList<String>();
-		WikipediaScanner.splitByPipe(src, beginIndex, endIndex, list);
-		return parseFunction(list, model, null, 0, 0);
-	}
-
-	public String parseFunction(List<String> list, IWikiModel model, char[] src, int beginIndex, int endIndex) throws UnsupportedEncodingException {
+	public String parseFunction(List<String> list, IWikiModel model, char[] src, int beginIndex, int endIndex)
+			throws UnsupportedEncodingException {
 		if (list.size() > 0) {
 			String arg0 = parse(list.get(0), model);
 			if (arg0.length() > 0 && list.size() == 1) {
@@ -37,7 +29,7 @@ public class Localurl extends AbstractTemplateFunction {
 			}
 			StringBuilder builder = new StringBuilder(arg0.length() + 32);
 			builder.append("/w/index.php?title=");
-			builder.append(URLEncoder.encode(Character.toUpperCase(arg0.charAt(0))+"", Connector.UTF8_CHARSET));
+			builder.append(URLEncoder.encode(Character.toUpperCase(arg0.charAt(0)) + "", Connector.UTF8_CHARSET));
 			builder.append(URLEncoder.encode(arg0.substring(1), Connector.UTF8_CHARSET));
 			for (int i = 1; i < list.size(); i++) {
 				builder.append("&");

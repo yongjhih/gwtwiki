@@ -2,7 +2,6 @@ package info.bliki.wiki.template;
 
 import info.bliki.wiki.model.IWikiModel;
 
-import java.io.IOException;
 import java.util.List;
 
 /**
@@ -16,10 +15,6 @@ public class Subst extends AbstractTemplateFunction {
 
 	public Subst() {
 
-	}
-
-	public String parseFunction(char[] src, int beginIndex, int endIndex, IWikiModel model) throws IOException {
-		return parseFunction(null, model, src, beginIndex, endIndex);
 	}
 
 	public String parseFunction(List<String> parts, IWikiModel model, char[] src, int beginIndex, int endIndex) {

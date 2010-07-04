@@ -1,10 +1,7 @@
 package info.bliki.wiki.template;
 
-import info.bliki.wiki.filter.WikipediaScanner;
 import info.bliki.wiki.model.IWikiModel;
 
-import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -21,19 +18,13 @@ public class Tag extends AbstractTemplateFunction {
 
 	}
 
-	public String parseFunction(char[] src, int beginIndex, int endIndex, IWikiModel model) throws IOException {
-		List<String> list = new ArrayList<String>();
-		WikipediaScanner.splitByPipe(src, beginIndex, endIndex, list);
-		return parseFunction(list, model, null, 0, 0);
-	}
-
 	public String parseFunction(List<String> list, IWikiModel model, char[] src, int beginIndex, int endIndex) {
 		if (list.size() > 0) {
 			String tagName = parse(list.get(0), model).trim();
 			if (list.size() <= 1) {
 				return "<" + tagName + "/>";
 			} else {
-				StringBuilder builder = new StringBuilder(list.size()*32 + tagName.length() + 10);
+				StringBuilder builder = new StringBuilder(list.size() * 32 + tagName.length() + 10);
 				builder.append("<");
 				builder.append(tagName);
 				String second = parse(list.get(1), model).trim();
