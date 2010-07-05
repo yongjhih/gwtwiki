@@ -23,6 +23,7 @@ import info.bliki.wiki.tags.code.JavaCodeFilter;
 import info.bliki.wiki.tags.code.JavaScriptCodeFilter;
 import info.bliki.wiki.tags.code.PHPCodeFilter;
 import info.bliki.wiki.tags.code.PythonCodeFilter;
+import info.bliki.wiki.tags.code.SQLCodeFilter;
 import info.bliki.wiki.tags.code.SourceCodeFormatter;
 import info.bliki.wiki.tags.code.XMLCodeFilter;
 import info.bliki.wiki.template.Anchorencode;
@@ -425,6 +426,7 @@ public class Configuration implements IConfiguration {
 		CODE_FORMATTER_MAP.put("php", new PHPCodeFilter());
 		CODE_FORMATTER_MAP.put("python", new PythonCodeFilter());
 		CODE_FORMATTER_MAP.put("html4strict", new XMLCodeFilter());
+		CODE_FORMATTER_MAP.put("sql", new SQLCodeFilter());
 		CODE_FORMATTER_MAP.put("xml", new XMLCodeFilter());
 
 		TAG_TOKEN_MAP.put("br", new BrTag());

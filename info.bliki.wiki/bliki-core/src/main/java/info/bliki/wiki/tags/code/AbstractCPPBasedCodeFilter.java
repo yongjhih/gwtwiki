@@ -208,7 +208,8 @@ abstract public class AbstractCPPBasedCodeFilter implements SourceCodeFormatter 
 	abstract public HashMap<String, String> getObjectSet();
 
 	/**
-	 * Test if the keywords are case sensitive.
+	 * Test if the keywords are case sensitive. Returns <code>true</code> by
+	 * default.
 	 * 
 	 * @return <code>true</code> if the keywords are case sensitive
 	 */
