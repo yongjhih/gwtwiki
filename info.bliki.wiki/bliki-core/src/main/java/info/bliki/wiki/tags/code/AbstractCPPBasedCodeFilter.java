@@ -61,14 +61,14 @@ abstract public class AbstractCPPBasedCodeFilter implements SourceCodeFormatter 
 			HashMap<String, String> objectWords, StringBuilder result) {
 		String originalIdent = input.substring(identifierStart, --currentPosition);
 		String keywordIdent = originalIdent;
-		if (!isKeywordLowerCase()) {
+		if (!isKeywordCaseSensitive()) {
 			keywordIdent = keywordIdent.toLowerCase();
 		}
 		String keywordValue = (String) keyWords.get(keywordIdent);
 		if (keywordValue != null) {
 			result.append(keywordValue);
 		} else {
-			if (objectWords==null) {
+			if (objectWords == null) {
 				result.append(originalIdent);
 				return currentPosition;
 			}
@@ -208,9 +208,11 @@ abstract public class AbstractCPPBasedCodeFilter implements SourceCodeFormatter 
 	abstract public HashMap<String, String> getObjectSet();
 
 	/**
-	 * @return Returns the KEYWORD_MAP.
+	 * Test if the keywords are case sensitive.
+	 * 
+	 * @return <code>true</code> if the keywords are case sensitive
 	 */
-	public boolean isKeywordLowerCase() {
+	public boolean isKeywordCaseSensitive() {
 		return true;
 	}
 

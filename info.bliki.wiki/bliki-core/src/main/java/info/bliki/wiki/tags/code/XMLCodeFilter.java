@@ -122,7 +122,7 @@ public class XMLCodeFilter extends AbstractCPPBasedCodeFilter implements SourceC
 	}
 
 	@Override
-	public boolean isKeywordLowerCase() {
+	public boolean isKeywordCaseSensitive() {
 		return false;
 	}
 
