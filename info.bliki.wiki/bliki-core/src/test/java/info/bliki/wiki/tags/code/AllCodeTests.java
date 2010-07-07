@@ -18,6 +18,7 @@ public class AllCodeTests extends TestCase {
     s.addTestSuite(JavaScriptTest.class);
     s.addTestSuite(PHPTest.class);
     s.addTestSuite(PythonTest.class);
+    s.addTestSuite(SQLTest.class);
     s.addTestSuite(XMLTest.class);
     
     s.addTestSuite(GroovyTest.class);

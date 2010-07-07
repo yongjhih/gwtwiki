@@ -92,6 +92,6 @@ public class HTMLCreatorExample {
 	}
 
 	public static void main(String[] args) {
-		testCreator001();
+		testCreator005();
 	}
 }
