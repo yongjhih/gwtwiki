@@ -43,6 +43,8 @@ public class AllFilterTests extends TestCase {
 		s.addTestSuite(TemplateParserTest.class);
 		
 		s.addTestSuite(TemplateFunctionsTest.class);
+		
+		s.addTestSuite(ChartFilterTest.class);
 		return s;
 	}
 

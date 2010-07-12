@@ -3,7 +3,6 @@ package info.bliki.wiki.addon.model;
 import info.bliki.wiki.addon.tags.AppletTag;
 import info.bliki.wiki.addon.tags.CTeXTag;
 import info.bliki.wiki.addon.tags.CalcTag;
-import info.bliki.wiki.addon.tags.ChartTag;
 import info.bliki.wiki.addon.tags.EvalTag;
 import info.bliki.wiki.addon.tags.PlotTag;
 import info.bliki.wiki.addon.tags.SampleTag;
@@ -19,7 +18,6 @@ public class AddonConfiguration extends Configuration {
 
 		TAG_TOKEN_MAP.put("applet", new AppletTag());
 		TAG_TOKEN_MAP.put("calc", new CalcTag());
-		TAG_TOKEN_MAP.put("chart", new ChartTag());
 		TAG_TOKEN_MAP.put("eval", new EvalTag());
 		TAG_TOKEN_MAP.put("plot", new PlotTag());
 		TAG_TOKEN_MAP.put("sample", new SampleTag());

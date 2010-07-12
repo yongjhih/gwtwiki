@@ -42,7 +42,8 @@ package info.bliki.htmlcleaner;
  * HTML tag token - descendants are start (TagNode) and end token (EndTagToken).
  * </p>
  * 
- * Created by: Vladimir Nikic<br/> Date: November, 2006.
+ * Created by: Vladimir Nikic<br/>
+ * Date: November, 2006.
  */
 public abstract class TagToken implements BaseToken, Cloneable {
 
@@ -91,6 +92,14 @@ public abstract class TagToken implements BaseToken, Cloneable {
 	 * @return
 	 */
 	public abstract boolean addAttribute(String attName, String attValue, boolean checkXSS);
+
+	/**
+	 * Check, if the attName is allowed.
+	 * 
+	 * @param attName
+	 * @return
+	 */
+	public abstract boolean isAllowedAttribute(String attName);
 
 	/**
 	 * Get the allowed parent tags for this tag

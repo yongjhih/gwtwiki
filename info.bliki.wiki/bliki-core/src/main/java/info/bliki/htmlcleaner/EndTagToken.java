@@ -59,6 +59,11 @@ public class EndTagToken extends TagToken {
 		return true;
 	}
 
+	@Override
+	public boolean isAllowedAttribute(String attName) {
+		return false;
+	}
+	
 	public void serialize(XmlSerializer xmlSerializer) {
 		// do nothing - simply ignore serialization
 	}

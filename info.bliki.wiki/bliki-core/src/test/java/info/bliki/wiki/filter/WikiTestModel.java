@@ -5,6 +5,7 @@ import info.bliki.htmlcleaner.TagNode;
 import info.bliki.htmlcleaner.Utils;
 import info.bliki.wiki.model.Configuration;
 import info.bliki.wiki.model.WikiModel;
+import info.bliki.wiki.tags.extension.ChartTag;
 
 import java.util.HashMap;
 import java.util.Locale;
@@ -2066,6 +2067,7 @@ public class WikiTestModel extends WikiModel {
 		// set up a simple cache mock-up for JUnit tests. HashMap is not usable for
 		// production!
 		Configuration.DEFAULT_CONFIGURATION.setTemplateCallsCache(new HashMap());
+		Configuration.DEFAULT_CONFIGURATION.addTokenTag("chart", new ChartTag());
 		fSemanticWebActive = false;
 	}
 
