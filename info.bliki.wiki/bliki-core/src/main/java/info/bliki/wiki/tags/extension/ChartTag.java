@@ -19,7 +19,9 @@ import java.util.Set;
  */
 public class ChartTag extends HTMLTag implements INoBodyParsingTag {
 	final static public HashSet<String> ALLOWED_ATTRIBUTES_SET = new HashSet<String>(997);
-	final static public String[] ALLOWED_ATTRIBUTES = { "cht", "chs", "chbh", "chxt", "chco", "chls", "chd" };
+	final static public String[] ALLOWED_ATTRIBUTES = { "alt", "cht", "chs", "chd", "chf", "chg", "chl", "chm", "chma", "chbh",
+			"chco", "chdl", "chdlp", "chds", "chem", "chfd", "chld", "chls", "chst", "chts", "chtt", "chxl", "chxp", "chxr", "chxs",
+			"chxt", "chxtc" };
 
 	static {
 		for (int i = 0; i < ALLOWED_ATTRIBUTES.length; i++) {
@@ -39,8 +41,10 @@ public class ChartTag extends HTMLTag implements INoBodyParsingTag {
 		Map<String, String> tagAtttributes = node.getAttributes();
 		Set<String> keysSet = tagAtttributes.keySet();
 		for (String str : keysSet) {
+			if (str.equals("alt")) {
+				continue;
+			}
 			Utils.appendAmpersandEscapedAttribute(chartUrl, str, tagAtttributes);
-			
 		}
 
 		buf.append("<img border=\"0\" src=\"http://chart.apis.google.com/chart?");
@@ -51,7 +55,7 @@ public class ChartTag extends HTMLTag implements INoBodyParsingTag {
 	}
 
 	@Override
-	public boolean isAllowedAttribute(String attName) { 
+	public boolean isAllowedAttribute(String attName) {
 		return ALLOWED_ATTRIBUTES_SET.contains(attName);
 	}
 
