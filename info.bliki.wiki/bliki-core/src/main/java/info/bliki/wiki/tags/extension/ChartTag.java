@@ -19,9 +19,15 @@ import java.util.Set;
  */
 public class ChartTag extends HTMLTag implements INoBodyParsingTag {
 	final static public HashSet<String> ALLOWED_ATTRIBUTES_SET = new HashSet<String>(997);
-	final static public String[] ALLOWED_ATTRIBUTES = { "alt", "cht", "chs", "chd", "chf", "chg", "chl", "chm", "chma", "chbh",
-			"chco", "chdl", "chdlp", "chds", "chem", "chfd", "chld", "chls", "chst", "chts", "chtt", "chxl", "chxp", "chxr", "chxs",
-			"chxt", "chxtc" };
+
+	/**
+	 * See <a href=
+	 * "http://code.google.com/intl/de-DE/apis/chart/docs/chart_params.html">chart
+	 * parameters supported by the Google Chart API</a>.
+	 */
+	final static public String[] ALLOWED_ATTRIBUTES = { "alt", "chbh", "chco", "chd", "chdl", "chdlp", "chds", "chem", "chf", "chfd",
+			"chg", "chl", "chld", "chls", "chm", "chma", "choe", "chof", "chp", "chs", "chst", "cht", "chtm", "chtt", "chts", "chxt",
+			"chxr", "chxl", "chxp", "chxs", "chxtc" };
 
 	static {
 		for (int i = 0; i < ALLOWED_ATTRIBUTES.length; i++) {
