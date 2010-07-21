@@ -13,7 +13,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.Set;
-import java.util.SortedMap;
 
 /**
  * Interface for rendering a wiki model
@@ -859,7 +858,7 @@ public interface IWikiModel extends IConfiguration {
 	 *          the buffer to append the substituted template content
 	 * @throws IOException
 	 */
-	public void substituteTemplateCall(String templateName, SortedMap<String, String> parameterMap, Appendable writer)
+	public void substituteTemplateCall(String templateName, Map<String, String> parameterMap, Appendable writer)
 			throws IOException;
 
 	public TagStack swapStack(TagStack stack);

@@ -2050,6 +2050,7 @@ public class WikiTestModel extends WikiModel {
 		TagNode.addAllowedAttribute("style");
 		Configuration.DEFAULT_CONFIGURATION.addUriScheme("tel");
 		Configuration.DEFAULT_CONFIGURATION.addInterwikiLink("intra", "/${title}");
+		Configuration.DEFAULT_CONFIGURATION.addTokenTag("chart", new ChartTag());
 	}
 
 	public WikiTestModel(String imageBaseURL, String linkBaseURL) {
@@ -2067,7 +2068,7 @@ public class WikiTestModel extends WikiModel {
 		// set up a simple cache mock-up for JUnit tests. HashMap is not usable for
 		// production!
 		Configuration.DEFAULT_CONFIGURATION.setTemplateCallsCache(new HashMap());
-		Configuration.DEFAULT_CONFIGURATION.addTokenTag("chart", new ChartTag());
+		
 		fSemanticWebActive = false;
 	}
 

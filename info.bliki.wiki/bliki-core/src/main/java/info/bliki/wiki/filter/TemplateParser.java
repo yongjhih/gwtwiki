@@ -8,9 +8,9 @@ import info.bliki.wiki.template.ITemplateFunction;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.TreeMap;
 import java.util.regex.Pattern;
 
 /**
@@ -579,7 +579,7 @@ public class TemplateParser extends AbstractParser {
 			}
 		}
 		fCurrentPosition = endPosition;
-		TreeMap<String, String> parameterMap = new TreeMap<String, String>();
+		LinkedHashMap<String, String> parameterMap = new LinkedHashMap<String, String>();
 		for (int i = 1; i < parts.size(); i++) {
 			if (i == parts.size() - 1) {
 				createSingleParameter(i, parts.get(i), parameterMap, true);
@@ -646,7 +646,7 @@ public class TemplateParser extends AbstractParser {
 	 * parameters map
 	 * 
 	 */
-	private static void createSingleParameter(int parameterCounter, String srcString, TreeMap<String, String> map,
+	private static void createSingleParameter(int parameterCounter, String srcString, Map<String, String> map,
 			boolean trimNewlineRight) {
 		int currOffset = 0;
 		char[] src = srcString.toCharArray();

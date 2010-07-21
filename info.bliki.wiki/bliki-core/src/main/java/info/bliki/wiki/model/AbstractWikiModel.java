@@ -35,7 +35,6 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.Set;
-import java.util.SortedMap;
 import java.util.Map.Entry;
 
 /**
@@ -1359,7 +1358,7 @@ public abstract class AbstractWikiModel implements IWikiModel, IContext {
 	 *          the buffer to append the substituted template content
 	 * @throws IOException
 	 */
-	public void substituteTemplateCall(String templateName, SortedMap<String, String> parameterMap, Appendable writer)
+	public void substituteTemplateCall(String templateName, Map<String, String> parameterMap, Appendable writer)
 			throws IOException {
 		
 		Map<String, String> templateCallsCache = null;
