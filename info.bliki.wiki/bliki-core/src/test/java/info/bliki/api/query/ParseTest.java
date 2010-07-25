@@ -16,7 +16,11 @@ public class ParseTest extends BaseQueryTest {
 		assertEquals("action=parse&amp;format=xml&amp;text={{Project:Sandbox}}&amp;title=A Sandbox Template test", request.toString());
 	}
 
-	public void testParseQuery() {
+	/**
+	 * To make this test work correctly uncomment the '__' underlines and be sure
+	 * that you have a internet connection running.
+	 */
+	public void __testParseQuery() {
 
 		User user = getAnonymousUser();
 		Connector connector = new Connector();
@@ -31,13 +35,13 @@ public class ParseTest extends BaseQueryTest {
 	}
 
 	/**
-	 * To make this test work correctly uncomment the
+	 * To make this test work correctly uncomment the '__' underlines
 	 * <code>assertNotNull(user);</code> line and define a correct user in the
 	 * <code>getRegisteredUser()</code> method
 	 * 
 	 * @see BaseQueryTest#getRegisteredUser()
 	 */
-	public void testParseRegisteredQuery() {
+	public void __testParseRegisteredQuery() {
 		User user = getRegisteredUser();
 		Connector connector = new Connector();
 		user = connector.login(user);
