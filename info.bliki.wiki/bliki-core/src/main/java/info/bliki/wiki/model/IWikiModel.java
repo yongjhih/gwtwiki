@@ -595,7 +595,7 @@ public interface IWikiModel extends IConfiguration {
 	public boolean isEditorMode();
 
 	/**
-	 * Check if the given namespace is a image namespace
+	 * Check if the given namespace is an image namespace
 	 * 
 	 * @param namespace
 	 * @return <code>true</code> if the namespace is a image namespace.

@@ -11,15 +11,15 @@ public class TemplateFilterTest extends FilterTestSupport {
 	public static Test suite() {
 		return new TestSuite(TemplateFilterTest.class);
 	}
-	
+
 	public void testTemplate06() {
 		assertEquals("\n" + "<p>start- 5.0 equals +5 -end</p>", wikiModel.render("start- {{ifeq|5.0|+5}} -end"));
 	}
-	
+
 	public void testTemplate09() {
 		assertEquals("\n" + "<p>start- test is not equal Test -end</p>", wikiModel.render("start- {{ifeq|test|Test}} -end"));
 	}
-	
+
 	public void testTemplateCall3() {
 		// see method WikiTestModel#getRawWikiContent()
 		assertEquals("\n" + "<p>b) First: Test1 Second: c) First: sdfsf Second: klj </p>\n" + "", wikiModel.render("{{templ1\n"
@@ -27,11 +27,9 @@ public class TemplateFilterTest extends FilterTestSupport {
 	}
 
 	public void testSwitch001() {
-		assertEquals("\n" + 
-				"<p>{{Templ1/ind&#38;}}</p>", wikiModel
-				.render("{{Templ1/{{ #switch: imperative  | ind | ind&}}}}"));
+		assertEquals("\n" + "<p>{{Templ1/ind&#38;}}</p>", wikiModel.render("{{Templ1/{{ #switch: imperative  | ind | ind&}}}}"));
 	}
-	
+
 	public void testNonExistentTemplate() {
 		assertEquals("<a id=\"Other_areas_of_Wikipedia\" name=\"Other_areas_of_Wikipedia\"></a><h2>Other areas of Wikipedia</h2>\n"
 				+ "<p>{{WikipediaOther}}</p>", wikiModel.render("==Other areas of Wikipedia==\n"
@@ -110,7 +108,6 @@ public class TemplateFilterTest extends FilterTestSupport {
 	public void testTemplate08() {
 		assertEquals("\n" + "<p>start- test equals test -end</p>", wikiModel.render("start- {{ifeq|test|test}} -end"));
 	}
-
 
 	public void testTemplate10() {
 		assertEquals("", wikiModel.render("{{{x| }}}"));
@@ -660,11 +657,16 @@ public class TemplateFilterTest extends FilterTestSupport {
 								+ "| 1.9 ||  || 1.8.1 + ECMAScript 5 Compliance ||  || 4 ||  ||  || || \n" + "|}\n" + "\n" + "<references/>\n"));
 	}
 
-	public void testbirth_date_and_age() {
-		assertEquals(
-				"\n"
-						+ "<p>test July 9, 1956<span style=\"display:none\"> (<span class=\"bday\">1956-07-09</span>)</span><span class=\"noprint\"> (age 54)</span> test123</p>",
-				wikiModel.render("test {{birth date and age|1956|7|9}} test123"));
-	}
+	/**
+	 * This is a date dependent template test, so only activate it for local tests
+	 * please.
+	 */
+	// public void testbirth_date_and_age() {
+	// assertEquals(
+	// "\n"
+	// +
+	// "<p>test July 9, 1956<span style=\"display:none\"> (<span class=\"bday\">1956-07-09</span>)</span><span class=\"noprint\"> (age 54)</span> test123</p>",
+	// wikiModel.render("test {{birth date and age|1956|7|9}} test123"));
+	// }
 
 }
