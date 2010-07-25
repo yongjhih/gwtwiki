@@ -9,6 +9,10 @@ import info.bliki.api.User;
  */
 public class EditTest extends BaseQueryTest {
 
+	public void testDummy() {
+		// ..
+	}
+
 	/**
 	 * To make this test work correctly uncomment it and be sure that you have a
 	 * internet connection running.
