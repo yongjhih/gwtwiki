@@ -323,6 +323,19 @@ public class TemplateParserTest extends FilterTestSupport {
 		assertEquals("7", wikiModel.parseTemplates("{{ #expr: not 30 + 7 }}", false));
 	}
 
+	public void testFormatnum001() {
+		assertEquals("1401", wikiModel.parseTemplates("{{formatnum:1401}}", false)); 
+	}
+	
+	public void testPlural001() {
+		assertEquals("is", wikiModel.parseTemplates("{{plural:n|is|are}}", false)); 
+		assertEquals("is", wikiModel.parseTemplates("{{plural:0|is|are}}", false)); 
+		assertEquals("is", wikiModel.parseTemplates("{{plural:1|is|are}}", false)); 
+		assertEquals("are", wikiModel.parseTemplates("{{plural:2|is|are}}", false)); 
+		assertEquals("are", wikiModel.parseTemplates("{{plural:3|is|are}}", false)); 
+		assertEquals("are", wikiModel.parseTemplates("{{plural:{{#expr:30+7}}|is|are}}", false)); 
+	}
+	
 	public void testExpr015() {
 		assertEquals("1", wikiModel.parseTemplates("{{ #expr: trunc1.2}}", false));
 		assertEquals("-1", wikiModel.parseTemplates("{{ #expr: trunc-1.2 }}", false));

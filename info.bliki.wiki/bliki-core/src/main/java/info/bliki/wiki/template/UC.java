@@ -6,7 +6,9 @@ import java.util.List;
 
 /**
  * A template parser function for <code>{{uc: ... }}</code> <i>upper case</i>
- * syntax
+ * syntax. See <a
+ * href="http://en.wikipedia.org/wiki/Help:Variable#Formatting">Wikipedia -
+ * Help:Variable#Formatting</a>
  * 
  */
 public class UC extends AbstractTemplateFunction {

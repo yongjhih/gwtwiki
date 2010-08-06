@@ -6,7 +6,9 @@ import java.util.List;
 
 /**
  * A template parser function for <code>{{lcfirst: ... }}</code> <i>first
- * character to lower case</i> syntax
+ * character to lower case</i> syntax. See <a
+ * href="http://en.wikipedia.org/wiki/Help:Variable#Formatting">Wikipedia -
+ * Help:Variable#Formatting</a>
  * 
  */
 public class LCFirst extends AbstractTemplateFunction {

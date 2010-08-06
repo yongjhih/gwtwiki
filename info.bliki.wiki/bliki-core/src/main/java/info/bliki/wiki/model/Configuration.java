@@ -28,6 +28,7 @@ import info.bliki.wiki.tags.code.SourceCodeFormatter;
 import info.bliki.wiki.tags.code.XMLCodeFilter;
 import info.bliki.wiki.template.Anchorencode;
 import info.bliki.wiki.template.Expr;
+import info.bliki.wiki.template.Formatnum;
 import info.bliki.wiki.template.Fullurl;
 import info.bliki.wiki.template.ITemplateFunction;
 import info.bliki.wiki.template.If;
@@ -41,6 +42,7 @@ import info.bliki.wiki.template.Localurl;
 import info.bliki.wiki.template.NS;
 import info.bliki.wiki.template.Padleft;
 import info.bliki.wiki.template.Padright;
+import info.bliki.wiki.template.Plural;
 import info.bliki.wiki.template.Subst;
 import info.bliki.wiki.template.Switch;
 import info.bliki.wiki.template.Tag;
@@ -397,6 +399,7 @@ public class Configuration implements IConfiguration {
 			INTERWIKI_MAP.put(INTERWIKI_STRINGS[i], INTERWIKI_STRINGS[i + 1]);
 		}
 		TEMPLATE_FUNCTION_MAP.put("anchorencode", Anchorencode.CONST);
+		TEMPLATE_FUNCTION_MAP.put("formatnum", Formatnum.CONST);
 		TEMPLATE_FUNCTION_MAP.put("fullurl", Fullurl.CONST);
 		TEMPLATE_FUNCTION_MAP.put("ns", NS.CONST);
 		TEMPLATE_FUNCTION_MAP.put("urlencode", URLEncode.CONST);
@@ -407,6 +410,7 @@ public class Configuration implements IConfiguration {
 		TEMPLATE_FUNCTION_MAP.put("ucfirst", UCFirst.CONST);
 		TEMPLATE_FUNCTION_MAP.put("padleft", Padleft.CONST);
 		TEMPLATE_FUNCTION_MAP.put("padright", Padright.CONST);
+		TEMPLATE_FUNCTION_MAP.put("plural", Plural.CONST);
 		TEMPLATE_FUNCTION_MAP.put("subst", Subst.CONST);
 		TEMPLATE_FUNCTION_MAP.put("#expr", Expr.CONST);
 		TEMPLATE_FUNCTION_MAP.put("#if", If.CONST);

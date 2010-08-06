@@ -5,23 +5,24 @@ import info.bliki.wiki.model.IWikiModel;
 import java.util.List;
 
 /**
- * A template parser function for <code>{{lc: ... }}</code> <i>lower case</i>
- * syntax. See <a
+ * A template parser function for <code>{{formatnum: ... }}</code> <i>lower
+ * case</i> syntax. See <a
  * href="http://en.wikipedia.org/wiki/Help:Variable#Formatting">Wikipedia -
  * Help:Variable#Formatting</a>
  * 
  */
-public class LC extends AbstractTemplateFunction {
-	public final static ITemplateFunction CONST = new LC();
+public class Formatnum extends AbstractTemplateFunction {
+	public final static ITemplateFunction CONST = new Formatnum();
 
-	public LC() {
+	public Formatnum() {
 
 	}
 
 	public String parseFunction(List<String> list, IWikiModel model, char[] src, int beginIndex, int endIndex) {
 		if (list.size() > 0) {
 			String result = parse(list.get(0), model);
-			return result.toLowerCase();
+			// TODO add formatting rules here
+			return result;
 		}
 		return null;
 	}
