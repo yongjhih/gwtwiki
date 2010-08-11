@@ -186,7 +186,9 @@ public class Converter implements EntryPoint {
     if (this.fNoDiv.isChecked()) {
       map.put("no_div", "true");
     }
-    this.fOutputTextArea.setText("");
+    this.fOutputTextArea.setText("Loading...");
+    this.fOutputLabel.setVisible(true);
+    this.fOutputTextArea.setVisible(true);
     this.fOutputHTML.setHTML("<pre></pre>");
 
     CONVERT_SERVICE.convert(this.fInputTextArea.getText(), map,
