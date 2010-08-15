@@ -293,6 +293,7 @@ public abstract class AbstractWikiModel implements IWikiModel, IContext {
 	 *             {@link IWikiModel#appendExternalLink(String, String, String, boolean)}
 	 *             instead.
 	 */
+	@Deprecated
 	public void appendExternalLink(String link, String linkName, boolean withoutSquareBrackets) {
 		appendExternalLink("", link, linkName, withoutSquareBrackets);
 	}
@@ -362,7 +363,11 @@ public abstract class AbstractWikiModel implements IWikiModel, IContext {
 		TagStack localStack = WikipediaParser.parseRecursive(rawHead.trim(), this, true, true);
 
 		WPTag headTagNode = new WPTag("h" + headLevel);
-		headTagNode.addChildren(localStack.getNodeList());
+		TagNode spanTagNode = new TagNode("span");
+		// Example:
+		// <h2><span class="mw-headline" id="Header_level_2">Header level 2</span></h2>
+		spanTagNode.addChildren(localStack.getNodeList());
+		headTagNode.addChild(spanTagNode);
 		String tocHead = headTagNode.getBodyString();
 		String anchor = Encoder.encodeDotUrl(tocHead);
 		createTableOfContent(false);
@@ -384,10 +389,8 @@ public abstract class AbstractWikiModel implements IWikiModel, IContext {
 		if (getRecursionLevel() == 1) {
 			buildEditLinkUrl(fSectionCounter++);
 		}
-		TagNode aTagNode = new TagNode("a");
-		aTagNode.addAttribute("name", anchor, true);
-		aTagNode.addAttribute("id", anchor, true);
-		append(aTagNode);
+		spanTagNode.addAttribute("class", "mw-headline", true);
+		spanTagNode.addAttribute("id", anchor, true);
 
 		append(headTagNode);
 		return fTableOfContentTag;
@@ -1358,13 +1361,12 @@ public abstract class AbstractWikiModel implements IWikiModel, IContext {
 	 *          the buffer to append the substituted template content
 	 * @throws IOException
 	 */
-	public void substituteTemplateCall(String templateName, Map<String, String> parameterMap, Appendable writer)
-			throws IOException {
-		
+	public void substituteTemplateCall(String templateName, Map<String, String> parameterMap, Appendable writer) throws IOException {
+
 		Map<String, String> templateCallsCache = null;
 		String cacheKey = null;
 		if (this instanceof IConfiguration) {
-			IConfiguration config = (IConfiguration) this;
+			IConfiguration config = this;
 			templateCallsCache = config.getTemplateCallsCache();
 			if (templateCallsCache != null) {
 				StringBuilder cacheKeyBuffer = new StringBuilder();
