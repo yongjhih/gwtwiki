@@ -7,8 +7,9 @@ import info.bliki.wiki.impl.APIWikiModel;
 import java.io.IOException;
 
 /**
- * Test to load a page and images and templates from en.wikipedia.org and render
- * it into a HTML file.
+ * Test to load a page, images and templates from en.wikipedia.org and render it
+ * into an HTML file. The CSS is always included in the generated HTML text
+ * which blows up the size of the HTML file.
  */
 public class HTMLCreatorExample {
 	public HTMLCreatorExample() {
@@ -39,7 +40,9 @@ public class HTMLCreatorExample {
 			db = new WikiDB(mainDirectory, databaseSubdirectory);
 			APIWikiModel wikiModel = new APIWikiModel(user, db, "${image}", "${title}", imageDirectory);
 			DocumentCreator creator = new DocumentCreator(wikiModel, user, listOfTitleStrings);
-			creator.setHeader(HTMLConstants.HTML_HEADER1 + HTMLConstants.CSS_SCREEN_STYLE + HTMLConstants.HTML_HEADER2);
+			// create header and CSS information
+			creator.setHeader(HTMLConstants.HTML_HEADER1 + HTMLConstants.CSS_MAIN_STYLE + HTMLConstants.CSS_SCREEN_STYLE
+					+ HTMLConstants.HTML_HEADER2);
 			creator.setFooter(HTMLConstants.HTML_FOOTER);
 			wikiModel.setUp();
 			creator.renderToFile(generatedHTMLFilename);
@@ -92,6 +95,6 @@ public class HTMLCreatorExample {
 	}
 
 	public static void main(String[] args) {
-		testCreator005();
+		testCreator001();
 	}
 }

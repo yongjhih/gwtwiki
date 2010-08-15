@@ -2,6 +2,1133 @@ package info.bliki.api.creator;
 
 public class HTMLConstants {
 
+	public final static String CSS_MAIN_STYLE = "<style type=\"text/css\">\n"+
+			"html,\n" + 
+			"body {\n" + 
+			"	height: 100%;\n" + 
+			"	margin: 0;\n" + 
+			"	padding: 0;\n" + 
+			"	font-family: sans-serif;\n" + 
+			"	font-size: 1em;\n" + 
+			"}\n" + 
+			"body {\n" + 
+			"	background-color: #f3f3f3;\n" + 
+			"	background-image: url(images/page-base.png?1);\n" + 
+			"}\n" + 
+			"/* Content */\n" + 
+			"#content {\n" + 
+			"	margin-left: 10em;\n" + 
+			"	padding: 1em;\n" + 
+			"	background-image: url(images/border.png?1);\n" + 
+			"	background-position: top left;\n" + 
+			"	background-repeat: repeat-y;\n" + 
+			"	background-color: white;\n" + 
+			"	color: black;\n" + 
+			"}\n" + 
+			"/* Head */\n" + 
+			"#mw-page-base {\n" + 
+			"	height: 5em;\n" + 
+			"	background-color: white;\n" + 
+			"	background-image: url(images/page-fade.png?1);\n" + 
+			"	background-position: bottom left;\n" + 
+			"	background-repeat: repeat-x;\n" + 
+			"}\n" + 
+			"#mw-head-base {\n" + 
+			"	margin-top: -5em;\n" + 
+			"	margin-left: 10em;\n" + 
+			"	height: 5em;\n" + 
+			"	background-image: url(images/border.png?1);\n" + 
+			"	background-position: bottom left;\n" + 
+			"	background-repeat: repeat-x;\n" + 
+			"}\n" + 
+			"div#mw-head {\n" + 
+			"	position: absolute;\n" + 
+			"	top: 0;\n" + 
+			"	right: 0;\n" + 
+			"	width: 100%;\n" + 
+			"}\n" + 
+			"div#mw-head h5 {\n" + 
+			"	margin: 0;\n" + 
+			"	padding: 0;\n" + 
+			"}\n" + 
+			"	/* Hide empty portlets */\n" + 
+			"	div.emptyPortlet {\n" + 
+			"		display: none;\n" + 
+			"	}\n" + 
+			"	/* Personal */\n" + 
+			"	#p-personal {\n" + 
+			"		position: absolute;\n" + 
+			"		top: 0;\n" + 
+			"		padding-left: 10em;\n" + 
+			"		right: 0.75em;\n" + 
+			"	}\n" + 
+			"	#p-personal h5 {\n" + 
+			"		display: none;\n" + 
+			"	}\n" + 
+			"	#p-personal ul {\n" + 
+			"		list-style: none;\n" + 
+			"		margin: 0;\n" + 
+			"		padding: 0;\n" + 
+			"	}\n" + 
+			"	/* @noflip */\n" + 
+			"	#p-personal li {\n" + 
+			"		line-height: 1.125em;\n" + 
+			"		float: left;\n" + 
+			"	}\n" + 
+			"	/* This one flips! */\n" + 
+			"	#p-personal li {\n" + 
+			"		margin-left: 0.75em;\n" + 
+			"		margin-top: 0.5em;\n" + 
+			"		font-size: 0.75em;\n" + 
+			"		white-space: nowrap;\n" + 
+			"	}\n" + 
+			"	/* Navigation Containers */\n" + 
+			"	#left-navigation {\n" + 
+			"		position: absolute;\n" + 
+			"		left: 10em;\n" + 
+			"		top: 2.5em;\n" + 
+			"	}\n" + 
+			"	#right-navigation {\n" + 
+			"		float: right;\n" + 
+			"		margin-top: 2.5em;\n" + 
+			"	}\n" + 
+			"	/* Navigation Labels */\n" + 
+			"	div.vectorTabs h5,\n" + 
+			"	div.vectorMenu h5 span {\n" + 
+			"		display: none;\n" + 
+			"	}\n" + 
+			"	/* Namespaces and Views */\n" + 
+			"	/* @noflip */\n" + 
+			"	div.vectorTabs {\n" + 
+			"		float: left;\n" + 
+			"		height: 2.5em;\n" + 
+			"	}\n" + 
+			"	div.vectorTabs {\n" + 
+			"		background-image: url(images/tab-break.png?1);\n" + 
+			"		background-position: bottom left;\n" + 
+			"		background-repeat: no-repeat;\n" + 
+			"		padding-left: 1px;\n" + 
+			"	}\n" + 
+			"	/* @noflip */\n" + 
+			"	div.vectorTabs ul {\n" + 
+			"		float: left;\n" + 
+			"	}\n" + 
+			"	div.vectorTabs ul {\n" + 
+			"		height: 100%;\n" + 
+			"		list-style: none;\n" + 
+			"		margin: 0;\n" + 
+			"		padding: 0;\n" + 
+			"	}\n" + 
+			"	/* @noflip */\n" + 
+			"	div.vectorTabs ul li {\n" + 
+			"		float: left;\n" + 
+			"	}\n" + 
+			"	/* OVERRIDDEN BY COMPLIANT BROWSERS */\n" + 
+			"	div.vectorTabs ul li {\n" + 
+			"		line-height: 1.125em;\n" + 
+			"		display: inline-block;\n" + 
+			"		height: 100%;\n" + 
+			"		margin: 0;\n" + 
+			"		padding: 0;\n" + 
+			"		background-color: #f3f3f3;\n" + 
+			"		background-image: url(images/tab-normal-fade.png?1);\n" + 
+			"		background-position: bottom left;\n" + 
+			"		background-repeat: repeat-x;\n" + 
+			"		white-space:nowrap;\n" + 
+			"	}\n" + 
+			"	/* IGNORED BY IE6 */\n" + 
+			"	div.vectorTabs ul > li {\n" + 
+			"		display: block;\n" + 
+			"	}\n" + 
+			"	div.vectorTabs li.selected {\n" + 
+			"		background-image: url(images/tab-current-fade.png?1);\n" + 
+			"	}\n" + 
+			"	/* OVERRIDDEN BY COMPLIANT BROWSERS */\n" + 
+			"	div.vectorTabs li a {\n" + 
+			"		display: inline-block;\n" + 
+			"		height: 2.5em;\n" + 
+			"		padding-left: 0.4em;\n" + 
+			"		padding-right: 0.4em;\n" + 
+			"		background-image: url(images/tab-break.png?1);\n" + 
+			"		background-position: bottom right;\n" + 
+			"		background-repeat: no-repeat;\n" + 
+			"	}\n" + 
+			"	div.vectorTabs li a,\n" + 
+			"	div.vectorTabs li a span {\n" + 
+			"		color: #0645ad;\n" + 
+			"		cursor: pointer;\n" + 
+			"	}\n" + 
+			"	div.vectorTabs li a span {\n" + 
+			"		font-size: 0.8em;\n" + 
+			"	}\n" + 
+			"	/* IGNORED BY IE6 */\n" + 
+			"	div.vectorTabs li > a {\n" + 
+			"		display: block;\n" + 
+			"	}\n" + 
+			"	/* OVERRIDDEN BY COMPLIANT BROWSERS */\n" + 
+			"	div.vectorTabs a span {\n" + 
+			"		display: inline-block;\n" + 
+			"		padding-top: 1.25em;\n" + 
+			"	}\n" + 
+			"	/* IGNORED BY IE6 */\n" + 
+			"	/* @noflip */\n" + 
+			"	div.vectorTabs a > span {\n" + 
+			"		float: left;\n" + 
+			"		display: block;\n" + 
+			"	}\n" + 
+			"	div.vectorTabs li.selected a,\n" + 
+			"	div.vectorTabs li.selected a span,\n" + 
+			"	div.vectorTabs li.selected a:visited\n" + 
+			"	div.vectorTabs li.selected a:visited span {\n" + 
+			"		color: #333333;\n" + 
+			"		text-decoration: none;\n" + 
+			"	}\n" + 
+			"	div.vectorTabs li.new a,\n" + 
+			"	div.vectorTabs li.new a span,\n" + 
+			"	div.vectorTabs li.new a:visited,\n" + 
+			"	div.vectorTabs li.new a:visited span {\n" + 
+			"		color: #a55858;\n" + 
+			"	}\n" + 
+			"	/* Variants and Actions */\n" + 
+			"	/* @noflip */\n" + 
+			"	div.vectorMenu {\n" + 
+			"		direction: ltr;\n" + 
+			"		float: left;\n" + 
+			"		background-image: url(images/arrow-down-icon.png?1);\n" + 
+			"		background-position: 100% 60%;\n" + 
+			"		background-repeat: no-repeat;\n" + 
+			"		cursor: pointer;\n" + 
+			"	}\n" + 
+			"	/* @noflip */\n" + 
+			"	body.rtl div.vectorMenu {\n" + 
+			"		direction: rtl;\n" + 
+			"	}\n" + 
+			"	/* OVERRIDDEN BY COMPLIANT BROWSERS */\n" + 
+			"	/* @noflip */\n" + 
+			"	div#mw-head div.vectorMenu h5 {\n" + 
+			"		float: left;\n" + 
+			"		background-image: url(images/tab-break.png?1);\n" + 
+			"		background-repeat: no-repeat;\n" + 
+			"	}\n" + 
+			"	/* IGNORED BY IE6 */\n" + 
+			"	div#mw-head div.vectorMenu > h5 {\n" + 
+			"		background-image: none;\n" + 
+			"	}\n" + 
+			"	div#mw-head div.vectorMenu h5 {\n" + 
+			"		background-position: bottom left;\n" + 
+			"		margin-left: -1px;\n" + 
+			"	}\n" + 
+			"	div#mw-head div.vectorMenu h4 {\n" + 
+			"		display: inline-block;\n" + 
+			"		float: left;\n" + 
+			"		font-size: 0.8em;\n" + 
+			"		padding-left: 0.5em;\n" + 
+			"		padding-top: 1.375em;\n" + 
+			"		font-weight: normal;\n" + 
+			"		border: none;\n" + 
+			"	}\n" + 
+			"	/* OVERRIDDEN BY COMPLIANT BROWSERS */\n" + 
+			"	/* @noflip */\n" + 
+			"	div.vectorMenu h5 a {\n" + 
+			"		display: inline-block;\n" + 
+			"		width: 24px;\n" + 
+			"		height: 2.5em;\n" + 
+			"		text-decoration: none;\n" + 
+			"		background-image: url(images/tab-break.png?1);\n" + 
+			"		background-repeat: no-repeat;\n" + 
+			"	}\n" + 
+			"	div.vectorMenu h5 a{\n" + 
+			"		background-position: bottom right;\n" + 
+			"	}\n" + 
+			"	/* IGNORED BY IE6 */\n" + 
+			"	div.vectorMenu h5 > a {\n" + 
+			"		display: block;\n" + 
+			"	}\n" + 
+			"	div.vectorMenu div.menu {\n" + 
+			"		position: relative;\n" + 
+			"		display: none;\n" + 
+			"		clear: both;\n" + 
+			"		text-align: left;\n" + 
+			"	}\n" + 
+			"	/* OVERRIDDEN BY COMPLIANT BROWSERS */\n" + 
+			"	/* @noflip */\n" + 
+			"	body.rtl div.vectorMenu div.menu {\n" + 
+			"		margin-left: 24px;\n" + 
+			"	}\n" + 
+			"	/* IGNORED BY IE6 */\n" + 
+			"	/* @noflip */\n" + 
+			"	body.rtl div.vectorMenu > div.menu {\n" + 
+			"		margin-left: auto;\n" + 
+			"	}\n" + 
+			"	/* Fixes old versions of FireFox */\n" + 
+			"	/* @noflip */\n" + 
+			"	body.rtl div.vectorMenu > div.menu,\n" + 
+			"	x:-moz-any-link {\n" + 
+			"		margin-left: 23px;\n" + 
+			"	}\n" + 
+			"	div.vectorMenu:hover div.menu {\n" + 
+			"		display: block;\n" + 
+			"	}\n" + 
+			"	div.vectorMenu ul {\n" + 
+			"		position: absolute;\n" + 
+			"		background-color: white;\n" + 
+			"		border: solid 1px silver;\n" + 
+			"		border-top-width: 0;\n" + 
+			"		list-style: none;\n" + 
+			"		list-style-image: none;\n" + 
+			"		list-style-type: none;\n" + 
+			"		padding: 0;\n" + 
+			"		margin: 0;\n" + 
+			"		margin-left: -1px;\n" + 
+			"		text-align: left;\n" + 
+			"	}\n" + 
+			"	/* Fixes old versions of FireFox */\n" + 
+			"	div.vectorMenu ul,\n" + 
+			"	x:-moz-any-link {\n" + 
+			"		min-width: 5em;\n" + 
+			"	}\n" + 
+			"	/* Returns things back to normal in modern versions of FireFox */\n" + 
+			"	div.vectorMenu ul,\n" + 
+			"	x:-moz-any-link,\n" + 
+			"	x:default {\n" + 
+			"		min-width: 0;\n" + 
+			"	}\n" + 
+			"	div.vectorMenu li {\n" + 
+			"		padding: 0;\n" + 
+			"		margin: 0;\n" + 
+			"		text-align: left;\n" + 
+			"		line-height: 1em;\n" + 
+			"	}\n" + 
+			"	/* OVERRIDDEN BY COMPLIANT BROWSERS */\n" + 
+			"	div.vectorMenu li a {\n" + 
+			"		display: inline-block;\n" + 
+			"		padding: 0.5em;\n" + 
+			"		white-space: nowrap;\n" + 
+			"	}\n" + 
+			"	/* IGNORED BY IE6 */\n" + 
+			"	div.vectorMenu li > a {\n" + 
+			"		display: block;\n" + 
+			"	}\n" + 
+			"	div.vectorMenu li a {\n" + 
+			"		color: #0645ad;\n" + 
+			"		cursor: pointer;\n" + 
+			"		font-size: 0.8em;\n" + 
+			"	}\n" + 
+			"	div.vectorMenu li.selected a,\n" + 
+			"	div.vectorMenu li.selected a:visited {\n" + 
+			"		color: #333333;\n" + 
+			"		text-decoration: none;\n" + 
+			"	}\n" + 
+			"	/* Search */\n" + 
+			"	#p-search h5 {\n" + 
+			"		display: none;\n" + 
+			"	}\n" + 
+			"	/* @noflip */\n" + 
+			"	#p-search {\n" + 
+			"		float: left;\n" + 
+			"	}\n" + 
+			"	#p-search {\n" + 
+			"		margin-right: 0.5em;\n" + 
+			"		margin-left: 0.5em;\n" + 
+			"	}\n" + 
+			"	#p-search form,\n" + 
+			"	#p-search input {\n" + 
+			"		margin: 0;\n" + 
+			"		margin-top: 0.4em;\n" + 
+			"	}\n" + 
+			"	#simpleSearch {\n" + 
+			"		margin-top: 0.65em;\n" + 
+			"		position: relative;\n" + 
+			"		min-height: 1px; /* Gotta trigger hasLayout for IE7 */\n" + 
+			"		border: solid 1px #AAAAAA;\n" + 
+			"		background-color: white;\n" + 
+			"		background-image: url(images/search-fade.png?1);\n" + 
+			"		background-position: top left;\n" + 
+			"		background-repeat: repeat-x;\n" + 
+			"	}\n" + 
+			"	#simpleSearch label {\n" + 
+			"		font-size: 13px;\n" + 
+			"		top: 0.25em;\n" + 
+			"	}\n" + 
+			"	div#simpleSearch .placeholder {\n" + 
+			"		color: #999999;\n" + 
+			"	}\n" + 
+			"	div#simpleSearch input::-webkit-input-placeholder { \n" + 
+			"		color: #999999;\n" + 
+			"	}\n" + 
+			"	div#simpleSearch input#searchInput {\n" + 
+			"		margin: 0;\n" + 
+			"		border-width: 0;\n" + 
+			"		padding: 3px;\n" + 
+			"		vertical-align: top;\n" + 
+			"		font-size: 13px;\n" + 
+			"		width: 14em;\n" + 
+			"		background-color: transparent;\n" + 
+			"	}\n" + 
+			"	/* OVERRIDDEN BY COMPLIANT BROWSERS */\n" + 
+			"	#simpleSearch button#searchButton {\n" + 
+			"		padding: 0;\n" + 
+			"		margin: 0 5px;\n" + 
+			"		border: none;\n" + 
+			"		cursor: pointer;\n" + 
+			"		background-color: transparent;\n" + 
+			"		font-size: x-small;\n" + 
+			"	}\n" + 
+			"	div#simpleSearch button#searchButton img {\n" + 
+			"		border: none;\n" + 
+			"		margin: 0;\n" + 
+			"		padding: 0;\n" + 
+			"		vertical-align: middle;\n" + 
+			"	}\n" + 
+			"/* Panel */\n" + 
+			"div#mw-panel {\n" + 
+			"	position: absolute;\n" + 
+			"	top: 160px;\n" + 
+			"	padding-top: 1em;\n" + 
+			"	width: 10em;\n" + 
+			"	left: 0;\n" + 
+			"}\n" + 
+			"	div#mw-panel div.portal {\n" + 
+			"		padding-bottom: 1.5em;\n" + 
+			"	}\n" + 
+			"	div#mw-panel div.portal h5 {\n" + 
+			"		font-weight: normal;\n" + 
+			"		color: #444444;\n" + 
+			"		padding: 0.25em;\n" + 
+			"		padding-top: 0;\n" + 
+			"		padding-left: 1.75em;\n" + 
+			"		cursor: default;\n" + 
+			"		border: none;\n" + 
+			"		font-size: 0.75em;\n" + 
+			"	}\n" + 
+			"	div#mw-panel div.portal div.body {\n" + 
+			"		margin: 0;\n" + 
+			"		padding-top: 0.5em;\n" + 
+			"		margin-left: 1.25em;\n" + 
+			"		background-image: url(images/portal-break.png?1);\n" + 
+			"		background-repeat: no-repeat;\n" + 
+			"		background-position: top left;\n" + 
+			"	}\n" + 
+			"	div#mw-panel div.portal div.body ul {\n" + 
+			"		list-style: none;\n" + 
+			"		list-style-image: none;\n" + 
+			"		list-style-type: none;\n" + 
+			"		padding: 0;\n" + 
+			"		margin: 0;\n" + 
+			"	}\n" + 
+			"	div#mw-panel div.portal div.body ul li {\n" + 
+			"		line-height: 1.125em;\n" + 
+			"		padding: 0;\n" + 
+			"		padding-bottom: 0.5em;\n" + 
+			"		margin: 0;\n" + 
+			"		overflow: hidden;\n" + 
+			"		font-size: 0.75em;\n" + 
+			"	}\n" + 
+			"	div#mw-panel div.portal div.body ul li a {\n" + 
+			"		color: #0645ad;\n" + 
+			"	}\n" + 
+			"	div#mw-panel div.portal div.body ul li a:visited {\n" + 
+			"		color: #0b0080;\n" + 
+			"	}\n" + 
+			"/* Footer */\n" + 
+			"#footer {\n" + 
+			"	margin-left: 10em;\n" + 
+			"	margin-top: 0;\n" + 
+			"	padding: 0.75em;\n" + 
+			"	background-image: url(images/border.png?1);\n" + 
+			"	background-position: top left;\n" + 
+			"	background-repeat: repeat-x;\n" + 
+			"}\n" + 
+			"#footer ul {\n" + 
+			"	list-style: none;\n" + 
+			"	list-style-image: none;\n" + 
+			"	list-style-type: none;\n" + 
+			"	margin: 0;\n" + 
+			"	padding: 0;\n" + 
+			"}\n" + 
+			"#footer ul li {\n" + 
+			"	margin: 0;\n" + 
+			"	padding: 0;\n" + 
+			"	padding-top: 0.5em;\n" + 
+			"	padding-bottom: 0.5em;\n" + 
+			"	color: #333333;\n" + 
+			"	font-size: 0.7em;\n" + 
+			"}\n" + 
+			"#footer #footer-icons {\n" + 
+			"	float: right;\n" + 
+			"}\n" + 
+			"/* @noflip */\n" + 
+			"body.ltr #footer #footer-places {\n" + 
+			"	float: left;\n" + 
+			"}\n" + 
+			"#footer #footer-info li {\n" + 
+			"	line-height: 1.4em;\n" + 
+			"}\n" + 
+			"#footer #footer-icons li {\n" + 
+			"	float: left;\n" + 
+			"	margin-left: 0.5em;\n" + 
+			"	line-height: 2em;\n" + 
+			"}\n" + 
+			"#footer #footer-places li {\n" + 
+			"	float: left;\n" + 
+			"	margin-right: 1em;\n" + 
+			"	line-height: 2em;\n" + 
+			"}\n" + 
+			"/* Logo */\n" + 
+			"#p-logo {\n" + 
+			"	position: absolute;\n" + 
+			"	top: -160px;\n" + 
+			"	left: 0;\n" + 
+			"	width: 10em;\n" + 
+			"	height: 160px;\n" + 
+			"}\n" + 
+			"#p-logo a {\n" + 
+			"	display: block;\n" + 
+			"	width: 10em;\n" + 
+			"	height: 160px;\n" + 
+			"	background-repeat: no-repeat;\n" + 
+			"	background-position: center center;\n" + 
+			"	text-decoration: none;\n" + 
+			"}\n" + 
+			"\n" + 
+			"/*\n" + 
+			" * \n" + 
+			" * The following code is highly modified from monobook. It would be nice if the\n" + 
+			" * preftoc id was more human readable like preferences-toc for instance,\n" + 
+			" * howerver this would require backporting the other skins.\n" + 
+			" */\n" + 
+			"\n" + 
+			"/* Preferences */\n" + 
+			"#preftoc {\n" + 
+			"	/* Tabs */\n" + 
+			"	width: 100%;\n" + 
+			"	float: left;\n" + 
+			"	clear: both;\n" + 
+			"	margin: 0 !important;\n" + 
+			"	padding: 0 !important;\n" + 
+			"	background-image: url(images/preferences-break.png?1);\n" + 
+			"	background-position: bottom left;\n" + 
+			"	background-repeat: no-repeat;\n" + 
+			"}\n" + 
+			"	#preftoc li {\n" + 
+			"		/* Tab */\n" + 
+			"		float: left;\n" + 
+			"		margin: 0;\n" + 
+			"		padding: 0;\n" + 
+			"		padding-right: 1px;\n" + 
+			"		height: 2.25em;\n" + 
+			"		white-space: nowrap;\n" + 
+			"		list-style-type: none;\n" + 
+			"		list-style-image: none;\n" + 
+			"		background-image: url(images/preferences-break.png?1);\n" + 
+			"		background-position: bottom right;\n" + 
+			"		background-repeat: no-repeat;\n" + 
+			"	}\n" + 
+			"	/* IGNORED BY IE6 */\n" + 
+			"	#preftoc li:first-child {\n" + 
+			"		margin-left: 1px;\n" + 
+			"	}\n" + 
+			"	#preftoc a,\n" + 
+			"	#preftoc a:active {\n" + 
+			"		display: inline-block;\n" + 
+			"		position: relative;\n" + 
+			"		color: #0645ad;\n" + 
+			"		padding: 0.5em;\n" + 
+			"		text-decoration: none;\n" + 
+			"		background-image: none;\n" + 
+			"		font-size: 0.9em;\n" + 
+			"	}\n" + 
+			"	#preftoc a:hover {\n" + 
+			"		text-decoration: underline;\n" + 
+			"	}\n" + 
+			"	#preftoc li.selected a {\n" + 
+			"		background-image: url(images/preferences-fade.png?1);\n" + 
+			"		background-position: bottom;\n" + 
+			"		background-repeat: repeat-x;\n" + 
+			"		color: #333333;\n" + 
+			"		text-decoration: none;\n" + 
+			"	}\n" + 
+			"#preferences {\n" + 
+			"	float: left;\n" + 
+			"	width: 100%;\n" + 
+			"	margin: 0;\n" + 
+			"	margin-top: -2px;\n" + 
+			"	clear: both;\n" + 
+			"	border: solid 1px #cccccc;\n" + 
+			"	background-color: #f9f9f9;\n" + 
+			"	background-image: url(images/preferences-base.png?1);\n" + 
+			"}\n" + 
+			"#preferences fieldset.prefsection {\n" + 
+			"	border: none;\n" + 
+			"	padding: 0;\n" + 
+			"	margin: 1em;\n" + 
+			"}\n" + 
+			"#preferences fieldset.prefsection fieldset {\n" + 
+			"	border: none;\n" + 
+			"	border-top: solid 1px #cccccc;\n" + 
+			"}\n" + 
+			"#preferences legend {\n" + 
+			"	color: #666666;\n" + 
+			"}\n" + 
+			"#preferences fieldset.prefsection legend.mainLegend {\n" + 
+			"	display: none;\n" + 
+			"}\n" + 
+			"#preferences td {\n" + 
+			"	padding-left: 0.5em;\n" + 
+			"	padding-right: 0.5em;\n" + 
+			"}\n" + 
+			"#preferences td.htmlform-tip {\n" + 
+			"	font-size: x-small;\n" + 
+			"	padding: .2em 2em;\n" + 
+			"	color: #666666;\n" + 
+			"}\n" + 
+			"#preferences div.mw-prefs-buttons {\n" + 
+			"	padding: 1em;\n" + 
+			"}\n" + 
+			"#preferences div.mw-prefs-buttons input {\n" + 
+			"	margin-right: 0.25em;\n" + 
+			"}\n" + 
+			"\n" + 
+			"/* \n" + 
+			" * Styles for the user login and create account forms\n" + 
+			" */\n" + 
+			"#userlogin, #userloginForm {\n" + 
+			"	border: solid 1px #cccccc;\n" + 
+			"	padding: 1.2em;\n" + 
+			"	margin: .5em;\n" + 
+			"	float: left;\n" + 
+			"}\n" + 
+			"\n" + 
+			"#userlogin {\n" + 
+			"	min-width: 20em;\n" + 
+			"	max-width: 90%;\n" + 
+			"	width: 40em;\n" + 
+			"}\n" + 
+			"\n" + 
+			"/*\n" + 
+			" * \n" + 
+			" * The following code is slightly modified from monobook\n" + 
+			" * \n" + 
+			" */\n" + 
+			"#content {\n" + 
+			"	line-height: 1.5em;\n" + 
+			"}\n" + 
+			"#bodyContent {\n" + 
+			"	font-size: 0.8em;\n" + 
+			"}\n" + 
+			"/* Links */\n" + 
+			"a {\n" + 
+			"	text-decoration: none;\n" + 
+			"	color: #0645ad;\n" + 
+			"	background: none;\n" + 
+			"}\n" + 
+			"a:visited {\n" + 
+			"	color: #0b0080;\n" + 
+			"}\n" + 
+			"a:active {\n" + 
+			"	color: #faa700;\n" + 
+			"}\n" + 
+			"a:hover {\n" + 
+			"	text-decoration: underline;\n" + 
+			"}\n" + 
+			"a.stub {\n" + 
+			"	color: #772233;\n" + 
+			"}\n" + 
+			"a.new, #p-personal a.new {\n" + 
+			"	color: #ba0000;\n" + 
+			"}\n" + 
+			"a.new:visited, #p-personal a.new:visited {\n" + 
+			"	color: #a55858;\n" + 
+			"}\n" + 
+			"\n" + 
+			"/* Inline Elements */\n" + 
+			"img {\n" + 
+			"	border: none;\n" + 
+			"	vertical-align: middle;\n" + 
+			"}\n" + 
+			"hr {\n" + 
+			"	height: 1px;\n" + 
+			"	color: #aaa;\n" + 
+			"	background-color: #aaa;\n" + 
+			"	border: 0;\n" + 
+			"	margin: .2em 0 .2em 0;\n" + 
+			"}\n" + 
+			"\n" + 
+			"/* Structural Elements */\n" + 
+			"h1,\n" + 
+			"h2,\n" + 
+			"h3,\n" + 
+			"h4,\n" + 
+			"h5,\n" + 
+			"h6 {\n" + 
+			"	color: black;\n" + 
+			"	background: none;\n" + 
+			"	font-weight: normal;\n" + 
+			"	margin: 0;\n" + 
+			"	padding-top: .5em;\n" + 
+			"	padding-bottom: .17em;\n" + 
+			"	border-bottom: 1px solid #aaa;\n" + 
+			"	width: auto;\n" + 
+			"}\n" + 
+			"h1 { font-size: 188%; }\n" + 
+			"h1 .editsection { font-size: 53%; }\n" + 
+			"h2 { font-size: 150%; }\n" + 
+			"h2 .editsection { font-size: 67%; }\n" + 
+			"h3,\n" + 
+			"h4,\n" + 
+			"h5,\n" + 
+			"h6 {\n" + 
+			"	border-bottom: none;\n" + 
+			"	font-weight: bold;\n" + 
+			"}\n" + 
+			"h3 { font-size: 132%; }\n" + 
+			"h3 .editsection { font-size: 76%; font-weight: normal; }\n" + 
+			"h4 { font-size: 116%; }\n" + 
+			"h4 .editsection { font-size: 86%; font-weight: normal; }\n" + 
+			"h5 { font-size: 100%; }\n" + 
+			"h5 .editsection { font-weight: normal; }\n" + 
+			"h6 { font-size: 80%;  }\n" + 
+			"h6 .editsection { font-size: 125%; font-weight: normal; }\n" + 
+			"p {\n" + 
+			"	margin: .4em 0 .5em 0;\n" + 
+			"	line-height: 1.5em;\n" + 
+			"}\n" + 
+			"	p img {\n" + 
+			"		margin: 0;\n" + 
+			"	}\n" + 
+			"abbr,\n" + 
+			"acronym,\n" + 
+			".explain {\n" + 
+			"	border-bottom: 1px dotted black;\n" + 
+			"	color: black;\n" + 
+			"	background: none;\n" + 
+			"	cursor: help;\n" + 
+			"}\n" + 
+			"q {\n" + 
+			"	font-family: Times, \"Times New Roman\", serif;\n" + 
+			"	font-style: italic;\n" + 
+			"}\n" + 
+			"/* Disabled for now\n" + 
+			"blockquote {\n" + 
+			"	font-family: Times, \"Times New Roman\", serif;\n" + 
+			"	font-style: italic;\n" + 
+			"}*/\n" + 
+			"pre, code, tt {\n" + 
+			"	/*\n" + 
+			"	 * It's important for this rule to first reference an actual font name, some browsers will render the monospace text\n" + 
+			"	 * too small otherwise, namely Firefox, Chrome and Safari\n" + 
+			"	 */\n" + 
+			"	font-family: monospace, \"Courier New\";\n" + 
+			"}\n" + 
+			"code {\n" + 
+			"	background-color: #f9f9f9;\n" + 
+			"}\n" + 
+			"pre {\n" + 
+			"	padding: 1em;\n" + 
+			"	border: 1px dashed #2f6fab;\n" + 
+			"	color: black;\n" + 
+			"	background-color: #f9f9f9;\n" + 
+			"	line-height: 1.1em;\n" + 
+			"}\n" + 
+			"ul {\n" + 
+			"	line-height: 1.5em;\n" + 
+			"	list-style-type: square;\n" + 
+			"	margin: .3em 0 0 1.5em;\n" + 
+			"	padding: 0;\n" + 
+			"	list-style-image: url(images/bullet-icon.png?1);\n" + 
+			"}\n" + 
+			"ol {\n" + 
+			"	line-height: 1.5em;\n" + 
+			"	margin: .3em 0 0 3.2em;\n" + 
+			"	padding: 0;\n" + 
+			"	list-style-image: none;\n" + 
+			"}\n" + 
+			"li {\n" + 
+			"	margin-bottom: .1em;\n" + 
+			"}\n" + 
+			"dt {\n" + 
+			"	font-weight: bold;\n" + 
+			"	margin-bottom: .1em;\n" + 
+			"}\n" + 
+			"dl {\n" + 
+			"	margin-top: .2em;\n" + 
+			"	margin-bottom: .5em;\n" + 
+			"}\n" + 
+			"dd {\n" + 
+			"	line-height: 1.5em;\n" + 
+			"	margin-left: 2em;\n" + 
+			"	margin-bottom: .1em;\n" + 
+			"}\n" + 
+			"/* Tables */\n" + 
+			"table {\n" + 
+			"	font-size: 100%;\n" + 
+			"	color: black;\n" + 
+			"	/* we don't want the bottom borders of <h2>s to be visible through\n" + 
+			"	 * floated tables */\n" + 
+			"	background-color: white;\n" + 
+			"}\n" + 
+			"fieldset table {\n" + 
+			"	/* but keep table layouts in forms clean... */\n" + 
+			"	background: none;\n" + 
+			"}\n" + 
+			"/* Forms */\n" + 
+			"fieldset {\n" + 
+			"	border: 1px solid #2f6fab;\n" + 
+			"	margin: 1em 0 1em 0;\n" + 
+			"	padding: 0 1em 1em;\n" + 
+			"	line-height: 1.5em;\n" + 
+			"}\n" + 
+			"	fieldset.nested {\n" + 
+			"		margin: 0 0 0.5em 0;\n" + 
+			"		padding: 0 0.5em 0.5em;\n" + 
+			"	}\n" + 
+			"legend {\n" + 
+			"	padding: .5em;\n" + 
+			"	font-size: 95%;\n" + 
+			"}\n" + 
+			"form {\n" + 
+			"	border: none;\n" + 
+			"	margin: 0;\n" + 
+			"}\n" + 
+			"textarea {\n" + 
+			"	width: 100%;\n" + 
+			"	padding: .1em;\n" + 
+			"}\n" + 
+			"select {\n" + 
+			"	vertical-align: top;\n" + 
+			"}\n" + 
+			"/* Table of Contents */\n" + 
+			"#toc,\n" + 
+			".toc,\n" + 
+			".mw-warning {\n" + 
+			"	border: 1px solid #aaa;\n" + 
+			"	background-color: #f9f9f9;\n" + 
+			"	padding: 5px;\n" + 
+			"	font-size: 95%;\n" + 
+			"}\n" + 
+			"#toc h2,\n" + 
+			".toc h2 {\n" + 
+			"	display: inline;\n" + 
+			"	border: none;\n" + 
+			"	padding: 0;\n" + 
+			"	font-size: 100%;\n" + 
+			"	font-weight: bold;\n" + 
+			"}\n" + 
+			"#toc #toctitle,\n" + 
+			".toc #toctitle,\n" + 
+			"#toc .toctitle,\n" + 
+			".toc .toctitle {\n" + 
+			"	text-align: center;\n" + 
+			"}\n" + 
+			"#toc ul,\n" + 
+			".toc ul {\n" + 
+			"	list-style-type: none;\n" + 
+			"	list-style-image: none;\n" + 
+			"	margin-left: 0;\n" + 
+			"	padding-left: 0;\n" + 
+			"	text-align: left;\n" + 
+			"}\n" + 
+			"#toc ul ul,\n" + 
+			".toc ul ul {\n" + 
+			"	margin: 0 0 0 2em;\n" + 
+			"}\n" + 
+			"#toc .toctoggle,\n" + 
+			".toc .toctoggle {\n" + 
+			"	font-size: 94%;\n" + 
+			"}\n" + 
+			"/* Images */\n" + 
+			"div.floatright, table.floatright {\n" + 
+			"	clear: right;\n" + 
+			"	float: right;\n" + 
+			"	position: relative;\n" + 
+			"	margin: 0 0 .5em .5em;\n" + 
+			"	border: 0;\n" + 
+			"}\n" + 
+			"div.floatright p { font-style: italic; }\n" + 
+			"div.floatleft, table.floatleft {\n" + 
+			"	float: left;\n" + 
+			"	clear: left;\n" + 
+			"	position: relative;\n" + 
+			"	margin: 0 .5em .5em 0;\n" + 
+			"	border: 0;\n" + 
+			"}\n" + 
+			"div.floatleft p { font-style: italic; }\n" + 
+			"/* Thumbnails */\n" + 
+			"div.thumb {\n" + 
+			"	margin-bottom: .5em;\n" + 
+			"	border-style: solid;\n" + 
+			"	border-color: white;\n" + 
+			"	width: auto;\n" + 
+			"	background-color: transparent;\n" + 
+			"}\n" + 
+			"div.thumbinner {\n" + 
+			"	border: 1px solid #ccc;\n" + 
+			"	padding: 3px !important;\n" + 
+			"	background-color: #f9f9f9;\n" + 
+			"	font-size: 94%;\n" + 
+			"	text-align: center;\n" + 
+			"	overflow: hidden;\n" + 
+			"}\n" + 
+			"html .thumbimage {\n" + 
+			"	border: 1px solid #ccc;\n" + 
+			"}\n" + 
+			"html .thumbcaption {\n" + 
+			"	border: none;\n" + 
+			"	text-align: left;\n" + 
+			"	line-height: 1.4em;\n" + 
+			"	padding: 3px !important;\n" + 
+			"	font-size: 94%;\n" + 
+			"}\n" + 
+			"div.magnify {\n" + 
+			"	float: right;\n" + 
+			"	border: none !important;\n" + 
+			"	background: none !important;\n" + 
+			"}\n" + 
+			"div.magnify a, div.magnify img {\n" + 
+			"	display: block;\n" + 
+			"	border: none !important;\n" + 
+			"	background: none !important;\n" + 
+			"}\n" + 
+			"/* @noflip */\n" + 
+			"div.tright {\n" + 
+			"	clear: right;\n" + 
+			"	float: right;\n" + 
+			"	border-width: .5em 0 .8em 1.4em;\n" + 
+			"}\n" + 
+			"/* @noflip */\n" + 
+			"div.tleft {\n" + 
+			"	float: left;\n" + 
+			"	clear: left;\n" + 
+			"	margin-right: .5em;\n" + 
+			"	border-width: .5em 1.4em .8em 0;\n" + 
+			"}\n" + 
+			"img.thumbborder {\n" + 
+			"	border: 1px solid #dddddd;\n" + 
+			"}\n" + 
+			".hiddenStructure {\n" + 
+			"	display: none;\n" + 
+			"}\n" + 
+			"/* Warning */\n" + 
+			".mw-warning {\n" + 
+			"	margin-left: 50px;\n" + 
+			"	margin-right: 50px;\n" + 
+			"	text-align: center;\n" + 
+			"}\n" + 
+			"/* User Message */\n" + 
+			".usermessage {\n" + 
+			"	background-color: #ffce7b;\n" + 
+			"	border: 1px solid #ffa500;\n" + 
+			"	color: black;\n" + 
+			"	font-weight: bold;\n" + 
+			"	margin: 2em 0 1em;\n" + 
+			"	padding: .5em 1em;\n" + 
+			"	vertical-align: middle;\n" + 
+			"}\n" + 
+			"/* Site Notice (includes notices from CentralNotice extension) */\n" + 
+			"#siteNotice {\n" + 
+			"	text-align: center;\n" + 
+			"	font-size: 0.8em;\n" + 
+			"	margin: 0;\n" + 
+			"}\n" + 
+			"#localNotice {\n" + 
+			"	margin-bottom: 0.9em;\n" + 
+			"}\n" + 
+			"/* Categories */\n" + 
+			".catlinks {\n" + 
+			"	border: 1px solid #aaa;\n" + 
+			"	background-color: #f9f9f9;\n" + 
+			"	padding: 5px;\n" + 
+			"	margin-top: 1em;\n" + 
+			"	clear: both;\n" + 
+			"}\n" + 
+			"/* Sub-navigation */\n" + 
+			"#siteSub {\n" + 
+			"	display: none;\n" + 
+			"}\n" + 
+			"#jump-to-nav {\n" + 
+			"	display: none;\n" + 
+			"}\n" + 
+			"#contentSub, #contentSub2 {\n" + 
+			"	font-size: 84%;\n" + 
+			"	line-height: 1.2em;\n" + 
+			"	margin: 0 0 1.4em 1em;\n" + 
+			"	color: #7d7d7d;\n" + 
+			"	width: auto;\n" + 
+			"}\n" + 
+			"span.subpages {\n" + 
+			"	display: block;\n" + 
+			"}\n" + 
+			"/* Emulate Center */\n" + 
+			".center {\n" + 
+			"	width: 100%;\n" + 
+			"	text-align: center;\n" + 
+			"}\n" + 
+			"*.center * {\n" + 
+			"	margin-left: auto;\n" + 
+			"	margin-right: auto;\n" + 
+			"}\n" + 
+			"/* Small for tables and similar */\n" + 
+			".small, .small * {\n" + 
+			"	font-size: 94%;\n" + 
+			"}\n" + 
+			"table.small {\n" + 
+			"	font-size: 100%;\n" + 
+			"}\n" + 
+			"/* Edge Cases for Content */\n" + 
+			"h1, h2 {\n" + 
+			"	margin-bottom: .6em;\n" + 
+			"}\n" + 
+			"h3, h4, h5 {\n" + 
+			"	margin-bottom: .3em;\n" + 
+			"}\n" + 
+			"#firstHeading {\n" + 
+			"	padding-top: 0;\n" + 
+			"	margin-top: 0;\n" + 
+			"	padding-top: 0;\n" + 
+			"	margin-bottom: 0.1em;\n" + 
+			"	line-height: 1.2em;\n" + 
+			"	font-size: 1.6em;\n" + 
+			"	padding-bottom: 0;\n" + 
+			"}\n" + 
+			"#content a.external,\n" + 
+			"#content a[href ^=\"gopher://\"] {\n" + 
+			"	background: url(images/external-link-ltr-icon.png?2) center right no-repeat;\n" + 
+			"	padding: 0 13px 0 0;\n" + 
+			"}\n" + 
+			"#content a[href ^=\"https://\"],\n" + 
+			".link-https {\n" + 
+			"	background: url(images/lock-icon.png?2) center right no-repeat;\n" + 
+			"	padding: 0 13px 0 0;\n" + 
+			"}\n" + 
+			"#content a[href ^=\"mailto:\"],\n" + 
+			".link-mailto {\n" + 
+			"	background: url(images/mail-icon.png?2) center right no-repeat;\n" + 
+			"	padding: 0 13px 0 0;\n" + 
+			"}\n" + 
+			"#content a[href ^=\"news://\"] {\n" + 
+			"	background: url(images/news-icon.png?2) center right no-repeat;\n" + 
+			"	padding: 0 13px 0 0;\n" + 
+			"}\n" + 
+			"#content a[href ^=\"ftp://\"],\n" + 
+			".link-ftp {\n" + 
+			"	background: url(images/file-icon.png?2) center right no-repeat;\n" + 
+			"	padding: 0 13px 0 0;\n" + 
+			"}\n" + 
+			"#content a[href ^=\"irc://\"],\n" + 
+			"#content a.extiw[href ^=\"irc://\"],\n" + 
+			".link-irc {\n" + 
+			"	background: url(images/talk-icon.png?2) center right no-repeat;\n" + 
+			"	padding: 0 13px 0 0;\n" + 
+			"}\n" + 
+			"#content a.external[href $=\".ogg\"], #content a.external[href $=\".OGG\"],\n" + 
+			"#content a.external[href $=\".mid\"], #content a.external[href $=\".MID\"],\n" + 
+			"#content a.external[href $=\".midi\"], #content a.external[href $=\".MIDI\"],\n" + 
+			"#content a.external[href $=\".mp3\"], #content a.external[href $=\".MP3\"],\n" + 
+			"#content a.external[href $=\".wav\"], #content a.external[href $=\".WAV\"],\n" + 
+			"#content a.external[href $=\".wma\"], #content a.external[href $=\".WMA\"],\n" + 
+			".link-audio {\n" + 
+			"	background: url(\"images/audio-icon.png?2\") center right no-repeat;\n" + 
+			"	padding: 0 13px 0 0;\n" + 
+			"}\n" + 
+			"#content a.external[href $=\".ogm\"], #content a.external[href $=\".OGM\"],\n" + 
+			"#content a.external[href $=\".avi\"], #content a.external[href $=\".AVI\"],\n" + 
+			"#content a.external[href $=\".mpeg\"], #content a.external[href $=\".MPEG\"],\n" + 
+			"#content a.external[href $=\".mpg\"], #content a.external[href $=\".MPG\"],\n" + 
+			".link-video {\n" + 
+			"	background: url(\"images/video-icon.png?2\") center right no-repeat;\n" + 
+			"	padding: 0 13px 0 0;\n" + 
+			"}\n" + 
+			"#content a.external[href $=\".pdf\"], #content a.external[href $=\".PDF\"],\n" + 
+			"#content a.external[href *=\".pdf#\"], #content a.external[href *=\".PDF#\"],\n" + 
+			"#content a.external[href *=\".pdf?\"], #content a.external[href *=\".PDF?\"],\n" + 
+			".link-document {\n" + 
+			"	background: url(\"images/document-icon.png?2\") center right no-repeat;\n" + 
+			"	padding: 0 13px 0 0;\n" + 
+			"}\n" + 
+			"/* Interwiki Styling  (Disabled) */\n" + 
+			"#content a.extiw,\n" + 
+			"#content a.extiw:active {\n" + 
+			"	color: #36b;\n" + 
+			"	background: none;\n" + 
+			"	padding: 0;\n" + 
+			"}\n" + 
+			"#content a.external {\n" + 
+			"	color: #36b;\n" + 
+			"}\n" + 
+			"#content .printfooter {\n" + 
+			"	display: none;\n" + 
+			"}\n" + 
+			"/* Icon for Usernames */\n" + 
+			"#pt-userpage,\n" + 
+			"#pt-anonuserpage,\n" + 
+			"#pt-login {\n" + 
+			"	background: url(images/user-icon.png?1) left top no-repeat;\n" + 
+			"	padding-left: 15px !important;\n" + 
+			"	text-transform: none;\n" + 
+			"}\n" + 
+			"\n" + 
+			".toccolours {\n" + 
+			"	border: 1px solid #aaa;\n" + 
+			"	background-color: #f9f9f9;\n" + 
+			"	padding: 5px;\n" + 
+			"	font-size: 95%;\n" + 
+			"}\n" + 
+			"#bodyContent {\n" + 
+			"	position: relative;\n" + 
+			"	width: 100%;\n" + 
+			"}\n" + 
+			"#mw-js-message {\n" + 
+			"	font-size: 0.8em;\n" + 
+			"}\n" + 
+			"div#bodyContent {\n" + 
+			"	line-height: 1.5em;\n" + 
+			"}\n" + 
+			"\n" + 
+			"/* Watch/Unwatch Icon Styling */\n" + 
+			"#ca-unwatch.icon,\n" + 
+			"#ca-watch.icon {\n" + 
+			"	margin-right:1px;\n" + 
+			"}\n" + 
+			"#ca-unwatch.icon a,\n" + 
+			"#ca-watch.icon a {\n" + 
+			"	margin: 0;\n" + 
+			"	padding: 0;\n" + 
+			"	outline: none;\n" + 
+			"	display: block;\n" + 
+			"	width: 26px;\n" + 
+			"	height: 2.5em;\n" + 
+			"}\n" + 
+			"#ca-unwatch.icon a {\n" + 
+			"	background-image: url(images/watch-icons.png?1);\n" + 
+			"	background-position: -43px 60%;\n" + 
+			"}\n" + 
+			"#ca-watch.icon a {\n" + 
+			"	background-image: url(images/watch-icons.png?1);\n" + 
+			"	background-position: 5px 60%;\n" + 
+			"}\n" + 
+			"#ca-unwatch.icon a:hover {\n" + 
+			"	background-image: url(images/watch-icons.png?1);\n" + 
+			"	background-position: -67px 60%;\n" + 
+			"}\n" + 
+			"#ca-watch.icon a:hover {\n" + 
+			"	background-image: url(images/watch-icons.png?1);\n" + 
+			"	background-position: -19px 60%;\n" + 
+			"}\n" + 
+			"#ca-unwatch.icon a.loading,\n" + 
+			"#ca-watch.icon a.loading {\n" + 
+			"	background-image: url(images/watch-icon-loading.gif?1);\n" + 
+			"	background-position: center 60%;\n" + 
+			"}\n" + 
+			"#ca-unwatch.icon a span,\n" + 
+			"#ca-watch.icon a span {\n" + 
+			"	display: none;\n" + 
+			"}\n" + 
+			"div.vectorTabs ul {\n" + 
+			"	background-image:url(images/tab-break.png?1);\n" + 
+			"	background-position:right bottom;\n" + 
+			"	background-repeat:no-repeat;\n" + 
+			"}\n" + 
+			"</style>\n\n";
 	/**
 	 * Test CSS manipulations for the PDF file
 	 */
