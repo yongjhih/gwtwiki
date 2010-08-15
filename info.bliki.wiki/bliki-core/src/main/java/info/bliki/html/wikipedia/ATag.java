@@ -11,8 +11,7 @@ public class ATag extends AbstractHTMLTag {
 	protected final String closeStr;
 
 	public ATag() {
-		openStr = "[[";
-		closeStr = "]]";
+		this("[[", "]]");
 	}
 
 	public ATag(String opener, String closer) {
@@ -28,25 +27,28 @@ public class ATag extends AbstractHTMLTag {
 	@Override
 	public void content(AbstractHTMLToWiki w, TagNode node, StringBuilder resultBuffer, boolean showWithoutTag) {
 		List<Object> children = node.getChildren();
-		StringBuilder buf = new StringBuilder();
 		BaseToken tok = getFirstContent(children, "img");
 		if (tok != null && tok instanceof TagNode) {
 			w.nodeToWiki(tok, resultBuffer);
 		} else {
-			resultBuffer.append(openStr);
-			// no wiki tags inside wiki links:
-			w.nodesToPlainText(children, buf);
-			char ch;
-			for (int i = 0; i < buf.length(); i++) {
-				ch = buf.charAt(i);
-				if (ch == '\n' || ch == '\r' || ch == '\t') {
-					buf.setCharAt(i, ' ');
+			String hrefStr = node.getAttributes().get("href");
+			if (hrefStr != null && hrefStr.trim().length() > 0) {
+				StringBuilder buf = new StringBuilder();
+				// create a new wiki-link, only if href contains a string
+				resultBuffer.append(openStr);
+				// no wiki tags inside wiki links:
+				w.nodesToPlainText(children, buf);
+				char ch;
+				for (int i = 0; i < buf.length(); i++) {
+					ch = buf.charAt(i);
+					if (ch == '\n' || ch == '\r' || ch == '\t') {
+						buf.setCharAt(i, ' ');
+					}
 				}
+				String str = buf.toString();
+				resultBuffer.append(str.trim());
+				resultBuffer.append(closeStr);
 			}
-			String str = buf.toString();
-			resultBuffer.append(str.trim());
-			// w.nodesToText(children, resultBuffer);
-			resultBuffer.append(closeStr);
 		}
 	}
 
