@@ -97,16 +97,19 @@ public class WikipediaParser extends AbstractParser implements IParser {
 	}
 
 	/**
-	 * copy the content in the resulting ContentToken
+	 * Copy the read ahead content in the resulting HTML text token.
 	 * 
+	 * @param diff
+	 *          subtract <code>diff</code> form the current parser position to get
+	 *          the HTML text token end position.
 	 */
-	private void createContentToken(boolean whiteStart, final int whiteStartPosition, final int diff) {
-		if (whiteStart) {
+	private void createContentToken(final int diff) {
+		if (fWhiteStart) {
 			try {
 				final int whiteEndPosition = fCurrentPosition - diff;
-				int count = whiteEndPosition - whiteStartPosition;
+				int count = whiteEndPosition - fWhiteStartPosition;
 				if (count > 0) {
-					fWikiModel.append(new ContentToken(fStringSource.substring(whiteStartPosition, whiteStartPosition + count)));
+					fWikiModel.append(new ContentToken(fStringSource.substring(fWhiteStartPosition, fWhiteStartPosition + count)));
 				}
 			} finally {
 				fWhiteStart = false;
@@ -276,7 +279,7 @@ public class WikipediaParser extends AbstractParser implements IParser {
 							fWhiteStart = true;
 							fWhiteStartPosition = fCurrentPosition;
 						} else {
-							createContentToken(fWhiteStart, fWhiteStartPosition, 1);
+							createContentToken(1);
 						}
 						continue;
 					}
@@ -285,7 +288,7 @@ public class WikipediaParser extends AbstractParser implements IParser {
 
 				if (isStartOfLine() && fWikiModel.getRecursionLevel() == 1) {
 					if (fWikiModel.stackSize() > 0 && (fWikiModel.peekNode() instanceof PTag) && isEmptyLine(1)) {
-						createContentToken(fWhiteStart, fWhiteStartPosition, 2);
+						createContentToken(2);
 						reduceTokenStack(Configuration.HTML_PARAGRAPH_OPEN);
 					} else {
 						if (!isEmptyLine(1)) {
@@ -333,18 +336,18 @@ public class WikipediaParser extends AbstractParser implements IParser {
 						if (getNextChar('\'')) {
 							if (getNextChar('\'')) {
 								if (getNextChar('\'')) {
-									createContentToken(fWhiteStart, fWhiteStartPosition, 5);
+									createContentToken(5);
 									return TokenBOLDITALIC;
 								}
 								fCurrentPosition -= 1;
 								fWhiteStart = true;
-								createContentToken(fWhiteStart, fWhiteStartPosition, 3);
+								createContentToken(3);
 								return TokenBOLD;
 							}
-							createContentToken(fWhiteStart, fWhiteStartPosition, 3);
+							createContentToken(3);
 							return TokenBOLD;
 						}
-						createContentToken(fWhiteStart, fWhiteStartPosition, 2);
+						createContentToken(2);
 						return TokenITALIC;
 					}
 					break;
@@ -383,7 +386,7 @@ public class WikipediaParser extends AbstractParser implements IParser {
 												((HTMLTag) tag).setTemplate(isTemplate());
 											}
 
-											createContentToken(fWhiteStart, fWhiteStartPosition, 1);
+											createContentToken(1);
 
 											fCurrentPosition = fScannerPosition;
 
@@ -404,7 +407,7 @@ public class WikipediaParser extends AbstractParser implements IParser {
 										String tagName = tagNode.getTagName();
 										TagToken tag = fWikiModel.getTokenMap().get(tagName);
 										if (tag != null) {
-											createContentToken(fWhiteStart, fWhiteStartPosition, 2);
+											createContentToken(2);
 											fCurrentPosition = fScannerPosition;
 
 											if (fWikiModel.stackSize() > 0) {
@@ -464,7 +467,7 @@ public class WikipediaParser extends AbstractParser implements IParser {
 			// end of scanner text
 		}
 		try {
-			createContentToken(fWhiteStart, fWhiteStartPosition, 1);
+			createContentToken(1);
 		} catch (IndexOutOfBoundsException e) {
 			// end of scanner text
 		}
@@ -472,7 +475,7 @@ public class WikipediaParser extends AbstractParser implements IParser {
 	}
 
 	private void addParagraph() {
-		createContentToken(fWhiteStart, fWhiteStartPosition, 2);
+		createContentToken(2);
 		reduceTokenStack(Configuration.HTML_PARAGRAPH_OPEN);
 		fWikiModel.pushNode(new PTag());
 	}
@@ -494,7 +497,7 @@ public class WikipediaParser extends AbstractParser implements IParser {
 			}
 			try {
 				fCurrentPosition = whiteEndPosition;
-				createContentToken(fWhiteStart, fWhiteStartPosition, 0);
+				createContentToken(0);
 			} finally {
 				fCurrentPosition = currentPos;
 			}
@@ -512,7 +515,7 @@ public class WikipediaParser extends AbstractParser implements IParser {
 			if (readUntil("-->")) {
 				String htmlCommentContent = fStringSource.substring(htmlStartPosition + 3, fCurrentPosition - 3);
 				if (htmlCommentContent != null) {
-					createContentToken(fWhiteStart, fWhiteStartPosition, fCurrentPosition - htmlStartPosition + 1);
+					createContentToken(fCurrentPosition - htmlStartPosition + 1);
 					return true;
 				}
 			}
@@ -529,7 +532,7 @@ public class WikipediaParser extends AbstractParser implements IParser {
 				fCurrentPosition += 4;
 				fCurrentCharacter = fSource[fCurrentPosition++];
 
-				createContentToken(fWhiteStart, fWhiteStartPosition, 6);
+				createContentToken(6);
 				fWhiteStart = false;
 				foundISBN = true;
 				char ch;
@@ -648,7 +651,7 @@ public class WikipediaParser extends AbstractParser implements IParser {
 			String urlString = fStringSource.substring(urlStartPosition - 1, tempPosition - 1);
 			String email = urlString.substring(7);
 			if (EmailValidator.getInstance().isValid(email)) {
-				createContentToken(fWhiteStart, fWhiteStartPosition, 1);
+				createContentToken(1);
 				fWhiteStart = false;
 				fCurrentPosition = tempPosition;
 				fCurrentPosition--;
@@ -689,7 +692,7 @@ public class WikipediaParser extends AbstractParser implements IParser {
 					tempPosition += uriSchemeName.length() + 1;
 					fCurrentCharacter = fSource[tempPosition++];
 
-					createContentToken(fWhiteStart, fWhiteStartPosition, 1);
+					createContentToken(1);
 					fWhiteStart = false;
 					foundUrl = true;
 					while (Encoder.isUrlIdentifierPart(fSource[tempPosition++])) {
@@ -733,7 +736,7 @@ public class WikipediaParser extends AbstractParser implements IParser {
 		}
 
 		if (isCamelCase) {
-			createContentToken(fWhiteStart, fWhiteStartPosition, 1);
+			createContentToken(1);
 			fWhiteStart = false;
 			fCurrentPosition = temp - 1;
 
@@ -755,7 +758,7 @@ public class WikipediaParser extends AbstractParser implements IParser {
 		if (getNextChar('[')) {
 			return parseWikiTag();
 		} else {
-			createContentToken(fWhiteStart, fWhiteStartPosition, 1);
+			createContentToken(1);
 			fWhiteStart = false;
 
 			if (readUntilCharOrStopAtEOL(']')) {
@@ -794,7 +797,7 @@ public class WikipediaParser extends AbstractParser implements IParser {
 		int startLinkPosition = fCurrentPosition;
 		int endLinkPosition;
 		// wikipedia link style
-		createContentToken(fWhiteStart, fWhiteStartPosition, 2);
+		createContentToken(2);
 
 		int temp = fCurrentPosition;
 		if (findWikiLinkEnd()) {
@@ -843,7 +846,7 @@ public class WikipediaParser extends AbstractParser implements IParser {
 					|| (fWikiModel.peekNode() instanceof PTag)) {
 				// !(fWikiModel.peekNode() instanceof PreTag || fWikiModel.peekNode()
 				// instanceof WPPreTag)) {
-				createContentToken(fWhiteStart, fWhiteStartPosition, 2);
+				createContentToken(2);
 				reduceTokenStack(Configuration.HTML_PRE_OPEN);
 
 				// don't use Configuration.HTML_PRE_OPEN here
@@ -868,7 +871,7 @@ public class WikipediaParser extends AbstractParser implements IParser {
 					int pos = isEndOfLine('-', tempCurrPosition);
 					if (pos > 0) {
 						HrTag hr = new HrTag();
-						createContentToken(fWhiteStart, fWhiteStartPosition, 2);
+						createContentToken(2);
 						reduceTokenStack(hr);
 						fCurrentPosition = pos;
 						fWikiModel.append(hr);
@@ -884,93 +887,26 @@ public class WikipediaParser extends AbstractParser implements IParser {
 		return false;
 	}
 
-	private boolean parseDefinitionLists() {
-		if (isStartOfLine()) {
-			createContentToken(fWhiteStart, fWhiteStartPosition, 1);
-
-			int startHeadPosition = fCurrentPosition;
-			if (readUntilEOL()) {
-				TagToken dl = new DlTag();
-				TagToken dt = new DtTag();
-				reduceTokenStack(dl);
-				String head = fStringSource.substring(startHeadPosition, fCurrentPosition);
-				int index = head.indexOf(" : ");
-				if (index > 0) {
-					fWikiModel.pushNode(dl);
-					fWikiModel.pushNode(dt);
-					// fResultBuffer.append("<dl><dt>");
-					WikipediaParser.parseRecursive(head.substring(0, index).trim(), fWikiModel, false, true);
-					// fResultBuffer.append("&nbsp;</dt><dd>");
-					fWikiModel.popNode();
-					fWikiModel.pushNode(new DdTag());
-					WikipediaParser.parseRecursive(head.substring(index + 2).trim(), fWikiModel, false, true);
-					// fResultBuffer.append("\n</dd></dl>");
-					fWikiModel.popNode();
-					fWikiModel.popNode();
-				} else {
-					index = head.indexOf(":");
-					if (index > 0) {
-						fWikiModel.pushNode(dl);
-						fWikiModel.pushNode(dt);
-						// fResultBuffer.append("<dl><dt>");
-						WikipediaParser.parseRecursive(head.substring(0, index).trim(), fWikiModel, false, true);
-						fWikiModel.popNode();
-						fWikiModel.pushNode(new DdTag());
-						// fResultBuffer.append("</dt><dd>");
-						WikipediaParser.parseRecursive(head.substring(index + 1).trim(), fWikiModel, false, true);
-						fWikiModel.popNode();
-						fWikiModel.popNode();
-						// fResultBuffer.append("\n</dd></dl>");
-					} else {
-						fWikiModel.pushNode(dl);
-						fWikiModel.pushNode(dt);
-						// fResultBuffer.append("<dl><dt>");
-						WikipediaParser.parseRecursive(head.trim(), fWikiModel, false, true);
-						fWikiModel.popNode();
-						fWikiModel.popNode();
-						// fResultBuffer.append("&nbsp;</dt></dl>");
-					}
-				}
-				return true;
-			}
-		}
-		return false;
-	}
-
-	// private boolean parseSimpleDefinitionLists() {
-	// if (isStartOfLine()) {
-	// createContentToken(fWhiteStart, fWhiteStartPosition, 1);
-	//
-	// int levelHeader = getNumberOfChar(':') + 1;
-	// int startHeadPosition = fCurrentPosition;
-	// if (readUntilEOL()) {
-	// reduceTokenStack(Configuration.HTML_DL_OPEN);
-	// String head = fStringSource.substring(startHeadPosition, fCurrentPosition);
-	// for (int i = 0; i < levelHeader; i++) {
-	// fWikiModel.pushNode(new DlTag());
-	// fWikiModel.pushNode(new DdTag());
-	// }
-	//
-	// WikipediaParser.parseRecursive(head.trim(), fWikiModel, false, true);
-	//
-	// for (int i = 0; i < levelHeader; i++) {
-	// // fResultBuffer.append("\n</dd></dl>");
-	// fWikiModel.popNode();
-	// fWikiModel.popNode();
-	// }
-	// return true;
-	// }
-	// }
-	// return false;
-	// }
-
+	/**
+	 * Parse a wiki list <br/>
+	 * <br/>
+	 * Example:<br/>
+	 * 
+	 * <pre>
+	 * * first line
+	 * * second line
+	 * ** third line
+	 * </pre>
+	 * 
+	 * @return
+	 */
 	private boolean parseLists() {
 		// set scanner pointer to '\n' character:
 		if (isStartOfLine()) {
 			setPosition(fCurrentPosition - 2);
 			WPList list = wpList();
 			if (list != null && !list.isEmpty()) {
-				createContentToken(fWhiteStart, fWhiteStartPosition, 1);
+				createContentToken(1);
 				reduceTokenStack(list);
 				fCurrentPosition = getPosition() - 1;
 				fWikiModel.append(list);
@@ -980,6 +916,16 @@ public class WikipediaParser extends AbstractParser implements IParser {
 		return false;
 	}
 
+	/**
+	 * Parses a wiki header line into &quot;h1, h2, h3, h4, h5, h6&quot; HTML
+	 * tags. <br/>
+	 * <br/>
+	 * Example wiki syntax header line: <br/>
+	 * <code>== Test header 2 ==</code>
+	 * 
+	 * @return <code>true</code> if a header line could be parsed correctly,
+	 *         <code>false</code> otherwise.
+	 */
 	private boolean parseSectionHeaders() {
 		if (isStartOfLine()) {
 			int headerStartPosition = fCurrentPosition - 1;
@@ -1006,10 +952,6 @@ public class WikipediaParser extends AbstractParser implements IParser {
 					level++;
 					headerStartPosition++;
 					headerEndPosition--;
-					// if (level == 6) {
-					// headerEndPosition++;
-					// break;
-					// }
 				} else {
 					headerEndPosition++;
 					break;
@@ -1021,7 +963,7 @@ public class WikipediaParser extends AbstractParser implements IParser {
 			if (level > 6) {
 				level = 6;
 			}
-			createContentToken(fWhiteStart, fWhiteStartPosition, 1);
+			createContentToken(1);
 			reduceTokenStack();
 			String head = "";
 			if (headerEndPosition > headerStartPosition) {
@@ -1044,7 +986,7 @@ public class WikipediaParser extends AbstractParser implements IParser {
 			setPosition(fCurrentPosition - 1);
 			WPTable table = wpTable(fTableOfContentTag);
 			if (table != null) {
-				createContentToken(fWhiteStart, fWhiteStartPosition, 1);
+				createContentToken(1);
 				reduceTokenStack(table);
 				// set pointer behind: "\n|}"
 				fCurrentPosition = getPosition();
@@ -1094,7 +1036,7 @@ public class WikipediaParser extends AbstractParser implements IParser {
 				boolean tocRecognized = false;
 				for (int i = 0; i < TOC_IDENTIFIERS.length; i++) {
 					if (TOC_IDENTIFIERS[i].equals(tocIdent)) {
-						createContentToken(fWhiteStart, fWhiteStartPosition, 2);
+						createContentToken(2);
 						tocRecognized = true;
 						fCurrentPosition = tocEndPosition + 1;
 						switch (i) {
@@ -1121,24 +1063,19 @@ public class WikipediaParser extends AbstractParser implements IParser {
 	}
 
 	/**
-	 * Check if the scanners cursor position is at the start of a line
+	 * Check if the scanners cursor position is at the beginning of a line.
 	 * 
-	 * @return
+	 * @return <code>true</code> if the scanners cursor points to the beginning of
+	 *         a line, <code>false</code> otherwise.
 	 */
 	private boolean isStartOfLine() {
 		if (fCurrentPosition >= 2) {
 			char beforeChar = fSource[fCurrentPosition - 2];
-			// if (beforeChar == '\n' || beforeChar == '\r') {
 			if (beforeChar == '\n') {
 				return true;
 			}
-			if (beforeChar == '*' && fCurrentPosition == 2) {
-				return true;
-			}
-		} else {
-			if (fCurrentPosition == 1) {
-				return true;
-			}
+		} else if (fCurrentPosition == 1) {
+			return true;
 		}
 		return false;
 	}
@@ -1372,7 +1309,7 @@ public class WikipediaParser extends AbstractParser implements IParser {
 			if (token.equals(BOLD) || token.equals(ITALIC) || token.equals(BOLDITALIC)) {
 				if (fWhiteStart) {
 					found = true;
-					createContentToken(fWhiteStart, fWhiteStartPosition, 1);
+					createContentToken(1);
 				}
 				fWikiModel.popNode();
 			} else {
