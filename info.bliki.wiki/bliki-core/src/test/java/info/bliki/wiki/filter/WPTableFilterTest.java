@@ -122,17 +122,40 @@ public class WPTableFilterTest extends FilterTestSupport {
 
 	public void testBlockquoteTable01() {
 		assertEquals(
-				"<a id=\"Simple_example\" name=\"Simple_example\"></a><h3>Simple example</h3>\n"
-						+ "<p>Both of these generate the same output.  Choose a style based on the number of cells in each row and the total text inside each cell.</p>\n"
-						+ "<p><b>Wiki markup</b>\n"
-						+ "</p><blockquote style=\"background: white; border: 1px solid rgb(153, 153, 153); padding: 1em;\">\n" + "<pre>\n"
-						+ "{| \n" + "| A \n" + "| B\n" + "|- \n" + "| C\n" + "| D\n" + "|}\n" + "</pre></blockquote>\n"
-						+ "<blockquote style=\"background: white; border: 1px solid rgb(153, 153, 153); padding: 1em;\">\n" + "<pre>\n"
-						+ "{| \n" + "| A || B\n" + "|- \n" + "| C || D \n" + "|}\n" + "</pre></blockquote>\n" + "\n"
-						+ "<p><b>What it looks like in your browser</b>\n"
-						+ "</p><blockquote style=\"background: white; border: 1px solid rgb(153, 153, 153); padding: 1em;\">\n" + "\n"
-						+ "<div style=\"page-break-inside: avoid;\">\n" + "<table>\n" + "<tr>\n" + "<td>A</td>\n" + "<td>B</td></tr>\n"
-						+ "<tr>\n" + "<td>C</td>\n" + "<td>D</td></tr></table></div></blockquote>\n" + "", wikiModel.render(TEST3));
+				"<h3><span class=\"mw-headline\" id=\"Simple_example\">Simple example</span></h3>\n" + 
+				"<p>Both of these generate the same output.  Choose a style based on the number of cells in each row and the total text inside each cell.</p>\n" + 
+				"<p><b>Wiki markup</b>\n" + 
+				"</p><blockquote style=\"background: white; border: 1px solid rgb(153, 153, 153); padding: 1em;\">\n" + 
+				"<pre>\n" + 
+				"{| \n" + 
+				"| A \n" + 
+				"| B\n" + 
+				"|- \n" + 
+				"| C\n" + 
+				"| D\n" + 
+				"|}\n" + 
+				"</pre></blockquote>\n" + 
+				"<blockquote style=\"background: white; border: 1px solid rgb(153, 153, 153); padding: 1em;\">\n" + 
+				"<pre>\n" + 
+				"{| \n" + 
+				"| A || B\n" + 
+				"|- \n" + 
+				"| C || D \n" + 
+				"|}\n" + 
+				"</pre></blockquote>\n" + 
+				"\n" + 
+				"<p><b>What it looks like in your browser</b>\n" + 
+				"</p><blockquote style=\"background: white; border: 1px solid rgb(153, 153, 153); padding: 1em;\">\n" + 
+				"\n" + 
+				"<div style=\"page-break-inside: avoid;\">\n" + 
+				"<table>\n" + 
+				"<tr>\n" + 
+				"<td>A</td>\n" + 
+				"<td>B</td></tr>\n" + 
+				"<tr>\n" + 
+				"<td>C</td>\n" + 
+				"<td>D</td></tr></table></div></blockquote>\n" + 
+				"", wikiModel.render(TEST3));
 	}
 
 	public void testBlockquoteTable02() {

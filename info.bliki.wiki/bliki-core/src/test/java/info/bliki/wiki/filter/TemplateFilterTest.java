@@ -31,8 +31,8 @@ public class TemplateFilterTest extends FilterTestSupport {
 	}
 
 	public void testNonExistentTemplate() {
-		assertEquals("<a id=\"Other_areas_of_Wikipedia\" name=\"Other_areas_of_Wikipedia\"></a><h2>Other areas of Wikipedia</h2>\n"
-				+ "<p>{{WikipediaOther}}</p>", wikiModel.render("==Other areas of Wikipedia==\n"
+		assertEquals("<h2><span class=\"mw-headline\" id=\"Other_areas_of_Wikipedia\">Other areas of Wikipedia</span></h2>\n" + 
+				"<p>{{WikipediaOther}}</p>", wikiModel.render("==Other areas of Wikipedia==\n"
 				+ "{{WikipediaOther}}<!--Template:WikipediaOther-->"));
 	}
 
@@ -467,153 +467,153 @@ public class TemplateFilterTest extends FilterTestSupport {
 
 	public void testProgrammiersprachen() {
 		assertEquals(
-				"<a id=\"Versionsgeschichte\" name=\"Versionsgeschichte\"></a><h3>Versionsgeschichte</h3>\n"
-						+ "\n"
-						+ "<div style=\"page-break-inside: avoid;\">\n"
-						+ "<table class=\"wikitable\">\n"
-						+ "<caption>Versionsgeschichte von JavaScript<sup id=\"_ref-1\" class=\"reference\"><a href=\"#_note-1\" title=\"\">[1]</a></sup></caption>\n"
-						+ "<tr>\n"
-						+ "<th>Version </th>\n"
-						+ "<th>Release </th>\n"
-						+ "<th>Entsprechung </th>\n"
-						+ "<th>Netscape Navigator </th>\n"
-						+ "<th>Mozilla Firefox </th>\n"
-						+ "<th>Internet Explorer </th>\n"
-						+ "<th>Opera </th>\n"
-						+ "<th>Safari </th>\n"
-						+ "<th>Google Chrome </th></tr>\n"
-						+ "<tr>\n"
-						+ "<td>1.0 </td>\n"
-						+ "<td>März 1996 </td>\n"
-						+ "<td />\n"
-						+ "<td>2.0 </td>\n"
-						+ "<td />\n"
-						+ "<td>3.0 </td>\n"
-						+ "<td />\n"
-						+ "<td />\n"
-						+ "<td /></tr>\n"
-						+ "<tr>\n"
-						+ "<td>1.1 </td>\n"
-						+ "<td>August 1996 </td>\n"
-						+ "<td />\n"
-						+ "<td>3.0 </td>\n"
-						+ "<td />\n"
-						+ "<td />\n"
-						+ "<td />\n"
-						+ "<td />\n"
-						+ "<td /></tr>\n"
-						+ "<tr>\n"
-						+ "<td>1.2 </td>\n"
-						+ "<td>Juni 1997 </td>\n"
-						+ "<td />\n"
-						+ "<td>4.0-4.05 </td>\n"
-						+ "<td />\n"
-						+ "<td />\n"
-						+ "<td />\n"
-						+ "<td />\n"
-						+ "<td /></tr>\n"
-						+ "<tr>\n"
-						+ "<td>1.3 </td>\n"
-						+ "<td>Oktober 1998 </td>\n"
-						+ "<td>ECMA-262 1<sup>st</sup> edition / ECMA-262 2<sup>nd</sup> edition </td>\n"
-						+ "<td>4.06-4.7x </td>\n"
-						+ "<td />\n"
-						+ "<td>4.0 </td>\n"
-						+ "<td />\n"
-						+ "<td />\n"
-						+ "<td /></tr>\n"
-						+ "<tr>\n"
-						+ "<td>1.4 </td>\n"
-						+ "<td />\n"
-						+ "<td />\n"
-						+ "<td>Netscape Server </td>\n"
-						+ "<td />\n"
-						+ "<td />\n"
-						+ "<td />\n"
-						+ "<td />\n"
-						+ "<td /></tr>\n"
-						+ "<tr>\n"
-						+ "<td>1.5 </td>\n"
-						+ "<td>November 2000 </td>\n"
-						+ "<td>ECMA-262 3<sup>rd</sup> edition </td>\n"
-						+ "<td>6.0 </td>\n"
-						+ "<td>1.0</td>\n"
-						+ "<td>\n"
-						+ "\n"
-						+ "<ul>\n"
-						+ "<li>5.5 (JScript 5.5)</li>\n"
-						+ "<li>6 (JScript 5.6)</li>\n"
-						+ "<li>7 (JScript 5.7)</li>\n"
-						+ "<li>8 (JScript 6)</li></ul></td>\n"
-						+ "<td>\n"
-						+ "\n"
-						+ "<ul>\n"
-						+ "<li>6.0</li>\n"
-						+ "<li>7.0</li>\n"
-						+ "<li>8.0</li>\n"
-						+ "<li>9.0</li></ul></td>\n"
-						+ "<td />\n"
-						+ "<td /></tr>\n"
-						+ "<tr>\n"
-						+ "<td>1.6 </td>\n"
-						+ "<td>November 2005 </td>\n"
-						+ "<td>1.5 + Array extras + Array &#38; String generics + E4X </td>\n"
-						+ "<td />\n"
-						+ "<td>1.5 </td>\n"
-						+ "<td />\n"
-						+ "<td></td>\n"
-						+ "<td>\n"
-						+ "\n"
-						+ "<ul>\n"
-						+ "<li>3.0</li>\n"
-						+ "<li>3.1</li></ul></td>\n"
-						+ "<td /></tr>\n"
-						+ "<tr>\n"
-						+ "<td>1.7 </td>\n"
-						+ "<td>Oktober 2006 </td>\n"
-						+ "<td>1.6 + Pythonic generators + Iterators + let + destructuring assignments </td>\n"
-						+ "<td />\n"
-						+ "<td>2.0 </td>\n"
-						+ "<td />\n"
-						+ "<td></td>\n"
-						+ "<td>\n"
-						+ "\n"
-						+ "<ul>\n"
-						+ "<li>3.2</li>\n"
-						+ "<li>4.0</li></ul></td>\n"
-						+ "<td>1.0</td></tr>\n"
-						+ "<tr>\n"
-						+ "<td>1.8 </td>\n"
-						+ "<td>Juni 2008 </td>\n"
-						+ "<td>1.7 + Generator expressions + Expression closures </td>\n"
-						+ "<td />\n"
-						+ "<td>3.0 </td>\n"
-						+ "<td />\n"
-						+ "<td />\n"
-						+ "<td />\n"
-						+ "<td /></tr>\n"
-						+ "<tr>\n"
-						+ "<td>1.8.1 </td>\n"
-						+ "<td />\n"
-						+ "<td>1.8 + geringfügige Updates </td>\n"
-						+ "<td />\n"
-						+ "<td>3.5 </td>\n"
-						+ "<td />\n"
-						+ "<td />\n"
-						+ "<td />\n"
-						+ "<td /></tr>\n"
-						+ "<tr>\n"
-						+ "<td>1.9 </td>\n"
-						+ "<td />\n"
-						+ "<td>1.8.1 + ECMAScript 5 Compliance </td>\n"
-						+ "<td />\n"
-						+ "<td>4 </td>\n"
-						+ "<td />\n"
-						+ "<td />\n"
-						+ "<td />\n"
-						+ "<td /></tr></table></div>\n"
-						+ "<ol class=\"references\">\n"
-						+ "<li id=\"_note-1\"><b><a href=\"#_ref-1\" title=\"\">&#8593;</a></b> John Resig. <i><a class=\"externallink\" href=\"http://ejohn.org/blog/versions-of-javascript\" rel=\"nofollow\" title=\"http://ejohn.org/blog/versions-of-javascript\">Versions of JavaScript</a></i>. Ejohn.org. Abgerufen am {{FormatDate}}.</li></ol>",
+				"<h3><span class=\"mw-headline\" id=\"Versionsgeschichte\">Versionsgeschichte</span></h3>\n" + 
+				"\n" + 
+				"<div style=\"page-break-inside: avoid;\">\n" + 
+				"<table class=\"wikitable\">\n" + 
+				"<caption>Versionsgeschichte von JavaScript<sup id=\"_ref-1\" class=\"reference\"><a href=\"#_note-1\" title=\"\">[1]</a></sup></caption>\n" + 
+				"<tr>\n" + 
+				"<th>Version </th>\n" + 
+				"<th>Release </th>\n" + 
+				"<th>Entsprechung </th>\n" + 
+				"<th>Netscape Navigator </th>\n" + 
+				"<th>Mozilla Firefox </th>\n" + 
+				"<th>Internet Explorer </th>\n" + 
+				"<th>Opera </th>\n" + 
+				"<th>Safari </th>\n" + 
+				"<th>Google Chrome </th></tr>\n" + 
+				"<tr>\n" + 
+				"<td>1.0 </td>\n" + 
+				"<td>März 1996 </td>\n" + 
+				"<td />\n" + 
+				"<td>2.0 </td>\n" + 
+				"<td />\n" + 
+				"<td>3.0 </td>\n" + 
+				"<td />\n" + 
+				"<td />\n" + 
+				"<td /></tr>\n" + 
+				"<tr>\n" + 
+				"<td>1.1 </td>\n" + 
+				"<td>August 1996 </td>\n" + 
+				"<td />\n" + 
+				"<td>3.0 </td>\n" + 
+				"<td />\n" + 
+				"<td />\n" + 
+				"<td />\n" + 
+				"<td />\n" + 
+				"<td /></tr>\n" + 
+				"<tr>\n" + 
+				"<td>1.2 </td>\n" + 
+				"<td>Juni 1997 </td>\n" + 
+				"<td />\n" + 
+				"<td>4.0-4.05 </td>\n" + 
+				"<td />\n" + 
+				"<td />\n" + 
+				"<td />\n" + 
+				"<td />\n" + 
+				"<td /></tr>\n" + 
+				"<tr>\n" + 
+				"<td>1.3 </td>\n" + 
+				"<td>Oktober 1998 </td>\n" + 
+				"<td>ECMA-262 1<sup>st</sup> edition / ECMA-262 2<sup>nd</sup> edition </td>\n" + 
+				"<td>4.06-4.7x </td>\n" + 
+				"<td />\n" + 
+				"<td>4.0 </td>\n" + 
+				"<td />\n" + 
+				"<td />\n" + 
+				"<td /></tr>\n" + 
+				"<tr>\n" + 
+				"<td>1.4 </td>\n" + 
+				"<td />\n" + 
+				"<td />\n" + 
+				"<td>Netscape Server </td>\n" + 
+				"<td />\n" + 
+				"<td />\n" + 
+				"<td />\n" + 
+				"<td />\n" + 
+				"<td /></tr>\n" + 
+				"<tr>\n" + 
+				"<td>1.5 </td>\n" + 
+				"<td>November 2000 </td>\n" + 
+				"<td>ECMA-262 3<sup>rd</sup> edition </td>\n" + 
+				"<td>6.0 </td>\n" + 
+				"<td>1.0</td>\n" + 
+				"<td>\n" + 
+				"\n" + 
+				"<ul>\n" + 
+				"<li>5.5 (JScript 5.5)</li>\n" + 
+				"<li>6 (JScript 5.6)</li>\n" + 
+				"<li>7 (JScript 5.7)</li>\n" + 
+				"<li>8 (JScript 6)</li></ul></td>\n" + 
+				"<td>\n" + 
+				"\n" + 
+				"<ul>\n" + 
+				"<li>6.0</li>\n" + 
+				"<li>7.0</li>\n" + 
+				"<li>8.0</li>\n" + 
+				"<li>9.0</li></ul></td>\n" + 
+				"<td />\n" + 
+				"<td /></tr>\n" + 
+				"<tr>\n" + 
+				"<td>1.6 </td>\n" + 
+				"<td>November 2005 </td>\n" + 
+				"<td>1.5 + Array extras + Array &#38; String generics + E4X </td>\n" + 
+				"<td />\n" + 
+				"<td>1.5 </td>\n" + 
+				"<td />\n" + 
+				"<td></td>\n" + 
+				"<td>\n" + 
+				"\n" + 
+				"<ul>\n" + 
+				"<li>3.0</li>\n" + 
+				"<li>3.1</li></ul></td>\n" + 
+				"<td /></tr>\n" + 
+				"<tr>\n" + 
+				"<td>1.7 </td>\n" + 
+				"<td>Oktober 2006 </td>\n" + 
+				"<td>1.6 + Pythonic generators + Iterators + let + destructuring assignments </td>\n" + 
+				"<td />\n" + 
+				"<td>2.0 </td>\n" + 
+				"<td />\n" + 
+				"<td></td>\n" + 
+				"<td>\n" + 
+				"\n" + 
+				"<ul>\n" + 
+				"<li>3.2</li>\n" + 
+				"<li>4.0</li></ul></td>\n" + 
+				"<td>1.0</td></tr>\n" + 
+				"<tr>\n" + 
+				"<td>1.8 </td>\n" + 
+				"<td>Juni 2008 </td>\n" + 
+				"<td>1.7 + Generator expressions + Expression closures </td>\n" + 
+				"<td />\n" + 
+				"<td>3.0 </td>\n" + 
+				"<td />\n" + 
+				"<td />\n" + 
+				"<td />\n" + 
+				"<td /></tr>\n" + 
+				"<tr>\n" + 
+				"<td>1.8.1 </td>\n" + 
+				"<td />\n" + 
+				"<td>1.8 + geringfügige Updates </td>\n" + 
+				"<td />\n" + 
+				"<td>3.5 </td>\n" + 
+				"<td />\n" + 
+				"<td />\n" + 
+				"<td />\n" + 
+				"<td /></tr>\n" + 
+				"<tr>\n" + 
+				"<td>1.9 </td>\n" + 
+				"<td />\n" + 
+				"<td>1.8.1 + ECMAScript 5 Compliance </td>\n" + 
+				"<td />\n" + 
+				"<td>4 </td>\n" + 
+				"<td />\n" + 
+				"<td />\n" + 
+				"<td />\n" + 
+				"<td /></tr></table></div>\n" + 
+				"<ol class=\"references\">\n" + 
+				"<li id=\"_note-1\"><b><a href=\"#_ref-1\" title=\"\">&#8593;</a></b> John Resig. <i><a class=\"externallink\" href=\"http://ejohn.org/blog/versions-of-javascript\" rel=\"nofollow\" title=\"http://ejohn.org/blog/versions-of-javascript\">Versions of JavaScript</a></i>. Ejohn.org. Abgerufen am {{FormatDate}}.</li></ol>",
 				wikiModel
 						.render("=== Versionsgeschichte ===\n"
 								+ "{| class=\"wikitable\"\n"

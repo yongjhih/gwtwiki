@@ -21,15 +21,16 @@ public class HeaderFilterTest extends FilterTestSupport {
 	}
 
 	public void testBad03() {
-		assertEquals("<a id=\"\" name=\"\"></a>\n", wikiModel.render("==  \r  \n"));
+		assertEquals("<h1><span class=\"mw-headline\" id=\"\" /></h1>\n" + 
+				"", wikiModel.render("==  \r  \n"));
 	}
 
 	public void testH2() {
-		assertEquals("<a id=\"Text\" name=\"Text\"></a><h2>Text</h2>", wikiModel.render("==Text=="));
+		assertEquals("<h2><span class=\"mw-headline\" id=\"Text\">Text</span></h2>", wikiModel.render("==Text=="));
 	}
 
 	public void testH6Whitespace() {
-		assertEquals("<a id=\"Text_.C3.9Cbersicht\" name=\"Text_.C3.9Cbersicht\"></a><h6>Text Übersicht</h6>\n" + 
+		assertEquals("<h6><span class=\"mw-headline\" id=\"Text_.C3.9Cbersicht\">Text Übersicht</span></h6>\n" + 
 				"<p>A new line.</p>",
 				wikiModel.render("=======Text Übersicht=======   \r \nA new line."));
 	}
@@ -40,7 +41,7 @@ public class HeaderFilterTest extends FilterTestSupport {
 
 	public void testH2Apostrophe() {
 		assertEquals(
-				"<a id=\"Wikipedia.27s_sister_projects\" name=\"Wikipedia.27s_sister_projects\"></a><h2>Wikipedia&#39;s sister projects</h2>",
+				"<h2><span class=\"mw-headline\" id=\"Wikipedia.27s_sister_projects\">Wikipedia&#39;s sister projects</span></h2>",
 				wikiModel.render("==Wikipedia's sister projects=="));
 	}
 
@@ -59,7 +60,7 @@ public class HeaderFilterTest extends FilterTestSupport {
 				"</li>\n" + 
 				"</ul>\n" + 
 				"</ul></td></tr></table><hr/>\n" + 
-				"<a id=\"Text_.C3.9Cbersicht\" name=\"Text_.C3.9Cbersicht\"></a><h2>Text <a href=\"http://www.bliki.info/wiki/Overview\" title=\"Overview\">Übersicht</a></h2>",
+				"<h2><span class=\"mw-headline\" id=\"Text_.C3.9Cbersicht\">Text <a href=\"http://www.bliki.info/wiki/Overview\" title=\"Overview\">Übersicht</a></span></h2>",
 				wikiModel.render("__FORCETOC__ \n==Text [[Overview|Übersicht]]=="));
 	}
 	
@@ -80,7 +81,7 @@ public class HeaderFilterTest extends FilterTestSupport {
 				"</ul>\n" + 
 				"</ul>\n" + 
 				"</ul></td></tr></table><hr/>\n" + 
-				"<a id=\"Captions\" name=\"Captions\"></a><h3><a href=\"http://www.bliki.info/wiki/Help:Table_Caption\" title=\"Help:Table Caption\">Captions</a></h3>",
+				"<h3><span class=\"mw-headline\" id=\"Captions\"><a href=\"http://www.bliki.info/wiki/Help:Table_Caption\" title=\"Help:Table Caption\">Captions</a></span></h3>",
 				wikiModel.render("__FORCETOC__ \n===[[Help:Table Caption|Captions]]==="));
 	}
 }
