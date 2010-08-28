@@ -9,9 +9,6 @@ import info.bliki.wiki.model.DefaultEventListener;
 import info.bliki.wiki.model.IEventListener;
 import info.bliki.wiki.model.ITableOfContent;
 import info.bliki.wiki.model.IWikiModel;
-import info.bliki.wiki.tags.DdTag;
-import info.bliki.wiki.tags.DlTag;
-import info.bliki.wiki.tags.DtTag;
 import info.bliki.wiki.tags.HTMLBlockTag;
 import info.bliki.wiki.tags.HTMLTag;
 import info.bliki.wiki.tags.HrTag;
@@ -449,13 +446,14 @@ public class WikipediaParser extends AbstractParser implements IParser {
 							continue;
 						}
 
+						if (fWikiModel.isCamelCaseEnabled() && Character.isUpperCase(fCurrentCharacter) && fWikiModel.getRecursionLevel() <= 1) {
+							if (parseCamelCaseLink()) {
+								continue;
+							}
+						}
 					}
 				}
-				if (fWikiModel.isCamelCaseEnabled() && Character.isUpperCase(fCurrentCharacter) && fWikiModel.getRecursionLevel() <= 1) {
-					if (parseCamelCaseLink()) {
-						continue;
-					}
-				}
+
 				if (!fWhiteStart) {
 					fWhiteStart = true;
 					fWhiteStartPosition = fCurrentPosition - 1;
@@ -684,7 +682,7 @@ public class WikipediaParser extends AbstractParser implements IParser {
 		int index = -1;
 		boolean foundUrl = false;
 		try {
-			index = fStringSource.indexOf(':', fCurrentPosition);
+			index = indexOfUntilEOL(':', fCurrentPosition);
 			if (index > 0) {
 				uriSchemeName = fStringSource.substring(fCurrentPosition - 1, index);
 				if (fWikiModel.isValidUriScheme(uriSchemeName)) {

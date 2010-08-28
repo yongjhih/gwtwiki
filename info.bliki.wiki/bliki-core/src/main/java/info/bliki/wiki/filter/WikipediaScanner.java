@@ -1640,6 +1640,32 @@ public class WikipediaScanner {
 		return -1;
 	}
 
+	/**
+	 * Read the characters until the end-of-line character or the given <code>testchar</code> is
+	 * found. If <code>testchar</code> return the offset position.
+	 * 
+	 * @param testCh
+	 *          the test character
+	 * @param fromIndex
+	 *          read from this offset unil end-of-line character
+	 * @return <code>-1</code> if the character could not be found or end-of-line
+	 *         character was found.
+	 */
+	protected int indexOfUntilEOL(char testCh, int fromIndex) {
+		int index = fromIndex;
+		char ch = fSource[index++];
+		while (ch != testCh) {
+			if (ch == '\n') {
+				return -1;
+			}
+			if (fSource.length<=index) {
+				return -1;
+			}
+			ch = fSource[index++];
+		}
+		return index - 1;
+	}
+
 	// protected final int readUntilIgnoreCase(Object processed, int start, String
 	// startString, String endString) {
 	// int index = Utils.indexOfIgnoreCase(fBMHR, processed, fStringSource,
