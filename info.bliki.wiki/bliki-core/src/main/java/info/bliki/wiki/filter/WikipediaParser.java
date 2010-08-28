@@ -1068,8 +1068,7 @@ public class WikipediaParser extends AbstractParser implements IParser {
 	 */
 	private boolean isStartOfLine() {
 		if (fCurrentPosition >= 2) {
-			char beforeChar = fSource[fCurrentPosition - 2];
-			if (beforeChar == '\n') {
+			if (fSource[fCurrentPosition - 2] == '\n') {
 				return true;
 			}
 		} else if (fCurrentPosition == 1) {
