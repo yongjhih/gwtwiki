@@ -443,7 +443,10 @@ public class Configuration implements IConfiguration {
 		TAG_TOKEN_MAP.put("ref", new RefTag());
 		TAG_TOKEN_MAP.put("references", new ReferencesTag());
 
+		// see http://www.mediawiki.org/wiki/Extension:SyntaxHighlight_GeSHi
+		TAG_TOKEN_MAP.put("syntaxhighlight", new SourceTag());
 		TAG_TOKEN_MAP.put("source", new SourceTag());
+		
 
 		TAG_TOKEN_MAP.put("a", HTML_A_OPEN);
 		TAG_TOKEN_MAP.put("h1", HTML_H1_OPEN);
