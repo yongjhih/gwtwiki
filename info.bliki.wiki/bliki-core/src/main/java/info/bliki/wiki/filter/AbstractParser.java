@@ -2,8 +2,6 @@ package info.bliki.wiki.filter;
 
 import java.util.Map;
 
-import org.apache.commons.lang.StringUtils;
-
 import info.bliki.htmlcleaner.ContentToken;
 import info.bliki.htmlcleaner.TagNode;
 import info.bliki.wiki.model.Configuration;
