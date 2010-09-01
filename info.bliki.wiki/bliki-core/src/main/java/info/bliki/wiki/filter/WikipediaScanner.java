@@ -705,6 +705,35 @@ public class WikipediaScanner {
 		return -1;
 	}
 
+	/**
+	 * <p>
+	 * Check if a String starts with a specified prefix (optionally case
+	 * insensitive).
+	 * </p>
+	 * 
+	 * @see java.lang.String#startsWith(String)
+	 * @param str
+	 *          the String to check, may be null
+	 * @param toffset
+	 *          the starting offset of the subregion the String to check
+	 * @param prefix
+	 *          the prefix to find, may be null
+	 * @param ignoreCase
+	 *          inidicates whether the compare should ignore case (case
+	 *          insensitive) or not.
+	 * @return <code>true</code> if the String starts with the prefix or both
+	 *         <code>null</code>
+	 */
+	public static boolean startsWith(String str, int toffset, String prefix, boolean ignoreCase) {
+		if (str == null || prefix == null) {
+			return (str == null && prefix == null);
+		}
+		if (prefix.length() > str.length() - toffset) {
+			return false;
+		}
+		return str.regionMatches(ignoreCase, toffset, prefix, 0, prefix.length());
+	}
+
 	public void scanWhiteSpace() {
 		while (Character.isWhitespace(fSource[fScannerPosition++])) {
 		}
@@ -1641,29 +1670,33 @@ public class WikipediaScanner {
 	}
 
 	/**
-	 * Read the characters until the end-of-line character or the given <code>testchar</code> is
-	 * found. If <code>testchar</code> return the offset position.
+	 * Read the characters until no more letters are found or the given
+	 * <code>testChar</code> is found. If <code>testChar</code> was found, return
+	 * the offset position.
 	 * 
 	 * @param testCh
 	 *          the test character
 	 * @param fromIndex
-	 *          read from this offset unil end-of-line character
-	 * @return <code>-1</code> if the character could not be found or end-of-line
-	 *         character was found.
+	 *          read from this offset
+	 * @return <code>-1</code> if the character could not be found or no more
+	 *         letter character were found.
 	 */
-	protected int indexOfUntilEOL(char testCh, int fromIndex) {
+	protected int indexOfUntilNoLetter(char testChar, int fromIndex) {
 		int index = fromIndex;
-		char ch = fSource[index++];
-		while (ch != testCh) {
-			if (ch == '\n') {
-				return -1;
-			}
-			if (fSource.length<=index) {
-				return -1;
-			}
+		char ch;
+		while (true) {
 			ch = fSource[index++];
+			if (ch == testChar) {
+				return index - 1;
+			}
+			if (Character.isLetter(ch)) {
+				if (fSource.length <= index) {
+					return -1;
+				}
+				continue;
+			}
+			return -1;
 		}
-		return index - 1;
 	}
 
 	// protected final int readUntilIgnoreCase(Object processed, int start, String

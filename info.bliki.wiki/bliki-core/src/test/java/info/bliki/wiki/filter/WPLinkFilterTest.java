@@ -182,27 +182,29 @@ public class WPLinkFilterTest extends FilterTestSupport {
 	}
 
 	public void testRedirect03() {
-		assertEquals(" \n" + 
-				"<p>Hello World!</p>", wikiModel.render(" \n{{TestRedirect1}}"));
+		assertEquals(" \n" + "<p>Hello World!</p>", wikiModel.render(" \n{{TestRedirect1}}"));
 	}
-	
+
 	public void testRedirect04() {
-		assertEquals(" \n" + 
-				"<pre>\n" + 
-				"Hello World! \n" + 
-				"</pre>", wikiModel.render(" \n {{TestRedirect1}} "));
+		assertEquals(" \n" + "<pre>\n" + "Hello World! \n" + "</pre>", wikiModel.render(" \n {{TestRedirect1}} "));
 	}
-	
+
+	public void testRedirect05() {
+		assertEquals("", wikiModel.render("#Redirect [[El Niño-Southern Oscillation]]"));
+		assertEquals("El Niño-Southern Oscillation", wikiModel.getRedirectLink());
+	}
+
 	public void testPlainTextConverter001() {
 		assertEquals("An external link.", wikiModel.render(new PlainTextConverter(), "An [http://www.example.com external link]."));
 	}
 
 	public void testPlainTextConverter002() {
-		String wikitext = "The '''Eiffel Tower''',{{IPA-fr|tuʀ ɛfɛl|}}" +
-				"<!--Note: French does not have tonic accents, so do not add stress marks to this pronunciation-->)" +
-				" is a 19th century ";
+		String wikitext = "The '''Eiffel Tower''',{{IPA-fr|tuʀ ɛfɛl|}}"
+				+ "<!--Note: French does not have tonic accents, so do not add stress marks to this pronunciation-->)"
+				+ " is a 19th century ";
 
-		assertEquals("The Eiffel Tower,French pronunciation:&nbsp;[tuʀ ɛfɛl]) is a 19th century ", wikiModel.render(new PlainTextConverter(), wikitext));
+		assertEquals("The Eiffel Tower,French pronunciation:&nbsp;[tuʀ ɛfɛl]) is a 19th century ", wikiModel.render(
+				new PlainTextConverter(), wikitext));
 	}
 	// public static void main(String[] args) {
 	// String test = Encoder.encode("erreäöü öüä++", ".");

@@ -2,6 +2,8 @@ package info.bliki.wiki.filter;
 
 import java.util.Map;
 
+import org.apache.commons.lang.StringUtils;
+
 import info.bliki.htmlcleaner.ContentToken;
 import info.bliki.htmlcleaner.TagNode;
 import info.bliki.wiki.model.Configuration;
@@ -618,7 +620,6 @@ public abstract class AbstractParser extends WikipediaScanner {
 		}
 		return null;
 	}
- 
 
 	/**
 	 * Check the text for a <code>#REDIRECT [[...]]</code> or
@@ -635,11 +636,7 @@ public abstract class AbstractParser extends WikipediaScanner {
 		int redirectEnd = -1;
 		for (int i = 0; i < rawWikiText.length(); i++) {
 			if (rawWikiText.charAt(i) == '#') {
-				boolean isRedirect = rawWikiText.startsWith("redirect", i + 1);
-				if (!isRedirect) {
-					isRedirect = rawWikiText.startsWith("REDIRECT", i + 1);
-				}
-				if (isRedirect) {
+				if (startsWith(rawWikiText, i + 1, "redirect", true)) {
 					redirectStart = rawWikiText.indexOf("[[", i + 8);
 					if (redirectStart > i + 8) {
 						redirectStart += 2;

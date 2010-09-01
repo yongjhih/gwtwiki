@@ -682,7 +682,7 @@ public class WikipediaParser extends AbstractParser implements IParser {
 		int index = -1;
 		boolean foundUrl = false;
 		try {
-			index = indexOfUntilEOL(':', fCurrentPosition);
+			index = indexOfUntilNoLetter(':', fCurrentPosition);
 			if (index > 0) {
 				uriSchemeName = fStringSource.substring(fCurrentPosition - 1, index);
 				if (fWikiModel.isValidUriScheme(uriSchemeName)) {
