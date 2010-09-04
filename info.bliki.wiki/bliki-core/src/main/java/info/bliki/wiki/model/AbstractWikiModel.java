@@ -244,7 +244,7 @@ public abstract class AbstractWikiModel implements IWikiModel, IContext {
 		return result;
 	}
 
-	private void addToTableOfContent(List<Object> toc, SectionHeader strPair, int headLevel) {
+	protected void addToTableOfContent(List<Object> toc, SectionHeader strPair, int headLevel) {
 		if (headLevel == 1) {
 			toc.add(strPair);
 		} else {
