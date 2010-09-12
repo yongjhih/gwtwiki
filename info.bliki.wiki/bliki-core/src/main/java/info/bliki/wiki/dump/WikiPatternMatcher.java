@@ -1,6 +1,7 @@
 package info.bliki.wiki.dump;
 
-import java.util.Vector;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -19,28 +20,32 @@ import java.util.regex.Pattern;
 public class WikiPatternMatcher {
 
 	private String wikiText = null;
-	private Vector<String> pageCats = null;
-	private Vector<String> pageLinks = null;
+	private List<String> pageCats = null;
+	private List<String> pageLinks = null;
 	private boolean redirect = false;
 	private String redirectString = null;
-	private static Pattern redirectPattern = Pattern.compile("#REDIRECT\\s+\\[\\[(.*?)\\]\\]");
 	private boolean stub = false;
 	private boolean disambiguation = false;
-	private static Pattern stubPattern = Pattern.compile("\\-stub\\}\\}");
-	private static Pattern disambCatPattern = Pattern.compile("\\{\\{disambig\\}\\}");
+
+	private final static Pattern REDIRECT_PATTERN = Pattern.compile("#REDIRECT\\s+\\[\\[(.*?)\\]\\]");
+	private final static Pattern STUB_PATTERN = Pattern.compile("\\-stub\\}\\}");
+	private final static Pattern DISAMB_TEMPLATE_PATTERN = Pattern.compile("\\{\\{disambig\\}\\}");
+	private final static Pattern CATEGORY_PATTERN = Pattern.compile("\\[\\[Category:(.*?)\\]\\]", Pattern.MULTILINE);
+	private final static Pattern LINKS_PATTERN = Pattern.compile("\\[\\[(.*?)\\]\\]", Pattern.MULTILINE);
+
 	private InfoBox infoBox = null;
 
 	public WikiPatternMatcher(String wtext) {
 		wikiText = wtext;
-		Matcher matcher = redirectPattern.matcher(wikiText);
+		Matcher matcher = REDIRECT_PATTERN.matcher(wikiText);
 		if (matcher.find()) {
 			redirect = true;
 			if (matcher.groupCount() == 1)
 				redirectString = matcher.group(1);
 		}
-		matcher = stubPattern.matcher(wikiText);
+		matcher = STUB_PATTERN.matcher(wikiText);
 		stub = matcher.find();
-		matcher = disambCatPattern.matcher(wikiText);
+		matcher = DISAMB_TEMPLATE_PATTERN.matcher(wikiText);
 		disambiguation = matcher.find();
 	}
 
@@ -60,22 +65,23 @@ public class WikiPatternMatcher {
 		return wikiText;
 	}
 
-	public Vector<String> getCategories() {
+	public List<String> getCategories() {
 		if (pageCats == null)
 			parseCategories();
 		return pageCats;
 	}
 
-	public Vector<String> getLinks() {
+	public List<String> getLinks() {
 		if (pageLinks == null)
 			parseLinks();
 		return pageLinks;
 	}
 
 	private void parseCategories() {
-		pageCats = new Vector<String>();
-		Pattern catPattern = Pattern.compile("\\[\\[Category:(.*?)\\]\\]", Pattern.MULTILINE);
-		Matcher matcher = catPattern.matcher(wikiText);
+		pageCats = new ArrayList<String>();
+		// Pattern catPattern = Pattern.compile("\\[\\[Category:(.*?)\\]\\]",
+		// Pattern.MULTILINE);
+		Matcher matcher = CATEGORY_PATTERN.matcher(wikiText);
 		while (matcher.find()) {
 			String[] temp = matcher.group(1).split("\\|");
 			pageCats.add(temp[0]);
@@ -83,10 +89,9 @@ public class WikiPatternMatcher {
 	}
 
 	private void parseLinks() {
-		pageLinks = new Vector<String>();
+		pageLinks = new ArrayList<String>();
 
-		Pattern catPattern = Pattern.compile("\\[\\[(.*?)\\]\\]", Pattern.MULTILINE);
-		Matcher matcher = catPattern.matcher(wikiText);
+		Matcher matcher = LINKS_PATTERN.matcher(wikiText);
 		while (matcher.find()) {
 			String[] temp = matcher.group(1).split("\\|");
 			if (temp == null || temp.length == 0)
@@ -117,6 +122,12 @@ public class WikiPatternMatcher {
 		return text;
 	}
 
+	/**
+	 * Parse the Infobox template (i.e. parsing a string starting with
+	 * &quot;{{Infobox&quot; and ending with &quot;}}&quot;)
+	 * 
+	 * @return <code>null</code> if the Infobox template wasn't found.
+	 */
 	public InfoBox getInfoBox() {
 		// parseInfoBox is expensive. Doing it only once like other parse* methods
 		if (infoBox == null)
@@ -124,6 +135,12 @@ public class WikiPatternMatcher {
 		return infoBox;
 	}
 
+	/**
+	 * Parse the Infobox template (i.e. parsing a string starting with
+	 * &quot;{{Infobox&quot; and ending with &quot;}}&quot;)
+	 * 
+	 * @return <code>null</code> if the Infobox template wasn't found.
+	 */
 	private InfoBox parseInfoBox() {
 		String INFOBOX_CONST_STR = "{{Infobox";
 		int startPos = wikiText.indexOf(INFOBOX_CONST_STR);
@@ -131,6 +148,10 @@ public class WikiPatternMatcher {
 			return null;
 		int bracketCount = 2;
 		int endPos = startPos + INFOBOX_CONST_STR.length();
+
+		if (endPos >= wikiText.length()) {
+			return null;
+		}
 		for (; endPos < wikiText.length(); endPos++) {
 			switch (wikiText.charAt(endPos)) {
 			case '}':
@@ -144,13 +165,19 @@ public class WikiPatternMatcher {
 			if (bracketCount == 0)
 				break;
 		}
-		String infoBoxText = wikiText.substring(startPos, endPos + 1);
+		String infoBoxText;
+		if (endPos >= wikiText.length()) {
+			infoBoxText = wikiText.substring(startPos);
+		} else {
+			infoBoxText = wikiText.substring(startPos, endPos + 1);
+		}
 		infoBoxText = stripCite(infoBoxText); // strip clumsy {{cite}} tags
 		// strip any html formatting
 		infoBoxText = infoBoxText.replaceAll("&gt;", ">");
 		infoBoxText = infoBoxText.replaceAll("&lt;", "<");
 		infoBoxText = infoBoxText.replaceAll("<ref.*?>.*?</ref>", " ");
 		infoBoxText = infoBoxText.replaceAll("</?.*?>", " ");
+
 		return new InfoBox(infoBoxText);
 	}
 
@@ -183,8 +210,8 @@ public class WikiPatternMatcher {
 	}
 
 	public String getTranslatedTitle(String languageCode) {
-		Pattern pattern = Pattern.compile("^\\[\\[" + languageCode + ":(.*?)\\]\\]$", Pattern.MULTILINE);
-		Matcher matcher = pattern.matcher(wikiText);
+		Pattern translatePattern = Pattern.compile("^\\[\\[" + languageCode + ":(.*?)\\]\\]$", Pattern.MULTILINE);
+		Matcher matcher = translatePattern.matcher(wikiText);
 		if (matcher.find()) {
 			return matcher.group(1);
 		}
