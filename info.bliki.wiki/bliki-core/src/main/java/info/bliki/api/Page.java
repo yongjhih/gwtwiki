@@ -17,18 +17,12 @@ import org.apache.commons.httpclient.methods.GetMethod;
  * Manages page data from the <a
  * href="http://meta.wikimedia.org/w/api.php">Wikimedia API</a>
  */
-public class Page {
+public class Page extends PageInfo {
 	List<Link> links;
 
-	List<Category> categories;
+	List<PageInfo> categories;
 
-	String pageid;
-
-	String ns;
-
-	String title;
-
-    String editToken;
+	String editToken;
 
 	// imageinfo
 	String imageUrl;
@@ -38,29 +32,10 @@ public class Page {
 	Revision revision = null;
 
 	public Page() {
-		this.pageid = "";
-		this.ns = "";
-		this.title = "";
+		super();
 		this.imageUrl = "";
 		this.links = new ArrayList<Link>();
-		this.categories = new ArrayList<Category>();
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (obj instanceof Category) {
-			return title.equals(((Category) obj).title) && ns.equals(((Category) obj).ns);
-		}
-		return false;
-	}
-
-	@Override
-	public int hashCode() {
-		return title.hashCode();
-	}
-
-	public String getNs() {
-		return ns;
+		this.categories = new ArrayList<PageInfo>();
 	}
 
 	/**
@@ -78,26 +53,6 @@ public class Page {
 
 	public String getImageThumbUrl() {
 		return imageThumbUrl;
-	}
-
-	public void setNs(String ns) {
-		this.ns = ns;
-	}
-
-	public String getPageid() {
-		return pageid;
-	}
-
-	public void setPageid(String pageid) {
-		this.pageid = pageid;
-	}
-
-	public String getTitle() {
-		return title;
-	}
-
-	public void setTitle(String title) {
-		this.title = title;
 	}
 
 	/**
@@ -124,15 +79,15 @@ public class Page {
 		return "PageID: " + pageid + "; NS: " + ns + "; Title: " + title + "; \nImage url: " + imageUrl + "\nContent:\n" + content;
 	}
 
-	public boolean addCategory(Category arg0) {
+	public boolean addCategory(PageInfo arg0) {
 		return categories.add(arg0);
 	}
 
-	public boolean containsCategory(Category o) {
+	public boolean containsCategory(PageInfo o) {
 		return categories.contains(o);
 	}
 
-	public Category getCategory(int index) {
+	public PageInfo getCategory(int index) {
 		return categories.get(index);
 	}
 

@@ -18,12 +18,6 @@ public class XMLPagesParser extends AbstractXMLParser {
 
 	private static final String CATEGORY_ID = "cl";
 
-	private static final String PAGE_ID = "pageid";
-
-	private static final String NS_ID = "ns";
-
-	private static final String TITLE_ID = "title";
-
 	private static final String URL_ID = "url";
 
 	private static final String THUMB_URL_ID = "thumburl";
@@ -58,9 +52,9 @@ public class XMLPagesParser extends AbstractXMLParser {
 		if ( (PAGE_TAG1.equals(qName)) ||
 			   (PAGE_TAG2.equals(qName)) ) {
 			fPage = new Page();
-			fPage.setPageid(fAttributes.getValue(PAGE_ID));
-			fPage.setNs(fAttributes.getValue(NS_ID));
-			fPage.setTitle(fAttributes.getValue(TITLE_ID));
+			fPage.setPageid(fAttributes.getValue(AbstractXMLParser.PAGE_ID));
+			fPage.setNs(fAttributes.getValue(AbstractXMLParser.NS_ID));
+			fPage.setTitle(fAttributes.getValue(AbstractXMLParser.TITLE_ID));
             fPage.setEditToken(fAttributes.getValue(EDIT_TOKEN_ID));
 		} else if (REV_ID.equals(qName)) {
 			fRevision = new Revision();
@@ -69,16 +63,16 @@ public class XMLPagesParser extends AbstractXMLParser {
 			fPage.setCurrentRevision(fRevision);
 		} else if (CATEGORY_ID.equals(qName)) {
 			if (fPage != null) {
-				Category cat = new Category();
-				cat.setNs(fAttributes.getValue(NS_ID));
-				cat.setTitle(fAttributes.getValue(TITLE_ID));
+				PageInfo cat = new PageInfo();
+				cat.setNs(fAttributes.getValue(AbstractXMLParser.NS_ID));
+				cat.setTitle(fAttributes.getValue(AbstractXMLParser.TITLE_ID));
 				fPage.addCategory(cat);
 			}
 		} else if (PL_ID.equals(qName)) {
 			if (fPage != null) {
 				Link link = new Link();
-				link.setNs(fAttributes.getValue(NS_ID));
-				link.setTitle(fAttributes.getValue(TITLE_ID));
+				link.setNs(fAttributes.getValue(AbstractXMLParser.NS_ID));
+				link.setTitle(fAttributes.getValue(AbstractXMLParser.TITLE_ID));
 				fPage.addLink(link);
 			}
 		} else if (II_ID.equals(qName)) {

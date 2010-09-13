@@ -15,6 +15,12 @@ import org.xml.sax.helpers.XMLReaderFactory;
  * Base class for reading XML strings.
  */
 public abstract class AbstractXMLParser extends DefaultHandler {
+	public static final String TITLE_ID = "title";
+
+	public static final String NS_ID = "ns";
+
+	public static final String PAGE_ID = "pageid";
+
 	protected Attributes fAttributes;
 
 	protected StringBuffer fData;
