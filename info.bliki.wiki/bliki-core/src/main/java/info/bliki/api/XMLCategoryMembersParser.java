@@ -71,8 +71,7 @@ public class XMLCategoryMembersParser extends AbstractXMLParser {
 			fPage.setPageid(fAttributes.getValue(AbstractXMLParser.PAGE_ID));
 			fPage.setNs(fAttributes.getValue(AbstractXMLParser.NS_ID));
 			fPage.setTitle(fAttributes.getValue(AbstractXMLParser.TITLE_ID));
-		}
-		if (CATEGORYMEMBERS_TAG.equals(qName)) {
+		} else if (CATEGORYMEMBERS_TAG.equals(qName)) {
 			cmContinue = fAttributes.getValue(CMCONTINUE_ID);
 		}
 		fData = null;

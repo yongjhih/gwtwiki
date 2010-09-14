@@ -29,6 +29,10 @@ public abstract class AbstractXMLParser extends DefaultHandler {
 
 	protected Reader fReader;
 
+	public static final String PAGE_TAG2 = "p";
+
+	public static final String PAGE_TAG1 = "page";
+
 	public AbstractXMLParser(String xmlText) throws SAXException {
 		super();
 		fXMLReader = XMLReaderFactory.createXMLReader();
