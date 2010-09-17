@@ -71,16 +71,25 @@ public class WikiModel extends AbstractWikiModel {
 		fExternalWikiBaseURL = linkBaseURL;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void addCategory(String categoryName, String sortKey) {
 		categories.put(categoryName, sortKey);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void addLink(String topicName) {
 		links.add(topicName);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public boolean addSemanticAttribute(String attribute, String attributeValue) {
 		if (semanticAttributes == null) {
@@ -90,6 +99,9 @@ public class WikiModel extends AbstractWikiModel {
 		return true;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public boolean addSemanticRelation(String relation, String relationValue) {
 		if (semanticRelations == null) {
@@ -99,11 +111,17 @@ public class WikiModel extends AbstractWikiModel {
 		return true;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void addTemplate(String template) {
 		templates.add(template);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void appendInternalLink(String topic, String hashSection, String topicDescription, String cssClass, boolean parseRecursive) {
 		String hrefLink;
@@ -161,16 +179,25 @@ public class WikiModel extends AbstractWikiModel {
 		return links;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public List<SemanticAttribute> getSemanticAttributes() {
 		return semanticAttributes;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public List<SemanticRelation> getSemanticRelations() {
 		return semanticRelations;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public Set<String> getTemplates() {
 		return templates;
 	}
@@ -178,19 +205,24 @@ public class WikiModel extends AbstractWikiModel {
 	/**
 	 * Append the internal wiki image link to this model.
 	 * 
-	 * <br/><br/><b>Note</b>: the pipe symbol (i.e. &quot;|&quot;) splits the
+	 * <br/>
+	 * <br/>
+	 * <b>Note</b>: the pipe symbol (i.e. &quot;|&quot;) splits the
 	 * <code>rawImageLink</code> into different segments. The first segment is
 	 * used as the <code>&lt;image-name&gt;</code> and typically ends with
 	 * extensions like <code>.png</code>, <code>.gif</code>, <code>.jpg</code> or
 	 * <code>.jpeg</code>.
 	 * 
-	 * <br/><br/><b>Note</b>: if the image link contains a "width" attribute, the
-	 * filename is constructed as <code>&lt;size&gt;px-&lt;image-name&gt;</code>,
-	 * otherwise it's only the <code>&lt;image-name&gt;</code>.
+	 * <br/>
+	 * <br/>
+	 * <b>Note</b>: if the image link contains a "width" attribute, the filename
+	 * is constructed as <code>&lt;size&gt;px-&lt;image-name&gt;</code>, otherwise
+	 * it's only the <code>&lt;image-name&gt;</code>.
 	 * 
-	 * <br/><br/>See <a href="http://en.wikipedia.org/wiki/Image_markup">Image
-	 * markup</a> and see <a
-	 * href="http://www.mediawiki.org/wiki/Help:Images">Help:Images</a>
+	 * <br/>
+	 * <br/>
+	 * See <a href="http://en.wikipedia.org/wiki/Image_markup">Image markup</a>
+	 * and see <a href="http://www.mediawiki.org/wiki/Help:Images">Help:Images</a>
 	 * 
 	 * @param imageNamespace
 	 *          the image namespace
@@ -238,11 +270,17 @@ public class WikiModel extends AbstractWikiModel {
 		}
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public boolean replaceColon() {
 		return false;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void setUp() {
 		super.setUp();
@@ -251,6 +289,9 @@ public class WikiModel extends AbstractWikiModel {
 		templates = new HashSet<String>();
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public INamespace getNamespace() {
 		return fNamespace;
 	}
