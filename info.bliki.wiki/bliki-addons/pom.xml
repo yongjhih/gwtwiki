@@ -9,7 +9,7 @@
 	<artifactId>bliki-addons</artifactId>
 	<groupId>info.bliki.wiki</groupId>
 	<packaging>jar</packaging>
-	<name>Bliki (Addons)</name> 
+	<name>Bliki (Addons)</name>
 	<version>3.0.16-SNAPSHOT</version>
 	<description> This is Bliki Add-ons project. </description>
 	<dependencies>
@@ -46,6 +46,29 @@
 					<target>1.5</target>
 					<encoding>UTF-8</encoding>
 				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-source-plugin</artifactId>
+				<executions>
+					<execution>
+						<goals>
+							<goal>jar</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-javadoc-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>attach-javadocs</id>
+						<goals>
+							<goal>jar</goal>
+						</goals>
+					</execution>
+				</executions>
 			</plugin>
 		</plugins>
 	</build>
