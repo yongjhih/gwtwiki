@@ -54,8 +54,6 @@ public abstract class AbstractWikiModel implements IWikiModel, IContext {
 
 	protected int fTemplateRecursionCount;
 
-	protected boolean fReplaceColon;
-
 	protected TagStack fTagStack;
 
 	private boolean fInitialized;
@@ -99,7 +97,7 @@ public abstract class AbstractWikiModel implements IWikiModel, IContext {
 	 * compiled down into a series of chunks that can be evaluated later). You can
 	 * have multiple
 	 */
-	protected Map attributes;
+	protected Map<String, Object> attributes;
 
 	/**
 	 * A Map<Class,Object> that allows people to register a renderer for a
@@ -1227,7 +1225,7 @@ public abstract class AbstractWikiModel implements IWikiModel, IContext {
 	}
 
 	/**
-	 * Initialze the internal class attributes
+	 * Initialize the internal class attributes
 	 */
 	protected void initialize() {
 		if (!fInitialized) {
@@ -1241,7 +1239,6 @@ public abstract class AbstractWikiModel implements IWikiModel, IContext {
 			fRecursionLevel = 0;
 			fTemplateRecursionCount = 0;
 			fSectionCounter = 0;
-			fReplaceColon = false;
 			fInitialized = true;
 		}
 	}
@@ -1508,7 +1505,7 @@ public abstract class AbstractWikiModel implements IWikiModel, IContext {
 			throw new IllegalArgumentException("cannot have '.' in attribute names");
 		}
 		if (attributes == null) {
-			attributes = new HashMap();
+			attributes = new HashMap<String, Object>();
 		}
 
 		// if (value instanceof StringTemplate) {
@@ -1698,11 +1695,16 @@ public abstract class AbstractWikiModel implements IWikiModel, IContext {
 	 * {@inheritDoc}
 	 */
 	public void tearDown() {
-
+	
 	}
 
 	/**
-	 * {@inheritDoc}
+	 * Initialize the wiki model and parse the <code>rawWikiText</code> and return
+	 * the parsed node list.
+	 * 
+	 * @param rawWikiText
+	 * @return
+	 * @deprecated
 	 */
 	public List<BaseToken> toNodeList(String rawWikiText) {
 		initialize();

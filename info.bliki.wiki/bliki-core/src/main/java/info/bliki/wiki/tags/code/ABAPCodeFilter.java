@@ -1,13 +1,12 @@
 package info.bliki.wiki.tags.code;
 
 import java.util.HashMap;
-import java.util.HashSet;
 
 /**
  * Syntax highlighting support for ABAP source codes
  * 
  */
-public class ABAPCodeFilter implements SourceCodeFormatter {
+public class ABAPCodeFilter extends AbstractCodeFormatter {
 
 	private static HashMap<String, String> KEYWORD_SET = new HashMap<String, String>();
 
@@ -33,7 +32,7 @@ public class ABAPCodeFilter implements SourceCodeFormatter {
 			"TYPE", "TYPE-POOL", "TYPE-POOLS", "TYPES", "ULINE", "USING", "UNPACK", "UP", "UPDATE", "VALUE", "WHEN", "WHILE", "WINDOW",
 			"WAIT", "WHERE", "WITH", "WORK", "WRITE", "Z" };
 
-	private static HashSet<String> OBJECT_SET = new HashSet<String>();
+	private static HashMap<String, String> OBJECT_SET = new HashMap<String, String>();
 
 	static {
 		for (int i = 0; i < KEYWORDS.length; i++) {
@@ -54,38 +53,40 @@ public class ABAPCodeFilter implements SourceCodeFormatter {
 	/**
 	 * @return Returns the OBJECT_SET.
 	 */
-	public HashSet<String> getObjectSet() {
+	public HashMap<String, String> getObjectSet() {
 		return OBJECT_SET;
 	}
 
-	public static void appendChar(StringBuilder result, char currentChar) {
-		switch (currentChar) {
-		case '\"': // special html escape character
-			result.append("&#34;");
-			break;
-		case '<': // special html escape character
-			result.append("&#60;");
-			break;
-		case '>': // special html escape character
-			result.append("&#62;");
-			break;
-		case '&': // special html escape character
-			result.append("&#38;");
-			break;
-		case '\'': // special html escape character
-			result.append("&#39;");
-			break;
-		default:
-			result.append(currentChar);
-		}
-	}
-
-	public static void createHashMap(HashMap<String, String> map, String str) {
-		map.put(str, AbstractCPPBasedCodeFilter.FONT_KEYWORD + str + AbstractCPPBasedCodeFilter.FONT_END);
-	}
+	//
+	// public static void appendChar(StringBuilder result, char currentChar) {
+	// switch (currentChar) {
+	// case '\"': // special html escape character
+	// result.append("&#34;");
+	// break;
+	// case '<': // special html escape character
+	// result.append("&#60;");
+	// break;
+	// case '>': // special html escape character
+	// result.append("&#62;");
+	// break;
+	// case '&': // special html escape character
+	// result.append("&#38;");
+	// break;
+	// case '\'': // special html escape character
+	// result.append("&#39;");
+	// break;
+	// default:
+	// result.append(currentChar);
+	// }
+	// }
+	//
+	// public static void createHashMap(HashMap<String, String> map, String str) {
+	// map.put(str, AbstractCPPBasedCodeFilter.FONT_KEYWORD + str +
+	// AbstractCPPBasedCodeFilter.FONT_END);
+	// }
 
 	private int appendIdentifier(String input, int identStart, int currentPosition, HashMap<String, String> keywords,
-			HashSet<String> objectWords, StringBuilder result) {
+			HashMap<String, String> objectWords, StringBuilder result) {
 		String originalIdent = input.substring(identStart, --currentPosition);
 		String keywordIdent = originalIdent;
 		if (!isKeywordLowerCase()) {
@@ -112,7 +113,7 @@ public class ABAPCodeFilter implements SourceCodeFormatter {
 		char currentChar = ' ';
 
 		HashMap<String, String> keywordsSet = getKeywordSet();
-		HashSet<String> objectsSet = getObjectSet();
+		HashMap<String, String> objectsSet = getObjectSet();
 		StringBuilder result = new StringBuilder(input.length() + input.length() / 4);
 		boolean identFound = false;
 		// result.append("<font color=\"#000000\">");
