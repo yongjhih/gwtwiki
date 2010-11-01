@@ -1,5 +1,6 @@
 package info.bliki.wiki.filter;
 
+import info.bliki.commons.validator.routines.EmailValidator;
 import info.bliki.htmlcleaner.ContentToken;
 import info.bliki.htmlcleaner.EndTagToken;
 import info.bliki.htmlcleaner.TagNode;
@@ -24,8 +25,6 @@ import info.bliki.wiki.tags.util.TagStack;
 import info.bliki.wiki.tags.util.WikiTagNode;
 
 import java.util.List;
-
-import org.apache.commons.validator.EmailValidator;
 
 /**
  * A Wikipedia syntax parser for the second pass in the parsing of a Wikipedia

@@ -64,7 +64,7 @@ public class Util {
 	}
 
 	/**
-	 * Returns the index within the seachable string of the first occurrence of
+	 * Returns the index within the searchable string of the first occurrence of
 	 * the concatenated <i>start</i> and <i>end</i> substring. The end substring
 	 * is matched ignoring case considerations.
 	 * 
