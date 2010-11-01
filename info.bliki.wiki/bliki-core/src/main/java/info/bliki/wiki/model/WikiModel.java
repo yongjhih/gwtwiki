@@ -287,6 +287,8 @@ public class WikiModel extends AbstractWikiModel {
 		categories = new HashMap<String, String>();
 		links = new HashSet<String>();
 		templates = new HashSet<String>();
+		semanticRelations = null;
+		semanticAttributes = null;
 	}
 
 	/**

@@ -15,7 +15,7 @@ public class Console {
 	 * Constant for an empty char array
 	 */
 	public static final char[] NO_CHAR = new char[0];
- 
+
 	private static final int DEFAULT_READING_SIZE = 8192;
 
 	public static void main(String[] args) {
@@ -78,12 +78,17 @@ public class Console {
 
 				while (true) {
 					String s = in.readLine();
-					if (s==null || s.equalsIgnoreCase("exit")) {
+					if (s == null || s.equalsIgnoreCase("exit")) {
 						break;
 					}
 					WikiModel wikiModel = new WikiModel(image, link);
-					String htmlStr = wikiModel.render(s);
-					System.out.print(htmlStr);
+					try {
+						wikiModel.setUp();
+						String htmlStr = wikiModel.render(s);
+						System.out.print(htmlStr);
+					} finally {
+						wikiModel.tearDown();
+					}
 				}
 				in.close();
 			}

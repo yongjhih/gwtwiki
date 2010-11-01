@@ -11,7 +11,6 @@ import org.xml.sax.SAXException;
  * 
  */
 public class PrintArticle implements IArticleFilter {
-	private WikiModel wikiModel;
 
 	private int counter;
 
@@ -25,7 +24,6 @@ public class PrintArticle implements IArticleFilter {
 	 * 
 	 */
 	public PrintArticle(int max_count) {
-		wikiModel = new WikiModel("${image}", "${title}");
 		counter = 0;
 		max_counter = max_count;
 	}
@@ -36,11 +34,17 @@ public class PrintArticle implements IArticleFilter {
 			throw new SAXException("\nLimit reached after " + max_counter + " entries.");
 		}
 		String htmlText = "";
-		htmlText = wikiModel.render(article.getText());
-		if (htmlText == null) {
-			System.out.println("An IOException occured!");
-		} else {
-			System.out.println(htmlText);
+		WikiModel wikiModel = new WikiModel("${image}", "${title}");
+		try {
+			wikiModel.setUp();
+			htmlText = wikiModel.render(article.getText());
+			if (htmlText == null) {
+				System.out.println("An IOException occured!");
+			} else {
+				System.out.println(htmlText);
+			}
+		} finally {
+			wikiModel.tearDown();
 		}
 	}
 
