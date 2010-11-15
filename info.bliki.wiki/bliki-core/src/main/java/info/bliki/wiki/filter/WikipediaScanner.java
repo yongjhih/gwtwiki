@@ -425,107 +425,6 @@ public class WikipediaScanner {
 		return null;
 	}
 
-	public WPList tracList() {
-		return wpList();
-		// TreeMap<Integer, Integer> levelList= new TreeMap<Integer, Integer>();
-		// int level=0;
-		// int biggestLevel=level;
-		// WPList list = null;
-		// WPListElement listElement = null;
-		// int startPosition;
-		// try {
-		// char ch;
-		// if (fScannerPosition < 0) {
-		// // simulate newline
-		// fScannerPosition = 0;
-		// ch = '\n';
-		// } else {
-		// ch = fSource[fScannerPosition++];
-		// }
-		//
-		// list = new WPList();
-		// while (true) {
-		// if (ch == '\n' || fScannerPosition == 0) {
-		// startPosition = fScannerPosition;
-		// if (listElement != null) {
-		// listElement.createTagStack(fSource, fWikiModel, fScannerPosition - 1);
-		// list.add(listElement);
-		// listElement = null;
-		// }
-		// ch = fSource[fScannerPosition++];
-		// if (ch != ' ') {
-		// fScannerPosition = startPosition;
-		// return list;
-		// }
-		// int count=1;
-		// while (true) {
-		// ch = fSource[fScannerPosition++];
-		// if (ch != ' ') {
-		// break;
-		// }
-		// count++;
-		// }
-		//
-		// switch (ch) {
-		// case '#':
-		// case '*':
-		// int type;
-		// char[] sequence;
-		// // Integer value = levelList.get(count);
-		// // if (value!=null) {
-		// //
-		// // } else {
-		// //
-		// // }
-		// sequence = new char[count];
-		// System.arraycopy(fSource, fScannerPosition - count, sequence, 0, count);
-		// if (ch == '#') {
-		// type = WPListElement.OL;
-		// } else {
-		// type = WPListElement.UL;
-		// }
-		//
-		// int startPos;
-		// while (true) {
-		// ch = fSource[fScannerPosition++];
-		// if (!Character.isWhitespace(ch)) {
-		// startPos = fScannerPosition - 1;
-		// listElement = new WPListElement(type, count, sequence, startPos);
-		// break;
-		// }
-		// if (ch == '\n') {
-		// fScannerPosition--; // to detect next row
-		// startPos = fScannerPosition;
-		// listElement = new WPListElement(type, count, sequence, startPos);
-		// listElement.createTagStack(fSource, fWikiModel, startPos);
-		// list.add(listElement);
-		// listElement = null;
-		// break;
-		// }
-		// }
-		//
-		// break;
-		//
-		// default:
-		// fScannerPosition = startPosition;
-		// return list;
-		// }
-		// }
-		// ch = fSource[fScannerPosition++];
-		// }
-		// } catch (IndexOutOfBoundsException e) {
-		// fScannerPosition = fSource.length + 1;
-		// }
-		// if (list != null) {
-		// if (listElement != null) {
-		// listElement.createTagStack(fSource, fWikiModel, fScannerPosition - 1);
-		// list.add(listElement);
-		// listElement = null;
-		// }
-		// return list;
-		// }
-		// return null;
-	}
 
 	public int nextNewline() {
 		while (true) {
@@ -537,64 +436,24 @@ public class WikipediaScanner {
 
 	public int indexEndOfComment() {
 		char ch;
-		try {
-			while (true) {
-				ch = fSource[fScannerPosition++];
-				if (ch == '-' && fSource[fScannerPosition] == '-' && fSource[fScannerPosition + 1] == '>') {
-					return fScannerPosition + 2;
-				}
+		while (fScannerPosition < fSource.length - 2) {
+			ch = fSource[fScannerPosition++];
+			if (ch == '-' && fSource[fScannerPosition] == '-' && fSource[fScannerPosition + 1] == '>') {
+				return fScannerPosition + 2;
 			}
-		} catch (IndexOutOfBoundsException e) {
-			// ..
-		}
-		return -1;
-	}
-
-	public int indexOf(char ch) {
-		try {
-			while (true) {
-				if (fSource[fScannerPosition++] == ch) {
-					return fScannerPosition - 1;
-				}
-			}
-		} catch (IndexOutOfBoundsException e) {
-			// ..
-		}
-		return -1;
-	}
-
-	public int indexOf(char ch, char stop) {
-		try {
-			char c;
-			while (true) {
-				c = fSource[fScannerPosition];
-				if (c == ch) {
-					return fScannerPosition;
-				}
-				if (c == stop) {
-					return -1;
-				}
-				fScannerPosition++;
-			}
-		} catch (IndexOutOfBoundsException e) {
-			// ..
 		}
 		return -1;
 	}
 
 	public int indexEndOfNowiki() {
 		char ch;
-		try {
-			while (true) {
-				ch = fSource[fScannerPosition++];
-				if (ch == '<' && fSource[fScannerPosition] == '/' && fSource[fScannerPosition + 1] == 'n'
-						&& fSource[fScannerPosition + 2] == 'o' && fSource[fScannerPosition + 3] == 'w' && fSource[fScannerPosition + 4] == 'i'
-						&& fSource[fScannerPosition + 5] == 'k' && fSource[fScannerPosition + 6] == 'i' && fSource[fScannerPosition + 7] == '>') {
-					return fScannerPosition + 8;
-				}
+		while (fScannerPosition < fSource.length - 8) {
+			ch = fSource[fScannerPosition++];
+			if (ch == '<' && fSource[fScannerPosition] == '/' && fSource[fScannerPosition + 1] == 'n'
+					&& fSource[fScannerPosition + 2] == 'o' && fSource[fScannerPosition + 3] == 'w' && fSource[fScannerPosition + 4] == 'i'
+					&& fSource[fScannerPosition + 5] == 'k' && fSource[fScannerPosition + 6] == 'i' && fSource[fScannerPosition + 7] == '>') {
+				return fScannerPosition + 8;
 			}
-		} catch (IndexOutOfBoundsException e) {
-			// ..
 		}
 		return -1;
 	}
@@ -605,7 +464,7 @@ public class WikipediaScanner {
 		int oldPosition;
 		char ch;
 		try {
-			while (true) {
+			while (fScannerPosition < fSource.length) {
 				ch = fSource[fScannerPosition++];
 				if (ch == '<' && fSource[fScannerPosition] == '!' && fSource[fScannerPosition + 1] == '-'
 						&& fSource[fScannerPosition + 2] == '-') {
@@ -654,7 +513,6 @@ public class WikipediaScanner {
 	 */
 	public int indexOfAttributes() {
 		try {
-			// int start = fScannerPosition;
 			char ch = fSource[fScannerPosition];
 			while (true) {
 				// TODO scan for NOWIKI and HTML comments
@@ -695,6 +553,9 @@ public class WikipediaScanner {
 					return fScannerPosition;
 				}
 				if (fSource[fScannerPosition] == '\n') {
+					return -1;
+				}
+				if (fScannerPosition >= fSource.length) {
 					return -1;
 				}
 				ch = fSource[++fScannerPosition];
@@ -902,7 +763,7 @@ public class WikipediaScanner {
 		int level = 1;
 		int position = startPosition;
 		try {
-			while (true) {
+			while (position < sourceArray.length) {
 				ch = sourceArray[position++];
 				if (ch == startCh && sourceArray[position] == startCh) {
 					position++;
@@ -910,11 +771,11 @@ public class WikipediaScanner {
 				} else if (ch == endChar && sourceArray[position] == endChar) {
 					position++;
 					if (--level == 0) {
-						break;
+						return position;
 					}
 				}
 			}
-			return position;
+			return -1;
 		} catch (IndexOutOfBoundsException e) {
 			return -1;
 		}
@@ -926,7 +787,7 @@ public class WikipediaScanner {
 		int countSingleOpenBraces = 0;
 		int position = startPosition;
 		try {
-			while (true) {
+			while (position < sourceArray.length) {
 				ch = sourceArray[position++];
 				if (ch == '{') {
 					// if (sourceArray[position] == '{') {
@@ -961,12 +822,12 @@ public class WikipediaScanner {
 						if (sourceArray[position] == '}') {
 							// template ending
 							position++;
-							break;
+							return position;
 						}
 					}
 				}
 			}
-			return position;
+			return -1;
 		} catch (IndexOutOfBoundsException e) {
 			return -1;
 		}
@@ -980,7 +841,7 @@ public class WikipediaScanner {
 		// int templatePosition = -1;
 		// int[] result = new int[] { -1, -1 };
 		try {
-			while (true) {
+			while (parameterPosition < sourceArray.length) {
 				ch = sourceArray[parameterPosition++];
 				if (ch == '{') {
 					if (sourceArray[parameterPosition] == '{') {
@@ -1035,49 +896,52 @@ public class WikipediaScanner {
 
 				}
 			}
+			return new int[] { -1, -1 };
 		} catch (IndexOutOfBoundsException e) {
 			return new int[] { -1, -1 };
 		}
 	}
 
-	public static final int findStackedTemplateEnd(final char[] sourceArray, final char startCh, final char endChar, int startPosition) {
-		char ch;
-		int templateLevel = 0;
-		int parameterLevel = 1;
-		int len = sourceArray.length;
-		int position = startPosition;
-
-		try {
-			while (true) {
-				ch = sourceArray[position++];
-				if (ch == startCh && sourceArray[position] == startCh) {
-					position++;
-					if ((len > position) && sourceArray[position] == startCh) {
-						// template parameter beginning
-						position++;
-						parameterLevel++;
-					} else {
-						templateLevel++;
-					}
-				} else if (ch == endChar && sourceArray[position] == endChar) {
-					position++;
-					if ((templateLevel == 0) && (len > position) && sourceArray[position] == endChar) {
-						// template parameter ending
-						position++;
-						if (--parameterLevel == 0) {
-							break;
-						}
-					} else {
-						templateLevel--;
-					}
-				}
-			}
-			return position;
-		} catch (IndexOutOfBoundsException e) {
-			e.printStackTrace();
-			return -1;
-		}
-	}
+	// public static final int findStackedTemplateEnd(final char[] sourceArray,
+	// final char startCh, final char endChar, int startPosition) {
+	// char ch;
+	// int templateLevel = 0;
+	// int parameterLevel = 1;
+	// int len = sourceArray.length;
+	// int position = startPosition;
+	//
+	// try {
+	// while (true) {
+	// ch = sourceArray[position++];
+	// if (ch == startCh && sourceArray[position] == startCh) {
+	// position++;
+	// if ((len > position) && sourceArray[position] == startCh) {
+	// // template parameter beginning
+	// position++;
+	// parameterLevel++;
+	// } else {
+	// templateLevel++;
+	// }
+	// } else if (ch == endChar && sourceArray[position] == endChar) {
+	// position++;
+	// if ((templateLevel == 0) && (len > position) && sourceArray[position] ==
+	// endChar) {
+	// // template parameter ending
+	// position++;
+	// if (--parameterLevel == 0) {
+	// break;
+	// }
+	// } else {
+	// templateLevel--;
+	// }
+	// }
+	// }
+	// return position;
+	// } catch (IndexOutOfBoundsException e) {
+	// e.printStackTrace();
+	// return -1;
+	// }
+	// }
 
 	// public static final int findNestedParamEnd(final char[] sourceArray, final
 	// char startCh, final char endChar, int startPosition) {
@@ -1683,7 +1547,7 @@ public class WikipediaScanner {
 	 */
 	protected int indexOfUntilNoLetter(char testChar, int fromIndex) {
 		int index = fromIndex;
-		char ch; 
+		char ch;
 		while (index < fSource.length) {
 			ch = fSource[index++];
 			if (ch == testChar) {
