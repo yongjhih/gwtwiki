@@ -1683,8 +1683,8 @@ public class WikipediaScanner {
 	 */
 	protected int indexOfUntilNoLetter(char testChar, int fromIndex) {
 		int index = fromIndex;
-		char ch;
-		while (true) {
+		char ch; 
+		while (index < fSource.length) {
 			ch = fSource[index++];
 			if (ch == testChar) {
 				return index - 1;
@@ -1697,8 +1697,8 @@ public class WikipediaScanner {
 			}
 			return -1;
 		}
+		return -1;
 	}
-
 	// protected final int readUntilIgnoreCase(Object processed, int start, String
 	// startString, String endString) {
 	// int index = Utils.indexOfIgnoreCase(fBMHR, processed, fStringSource,
