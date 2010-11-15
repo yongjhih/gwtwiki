@@ -425,7 +425,6 @@ public class WikipediaScanner {
 		return null;
 	}
 
-
 	public int nextNewline() {
 		while (true) {
 			if (fSource[fScannerPosition++] == '\n') {
@@ -1224,7 +1223,10 @@ public class WikipediaScanner {
 					throw new IllegalStateException("how did we get in state " + state);
 				}
 			}
-
+			if (fSource[fScannerPosition-1] != '>') {
+				fScannerPosition = start;
+				return null;
+			}
 			return (makeTag(start, fScannerPosition, attributes));
 		} catch (IndexOutOfBoundsException e) {
 
@@ -1233,6 +1235,7 @@ public class WikipediaScanner {
 				naked(attributes, bookmarks);
 			}
 		}
+		fScannerPosition = start;
 		return null;
 	}
 
@@ -1488,6 +1491,7 @@ public class WikipediaScanner {
 	}
 
 	protected int readSpecialWikiTags(int start) {
+		int startPosition = fScannerPosition;
 		try {
 			if (fSource[start] != '/') {
 				// starting tag
@@ -1511,6 +1515,7 @@ public class WikipediaScanner {
 		} catch (IndexOutOfBoundsException e) {
 			// do nothing
 		}
+		fScannerPosition = startPosition;
 		return -1;
 	}
 

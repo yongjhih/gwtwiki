@@ -33,6 +33,26 @@ public class PreFilterTest extends FilterTestSupport {
             + "last line"));
   }
 
+  public void testPre3() {
+    assertEquals("\n" + 
+    		"\n" + 
+    		"<ul>\n" + 
+    		"<li>line 1 ...</li>\n" + 
+    		"<li>line 2 &#60; test wrong tag</li>\n" + 
+    		"<li>line 3 &#60; test wrong tag</li></ul>\n" + 
+    		"\n" + 
+    		"<pre>\n" + 
+    		"preformatted text\n" + 
+    		"</pre>", wikiModel.render("\n" + 
+    				"* line 1 ...\n" + 
+    				"* line 2 < test wrong tag\n" + 
+    				"* line 3 < test wrong tag\n" + 
+    				"\n" + 
+    				"<pre>\n" + 
+    				"preformatted text\n" + 
+    				"</pre>"));
+  }
+  
   // public void testPre1() {
   // assertEquals("", wikiModel.render("<pre>\n<nowiki>\n" +
   // "The nowiki tag ignores [[Wiki]] ''markup''.\n" +

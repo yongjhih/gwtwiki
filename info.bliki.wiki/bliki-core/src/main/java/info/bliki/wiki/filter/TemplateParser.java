@@ -305,6 +305,7 @@ public class TemplateParser extends AbstractParser {
 				if (fSource[fCurrentPosition] != '/') {
 					// starting tag
 					int lessThanStart = fCurrentPosition - 1;
+					int startPosition = fCurrentPosition;
 					WikiTagNode tagNode = parseTag(fCurrentPosition);
 					if (tagNode != null) {
 						fCurrentPosition = tagNode.getEndPosition();
@@ -430,6 +431,7 @@ public class TemplateParser extends AbstractParser {
 								return true;
 							}
 						}
+						fCurrentPosition=startPosition;
 					}
 				}
 			}
@@ -450,6 +452,7 @@ public class TemplateParser extends AbstractParser {
 			default:
 
 				if (fSource[fCurrentPosition] != '/') {
+					int startPosition = fCurrentPosition;
 					// starting tag
 					WikiTagNode tagNode = parseTag(fCurrentPosition);
 					if (tagNode != null) {
@@ -469,6 +472,7 @@ public class TemplateParser extends AbstractParser {
 							}
 						}
 					}
+					fCurrentPosition = startPosition;
 				}
 			}
 		} catch (IndexOutOfBoundsException e) {
