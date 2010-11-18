@@ -431,7 +431,7 @@ public class TemplateParser extends AbstractParser {
 								return true;
 							}
 						}
-						fCurrentPosition=startPosition;
+						fCurrentPosition = startPosition;
 					}
 				}
 			}
@@ -584,15 +584,39 @@ public class TemplateParser extends AbstractParser {
 		}
 		fCurrentPosition = endPosition;
 		LinkedHashMap<String, String> parameterMap = new LinkedHashMap<String, String>();
+		List<String> unnamedParameters = new ArrayList<String>();
 		for (int i = 1; i < parts.size(); i++) {
 			if (i == parts.size() - 1) {
-				createSingleParameter(i, parts.get(i), parameterMap, true);
+				createSingleParameter(parts.get(i), parameterMap, unnamedParameters, true);
 			} else {
-				createSingleParameter(i, parts.get(i), parameterMap, false);
+				createSingleParameter(parts.get(i), parameterMap, unnamedParameters, false);
 			}
 		}
+		mergeParameters(parameterMap, unnamedParameters);
+
 		fWikiModel.substituteTemplateCall(templateName, parameterMap, writer);
 		return true;
+	}
+
+	/**
+	 * If template calls have a mix between named and unnamed parameters, the
+	 * collected <code>unnamedParameters</code> are merge into the
+	 * <code>parameterMap</code>.
+	 * 
+	 * 
+	 * See <a href="http://meta.wikimedia.org/wiki/Help:Template#Mix_of_named_and_unnamed_parameters"
+	 * >Help:Template#Mix_of_named_and_unnamed_parameters</a>
+	 * 
+	 * @param parameterMap
+	 * @param unnamedParameters
+	 */
+	private void mergeParameters(LinkedHashMap<String, String> parameterMap, List<String> unnamedParameters) {
+		int unnamedParameterIndex = 1;
+		for (String param : unnamedParameters) {
+			String key = Integer.toString(unnamedParameterIndex++);
+			if (!parameterMap.containsKey(key))
+				parameterMap.put(key, param);
+		}
 	}
 
 	/**
@@ -650,7 +674,7 @@ public class TemplateParser extends AbstractParser {
 	 * parameters map
 	 * 
 	 */
-	private static void createSingleParameter(int parameterCounter, String srcString, Map<String, String> map,
+	private static void createSingleParameter(String srcString, Map<String, String> map, List<String> unnamedParams,
 			boolean trimNewlineRight) {
 		int currOffset = 0;
 		char[] src = srcString.toCharArray();
@@ -712,8 +736,7 @@ public class TemplateParser extends AbstractParser {
 				if (parameter != null) {
 					map.put(parameter, value);
 				} else {
-					String intParameter = Integer.toString(parameterCounter);
-					map.put(intParameter, value);
+					unnamedParams.add(value);
 				}
 			}
 		}

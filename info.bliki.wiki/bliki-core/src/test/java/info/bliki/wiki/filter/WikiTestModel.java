@@ -2131,7 +2131,7 @@ public class WikiTestModel extends WikiModel {
 			} else if (name.equals("Test")) {
 				return "a) First: {{{1}}} Second: {{{2}}}";
 			} else if (name.equals("Templ1")) {
-				return "b) First: {{{a}}} Second: {{{2}}}";
+				return "b) First: {{{a}}} Second: {{{1}}}";
 			} else if (name.equals("Templ2")) {
 				return "c) First: {{{1}}} Second: {{{2}}}";
 			} else if (name.equals("Ifeq")) {
