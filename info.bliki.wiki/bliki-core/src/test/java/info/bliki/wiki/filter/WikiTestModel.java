@@ -2044,6 +2044,73 @@ public class WikiTestModel extends WikiModel {
 			+ "<!-- PLEASE ADD INTERWIKIS BELOW THIS LINE, THANKS. -->\n"
 			+ "[[id:Templat:IPA-fr]]";
 
+	private static String COMMONS = "{{sister\n"
+			+ "| position = {{{position|}}}\n"
+			+ "| project  = commons\n"
+			+ "| text     = \n"
+			+ "Wikimedia Commons has media related to: '''''{{sec link auto| commons | {{{1| Special:Search/{{PAGENAME}} }}} | {{{2| {{{1| {{PAGENAME}} }}} }}} }}''''' \n"
+			+ "}}<noinclude>\n" + "\n" + "{{documentation}}\n"
+			+ "<!-- Add categories and interwikis to the /doc subpage, not here! -->\n" + "</noinclude>";
+
+	private static String COMMONS_CATEGORY = "{{commons\n" + "| position = {{{position|}}}\n"
+			+ "  <!-- {{#if:x|}} strips whitespace from parameter 1, \n"
+			+ "       in case it is fed like this: {{Commons category| Some cat }}. -->\n"
+			+ "| Category:{{#if:x| {{{1| {{PAGENAME}} }}} }}\n" + "| {{{2| {{{1| {{PAGENAME}} }}} }}}\n" + "}}<noinclude>\n" + "\n"
+			+ "{{documentation}}\n" + "<!-- Add categories and interwikis to the /doc subpage, not here! -->\n" + "</noinclude>";
+
+	private static String SISTER = "{{Side box\n" + "| position = {{{position|}}}\n" + "| image    = \n"
+			+ "  {{#switch: {{{image|}}}\n" + "  | none =    <!-- \"image=none\", do nothing -->\n"
+			+ "  |      =    <!-- No image fed, select an image -->\n" + "    [[Image:{{#switch: {{lc: {{{project|}}} }}\n"
+			+ "    | commons                = Commons-logo.svg\n" + "    | meta|metawiki|m        = Wikimedia Community Logo.svg\n"
+			+ "    | wikibooks|wbk|wb|b     = Wikibooks-logo-en-noslogan.svg\n"
+			+ "    | wikiquote|quote|wqt|q  = Wikiquote-logo-en.svg\n" + "    | wikipedia|wp|w         = Wikipedia-logo.png\n"
+			+ "    | wikisource|source|ws|s = Wikisource-logo.svg\n" + "    | wiktionary|wkt|wdy|d   = Wiktionary-logo-en.svg\n"
+			+ "    | wikinews|news|wnw|n    = Wikinews-logo.svg\n" + "    | wikispecies|species    = Wikispecies-logo.svg\n"
+			+ "    | wikiversity|wvy|v      = Wikiversity-logo.svg\n" + "    | mediawiki|mw           = Mediawiki.png\n"
+			+ "    | #default               = Wikimedia-logo.svg\n" + "    }}|40x40px|link=|alt=\n" + "    ]]\n"
+			+ "  | #default = {{{image|}}}\n" + "  }}\n" + "| text       = {{{text}}}\n" + "| below      = {{{below|}}}\n"
+			+ "| imageright = {{{imageright|}}}\n" + "| class      = plainlinks\n" + "}}<noinclude>\n" + "\n" + "{{Documentation}}\n"
+			+ "\n" + "<!-- Add categories and interwikis to the /doc subpage, not here! -->\n" + "</noinclude>";
+
+	private static String SIDE_BOX = "<table class=\"metadata mbox-small{{#ifeq:{{lc:{{{position|}}}}}|left|-left}} {{{class|}}}\" style=\"border:1px solid #aaa; background-color:#f9f9f9; {{{style|}}}\">\n"
+			+ "<tr>\n"
+			+ "{{#switch:{{{image|}}}\n"
+			+ "|<!--BLANK-->|none={{td}}\n"
+			+ "|#default=<td class=\"mbox-image\">{{{image}}}</td>\n"
+			+ "}}\n"
+			+ "<td class=\"mbox-text\" style=\"{{{textstyle|}}}\"> {{{text}}} </td>\n"
+			+ "{{#if:{{{imageright|}}}\n"
+			+ "| <td class=\"mbox-imageright\">{{{imageright}}}</td>\n"
+			+ "}}\n"
+			+ "</tr>\n"
+			+ "{{#if:{{{below|}}}\n"
+			+ "| <tr><td colspan={{#if:{{{imageright|}}}|3|2}} class=\"mbox-text\" style=\"{{{textstyle|}}}\"> {{{below}}} </td></tr>\n"
+			+ "}}\n"
+			+ "</table><noinclude>\n"
+			+ "\n"
+			+ "{{Documentation}}\n"
+			+ "<!-- Add categories and interwikis to the /doc subpage, not here! -->\n" + "</noinclude>";
+
+	private static String SEC_LINK_AUTO = "{{#ifeq: {{SERVERNAME}} | secure.wikimedia.org\n"
+			+ "| {{#switch: {{lc: {{{padlock|}}} }}\n" + "  | yes    <!--Supress CSS icon, to not get double icon-->\n"
+			+ "  | no = <span class=\"plainlinks\">\n" + "  }}[{{sec link/secure url\n" + "  | project = {{{1|}}}\n"
+			+ "  | pagename = {{{2|}}}\n" + "  | lang = {{{lang|}}}\n" + "  | query = {{{query|}}}\n" + "  | anchor = {{{anchor|}}}\n"
+			+ "  }} {{sec link/text\n" + "  | project = {{{1|}}}\n" + "  | pagename = {{{2|}}}\n" + "  | text = {{{3|}}}\n"
+			+ "  | lang = {{{lang|}}}\n" + "  | query = {{{query|}}}\n" + "  | anchor = {{{anchor|}}}\n"
+			+ "  }}]{{#switch: {{lc: {{{padlock|}}} }}\n" + "  | no = </span>\n"
+			+ "  | yes = </span>[[File:Lock icon blue.gif|16x13px|link=]]\n" + "  }}\n" + "\n"
+			+ "| <!--Not on the secure server, make a normal link-->\n" + "  {{#if: {{{query|}}} {{{lang|}}}\n"
+			+ "  | <!--Make a full url link, needed when query or lang-->\n" + "    <span class=\"plainlinks\">[{{sec link/normal url\n"
+			+ "    | project = {{{1|}}}\n" + "    | pagename = {{{2|}}}\n" + "    | lang = {{{lang|}}}\n"
+			+ "    | query = {{{query|}}}\n" + "    | anchor = {{{anchor|}}}\n" + "    }} {{sec link/text\n"
+			+ "    | project = {{{1|}}}\n" + "    | pagename = {{{2|}}}\n" + "    | text = {{{3|}}}\n" + "    | lang = {{{lang|}}}\n"
+			+ "    | query = {{{query|}}}\n" + "    | anchor = {{{anchor|}}}\n" + "    }}]</span>\n" + "  | <!--Make a normal link-->\n"
+			+ "    [[:{{sec link/normal link\n" + "    | project = {{{1|}}}\n" + "    | pagename = {{{2|}}}\n"
+			+ "    | anchor = {{{anchor|}}}\n" + "    }}|{{sec link/text\n" + "    | project = {{{1|}}}\n"
+			+ "    | pagename = {{{2|}}}\n" + "    | text = {{{3|}}}\n" + "    | anchor = {{{anchor|}}}\n" + "    }}]]\n" + "  }}\n"
+			+ "}}<noinclude>\n" + "\n" + "{{documentation}}\n"
+			+ "<!-- Add categories and interwikis to the /doc subpage, not here! -->\n" + "</noinclude>";
+
 	boolean fSemanticWebActive;
 
 	static {
@@ -2068,7 +2135,7 @@ public class WikiTestModel extends WikiModel {
 		// set up a simple cache mock-up for JUnit tests. HashMap is not usable for
 		// production!
 		Configuration.DEFAULT_CONFIGURATION.setTemplateCallsCache(new HashMap());
-		
+
 		fSemanticWebActive = false;
 	}
 
@@ -2099,6 +2166,16 @@ public class WikiTestModel extends WikiModel {
 				return CITE_JOURNAL;
 			} else if (name.equals("Citation/core")) {
 				return CITATION_CORE;
+			} else if (name.equals("Commons")) {
+				return COMMONS;
+			} else if (name.equals("Commons_category")) {
+				return COMMONS_CATEGORY;
+			} else if (name.equals("Sister")) {
+				return SISTER;
+			} else if (name.equals("Sec_link_auto")) {
+				return SEC_LINK_AUTO;
+			} else if (name.equals("Side_box")) {
+				return SIDE_BOX;
 			} else if (name.equals("!")) {
 				return PIPE_SYMBOL;
 			} else if (name.equals("2x")) {

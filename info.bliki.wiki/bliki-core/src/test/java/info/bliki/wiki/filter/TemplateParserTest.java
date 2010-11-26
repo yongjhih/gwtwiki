@@ -23,11 +23,11 @@ public class TemplateParserTest extends FilterTestSupport {
 				wikiModel
 						.parseTemplates("start{{{{ #if:  | l | u }}cfirst:  {{ es-verb form of/{{ #switch: indicative  | ind | indicative = indicative  | subj | subjunctive = subjunctive  | imp | imperative = imperative  | cond | conditional = conditional  | par | part | participle | past participle  | past-participle = participle  | adv | adverbial | ger | gerund | gerundive  | gerundio | present participle  | present-participle = adverbial  | error  }}  | tense =  {{ #switch: present  | pres | present = present  | imp | imperfect = imperfect  | pret | preterit | preterite = preterite  | fut | future = future  | cond | conditional = conditional  }}  | number =  {{ #switch: singular  | s | sg | sing | singular = singular  | p | pl | plural = plural  }}  | person =  {{ #switch: 1  | 1 | first | first person | first-person = first  | 2 | second|second person | second-person = second  | 3 | third | third person | third-person = third  | 0 | - | imp | impersonal = impersonal  }}  | formal =  {{ #switch: {{{formal}}}  | y | yes = yes  | n | no = no  }}  | gender =  {{ #switch:   | m | masc | masculine = masculine  | f | fem | feminine = feminine  }}  | sense =  {{ #switch: {{{sense}}}  | + | aff | affirmative = affirmative  | - | neg | negative = negative  }}  | sera = {{ #switch: {{{sera}}} | se = se | ra = ra }}  | ending =  {{ #switch: ar  | ar | -ar = -ar  | er | -er = -er  | ir | -ir = -ir  }}  | participle =   | voseo = {{ #if:  | yes | no }}  }}}}end"));
 	}
-	
+
 	public void testIf01() {
 		assertEquals("startnoend", wikiModel.parseTemplates("start{{#if:\n" + "\n" + "\n" + "| yes | no}}end"));
 	}
-	
+
 	public void testIf02() {
 		assertEquals("startend", wikiModel.parseTemplates("start{{      #if:   \n    |{{#ifeq:{{{seperator}}}|;|;|. }}     }}end"));
 	}
@@ -219,9 +219,9 @@ public class TemplateParserTest extends FilterTestSupport {
 	public void testNestedIf03() {
 		assertEquals("PAGENAME", wikiModel.parseTemplates(TEST_STRING_03, false));
 	}
-	
+
 	private final String TEST_STRING_04 = "{{ucfirst:{{{cat|{{{category}}}}}}}}";
-	
+
 	public void testNestedIf04() {
 		assertEquals("{{{category}}}", wikiModel.parseTemplates(TEST_STRING_04, false));
 	}//
@@ -324,18 +324,18 @@ public class TemplateParserTest extends FilterTestSupport {
 	}
 
 	public void testFormatnum001() {
-		assertEquals("1401", wikiModel.parseTemplates("{{formatnum:1401}}", false)); 
+		assertEquals("1401", wikiModel.parseTemplates("{{formatnum:1401}}", false));
 	}
-	
+
 	public void testPlural001() {
-		assertEquals("is", wikiModel.parseTemplates("{{plural:n|is|are}}", false)); 
-		assertEquals("is", wikiModel.parseTemplates("{{plural:0|is|are}}", false)); 
-		assertEquals("is", wikiModel.parseTemplates("{{plural:1|is|are}}", false)); 
-		assertEquals("are", wikiModel.parseTemplates("{{plural:2|is|are}}", false)); 
-		assertEquals("are", wikiModel.parseTemplates("{{plural:3|is|are}}", false)); 
-		assertEquals("are", wikiModel.parseTemplates("{{plural:{{#expr:30+7}}|is|are}}", false)); 
+		assertEquals("is", wikiModel.parseTemplates("{{plural:n|is|are}}", false));
+		assertEquals("is", wikiModel.parseTemplates("{{plural:0|is|are}}", false));
+		assertEquals("is", wikiModel.parseTemplates("{{plural:1|is|are}}", false));
+		assertEquals("are", wikiModel.parseTemplates("{{plural:2|is|are}}", false));
+		assertEquals("are", wikiModel.parseTemplates("{{plural:3|is|are}}", false));
+		assertEquals("are", wikiModel.parseTemplates("{{plural:{{#expr:30+7}}|is|are}}", false));
 	}
-	
+
 	public void testExpr015() {
 		assertEquals("1", wikiModel.parseTemplates("{{ #expr: trunc1.2}}", false));
 		assertEquals("-1", wikiModel.parseTemplates("{{ #expr: trunc-1.2 }}", false));
@@ -461,8 +461,7 @@ public class TemplateParserTest extends FilterTestSupport {
 	}
 
 	public void testSubst006() {
-		assertEquals("NAMESPACE", wikiModel.parseTemplates(
-				"{{subst:tl|{{subst:NAMESPACE}}}}", false));
+		assertEquals("NAMESPACE", wikiModel.parseTemplates("{{subst:tl|{{subst:NAMESPACE}}}}", false));
 	}
 
 	public void testPipe001() {
@@ -519,6 +518,19 @@ public class TemplateParserTest extends FilterTestSupport {
 		assertEquals("test [[Help_talk:Sandbox]] test123", wikiModel.parseTemplates("test [[{{TALKPAGENAME:\nHelp:Sandbox}}]] test123"));
 	}
 
+//	public void testRef001() {
+//		assertEquals(
+//				"",
+//				wikiModel.parseTemplates("<ref>{{cite web |url=http://www.pottsmerc.com/articles/2009/04/12/opinion/srv0000005095974.txt |title=Actor Tom Hanks talks about religion |author=Terry Mattingly |work=The Mercury |date=April 12, 2009 |accessdate=October 19, 2010}}</ref>\n\n<references/>"));
+//	}
+//
+//	
+//	public void testCommonsCategory() {
+//		assertEquals(
+//				"",
+//				wikiModel.parseTemplates("{{Commons category}}"));
+//	}
+	
 	public void testTemplateSwitch() {
 		// issue #32
 		assertEquals(
