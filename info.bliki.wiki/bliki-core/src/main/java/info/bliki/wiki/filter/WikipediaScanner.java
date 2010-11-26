@@ -1496,7 +1496,7 @@ public class WikipediaScanner {
 			if (fSource[start] != '/') {
 				// starting tag
 				WikiTagNode tagNode = parseTag(start);
-				if (tagNode != null) {
+				if (tagNode != null && !tagNode.isEmptyXmlTag()) {
 					String tagName = tagNode.getTagName();
 					if (tagName.equals("nowiki")) {
 						return readUntilIgnoreCase(fScannerPosition, "</", "nowiki>");

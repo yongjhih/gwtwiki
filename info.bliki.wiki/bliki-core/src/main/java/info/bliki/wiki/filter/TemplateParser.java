@@ -307,7 +307,7 @@ public class TemplateParser extends AbstractParser {
 					int lessThanStart = fCurrentPosition - 1;
 					int startPosition = fCurrentPosition;
 					WikiTagNode tagNode = parseTag(fCurrentPosition);
-					if (tagNode != null) {
+					if (tagNode != null && !tagNode.isEmptyXmlTag()) {
 						fCurrentPosition = tagNode.getEndPosition();
 						int tagStart = fCurrentPosition;
 						String tagName = tagNode.getTagName();
@@ -455,7 +455,7 @@ public class TemplateParser extends AbstractParser {
 					int startPosition = fCurrentPosition;
 					// starting tag
 					WikiTagNode tagNode = parseTag(fCurrentPosition);
-					if (tagNode != null) {
+					if (tagNode != null && !tagNode.isEmptyXmlTag()) {
 						fCurrentPosition = tagNode.getEndPosition();
 						String tagName = tagNode.getTagName();
 						if (tagName.equals("nowiki")) {
