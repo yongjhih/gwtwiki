@@ -3,20 +3,20 @@
 	<parent>
 		<groupId>info.bliki.wiki</groupId>
 		<artifactId>bliki</artifactId>
-		<version>3.0.16-SNAPSHOT</version>
+		<version>3.0.16</version>
 	</parent>
 	<modelVersion>4.0.0</modelVersion>
 	<artifactId>bliki-pdf</artifactId>
 	<groupId>info.bliki.wiki</groupId>
 	<packaging>jar</packaging>
 	<name>Bliki (PDF)</name>
-	<version>3.0.16-SNAPSHOT</version>
+	<version>3.0.16</version>
 	<description> This is PDF project. </description>
 	<dependencies>
 		<dependency>
 			<groupId>info.bliki.wiki</groupId>
 			<artifactId>bliki-core</artifactId>
-			<version>3.0.16-SNAPSHOT</version>
+			<version>3.0.16</version>
 		</dependency>
 		<dependency>
 			<groupId>com.lowagie</groupId>
