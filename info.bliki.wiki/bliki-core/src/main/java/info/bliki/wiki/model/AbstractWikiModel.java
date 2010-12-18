@@ -273,7 +273,15 @@ public abstract class AbstractWikiModel implements IWikiModel, IContext {
 	}
 
 	/**
-	 * {@inheritDoc}
+	 * Add a section header with the given <code>headLevel</code> to the
+	 * &quot;table of content&quot;
+	 * 
+	 * @param toc
+	 *          the &quot;table of content list&quot;
+	 * @param strPair
+	 *          a new section header
+	 * @param headLevel
+	 *          the level of the new section header
 	 */
 	protected void addToTableOfContent(List<Object> toc, SectionHeader strPair, int headLevel) {
 		if (headLevel == 1) {
@@ -1695,7 +1703,7 @@ public abstract class AbstractWikiModel implements IWikiModel, IContext {
 	 * {@inheritDoc}
 	 */
 	public void tearDown() {
-	
+
 	}
 
 	/**
