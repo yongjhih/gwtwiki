@@ -710,7 +710,7 @@ public class WikipediaScanner {
 		char ch;
 		String value;
 		int[] temp = new int[] { -1, -1 };
-		;
+
 		int lastOffset = currOffset;
 		try {
 			while (currOffset < endOffset) {
@@ -757,7 +757,7 @@ public class WikipediaScanner {
 		return resultList;
 	}
 
-	public static final int findNestedEnd(final char[] sourceArray, final char startCh, final char endChar, int startPosition) {
+	public static int findNestedEnd(final char[] sourceArray, final char startCh, final char endChar, int startPosition) {
 		char ch;
 		int level = 1;
 		int position = startPosition;
@@ -780,7 +780,7 @@ public class WikipediaScanner {
 		}
 	}
 
-	public static final int findNestedTemplateEnd(final char[] sourceArray, int startPosition) {
+	public static int findNestedTemplateEnd(final char[] sourceArray, int startPosition) {
 		char ch;
 		// int len = sourceArray.length;
 		int countSingleOpenBraces = 0;
@@ -832,7 +832,7 @@ public class WikipediaScanner {
 		}
 	}
 
-	public static final int[] findNestedParamEnd(final char[] sourceArray, int startPosition) {
+	public static int[] findNestedParamEnd(final char[] sourceArray, int startPosition) {
 		char ch;
 		int len = sourceArray.length;
 		int countSingleOpenBraces = 0;

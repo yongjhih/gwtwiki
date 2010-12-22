@@ -170,7 +170,7 @@ public class Connector {
 					XMLUserParser parser = new XMLUserParser(user, responseBody);
 					parser.parse();
 					if (i == 0 && user.getResult().equals(User.NEED_TOKEN_ID)) {
-						; // try again
+						 // try again
 					} else if (user.getResult().equals(User.SUCCESS_ID)) {
 						return user;
 					} else {

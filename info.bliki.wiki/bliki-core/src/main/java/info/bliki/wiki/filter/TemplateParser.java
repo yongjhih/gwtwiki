@@ -131,7 +131,6 @@ public class TemplateParser extends AbstractParser {
 				}
 			}
 			writer.append(sb);
-			return;
 		} catch (Exception e) {
 			e.printStackTrace();
 			writer.append(e.getClass().getSimpleName());

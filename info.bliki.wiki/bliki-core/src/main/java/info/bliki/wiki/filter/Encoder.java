@@ -473,7 +473,7 @@ public class Encoder {
 	/**
 	 * Determines if the specified character may be part of a url
 	 */
-	public final static boolean isUrlIdentifierPart(char ch) {
+	public static boolean isUrlIdentifierPart(char ch) {
 		if (Character.isLetterOrDigit(ch)) {
 			return true;
 		}
@@ -485,7 +485,7 @@ public class Encoder {
 	 * Determines if the specified character may be part of a wiki plugin
 	 * identifier as other than the first character
 	 */
-	public final static boolean isWikiPluginIdentifierPart(char ch) {
+	public static boolean isWikiPluginIdentifierPart(char ch) {
 		return Character.isLetterOrDigit(ch) || (ch == '_');
 	}
 
@@ -493,7 +493,7 @@ public class Encoder {
 	 * Determines if the specified character may be part the first character of a
 	 * wiki plugin identifier
 	 */
-	public final static boolean isWikiPluginIdentifierStart(char ch) {
+	public static boolean isWikiPluginIdentifierStart(char ch) {
 		return Character.isLetter(ch);
 	}
 }

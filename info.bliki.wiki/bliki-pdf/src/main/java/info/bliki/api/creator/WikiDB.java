@@ -108,7 +108,7 @@ public class WikiDB {
 		fSelectContent.setString(1, name);
 		ResultSet resultSet = fSelectContent.executeQuery();
 		try {
-			while (resultSet.next()) {
+			if (resultSet.next()) {
 				topicData.setContent(resultSet.getString(1));
 				return topicData;
 			}
@@ -143,7 +143,7 @@ public class WikiDB {
 		fSelectImage.setString(1, imageName);
 		ResultSet resultSet = fSelectImage.executeQuery();
 		try {
-			while (resultSet.next()) {
+			if (resultSet.next()) {
 				imageData.setUrl(resultSet.getString(1));
 				imageData.setFilename(resultSet.getString(2));
 				return imageData;

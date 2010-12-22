@@ -625,7 +625,7 @@ public class WikiTagNode extends AbstractNode {
 
 		raw = getRawTagName();
 
-		return ((null == raw) ? false : ((0 != raw.length()) && ('/' == raw.charAt(0))));
+		return ((null != raw) && ((0 != raw.length()) && ('/' == raw.charAt(0))));
 	}
 
 	/**

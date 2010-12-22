@@ -1218,7 +1218,6 @@ public class WikipediaParser extends AbstractParser implements IParser {
 			divTagNode.addChild(new ContentToken(command + ": " + e.getMessage()));
 			fWikiModel.append(divTagNode);
 			e.printStackTrace();
-			return;
 		}
 	}
 

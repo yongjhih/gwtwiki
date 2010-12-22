@@ -82,7 +82,7 @@ public class MediaWikiComm {
 		fPageURL = pageURL;
 
 		// Make a defensive copy of the cookie pairs.
-		fCookiePairs = cookiePairs != null ? ((String[]) cookiePairs.clone()) : new String[0];
+		fCookiePairs = cookiePairs != null ? cookiePairs.clone() : new String[0];
 	}
 
 	/**

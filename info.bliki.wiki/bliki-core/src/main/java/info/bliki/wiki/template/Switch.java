@@ -32,7 +32,7 @@ public class Switch extends AbstractTemplateFunction {
 				int index = temp.indexOf('=');
 				String leftHandSide;
 				if (index >= 0) {
-					if (valueFound == true) {
+					if (valueFound) {
 						return temp.substring(index + 1).trim();
 					}
 					leftHandSide = temp.substring(0, index).trim();

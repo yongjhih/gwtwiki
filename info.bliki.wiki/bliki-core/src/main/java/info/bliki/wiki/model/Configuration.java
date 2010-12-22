@@ -373,13 +373,13 @@ public class Configuration implements IConfiguration {
 	/**
 	 * Map the source code's language string to the code formatter implementation
 	 */
-	protected static final HashMap<String, SourceCodeFormatter> CODE_FORMATTER_MAP = new HashMap<String, SourceCodeFormatter>();;
+	protected static final HashMap<String, SourceCodeFormatter> CODE_FORMATTER_MAP = new HashMap<String, SourceCodeFormatter>();
 
 	/**
 	 * Map the template's function name to the TemplateFunction implementation
 	 */
 	protected static final Map<String, ITemplateFunction> TEMPLATE_FUNCTION_MAP = new TreeMap<String, ITemplateFunction>(
-			String.CASE_INSENSITIVE_ORDER);;
+			String.CASE_INSENSITIVE_ORDER);
 
 	/**
 	 * Allowed URI schemes

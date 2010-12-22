@@ -23,11 +23,8 @@ public class DoubleNode extends ASTNode {
 	}
 
 	public boolean equals(Object obj) {
-		if (obj instanceof DoubleNode) {
-			return value== ((DoubleNode)obj).value;
-		}
-		return false;
-	}
+        return (obj instanceof DoubleNode) && value == ((DoubleNode) obj).value;
+    }
 	public int hashCode() {
 		long bits = Double.doubleToLongBits(value);
 		return (int)(bits ^ (bits >>> 32));

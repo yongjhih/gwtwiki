@@ -1340,11 +1340,8 @@ public abstract class AbstractWikiModel implements IWikiModel, IContext {
 	 */
 	public boolean isValidUriSchemeSpecificPart(String uriScheme, String uriSchemeSpecificPart) {
 		if (uriScheme.equals("ftp") || uriScheme.equals("http") || uriScheme.equals("https")) {
-			if (uriSchemeSpecificPart.length() >= 2 && uriSchemeSpecificPart.substring(0, 2).equals("//")) {
-				return true;
-			}
-			return false;
-		}
+            return uriSchemeSpecificPart.length() >= 2 && uriSchemeSpecificPart.substring(0, 2).equals("//");
+        }
 		return true;
 	}
 
@@ -1687,7 +1684,6 @@ public abstract class AbstractWikiModel implements IWikiModel, IContext {
 		writer.append("{{");
 		writer.append(templateName);
 		writer.append("}}");
-		return;
 	}
 
 	/**

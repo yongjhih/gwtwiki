@@ -149,7 +149,8 @@ public class APIWikiModel extends WikiModel {
 				String[] listOfTitleStrings = { templateNS + name };
 				fUser.login();
 				List<Page> listOfPages = fUser.queryContent(listOfTitleStrings);
-				for (Page page : listOfPages) {
+				if (listOfPages.size()>0) {
+                    Page page = listOfPages.get(0);
 					content = page.getCurrentContent();
 					if (content != null) {
 						// System.out.println(name);
@@ -162,7 +163,6 @@ public class APIWikiModel extends WikiModel {
 							content = content.length() == 0 ? null : content;
 						}
 					}
-					break;
 				}
 				return content;
 			} catch (Exception e) {
@@ -223,8 +223,8 @@ public class APIWikiModel extends WikiModel {
 			} else {
 				listOfPages = fUser.queryImageinfo(listOfTitleStrings);
 			}
-			for (Page page : listOfPages) {
-
+			if ( listOfPages.size()>0) {
+                Page page =   listOfPages.get(0);
 				imageData = new ImageData(imageName);
 
 				// download the image to fImageDirectoryName directory
@@ -265,7 +265,6 @@ public class APIWikiModel extends WikiModel {
 					}
 
 				}
-				break;
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
