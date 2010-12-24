@@ -57,6 +57,8 @@ public class ListTag extends AbstractHTMLTag {
 									} else {
 										w.nodeToWiki(subSubNode, subBuffer);
 									}
+								} else if (subChildren.get(j) instanceof List) {
+									w.nodesToText((List)subChildren.get(j), subBuffer);
 								} else {
 									w.nodeToWiki((BaseToken) subChildren.get(j), subBuffer);
 								}
