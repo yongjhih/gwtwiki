@@ -243,7 +243,7 @@ public class Encoder {
 		} else if (ch == ' ') { // space
 			// sbuf.append('+');
 			sbuf.append('_'); // special for wiki syntax !
-		} else if (ch == '-' || ch == '_' || ch == '/' || ch == '!' || ch == '~' || ch == '(' || ch == ')') {
+		} else if (ch == '.' || ch == '-' || ch == '_' || ch == '/' || ch == '!' || ch == '~' || ch == '(' || ch == ')') {
 			sbuf.append((char) ch);
 			// } else if (ch == ':') {
 			// sbuf.append('/');

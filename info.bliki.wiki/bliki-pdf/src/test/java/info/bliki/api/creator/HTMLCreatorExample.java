@@ -94,7 +94,11 @@ public class HTMLCreatorExample {
 		testWikipediaENAPI("libero", "http://en.wiktionary.org/w/api.php");
 	}
 
+	public static void testCreator009() {
+		testWikipediaENAPI("Metallica");
+	}
+	
 	public static void main(String[] args) {
-		testCreator005();
+		testCreator001();
 	}
 }

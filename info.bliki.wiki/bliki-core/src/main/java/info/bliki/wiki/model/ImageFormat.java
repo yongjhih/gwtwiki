@@ -243,4 +243,15 @@ public class ImageFormat {
 		this.fType = type.toLowerCase();
 	}
 
+	/**
+	 * Set the width of the image in pixel. This method is typically used to set a
+	 * &quot;default width&quot; (220px) for images of type &quot;thumb&quot; if
+	 * no width is set in the image format string.
+	 * 
+	 * @param width
+	 * @see AbstractWikiModel#setDefaultThumbWidth(ImageFormat)
+	 */
+	public void setWidth(int width) {
+		fWidth = width;
+	}
 }

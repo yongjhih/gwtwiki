@@ -452,33 +452,37 @@ public abstract class AbstractWikiModel implements IWikiModel, IContext {
 		int pxWidth = imageFormat.getWidth();
 		int pxHeight = imageFormat.getHeight();
 		String caption = imageFormat.getCaption();
-		TagNode divTagNode = new TagNode("div");
-		divTagNode.addAttribute("id", "image", false);
+		String imageType = imageFormat.getType();
+		TagNode divInnerTagNode = new TagNode("div");
+		divInnerTagNode.addAttribute("id", "image", false);
 		// String link = imageFormat.getLink();
 		// if (link != null) {
 		// String href = encodeTitleToUrl(link, true);
 		// divTagNode.addAttribute("href", href, false);
 		// } else {
 		if (hrefImageLink.length() != 0) {
-			divTagNode.addAttribute("href", hrefImageLink, false);
+			divInnerTagNode.addAttribute("href", hrefImageLink, false);
 		}
 		// }
-		divTagNode.addAttribute("src", srcImageLink, false);
-		divTagNode.addObjectAttribute("wikiobject", imageFormat);
-		if (pxHeight != -1) {
-			if (pxWidth != -1) {
-				divTagNode.addAttribute("style", "height:" + pxHeight + "px; " + "width:" + pxWidth + "px", false);
-			} else {
-				divTagNode.addAttribute("style", "height:" + pxHeight + "px", false);
-			}
-		} else {
-			if (pxWidth != -1) {
-				divTagNode.addAttribute("style", "width:" + pxWidth + "px", false);
-			}
-		}
-		pushNode(divTagNode);
 
-		String imageType = imageFormat.getType();
+		divInnerTagNode.addAttribute("src", srcImageLink, false);
+		setDefaultThumbWidth(imageFormat);
+		divInnerTagNode.addObjectAttribute("wikiobject", imageFormat);
+		// if (pxHeight != -1) {
+		// if (pxWidth != -1) {
+		// divInnerTagNode.addAttribute("style", "height:" + pxHeight + "px; " +
+		// "width:" + pxWidth + "px", false);
+		// } else {
+		// divInnerTagNode.addAttribute("style", "height:" + pxHeight + "px",
+		// false);
+		// }
+		// } else {
+		// if (pxWidth != -1) {
+		// divInnerTagNode.addAttribute("style", "width:" + pxWidth + "px", false);
+		// }
+		// }
+		pushNode(divInnerTagNode);
+
 		// TODO: test all these cases
 		if (caption != null && caption.length() > 0
 				&& ("frame".equals(imageType) || "thumb".equals(imageType) || "thumbnail".equals(imageType))) {
@@ -505,6 +509,22 @@ public abstract class AbstractWikiModel implements IWikiModel, IContext {
 
 		popNode(); // div
 
+	}
+
+	/**
+	 * Set the default thumb format width. This method sets a &quot;default
+	 * width&quot; (220px) for images of type &quot;thumb&quot;, if no width is
+	 * set in the image format string.
+	 * 
+	 * @param imageFormat
+	 */
+	protected void setDefaultThumbWidth(ImageFormat imageFormat) {
+		int pxWidth = imageFormat.getWidth();
+		String imageType = imageFormat.getType();
+		if (pxWidth == -1 && (imageType == null || "thumb".equals(imageType))) {
+			// set the default thumb format width
+			imageFormat.setWidth(220);
+		}
 	}
 
 	/**
@@ -1340,8 +1360,8 @@ public abstract class AbstractWikiModel implements IWikiModel, IContext {
 	 */
 	public boolean isValidUriSchemeSpecificPart(String uriScheme, String uriSchemeSpecificPart) {
 		if (uriScheme.equals("ftp") || uriScheme.equals("http") || uriScheme.equals("https")) {
-            return uriSchemeSpecificPart.length() >= 2 && uriSchemeSpecificPart.substring(0, 2).equals("//");
-        }
+			return uriSchemeSpecificPart.length() >= 2 && uriSchemeSpecificPart.substring(0, 2).equals("//");
+		}
 		return true;
 	}
 

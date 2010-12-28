@@ -188,7 +188,9 @@ public interface IWikiModel extends IConfiguration {
 			int endPosition);
 
 	/**
-	 * Append this internal wiki image link
+	 * Append this internal wiki image link. In the current implementation some
+	 * parts of the image rendering are moved to the
+	 * <code>HTMLConverter#imageNodeToText()</code> method.
 	 * 
 	 * @param hrefImageLink
 	 * @param srcImageLink
@@ -858,8 +860,7 @@ public interface IWikiModel extends IConfiguration {
 	 *          the buffer to append the substituted template content
 	 * @throws IOException
 	 */
-	public void substituteTemplateCall(String templateName, Map<String, String> parameterMap, Appendable writer)
-			throws IOException;
+	public void substituteTemplateCall(String templateName, Map<String, String> parameterMap, Appendable writer) throws IOException;
 
 	public TagStack swapStack(TagStack stack);
 

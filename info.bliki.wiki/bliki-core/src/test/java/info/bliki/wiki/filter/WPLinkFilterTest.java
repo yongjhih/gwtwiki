@@ -158,7 +158,7 @@ public class WPLinkFilterTest extends FilterTestSupport {
 	public void testSectionLink02() {
 		assertEquals("\n" + "<p><a href=\"#Section.C3.A4.C3.B6.C3.BC\" title=\"\" /></p>", wikiModel.render("[[#Sectionäöü]]"));
 	}
-
+	
 	public void testSubLink01() {
 		assertEquals("\n" + "<p><a href=\"http://www.bliki.info/wiki/Test/testing\" title=\"test/testing\">test/testing</a></p>",
 				wikiModel.render("[[test/testing]]"));

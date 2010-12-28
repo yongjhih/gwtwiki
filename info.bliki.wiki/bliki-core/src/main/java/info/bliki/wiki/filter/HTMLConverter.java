@@ -132,14 +132,33 @@ public class HTMLConverter implements ITextConverter {
 		String type = imageFormat.getType();
 		int pxWidth = imageFormat.getWidth();
 		int pxHeight = imageFormat.getHeight();
+
+		if ("thumb".equals(type)) {
+			resultBuffer.append("\n<div class=\"thumb ");
+			if ("left".equals(location)) {
+				resultBuffer.append("tleft\"");
+			} else if ("right".equals(location)) {
+				resultBuffer.append("tright\"");
+			} else {
+				resultBuffer.append("tright\"");
+			}
+			resultBuffer.append('>');
+		}
+
 		boolean hasDimensions = pxHeight != -1 || pxWidth != -1;
 		if (hasDimensions) {
-			resultBuffer.append("<div style=\"");
+			int pxWidthThumbinner = pxWidth;
+			if ("thumb".equals(type)) {
+				pxWidthThumbinner += 2;
+				resultBuffer.append("\n<div class=\"thumbinner\" style=\"");
+			} else {
+				resultBuffer.append("<div style=\"");
+			}
 			if (pxHeight != -1) {
 				resultBuffer.append("height:").append(Integer.toString(pxHeight)).append("px;");
 			}
 			if (pxWidth != -1) {
-				resultBuffer.append("width:").append(Integer.toString(pxWidth)).append("px;");
+				resultBuffer.append("width:").append(Integer.toString(pxWidthThumbinner)).append("px;");
 			}
 			resultBuffer.append("\">");
 		}
@@ -200,6 +219,9 @@ public class HTMLConverter implements ITextConverter {
 		// }
 
 		if (hasDimensions) {
+			resultBuffer.append("</div>\n");
+		}
+		if ("thumb".equals(type)) {
 			resultBuffer.append("</div>\n");
 		}
 	}

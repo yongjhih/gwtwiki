@@ -149,8 +149,8 @@ public class APIWikiModel extends WikiModel {
 				String[] listOfTitleStrings = { templateNS + name };
 				fUser.login();
 				List<Page> listOfPages = fUser.queryContent(listOfTitleStrings);
-				if (listOfPages.size()>0) {
-                    Page page = listOfPages.get(0);
+				if (listOfPages.size() > 0) {
+					Page page = listOfPages.get(0);
 					content = page.getCurrentContent();
 					if (content != null) {
 						// System.out.println(name);
@@ -215,6 +215,7 @@ public class APIWikiModel extends WikiModel {
 				}
 			}
 			String imageNamespace = getImageNamespace();
+			setDefaultThumbWidth(imageFormat);
 			String[] listOfTitleStrings = { imageNamespace + ":" + imageName };
 			fUser.login();
 			List<Page> listOfPages;
@@ -223,8 +224,8 @@ public class APIWikiModel extends WikiModel {
 			} else {
 				listOfPages = fUser.queryImageinfo(listOfTitleStrings);
 			}
-			if ( listOfPages.size()>0) {
-                Page page =   listOfPages.get(0);
+			if (listOfPages.size() > 0) {
+				Page page = listOfPages.get(0);
 				imageData = new ImageData(imageName);
 
 				// download the image to fImageDirectoryName directory
@@ -236,11 +237,12 @@ public class APIWikiModel extends WikiModel {
 					} else {
 						imageUrl = page.getImageUrl();
 					}
-					String urlImageName = page.getTitle().substring(imageNamespace.length() + 1).replace(' ', '_');
+
+					String urlImageName = Encoder.encodeTitleLocalUrl(page.getTitle());
 					if (imageUrl != null) {
 						int index = imageUrl.lastIndexOf('/');
 						if (index > 0) {
-							urlImageName = imageUrl.substring(index + 1);
+							urlImageName = Encoder.encodeTitleLocalUrl(imageUrl.substring(index + 1));
 						}
 					}
 					if (fImageDirectoryName != null) {
