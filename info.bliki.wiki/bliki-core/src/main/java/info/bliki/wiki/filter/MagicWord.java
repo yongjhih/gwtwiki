@@ -272,7 +272,11 @@ public class MagicWord {
 	public static String processMagicWord(String name, String parameter, IWikiModel model) {
 		SimpleDateFormat formatter = new SimpleDateFormat();
 		TimeZone utc = TimeZone.getTimeZone("GMT+00");
-		Date current = new Date(System.currentTimeMillis());
+		Date current = model.getCurrentTimeStamp();
+		if (current == null) {
+		  // set a default value
+	    current = new Date(System.currentTimeMillis());
+		}
 		// local date values
 		if (name.equals(MAGIC_LOCAL_DAY)) {
 			formatter.applyPattern("d");

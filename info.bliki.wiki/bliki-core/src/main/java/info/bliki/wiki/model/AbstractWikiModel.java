@@ -28,6 +28,7 @@ import info.bliki.wiki.template.extension.AttributeRenderer;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -57,6 +58,8 @@ public abstract class AbstractWikiModel implements IWikiModel, IContext {
 	protected TagStack fTagStack;
 
 	private boolean fInitialized;
+
+	private final Locale fLocale;
 
 	private IConfiguration fConfiguration;
 
@@ -119,10 +122,24 @@ public abstract class AbstractWikiModel implements IWikiModel, IContext {
 	}
 
 	public AbstractWikiModel(Configuration configuration, Locale locale) {
-		this(configuration, Messages.getResourceBundle(locale), new Namespace(locale));
+		this(configuration, locale, Messages.getResourceBundle(locale), new Namespace(locale));
 	}
 
+	/**
+	 * 
+	 * @deprecated use the
+	 *             <code>(Configuration configuration, Locale locale,...)</code>
+	 *             constructors instead.
+	 * @param configuration
+	 * @param resourceBundle
+	 * @param namespace
+	 */
 	public AbstractWikiModel(Configuration configuration, ResourceBundle resourceBundle, INamespace namespace) {
+		this(configuration, Locale.ENGLISH, resourceBundle, namespace);
+	}
+
+	public AbstractWikiModel(Configuration configuration, Locale locale, ResourceBundle resourceBundle, INamespace namespace) {
+		fLocale = locale;
 		fInitialized = false;
 		fConfiguration = configuration;
 		// fResourceBundle = resourceBundle;
@@ -1054,6 +1071,13 @@ public abstract class AbstractWikiModel implements IWikiModel, IContext {
 	/**
 	 * {@inheritDoc}
 	 */
+	public Date getCurrentTimeStamp() {
+		return new Date(System.currentTimeMillis());
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
 	public String getImageNamespace() {
 		return fNamespace.getImage();
 	}
@@ -1063,6 +1087,13 @@ public abstract class AbstractWikiModel implements IWikiModel, IContext {
 	 */
 	public Map<String, String> getInterwikiMap() {
 		return fConfiguration.getInterwikiMap();
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public Locale getLocale() {
+		return fLocale;
 	}
 
 	/**

@@ -9,7 +9,9 @@ import info.bliki.wiki.tags.util.TagStack;
 import info.bliki.wiki.template.ITemplateFunction;
 
 import java.io.IOException;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.Set;
@@ -418,6 +420,17 @@ public interface IWikiModel extends IConfiguration {
 	public String getCategoryNamespace();
 
 	/**
+	 * Get the current time stamp. This is the value for the magic word
+	 * &quot;CURRENTTIMESTAMP&quot;.
+	 * 
+	 * This method typically returns the value
+	 * <code>new Date(System.currentTimeMillis());</code>.
+	 * 
+	 * @return
+	 */
+	public Date getCurrentTimeStamp();
+
+	/**
 	 * Get the primary namespace for images in this wiki
 	 * 
 	 * @return the primary image namespace
@@ -431,6 +444,18 @@ public interface IWikiModel extends IConfiguration {
 	 */
 	public Set<String> getLinks();
 
+	/**
+	 * Get the locale of this model.
+	 * 
+	 * @return the locale for this model.
+	 */
+	public Locale getLocale();
+
+	/**
+	 * Get the namespace of this model.
+	 * 
+	 * @return the namespace for this model
+	 */
 	public INamespace getNamespace();
 
 	/**

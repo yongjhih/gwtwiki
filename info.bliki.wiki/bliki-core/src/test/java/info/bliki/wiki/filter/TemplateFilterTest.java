@@ -153,22 +153,22 @@ public class TemplateFilterTest extends FilterTestSupport {
 	public void testTemplateParameter13() {
 		// see method WikiTestModel#getTemplateContent()
 		assertEquals(
-				"\n"
-						+ "<div style=\"page-break-inside: avoid;\">\n"
-						+ "<table class=\"wikitable\">\n"
-						+ "<caption>Versionsgeschichte von JavaScript<sup id=\"_ref-1\" class=\"reference\"><a href=\"#_note-1\" title=\"\">[1]</a></sup></caption>\n"
-						+ "<tr>\n"
-						+ "<th>Version </th>\n"
-						+ "<th>Release </th>\n"
-						+ "<th>Entsprechung </th>\n"
-						+ "<th>Netscape Navigator </th>\n"
-						+ "<th>Mozilla Firefox </th>\n"
-						+ "<th>Internet Explorer </th>\n"
-						+ "<th>Opera </th>\n"
-						+ "<th>Safari </th>\n"
-						+ "<th>Google Chrome</th></tr></table></div>\n"
-						+ "<pre /><ol class=\"references\">\n"
-						+ "<li id=\"_note-1\"><b><a href=\"#_ref-1\" title=\"\">&#8593;</a></b> John Resig. <i><a class=\"externallink\" href=\"http://ejohn.org/blog/versions-of-javascript\" rel=\"nofollow\" title=\"http://ejohn.org/blog/versions-of-javascript\">Versions of JavaScript</a></i>. Ejohn.org. Abgerufen am {{FormatDate}}.</li></ol>",
+				"\n" + 
+				"<div style=\"page-break-inside: avoid;\">\n" + 
+				"<table class=\"wikitable\">\n" + 
+				"<caption>Versionsgeschichte von JavaScript<sup id=\"_ref-1\" class=\"reference\"><a href=\"#_note-1\" title=\"\">[1]</a></sup></caption>\n" + 
+				"<tr>\n" + 
+				"<th>Version </th>\n" + 
+				"<th>Release </th>\n" + 
+				"<th>Entsprechung </th>\n" + 
+				"<th>Netscape Navigator </th>\n" + 
+				"<th>Mozilla Firefox </th>\n" + 
+				"<th>Internet Explorer </th>\n" + 
+				"<th>Opera </th>\n" + 
+				"<th>Safari </th>\n" + 
+				"<th>Google Chrome</th></tr></table></div>\n" + 
+				"<pre /><ol class=\"references\">\n" + 
+				"<li id=\"_note-1\"><b><a href=\"#_ref-1\" title=\"\">&#8593;</a></b> John Resig. <i><a class=\"externallink\" href=\"http://ejohn.org/blog/versions-of-javascript\" rel=\"nofollow\" title=\"http://ejohn.org/blog/versions-of-javascript\">Versions of JavaScript</a></i>. Ejohn.org. Abgerufen am .</li></ol>",
 				wikiModel
 						.render("{| class=\"wikitable\"\n"
 								+ "|+Versionsgeschichte von JavaScript<ref>{{cite web|author=John Resig |url=http://ejohn.org/blog/versions-of-javascript |title=Versions of JavaScript |publisher=Ejohn.org |date= |accessdate=2009-05-19}}</ref>\n"
@@ -613,7 +613,7 @@ public class TemplateFilterTest extends FilterTestSupport {
 				"<td />\n" + 
 				"<td /></tr></table></div>\n" + 
 				"<ol class=\"references\">\n" + 
-				"<li id=\"_note-1\"><b><a href=\"#_ref-1\" title=\"\">&#8593;</a></b> John Resig. <i><a class=\"externallink\" href=\"http://ejohn.org/blog/versions-of-javascript\" rel=\"nofollow\" title=\"http://ejohn.org/blog/versions-of-javascript\">Versions of JavaScript</a></i>. Ejohn.org. Abgerufen am {{FormatDate}}.</li></ol>",
+				"<li id=\"_note-1\"><b><a href=\"#_ref-1\" title=\"\">&#8593;</a></b> John Resig. <i><a class=\"externallink\" href=\"http://ejohn.org/blog/versions-of-javascript\" rel=\"nofollow\" title=\"http://ejohn.org/blog/versions-of-javascript\">Versions of JavaScript</a></i>. Ejohn.org. Abgerufen am .</li></ol>",
 				wikiModel
 						.render("=== Versionsgeschichte ===\n"
 								+ "{| class=\"wikitable\"\n"

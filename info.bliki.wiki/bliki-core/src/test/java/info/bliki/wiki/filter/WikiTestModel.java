@@ -2111,6 +2111,62 @@ public class WikiTestModel extends WikiModel {
 			+ "}}<noinclude>\n" + "\n" + "{{documentation}}\n"
 			+ "<!-- Add categories and interwikis to the /doc subpage, not here! -->\n" + "</noinclude>";
 
+	public final static String FORMAT_DATE = "#REDIRECT [[Template:Date]]";
+
+	public final static String DATE = "{{{{{|safesubst:}}}#switch:none\n"
+			+ " |{{{{{|safesubst:}}}#iferror: {{{{{|safesubst:}}}#time:Y_M_d|{{{1|}}} }} | none }} <noinclude><!-- #time: can't handle --></noinclude>\n"
+			+ " |{{{{{|safesubst:}}}#iferror: {{{{{|safesubst:}}}#expr: {{{1|}}}+0 }}\n"
+			+ "    |<noinclude><!--not a pure number--></noinclude>\n"
+			+ "    |{{{{{|safesubst:}}}#ifexpr: {{{1|}}}+0 > 10000000000000\n"
+			+ "       |<noinclude><!-- a yyyymmddhhmmss timestamp --></noinclude>\n"
+			+ "       |{{{{{|safesubst:}}}#ifeq: {{{{{|safesubst:}}}#expr:{{{1|}}}+0}} | {{{1|}}}\n"
+			+ "          | none <noinclude><!-- pure number eg 123.456 --></noinclude>\n"
+			+ "          | <noinclude><!-- assume yy-mm-dd --></noinclude>\n"
+			+ "        }}\n"
+			+ "     }}\n"
+			+ "  }}\n"
+			+ " |{{{{{|safesubst:}}}#switch:  {{lc:{{{2|}}}}} | none | asis=none }}\n"
+			+ " |{{{{{|safesubst:}}}#ifexpr:  {{{{{|safesubst:}}}#time:Y|{{{1|}}} }} < 1000 | none }}\n"
+			+ " |{{{{{|safesubst:}}}#switch:  {{{{{|safesubst:}}}#time:Ynj|{{{1|}}} }}|100031|110031|130031|140031|150031=none}}\n"
+			+ " |= {{{1|}}}<noinclude><!-- error or \"none\", so no formatting --></noinclude>\n"
+			+ " |<noinclude><!-- continue with formatting --></noinclude>\n"
+			+ "  {{{{{|safesubst:}}}#ifeq:<noinclude><!--\n"
+			+ "    --></noinclude>{{{{{|safesubst:}}}#time:Y|{{{1}}} 2008}}<noinclude><!--\n"
+			+ "    --></noinclude>{{{{{|safesubst:}}}#iferror: {{{{{|safesubst:}}}#ifexpr: {{{1}}}>10000000000000 | no }} | }}<noinclude><!--\n"
+			+ "    --></noinclude>{{{{{|safesubst:}}}#time:Y|{{{1}}} 2004}}\n"
+			+ "  |20082004\n"
+			+ "  |<noinclude><!-- no year --></noinclude>\n"
+			+ "    {{{{{|safesubst:}}}#ifeq:{{{{{|safesubst:}}}#time:d|{{{1}}} 2036}}|{{{{{|safesubst:}}}#time:d|{{{1}}} }}\n"
+			+ "    |<noinclude><!-- month+day --></noinclude>{{{{{|safesubst:}}}#time:\n"
+			+ "      {{{{{|safesubst:}}}#switch: {{lc: {{{{{|safesubst:}}}#ifeq:{{{3|}}}|y|L}}{{{2|}}} }}\n"
+			+ "      | lmdy | liso | lymd      = [[:F j]]\n"
+			+ "      | mdy  | iso  | ymd       = F j\n"
+			+ "      | ldmy | l                = [[:j F]]\n"
+			+ "      | #default                = j F\n"
+			+ "      }}|{{{1}}} 2000 }}<noinclude><!-- default='dmy' or null or \"\" or unsupported option --></noinclude>\n"
+			+ "    |<noinclude><!-- month only --></noinclude>{{{{{|safesubst:}}}#time:\n"
+			+ "      {{{{{|safesubst:}}}#switch: {{lc: {{{{{|safesubst:}}}#ifeq:{{{3|}}}|y|L}}{{{2|}}} }}\n"
+			+ "      | lmdy | liso | lymd \n"
+			+ "      | ldmy | l                = [[F]]\n"
+			+ "      | #default                = F\n"
+			+ "      }}|{{{1}}} 2000 }}<noinclude><!-- default='dmy'/'mdy'/'ymd'/'iso'/null/\"\"/unsupported opt --></noinclude>\n"
+			+ "    }}\n"
+			+ "  |<noinclude><!-- with year--></noinclude>\n"
+			+ "    {{{{{|safesubst:}}}#if: {{{{{|safesubst:}}}#iferror:{{{{{|safesubst:}}}#time:j|2 {{{1|}}}}}|*D*|{{{{{|safesubst:}}}#iferror:{{{{{|safesubst:}}}#time:j|2000 {{{1|}}}}}|*D*| }}}}\n"
+			+ "    |<noinclude><!-- day+month+year --></noinclude>{{{{{|safesubst:}}}#time:\n"
+			+ "      {{{{{|safesubst:}}}#switch: {{lc: {{{{{|safesubst:}}}#ifeq:{{{3|}}}|y|L}}{{{2|}}} }}\n"
+			+ "      | lmdy                    = [[:F j]], [[Y]]\n" + "      | mdy                     = F j, Y\n"
+			+ "      | liso                    = [[Y|Y-]][[F j|m-d]]<noinclude><!-- i.e. [[Y-m-d]] --></noinclude>\n"
+			+ "      | iso                     = Y-m-d\n" + "      | lymd                    = [[Y]] [[:F j]]\n"
+			+ "      | ymd                     = Y F j\n" + "      | ldmy | l                = [[:j F]] [[Y]]\n"
+			+ "      | #default                = j F Y\n"
+			+ "      }}|{{{1|}}} }}<noinclude><!-- #default='dmy' or null or \"\" or unsupported option --></noinclude>\n"
+			+ "    |<noinclude><!-- month+year --></noinclude>{{{{{|safesubst:}}}#time:\n"
+			+ "      {{{{{|safesubst:}}}#switch: {{lc: {{{{{|safesubst:}}}#ifeq:{{{3|}}}|y|L}}{{{2|}}} }}\n"
+			+ "      | lmdy | liso | lymd | ldmy | l  = [[:F Y]]\n" + "      | #default                = F Y\n"
+			+ "      }}|{{{1|}}} }}<noinclude><!-- default='dmy'/'iso'/'mdy'/null/\"\"/unsupported option --></noinclude>\n" + "    }}\n"
+			+ "  }}    \n" + "}}<noinclude>\n" + "{{documentation}}\n" + "</noinclude>";
+
 	boolean fSemanticWebActive;
 
 	static {
@@ -2170,6 +2226,10 @@ public class WikiTestModel extends WikiModel {
 				return COMMONS;
 			} else if (name.equals("Commons_category")) {
 				return COMMONS_CATEGORY;
+			} else if (name.equals("Date")) {
+				return DATE;
+			} else if (name.equals("FormatDate")) {
+				return FORMAT_DATE;
 			} else if (name.equals("Sister")) {
 				return SISTER;
 			} else if (name.equals("Sec_link_auto")) {
