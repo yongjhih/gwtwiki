@@ -21,8 +21,7 @@ public class HeaderFilterTest extends FilterTestSupport {
 	}
 
 	public void testBad03() {
-		assertEquals("<h1><span class=\"mw-headline\" id=\"\" /></h1>\n" + 
-				"", wikiModel.render("==  \r  \n"));
+		assertEquals("<h1><span class=\"mw-headline\" id=\"\" /></h1>\n" + "", wikiModel.render("==  \r  \n"));
 	}
 
 	public void testH2() {
@@ -30,8 +29,7 @@ public class HeaderFilterTest extends FilterTestSupport {
 	}
 
 	public void testH6Whitespace() {
-		assertEquals("<h6><span class=\"mw-headline\" id=\"Text_.C3.9Cbersicht\">Text Übersicht</span></h6>\n" + 
-				"<p>A new line.</p>",
+		assertEquals("<h6><span class=\"mw-headline\" id=\"Text_.C3.9Cbersicht\">Text Übersicht</span></h6>\n" + "<p>A new line.</p>",
 				wikiModel.render("=======Text Übersicht=======   \r \nA new line."));
 	}
 
@@ -47,26 +45,46 @@ public class HeaderFilterTest extends FilterTestSupport {
 
 	public void testH2Link01() {
 		assertEquals(
-				" \n" + 
-				"<table id=\"toc\" class=\"toc\" summary=\"Contents\">\n" + 
-				"<tr>\n" + 
-				"<td>\n" + 
-				"<div id=\"toctitle\">\n" + 
-				"<h2>Contents</h2>\n" + 
-				"</div>\n" + 
-				"<ul>\n" + 
-				"<ul>\n" + 
-				"<li class=\"toclevel-1\"><a href=\"#Text_.C3.9Cbersicht\">Text Übersicht</a>\n" + 
-				"</li>\n" + 
-				"</ul>\n" + 
-				"</ul></td></tr></table><hr/>\n" + 
-				"<h2><span class=\"mw-headline\" id=\"Text_.C3.9Cbersicht\">Text <a href=\"http://www.bliki.info/wiki/Overview\" title=\"Overview\">Übersicht</a></span></h2>",
+				" \n"
+						+ "<table id=\"toc\" class=\"toc\" summary=\"Contents\">\n"
+						+ "<tr>\n"
+						+ "<td>\n"
+						+ "<div id=\"toctitle\">\n"
+						+ "<h2>Contents</h2>\n"
+						+ "</div>\n"
+						+ "<ul>\n"
+						+ "<ul>\n"
+						+ "<li class=\"toclevel-1\"><a href=\"#Text_.C3.9Cbersicht\">Text Übersicht</a>\n"
+						+ "</li>\n"
+						+ "</ul>\n"
+						+ "</ul></td></tr></table><hr/>\n"
+						+ "<h2><span class=\"mw-headline\" id=\"Text_.C3.9Cbersicht\">Text <a href=\"http://www.bliki.info/wiki/Overview\" title=\"Overview\">Übersicht</a></span></h2>",
 				wikiModel.render("__FORCETOC__ \n==Text [[Overview|Übersicht]]=="));
 	}
-	
+
 	public void testH3Link01() {
 		assertEquals(
-				" \n" + 
+				" \n"
+						+ "<table id=\"toc\" class=\"toc\" summary=\"Contents\">\n"
+						+ "<tr>\n"
+						+ "<td>\n"
+						+ "<div id=\"toctitle\">\n"
+						+ "<h2>Contents</h2>\n"
+						+ "</div>\n"
+						+ "<ul>\n"
+						+ "<ul>\n"
+						+ "<ul>\n"
+						+ "<li class=\"toclevel-1\"><a href=\"#Captions\">Captions</a>\n"
+						+ "</li>\n"
+						+ "</ul>\n"
+						+ "</ul>\n"
+						+ "</ul></td></tr></table><hr/>\n"
+						+ "<h3><span class=\"mw-headline\" id=\"Captions\"><a href=\"http://www.bliki.info/wiki/Help:Table_Caption\" title=\"Help:Table Caption\">Captions</a></span></h3>",
+				wikiModel.render("__FORCETOC__ \n===[[Help:Table Caption|Captions]]==="));
+	}
+
+	public void testH2Multiple() {
+		assertEquals(" \n" + 
 				"<table id=\"toc\" class=\"toc\" summary=\"Contents\">\n" + 
 				"<tr>\n" + 
 				"<td>\n" + 
@@ -75,13 +93,20 @@ public class HeaderFilterTest extends FilterTestSupport {
 				"</div>\n" + 
 				"<ul>\n" + 
 				"<ul>\n" + 
-				"<ul>\n" + 
-				"<li class=\"toclevel-1\"><a href=\"#Captions\">Captions</a>\n" + 
+				"<li class=\"toclevel-1\"><a href=\"#Head_1\">Head 1</a>\n" + 
+				"</li>\n" + 
+				"<li class=\"toclevel-1\"><a href=\"#Head_1_2\">Head 1</a>\n" + 
+				"</li>\n" + 
+				"<li class=\"toclevel-1\"><a href=\"#Head_1_3\">Head 1</a>\n" + 
 				"</li>\n" + 
 				"</ul>\n" + 
-				"</ul>\n" + 
 				"</ul></td></tr></table><hr/>\n" + 
-				"<h3><span class=\"mw-headline\" id=\"Captions\"><a href=\"http://www.bliki.info/wiki/Help:Table_Caption\" title=\"Help:Table Caption\">Captions</a></span></h3>",
-				wikiModel.render("__FORCETOC__ \n===[[Help:Table Caption|Captions]]==="));
+				"<h2><span class=\"mw-headline\" id=\"Head_1\">Head 1</span></h2>\n" + 
+				"<p>A first line.\n" + 
+				"</p><h2><span class=\"mw-headline\" id=\"Head_1_2\">Head 1</span></h2>\n" + 
+				"<p>A second line.\n" + 
+				"</p><h2><span class=\"mw-headline\" id=\"Head_1_3\">Head 1</span></h2>\n" + 
+				"<p>A third line.</p>",
+				wikiModel.render("__FORCETOC__ \n==Head 1==\nA first line.\n==Head 1==\nA second line.\n==Head 1==\nA third line."));
 	}
 }

@@ -450,6 +450,7 @@ public abstract class AbstractWikiModel implements IWikiModel, IContext {
 			}
 			anchor = newAnchor;
 		}
+		fToCSet.add(anchor);
 		SectionHeader strPair = new SectionHeader(headLevel, startPosition, endPosition, tocHead, anchor);
 		addToTableOfContent(fTableOfContent, strPair, headLevel);
 		if (getRecursionLevel() == 1) {
