@@ -2,6 +2,8 @@ package info.bliki.wiki.template;
 
 import info.bliki.wiki.model.IWikiModel;
 
+import java.text.DateFormat;
+import java.text.ParseException;
 import java.util.Date;
 import java.util.List;
 
@@ -10,8 +12,9 @@ import java.util.List;
  * 
  * NOT COMPLETE YET!!!
  * 
- * See <a href="http://www.mediawiki.org/wiki/Help:Extension:ParserFunctions">
- * Mediwiki's Help:Extension:ParserFunctions</a>
+ * See <a
+ * href="http://www.mediawiki.org/wiki/Help:Extension:ParserFunctions#.23time">
+ * Mediwiki's Help:Extension:ParserFunctions - #time</a>
  * 
  */
 public class Time extends AbstractTemplateFunction {
@@ -23,10 +26,25 @@ public class Time extends AbstractTemplateFunction {
 
 	public String parseFunction(List<String> list, IWikiModel model, char[] src, int beginIndex, int endIndex) {
 		if (list.size() > 0) {
+			Date date;
+			DateFormat df = DateFormat.getDateInstance(DateFormat.MEDIUM, model.getLocale());
+			if (list.size() > 1) {
+				String dateTimeParameter = list.get(1);
+
+				try {
+					date = df.parse(dateTimeParameter);
+				} catch (ParseException e) {
+					return "<span class=\"error\">Error: invalid time</span>";
+				}
+			} else {
+				date = model.getCurrentTimeStamp();
+			}
+
 			String condition = parse(list.get(0), model);
 			if (condition.equals("U")) {
 				return secondsSinceJanuary1970(list);
 			}
+			return df.format(date);
 		}
 		return null;
 	}

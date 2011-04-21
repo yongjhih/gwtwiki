@@ -18,6 +18,8 @@ public class TimeFilterTest extends FilterTestSupport {
 	}
 
 	public void testDate001() {
-		assertEquals("", wikiModel.render("{{#time: d F Y | 29 Feb 2004 }}"));
+		// TODO implement more options for time
+		assertEquals("\n" + 
+				"<p><span class=\"error\">Error: invalid time</span></p>", wikiModel.render("{{#time: d F Y | 29 Feb 2004 }}"));
 	}
 }

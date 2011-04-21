@@ -32,6 +32,7 @@ public class AllFilterTests extends TestCase {
 		s.addTestSuite(PreFormattedFilterTest.class);
 		s.addTestSuite(RefFilterTest.class);
 		s.addTestSuite(TagFilterTest.class);
+		s.addTestSuite(TimeFilterTest.class);
 		s.addTestSuite(TemplateFilterTest.class);
 		s.addTestSuite(TOCFilterTest.class);
 		s.addTestSuite(WPImageFilterTest.class);
