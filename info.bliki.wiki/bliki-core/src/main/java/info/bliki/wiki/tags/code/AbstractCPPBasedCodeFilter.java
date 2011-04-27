@@ -18,7 +18,7 @@ abstract public class AbstractCPPBasedCodeFilter extends AbstractCodeFormatter {
 		if (!isKeywordCaseSensitive()) {
 			keywordIdent = keywordIdent.toLowerCase();
 		}
-		String keywordValue = (String) keyWords.get(keywordIdent);
+		String keywordValue = keyWords.get(keywordIdent);
 		if (keywordValue != null) {
 			result.append(keywordValue);
 		} else {
@@ -26,7 +26,7 @@ abstract public class AbstractCPPBasedCodeFilter extends AbstractCodeFormatter {
 				result.append(originalIdent);
 				return currentPosition;
 			}
-			String objectValue = (String) objectWords.get(keywordIdent);
+			String objectValue = objectWords.get(keywordIdent);
 			if (objectValue != null) {
 				result.append(objectValue);
 			} else {

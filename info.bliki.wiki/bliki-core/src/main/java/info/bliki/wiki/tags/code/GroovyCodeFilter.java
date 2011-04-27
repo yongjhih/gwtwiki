@@ -1,7 +1,6 @@
 package info.bliki.wiki.tags.code;
 
 import java.util.HashMap;
-import java.util.HashSet;
 
 /**
  * Syntax highlighting support for Groovy source codes
@@ -38,6 +37,7 @@ public class GroovyCodeFilter extends AbstractCPPBasedCodeFilter implements Sour
 	public GroovyCodeFilter() {
 	}
 
+	@Override
 	public String filter(String input) {
 		char[] source = input.toCharArray();
 		int currentPosition = 0;
