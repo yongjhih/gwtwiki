@@ -17,7 +17,7 @@ public class XMLSearchParser extends AbstractXMLParser {
 	private static final String SNIPPET_ID = "snippet";
 	private static final String SROFFSET_ID = "sroffset";
 	private static final String TIMESTAMP_ID = "timestamp";
-	private static final String WORDCOUNT_ID = "wordCount";
+	private static final String WORDCOUNT_ID = "wordcount";
 
 	private SearchResult fSearchResult;
 
