@@ -67,7 +67,7 @@ public class XMLCodeFilter extends AbstractCPPBasedCodeFilter implements SourceC
 							currentChar = source[currentPosition++];
 						}
 						while ((currentChar >= 'a' && currentChar <= 'z') || (currentChar >= 'A' && currentChar <= 'Z')
-								|| (currentChar >= '0' && currentChar <= '9') || currentChar == '_' || currentChar == '-') {
+								|| (currentChar >= '0' && currentChar <= '9') || currentChar == '_' || currentChar == '-'|| currentChar == ':') {
 							appendChar(result, currentChar);
 							currentChar = source[currentPosition++];
 						}

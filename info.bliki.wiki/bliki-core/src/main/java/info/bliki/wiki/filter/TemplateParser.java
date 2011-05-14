@@ -316,6 +316,7 @@ public class TemplateParser extends AbstractParser {
 							}
 						} else if (tagName.equals("source")) {
 							if (readUntilIgnoreCase("</", "source>")) {
+								appendContentWithComment(writer, startPosition);
 								return true;
 							}
 						} else if (tagName.equals("math")) {
@@ -463,6 +464,7 @@ public class TemplateParser extends AbstractParser {
 							}
 						} else if (tagName.equals("source")) {
 							if (readUntilIgnoreCase("</", "source>")) {
+								appendContentWithComment(writer, startPosition);
 								return true;
 							}
 						} else if (tagName.equals("math")) {
@@ -498,6 +500,15 @@ public class TemplateParser extends AbstractParser {
 				fWhiteStart = false;
 			}
 		}
+	}
+
+	private void appendContentWithComment(Appendable writer, int startPosition) throws IOException {
+		if (fWhiteStartPosition < startPosition - 1) {
+			appendContent(writer, fWhiteStart, fWhiteStartPosition, fCurrentPosition - startPosition + 1, true);
+		}
+		appendContent(writer, true, startPosition - 1, 0, false);
+		fWhiteStart = true;
+		fWhiteStartPosition = fCurrentPosition;
 	}
 
 	private boolean parseTemplateOrTemplateParameter(Appendable writer) throws IOException {
