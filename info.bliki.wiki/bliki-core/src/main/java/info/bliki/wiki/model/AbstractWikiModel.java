@@ -1292,6 +1292,7 @@ public abstract class AbstractWikiModel implements IWikiModel, IContext {
 			fWikiListener = null;
 			fToCSet = null;
 			fTableOfContent = null;
+			fTableOfContentTag = null;
 			fTagStack = new TagStack();
 			fReferences = null;
 			fReferenceNames = null;
@@ -1650,9 +1651,16 @@ public abstract class AbstractWikiModel implements IWikiModel, IContext {
 	 * {@inheritDoc}
 	 */
 	public void setUp() {
+		fToCSet = null;
+		fTableOfContent = null;
+		fTableOfContentTag = null;
+		fTagStack = new TagStack();
+		fReferences = null;
+		fReferenceNames = null; 
 		fParserRecursionCount = 0;
 		fRecursionLevel = 0;
 		fTemplateRecursionCount = 0;
+		fSectionCounter = 0;
 	}
 
 	/**

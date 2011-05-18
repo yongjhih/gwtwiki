@@ -99,8 +99,8 @@ public class BasicFilterTest extends FilterTestSupport {
 
 	public void testPreBlock() {
 		assertEquals("\n<pre>\n* Lists are easy to do:\n" + "** start every line\n" + "* with a star\n" + "** more stars mean\n"
-				+ "*** deeper levels\n</pre>", wikiModel.render(" * Lists are easy to do:\n" + " ** start every line\n" + " * with a star\n"
-				+ " ** more stars mean\n" + " *** deeper levels"));
+				+ "*** deeper levels\n</pre>", wikiModel.render(" * Lists are easy to do:\n" + " ** start every line\n"
+				+ " * with a star\n" + " ** more stars mean\n" + " *** deeper levels"));
 	}
 
 	public void testNestedPreBlock() {
@@ -113,18 +113,16 @@ public class BasicFilterTest extends FilterTestSupport {
 
 	public void testPBlock() {
 		assertEquals(
-				"\n" + 
-				"<p style=\"padding: 1em; border: 1px dashed #2f6fab; color: Black; background-color: #f9f9f9; line-height: 1.1em;\"> <tt>\n" + 
-				"&#60;p style=&#34;padding: 1em; border: 1px dashed #2f6fab; color: Black; background-color: #f9f9f9; line-height: 1.1em;&#34;&#62; &#60;tt&#62; <br/>\n" + 
-				"&#38;#123;&#38;#124; border=&#34;5&#34; cellspacing=&#34;5&#34; cellpadding=&#34;2&#34; &#60;br /&#62; <br/>\n" + 
-				"&#38;#124; style=&#34;text-align: center;&#34; &#38;#124; &#38;#91;&#38;#91;Image:gnome-system.png]] &#60;br /&#62; <br/>\n" + 
-				"&#38;#124;- &#60;br /&#62; <br/>\n" + 
-				"&#38;#33; Computer &#60;br /&#62; <br/>\n" + 
-				"&#38;#124;- &#60;br /&#62; <br/>\n" + 
-				"<b>&#38;#124; style=&#34;color: yellow; background-color: green;&#34; &#38;#124; Processor Speed: &#38;#60;span style=&#34;color: red;&#34;&#62; 1.8 GHz &#38;#60;/span&#62; &#60;br /&#62;</b> <br/>\n" + 
-				"&#38;#124;&#38;#125; &#60;br /&#62; <br/>\n" + 
-				"&#60;/tt&#62; &#60;/p&#62;\n" + 
-				"</tt> </p>",
+				"\n"
+						+ "<p style=\"padding: 1em; border: 1px dashed #2f6fab; color: Black; background-color: #f9f9f9; line-height: 1.1em;\"> <tt>\n"
+						+ "&#60;p style=&#34;padding: 1em; border: 1px dashed #2f6fab; color: Black; background-color: #f9f9f9; line-height: 1.1em;&#34;&#62; &#60;tt&#62; <br/>\n"
+						+ "&#38;#123;&#38;#124; border=&#34;5&#34; cellspacing=&#34;5&#34; cellpadding=&#34;2&#34; &#60;br /&#62; <br/>\n"
+						+ "&#38;#124; style=&#34;text-align: center;&#34; &#38;#124; &#38;#91;&#38;#91;Image:gnome-system.png]] &#60;br /&#62; <br/>\n"
+						+ "&#38;#124;- &#60;br /&#62; <br/>\n"
+						+ "&#38;#33; Computer &#60;br /&#62; <br/>\n"
+						+ "&#38;#124;- &#60;br /&#62; <br/>\n"
+						+ "<b>&#38;#124; style=&#34;color: yellow; background-color: green;&#34; &#38;#124; Processor Speed: &#38;#60;span style=&#34;color: red;&#34;&#62; 1.8 GHz &#38;#60;/span&#62; &#60;br /&#62;</b> <br/>\n"
+						+ "&#38;#124;&#38;#125; &#60;br /&#62; <br/>\n" + "&#60;/tt&#62; &#60;/p&#62;\n" + "</tt> </p>",
 				wikiModel
 						.render("<p style=\"padding: 1em; border: 1px dashed #2f6fab; color: Black; background-color: #f9f9f9; line-height: 1.1em;\"> <tt>\n"
 								+ "&#60;p style=\"padding: 1em; border: 1px dashed #2f6fab; color: Black; background-color: #f9f9f9; line-height: 1.1em;\"> &#60;tt> <br />\n"
@@ -169,7 +167,7 @@ public class BasicFilterTest extends FilterTestSupport {
 	public void testSignature06() {
 		assertEquals("\n" + "<p>a simple~~~</p>", wikiModel.render("a simple~~~"));
 	}
-	
+
 	public void testSignature07() {
 		assertEquals("\n" + "<p>~~~test</p>", wikiModel.render("~~~test"));
 	}
@@ -177,12 +175,50 @@ public class BasicFilterTest extends FilterTestSupport {
 	public void testSignature08() {
 		assertEquals("\n" + "<p>~~~</p>", wikiModel.render("~~~"));
 	}
-	
+
 	public void testSpan001() {
-		
-		assertEquals("\n" + 
-				"<p><span class=\"xxx\">test</span></p>", wikiModel.render("<span class=\"xxx\"\n" + 
-		">test</span>"));
-		
+
+		assertEquals("\n" + "<p><span class=\"xxx\">test</span></p>", wikiModel.render("<span class=\"xxx\"\n" + ">test</span>"));
+
+	}
+
+	public void testReuseModel001() {
+		wikiModel.setUp();
+		try {
+			assertEquals("<h1><span class=\"mw-headline\" id=\"My_Title_1\">My Title 1</span></h1>\n" + 
+					"<table id=\"toc\" class=\"toc\" summary=\"Contents\">\n" + 
+					"<tr>\n" + 
+					"<td>\n" + 
+					"<div id=\"toctitle\">\n" + 
+					"<h2>Contents</h2>\n" + 
+					"</div>\n" + 
+					"<ul>\n" + 
+					"<li class=\"toclevel-1\"><a href=\"#My_Title_1\">My Title 1</a>\n" + 
+					"</li>\n" + 
+					"</ul></td></tr></table><hr/>\n" + 
+					"\n" + 
+					"<h2><span class=\"mw-headline\" id=\"secA\">secA</span></h2>", wikiModel.render("= My Title 1=\n" + "__TOC__\n" + "== secA =="));
+		} finally {
+			wikiModel.tearDown();
+		}
+		wikiModel.setUp();
+		try {
+			assertEquals("<h1><span class=\"mw-headline\" id=\"My_Title_2\">My Title 2</span></h1>\n" + 
+					"<table id=\"toc\" class=\"toc\" summary=\"Contents\">\n" + 
+					"<tr>\n" + 
+					"<td>\n" + 
+					"<div id=\"toctitle\">\n" + 
+					"<h2>Contents</h2>\n" + 
+					"</div>\n" + 
+					"<ul>\n" + 
+					"<li class=\"toclevel-1\"><a href=\"#My_Title_2\">My Title 2</a>\n" + 
+					"</li>\n" + 
+					"</ul></td></tr></table><hr/>\n" + 
+					"\n" + 
+					"<h2><span class=\"mw-headline\" id=\"secB\">secB</span></h2>", wikiModel.render("= My Title 2=\n" + "__TOC__\n" + "== secB =="));
+		} finally {
+			wikiModel.tearDown();
+		}
+
 	}
 }
