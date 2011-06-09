@@ -195,6 +195,10 @@ public class BasicFilterTest extends FilterTestSupport {
 					"<ul>\n" + 
 					"<li class=\"toclevel-1\"><a href=\"#My_Title_1\">My Title 1</a>\n" + 
 					"</li>\n" + 
+					"<ul>\n" + 
+					"<li class=\"toclevel-2\"><a href=\"#secA\">secA</a>\n" + 
+					"</li>\n" + 
+					"</ul>\n" + 
 					"</ul></td></tr></table><hr/>\n" + 
 					"\n" + 
 					"<h2><span class=\"mw-headline\" id=\"secA\">secA</span></h2>", wikiModel.render("= My Title 1=\n" + "__TOC__\n" + "== secA =="));
@@ -213,6 +217,10 @@ public class BasicFilterTest extends FilterTestSupport {
 					"<ul>\n" + 
 					"<li class=\"toclevel-1\"><a href=\"#My_Title_2\">My Title 2</a>\n" + 
 					"</li>\n" + 
+					"<ul>\n" + 
+					"<li class=\"toclevel-2\"><a href=\"#secB\">secB</a>\n" + 
+					"</li>\n" + 
+					"</ul>\n" + 
 					"</ul></td></tr></table><hr/>\n" + 
 					"\n" + 
 					"<h2><span class=\"mw-headline\" id=\"secB\">secB</span></h2>", wikiModel.render("= My Title 2=\n" + "__TOC__\n" + "== secB =="));

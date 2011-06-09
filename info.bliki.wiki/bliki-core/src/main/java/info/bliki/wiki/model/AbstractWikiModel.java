@@ -877,17 +877,13 @@ public abstract class AbstractWikiModel implements IWikiModel, IContext {
 			this.append(fTableOfContentTag);
 		} else {
 			if (isTOCIdentifier) {
-				// try {
 				TableOfContentTag tableOfContentTag = (TableOfContentTag) fTableOfContentTag.clone();
 				fTableOfContentTag.setShowToC(false);
 				tableOfContentTag.setShowToC(true);
 				tableOfContentTag.setTOCIdentifier(isTOCIdentifier);
 				fTableOfContentTag = tableOfContentTag;
-				// } catch (CloneNotSupportedException e) {
-				// e.printStackTrace();
-				// }
+				fTableOfContent = null;
 				this.append(fTableOfContentTag);
-			} else {
 			}
 		}
 
