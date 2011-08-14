@@ -7,12 +7,14 @@ import info.bliki.wiki.namespaces.INamespace;
  * 
  */
 public class WikiArticle {
-	private String text;
-	private String title;
-	private String timeStamp;
 	private String id = null;
-	private String namespace = "";
 	private Integer integerNamespace = 0;
+	private String namespace = "";
+	private String revisionId = null;
+	private String text;
+	private String timeStamp;
+
+	private String title;
 
 	public WikiArticle() {
 
@@ -42,6 +44,13 @@ public class WikiArticle {
 	 */
 	public String getNamespace() {
 		return namespace;
+	}
+
+	/**
+	 * @return the revisionId
+	 */
+	public String getRevisionId() {
+		return revisionId;
 	}
 
 	public String getText() {
@@ -92,6 +101,8 @@ public class WikiArticle {
 	}
 
 	/**
+	 * The ID of the wiki article to set.
+	 * 
 	 * @param id
 	 *          the id to set
 	 */
@@ -113,6 +124,16 @@ public class WikiArticle {
 	 */
 	public void setNamespace(String namespace) {
 		this.namespace = namespace;
+	}
+
+	/**
+	 * The ID of the revision of the wiki article to set.
+	 * 
+	 * @param revisionId
+	 *          the revisisonId to set
+	 */
+	public void setRevisionId(String revisionId) {
+		this.revisionId = revisionId;
 	}
 
 	public void setText(String newText) {

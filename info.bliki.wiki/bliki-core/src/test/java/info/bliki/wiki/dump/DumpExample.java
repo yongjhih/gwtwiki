@@ -17,6 +17,8 @@ public class DumpExample {
 
 		public void process(WikiArticle page, Siteinfo siteinfo) throws SAXException {
 			System.out.println("----------------------------------------");
+			System.out.println(page.getId());
+			System.out.println(page.getRevisionId());
 			System.out.println(page.getTitle());
 			System.out.println("----------------------------------------");
 			System.out.println(page.getText());

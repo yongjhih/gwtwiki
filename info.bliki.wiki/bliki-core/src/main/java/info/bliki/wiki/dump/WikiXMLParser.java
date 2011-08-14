@@ -191,6 +191,9 @@ public class WikiXMLParser extends DefaultHandler {
 				} else if (!fRevision && WIKIPEDIA_ID.equals(qName)) {
 					// get the id from wiki page, not the id from the revision
 					fArticle.setId(getString());
+				} else if (fRevision && WIKIPEDIA_ID.equals(qName)) {
+					// get the id from revision, not the id from the wiki PAGE
+					fArticle.setRevisionId(getString());
 				}
 			}
 			fData = null;
