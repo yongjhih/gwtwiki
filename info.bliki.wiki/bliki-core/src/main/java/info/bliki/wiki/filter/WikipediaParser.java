@@ -963,8 +963,12 @@ public class WikipediaParser extends AbstractParser implements IParser {
 			createContentToken(1);
 			reduceTokenStack();
 			String head = "";
-			if (headerEndPosition > headerStartPosition) {
-				head = fStringSource.substring(headerStartPosition, headerEndPosition);
+			if (headerEndPosition >= headerStartPosition) {
+				if (headerEndPosition > headerStartPosition) {
+					head = fStringSource.substring(headerStartPosition, headerEndPosition);
+				} else {
+					head = String.valueOf(fStringSource.charAt(headerStartPosition));
+				}
 			}
 			fEventListener.onHeader(fSource, startPosition, endPosition, headerStartPosition, headerEndPosition, level);
 			fCurrentPosition = endIndex;

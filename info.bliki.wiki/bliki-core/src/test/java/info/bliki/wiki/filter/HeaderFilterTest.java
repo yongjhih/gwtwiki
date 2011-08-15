@@ -24,6 +24,16 @@ public class HeaderFilterTest extends FilterTestSupport {
 		assertEquals("<h1><span class=\"mw-headline\" id=\"\" /></h1>\n" + "", wikiModel.render("==  \r  \n"));
 	}
 
+	public void testH2OneCharacter() {
+		assertEquals("<h2><span class=\"mw-headline\" id=\"a\">a</span></h2>", wikiModel.render("==a=="));
+		assertEquals("\n" + 
+				"<p>line 1\n" + 
+				"</p><h2><span class=\"mw-headline\" id=\"a\">a</span></h2>", wikiModel.render("line 1\n==a=="));
+		assertEquals("<h3><span class=\"mw-headline\" id=\"a\">a</span></h3>", wikiModel.render("===a==="));
+		assertEquals("\n" + 
+				"<p>line 1\n" + 
+				"</p><h3><span class=\"mw-headline\" id=\"a\">a</span></h3>", wikiModel.render("line 1\n===a==="));
+	}
 	public void testH2() {
 		assertEquals("<h2><span class=\"mw-headline\" id=\"Text\">Text</span></h2>", wikiModel.render("==Text=="));
 	}
