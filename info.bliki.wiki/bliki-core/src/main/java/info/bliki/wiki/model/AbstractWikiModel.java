@@ -271,7 +271,11 @@ public abstract class AbstractWikiModel implements IWikiModel, IContext {
 				if (count >= Reference.CHARACTER_REFS.length()) {
 					result[1] = nameAttribute + '_' + 'Z';
 				} else {
-					result[1] = nameAttribute + '_' + Reference.CHARACTER_REFS.charAt(count);
+					if (count == 0) {
+						result[1] = nameAttribute;
+					} else {
+						result[1] = nameAttribute + '_' + Reference.CHARACTER_REFS.charAt(count);
+					}
 				}
 				return result;
 			}
@@ -281,7 +285,7 @@ public abstract class AbstractWikiModel implements IWikiModel, IContext {
 			fReferences.add(new Reference(reference, nameAttribute));
 			Integer index = Integer.valueOf(fReferences.size());
 			fReferenceNames.put(nameAttribute, index);
-			result[1] = nameAttribute + "_a";
+			result[1] = nameAttribute;
 		} else {
 			fReferences.add(new Reference(reference));
 		}
@@ -1652,7 +1656,7 @@ public abstract class AbstractWikiModel implements IWikiModel, IContext {
 		fTableOfContentTag = null;
 		fTagStack = new TagStack();
 		fReferences = null;
-		fReferenceNames = null; 
+		fReferenceNames = null;
 		fParserRecursionCount = 0;
 		fRecursionLevel = 0;
 		fTemplateRecursionCount = 0;

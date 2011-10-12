@@ -97,7 +97,11 @@ public class HTMLCreatorExample {
 	public static void testCreator009() {
 		testWikipediaENAPI("Metallica");
 	}
-	
+
+	public static void testCreator010() {
+		testWikipediaENAPI("HTTP-Statuscode", "http://de.wikipedia.org/w/api.php");
+	}
+
 	public static void main(String[] args) {
 		testCreator001();
 	}

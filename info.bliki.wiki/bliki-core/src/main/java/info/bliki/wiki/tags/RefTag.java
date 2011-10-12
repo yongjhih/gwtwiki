@@ -35,14 +35,20 @@ public class RefTag extends HTMLTag implements IBodyTag {
 		renderHTMLWithoutTag(converter, buf, model);
 		Map<String, String> map = getAttributes();
 		String value = map.get("name");
-		String[] offset = model.addToReferences(buf.toString(), value);// getBodyString
+		String reference = buf.toString();
+		String[] offset = model.addToReferences(reference, value);
 		if (null == value) {
 			value = offset[0];
 		}
 		String ref = (null == offset[1]) ? offset[0] : offset[1];
 
-		writer.append("<sup id=\"_ref-").append(Encoder.encodeDotUrl(ref)).append("\" class=\"reference\"><a href=\"#_note-").append(
-				Encoder.encodeDotUrl(value)).append("\" title=\"\">[").append(offset[0]).append("]</a></sup>");
+		writer.append("<sup id=\"_ref-");
+		writer.append(Encoder.encodeDotUrl(ref));
+		writer.append("\" class=\"reference\"><a href=\"#_note-");
+		writer.append(Encoder.encodeDotUrl(value));
+		writer.append("\" title=\"\">[");
+		writer.append(offset[0]);
+		writer.append("]</a></sup>");
 	}
 
 	@Override

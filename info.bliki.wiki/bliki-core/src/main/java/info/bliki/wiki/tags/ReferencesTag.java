@@ -1,5 +1,6 @@
 package info.bliki.wiki.tags;
 
+import info.bliki.wiki.filter.Encoder;
 import info.bliki.wiki.filter.ITextConverter;
 import info.bliki.wiki.model.Configuration;
 import info.bliki.wiki.model.IWikiModel;
@@ -29,26 +30,37 @@ public class ReferencesTag extends HTMLTag {
 				ref = (Reference) list.get(i);
 				counter = ref.getCounter();
 				writer.append("<li id=\"_note-");
+				String nameAttribute = Encoder.encodeDotUrl(ref.getAttribute());
 				if (counter == 0) {
-					String i1 = Integer.toString(i + 1);
-					writer.append(i1);
-					writer.append("\"><b><a href=\"#_ref-");
-					writer.append(i1);
+					if (nameAttribute.length() == 0) {
+						String i1 = Integer.toString(i + 1);
+						writer.append(i1);
+						writer.append("\"><b><a href=\"#_ref-");
+						writer.append(i1);
+					} else {
+						writer.append(nameAttribute);
+						writer.append("\"><b><a href=\"#_ref-");
+						writer.append(nameAttribute);
+					}
 					// upwards arrow
-					writer.append("\" title=\"\">&#8593;</a></b> ");//&uarr;
+					writer.append("\" title=\"\">&#8593;</a></b> ");// &uarr;
 				} else {
 					String note;
-					String nameAttribute = ref.getAttribute();
 					char ch;
 					writer.append(nameAttribute);
-					writer.append("\">&#8593; "); //&uarr;
+					writer.append("\">&#8593; "); // &uarr;
 					for (int j = 0; j <= counter; j++) {
+
 						if (j >= Reference.CHARACTER_REFS.length()) {
 							ch = 'Z';
 						} else {
 							ch = Reference.CHARACTER_REFS.charAt(j);
 						}
-						note = nameAttribute + '_' + ch;
+						if (j != 0) {
+							note = nameAttribute + '_' + ch;
+						} else {
+							note = nameAttribute;
+						}
 						writer.append("<a href=\"#_ref-");
 						writer.append(note);
 						writer.append("\" title=\"\"><sup><i><b>" + ch + "</b></i></sup></a> ");
@@ -60,12 +72,12 @@ public class ReferencesTag extends HTMLTag {
 			writer.append("</ol>");
 		}
 	}
- 
+
 	@Override
 	public boolean isReduceTokenStack() {
 		return false;
 	}
-	
+
 	@Override
 	public String getParents() {
 		return Configuration.SPECIAL_BLOCK_TAGS;
