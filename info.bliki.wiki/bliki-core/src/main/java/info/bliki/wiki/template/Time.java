@@ -18,7 +18,7 @@ import java.util.Map;
 /**
  * A template parser function for <code>{{ #time: ... }}</code> syntax.
  * 
- * Based on {@link Time} but supporting more flags (still not complete though).
+ * Supporting more control flags, but still not complete though.
  * 
  * See <a
  * href="http://www.mediawiki.org/wiki/Help:Extension:ParserFunctions#.23time">
@@ -175,7 +175,8 @@ public class Time extends AbstractTemplateFunction {
 						continue;
 					}
 					// TODO:
-					// FORMAT_WIKI_TO_JAVA.put("xg", "??"); // Output the full month name
+					// FORMAT_WIKI_TO_JAVA.put("xg", "??"); // Output the full month
+					// name
 					// in the genitive form for site languages that distinguish between
 					// genitive and nominative forms.
 					// Iranian:
@@ -186,10 +187,12 @@ public class Time extends AbstractTemplateFunction {
 					// FORMAT_WIKI_TO_JAVA.put("xin", "??"); // Month index, e.g. "7"
 					// FORMAT_WIKI_TO_JAVA.put("xiY", "??"); // Full year, e.g. "1390"
 					// Hebrew:
-					// FORMAT_WIKI_TO_JAVA.put("xjj", "??"); // Day of the month, e.g. "8"
+					// FORMAT_WIKI_TO_JAVA.put("xjj", "??"); // Day of the month, e.g.
+					// "8"
 					// FORMAT_WIKI_TO_JAVA.put("xjF", "??"); // Full month name, e.g.
 					// "Tishrei"
-					// FORMAT_WIKI_TO_JAVA.put("xjx", "??"); // Genitive form of the month
+					// FORMAT_WIKI_TO_JAVA.put("xjx", "??"); // Genitive form of the
+					// month
 					// name, e.g. "Tishrei"
 					// FORMAT_WIKI_TO_JAVA.put("xjn", "??"); // Month number, e.g. "1"
 					// FORMAT_WIKI_TO_JAVA.put("xjY", "??"); // Full year, e.g. "5772"
@@ -202,7 +205,8 @@ public class Time extends AbstractTemplateFunction {
 					// FORMAT_WIKI_TO_JAVA.put("xN", "??"); // Like xn, but as a toggled
 					// flag, which endures until the end of the string or until the next
 					// appearance of xN in the string.
-					// FORMAT_WIKI_TO_JAVA.put("Xr", "??"); // Format the next number as a
+					// FORMAT_WIKI_TO_JAVA.put("Xr", "??"); // Format the next number as
+					// a
 					// roman numeral. Only works for numbers up to 3000
 					switch (curCh) {
 					case 'L': // 1 or 0 whether it's a leap year or not
@@ -212,7 +216,8 @@ public class Time extends AbstractTemplateFunction {
 							result.append(0);
 						}
 						continue;
-					case 'z': // Day of the year (January 1 = 0). Note: To get the ISO day
+					case 'z': // Day of the year (January 1 = 0). Note: To get the ISO
+						// day
 						// of the year add 1
 						result.append(cal.get(Calendar.DAY_OF_YEAR) - 1);
 						continue;
@@ -224,7 +229,8 @@ public class Time extends AbstractTemplateFunction {
 							result.append(dayOfWeek_N);
 						}
 						continue;
-					case 'w': // Number of the day of the week (Sunday = 0, Saturday = 6)
+					case 'w': // Number of the day of the week (Sunday = 0, Saturday =
+						// 6)
 						int dayOfWeek_w = cal.get(Calendar.DAY_OF_WEEK) - Calendar.SUNDAY;
 						if (dayOfWeek_w < 0) {
 							result.append(dayOfWeek_w + 7);

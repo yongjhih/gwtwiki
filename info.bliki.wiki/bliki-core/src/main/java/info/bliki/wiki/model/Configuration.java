@@ -423,6 +423,7 @@ public class Configuration implements IConfiguration {
 		TEMPLATE_FUNCTION_MAP.put("#switch", Switch.CONST);
 		TEMPLATE_FUNCTION_MAP.put("#tag", Tag.CONST);
 		TEMPLATE_FUNCTION_MAP.put("#time", Time.CONST);
+		TEMPLATE_FUNCTION_MAP.put("#timel", Time.CONST);
 
 		CODE_FORMATTER_MAP.put("abap", new ABAPCodeFilter());
 		CODE_FORMATTER_MAP.put("csharp", new CSharpCodeFilter());
