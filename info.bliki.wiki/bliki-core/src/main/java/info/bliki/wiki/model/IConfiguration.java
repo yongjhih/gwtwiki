@@ -88,7 +88,7 @@ public interface IConfiguration {
 	 * Get the currently configured cache implementation for template calls.
 	 * 
 	 * @return <code>null</code> if no cache implementation is set.
-	 * @see #setTemplateCallsCache(Map)
+	 * @see IConfiguration#setTemplateCallsCache(Map)
 	 */
 	public Map<String, String> getTemplateCallsCache();
 
@@ -122,6 +122,8 @@ public interface IConfiguration {
 	 * href="http://jcp.org/en/jsr/detail?id=107">JSR 107</a>. Template calls
 	 * which use the same parameters over and over again do lookup this cache and
 	 * use the preparsed result if available.
+	 * 
+	 * <b>Note:</b> don't use a simple java.util.HashMap implementation because it's not thread-safe an grows infinitly.
 	 * 
 	 * @param map
 	 *          the cache implementation

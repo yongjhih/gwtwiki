@@ -4,7 +4,7 @@ package info.bliki.wiki.template.expr.ast;
  * The basic node for a parsed expression string
  * 
  */
-public class NumberNode extends ASTNode {
+public abstract class NumberNode extends ASTNode {
 
 	protected boolean sign;
 
@@ -39,12 +39,7 @@ public class NumberNode extends ASTNode {
 		return Double.parseDouble(toString());
 	}
 
-	public boolean equals(Object obj) {
-		if (obj instanceof NumberNode) {
-			return fStringValue.equals(((NumberNode) obj).fStringValue) && sign == ((NumberNode) obj).sign;
-		}
-		return false;
-	}
+	public abstract boolean equals(Object obj);
 
 	public int hashCode() {
 		if (sign) {

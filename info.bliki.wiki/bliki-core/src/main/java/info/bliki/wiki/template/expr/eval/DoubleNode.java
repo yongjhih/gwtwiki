@@ -7,7 +7,7 @@ import info.bliki.wiki.template.expr.ast.ASTNode;
  */
 public class DoubleNode extends ASTNode {
 
-	private final double value; 
+	private final double value;
 
 	public DoubleNode(double value) {
 		super("DoubleNode");
@@ -23,10 +23,11 @@ public class DoubleNode extends ASTNode {
 	}
 
 	public boolean equals(Object obj) {
-        return (obj instanceof DoubleNode) && value == ((DoubleNode) obj).value;
-    }
+		return (obj instanceof DoubleNode) && value == ((DoubleNode) obj).value;
+	}
+
 	public int hashCode() {
 		long bits = Double.doubleToLongBits(value);
-		return (int)(bits ^ (bits >>> 32));
+		return (int) (bits ^ (bits >>> 32));
 	}
 }

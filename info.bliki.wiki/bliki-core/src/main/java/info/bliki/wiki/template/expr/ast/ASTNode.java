@@ -4,7 +4,7 @@ package info.bliki.wiki.template.expr.ast;
  * The basic node for a parsed expression string
  * 
  */
-public class ASTNode {
+public abstract class ASTNode {
 
 	protected final String fStringValue;
 
@@ -34,12 +34,7 @@ public class ASTNode {
 		return new IntegerNode("0");
 	}
 
-	public boolean equals(Object obj) {
-		if (obj instanceof ASTNode) {
-			return fStringValue.equals(((ASTNode) obj).fStringValue);
-		}
-		return false;
-	}
+	public abstract boolean equals(Object obj);
 
 	public int hashCode() {
 		return fStringValue.hashCode();

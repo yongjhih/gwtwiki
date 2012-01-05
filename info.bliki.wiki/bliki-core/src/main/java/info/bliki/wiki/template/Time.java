@@ -31,7 +31,7 @@ public class Time extends AbstractTemplateFunction {
 	public final static ITemplateFunction CONST = new Time();
 
 	protected static Map<String, String> FORMAT_WIKI_TO_JAVA = new HashMap<String, String>();
-	protected static SimpleDateFormat RFC822DATEFORMAT = new SimpleDateFormat("EEE', 'dd' 'MMM' 'yyyy' 'HH:mm:ss' '+0000", Locale.US);
+	protected final SimpleDateFormat RFC822DATEFORMAT;
 
 	static {
 		// year
@@ -142,6 +142,7 @@ public class Time extends AbstractTemplateFunction {
 	 * Creates a new parser for the #time template function.
 	 */
 	public Time() {
+		 RFC822DATEFORMAT = new SimpleDateFormat("EEE', 'dd' 'MMM' 'yyyy' 'HH:mm:ss' '+0000", Locale.US);
 	}
 
 	public String parseFunction(List<String> list, IWikiModel model, char[] src, int beginIndex, int endIndex) {

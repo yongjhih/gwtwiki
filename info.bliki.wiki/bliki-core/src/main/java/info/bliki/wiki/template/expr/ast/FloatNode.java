@@ -9,4 +9,11 @@ public class FloatNode extends NumberNode {
 	public FloatNode(final String value) {
 		super(value);
 	}
+	
+	public boolean equals(Object obj) {
+		if (obj instanceof FloatNode) {
+			return fStringValue.equals(((NumberNode) obj).fStringValue) && sign == ((NumberNode) obj).sign;
+		}
+		return false;
+	}
 }

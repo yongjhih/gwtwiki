@@ -5,9 +5,9 @@ import info.bliki.htmlcleaner.TagNode;
 import java.util.List;
 
 public class OpenCloseTag extends AbstractHTMLTag {
-	protected final String openStr;
-
-	protected final String closeStr;
+	protected String openStr;
+	
+	protected String closeStr;
 
 	protected final boolean formatContent;
 
@@ -23,8 +23,7 @@ public class OpenCloseTag extends AbstractHTMLTag {
 	 *          format the intermediate resulting wiki content by reducing
 	 *          multiple spaces to only one space ' ' character
 	 */
-	public OpenCloseTag(String opener, String closer, boolean convertPlainText,
-	    boolean formatContent) {
+	public OpenCloseTag(String opener, String closer, boolean convertPlainText, boolean formatContent) {
 		super(convertPlainText);
 		this.openStr = opener;
 		this.closeStr = closer;
@@ -45,8 +44,7 @@ public class OpenCloseTag extends AbstractHTMLTag {
 	}
 
 	@Override
-	public void content(AbstractHTMLToWiki w, TagNode node,
-	    StringBuilder resultBuffer, boolean showWithoutTag) {
+	public void content(AbstractHTMLToWiki w, TagNode node, StringBuilder resultBuffer, boolean showWithoutTag) {
 		List<Object> children = node.getChildren();
 		if (children.size() != 0) {
 
@@ -112,5 +110,21 @@ public class OpenCloseTag extends AbstractHTMLTag {
 	@Override
 	public void close(TagNode node, StringBuilder resultBuffer) {
 		resultBuffer.append(closeStr);
+	}
+	
+	public String getOpenStr() {
+		return openStr;
+	}
+
+	public void setOpenStr(String openStr) {
+		this.openStr = openStr;
+	}
+
+	public String getCloseStr() {
+		return closeStr;
+	}
+
+	public void setCloseStr(String closeStr) {
+		this.closeStr = closeStr;
 	}
 }

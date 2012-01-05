@@ -57,7 +57,7 @@ public class IntegerNode extends NumberNode {
 		}
 		return false;
 	}
-
+ 
 	public int hashCode() {
 		if (fStringValue == null) {
 			return toString().hashCode();

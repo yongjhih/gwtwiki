@@ -5,9 +5,6 @@ import info.bliki.htmlcleaner.TagNode;
 import java.util.Map;
 
 public class PreTag extends OpenCloseTag {
-	protected String openStr;
-
-	protected String closeStr;
 
 	protected static final String PRE_OPEN = "\n<pre>";
 
@@ -19,8 +16,6 @@ public class PreTag extends OpenCloseTag {
 
 	public PreTag() {
 		super(PRE_OPEN, PRE_CLOSE, false, false);
-		this.openStr = PRE_OPEN;
-		this.closeStr = PRE_CLOSE;
 	}
 
 	@Override
@@ -34,21 +29,20 @@ public class PreTag extends OpenCloseTag {
 	}
 
 	@Override
-	public void content(AbstractHTMLToWiki w, TagNode node,
-	    StringBuilder resultBuffer, boolean showWithoutTag) {
+	public void content(AbstractHTMLToWiki w, TagNode node, StringBuilder resultBuffer, boolean showWithoutTag) {
 		Map<String, String> attr = node.getAttributes();
 		if ("code".equals(attr.get("name"))) {
-			this.openStr = SOURCE_OPEN;
-			this.closeStr = SOURCE_CLOSE;
+			String sourceStr = SOURCE_OPEN;
+			setCloseStr(SOURCE_CLOSE);
 			if (attr.get("class").equals("html") || attr.get("class").equals("xml")) {
-				openStr = "\n<source lang=\"xml\">";
+				sourceStr = "\n<source lang=\"xml\">";
 			} else if (attr.get("class").equals("java")) {
-				openStr = "\n<source lang=\"java\">";
+				sourceStr = "\n<source lang=\"java\">";
 			} else if (attr.get("class").equals("javascript")) {
-				openStr = "\n<source lang=\"javascript\">";
+				sourceStr = "\n<source lang=\"javascript\">";
 			}
+			setOpenStr(sourceStr);
 		}
 		super.content(w, node, resultBuffer, showWithoutTag);
 	}
-
 }

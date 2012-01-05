@@ -588,23 +588,15 @@ public class Configuration implements IConfiguration {
 	}
 
 	/**
-	 * Get the currently configured cache implementation for template calls.
-	 * 
-	 * @return <code>null</code> if no cache implementation is set.
-	 * @see #setTemplateCallsCache(Map)
+	 * {@inheritDoc}
 	 */
 	public Map<String, String> getTemplateCallsCache() {
 		return TEMPLATE_CALLS_CACHE;
 	}
 
+
 	/**
-	 * Set a cache map implementation. For example based on <a
-	 * href="http://jcp.org/en/jsr/detail?id=107">JSR 107</a>. Template calls
-	 * which use the same parameters over and over again do lookup this cache and
-	 * use the preparsed result if available.
-	 * 
-	 * @param map
-	 *          the cache implementation
+	 * {@inheritDoc}
 	 */
 	public void setTemplateCallsCache(Map<String, String> map) {
 		TEMPLATE_CALLS_CACHE = map;

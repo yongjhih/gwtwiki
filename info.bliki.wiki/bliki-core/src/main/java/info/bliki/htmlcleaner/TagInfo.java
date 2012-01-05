@@ -327,7 +327,7 @@ public class TagInfo {
 	}
 
 	boolean allowsItem(BaseToken token) {
-		if (contentType != CONTENT_NONE && token instanceof TagToken) {
+		if (!contentType.equals(CONTENT_NONE) && token instanceof TagToken) {
 			TagToken tagToken = (TagToken) token;
 			String tagName = tagToken.getName();
 			if ("script".equals(tagName)) {
@@ -335,7 +335,7 @@ public class TagInfo {
 			}
 		}
 
-		if (contentType == CONTENT_ALL) {
+		if (contentType.equals(CONTENT_ALL)) {
 			if (!childTags.isEmpty()) {
 				return token instanceof TagToken ? childTags.contains(((TagToken) token).getName()) : false;
 			} else if (!permittedTags.isEmpty()) {
@@ -343,7 +343,7 @@ public class TagInfo {
 			} else {
 				return true;
 			}
-		} else if (contentType == CONTENT_TEXT) {
+		} else if (contentType.equals(CONTENT_TEXT)) {
 			return !(token instanceof TagToken);
 		}
 
