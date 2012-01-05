@@ -14,4 +14,8 @@ public class SymbolNode extends ASTNode {
 	public boolean dependsOn(String variableName) {
 		return fStringValue.equals(variableName);
 	}
+	
+	public boolean equals(Object obj) {
+		return (obj instanceof SymbolNode) && fStringValue == ((SymbolNode) obj).fStringValue;
+	}
 }
