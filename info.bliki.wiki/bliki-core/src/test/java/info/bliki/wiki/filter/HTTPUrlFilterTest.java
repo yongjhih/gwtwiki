@@ -19,6 +19,13 @@ public class HTTPUrlFilterTest extends FilterTestSupport {
 				wikiModel.render("see http://www.plog4u.de"));
 	}
 
+	public void testUrlHTTP001() {
+		assertEquals(
+				"\n"
+						+ "<p><b><a class=\"externallink\" href=\"http://bla.blub.com\" rel=\"nofollow\" title=\"http://bla.blub.com\">http://bla.blub.com</a></b></p>",
+				wikiModel.render("'''http://bla.blub.com'''"));
+	}
+
 	public void testUrlFTP() {
 		assertEquals(
 				"\n"
@@ -43,16 +50,16 @@ public class HTTPUrlFilterTest extends FilterTestSupport {
 
 	public void testUrl4() {
 		assertEquals(
-				"\n" + 
-				"<p>Bericht über die Weltkulturerbe-Bewerbung von <a class=\"externallink\" href=\"ftp://www.hr-online.de/website/rubriken/kultur/index.jsp?rubrik=5676&#38;key=standard&#38;key=standard_document_7782534\" rel=\"nofollow\" title=\"ftp://www.hr-online.de/website/rubriken/kultur/index.jsp?rubrik=5676&#38;key=standard&#38;key=standard_document_7782534\">www.hr-online.de?rubrik=5676&#38;key=standard</a> vom 13. Juli 2005</p>",
+				"\n"
+						+ "<p>Bericht über die Weltkulturerbe-Bewerbung von <a class=\"externallink\" href=\"ftp://www.hr-online.de/website/rubriken/kultur/index.jsp?rubrik=5676&#38;key=standard&#38;key=standard_document_7782534\" rel=\"nofollow\" title=\"ftp://www.hr-online.de/website/rubriken/kultur/index.jsp?rubrik=5676&#38;key=standard&#38;key=standard_document_7782534\">www.hr-online.de?rubrik=5676&#38;key=standard</a> vom 13. Juli 2005</p>",
 				wikiModel
 						.render("Bericht über die Weltkulturerbe-Bewerbung von [ftp://www.hr-online.de/website/rubriken/kultur/index.jsp?rubrik=5676&amp;key=standard&key=standard_document_7782534 www.hr-online.de?rubrik=5676&key=standard] vom 13.&nbsp;Juli 2005"));
 	}
 
 	public void testUrl5() {
 		assertEquals(
-				"\n" + 
-				"<p>Bericht über die Weltkulturerbe-Bewerbung von <a class=\"externallink\" href=\"http://www.hr-online.de/website/rubriken/kultur/index.jsp?rubrik=5676&#38;key=standard&#38;key=standard_document_7782534\" rel=\"nofollow\" title=\"http://www.hr-online.de/website/rubriken/kultur/index.jsp?rubrik=5676&#38;key=standard&#38;key=standard_document_7782534\">www.hr-online.de?rubrik=5676&#38;key=standard</a> vom 13. Juli 2005</p>",
+				"\n"
+						+ "<p>Bericht über die Weltkulturerbe-Bewerbung von <a class=\"externallink\" href=\"http://www.hr-online.de/website/rubriken/kultur/index.jsp?rubrik=5676&#38;key=standard&#38;key=standard_document_7782534\" rel=\"nofollow\" title=\"http://www.hr-online.de/website/rubriken/kultur/index.jsp?rubrik=5676&#38;key=standard&#38;key=standard_document_7782534\">www.hr-online.de?rubrik=5676&#38;key=standard</a> vom 13. Juli 2005</p>",
 				wikiModel
 						.render("Bericht über die Weltkulturerbe-Bewerbung von [http://www.hr-online.de/website/rubriken/kultur/index.jsp?rubrik=5676&amp;key=standard&key=standard_document_7782534 www.hr-online.de?rubrik=5676&key=standard] vom 13.&nbsp;Juli 2005"));
 	}
@@ -114,7 +121,7 @@ public class HTTPUrlFilterTest extends FilterTestSupport {
 				+ "<p>call <a class=\"telephonelink\" href=\"tel:+0815-4711\" title=\"tel:+0815-4711\">a phone number</a></p>", wikiModel
 				.render("call [tel:+0815-4711 a phone number]"));
 	}
-	
+
 	public void testUrlTEL03() {
 		assertEquals("\n"
 				+ "<p>call <a class=\"telephonelink\" href=\"tEl:+0815-4711\" title=\"tEl:+0815-4711\">a phone number</a></p>", wikiModel

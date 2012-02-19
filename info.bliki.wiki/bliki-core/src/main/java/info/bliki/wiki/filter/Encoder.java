@@ -477,7 +477,9 @@ public class Encoder {
 		if (Character.isLetterOrDigit(ch)) {
 			return true;
 		}
-		final String test = "-_.!~*';/?:@#&=+$,%";
+		// ' (#39;) character is excluded because of its use in wiki bold and italic
+		// markup
+		final String test = "-_.!~*;/?:@#&=+$,%";
 		return test.indexOf(ch) != (-1);
 	}
 

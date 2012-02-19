@@ -630,7 +630,7 @@ public interface IWikiModel extends IConfiguration {
 	public boolean isImageNamespace(String namespace);
 
 	/**
-	 * Check if the given namespace for an interwiki link
+	 * Check if the given namespace is an interwiki link prefix. 
 	 * 
 	 * @param namespace
 	 * @return <code>true</code> if the namespace is a interwiki namespace (i.e.
