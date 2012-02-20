@@ -6,7 +6,7 @@
 	<artifactId>bliki</artifactId>
 	<packaging>pom</packaging>
 	<name>Bliki POM</name>
-	<version>3.0.17-SNAPSHOT</version>
+	<version>3.0.17</version>
 	<description>The Bliki API is a Java-based Wiki to HTML renderer
 		with MediaWiki syntax support.</description>
 	<organization>
@@ -45,17 +45,17 @@
 			<dependency>
 				<groupId>info.bliki.wiki</groupId>
 				<artifactId>bliki-core</artifactId>
-				<version>3.0.17-SNAPSHOT</version>
+				<version>3.0.17</version>
 			</dependency>
 			<dependency>
 				<groupId>info.bliki.wiki</groupId>
 				<artifactId>bliki-pdf</artifactId>
-				<version>3.0.17-SNAPSHOT</version>
+				<version>3.0.17</version>
 			</dependency>
 			<dependency>
 				<groupId>info.bliki.wiki</groupId>
 				<artifactId>bliki-addons</artifactId>
-				<version>3.0.17-SNAPSHOT</version>
+				<version>3.0.17</version>
 			</dependency>
 			<dependency>
 				<groupId>commons-httpclient</groupId>
