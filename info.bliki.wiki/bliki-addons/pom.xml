@@ -3,20 +3,20 @@
 	<parent>
 		<groupId>info.bliki.wiki</groupId>
 		<artifactId>bliki</artifactId>
-		<version>3.0.17</version>
+		<version>3.0.18-SNAPSHOT</version>
 	</parent>
 	<modelVersion>4.0.0</modelVersion>
 	<artifactId>bliki-addons</artifactId>
 	<groupId>info.bliki.wiki</groupId>
 	<packaging>jar</packaging>
 	<name>Bliki (Addons)</name>
-	<version>3.0.17</version>
-	<description> This is Bliki Add-ons project. </description>
+	<version>3.0.18-SNAPSHOT</version>
+	<description> This is the Bliki Add-ons project. </description>
 	<dependencies>
 		<dependency>
 			<groupId>info.bliki.wiki</groupId>
 			<artifactId>bliki-core</artifactId>
-			<version>3.0.17</version>
+			<version>3.0.18-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>stax</groupId>
