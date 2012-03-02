@@ -4,7 +4,7 @@
 	<classpathentry kind="con" path="com.google.gwt.eclipse.core.GWT_CONTAINER"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/commons-lang-2.4.jar"/>
-	<classpathentry kind="con" path="com.google.appengine.eclipse.core.GAE_CONTAINER/com.google.appengine.eclipse.sdkbundle_1.5.0.r35v201105092302"/>
-	<classpathentry kind="lib" path="war/WEB-INF/lib/bliki-core-3.0.17-SNAPSHOT.jar"/>
+	<classpathentry kind="con" path="com.google.appengine.eclipse.core.GAE_CONTAINER/App Engine"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/bliki-core-3.0.17.jar"/>
 	<classpathentry kind="output" path="war/WEB-INF/classes"/>
 </classpath>
