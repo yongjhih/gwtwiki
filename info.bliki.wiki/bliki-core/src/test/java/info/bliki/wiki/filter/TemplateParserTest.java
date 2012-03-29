@@ -16,7 +16,7 @@ public class TemplateParserTest extends FilterTestSupport {
 	}
 
 	private final String TEST_STRING_03 = "{{{1|{{PAGENAME}}}}}";
-
+	
 	public void testIf00() {
 		assertEquals(
 				"start{{es-verb form of/indicative}}end",
@@ -101,7 +101,8 @@ public class TemplateParserTest extends FilterTestSupport {
 
 	public void testTemplateCall3() {
 		// see method WikiTestModel#getRawWikiContent()
-		assertEquals("b) First: Test1 Second: c) First: sdfsf Second: klj \n" + "\n" + "", wikiModel.parseTemplates("{{templ1\n"
+		assertEquals("b) First: Test1 Second: c) First: sdfsf Second: klj  \n" + 
+				"", wikiModel.parseTemplates("{{templ1\n"
 				+ " | a = Test1\n" + " |{{templ2|sdfsf|klj}} \n" + "}}\n" + "", false));
 	}
 
@@ -467,7 +468,10 @@ public class TemplateParserTest extends FilterTestSupport {
 	public void testPipe001() {
 		assertEquals("hello worldhello world ", wikiModel.parseTemplates("{{2x|hello world" + "}} ", false));
 	}
-
+	public void testPipe001a() {
+		assertEquals("Hello World Hello World ", wikiModel.parseTemplates("{{2x|Hello World\n" + 
+				"}}", false));
+	}
 	public void testPipe002() {
 		assertEquals("{| \n" + "| A \n" + "| B\n" + "|- \n" + "| C\n" + "| D\n" + "|}\n" + "{| \n" + "| A \n" + "| B\n" + "|- \n"
 				+ "| C\n" + "| D\n" + "|}\n", wikiModel.parseTemplates("{{2x|{{{!}} \n" + "{{!}} A \n" + "{{!}} B\n" + "{{!}}- \n"
@@ -485,6 +489,26 @@ public class TemplateParserTest extends FilterTestSupport {
 		assertEquals("test123 start\n" + "test123 end", wikiModel.parseTemplates("test123 start<noinclude>\n" + "test123 end"));
 	}
 
+	public void testTemplateImage1() {
+		// see method WikiTestModel#getRawWikiContent()
+		assertEquals("{|\n" + 
+				"! | <h2 style=\"background:#cedff2;\">In the news</h2>\n" + 
+				"|-\n" + 
+				"| style=\"color:#000; padding:2px 5px;\" | <div id=\"mp-itn\">[[File:Yoshihiko Noda-1.jpg|Yoshihiko Noda |alt=Yoshihiko Noda ]]\n" + 
+				"The ruling Democratic Party of Japan selects '''Yoshihiko Noda''' ''(pictured)'' as the country's new prime minister, following the resignation of Naoto Kan\n" + 
+				"</div>\n" + 
+				"|}", wikiModel.parseTemplates("{|\n" + 
+				"! | <h2 style=\"background:#cedff2;\">In the news</h2>\n" + 
+				"|-\n" + 
+				"| style=\"color:#000; padding:2px 5px;\" | <div id=\"mp-itn\">{{Image\n" + 
+				" |image  = Yoshihiko Noda-1.jpg\n" + 
+				" |title  = Yoshihiko Noda\n" + 
+				"}}\n" + 
+				"The ruling Democratic Party of Japan selects '''Yoshihiko Noda''' ''(pictured)'' as the country's new prime minister, following the resignation of Naoto Kan\n" + 
+				"</div>\n" + 
+				"|}"));
+	}
+	
 	public void testInvalidIncludeonly() {
 		assertEquals("test123 start", wikiModel.parseTemplates("test123 start<includeonly>\n" + "test123 end"));
 	}

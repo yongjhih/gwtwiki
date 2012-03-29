@@ -17,6 +17,7 @@ import java.util.Map;
  * 
  */
 public class WikiTestModel extends WikiModel {
+	public static final String IMAGE = "[[File:{{{image}}}|{{{title}}}|alt={{{title}}}]]";
 
 	public static final String NOWRAP = "<span style=\"white-space:nowrap;\">{{{1}}}</span><noinclude>{{documentation}}<!--interwikis/categories go inside doc--></noinclude>";
 
@@ -2307,6 +2308,8 @@ public class WikiTestModel extends WikiModel {
 				return " \n #REDIRECT [[Template:TestRedirect2]] \n";
 			} else if (name.equals("TestRedirect2")) {
 				return "Hello World!";
+			} else if (name.equals("Image")) {
+				return IMAGE;
 			}
 		} else {
 			if (name.equals("Include_Page")) {

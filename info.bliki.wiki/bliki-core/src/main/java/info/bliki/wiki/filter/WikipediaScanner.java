@@ -640,6 +640,11 @@ public class WikipediaScanner {
 							}
 							if (value != null) {
 								if (value.length() <= Configuration.TEMPLATE_VALUE_LIMIT) {
+									if (value.length() > 0 && value.charAt(value.length() - 1) == '\n') {
+										if (value.length() <= 2 || value.charAt(value.length() - 2) != '}') {
+											value = value.substring(0, value.length() - 1) + ' ';
+										}
+									}
 									if (buffer == null) {
 										buffer = new StringBuilder(template.length() + 128);
 									}
@@ -1223,7 +1228,7 @@ public class WikipediaScanner {
 					throw new IllegalStateException("how did we get in state " + state);
 				}
 			}
-			if (fSource[fScannerPosition-1] != '>') {
+			if (fSource[fScannerPosition - 1] != '>') {
 				fScannerPosition = start;
 				return null;
 			}
