@@ -17,6 +17,14 @@ import java.util.Map;
  * 
  */
 public class WikiTestModel extends WikiModel {
+	public static final String YESNO = "{{#switch: {{lc: {{{1|¬}}} }}\n" + " |no\n" + " |n\n"
+			+ " |0        = {{{no|<!-- null -->}}}\n" + " |         = {{{blank|{{{no|<!-- null -->}}}}}}\n" + " |¬        = {{{¬|}}}\n"
+			+ " |yes\n" + " |y\n" + " |1        = {{{yes|yes}}}\n" + " |#default = {{{def|{{{yes|yes}}}}}}\n" + "}}";
+
+	public static final String IN_THE_NEWS_IMAGE = "<div style=\"float:right;margin-left:0.5em;\">\n"
+			+ "[[File:{{{image}}}|{{{size}}}|{{yesno|{{{border|}}}|yes=border}}|{{{title}}}|alt={{#if:{{{alt|}}}|{{{alt}}}|{{{title}}}}}|link=File:{{{image}}}]]\n"
+			+ "</div>";
+
 	public static final String IMAGE = "[[File:{{{image}}}|{{{title}}}|alt={{{title}}}]]";
 
 	public static final String NOWRAP = "<span style=\"white-space:nowrap;\">{{{1}}}</span><noinclude>{{documentation}}<!--interwikis/categories go inside doc--></noinclude>";
@@ -2310,6 +2318,10 @@ public class WikiTestModel extends WikiModel {
 				return "Hello World!";
 			} else if (name.equals("Image")) {
 				return IMAGE;
+			} else if (name.equals("Yesno")) {
+				return YESNO;
+			} else if (name.equals("In_the_news/image")) {
+				return IN_THE_NEWS_IMAGE;
 			}
 		} else {
 			if (name.equals("Include_Page")) {

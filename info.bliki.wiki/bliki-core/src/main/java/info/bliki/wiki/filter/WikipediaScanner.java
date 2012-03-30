@@ -94,6 +94,13 @@ public class WikipediaScanner {
 			while (true) {
 				ch = fSource[fScannerPosition++];
 				switch (ch) {
+				case '[':
+					int position = findNestedEnd(fSource, '[', ']', fScannerPosition);
+					if (position >= 0) {
+						fScannerPosition = position;
+						continue;
+					}
+					break;
 				case '\n':
 					ch = fSource[fScannerPosition++];
 					// ignore whitespace at the beginning of the line
@@ -762,6 +769,17 @@ public class WikipediaScanner {
 		return resultList;
 	}
 
+	/**
+	 * Read the end of a nested block i.e. something like
+	 * <code>[[...[[  ]]...]]</code>
+	 * 
+	 * @param sourceArray
+	 * @param startCh
+	 * @param endChar
+	 * @param startPosition
+	 * @return the position of the nested end charcters or <code>-1</code> if not
+	 *         found
+	 */
 	public static int findNestedEnd(final char[] sourceArray, final char startCh, final char endChar, int startPosition) {
 		char ch;
 		int level = 1;
