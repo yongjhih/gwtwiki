@@ -5,8 +5,9 @@ import info.bliki.wiki.model.IWikiModel;
 import java.util.List;
 
 /**
- * A template parser function for <code>{{ucfirst: ... }}</code> <i>first
- * character to upper case</i> syntax. See <a href=
+ * A template parser function for <code>{{titleparts: ... }}</code>. This
+ * function separates a pagetitle into segments based on slashes, then returns
+ * some of those segments as output. See <a href=
  * "https://www.mediawiki.org/wiki/Help:Extension:ParserFunctions#.23titleparts"
  * >Mediawiki - Help:Extension:ParserFunctions - Titleparts</a>
  * 
