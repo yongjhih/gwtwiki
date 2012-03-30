@@ -48,6 +48,7 @@ import info.bliki.wiki.template.Subst;
 import info.bliki.wiki.template.Switch;
 import info.bliki.wiki.template.Tag;
 import info.bliki.wiki.template.Time;
+import info.bliki.wiki.template.Titleparts;
 import info.bliki.wiki.template.UC;
 import info.bliki.wiki.template.UCFirst;
 import info.bliki.wiki.template.URLEncode;
@@ -424,6 +425,7 @@ public class Configuration implements IConfiguration {
 		TEMPLATE_FUNCTION_MAP.put("#tag", Tag.CONST);
 		TEMPLATE_FUNCTION_MAP.put("#time", Time.CONST);
 		TEMPLATE_FUNCTION_MAP.put("#timel", Time.CONST);
+		TEMPLATE_FUNCTION_MAP.put("#titleparts", Titleparts.CONST);
 
 		CODE_FORMATTER_MAP.put("abap", new ABAPCodeFilter());
 		CODE_FORMATTER_MAP.put("csharp", new CSharpCodeFilter());

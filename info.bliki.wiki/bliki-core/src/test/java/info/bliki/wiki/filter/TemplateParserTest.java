@@ -563,4 +563,40 @@ public class TemplateParserTest extends FilterTestSupport {
 						.parseTemplates("{{#switch:y|y=1001|d={{#switch:w1001|w0=1|w-0=-8|{{#expr:\n"
 								+ "1001*10{{#ifexpr:1001<0|-8|+1}}}}}}|c={{#expr:1001*100{{#ifexpr: 1001>0|-98|+1}}}}|m={{#expr:1001*1000{{#ifexpr:1001>0|-998|+1}}}}}}"));
 	}
+	
+	public void testTitleparts000() {
+		assertEquals("Talk:Foo/bar/baz/quok", wikiModel.parseTemplates("{{#titleparts: Talk:Foo/bar/baz/quok }}", false));
+	}
+
+	public void testTitleparts001() {
+		assertEquals("Talk:Foo", wikiModel.parseTemplates("{{#titleparts: Talk:Foo/bar/baz/quok | 1 }}", false));
+	}
+	
+	public void testTitleparts002() {
+		assertEquals("Talk:Foo/bar", wikiModel.parseTemplates("{{#titleparts: Talk:Foo/bar/baz/quok | 2 }}", false));
+	}
+	
+	public void testTitleparts003() {
+		assertEquals("Talk:Foo/bar/baz", wikiModel.parseTemplates("{{#titleparts: Talk:Foo/bar/baz/quok | 3 }}", false));
+	}
+	
+	public void testTitlepartsn01() {
+		assertEquals("Talk:Foo/bar/baz", wikiModel.parseTemplates("{{#titleparts: Talk:Foo/bar/baz/quok | -1 }}", false));
+	}
+	
+	public void testTitlepartsn02() {
+		assertEquals("Talk:Foo/bar", wikiModel.parseTemplates("{{#titleparts: Talk:Foo/bar/baz/quok | -2 }}", false));
+	}
+	
+	public void testTitlepartsn03() {
+		assertEquals("Talk:Foo", wikiModel.parseTemplates("{{#titleparts: Talk:Foo/bar/baz/quok | -3 }}", false));
+	}
+	
+	public void testTitlepartsn04() {
+		assertEquals("", wikiModel.parseTemplates("{{#titleparts: Talk:Foo/bar/baz/quok | -4 }}", false));
+	}
+	
+	public void testTitlepartsn05() {
+		assertEquals("", wikiModel.parseTemplates("{{#titleparts: Talk:Foo/bar/baz/quok | -5 }}", false));
+	}
 }
