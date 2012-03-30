@@ -529,7 +529,7 @@ public class Configuration implements IConfiguration {
 	/**
 	 * Limits the template parameter value length
 	 */
-	public final static int TEMPLATE_VALUE_LIMIT = 4096;
+	public final static int TEMPLATE_VALUE_LIMIT = 8192;
 
 	/**
 	 * Limits the recursive call of the AbstractParser parser to a depth of
