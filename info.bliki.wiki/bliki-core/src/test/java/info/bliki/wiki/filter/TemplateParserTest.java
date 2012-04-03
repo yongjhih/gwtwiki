@@ -495,7 +495,7 @@ public class TemplateParserTest extends FilterTestSupport {
 				"{|\n"
 						+ "! | <h2 style=\"background:#cedff2;\">In the news</h2>\n"
 						+ "|-\n"
-						+ "| style=\"color:#000; padding:2px 5px;\" | <div id=\"mp-itn\">[[File:Yoshihiko Noda-1.jpg|Yoshihiko Noda |alt=Yoshihiko Noda ]]\n"
+						+ "| style=\"color:#000; padding:2px 5px;\" | <div id=\"mp-itn\">[[File:Yoshihiko Noda-1.jpg|Yoshihiko Noda|alt=Yoshihiko Noda]]\n"
 						+ "The ruling Democratic Party of Japan selects '''Yoshihiko Noda''' ''(pictured)'' as the country's new prime minister, following the resignation of Naoto Kan\n"
 						+ "</div>\n" + "|}",
 				wikiModel

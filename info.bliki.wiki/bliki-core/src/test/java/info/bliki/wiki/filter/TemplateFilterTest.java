@@ -168,7 +168,7 @@ public class TemplateFilterTest extends FilterTestSupport {
 						+ "<td><a href=\"http://www.bliki.info/wiki/GNU_Lesser_General_Public_License\" title=\"GNU Lesser General Public License\">LGPL</a></td></tr>\n"
 						+ "<tr>\n"
 						+ "<th><a href=\"http://www.bliki.info/wiki/Website\" title=\"Website\">Website</a></th>\n"
-						+ "<td><a class=\"externallink\" href=\"http://www.jamwiki.org/\" rel=\"nofollow\" title=\"http://www.jamwiki.org/\">JAMWiki wiki</a> </td></tr></table></div>\n"
+						+ "<td><a class=\"externallink\" href=\"http://www.jamwiki.org/\" rel=\"nofollow\" title=\"http://www.jamwiki.org/\">JAMWiki wiki</a></td></tr></table></div>\n"
 						+ "", wikiModel.render("{{Infobox_Software\n" + "|name = JAMWiki\n" + "|logo = \n" + "|caption =\n" + "\n"
 						+ "|developer = \n" + "|latest_release_version = 0.6.5\n" + "|latest_release_date = [[March 16]], [[2008]]\n"
 						+ "|latest preview version = 0.6.5 \n" + "|latest preview date = \n" + "|operating_system = [[Cross-platform]]\n"
@@ -372,7 +372,7 @@ public class TemplateFilterTest extends FilterTestSupport {
 						+ "<span style=\"white-space:nowrap;\"><a href=\"http://www.bliki.info/wiki/Template:AcademyAwardBestActor_1961-1980\" title=\"Template:AcademyAwardBestActor 1961-1980\">(1961–1980)</a></span><span style=\"font-weight:bold;\"> ·</span> \n"
 						+ "<span style=\"white-space:nowrap;\"><a href=\"http://www.bliki.info/wiki/Template:AcademyAwardBestActor_1981-2000\" title=\"Template:AcademyAwardBestActor 1981-2000\"><b>(1981–2000)</b></a></span><span style=\"font-weight:bold;\"> ·</span> \n"
 						+ "<span style=\"white-space:nowrap;\"><a href=\"http://www.bliki.info/wiki/Template:AcademyAwardBestActor_2001-2020\" title=\"Template:AcademyAwardBestActor 2001-2020\">(2001-present)</a></span>\n"
-						+ "</p></div> </div></td>\n" + "</tr>\n" + "</table></td>\n" + "</tr>\n" + "</table>", wikiModel.render(NAVBOX_STRING));
+						+ "</p></div></div></td>\n" + "</tr>\n" + "</table></td>\n" + "</tr>\n" + "</table>", wikiModel.render(NAVBOX_STRING));
 	}
 
 	public void test11() {

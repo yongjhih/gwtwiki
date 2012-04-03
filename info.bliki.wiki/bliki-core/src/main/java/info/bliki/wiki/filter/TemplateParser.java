@@ -681,7 +681,18 @@ public class TemplateParser extends AbstractParser {
 
 	/**
 	 * Create a single parameter defined in a template call and add it to the
-	 * parameters map
+	 * parameters map.
+	 * 
+	 * <p>
+	 * See <a href="http://en.wikipedia.org/wiki/Help:Template">Help:Template</a>:
+	 * <i>Remember that whitespace characters (spaces, tabs, carriage returns and
+	 * line feeds) are not automatically stripped from the start and end of
+	 * unnamed parameters (as they are from named parameters). Including such
+	 * characters (or any other non-visible characters in any parameters) may in
+	 * some cases affect the template's behaviour in unexpected ways. (Template
+	 * designers can use {{StripWhitespace}} to remove unwanted whitespace in
+	 * unnamed parameters.)</i>
+	 * </p>
 	 * 
 	 */
 	private static void createSingleParameter(String srcString, Map<String, String> map, List<String> unnamedParams,
@@ -738,14 +749,12 @@ public class TemplateParser extends AbstractParser {
 
 		} finally {
 			if (currOffset > lastOffset) {
-				if (trimNewlineRight) {
-					value = Utils.trimNewlineRight(srcString.substring(lastOffset, currOffset));
-				} else {
-					value = srcString.substring(lastOffset, currOffset).trim();
-				}
+				value = srcString.substring(lastOffset, currOffset);
 				if (parameter != null) {
-					map.put(parameter, value);
+					map.put(parameter, value.trim());
 				} else {
+					// whitespace characters are not automatically stripped from the start
+					// and end of unnamed parameters!
 					unnamedParams.add(value);
 				}
 			}
