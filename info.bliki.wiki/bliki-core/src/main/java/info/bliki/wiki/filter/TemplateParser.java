@@ -597,9 +597,9 @@ public class TemplateParser extends AbstractParser {
 		List<String> unnamedParameters = new ArrayList<String>();
 		for (int i = 1; i < parts.size(); i++) {
 			if (i == parts.size() - 1) {
-				createSingleParameter(parts.get(i), parameterMap, unnamedParameters, true);
+				createSingleParameter(parts.get(i), parameterMap, unnamedParameters);
 			} else {
-				createSingleParameter(parts.get(i), parameterMap, unnamedParameters, false);
+				createSingleParameter(parts.get(i), parameterMap, unnamedParameters);
 			}
 		}
 		mergeParameters(parameterMap, unnamedParameters);
@@ -695,8 +695,7 @@ public class TemplateParser extends AbstractParser {
 	 * </p>
 	 * 
 	 */
-	private static void createSingleParameter(String srcString, Map<String, String> map, List<String> unnamedParams,
-			boolean trimNewlineRight) {
+	private static void createSingleParameter(String srcString, Map<String, String> map, List<String> unnamedParams) {
 		int currOffset = 0;
 		char[] src = srcString.toCharArray();
 		int endOffset = srcString.length();
