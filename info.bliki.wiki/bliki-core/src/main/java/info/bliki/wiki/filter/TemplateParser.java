@@ -680,8 +680,8 @@ public class TemplateParser extends AbstractParser {
 	}
 
 	/**
-	 * Create a single parameter defined in a template call and add it to the
-	 * parameters map.
+	 * Create a single parameter, defined in a template call, and add it to the
+	 * <b>named parmeters map</b> or <b>unnamed parameter list</b>
 	 * 
 	 * <p>
 	 * See <a href="http://en.wikipedia.org/wiki/Help:Template">Help:Template</a>:
@@ -694,8 +694,11 @@ public class TemplateParser extends AbstractParser {
 	 * unnamed parameters.)</i>
 	 * </p>
 	 * 
+	 * @param srcString
+	 * @param namedParameterMap
+	 * @param unnamedParams
 	 */
-	private static void createSingleParameter(String srcString, Map<String, String> map, List<String> unnamedParams) {
+	private static void createSingleParameter(String srcString, Map<String, String> namedParameterMap, List<String> unnamedParams) {
 		int currOffset = 0;
 		char[] src = srcString.toCharArray();
 		int endOffset = srcString.length();
@@ -750,7 +753,7 @@ public class TemplateParser extends AbstractParser {
 			if (currOffset > lastOffset) {
 				value = srcString.substring(lastOffset, currOffset);
 				if (parameter != null) {
-					map.put(parameter, value.trim());
+					namedParameterMap.put(parameter, value.trim());
 				} else {
 					// whitespace characters are not automatically stripped from the start
 					// and end of unnamed parameters!
