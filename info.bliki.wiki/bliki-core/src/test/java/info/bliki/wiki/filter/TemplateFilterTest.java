@@ -22,7 +22,9 @@ public class TemplateFilterTest extends FilterTestSupport {
 
 	public void testTemplateCall3() {
 		// see method WikiTestModel#getRawWikiContent()
-		assertEquals("\n" + "<p>b) First: Test1 Second: c) First: sdfsf Second: klj  \n" + "</p>", wikiModel.render("{{templ1\n"
+		assertEquals("\n" + 
+				"<p>b) First: Test1 Second: c) First: sdfsf Second: klj </p>\n" + 
+				"", wikiModel.render("{{templ1\n"
 				+ " | a = Test1\n" + " | {{templ2|sdfsf|klj}} \n" + "}}\n" + ""));
 	}
 
@@ -383,6 +385,13 @@ public class TemplateFilterTest extends FilterTestSupport {
 						.render("[[Template:AcademyAwardBestActor_1981-2000|<span title=\"View this template\" style=\";background: #EEDD82;border:none;;\">v</span>]]"));
 	}
 
+	public void testPipe001a() {
+		assertEquals("\n" + 
+				"<p>Hello World\n" + 
+				"Hello World\n" + 
+				"</p>", wikiModel.render("{{2x|Hello World\n" + "}}"));
+	}
+	
 	public void testPipe001() {
 		assertEquals("\n" + "<p>hello worldhello world </p>", wikiModel.render("{{2x|hello world" + "}} "));
 	}

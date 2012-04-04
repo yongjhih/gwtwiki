@@ -101,7 +101,9 @@ public class TemplateParserTest extends FilterTestSupport {
 
 	public void testTemplateCall3() {
 		// see method WikiTestModel#getRawWikiContent()
-		assertEquals("b) First: Test1 Second: c) First: sdfsf Second: klj  \n" + "", wikiModel.parseTemplates("{{templ1\n"
+		assertEquals("b) First: Test1 Second: c) First: sdfsf Second: klj \n" + 
+				"\n" +
+				"", wikiModel.parseTemplates("{{templ1\n"
 				+ " | a = Test1\n" + " |{{templ2|sdfsf|klj}} \n" + "}}\n" + "", false));
 	}
 
@@ -469,7 +471,9 @@ public class TemplateParserTest extends FilterTestSupport {
 	}
 
 	public void testPipe001a() {
-		assertEquals("Hello World Hello World ", wikiModel.parseTemplates("{{2x|Hello World\n" + "}}", false));
+		assertEquals("Hello World\n" + 
+				"Hello World\n" + 
+				"", wikiModel.parseTemplates("{{2x|Hello World\n" + "}}", false));
 	}
 
 	public void testPipe002() {
