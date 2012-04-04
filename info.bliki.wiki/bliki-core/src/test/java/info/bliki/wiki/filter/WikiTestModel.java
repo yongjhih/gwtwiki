@@ -17,6 +17,25 @@ import java.util.Map;
  * 
  */
 public class WikiTestModel extends WikiModel {
+	/**
+	 * Issue 77
+	 */
+	public static final String MAIN_PAGE_PANEL = "{| style=\"width: 100%; height: auto; border: 1px solid #88A; background-color: #ACF; vertical-align: top; margin: 0em 0em 0.5em 0em; border-spacing: 0.6em;\" cellspacing=\"6\"\n"
+			+ "|-\n"
+			+ "{{{1}}}{{#if:{{{2|}}}|\n"
+			+ "{{!}}-\n"
+			+ "{{{2}}}{{#if:{{{3|}}}|\n"
+			+ "{{!}}-\n"
+			+ "{{{3}}}{{#if:{{{4|}}}|\n" + "{{!}}-\n" + "{{{4}}}{{#if:{{{5|}}}|\n" + "{{!}}-\n" + "{{{5}}}}}}}}}}}\n" + "|}";
+	/**
+	 * Issue 77
+	 */
+	public static final String MAIN_PAGE_SUBPANEL = "| style=\"width: 100%; vertical-align:top; color:#000; border: 3px double #AAA; background-color: #ffffff; padding: 0.5em; margin: 0em;\" colspan=\"2\" |\n"
+			+ "{| style=\"vertical-align: top; margin: 0em; width: 100% !important; width: auto; display: table !important; display: inline; background-color: transparent;\"\n"
+			+ "{{#if:{{{title|}}}|\n"
+			+ "! colspan=\"2\" style=\"background:#F0F0F0; margin: 0em; height: 1em; font-weight:bold; border:1px solid #AAA; text-align:left; color:#000;\" {{!}} <div style=\"float:right;\"></div><h1 style=\"text-align: left; font-size: 1.2em; border: none; margin: 0; padding: 1.5px 0 2px 4px;\">'''{{{title}}}'''</h1></div>}}\n"
+			+ "|-\n" + "|\n" + "{{{1}}}\n" + "|}";
+
 	public static final String YESNO = "{{#switch: {{lc: {{{1|¬}}} }}\n" + " |no\n" + " |n\n"
 			+ " |0        = {{{no|<!-- null -->}}}\n" + " |         = {{{blank|{{{no|<!-- null -->}}}}}}\n" + " |¬        = {{{¬|}}}\n"
 			+ " |yes\n" + " |y\n" + " |1        = {{{yes|yes}}}\n" + " |#default = {{{def|{{{yes|yes}}}}}}\n" + "}}";
@@ -2322,6 +2341,10 @@ public class WikiTestModel extends WikiModel {
 				return YESNO;
 			} else if (name.equals("In_the_news/image")) {
 				return IN_THE_NEWS_IMAGE;
+			} else if (name.equals("Main_Page_panel")) {
+				return MAIN_PAGE_PANEL;
+			} else if (name.equals("Main_Page_subpanel")) {
+				return MAIN_PAGE_SUBPANEL;
 			}
 		} else {
 			if (name.equals("Include_Page")) {

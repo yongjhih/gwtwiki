@@ -22,9 +22,7 @@ public class TemplateFilterTest extends FilterTestSupport {
 
 	public void testTemplateCall3() {
 		// see method WikiTestModel#getRawWikiContent()
-		assertEquals("\n" + 
-				"<p>b) First: Test1 Second: c) First: sdfsf Second: klj </p>\n" + 
-				"", wikiModel.render("{{templ1\n"
+		assertEquals("\n" + "<p>b) First: Test1 Second: c) First: sdfsf Second: klj </p>\n" + "", wikiModel.render("{{templ1\n"
 				+ " | a = Test1\n" + " | {{templ2|sdfsf|klj}} \n" + "}}\n" + ""));
 	}
 
@@ -386,12 +384,9 @@ public class TemplateFilterTest extends FilterTestSupport {
 	}
 
 	public void testPipe001a() {
-		assertEquals("\n" + 
-				"<p>Hello World\n" + 
-				"Hello World\n" + 
-				"</p>", wikiModel.render("{{2x|Hello World\n" + "}}"));
+		assertEquals("\n" + "<p>Hello World\n" + "Hello World\n" + "</p>", wikiModel.render("{{2x|Hello World\n" + "}}"));
 	}
-	
+
 	public void testPipe001() {
 		assertEquals("\n" + "<p>hello worldhello world </p>", wikiModel.render("{{2x|hello world" + "}} "));
 	}
@@ -692,22 +687,22 @@ public class TemplateFilterTest extends FilterTestSupport {
 								+ "| 1.9 ||  || 1.8.1 + ECMAScript 5 Compliance ||  || 4 ||  ||  || || \n" + "|}\n" + "\n" + "<references/>\n"));
 	}
 
-	public void testIssue77() {
+	public void testIssue77_001() {
 		assertEquals(
-				"\n" + 
-				"<div style=\"page-break-inside: avoid;\">\n" + 
-				"<table>\n" + 
-				"<tr>\n" + 
-				"<th><h2 style=\"background:#cedff2;\">In the news</h2></th></tr>\n" + 
-				"<tr>\n" + 
-				"<td>\n" + 
-				"<div>\n" + 
-				"<div style=\"float:right;margin-left:0.5em;\">\n" + 
-				"<div style=\"height:100px;width:100px;\"><a class=\"internal\" href=\"http://www.bliki.info/wiki/File:Yoshihiko_Noda-1.jpg\" title=\"Yoshihiko Noda\"><img src=\"http://www.bliki.info/wiki/100px-Yoshihiko_Noda-1.jpg\" alt=\"Yoshihiko Noda\" title=\"Yoshihiko Noda\" class=\"location-none\" height=\"100\" width=\"100\" />\n" + 
-				"</a></div>\n" + 
-				"\n" + 
-				"</div>\n" + 
-				"The ruling Democratic Party of Japan selects <b>Yoshihiko Noda</b> <i>(pictured)</i> as the country&#39;s new Prime Minister of Japan|prime minister, following the resignation of Naoto Kan.</div></td></tr></table></div>",
+				"\n"
+						+ "<div style=\"page-break-inside: avoid;\">\n"
+						+ "<table>\n"
+						+ "<tr>\n"
+						+ "<th><h2 style=\"background:#cedff2;\">In the news</h2></th></tr>\n"
+						+ "<tr>\n"
+						+ "<td>\n"
+						+ "<div>\n"
+						+ "<div style=\"float:right;margin-left:0.5em;\">\n"
+						+ "<div style=\"height:100px;width:100px;\"><a class=\"internal\" href=\"http://www.bliki.info/wiki/File:Yoshihiko_Noda-1.jpg\" title=\"Yoshihiko Noda\"><img src=\"http://www.bliki.info/wiki/100px-Yoshihiko_Noda-1.jpg\" alt=\"Yoshihiko Noda\" title=\"Yoshihiko Noda\" class=\"location-none\" height=\"100\" width=\"100\" />\n"
+						+ "</a></div>\n"
+						+ "\n"
+						+ "</div>\n"
+						+ "The ruling Democratic Party of Japan selects <b>Yoshihiko Noda</b> <i>(pictured)</i> as the country&#39;s new Prime Minister of Japan|prime minister, following the resignation of Naoto Kan.</div></td></tr></table></div>",
 				wikiModel
 						.render("{|\n"
 								+ "! | <h2 style=\"background:#cedff2;\">In the news</h2>\n"
@@ -723,6 +718,42 @@ public class TemplateFilterTest extends FilterTestSupport {
 								+ "|}"));
 	}
 
+	public void testIssue77_002() {
+		assertEquals("\n" + 
+				"<div style=\"page-break-inside: avoid;\">\n" + 
+				"<table cellspacing=\"6\" style=\"width: 100%; height: auto; border: 1px solid #88A; background-color: #ACF; vertical-align: top; margin: 0em 0em 0.5em 0em; border-spacing: 0.6em;\">\n" + 
+				"<tr>\n" + 
+				"<td colspan=\"2\" style=\"width: 100%; vertical-align:top; color:#000; border: 3px double #AAA; background-color: #ffffff; padding: 0.5em; margin: 0em;\">\n" + 
+				"\n" + 
+				"<div style=\"page-break-inside: avoid;\">\n" + 
+				"<table style=\"vertical-align: top; margin: 0em; width: 100% !important; width: auto; display: table !important; display: inline; background-color: transparent;\">\n" + 
+				"<tr>\n" + 
+				"<th colspan=\"2\" style=\"background:#F0F0F0; margin: 0em; height: 1em; font-weight:bold; border:1px solid #AAA; text-align:left; color:#000;\">\n" + 
+				"<div style=\"float:right;\" /><h1 style=\"text-align: left; font-size: 1.2em; border: none; margin: 0; padding: 1.5px 0 2px 4px;\"><b>Knowledge groups</b></h1></th></tr>\n" + 
+				"<tr>\n" + 
+				"<td>\n" + 
+				"TEST1</td></tr></table></div></td></tr>\n" + 
+				"<tr>\n" + 
+				"<td colspan=\"2\" style=\"width: 100%; vertical-align:top; color:#000; border: 3px double #AAA; background-color: #ffffff; padding: 0.5em; margin: 0em;\">\n" + 
+				"\n" + 
+				"<div style=\"page-break-inside: avoid;\">\n" + 
+				"<table style=\"vertical-align: top; margin: 0em; width: 100% !important; width: auto; display: table !important; display: inline; background-color: transparent;\">\n" + 
+				"<tr>\n" + 
+				"<th colspan=\"2\" style=\"background:#F0F0F0; margin: 0em; height: 1em; font-weight:bold; border:1px solid #AAA; text-align:left; color:#000;\">\n" + 
+				"<div style=\"float:right;\" /><h1 style=\"text-align: left; font-size: 1.2em; border: none; margin: 0; padding: 1.5px 0 2px 4px;\"><b>Sister projects</b></h1></th></tr>\n" + 
+				"<tr>\n" + 
+				"<td>\n" + 
+				"TEST2</td></tr></table></div></td></tr></table></div>", wikiModel.render("{| style=\"width: 100%; height: auto; border: 1px solid #88A; background-color: #ACF; vertical-align: top; margin: 0em 0em 0.5em 0em; border-spacing: 0.6em;\" cellspacing=\"6\"\n" + 
+				"|-\n" + 
+				"{{Main Page subpanel|column=both|title=Knowledge groups|1=\n" + 
+				"TEST1\n" + 
+				"}}\n" + 
+				"{{!}}-\n" + 
+				"{{Main Page subpanel|column=both|title=Sister projects|1=\n" + 
+				"TEST2\n" + 
+				"}}\n" + 
+				"|}"));
+	}
 	/**
 	 * This is a date dependent template test, so only activate it for local tests
 	 * please.

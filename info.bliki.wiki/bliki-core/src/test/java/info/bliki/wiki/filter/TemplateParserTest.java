@@ -101,9 +101,7 @@ public class TemplateParserTest extends FilterTestSupport {
 
 	public void testTemplateCall3() {
 		// see method WikiTestModel#getRawWikiContent()
-		assertEquals("b) First: Test1 Second: c) First: sdfsf Second: klj \n" + 
-				"\n" +
-				"", wikiModel.parseTemplates("{{templ1\n"
+		assertEquals("b) First: Test1 Second: c) First: sdfsf Second: klj \n" + "\n" + "", wikiModel.parseTemplates("{{templ1\n"
 				+ " | a = Test1\n" + " |{{templ2|sdfsf|klj}} \n" + "}}\n" + "", false));
 	}
 
@@ -471,9 +469,7 @@ public class TemplateParserTest extends FilterTestSupport {
 	}
 
 	public void testPipe001a() {
-		assertEquals("Hello World\n" + 
-				"Hello World\n" + 
-				"", wikiModel.parseTemplates("{{2x|Hello World\n" + "}}", false));
+		assertEquals("Hello World\n" + "Hello World\n" + "", wikiModel.parseTemplates("{{2x|Hello World\n" + "}}", false));
 	}
 
 	public void testPipe002() {
@@ -605,16 +601,16 @@ public class TemplateParserTest extends FilterTestSupport {
 		assertEquals("", wikiModel.parseTemplates("{{#titleparts: Talk:Foo/bar/baz/quok | -5 }}", false));
 	}
 
-	public void testIssue77() {
+	public void testIssue77_001() {
 		assertEquals(
-				"{|\n" + 
-				"! | <h2 style=\"background:#cedff2;\">In the news</h2>\n" + 
-				"|-\n" + 
-				"| | <div><div style=\"float:right;margin-left:0.5em;\">\n" + 
-				"[[File:Yoshihiko Noda-1.jpg|100x100px||Yoshihiko Noda|alt=Yoshihiko Noda|link=File:Yoshihiko Noda-1.jpg]]\n" + 
-				"</div>\n" + 
-				"The ruling Democratic Party of Japan selects '''Yoshihiko Noda''' ''(pictured)'' as the country's new Prime Minister of Japan|prime minister, following the resignation of Naoto Kan.</div>\n" + 
-				"|}",
+				"{|\n"
+						+ "! | <h2 style=\"background:#cedff2;\">In the news</h2>\n"
+						+ "|-\n"
+						+ "| | <div><div style=\"float:right;margin-left:0.5em;\">\n"
+						+ "[[File:Yoshihiko Noda-1.jpg|100x100px||Yoshihiko Noda|alt=Yoshihiko Noda|link=File:Yoshihiko Noda-1.jpg]]\n"
+						+ "</div>\n"
+						+ "The ruling Democratic Party of Japan selects '''Yoshihiko Noda''' ''(pictured)'' as the country's new Prime Minister of Japan|prime minister, following the resignation of Naoto Kan.</div>\n"
+						+ "|}",
 				wikiModel
 						.parseTemplates("{|\n"
 								+ "! | <h2 style=\"background:#cedff2;\">In the news</h2>\n"
@@ -628,5 +624,25 @@ public class TemplateParserTest extends FilterTestSupport {
 								+ "}}\n"
 								+ "The ruling Democratic Party of Japan selects '''Yoshihiko Noda''' ''(pictured)'' as the country's new Prime Minister of Japan|prime minister, following the resignation of Naoto Kan.</div>\n"
 								+ "|}"));
+	}
+
+	public void testIssue77_002() {
+		assertEquals(
+				"{| style=\"width: 100%; height: auto; border: 1px solid #88A; background-color: #ACF; vertical-align: top; margin: 0em 0em 0.5em 0em; border-spacing: 0.6em;\" cellspacing=\"6\"\n"
+						+ "|-\n"
+						+ "| style=\"width: 100%; vertical-align:top; color:#000; border: 3px double #AAA; background-color: #ffffff; padding: 0.5em; margin: 0em;\" colspan=\"2\" |\n"
+						+ "{| style=\"vertical-align: top; margin: 0em; width: 100% !important; width: auto; display: table !important; display: inline; background-color: transparent;\"\n"
+						+ "! colspan=\"2\" style=\"background:#F0F0F0; margin: 0em; height: 1em; font-weight:bold; border:1px solid #AAA; text-align:left; color:#000;\" | <div style=\"float:right;\"></div><h1 style=\"text-align: left; font-size: 1.2em; border: none; margin: 0; padding: 1.5px 0 2px 4px;\">'''Knowledge groups'''</h1></div>\n"
+						+ "|-\n"
+						+ "|\n"
+						+ "TEST1\n"
+						+ "|}\n"
+						+ "|-\n"
+						+ "| style=\"width: 100%; vertical-align:top; color:#000; border: 3px double #AAA; background-color: #ffffff; padding: 0.5em; margin: 0em;\" colspan=\"2\" |\n"
+						+ "{| style=\"vertical-align: top; margin: 0em; width: 100% !important; width: auto; display: table !important; display: inline; background-color: transparent;\"\n"
+						+ "! colspan=\"2\" style=\"background:#F0F0F0; margin: 0em; height: 1em; font-weight:bold; border:1px solid #AAA; text-align:left; color:#000;\" | <div style=\"float:right;\"></div><h1 style=\"text-align: left; font-size: 1.2em; border: none; margin: 0; padding: 1.5px 0 2px 4px;\">'''Sister projects'''</h1></div>\n"
+						+ "|-\n" + "|\n" + "TEST2\n" + "|}\n" + "|}", wikiModel.parseTemplates("{{Main Page panel|\n"
+						+ "{{Main Page subpanel|column=both|title=Knowledge groups|1=\n" + "TEST1\n" + "}}\n" + "|\n"
+						+ "{{Main Page subpanel|column=both|title=Sister projects|1=\n" + "TEST2\n" + "}}\n" + "}}"));
 	}
 }

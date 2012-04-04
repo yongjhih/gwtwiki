@@ -102,6 +102,10 @@ public class HTMLCreatorExample {
 		testWikipediaENAPI("HTTP-Statuscode", "http://de.wikipedia.org/w/api.php");
 	}
 
+	public static void testCreator011() {
+		testWikipediaENAPI("Main Page", "http://simple.wikipedia.org/w/api.php");
+	}
+
 	public static void main(String[] args) {
 		testCreator001();
 	}
