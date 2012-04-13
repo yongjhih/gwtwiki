@@ -24,8 +24,7 @@ public class TimeFilterTest extends FilterTestSupport {
 
 	public void testTime001() {
 		// TODO implement more options for time
-		assertEquals("\n" + "<p><span class=\"error\">Error: invalid time</span></p>", wikiModel
-				.render("{{#time: d F Y | 29 Feb 2004 }}"));
+		assertEquals("\n" + "<p>29 February 2004</p>", wikiModel.render("{{#time: d F Y | 29 Feb 2004 }}"));
 	}
 
 	public void testTime002() {
@@ -59,8 +58,10 @@ public class TimeFilterTest extends FilterTestSupport {
 		// wikiModel.render("{{#time: i's\" }}"));
 	}
 
-	public void testTime007() {
-		assertEquals("\n" + "<p><span class=\"error\">Error: invalid time</span></p>", wikiModel.render("{{#time: r|now}}"));
-	}
+	// current time dependent test
+	// public void testTime007() {
+	// assertEquals("\n" + "<p>Fri, 13 Apr 2012 19:31:04 +0000</p>",
+	// wikiModel.render("{{#time: r|now}}"));
+	// }
 
 }

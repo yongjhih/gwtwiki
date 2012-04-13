@@ -1,11 +1,10 @@
 package info.bliki.wiki.template;
 
 import info.bliki.wiki.model.IWikiModel;
-import info.bliki.wiki.template.AbstractTemplateFunction;
-import info.bliki.wiki.template.ITemplateFunction;
+import info.bliki.wiki.template.dates.StringToTime;
+import info.bliki.wiki.template.dates.StringToTimeException;
 
 import java.text.DateFormat;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -142,7 +141,7 @@ public class Time extends AbstractTemplateFunction {
 	 * Creates a new parser for the #time template function.
 	 */
 	public Time() {
-		 RFC822DATEFORMAT = new SimpleDateFormat("EEE', 'dd' 'MMM' 'yyyy' 'HH:mm:ss' '+0000", Locale.US);
+		RFC822DATEFORMAT = new SimpleDateFormat("EEE', 'dd' 'MMM' 'yyyy' 'HH:mm:ss' '+0000", Locale.US);
 	}
 
 	public String parseFunction(List<String> list, IWikiModel model, char[] src, int beginIndex, int endIndex) {
@@ -150,11 +149,11 @@ public class Time extends AbstractTemplateFunction {
 			Date date;
 			DateFormat df = DateFormat.getDateInstance(DateFormat.MEDIUM, model.getLocale());
 			if (list.size() > 1) {
-				String dateTimeParameter = list.get(1);
+				String dateTimeParameter = parse(list.get(1), model);
 
 				try {
-					date = df.parse(dateTimeParameter);
-				} catch (ParseException e) {
+					date = new StringToTime(dateTimeParameter);
+				} catch (StringToTimeException e) {
 					return "<span class=\"error\">Error: invalid time</span>";
 				}
 			} else {
