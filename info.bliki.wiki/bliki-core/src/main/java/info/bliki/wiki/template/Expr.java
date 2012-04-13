@@ -12,7 +12,9 @@ import java.util.List;
  * 
  * See <a href="http://www.mediawiki.org/wiki/Help:Extension:ParserFunctions">
  * Mediwiki's Help:Extension:ParserFunctions</a> See: <a href="http://svn.wikimedia.org/viewvc/mediawiki/trunk/extensions/ParserFunctions/Expr.php?view=markup"
- * >Expr.php in MediaWiki SVN</a>
+ * >Expr.php in MediaWiki SVN</a> or<a
+ * href="http://en.wikipedia.org/wiki/Help:Calculation">Wikipedia -
+ * Help:Calculation</a>.
  */
 public class Expr extends AbstractTemplateFunction {
 	public final static ITemplateFunction CONST = new Expr();
