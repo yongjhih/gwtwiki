@@ -10,18 +10,17 @@ import java.util.List;
  * >Wikipedia-Help:Substitution</a>
  * 
  */
-public class Subst extends AbstractTemplateFunction {
+public class Subst extends Safesubst {
 	public final static ITemplateFunction CONST = new Subst();
 
 	public Subst() {
 
 	}
 
-	public String parseFunction(List<String> parts, IWikiModel model, char[] src, int beginIndex, int endIndex) {
-		StringBuilder template = new StringBuilder(endIndex - beginIndex + 4);
-		template.append("{{");
-		template.append(src, beginIndex, endIndex - beginIndex);
-		template.append("}}");
-		return parse(template.toString(), model);
+	public String parseFunction(List<String> parts1, IWikiModel model, char[] src, int beginIndex, int endIndex, boolean isSubst) {
+		if (!model.isTemplateTopic()) {
+			return super.parseFunction(parts1, model,src, beginIndex,endIndex,isSubst);
+		}
+		return "";
 	}
 }

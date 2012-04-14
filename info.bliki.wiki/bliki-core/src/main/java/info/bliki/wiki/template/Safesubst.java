@@ -1,7 +1,11 @@
 package info.bliki.wiki.template;
 
+import info.bliki.wiki.filter.TemplateParser;
 import info.bliki.wiki.model.IWikiModel;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 /**
@@ -17,13 +21,57 @@ public class Safesubst extends AbstractTemplateFunction {
 
 	}
 
-	public String parseFunction(List<String> parts, IWikiModel model, char[] src, int beginIndex, int endIndex) {
-		if (model.isTemplateTopic()) {
-			StringBuilder template = new StringBuilder(endIndex - beginIndex + 4);
-			template.append("{{");
-			template.append(src, beginIndex, endIndex - beginIndex);
-			template.append("}}");
-			return parse(template.toString(), model);
+	public String parseFunction(List<String> parts1, IWikiModel model, char[] src, int beginIndex, int endIndex, boolean isSubst) {
+		String substArg = new String(src, beginIndex, endIndex - beginIndex);
+		String substituted = parsePreprocess(substArg, model, null);
+		char[] src2 = substituted.toCharArray();
+
+		Object[] objs = TemplateParser.createParameterMap(src2, 0, src2.length);
+		List<String> parts = (List<String>) objs[0];
+		String templateName = ((String) objs[1]).trim();
+
+		int currOffset = TemplateParser.checkParserFunction(substituted);
+		if (currOffset > 0) {
+			String function = substituted.substring(0, currOffset - 1).trim();
+			if (function != null) {
+				ITemplateFunction templateFunction = model.getTemplateFunction(function);
+				if (templateFunction != null) {
+					// if (function.charAt(0) == '#') {
+					// #if:, #ifeq:,...
+					parts.set(0, templateName.substring(currOffset));
+					String plainContent;
+					try {
+						plainContent = templateFunction.parseFunction(parts, model, src2, currOffset, src2.length, true);
+						if (plainContent != null) {
+							return plainContent;
+						}
+					} catch (IOException e) {
+					}
+				}
+				return "";
+			}
+		}
+
+		LinkedHashMap<String, String> parameterMap = new LinkedHashMap<String, String>();
+		List<String> unnamedParameters = new ArrayList<String>();
+		for (int i = 1; i < parts.size(); i++) {
+			if (i == parts.size() - 1) {
+				TemplateParser.createSingleParameter(parts.get(i), parameterMap, unnamedParameters);
+			} else {
+				TemplateParser.createSingleParameter(parts.get(i), parameterMap, unnamedParameters);
+			}
+		}
+		TemplateParser.mergeParameters(parameterMap, unnamedParameters);
+
+		String plainContent;
+		if (templateName.length() > 0 && templateName.charAt(0) == ':') {
+			plainContent = model.getRawWikiContent("", templateName.substring(1), parameterMap);
+		} else {
+			plainContent = model.getRawWikiContent(model.getTemplateNamespace(), templateName, parameterMap);
+		}
+
+		if (plainContent != null) {
+			return parsePreprocess(plainContent, model, parameterMap);
 		}
 		return "";
 	}

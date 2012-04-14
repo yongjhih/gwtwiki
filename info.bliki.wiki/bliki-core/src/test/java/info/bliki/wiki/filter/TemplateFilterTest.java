@@ -11,7 +11,7 @@ public class TemplateFilterTest extends FilterTestSupport {
 	public static Test suite() {
 		return new TestSuite(TemplateFilterTest.class);
 	}
-
+	
 	public void testTemplate06() {
 		assertEquals("\n" + "<p>start- 5.0 equals +5 -end</p>", wikiModel.render("start- {{ifeq|5.0|+5}} -end"));
 	}
@@ -719,41 +719,56 @@ public class TemplateFilterTest extends FilterTestSupport {
 	}
 
 	public void testIssue77_002() {
-		assertEquals("\n" + 
-				"<div style=\"page-break-inside: avoid;\">\n" + 
-				"<table cellspacing=\"6\" style=\"width: 100%; height: auto; border: 1px solid #88A; background-color: #ACF; vertical-align: top; margin: 0em 0em 0.5em 0em; border-spacing: 0.6em;\">\n" + 
-				"<tr>\n" + 
-				"<td colspan=\"2\" style=\"width: 100%; vertical-align:top; color:#000; border: 3px double #AAA; background-color: #ffffff; padding: 0.5em; margin: 0em;\">\n" + 
-				"\n" + 
-				"<div style=\"page-break-inside: avoid;\">\n" + 
-				"<table style=\"vertical-align: top; margin: 0em; width: 100% !important; width: auto; display: table !important; display: inline; background-color: transparent;\">\n" + 
-				"<tr>\n" + 
-				"<th colspan=\"2\" style=\"background:#F0F0F0; margin: 0em; height: 1em; font-weight:bold; border:1px solid #AAA; text-align:left; color:#000;\">\n" + 
-				"<div style=\"float:right;\" /><h1 style=\"text-align: left; font-size: 1.2em; border: none; margin: 0; padding: 1.5px 0 2px 4px;\"><b>Knowledge groups</b></h1></th></tr>\n" + 
-				"<tr>\n" + 
-				"<td>\n" + 
-				"TEST1</td></tr></table></div></td></tr>\n" + 
-				"<tr>\n" + 
-				"<td colspan=\"2\" style=\"width: 100%; vertical-align:top; color:#000; border: 3px double #AAA; background-color: #ffffff; padding: 0.5em; margin: 0em;\">\n" + 
-				"\n" + 
-				"<div style=\"page-break-inside: avoid;\">\n" + 
-				"<table style=\"vertical-align: top; margin: 0em; width: 100% !important; width: auto; display: table !important; display: inline; background-color: transparent;\">\n" + 
-				"<tr>\n" + 
-				"<th colspan=\"2\" style=\"background:#F0F0F0; margin: 0em; height: 1em; font-weight:bold; border:1px solid #AAA; text-align:left; color:#000;\">\n" + 
-				"<div style=\"float:right;\" /><h1 style=\"text-align: left; font-size: 1.2em; border: none; margin: 0; padding: 1.5px 0 2px 4px;\"><b>Sister projects</b></h1></th></tr>\n" + 
-				"<tr>\n" + 
-				"<td>\n" + 
-				"TEST2</td></tr></table></div></td></tr></table></div>", wikiModel.render("{| style=\"width: 100%; height: auto; border: 1px solid #88A; background-color: #ACF; vertical-align: top; margin: 0em 0em 0.5em 0em; border-spacing: 0.6em;\" cellspacing=\"6\"\n" + 
-				"|-\n" + 
-				"{{Main Page subpanel|column=both|title=Knowledge groups|1=\n" + 
-				"TEST1\n" + 
-				"}}\n" + 
-				"{{!}}-\n" + 
-				"{{Main Page subpanel|column=both|title=Sister projects|1=\n" + 
-				"TEST2\n" + 
-				"}}\n" + 
-				"|}"));
+		assertEquals(
+				"\n"
+						+ "<div style=\"page-break-inside: avoid;\">\n"
+						+ "<table cellspacing=\"6\" style=\"width: 100%; height: auto; border: 1px solid #88A; background-color: #ACF; vertical-align: top; margin: 0em 0em 0.5em 0em; border-spacing: 0.6em;\">\n"
+						+ "<tr>\n"
+						+ "<td colspan=\"2\" style=\"width: 100%; vertical-align:top; color:#000; border: 3px double #AAA; background-color: #ffffff; padding: 0.5em; margin: 0em;\">\n"
+						+ "\n"
+						+ "<div style=\"page-break-inside: avoid;\">\n"
+						+ "<table style=\"vertical-align: top; margin: 0em; width: 100% !important; width: auto; display: table !important; display: inline; background-color: transparent;\">\n"
+						+ "<tr>\n"
+						+ "<th colspan=\"2\" style=\"background:#F0F0F0; margin: 0em; height: 1em; font-weight:bold; border:1px solid #AAA; text-align:left; color:#000;\">\n"
+						+ "<div style=\"float:right;\" /><h1 style=\"text-align: left; font-size: 1.2em; border: none; margin: 0; padding: 1.5px 0 2px 4px;\"><b>Knowledge groups</b></h1></th></tr>\n"
+						+ "<tr>\n"
+						+ "<td>\n"
+						+ "TEST1</td></tr></table></div></td></tr>\n"
+						+ "<tr>\n"
+						+ "<td colspan=\"2\" style=\"width: 100%; vertical-align:top; color:#000; border: 3px double #AAA; background-color: #ffffff; padding: 0.5em; margin: 0em;\">\n"
+						+ "\n"
+						+ "<div style=\"page-break-inside: avoid;\">\n"
+						+ "<table style=\"vertical-align: top; margin: 0em; width: 100% !important; width: auto; display: table !important; display: inline; background-color: transparent;\">\n"
+						+ "<tr>\n"
+						+ "<th colspan=\"2\" style=\"background:#F0F0F0; margin: 0em; height: 1em; font-weight:bold; border:1px solid #AAA; text-align:left; color:#000;\">\n"
+						+ "<div style=\"float:right;\" /><h1 style=\"text-align: left; font-size: 1.2em; border: none; margin: 0; padding: 1.5px 0 2px 4px;\"><b>Sister projects</b></h1></th></tr>\n"
+						+ "<tr>\n" + "<td>\n" + "TEST2</td></tr></table></div></td></tr></table></div>",
+				wikiModel
+						.render("{| style=\"width: 100%; height: auto; border: 1px solid #88A; background-color: #ACF; vertical-align: top; margin: 0em 0em 0.5em 0em; border-spacing: 0.6em;\" cellspacing=\"6\"\n"
+								+ "|-\n"
+								+ "{{Main Page subpanel|column=both|title=Knowledge groups|1=\n"
+								+ "TEST1\n"
+								+ "}}\n"
+								+ "{{!}}-\n"
+								+ "{{Main Page subpanel|column=both|title=Sister projects|1=\n" + "TEST2\n" + "}}\n" + "|}"));
 	}
+
+	public void testIssue81() {
+		assertEquals("\n" + "<p>104</p>", wikiModel.render("{{#time:z|{{{1|April 14}}}}}"));
+	}
+
+	public void testIssue82_001() {
+		assertEquals("105", wikiModel.parseTemplates("{{#expr:{{#time:z|{{{1|April 14}}}}}+1}}"));
+	}
+
+	public void testIssue82_002() {
+		assertEquals("105th", wikiModel.parseTemplates("{{ordinal|105}}"));
+	}
+
+	public void testIssue82_003() {
+		assertEquals("105th", wikiModel.parseTemplates("{{ordinal|{{#expr:{{#time:z|{{{1|April 14}}}}}+1}}}}"));
+	}
+
 	/**
 	 * This is a date dependent template test, so only activate it for local tests
 	 * please.

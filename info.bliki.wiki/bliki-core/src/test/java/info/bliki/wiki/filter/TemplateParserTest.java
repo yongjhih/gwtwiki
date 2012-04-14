@@ -16,7 +16,7 @@ public class TemplateParserTest extends FilterTestSupport {
 	}
 
 	private final String TEST_STRING_03 = "{{{1|{{PAGENAME}}}}}";
-
+	
 	public void testIf00() {
 		assertEquals(
 				"start{{es-verb form of/indicative}}end",
@@ -414,55 +414,7 @@ public class TemplateParserTest extends FilterTestSupport {
 		assertEquals("<references =\"\"></references>", wikiModel.parseTemplates("{{#tag:references|{{{refs|}}}|group={{{group|}}}}}"));
 	}
 
-	/**
-	 * See <a
-	 * href="http://en.wikipedia.org/wiki/Help:Substitution">Wikipedia-Help:
-	 * Substitution</a>
-	 */
-	public void testSubst001() {
-		assertEquals("{{}}", wikiModel.parseTemplates("{{subst:}}", false));
-		assertEquals("a nested template text", wikiModel.parseTemplates("{{subst:Nested}}", false));
-	}
-
-	/**
-	 * See <a
-	 * href="http://en.wikipedia.org/wiki/Help:Substitution">Wikipedia-Help:
-	 * Substitution</a>
-	 */
-	public void testSubst002() {
-		assertEquals("Image", wikiModel.parseTemplates("{{subst:ns:{{subst:#expr:2*3}}}}", false));
-	}
-
-	/**
-	 * See <a
-	 * href="http://en.wikipedia.org/wiki/Help:Substitution">Wikipedia-Help:
-	 * Substitution</a>
-	 */
-	public void testSubst003() {
-		assertEquals("Image", wikiModel.parseTemplates("{{ns:{{subst:#expr:2*3}}}}", false));
-	}
-
-	/**
-	 * See <a
-	 * href="http://en.wikipedia.org/wiki/Help:Substitution">Wikipedia-Help:
-	 * Substitution</a>
-	 */
-	public void testSubst004() {
-		assertEquals("1.0e-5", wikiModel.parseTemplates("{{subst:LC:{{subst:#expr:1/100000}}}}", false));
-	}
-
-	/**
-	 * See <a
-	 * href="http://en.wikipedia.org/wiki/Help:Substitution">Wikipedia-Help:
-	 * Substitution</a>
-	 */
-	public void testSubst005() {
-		assertEquals("IN", wikiModel.parseTemplates("{{subst:UC:{{subst:tc}}}}", false));
-	}
-
-	public void testSubst006() {
-		assertEquals("NAMESPACE", wikiModel.parseTemplates("{{subst:tl|{{subst:NAMESPACE}}}}", false));
-	}
+	
 
 	public void testPipe001() {
 		assertEquals("hello worldhello world ", wikiModel.parseTemplates("{{2x|hello world" + "}} ", false));
@@ -644,5 +596,29 @@ public class TemplateParserTest extends FilterTestSupport {
 						+ "|-\n" + "|\n" + "TEST2\n" + "|}\n" + "|}", wikiModel.parseTemplates("{{Main Page panel|\n"
 						+ "{{Main Page subpanel|column=both|title=Knowledge groups|1=\n" + "TEST1\n" + "}}\n" + "|\n"
 						+ "{{Main Page subpanel|column=both|title=Sister projects|1=\n" + "TEST2\n" + "}}\n" + "}}"));
+	}
+	
+	public void testIssue81_001() {
+		assertEquals(" April 14 ", wikiModel.parseTemplates(" {{{1|April 14}}} "));
+	}
+	
+	public void testIssue81_002() {
+		assertEquals("104", wikiModel.parseTemplates("{{#time:z|{{{1|April 14}}}}}"));
+	}
+	
+	public void testIssue82_001() {
+		assertEquals("105", wikiModel.parseTemplates("{{#expr:{{#time:z|{{{1|April 14}}}}}+1}}"));
+	}
+	
+	public void testIssue82_002() {
+		assertEquals("105th", wikiModel.parseTemplates("{{ordinal|105}}"));
+	}
+	
+	public void testIssue82_003() {
+		assertEquals("105th", wikiModel.parseTemplates("{{ordinal|{{#expr:{{#time:z|{{{1|April 14}}}}}+1}}}}"));
+	}
+	
+	public void testIssue82_004() {
+		assertEquals("<div class=\"error\">Expression error: Unrecognised punctuation character: \"{\"</div>", wikiModel.parseTemplates("{{subst:#expr:{{#time:z|{{{1|April 14}}}}}+1}}"));
 	}
 }

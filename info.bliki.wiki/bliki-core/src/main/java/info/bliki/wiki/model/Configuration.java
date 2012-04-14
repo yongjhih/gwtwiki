@@ -43,8 +43,6 @@ import info.bliki.wiki.template.NS;
 import info.bliki.wiki.template.Padleft;
 import info.bliki.wiki.template.Padright;
 import info.bliki.wiki.template.Plural;
-import info.bliki.wiki.template.Safesubst;
-import info.bliki.wiki.template.Subst;
 import info.bliki.wiki.template.Switch;
 import info.bliki.wiki.template.Tag;
 import info.bliki.wiki.template.Time;
@@ -413,8 +411,6 @@ public class Configuration implements IConfiguration {
 		TEMPLATE_FUNCTION_MAP.put("padleft", Padleft.CONST);
 		TEMPLATE_FUNCTION_MAP.put("padright", Padright.CONST);
 		TEMPLATE_FUNCTION_MAP.put("plural", Plural.CONST);
-		TEMPLATE_FUNCTION_MAP.put("safesubst", Safesubst.CONST);
-		TEMPLATE_FUNCTION_MAP.put("subst", Subst.CONST);
 		TEMPLATE_FUNCTION_MAP.put("#expr", Expr.CONST);
 		TEMPLATE_FUNCTION_MAP.put("#if", If.CONST);
 		TEMPLATE_FUNCTION_MAP.put("#iferror", Iferror.CONST);
@@ -451,7 +447,6 @@ public class Configuration implements IConfiguration {
 		// see http://www.mediawiki.org/wiki/Extension:SyntaxHighlight_GeSHi
 		TAG_TOKEN_MAP.put("syntaxhighlight", new SourceTag());
 		TAG_TOKEN_MAP.put("source", new SourceTag());
-		
 
 		TAG_TOKEN_MAP.put("a", HTML_A_OPEN);
 		TAG_TOKEN_MAP.put("h1", HTML_H1_OPEN);
@@ -595,7 +590,6 @@ public class Configuration implements IConfiguration {
 	public Map<String, String> getTemplateCallsCache() {
 		return TEMPLATE_CALLS_CACHE;
 	}
-
 
 	/**
 	 * {@inheritDoc}

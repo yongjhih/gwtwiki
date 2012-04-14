@@ -23,30 +23,37 @@ public class Expr extends AbstractTemplateFunction {
 
 	}
 
-	public String parseFunction(List<String> list, IWikiModel model, char[] src, int beginIndex, int endIndex) throws IOException {
+	public String parseFunction(List<String> list, IWikiModel model, char[] src, int beginIndex, int endIndex, boolean isSubst)
+			throws IOException {
 		if (list.size() > 0) {
 			String expression = list.get(0);
 			if (expression.length() == 0) {
 				return null;
 			}
-			StringBuilder conditionBuffer = new StringBuilder(expression.length());
-			TemplateParser.parse(expression, model, conditionBuffer, false);
-			if (conditionBuffer.length() > 0) {
-				try {
-					DoubleEvaluator engine = new DoubleEvaluator();
-					double d = engine.evaluate(conditionBuffer.toString());
-					double dInt = Math.rint(d);
-					// if (dInt == d) {
-					if (Math.abs(dInt - d) < DoubleEvaluator.EPSILON) {
-						return Long.toString(Math.round(d));
-					}
-					String result = Double.toString(d);
-					return result.toUpperCase();
-				} catch (Exception e) {
-					return "<div class=\"error\">Expression error: " + e.getMessage() + "</div>";
-					// e.printStackTrace();
+			if (!isSubst) {
+				StringBuilder conditionBuffer = new StringBuilder(expression.length());
+				TemplateParser.parse(expression, model, conditionBuffer, false);
+				if (conditionBuffer.length() == 0) {
+					return null;
 				}
+				expression = conditionBuffer.toString();
 			}
+
+			try {
+				DoubleEvaluator engine = new DoubleEvaluator();
+				double d = engine.evaluate(expression);
+				double dInt = Math.rint(d);
+				// if (dInt == d) {
+				if (Math.abs(dInt - d) < DoubleEvaluator.EPSILON) {
+					return Long.toString(Math.round(d));
+				}
+				String result = Double.toString(d);
+				return result.toUpperCase();
+			} catch (Exception e) {
+				return "<div class=\"error\">Expression error: " + e.getMessage() + "</div>";
+				// e.printStackTrace();
+			}
+
 		}
 		return null;
 	}

@@ -18,6 +18,15 @@ import java.util.Map;
  */
 public class WikiTestModel extends WikiModel {
 	/**
+	 * Issue 82
+	 */
+	public static String ORDINAL = "{{{1}}}{{{{{|safesubst:}}}#ifeq:{{{sup}}}|yes\n" + " |<sup>\n"
+			+ "}}{{{{{|safesubst:}}}#switch:{{{{{|safesubst:}}}#expr:abs({{{1}}}) mod 100}}\n" + "  |11|12|13=th\n"
+			+ "  |{{{{{|safesubst:}}}#switch:{{{{{|safesubst:}}}#expr:abs{{{1}}} mod 10}}\n" + "   |1=st\n"
+			+ "   |2={{{{{|safesubst:}}}#ifeq:{{{2|}}}|d|d|nd}}\n" + "   |3={{{{{|safesubst:}}}#ifeq:{{{2|}}}|d|d|rd}}\n" + "   |th\n"
+			+ "  }}\n" + " }}{{{{{|safesubst:}}}#ifeq:{{{sup}}}|yes\n" + " |</sup>\n" + "}}<noinclude>\n" + "{{documentation}}\n"
+			+ "</noinclude>";
+	/**
 	 * Issue 77
 	 */
 	public static final String MAIN_PAGE_PANEL = "{| style=\"width: 100%; height: auto; border: 1px solid #88A; background-color: #ACF; vertical-align: top; margin: 0em 0em 0.5em 0em; border-spacing: 0.6em;\" cellspacing=\"6\"\n"
@@ -26,7 +35,8 @@ public class WikiTestModel extends WikiModel {
 			+ "{{!}}-\n"
 			+ "{{{2}}}{{#if:{{{3|}}}|\n"
 			+ "{{!}}-\n"
-			+ "{{{3}}}{{#if:{{{4|}}}|\n" + "{{!}}-\n" + "{{{4}}}{{#if:{{{5|}}}|\n" + "{{!}}-\n" + "{{{5}}}}}}}}}}}\n" + "|}";
+			+ "{{{3}}}{{#if:{{{4|}}}|\n"
+			+ "{{!}}-\n" + "{{{4}}}{{#if:{{{5|}}}|\n" + "{{!}}-\n" + "{{{5}}}}}}}}}}}\n" + "|}";
 	/**
 	 * Issue 77
 	 */
@@ -2345,6 +2355,8 @@ public class WikiTestModel extends WikiModel {
 				return MAIN_PAGE_PANEL;
 			} else if (name.equals("Main_Page_subpanel")) {
 				return MAIN_PAGE_SUBPANEL;
+			} else if (name.equals("Ordinal")) {
+				return ORDINAL;
 			}
 		} else {
 			if (name.equals("Include_Page")) {

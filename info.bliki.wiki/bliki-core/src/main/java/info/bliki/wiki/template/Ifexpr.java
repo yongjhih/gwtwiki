@@ -19,10 +19,14 @@ public class Ifexpr extends AbstractTemplateFunction {
 
 	}
 
-	public String parseFunction(List<String> list, IWikiModel model, char[] src, int beginIndex, int endIndex) {
+	public String parseFunction(List<String> list, IWikiModel model, char[] src, int beginIndex, int endIndex, boolean isSubst) {
 		if (list.size() > 1) {
-
-			String condition = parse(list.get(0), model);
+			String condition;
+			if (isSubst) {
+				condition = list.get(0);
+			} else {
+				condition = parse(list.get(0), model);
+			}
 			if (condition.length() > 0) {
 				try {
 					DoubleEvaluator engine = new DoubleEvaluator();
@@ -31,18 +35,30 @@ public class Ifexpr extends AbstractTemplateFunction {
 					if (Math.abs(d - 0.0) < DoubleEvaluator.EPSILON) {
 						if (list.size() >= 3) {
 							// &lt;else text&gt;
-							return parse(list.get(2), model);
+							if (isSubst) {
+								return list.get(2);
+							} else {
+								return parse(list.get(2), model);
+							}
 						}
 						return null;
 					}
-					return parse(list.get(1), model);
+					if (isSubst) {
+						return list.get(1);
+					} else {
+						return parse(list.get(1), model);
+					}
 				} catch (Exception e) {
 					return "<div class=\"error\">Expression error: " + e.getMessage() + "</div>";
 				}
 			} else {
 				if (list.size() >= 3) {
 					// &lt;else text&gt;
-					return parse(list.get(2), model);
+					if (isSubst) {
+						return list.get(2);
+					} else {
+						return parse(list.get(2), model);
+					}
 				}
 			}
 		}

@@ -19,7 +19,7 @@ public class Titleparts extends AbstractTemplateFunction {
 
 	}
 
-	public String parseFunction(List<String> list, IWikiModel model, char[] src, int beginIndex, int endIndex) {
+	public String parseFunction(List<String> list, IWikiModel model, char[] src, int beginIndex, int endIndex, boolean isSubst) {
 		if (list.size() > 0) {
 			String pagename = parse(list.get(0), model);
 			int numberOfSegments = 0;

@@ -18,7 +18,7 @@ public class URLEncode extends AbstractTemplateFunction {
 
 	}
 
-	public String parseFunction(List<String> list, IWikiModel model, char[] src, int beginIndex, int endIndex) throws IOException {
+	public String parseFunction(List<String> list, IWikiModel model, char[] src, int beginIndex, int endIndex, boolean isSubst) throws IOException {
 		if (list.size() > 0) {
 			String result = parse(list.get(0), model);
 			return URLEncoder.encode(result, Connector.UTF8_CHARSET);

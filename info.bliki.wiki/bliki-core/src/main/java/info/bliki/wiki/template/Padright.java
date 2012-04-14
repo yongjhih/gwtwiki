@@ -18,7 +18,7 @@ public class Padright extends AbstractTemplateFunction {
 
 	}
 
-	public String parseFunction(List<String> list, IWikiModel model, char[] src, int beginIndex, int endIndex) {
+	public String parseFunction(List<String> list, IWikiModel model, char[] src, int beginIndex, int endIndex, boolean isSubst) {
 		if (list.size() == 1) {
 			return parse(list.get(0), model);
 		}

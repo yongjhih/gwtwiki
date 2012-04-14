@@ -30,7 +30,7 @@ public class Allmacros extends AbstractTemplateFunction {
 		return "Returns all macros";
 	}
 
-	public String parseFunction(List<String> parts, IWikiModel model, char[] src, int beginIndex, int endIndex) throws IOException {
+	public String parseFunction(List<String> parts, IWikiModel model, char[] src, int beginIndex, int endIndex, boolean isSubst) throws IOException {
 		Map<String, ITemplateFunction> t = model.getTemplateMap();
 		StringBuilder sb = new StringBuilder();
 		String doc;

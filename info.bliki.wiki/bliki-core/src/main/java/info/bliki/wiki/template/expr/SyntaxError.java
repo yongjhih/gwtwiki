@@ -55,16 +55,17 @@ public class SyntaxError extends RuntimeException {
 	}
 
 	public String getMessage() {
-		final StringBuffer buf = new StringBuffer(256);
-		buf.append("Syntax error in line: ");
-		buf.append(fRowIndex + 1);
-		buf.append(" - " + fError + "\n");
-		buf.append(fCurrentLine + "\n");
-		for (int i = 0; i < (fColumnIndex - 1); i++) {
-			buf.append(' ');
-		}
-		buf.append('^');
-		return buf.toString();
+		return fError;
+//		final StringBuffer buf = new StringBuffer(256);
+//		buf.append("Syntax error in line: ");
+//		buf.append(fRowIndex + 1);
+//		buf.append(" - " + fError + "\n");
+//		buf.append(fCurrentLine + "\n");
+//		for (int i = 0; i < (fColumnIndex - 1); i++) {
+//			buf.append(' ');
+//		}
+//		buf.append('^');
+//		return buf.toString();
 	}
 
 	/**

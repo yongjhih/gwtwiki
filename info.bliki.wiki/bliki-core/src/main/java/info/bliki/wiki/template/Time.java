@@ -144,7 +144,7 @@ public class Time extends AbstractTemplateFunction {
 		RFC822DATEFORMAT = new SimpleDateFormat("EEE', 'dd' 'MMM' 'yyyy' 'HH:mm:ss' '+0000", Locale.US);
 	}
 
-	public String parseFunction(List<String> list, IWikiModel model, char[] src, int beginIndex, int endIndex) {
+	public String parseFunction(List<String> list, IWikiModel model, char[] src, int beginIndex, int endIndex, boolean isSubst) {
 		if (list.size() > 0) {
 			Date date;
 			DateFormat df = DateFormat.getDateInstance(DateFormat.MEDIUM, model.getLocale());

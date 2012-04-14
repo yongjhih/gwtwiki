@@ -42,6 +42,7 @@ public class AllFilterTests extends TestCase {
 		s.addTestSuite(WrongTagFilterTest.class);
 		s.addTestSuite(WPSemanticLinkTest.class);
 		s.addTestSuite(TemplateParserTest.class);
+		s.addTestSuite(TemplateSubstParserTest.class);
 		
 		s.addTestSuite(TemplateFunctionsTest.class);
 		

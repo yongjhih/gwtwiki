@@ -43,7 +43,6 @@ public class WikipediaScanner {
 		fSource = src.toCharArray();
 		fStringSource = src;
 		fScannerPosition = position;
-		// initialize(src, position);
 	}
 
 	public void setModel(IWikiModel wikiModel) {
@@ -625,6 +624,7 @@ public class WikipediaScanner {
 			char ch;
 			int parameterStart = -1;
 			StringBuilder recursiveResult;
+			boolean isDefaultValue;
 			while (true) {
 				ch = fSource[fScannerPosition++];
 				if (ch == '{' && fSource[fScannerPosition] == '{' && fSource[fScannerPosition + 1] == '{'
@@ -639,11 +639,14 @@ public class WikipediaScanner {
 						if (list.size() > 0) {
 							String parameterString = list.get(0);
 							String value = null;
+							isDefaultValue = false;
 							if (templateParameters != null) {
 								value = templateParameters.get(parameterString);
 							}
 							if (value == null && list.size() > 1) {
+								// default value is available for the template
 								value = list.get(1);
+								isDefaultValue = true;
 							}
 							if (value != null) {
 								if (value.length() <= Configuration.TEMPLATE_VALUE_LIMIT) {
@@ -656,7 +659,11 @@ public class WikipediaScanner {
 
 									WikipediaScanner scanner = new WikipediaScanner(value);
 									scanner.setModel(fWikiModel);
-									recursiveResult = scanner.replaceTemplateParameters(value, templateParameters);
+									if (isDefaultValue) {
+										recursiveResult = scanner.replaceTemplateParameters(value, templateParameters);
+									} else {
+										recursiveResult = scanner.replaceTemplateParameters(value, null);
+									}
 									if (recursiveResult != null) {
 										buffer.append(recursiveResult);
 									} else {
@@ -855,8 +862,6 @@ public class WikipediaScanner {
 		int len = sourceArray.length;
 		int countSingleOpenBraces = 0;
 		int parameterPosition = startPosition;
-		// int templatePosition = -1;
-		// int[] result = new int[] { -1, -1 };
 		try {
 			while (parameterPosition < sourceArray.length) {
 				ch = sourceArray[parameterPosition++];
@@ -876,16 +881,6 @@ public class WikipediaScanner {
 									return new int[] { -1, -1 };
 								}
 							}
-							// if (temp[0] < 0) {
-							// // return -1;
-							// parameterPosition--;
-							// temp[0] = findNestedTemplateEnd(sourceArray,
-							// parameterPosition);
-							// if (temp[0] < 0) {
-							// return new int[] { -1, -1 };
-							// }
-							// }
-							// parameterPosition = temp[0];
 						} else {
 							// template beginning
 							int temp = findNestedTemplateEnd(sourceArray, parameterPosition);
@@ -919,116 +914,6 @@ public class WikipediaScanner {
 		}
 	}
 
-	// public static final int findStackedTemplateEnd(final char[] sourceArray,
-	// final char startCh, final char endChar, int startPosition) {
-	// char ch;
-	// int templateLevel = 0;
-	// int parameterLevel = 1;
-	// int len = sourceArray.length;
-	// int position = startPosition;
-	//
-	// try {
-	// while (true) {
-	// ch = sourceArray[position++];
-	// if (ch == startCh && sourceArray[position] == startCh) {
-	// position++;
-	// if ((len > position) && sourceArray[position] == startCh) {
-	// // template parameter beginning
-	// position++;
-	// parameterLevel++;
-	// } else {
-	// templateLevel++;
-	// }
-	// } else if (ch == endChar && sourceArray[position] == endChar) {
-	// position++;
-	// if ((templateLevel == 0) && (len > position) && sourceArray[position] ==
-	// endChar) {
-	// // template parameter ending
-	// position++;
-	// if (--parameterLevel == 0) {
-	// break;
-	// }
-	// } else {
-	// templateLevel--;
-	// }
-	// }
-	// }
-	// return position;
-	// } catch (IndexOutOfBoundsException e) {
-	// e.printStackTrace();
-	// return -1;
-	// }
-	// }
-
-	// public static final int findNestedParamEnd(final char[] sourceArray, final
-	// char startCh, final char endChar, int startPosition) {
-	// char ch;
-	// int parameterLevel = 1;
-	// int position = startPosition;
-	// try {
-	// while (true) {
-	// ch = sourceArray[position++];
-	// if (ch == startCh && sourceArray[position] == startCh &&
-	// sourceArray[position + 1] == startCh) {
-	// // ending of template parameters {{{
-	// position += 2;
-	// parameterLevel++;
-	// } else if (ch == endChar && sourceArray[position] == endChar &&
-	// sourceArray[position + 1] == endChar) {
-	// // ending of template parameters }}}
-	// position += 2;
-	// if (--parameterLevel == 0) {
-	// break;
-	// }
-	// }
-	// }
-	// return position;
-	// } catch (IndexOutOfBoundsException e) {
-	// return -1;
-	// }
-	// }
-
-	/**
-	 * Read the characters until the end position of the current template is found
-	 * 
-	 * @return
-	 */
-	// protected final int findTemplateEnd(final char[] sourceArray, int
-	// startPosition) {
-	// char ch;
-	// int position = startPosition;
-	// int counter = 0;
-	// try {
-	// while (true) {
-	// ch = sourceArray[position++];
-	// if (ch == '}') {
-	// if ((counter == 0) && sourceArray[position] == '}') {
-	// // template ending
-	// position++;
-	// break;
-	// }
-	// if (counter > 0) {
-	// counter--;
-	// }
-	// } else if (ch == '{') {
-	// counter++;
-	// continue;
-	// }
-	// }
-	// return position;
-	// } catch (IndexOutOfBoundsException e) {
-	// return -1;
-	// }
-	// }
-	/**
-	 * Read the characters until the end position of the current template
-	 * parameter is found
-	 * 
-	 * @return
-	 */
-	// protected final int[] findTemplateParameterEnd(int startPosition) {
-	// return findNestedParamEnd(fSource, startPosition);
-	// }
 	/**
 	 * Parse a tag. Parse the name and attributes from a start tag.
 	 * <p>
@@ -1197,17 +1082,12 @@ public class WikipediaScanner {
 					if (EOF == ch) {
 						double_quote(attributes, bookmarks);
 						done = true; // complain?
-						// } else if ('\\' == ch && fSource[fScannerPosition] == '"') {
-						// fScannerPosition++;
 					} else if ('"' == ch) {
 						double_quote(attributes, bookmarks);
 						bookmarks[0] = bookmarks[6] + 1;
 						state = 0;
 					}
 					break;
-				// patch for lexer state correction by
-				// Gernot Fricke
-				// See Bug # 891058 Bug in lexer.
 				case 6: // undecided for state 0 or 2
 					// we have read white spaces after an attributte name
 					if (EOF == ch) {
@@ -1219,9 +1099,8 @@ public class WikipediaScanner {
 						state = 0;
 					} else if (Character.isWhitespace(ch)) {
 						// proceed
-					} else if ('=' == ch) // yepp. the white spaces belonged
-					// to the equal.
-					{
+					} else if ('=' == ch) {// yepp. the white spaces belonged to the
+						// equal.
 						bookmarks[2] = bookmarks[6];
 						bookmarks[3] = bookmarks[7];
 						state = 2;
@@ -1427,8 +1306,6 @@ public class WikipediaScanner {
 				// this is an error
 				return null; // (makeString(start, end));
 			}
-			// ret = getNodeFactory().createTagNode(this.getPage(), start, end,
-			// attributes);
 			return new WikiTagNode(start, end, attributes);
 		}
 		return null;
@@ -1586,13 +1463,5 @@ public class WikipediaScanner {
 		}
 		return -1;
 	}
-	// protected final int readUntilIgnoreCase(Object processed, int start, String
-	// startString, String endString) {
-	// int index = Utils.indexOfIgnoreCase(fBMHR, processed, fStringSource,
-	// startString, endString, start);
-	// if (index != (-1)) {
-	// return index + startString.length() + endString.length();
-	// }
-	// return -1;
-	// }
+
 }

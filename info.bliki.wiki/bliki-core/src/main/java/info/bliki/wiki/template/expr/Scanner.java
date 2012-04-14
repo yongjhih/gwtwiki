@@ -226,7 +226,25 @@ public class Scanner {
 				//
 				// break;
 				default:
-					throwSyntaxError("Unrecognised punctuation character:\"" + fCurrentChar + "\"");
+					String str;
+					switch (fCurrentChar) {
+					case '<':
+						str = "&lt;";
+						break;
+					case '>':
+						str = "&gt;";
+						break;
+					case '&':
+						str = "&amp;";
+						break;
+					default:
+						str = String.valueOf(fCurrentChar);
+						break;
+					}
+					if (fCurrentChar == '<') {
+
+					}
+					throwSyntaxError("Unrecognised punctuation character: \"" + str + "\"");
 				}
 
 				if (fToken == TT_EOF) {
