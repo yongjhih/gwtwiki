@@ -21,6 +21,7 @@ public class Safesubst extends AbstractTemplateFunction {
 
 	}
 
+	@Override
 	public String parseFunction(List<String> parts1, IWikiModel model, char[] src, int beginIndex, int endIndex, boolean isSubst) {
 		String substArg = new String(src, beginIndex, endIndex - beginIndex);
 		String substituted = parsePreprocess(substArg, model, null);

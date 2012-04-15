@@ -18,9 +18,10 @@ public class UCFirst extends AbstractTemplateFunction {
 
 	}
 
+	@Override
 	public String parseFunction(List<String> list, IWikiModel model, char[] src, int beginIndex, int endIndex, boolean isSubst) {
 		if (list.size() > 0) {
-			String word = parse(list.get(0), model);
+			String word = isSubst ? list.get(0) : parse(list.get(0), model);
 			if (word.length() > 0) {
 				return Character.toUpperCase(word.charAt(0)) + word.substring(1);
 			}

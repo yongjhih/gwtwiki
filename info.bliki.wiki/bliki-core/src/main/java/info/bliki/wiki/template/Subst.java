@@ -17,6 +17,7 @@ public class Subst extends Safesubst {
 
 	}
 
+	@Override
 	public String parseFunction(List<String> parts1, IWikiModel model, char[] src, int beginIndex, int endIndex, boolean isSubst) {
 		if (!model.isTemplateTopic()) {
 			return super.parseFunction(parts1, model,src, beginIndex,endIndex,isSubst);

@@ -4,7 +4,6 @@ import info.bliki.wiki.model.IWikiModel;
 import info.bliki.wiki.template.dates.StringToTime;
 import info.bliki.wiki.template.dates.StringToTimeException;
 
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -144,12 +143,12 @@ public class Time extends AbstractTemplateFunction {
 		RFC822DATEFORMAT = new SimpleDateFormat("EEE', 'dd' 'MMM' 'yyyy' 'HH:mm:ss' '+0000", Locale.US);
 	}
 
+	@Override
 	public String parseFunction(List<String> list, IWikiModel model, char[] src, int beginIndex, int endIndex, boolean isSubst) {
 		if (list.size() > 0) {
 			Date date;
-			DateFormat df = DateFormat.getDateInstance(DateFormat.MEDIUM, model.getLocale());
 			if (list.size() > 1) {
-				String dateTimeParameter = parse(list.get(1), model);
+				String dateTimeParameter = isSubst ? list.get(1) : parse(list.get(1), model);
 
 				try {
 					date = new StringToTime(dateTimeParameter);
@@ -160,7 +159,7 @@ public class Time extends AbstractTemplateFunction {
 				date = model.getCurrentTimeStamp();
 			}
 
-			String condition = parse(list.get(0), model);
+			String condition = isSubst ? list.get(0) : parse(list.get(0), model);
 			StringBuilder result = new StringBuilder(condition.length() * 2);
 			boolean inDoubleQuotes = false;
 			GregorianCalendar cal = new GregorianCalendar(model.getLocale());

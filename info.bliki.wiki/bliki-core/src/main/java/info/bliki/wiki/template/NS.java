@@ -17,9 +17,10 @@ public class NS extends AbstractTemplateFunction {
 
 	}
 
+	@Override
 	public String parseFunction(List<String> list, IWikiModel model, char[] src, int beginIndex, int endIndex, boolean isSubst) {
 		if (list.size() > 0) {
-			String arg0 = parse(list.get(0), model);
+			String arg0 = isSubst ? list.get(0) : parse(list.get(0), model);
 			INamespace namespace = model.getNamespace();
 			try {
 				int numberCode = Integer.valueOf(arg0).intValue();

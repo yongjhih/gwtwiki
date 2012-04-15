@@ -23,6 +23,7 @@ public class Expr extends AbstractTemplateFunction {
 
 	}
 
+	@Override
 	public String parseFunction(List<String> list, IWikiModel model, char[] src, int beginIndex, int endIndex, boolean isSubst)
 			throws IOException {
 		if (list.size() > 0) {

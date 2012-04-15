@@ -18,9 +18,10 @@ public class LC extends AbstractTemplateFunction {
 
 	}
 
+	@Override
 	public String parseFunction(List<String> list, IWikiModel model, char[] src, int beginIndex, int endIndex, boolean isSubst) {
 		if (list.size() > 0) {
-			String result = parse(list.get(0), model);
+			String result = isSubst ? list.get(0) : parse(list.get(0), model);
 			return result.toLowerCase();
 		}
 		return null;

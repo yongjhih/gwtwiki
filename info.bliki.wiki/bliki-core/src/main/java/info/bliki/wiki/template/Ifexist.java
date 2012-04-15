@@ -17,14 +17,10 @@ public class Ifexist extends AbstractTemplateFunction {
 
 	}
 
+	@Override
 	public String parseFunction(List<String> list, IWikiModel model, char[] src, int beginIndex, int endIndex, boolean isSubst) {
 		if (list.size() > 1) {
-			String wikiTopicName;
-			if (isSubst) {
-				wikiTopicName = list.get(0);
-			} else {
-				wikiTopicName = parse(list.get(0), model);
-			}
+			String wikiTopicName = isSubst ? list.get(0) : parse(list.get(0), model);
 			int index = wikiTopicName.indexOf(":");
 			String namespace = "";
 			String templateName = wikiTopicName;
@@ -37,19 +33,11 @@ public class Ifexist extends AbstractTemplateFunction {
 				}
 			}
 			if (model.getRawWikiContent(namespace, templateName, null) != null) {
-				if (isSubst) {
-					return list.get(1);
-				} else {
-					return parse(list.get(1), model);
-				}
+				return isSubst ? list.get(1) : parse(list.get(1), model);
 			} else {
 				// the requested templateName doesn't exist
 				if (list.size() >= 3) {
-					if (isSubst) {
-						return list.get(2);
-					} else {
-						return parse(list.get(2), model);
-					}
+					return isSubst ? list.get(2) : parse(list.get(2), model);
 				}
 			}
 		}

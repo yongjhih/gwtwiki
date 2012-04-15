@@ -18,9 +18,10 @@ public class Fullurl extends AbstractTemplateFunction {
 
 	}
 
+	@Override
 	public String parseFunction(List<String> list, IWikiModel model, char[] src, int beginIndex, int endIndex, boolean isSubst) throws UnsupportedEncodingException {
 		if (list.size() > 0) {
-			String arg0 = parse(list.get(0), model);
+			String arg0 = isSubst ? list.get(0) : parse(list.get(0), model);
 			if (arg0.length() > 0 && list.size() == 1) {
 				String result = "http://en.wikipedia.org/wiki/"
 						+ URLEncoder.encode(Character.toUpperCase(arg0.charAt(0)) + "", Connector.UTF8_CHARSET)
@@ -33,7 +34,7 @@ public class Fullurl extends AbstractTemplateFunction {
 			builder.append(URLEncoder.encode(arg0.substring(1), Connector.UTF8_CHARSET));
 			for (int i = 1; i < list.size(); i++) {
 				builder.append("&");
-				builder.append(parse(list.get(i), model));
+				builder.append(isSubst ? list.get(i) : parse(list.get(i), model));
 			}
 			return builder.toString();
 		}

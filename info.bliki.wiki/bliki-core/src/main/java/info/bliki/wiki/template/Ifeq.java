@@ -18,24 +18,15 @@ public class Ifeq extends AbstractTemplateFunction {
 
 	}
 
+	@Override
 	public String parseFunction(List<String> list, IWikiModel model, char[] src, int beginIndex, int endIndex, boolean isSubst) {
 		if (list.size() > 2) {
-			if (isSubst) {
-				String first = list.get(0);
-				String second = list.get(1);
-				if (equalsTypes(first, second)) {
-					return list.get(2);
-				} else if (list.size() >= 4) {
-					return list.get(3);
-				}
-			} else {
-				String first = parse(list.get(0), model);
-				String second = parse(list.get(1), model);
-				if (equalsTypes(first, second)) {
-					return parse(list.get(2), model);
-				} else if (list.size() >= 4) {
-					return parse(list.get(3), model);
-				}
+			String first = isSubst ? list.get(0) : parse(list.get(0), model);
+			String second = isSubst ? list.get(1) : parse(list.get(1), model);
+			if (equalsTypes(first, second)) {
+				return isSubst ? list.get(2) : parse(list.get(2), model);
+			} else if (list.size() >= 4) {
+				return isSubst ? list.get(3) : parse(list.get(3), model);
 			}
 		}
 		return null;

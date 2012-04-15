@@ -19,26 +19,14 @@ public class Switch extends AbstractTemplateFunction {
 
 	}
 
+	@Override
 	public String parseFunction(List<String> list, IWikiModel model, char[] src, int beginIndex, int endIndex, boolean isSubst) {
 		if (list.size() > 2) {
 			String defaultResult = null;
-			String conditionString;
-			if (isSubst) {
-				conditionString = list.get(0);
-			} else {
-				conditionString = parse(list.get(0), model);
-			}
-			// StringBuilder firstBuffer = new StringBuilder(first.length());
-			// TemplateParser.parse(first, model, firstBuffer, false);
-			// String conditionString = first.trim();
+			String conditionString = isSubst ? list.get(0) : parse(list.get(0), model);
 			boolean valueFound = false;
 			for (int i = 1; i < list.size(); i++) {
-				String temp;
-				if (isSubst) {
-					temp = list.get(i);
-				} else {
-					temp = parse(list.get(i), model);
-				}
+				String temp=isSubst ? list.get(i) : parse(list.get(i), model);
 				int index = temp.indexOf('=');
 				String leftHandSide;
 				if (index >= 0) {
@@ -49,12 +37,7 @@ public class Switch extends AbstractTemplateFunction {
 				} else {
 					leftHandSide = temp.trim();
 				}
-				String parsedLHS;
-				if (isSubst) {
-					parsedLHS = leftHandSide.trim();
-				} else {
-					parsedLHS = parse(leftHandSide, model);
-				}
+				String parsedLHS=isSubst ? leftHandSide.trim() : parse(leftHandSide, model);
 				if (index >= 0 && "#default".equals(parsedLHS)) {
 					defaultResult = temp.substring(index + 1).trim();
 					continue;
