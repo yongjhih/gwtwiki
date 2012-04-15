@@ -125,6 +125,7 @@ public interface IWikiModel extends IConfiguration {
 	 *             {@link IWikiModel#appendExternalLink(String, String, String, boolean)}
 	 *             instead.
 	 */
+	@Deprecated
 	public void appendExternalLink(String link, String linkName, boolean withoutSquareBrackets);
 
 	/**
@@ -164,6 +165,7 @@ public interface IWikiModel extends IConfiguration {
 	 * 
 	 * @deprecated
 	 */
+	@Deprecated
 	public ITableOfContent appendHead(String rawHead, int headLevel, boolean noToC, int headCounter);
 
 	/**

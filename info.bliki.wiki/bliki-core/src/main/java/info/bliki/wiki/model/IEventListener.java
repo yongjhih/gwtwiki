@@ -21,6 +21,7 @@ public interface IEventListener {
 	 *          <code>===</code> gives level 3;<code>====</code> gives level 4...)
 	 * @deprecated
 	 */
+	@Deprecated
 	public void onHeader(char[] src, int rawStart, int rawEnd, int level);
 
 	/**

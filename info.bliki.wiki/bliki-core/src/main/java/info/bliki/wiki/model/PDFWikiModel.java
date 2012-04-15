@@ -17,6 +17,7 @@ import java.util.Map;
  * @deprecated use an extended APIWikiModel instead; see PDFCreatorTest in the
  *             test sources
  */
+@Deprecated
 public class PDFWikiModel extends WikiModel {
 
 	static {
@@ -60,6 +61,7 @@ public class PDFWikiModel extends WikiModel {
 		return null;
 	}
 
+	@Override
 	public void appendInternalLink(String topic, String hashSection, String topicDescription, String cssClass, boolean parseRecursive) {
 		// WPATag aTagNode = new WPATag();
 		// append(aTagNode);
@@ -80,6 +82,7 @@ public class PDFWikiModel extends WikiModel {
 		// aTagNode.addChild(text);
 	}
 
+	@Override
 	public void parseInternalImageLink(String imageNamespace, String rawImageLink) {
 		if (fExternalImageBaseURL != null) {
 			String imageHref = fExternalWikiBaseURL;

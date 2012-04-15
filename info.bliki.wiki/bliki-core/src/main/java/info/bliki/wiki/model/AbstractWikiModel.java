@@ -134,6 +134,7 @@ public abstract class AbstractWikiModel implements IWikiModel, IContext {
 	 * @param resourceBundle
 	 * @param namespace
 	 */
+	@Deprecated
 	public AbstractWikiModel(Configuration configuration, ResourceBundle resourceBundle, INamespace namespace) {
 		this(configuration, Locale.ENGLISH, resourceBundle, namespace);
 	}
@@ -1770,6 +1771,7 @@ public abstract class AbstractWikiModel implements IWikiModel, IContext {
 	 * @return
 	 * @deprecated
 	 */
+	@Deprecated
 	public List<BaseToken> toNodeList(String rawWikiText) {
 		initialize();
 		if (rawWikiText == null) {
