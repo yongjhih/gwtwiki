@@ -66,6 +66,7 @@ public class ToJSPWiki extends AbstractHTMLToWiki implements IHTMLToWiki {
 		this(false, false);
 	}
 
+	@Override
 	public void nodesToText(List nodes, StringBuilder resultBuffer) {
 		if (nodes != null && !nodes.isEmpty()) {
 			Iterator childrenIt = nodes.iterator();

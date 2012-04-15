@@ -18,14 +18,17 @@ public class DoubleNode extends ASTNode {
 		return value;
 	}
 
+	@Override
 	public String toString() {
 		return Double.toString(value);
 	}
 
+	@Override
 	public boolean equals(Object obj) {
 		return (obj instanceof DoubleNode) && value == ((DoubleNode) obj).value;
 	}
 
+	@Override
 	public int hashCode() {
 		long bits = Double.doubleToLongBits(value);
 		return (int) (bits ^ (bits >>> 32));

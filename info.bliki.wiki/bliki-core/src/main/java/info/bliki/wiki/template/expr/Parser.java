@@ -3,7 +3,6 @@ package info.bliki.wiki.template.expr;
 import info.bliki.wiki.template.expr.ast.ASTNode;
 import info.bliki.wiki.template.expr.ast.IParserFactory;
 import info.bliki.wiki.template.expr.ast.NumberNode;
-import info.bliki.wiki.template.expr.ast.SymbolNode;
 import info.bliki.wiki.template.expr.operator.ASTNodeFactory;
 import info.bliki.wiki.template.expr.operator.InfixOperator;
 import info.bliki.wiki.template.expr.operator.Operator;

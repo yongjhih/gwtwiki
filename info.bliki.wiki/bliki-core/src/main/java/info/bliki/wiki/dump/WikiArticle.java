@@ -149,6 +149,7 @@ public class WikiArticle {
 	 * @param newTitle
 	 * @deprecated
 	 */
+	@Deprecated
 	public void setTitle(String newTitle) {
 		setTitle(newTitle, null);
 	}

@@ -23,6 +23,7 @@ public class FractionNode extends NumberNode {
 		return fNumerator;
 	}
 
+	@Override
 	public String toString() {
 		final StringBuffer buff = new StringBuffer();
 		if (sign) {
@@ -38,6 +39,7 @@ public class FractionNode extends NumberNode {
 		return buff.toString();
 	}
 
+	@Override
 	public double doubleValue() {
 		double numer = Double.parseDouble(fNumerator.toString());
 		double denom = Double.parseDouble(fDenominator.toString());
@@ -47,6 +49,7 @@ public class FractionNode extends NumberNode {
 		return numer / denom;
 	}
 
+	@Override
 	public boolean equals(Object obj) {
 		if (obj instanceof FractionNode) {
 			return fNumerator.equals(((FractionNode) obj).fNumerator) && fDenominator.equals(((FractionNode) obj).fDenominator)
@@ -55,6 +58,7 @@ public class FractionNode extends NumberNode {
 		return false;
 	}
 
+	@Override
 	public int hashCode() {
 		if (sign) {
 			return fNumerator.hashCode() + fDenominator.hashCode() * 17;

@@ -75,6 +75,7 @@ public class FunctionNode extends ASTNode implements java.util.List<ASTNode> {
 		fNodesList.ensureCapacity(minCapacity);
 	}
 
+	@Override
 	public boolean equals(final Object o) {
 		if (o instanceof FunctionNode) {
 			return fNodesList.equals(((FunctionNode) o).fNodesList);
@@ -95,6 +96,7 @@ public class FunctionNode extends ASTNode implements java.util.List<ASTNode> {
 		return fNodesList.get(index);
 	}
 
+	@Override
 	public int hashCode() {
 		return fNodesList.hashCode();
 	}
@@ -159,8 +161,9 @@ public class FunctionNode extends ASTNode implements java.util.List<ASTNode> {
 		return fNodesList.toArray(a);
 	}
 
+	@Override
 	public String toString() {
-		ASTNode temp = (ASTNode) fNodesList.get(0);
+		ASTNode temp = fNodesList.get(0);
 		final StringBuffer buf = new StringBuffer();
 		if (temp == null) {
 			buf.append("<null-tag>");

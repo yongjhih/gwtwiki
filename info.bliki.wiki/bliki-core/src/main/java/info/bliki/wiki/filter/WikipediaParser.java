@@ -1225,6 +1225,7 @@ public class WikipediaParser extends AbstractParser implements IParser {
 		}
 	}
 
+	@Override
 	public void runParser() {
 		int token = TokenSTART;
 		while ((token = getNextToken()) != TokenEOF) {
@@ -1383,6 +1384,7 @@ public class WikipediaParser extends AbstractParser implements IParser {
 		return fNoToC;
 	}
 
+	@Override
 	public void setNoToC(boolean noToC) {
 		fNoToC = noToC;
 	}

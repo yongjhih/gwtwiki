@@ -9,6 +9,7 @@ public class PreMinusOperator extends PrefixOperator {
 		super(oper, functionName, precedence);
 	}
 
+	@Override
 	public ASTNode createFunction(final IParserFactory factory,
 			final ASTNode argument) {
 		return factory.createFunction(factory.createSymbol("Times"),factory.createInteger(-1),

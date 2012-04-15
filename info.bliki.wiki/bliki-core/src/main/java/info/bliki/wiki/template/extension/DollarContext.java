@@ -41,6 +41,7 @@ public class DollarContext extends AbstractTemplateFunction {
 
 	}
 
+	@Override
 	public String parseFunction(List<String> list, IWikiModel model, char[] src, int beginIndex, int endIndex, boolean isSubst) throws IOException {
 		if (model instanceof IContext) {
 			IContext context = (IContext) model;

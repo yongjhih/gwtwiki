@@ -74,7 +74,7 @@ public class AbstractHTMLToWiki {
 			TagNode tagNode = (TagNode) node;
 
 			String name = tagNode.getName();
-			HTMLTag tag = (HTMLTag) fHashMap.get(name);
+			HTMLTag tag = fHashMap.get(name);
 
 			if (tag != null) {
 				boolean showWithoutTag = false;

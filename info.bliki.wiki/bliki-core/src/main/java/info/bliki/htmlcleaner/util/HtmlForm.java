@@ -221,6 +221,7 @@ public class HtmlForm {
 			return mValue;
 		}
 
+		@Override
 		public int hashCode() {
 			int hc = mName.hashCode();
 			hc = 31 * hc + mType.hashCode();
@@ -228,6 +229,7 @@ public class HtmlForm {
 			return hc;
 		}
 
+		@Override
 		public boolean equals(Object o) {
 			if (o == this)
 				return true;

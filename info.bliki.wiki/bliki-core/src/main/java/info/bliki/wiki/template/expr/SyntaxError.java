@@ -54,6 +54,7 @@ public class SyntaxError extends RuntimeException {
 		fLength = length;
 	}
 
+	@Override
 	public String getMessage() {
 		return fError;
 //		final StringBuffer buf = new StringBuffer(256);

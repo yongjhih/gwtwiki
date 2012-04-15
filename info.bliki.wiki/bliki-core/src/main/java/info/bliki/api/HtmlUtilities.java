@@ -148,6 +148,7 @@ public class HtmlUtilities {
 		 *              Any SAX exception, possibly wrapping another exception.
 		 * @see org.xml.sax.ContentHandler#startElement
 		 */
+		@Override
 		public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
 			String elementName = localName;
 			if (elementName.length() == 0) {
@@ -226,6 +227,7 @@ public class HtmlUtilities {
 		 *              Any SAX exception, possibly wrapping another exception.
 		 * @see org.xml.sax.ContentHandler#endElement
 		 */
+		@Override
 		public void endElement(String uri, String localName, String qName) throws SAXException {
 			String elementName = localName;
 			if (elementName.length() == 0) {
@@ -263,6 +265,7 @@ public class HtmlUtilities {
 		 *              Any SAX exception, possibly wrapping another exception.
 		 * @see org.xml.sax.ContentHandler#characters
 		 */
+		@Override
 		public void characters(char ch[], int start, int length) throws SAXException {
 			if (mCurrentElement != null && length > 0) {
 				if (mCurrentElementBuffer == null) {

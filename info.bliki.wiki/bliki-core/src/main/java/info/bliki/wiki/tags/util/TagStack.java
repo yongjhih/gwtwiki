@@ -5,7 +5,6 @@ import info.bliki.htmlcleaner.TagNode;
 import info.bliki.htmlcleaner.TagToken;
 
 import java.util.ArrayList;
-import java.util.EmptyStackException;
 import java.util.List;
 
 /**

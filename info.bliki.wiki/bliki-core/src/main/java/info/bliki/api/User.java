@@ -41,6 +41,7 @@ public class User {
 	 * 
 	 * @deprecated
 	 */
+	@Deprecated
 	public User() {
 		super();
 		this.result = "";

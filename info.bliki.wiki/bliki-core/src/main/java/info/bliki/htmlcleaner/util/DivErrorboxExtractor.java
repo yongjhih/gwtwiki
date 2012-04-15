@@ -19,6 +19,7 @@ public class DivErrorboxExtractor extends AbstractHtmlExtractor<StringBuilder> {
 		super(resultBuffer);
 	}
 
+	@Override
 	public void appendContent(List nodes) {
 		if (nodes != null && !nodes.isEmpty()) {
 			Iterator childrenIt = nodes.iterator();
@@ -35,6 +36,7 @@ public class DivErrorboxExtractor extends AbstractHtmlExtractor<StringBuilder> {
 		}
 	}
 
+	@Override
 	public boolean isFound(TagNode tagNode) {
 		String name = tagNode.getName();
 		if (name.equals("div")) {

@@ -281,6 +281,7 @@ public class TagNode extends TagToken {
 		return tt;
 	}
 
+	@Override
 	public String getParents() {
 		return null;
 	}

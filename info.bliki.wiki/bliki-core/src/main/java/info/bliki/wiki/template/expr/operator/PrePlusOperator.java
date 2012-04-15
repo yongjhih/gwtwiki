@@ -9,6 +9,7 @@ public class PrePlusOperator extends PrefixOperator {
 		super(oper, functionName, precedence);
 	}
 
+	@Override
 	public ASTNode createFunction(final IParserFactory factory,
 			final ASTNode argument) {
 		return argument;

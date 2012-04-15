@@ -9,6 +9,7 @@ public class SubtractOperator extends InfixOperator {
 		super(oper, functionName, precedence, grouping);
 	}
 
+	@Override
 	public ASTNode createFunction(final IParserFactory factory, final ASTNode lhs,
 			final ASTNode rhs) {
 		return factory.createFunction(factory.createSymbol("Plus"), lhs,

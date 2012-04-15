@@ -14,6 +14,7 @@ public abstract class Operator {
 		fPrecedence = precedence;
 	}
 
+	@Override
 	public boolean equals(final Object obj) {
 		if (obj instanceof Operator) {
 			return fFunctionName.equals(((Operator) obj).fFunctionName);
@@ -45,10 +46,12 @@ public abstract class Operator {
 	/**
 	 * @return the hashCode of the function name
 	 */
+	@Override
 	public int hashCode() {
 		return fFunctionName.hashCode();
 	}
 
+	@Override
 	public String toString() {
 		return "["+fFunctionName + "," + fOperatorString + "," + fPrecedence+"]";
 	}

@@ -12,14 +12,14 @@ public class ImgTag extends AbstractHTMLTag {
 
 		Map<String, String> tagAtttributes = node.getAttributes();
 		if (tagAtttributes != null) {
-			String srcValue = (String) tagAtttributes.get("src");
+			String srcValue = tagAtttributes.get("src");
 			if (srcValue != null) {
 				int index = srcValue.lastIndexOf('/');
 				if (index >= 0) {
 					srcValue = srcValue.substring(index + 1);
 				}
 				if (srcValue.endsWith(".jpg") || srcValue.endsWith(".jpeg") || srcValue.endsWith(".png") || srcValue.endsWith(".gif")) {
-					String altValue = (String) tagAtttributes.get("alt");
+					String altValue = tagAtttributes.get("alt");
 					
 					resultBuffer.append("[[Image:");
 					resultBuffer.append(srcValue);

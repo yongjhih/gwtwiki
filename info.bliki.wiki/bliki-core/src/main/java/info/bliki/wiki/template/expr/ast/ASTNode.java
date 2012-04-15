@@ -22,6 +22,7 @@ public abstract class ASTNode {
 		return fStringValue;
 	}
 
+	@Override
 	public String toString() {
 		return fStringValue;
 	}
@@ -34,8 +35,10 @@ public abstract class ASTNode {
 		return new IntegerNode("0");
 	}
 
+	@Override
 	public abstract boolean equals(Object obj);
 
+	@Override
 	public int hashCode() {
 		return fStringValue.hashCode();
 	}

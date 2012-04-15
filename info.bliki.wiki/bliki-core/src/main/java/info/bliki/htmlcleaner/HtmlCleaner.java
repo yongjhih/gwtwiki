@@ -446,9 +446,9 @@ public class HtmlCleaner {
 		if (attributes != null) {
 			Map<String, String> tagAttributes = tag.getAttributes();
 			for (Map.Entry<String, String> currEntry : attributes.entrySet()) {
-				String attName = (String) currEntry.getKey();
+				String attName = currEntry.getKey();
 				if (!tagAttributes.containsKey(attName)) {
-					String attValue = (String) currEntry.getValue();
+					String attValue = currEntry.getValue();
 					tag.addAttribute(attName, attValue, true);
 				}
 			}

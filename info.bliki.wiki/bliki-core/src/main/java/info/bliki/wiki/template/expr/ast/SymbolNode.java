@@ -11,10 +11,12 @@ public class SymbolNode extends ASTNode {
 		super(value);
 	}
 	
+	@Override
 	public boolean dependsOn(String variableName) {
 		return fStringValue.equals(variableName);
 	}
 	
+	@Override
 	public boolean equals(Object obj) {
 		return (obj instanceof SymbolNode) && fStringValue == ((SymbolNode) obj).fStringValue;
 	}

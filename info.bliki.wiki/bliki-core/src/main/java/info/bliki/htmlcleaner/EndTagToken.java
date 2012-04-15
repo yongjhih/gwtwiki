@@ -74,6 +74,7 @@ public class EndTagToken extends TagToken {
 		return et;
 	}
 
+	@Override
 	public String getParents() {
 		return null;
 	}

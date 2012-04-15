@@ -198,7 +198,8 @@ public class RegexValidator implements Serializable {
      * Provide a String representation of this validator.
      * @return A String representation of this validator
      */
-    public String toString() {
+    @Override
+		public String toString() {
         StringBuffer buffer = new StringBuffer();
         buffer.append("RegexValidator{");
         for (int i = 0; i < patterns.length; i++) {

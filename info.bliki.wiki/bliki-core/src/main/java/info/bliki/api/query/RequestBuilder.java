@@ -27,6 +27,7 @@ public class RequestBuilder {
 		return fQueryMap.entrySet();
 	}
 
+	@Override
 	public boolean equals(Object arg0) {
 		if (arg0 instanceof RequestBuilder) {
 			return fQueryMap.equals(arg0);
@@ -38,6 +39,7 @@ public class RequestBuilder {
 		return fQueryMap.get(arg0);
 	}
 
+	@Override
 	public int hashCode() {
 		return fQueryMap.hashCode();
 	}

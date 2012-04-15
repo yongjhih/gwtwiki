@@ -27,6 +27,7 @@ public class IntegerNode extends NumberNode {
 		fIntValue = intValue;
 	}
 
+	@Override
 	public String toString() {
 		if (fStringValue == null) {
 			if (sign) {
@@ -48,6 +49,7 @@ public class IntegerNode extends NumberNode {
 		return fIntValue;
 	}
 
+	@Override
 	public boolean equals(Object obj) {
 		if (obj instanceof IntegerNode) {
 			if (fStringValue == null) {
@@ -58,6 +60,7 @@ public class IntegerNode extends NumberNode {
 		return false;
 	}
  
+	@Override
 	public int hashCode() {
 		if (fStringValue == null) {
 			return toString().hashCode();

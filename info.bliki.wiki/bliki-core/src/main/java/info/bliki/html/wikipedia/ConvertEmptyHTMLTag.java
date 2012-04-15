@@ -13,6 +13,7 @@ public abstract class ConvertEmptyHTMLTag extends AbstractHTMLTag {
 		super(noNewLine);
 	}
  
+	@Override
 	public void emptyContent(AbstractHTMLToWiki html2WikiConverter, TagNode node, StringBuilder resultBuffer, boolean showWithoutTag) {
 		if (!showWithoutTag) {
 			open(node, resultBuffer);

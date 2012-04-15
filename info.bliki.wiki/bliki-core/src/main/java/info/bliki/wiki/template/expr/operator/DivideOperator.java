@@ -11,6 +11,7 @@ public class DivideOperator extends InfixOperator {
 		super(oper, functionName, precedence, grouping);
 	}
 
+	@Override
 	public ASTNode createFunction(final IParserFactory factory,
 			final ASTNode lhs, final ASTNode rhs) {
 		if (rhs instanceof IntegerNode) {

@@ -17,6 +17,7 @@ public abstract class NumberNode extends ASTNode {
 		sign = !sign;
 	}
 
+	@Override
 	public String getString() {
 		if (sign) {
 			return "-" + fStringValue;
@@ -24,6 +25,7 @@ public abstract class NumberNode extends ASTNode {
 		return fStringValue;
 	}
 
+	@Override
 	public String toString() {
 		if (sign) {
 			return "-" + fStringValue;
@@ -39,8 +41,10 @@ public abstract class NumberNode extends ASTNode {
 		return Double.parseDouble(toString());
 	}
 
+	@Override
 	public abstract boolean equals(Object obj);
 
+	@Override
 	public int hashCode() {
 		if (sign) {
 			return fStringValue.hashCode() * 17;

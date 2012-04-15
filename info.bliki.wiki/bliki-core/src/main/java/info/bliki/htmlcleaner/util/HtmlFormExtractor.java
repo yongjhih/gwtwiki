@@ -31,6 +31,7 @@ public class HtmlFormExtractor extends AbstractHtmlExtractor<HtmlForm> {
 		fFormID = formID;
 	}
 
+	@Override
 	public void appendContent(List nodes) {
 		if (nodes != null && !nodes.isEmpty()) {
 			Iterator childrenIt = nodes.iterator();
@@ -62,6 +63,7 @@ public class HtmlFormExtractor extends AbstractHtmlExtractor<HtmlForm> {
 		}
 	}
 
+	@Override
 	public boolean isFound(TagNode tagNode) {
 		String tagName = tagNode.getName();
 		if (tagName.equals(FORM_TAG)) {

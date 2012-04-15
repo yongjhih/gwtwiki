@@ -72,7 +72,7 @@ public class WPRow {
 		if (fCells.size() > 0) {
 			if (fType == WPCell.CAPTION) {
 				if (fCells.size() == 1) {
-					((WPCell) fCells.get(0)).renderHTML(converter, buf, wikiModel);
+					(fCells.get(0)).renderHTML(converter, buf, wikiModel);
 				}
 			} else {
 				if (HTMLTag.NEW_LINES) {
@@ -84,7 +84,7 @@ public class WPRow {
 				buf.append(">");
 				WPCell cell;
 				for (int i = 0; i < fCells.size(); i++) {
-					cell = (WPCell) fCells.get(i);
+					cell = fCells.get(i);
 					cell.renderHTML(converter, buf, wikiModel);
 				}
 				buf.append("</tr>");
@@ -99,7 +99,7 @@ public class WPRow {
 					if (HTMLTag.NEW_LINES) {
 						buf.append("\n");
 					}
-					((WPCell) fCells.get(0)).renderPlainText(converter, buf, wikiModel);
+					(fCells.get(0)).renderPlainText(converter, buf, wikiModel);
 				}
 			} else {
 				if (HTMLTag.NEW_LINES) {
@@ -107,7 +107,7 @@ public class WPRow {
 				}
 				WPCell cell;
 				for (int i = 0; i < fCells.size(); i++) {
-					cell = (WPCell) fCells.get(i);
+					cell = fCells.get(i);
 					cell.renderPlainText(converter, buf, wikiModel);
 					buf.append(" ");
 				}

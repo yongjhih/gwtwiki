@@ -384,7 +384,7 @@ public class Utils {
 
   public static void appendAmpersandEscapedAttribute(StringBuilder writer,
       String attributeName, Map<String, String> tagAtttributes) {
-    String attributeValue = (String) tagAtttributes.get(attributeName);
+    String attributeValue = tagAtttributes.get(attributeName);
     if (attributeValue != null) {
       if (writer.length() > 0) {
         writer.append("&amp;");
@@ -403,7 +403,7 @@ public class Utils {
   public static void appendEscapedAttribute(Appendable writer,
       String attributeName, Map<String, String> tagAtttributes)
       throws IOException {
-    String attributeValue = (String) tagAtttributes.get(attributeName);
+    String attributeValue = tagAtttributes.get(attributeName);
     if (attributeValue != null) {
       Utils.escapeXmlToBuffer(attributeValue, writer, false, false, false);
     }
