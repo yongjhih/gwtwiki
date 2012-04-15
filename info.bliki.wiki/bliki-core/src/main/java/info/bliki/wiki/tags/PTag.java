@@ -12,6 +12,7 @@ public class PTag extends HTMLBlockTag {
 		super("p", "|address" + Configuration.SPECIAL_BLOCK_TAGS);
 	}
 
+	@Override
 	public String getCloseTag() {
 		return "\n</p>";
 	}

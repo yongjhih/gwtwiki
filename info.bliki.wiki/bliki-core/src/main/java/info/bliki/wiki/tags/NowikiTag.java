@@ -1,12 +1,10 @@
 package info.bliki.wiki.tags;
 
-import info.bliki.htmlcleaner.ContentToken;
 import info.bliki.wiki.filter.ITextConverter;
 import info.bliki.wiki.model.IWikiModel;
 import info.bliki.wiki.tags.util.INoBodyParsingTag;
 
 import java.io.IOException;
-import java.util.List;
 
 /**
  * Wiki tag for escaping the wiki syntax.

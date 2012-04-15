@@ -25,7 +25,7 @@ public class MathTag extends NowikiTag {
 			if (content != null && content.length() > 0) {
 				String sizeStr = "D=3";
 				Map<String, String> tagAtttributes = getAttributes();
-				String attributeValue = (String) tagAtttributes.get("d");
+				String attributeValue = tagAtttributes.get("d");
 				if (attributeValue != null) {
 					try {
 						int size = Integer.parseInt(attributeValue);

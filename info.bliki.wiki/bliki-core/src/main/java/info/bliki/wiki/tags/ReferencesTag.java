@@ -27,7 +27,7 @@ public class ReferencesTag extends HTMLTag {
 			int counter;
 			writer.append("<ol class=\"references\">\n");
 			for (int i = 0; i < list.size(); i++) {
-				ref = (Reference) list.get(i);
+				ref = list.get(i);
 				counter = ref.getCounter();
 				writer.append("<li id=\"_note-");
 				String nameAttribute = Encoder.encodeDotUrl(ref.getAttribute());

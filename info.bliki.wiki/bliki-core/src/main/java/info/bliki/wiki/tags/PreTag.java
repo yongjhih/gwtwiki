@@ -6,7 +6,6 @@ import info.bliki.wiki.model.IWikiModel;
 import info.bliki.wiki.tags.util.INoBodyParsingTag;
 
 import java.io.IOException;
-import java.util.regex.Pattern;
 
 /**
  * Wiki tag for the HTML <code>pre</code> Tag.
