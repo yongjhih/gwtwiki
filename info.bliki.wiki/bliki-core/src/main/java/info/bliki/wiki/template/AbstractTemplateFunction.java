@@ -27,10 +27,6 @@ public abstract class AbstractTemplateFunction implements ITemplateFunction {
 		return null;
 	}
 
-	public String parseFunction(List<String> parts, IWikiModel model, char[] src, int beginIndex, int endIndex) throws IOException {
-		return parseFunction(parts, model, src, beginIndex, endIndex, false);
-	}
-
 	public abstract String parseFunction(List<String> parts, IWikiModel model, char[] src, int beginIndex, int endIndex,
 			boolean isSubst) throws IOException;
 
