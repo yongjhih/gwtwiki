@@ -857,6 +857,17 @@ public class WikipediaScanner {
 		}
 	}
 
+	/**
+	 * Find the end of a template parameter declaration or the end of a template
+	 * declaration.
+	 * 
+	 * @param sourceArray
+	 * @param startPosition
+	 * @return an array of two integers. If <code>array[0] > 0</code> the scanner
+	 *         has found the end position of a template parameter declaration. If
+	 *         <code>array[1] > 0</code> the scanner has found the end position of
+	 *         a template declaration.
+	 */
 	public static int[] findNestedParamEnd(final char[] sourceArray, int startPosition) {
 		char ch;
 		int len = sourceArray.length;

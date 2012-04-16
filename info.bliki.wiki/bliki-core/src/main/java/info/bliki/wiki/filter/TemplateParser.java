@@ -801,10 +801,8 @@ public class TemplateParser extends AbstractParser {
 						if (temp[0] >= 0) {
 							currOffset = temp[0];
 						} else {
-							currOffset--;
-							temp[0] = findNestedTemplateEnd(src, currOffset);
-							if (temp[0] >= 0) {
-								currOffset = temp[0];
+							if (temp[1] >= 0) {
+								currOffset = temp[1];
 							}
 						}
 					} else {
@@ -813,6 +811,7 @@ public class TemplateParser extends AbstractParser {
 							currOffset = temp[0];
 						}
 					}
+
 				} else if (ch == '=') {
 					if (!equalCharParsed) {
 						parameter = srcString.substring(lastOffset, currOffset - 1).trim();

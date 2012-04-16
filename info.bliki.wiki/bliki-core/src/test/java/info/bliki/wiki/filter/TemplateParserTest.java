@@ -16,7 +16,17 @@ public class TemplateParserTest extends FilterTestSupport {
 	}
 
 	private final String TEST_STRING_03 = "{{{1|{{PAGENAME}}}}}";
-	
+
+	public void test000() {
+		assertEquals(
+				"start\n"
+						+ "{|border=\"0\" cellspacing=\"0\" cellpadding=\"0\" style=\"margin:0 0 0 0; border-style:none; border-width:0px; border-collapse:collapse; empty-cells:show\"\n"
+						+ "|<div style=\"position: relative;\"><div style=\"font-size:16px\">middle</div></div> \n" + "|}\n" + "end",
+				wikiModel
+						.parseTemplates("start\n{{#if: {{{1|test}}} | {{{!}}border=\"0\" cellspacing=\"0\" cellpadding=\"0\" style=\"margin:0 0 0 0; border-style:none; border-width:0px; border-collapse:collapse; empty-cells:show\"\n"
+								+ "{{!}}<div style=\"position: relative;\"><div style=\"font-size:16px\">middle</div></div> \n{{!}}} }}\nend"));
+	}
+
 	public void testIf00() {
 		assertEquals(
 				"start{{es-verb form of/indicative}}end",
@@ -414,8 +424,6 @@ public class TemplateParserTest extends FilterTestSupport {
 		assertEquals("<references =\"\"></references>", wikiModel.parseTemplates("{{#tag:references|{{{refs|}}}|group={{{group|}}}}}"));
 	}
 
-	
-
 	public void testPipe001() {
 		assertEquals("hello worldhello world ", wikiModel.parseTemplates("{{2x|hello world" + "}} ", false));
 	}
@@ -597,28 +605,29 @@ public class TemplateParserTest extends FilterTestSupport {
 						+ "{{Main Page subpanel|column=both|title=Knowledge groups|1=\n" + "TEST1\n" + "}}\n" + "|\n"
 						+ "{{Main Page subpanel|column=both|title=Sister projects|1=\n" + "TEST2\n" + "}}\n" + "}}"));
 	}
-	
+
 	public void testIssue81_001() {
 		assertEquals(" April 14 ", wikiModel.parseTemplates(" {{{1|April 14}}} "));
 	}
-	
+
 	public void testIssue81_002() {
 		assertEquals("104", wikiModel.parseTemplates("{{#time:z|{{{1|April 14}}}}}"));
 	}
-	
+
 	public void testIssue82_001() {
 		assertEquals("105", wikiModel.parseTemplates("{{#expr:{{#time:z|{{{1|April 14}}}}}+1}}"));
 	}
-	
+
 	public void testIssue82_002() {
 		assertEquals("105th", wikiModel.parseTemplates("{{ordinal|105}}"));
 	}
-	
+
 	public void testIssue82_003() {
 		assertEquals("105th", wikiModel.parseTemplates("{{ordinal|{{#expr:{{#time:z|{{{1|April 14}}}}}+1}}}}"));
 	}
-	
+
 	public void testIssue82_004() {
-		assertEquals("<div class=\"error\">Expression error: Unrecognised punctuation character: \"{\"</div>", wikiModel.parseTemplates("{{subst:#expr:{{#time:z|{{{1|April 14}}}}}+1}}"));
+		assertEquals("<div class=\"error\">Expression error: Unrecognised punctuation character: \"{\"</div>", wikiModel
+				.parseTemplates("{{subst:#expr:{{#time:z|{{{1|April 14}}}}}+1}}"));
 	}
 }
