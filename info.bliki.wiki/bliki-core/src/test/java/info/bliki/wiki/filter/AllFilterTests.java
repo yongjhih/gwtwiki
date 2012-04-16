@@ -15,6 +15,7 @@ public class AllFilterTests extends TestCase {
 
 		s.addTestSuite(BasicFilterTest.class);
 		s.addTestSuite(BBCodeFilterTest.class);
+		s.addTestSuite(BehaviorSwitchTest.class);
 		s.addTestSuite(BoldFilterTest.class);
 		s.addTestSuite(DefinitionListFilterTest.class);
 		s.addTestSuite(CiteFilterTest.class);

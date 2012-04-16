@@ -632,7 +632,7 @@ public interface IWikiModel extends IConfiguration {
 	public boolean isImageNamespace(String namespace);
 
 	/**
-	 * Check if the given namespace is an interwiki link prefix. 
+	 * Check if the given namespace is an interwiki link prefix.
 	 * 
 	 * @param namespace
 	 * @return <code>true</code> if the namespace is a interwiki namespace (i.e.
@@ -730,6 +730,20 @@ public interface IWikiModel extends IConfiguration {
 	 * @return <code>true</code> if the bbCodes should be parsed
 	 */
 	public boolean parseBBCodes();
+
+	/**
+	 * Parse a behavior switch (i.e. an identifier with two leading and trailing
+	 * underscores &quot;__&quot; like for example <code>__NOEDITSECTION__</code>
+	 * ). See <a href
+	 * ="http://www.mediawiki.org/wiki/Help:Magic_words#Behavior_switches">Help
+	 * :Magic_words#Behavior_switches</a>.
+	 * 
+	 * @param identifier
+	 *          the identifier without the leading and trailing underscores
+	 *          (&quot;__&quot;)
+	 * @return <code>true</code> if the switch was parsed
+	 */
+	public boolean parseBehaviorSwitch(String identifier);
 
 	/**
 	 * Parse the raw Wikipedia text and notify the listener

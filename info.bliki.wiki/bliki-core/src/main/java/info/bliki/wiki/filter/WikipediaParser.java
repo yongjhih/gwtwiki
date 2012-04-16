@@ -33,7 +33,7 @@ import java.util.List;
  * @see TemplateParser for the first pass
  */
 public class WikipediaParser extends AbstractParser implements IParser {
-	private static final String[] TOC_IDENTIFIERS = { "TOC", "NOTOC", "FORCETOC" };
+	public static final String[] TOC_IDENTIFIERS = { "TOC", "NOTOC", "FORCETOC" };
 
 	final static String HEADER_STRINGS[] = { "=", "==", "===", "====", "=====", "======" };
 
@@ -1034,6 +1034,11 @@ public class WikipediaParser extends AbstractParser implements IParser {
 			}
 			if (ch == '_' && fSource[tocEndPosition] == '_') {
 				String tocIdent = fStringSource.substring(fCurrentPosition, tocEndPosition - 1);
+				if (fWikiModel.parseBehaviorSwitch(tocIdent)){
+					createContentToken(2);
+					fCurrentPosition = tocEndPosition + 1;
+					return true;
+				}
 				boolean tocRecognized = false;
 				for (int i = 0; i < TOC_IDENTIFIERS.length; i++) {
 					if (TOC_IDENTIFIERS[i].equals(tocIdent)) {
@@ -1057,7 +1062,7 @@ public class WikipediaParser extends AbstractParser implements IParser {
 				}
 				if (tocRecognized) {
 					return true;
-				}
+				}  
 			}
 		}
 		return false;

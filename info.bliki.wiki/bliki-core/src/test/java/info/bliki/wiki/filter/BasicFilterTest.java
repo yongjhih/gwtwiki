@@ -71,7 +71,8 @@ public class BasicFilterTest extends FilterTestSupport {
 	}
 
 	public void testWrongNOTOC() {
-		assertEquals("\n" + "<p>jhfksd __WRONGTOC__ sflkjsd</p>", wikiModel.render("jhfksd __WRONGTOC__ sflkjsd"));
+		assertEquals("\n" + 
+				"<p>jhfksd  sflkjsd</p>", wikiModel.render("jhfksd __WRONGTOC__ sflkjsd"));
 	}
 
 	public void testbq1() {

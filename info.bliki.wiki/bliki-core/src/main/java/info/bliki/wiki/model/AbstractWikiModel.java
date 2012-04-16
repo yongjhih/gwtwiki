@@ -1409,6 +1409,18 @@ public abstract class AbstractWikiModel implements IWikiModel, IContext {
 	/**
 	 * {@inheritDoc}
 	 */
+	public boolean parseBehaviorSwitch(String identifier) {
+		for (int i = 0; i < WikipediaParser.TOC_IDENTIFIERS.length; i++) {
+			if (WikipediaParser.TOC_IDENTIFIERS[i].equals(identifier)) {
+				return false;
+			}
+		}
+		return true;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
 	public void parseEvents(IEventListener listener, String rawWikiText) {
 		initialize();
 		if (rawWikiText == null) {
