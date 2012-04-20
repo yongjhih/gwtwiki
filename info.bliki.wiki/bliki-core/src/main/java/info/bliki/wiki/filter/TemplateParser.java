@@ -828,8 +828,6 @@ public class TemplateParser extends AbstractParser {
 				value = srcString.substring(lastOffset, currOffset);
 				if (parameter != null) {
 					value = value.trim();
-				}
-				if (parameter != null) {
 					namedParameterMap.put(parameter, value);
 				} else {
 					// whitespace characters are not automatically stripped from the start
