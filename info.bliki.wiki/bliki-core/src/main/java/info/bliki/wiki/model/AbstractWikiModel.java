@@ -1713,6 +1713,8 @@ public abstract class AbstractWikiModel implements IWikiModel, IContext {
 			templateCallsCache = config.getTemplateCallsCache();
 			if (templateCallsCache != null) {
 				StringBuilder cacheKeyBuffer = new StringBuilder();
+				cacheKeyBuffer.append(templateName);
+				cacheKeyBuffer.append("|");
 				for (Entry<String, String> entry : parameterMap.entrySet()) {
 					cacheKeyBuffer.append(entry.getKey());
 					cacheKeyBuffer.append("=");
