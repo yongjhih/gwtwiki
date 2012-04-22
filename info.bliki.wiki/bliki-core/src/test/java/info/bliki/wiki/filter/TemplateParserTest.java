@@ -17,8 +17,200 @@ public class TemplateParserTest extends FilterTestSupport {
 
 	private final String TEST_STRING_03 = "{{{1|{{PAGENAME}}}}}";
 
+	public void test00() {
+		assertEquals("{| class=\"float-right\" style=\"width:290px; font-size:90%; background:#FAFAFA;  border:1px solid #bbb; margin:0px 0px 1em 1em; border-collapse:collapse;\" summary=\"Infobox\"\n" + 
+				"|-\n" + 
+				"| colspan=\"2\" style=\"background:#ffffff; text-align:center; font-size:135%;\" | '''PAGENAME'''</font></br><small></small>\n" + 
+				"|- class=\"hintergrundfarbe2\"\n" + 
+				"| colspan=\"2\" style=\"font-weight:bold; padding-left:8px; border-top:solid 1px #bbb;\" |\n" + 
+				"|- class=\"hintergrundfarbe2\" style=\"text-align: center;\"\n" + 
+				"| style=\"width: 50%;\" | [[Bild:Sin escudo.svg|120px|Wappn fêîht]]\n" + 
+				"| align=\"center\" style=\"width: 50%;\" | \n" + 
+				"{| border=\"0\" cellspacing=\"0\" cellpadding=\"0\" style=\"margin:0 0 0 0; border-style:none; border-width:0px; border-collapse:collapse; empty-cells:show\"\n" + 
+				"|<div style=\"position: relative;\"><div style=\"font-size: 5px; position: absolute; display: block; left:87px; top:117px; padding:0;\">[[Bild:reddot.svg|5px|PAGENAME]]</div>[[Bild:Karte Deutschland.svg|140x175px|Deitschlandkartn, Position vo PAGENAME heavoghom]]</div>\n" + 
+				"|}\n" + 
+				"|-\n" + 
+				"! colspan=\"2\" style=\"background-color:#ABCDEF; border:1px solid #bbb;\" | Basisdatn\n" + 
+				"|- class=\"hintergrundfarbe2\"\n" + 
+				"| '''[[Bundesland (Deutschland)|Bundesland]]''': || [[Bayern]]\n" + 
+				"|- class=\"hintergrundfarbe2\"\n" + 
+				"|}", wikiModel.parseTemplates("{{Infobox Ort in Deutschland\n" + 
+				"|Art               = Stadt\n" + 
+				"|Wappen            = Wappen_Grafenwöhr.png\n" + 
+				"|lat_deg           = 49 |lat_min = 43\n" + 
+				"|lon_deg           = 11 |lon_min = 54\n" + 
+				"|Lageplan          = \n" + 
+				"|Bundesland        = Bayern\n" + 
+				"}}"));
+	}
+	
 	public void test000() {
-		assertEquals(
+		assertEquals("{| border=\"0\" cellspacing=\"0\" cellpadding=\"0\" style=\"margin:0 0 0 0; border-style:none; border-width:0px; border-collapse:collapse; empty-cells:show\"\n" + 
+				"|<div style=\"position: relative;\"><div style=\"font-size: 5px; position: absolute; display: block; left:108px; top:55px; padding:0;\">[[Bild:reddot.svg|5px|PAGENAME]]</div>[[Bild:Karte Deutschland.svg|140x175px|Deitschlandkartn, Position vo PAGENAME heavoghom]]</div>\n" + 
+				"|}", wikiModel.parseTemplates("{{Lageplan\n" + "|marker     = reddot.svg\n" + "|markersize = 5\n"
+				+ "|markertext = {{#if: {{{Name|}}} | {{{Name}}} | {{PAGENAME}} }}\n"
+				+ "|pos_y      = {{#expr: (55.1 - {{{lat_deg|52.5}}} - {{{lat_min|0}}} / 60) * 100 / 7.9}}\n"
+				+ "|pos_x      = {{#expr: ({{{lon_deg|13.4}}} + {{{lon_min|0}}} / 60) * 10 - 55}}\n"
+				+ "|map        = Karte Deutschland.svg\n" + "|mapsize_x  = 140\n" + "|mapsize_y  = 175\n"
+				+ "|maptext    = Deitschlandkartn, Position vo {{#if: {{{Name|}}} | {{{Name}}} | {{PAGENAME}} }} heavoghom\n"
+				+ "|warning    = [[Bild:Missing Map of Germany.png|140px|Koordinaten san außerhoib vom darstellbarn Bereich]]\n" + "}}"));
+	}
+
+	public void test001() {
+		assertEquals("\n" + 
+				"<div style=\"page-break-inside: avoid;\">\n" + 
+				"<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" style=\"margin:0 0 0 0; border-style:none; border-width:0px; border-collapse:collapse; empty-cells:show\">\n" + 
+				"<tr>\n" + 
+				"<td>\n" + 
+				"<div style=\"position: relative;\">\n" + 
+				"<div style=\"font-size: 5px; position: absolute; display: block; left:108px; top:55px; padding:0;\"><div style=\"width:5px;\"><a class=\"internal\" href=\"http://www.bliki.info/wiki/Bild:5px-reddot.svg.png\" title=\"PAGENAME\"><img src=\"http://www.bliki.info/wiki/5px-reddot.svg.png\" alt=\"PAGENAME\" title=\"PAGENAME\" class=\"location-none\" width=\"5\" />\n" + 
+				"</a></div>\n" + 
+				"</div><div style=\"height:175px;width:140px;\"><a class=\"internal\" href=\"http://www.bliki.info/wiki/Bild:140px-Karte_Deutschland.svg.png\" title=\"Deitschlandkartn, Position vo PAGENAME heavoghom\"><img src=\"http://www.bliki.info/wiki/140px-Karte_Deutschland.svg.png\" alt=\"Deitschlandkartn, Position vo PAGENAME heavoghom\" title=\"Deitschlandkartn, Position vo PAGENAME heavoghom\" class=\"location-none\" height=\"175\" width=\"140\" />\n" + 
+				"</a></div>\n" + 
+				"</div></td></tr></table></div>", wikiModel.render("{{Lageplan\n" + "|marker     = reddot.svg\n" + "|markersize = 5\n"
+				+ "|markertext = {{#if: {{{Name|}}} | {{{Name}}} | {{PAGENAME}} }}\n"
+				+ "|pos_y      = {{#expr: (55.1 - {{{lat_deg|52.5}}} - {{{lat_min|0}}} / 60) * 100 / 7.9}}\n"
+				+ "|pos_x      = {{#expr: ({{{lon_deg|13.4}}} + {{{lon_min|0}}} / 60) * 10 - 55}}\n"
+				+ "|map        = Karte Deutschland.svg\n" + "|mapsize_x  = 140\n" + "|mapsize_y  = 175\n"
+				+ "|maptext    = Deitschlandkartn, Position vo {{#if: {{{Name|}}} | {{{Name}}} | {{PAGENAME}} }} heavoghom\n"
+				+ "|warning    = [[Bild:Missing Map of Germany.png|140px|Koordinaten san außerhoib vom darstellbarn Bereich]]\n" + "}}"));
+	}
+
+	public void test002() {
+		assertEquals("{| class=\"float-right\" style=\"width:290px; font-size:90%; background:#FAFAFA;  border:1px solid #bbb; margin:0px 0px 1em 1em; border-collapse:collapse;\" summary=\"Infobox\"\n" + 
+				"|-\n" + 
+				"| colspan=\"2\" style=\"background:#ffffff; text-align:center; font-size:135%;\" | '''PAGENAME'''</font></br><small></small>\n" + 
+				"|- class=\"hintergrundfarbe2\"\n" + 
+				"| colspan=\"2\" style=\"font-weight:bold; padding-left:8px; border-top:solid 1px #bbb;\" |\n" + 
+				"|- class=\"hintergrundfarbe2\" style=\"text-align: center;\"\n" + 
+				"| style=\"width: 50%;\" | [[Bild:Sin escudo.svg|120px|Wappn fêîht]]\n" + 
+				"| align=\"center\" style=\"width: 50%;\" | [[Bild:Karte Deutschland.png|140px|Koordinatn san net da]]\n" + 
+				"|-\n" + 
+				"! colspan=\"2\" style=\"background-color:#ABCDEF; border:1px solid #bbb;\" | Basisdatn\n" + 
+				"|- class=\"hintergrundfarbe2\"\n" + 
+				"| '''[[Bundesland (Deutschland)|Bundesland]]''': || [[]]\n" + 
+				"|- class=\"hintergrundfarbe2\"\n" + 
+				"|}", wikiModel.parseTemplates("{{Infobox Ort in Deutschland}}"));
+	}
+
+	public void test003() {
+		assertEquals("\n" + 
+				"<div style=\"page-break-inside: avoid;\">\n" + 
+				"<table class=\"float-right\" style=\"width:290px; font-size:90%; background:#FAFAFA;  border:1px solid #bbb; margin:0px 0px 1em 1em; border-collapse:collapse;\" summary=\"Infobox\">\n" + 
+				"<tr>\n" + 
+				"<td colspan=\"2\" style=\"background:#ffffff; text-align:center; font-size:135%;\"><b>PAGENAME</b><small /></td></tr>\n" + 
+				"<tr class=\"hintergrundfarbe2\">\n" + 
+				"<td colspan=\"2\" style=\"font-weight:bold; padding-left:8px; border-top:solid 1px #bbb;\" /></tr>\n" + 
+				"<tr class=\"hintergrundfarbe2\" style=\"text-align: center;\">\n" + 
+				"<td style=\"width: 50%;\"><div style=\"width:120px;\"><a class=\"internal\" href=\"http://www.bliki.info/wiki/Bild:120px-Sin_escudo.svg.png\" title=\"Wappn fêîht\"><img src=\"http://www.bliki.info/wiki/120px-Sin_escudo.svg.png\" alt=\"Wappn fêîht\" title=\"Wappn fêîht\" class=\"location-none\" width=\"120\" />\n" + 
+				"</a></div>\n" + 
+				"</td>\n" + 
+				"<td align=\"center\" style=\"width: 50%;\"><div style=\"width:140px;\"><a class=\"internal\" href=\"http://www.bliki.info/wiki/Bild:140px-Karte_Deutschland.png\" title=\"Koordinatn san net da\"><img src=\"http://www.bliki.info/wiki/140px-Karte_Deutschland.png\" alt=\"Koordinatn san net da\" title=\"Koordinatn san net da\" class=\"location-none\" width=\"140\" />\n" + 
+				"</a></div>\n" + 
+				"</td></tr>\n" + 
+				"<tr>\n" + 
+				"<th colspan=\"2\" style=\"background-color:#ABCDEF; border:1px solid #bbb;\">Basisdatn</th></tr>\n" + 
+				"<tr class=\"hintergrundfarbe2\">\n" + 
+				"<td><b><a href=\"http://www.bliki.info/wiki/Bundesland_(Deutschland)\" title=\"Bundesland (Deutschland)\">Bundesland</a></b>: </td>\n" + 
+				"<td><a href=\"http://www.bliki.info/wiki/\" title=\"\" /></td></tr></table></div>", wikiModel.render("{{Infobox Ort in Deutschland}}"));
+	}
+	
+	public void test004() {
+		assertEquals("{| class=\"float-right\" style=\"width:290px; font-size:90%; background:#FAFAFA;  border:1px solid #bbb; margin:0px 0px 1em 1em; border-collapse:collapse;\" summary=\"Infobox\"\n" + 
+				"|-\n" + 
+				"| colspan=\"2\" style=\"background:#ffffff; text-align:center; font-size:135%;\" | '''PAGENAME'''</font></br><small></small>\n" + 
+				"|- class=\"hintergrundfarbe2\"\n" + 
+				"| colspan=\"2\" style=\"font-weight:bold; padding-left:8px; border-top:solid 1px #bbb;\" |\n" + 
+				"|- class=\"hintergrundfarbe2\" style=\"text-align: center;\"\n" + 
+				"| style=\"width: 50%;\" | [[Bild:Sin escudo.svg|120px|Wappn fêîht]]\n" + 
+				"| align=\"center\" style=\"width: 50%;\" | \n" + 
+				"{| border=\"0\" cellspacing=\"0\" cellpadding=\"0\" style=\"margin:0 0 0 0; border-style:none; border-width:0px; border-collapse:collapse; empty-cells:show\"\n" + 
+				"|<div style=\"position: relative;\"><div style=\"font-size: 5px; position: absolute; display: block; left:87px; top:117px; padding:0;\">[[Bild:reddot.svg|5px|PAGENAME]]</div>[[Bild:Karte Deutschland.svg|140x175px|Deitschlandkartn, Position vo PAGENAME heavoghom]]</div>\n" + 
+				"|}\n" + 
+				"|-\n" + 
+				"! colspan=\"2\" style=\"background-color:#ABCDEF; border:1px solid #bbb;\" | Basisdatn\n" + 
+				"|- class=\"hintergrundfarbe2\"\n" + 
+				"| '''[[Bundesland (Deutschland)|Bundesland]]''': || [[Bayern]]\n" + 
+				"|- class=\"hintergrundfarbe2\"\n" + 
+				"|}", wikiModel.parseTemplates("{{Infobox Ort in Deutschland\n" + 
+				"|Art               = Stadt\n" + 
+				"|Wappen            = Wappen_Grafenwöhr.png\n" + 
+				"|lat_deg           = 49 |lat_min = 43\n" + 
+				"|lon_deg           = 11 |lon_min = 54\n" + 
+				"|Lageplan          = \n" + 
+				"|Bundesland        = Bayern\n" + 
+				"}}"));
+	}
+
+	public void test005() {
+		assertEquals("\n" + 
+				"<div style=\"page-break-inside: avoid;\">\n" + 
+				"<table class=\"float-right\" style=\"width:290px; font-size:90%; background:#FAFAFA;  border:1px solid #bbb; margin:0px 0px 1em 1em; border-collapse:collapse;\" summary=\"Infobox\">\n" + 
+				"<tr>\n" + 
+				"<td colspan=\"2\" style=\"background:#ffffff; text-align:center; font-size:135%;\"><b>PAGENAME</b><small /></td></tr>\n" + 
+				"<tr class=\"hintergrundfarbe2\">\n" + 
+				"<td colspan=\"2\" style=\"font-weight:bold; padding-left:8px; border-top:solid 1px #bbb;\" /></tr>\n" + 
+				"<tr class=\"hintergrundfarbe2\" style=\"text-align: center;\">\n" + 
+				"<td style=\"width: 50%;\"><div style=\"width:120px;\"><a class=\"internal\" href=\"http://www.bliki.info/wiki/Bild:120px-Sin_escudo.svg.png\" title=\"Wappn fêîht\"><img src=\"http://www.bliki.info/wiki/120px-Sin_escudo.svg.png\" alt=\"Wappn fêîht\" title=\"Wappn fêîht\" class=\"location-none\" width=\"120\" />\n" + 
+				"</a></div>\n" + 
+				"</td>\n" + 
+				"<td align=\"center\" style=\"width: 50%;\">\n" + 
+				"\n" + 
+				"<div style=\"page-break-inside: avoid;\">\n" + 
+				"<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" style=\"margin:0 0 0 0; border-style:none; border-width:0px; border-collapse:collapse; empty-cells:show\">\n" + 
+				"<tr>\n" + 
+				"<td>\n" + 
+				"<div style=\"position: relative;\">\n" + 
+				"<div style=\"font-size: 5px; position: absolute; display: block; left:87px; top:117px; padding:0;\"><div style=\"width:5px;\"><a class=\"internal\" href=\"http://www.bliki.info/wiki/Bild:5px-reddot.svg.png\" title=\"PAGENAME\"><img src=\"http://www.bliki.info/wiki/5px-reddot.svg.png\" alt=\"PAGENAME\" title=\"PAGENAME\" class=\"location-none\" width=\"5\" />\n" + 
+				"</a></div>\n" + 
+				"</div><div style=\"height:175px;width:140px;\"><a class=\"internal\" href=\"http://www.bliki.info/wiki/Bild:140px-Karte_Deutschland.svg.png\" title=\"Deitschlandkartn, Position vo PAGENAME heavoghom\"><img src=\"http://www.bliki.info/wiki/140px-Karte_Deutschland.svg.png\" alt=\"Deitschlandkartn, Position vo PAGENAME heavoghom\" title=\"Deitschlandkartn, Position vo PAGENAME heavoghom\" class=\"location-none\" height=\"175\" width=\"140\" />\n" + 
+				"</a></div>\n" + 
+				"</div></td></tr></table></div></td></tr>\n" + 
+				"<tr>\n" + 
+				"<th colspan=\"2\" style=\"background-color:#ABCDEF; border:1px solid #bbb;\">Basisdatn</th></tr>\n" + 
+				"<tr class=\"hintergrundfarbe2\">\n" + 
+				"<td><b><a href=\"http://www.bliki.info/wiki/Bundesland_(Deutschland)\" title=\"Bundesland (Deutschland)\">Bundesland</a></b>: </td>\n" + 
+				"<td><a href=\"http://www.bliki.info/wiki/Bayern\" title=\"Bayern\">Bayern</a></td></tr></table></div>", wikiModel.render("{{Infobox Ort in Deutschland\n" + 
+				"|Art               = Stadt\n" + 
+				"|Wappen            = Wappen_Grafenwöhr.png\n" + 
+				"|lat_deg           = 49 |lat_min = 43\n" + 
+				"|lon_deg           = 11 |lon_min = 54\n" + 
+				"|Lageplan          = \n" + 
+				"|Bundesland        = Bayern\n" + 
+				"}}"));
+	}
+	
+	public void test006() {
+		assertEquals("\n" + 
+				"\n" + 
+				"<div style=\"page-break-inside: avoid;\">\n" + 
+				"<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" style=\"margin:0 0 0 0; border-style:none; border-width:0px; border-collapse:collapse; empty-cells:show\">\n" + 
+				"<tr>\n" + 
+				"<td>\n" + 
+				"<div style=\"position: relative;\">\n" + 
+				"<div style=\"font-size: 5px; position: absolute; display: block; left:108px; top:55px; padding:0;\"><div style=\"width:5px;\"><a class=\"internal\" href=\"http://www.bliki.info/wiki/Bild:5px-reddot.svg.png\" title=\"PAGENAME\"><img src=\"http://www.bliki.info/wiki/5px-reddot.svg.png\" alt=\"PAGENAME\" title=\"PAGENAME\" class=\"location-none\" width=\"5\" />\n" + 
+				"</a></div>\n" + 
+				"</div><div style=\"height:175px;width:140px;\"><a class=\"internal\" href=\"http://www.bliki.info/wiki/Bild:140px-Karte_Deutschland.svg.png\" title=\"Deitschlandkartn, Position vo PAGENAME heavoghom\"><img src=\"http://www.bliki.info/wiki/140px-Karte_Deutschland.svg.png\" alt=\"Deitschlandkartn, Position vo PAGENAME heavoghom\" title=\"Deitschlandkartn, Position vo PAGENAME heavoghom\" class=\"location-none\" height=\"175\" width=\"140\" />\n" + 
+				"</a></div>\n" + 
+				"</div></td></tr></table></div>", wikiModel.render("{{#if: {{{Karte|}}} | [[Bild:{{{Karte}}}|140x175px|Deitschlandkartn, Position vo {{#if: {{{Name|}}} | {{{Name}}} | {{PAGENAME}} }} heavoghobn]] | {{#if: {{{lat_deg|t2}}} |\n" + 
+				"{{Lageplan\n" + 
+				"|marker     = reddot.svg\n" + 
+				"|markersize = 5\n" +  
+				"|markertext = {{#if: {{{Name|}}} | {{{Name}}} | {{PAGENAME}} }}\n" + 
+				"|pos_y      = {{#expr: (55.1 - {{{lat_deg|52.5}}} - {{{lat_min|0}}} / 60) * 100 / 7.9}}\n" + 
+				"|pos_x      = {{#expr: ({{{lon_deg|13.4}}} + {{{lon_min|0}}} / 60) * 10 - 55}}\n" + 
+				"|map        = Karte Deutschland.svg\n" + 
+				"|mapsize_x  = 140\n" + 
+				"|mapsize_y  = 175\n" + 
+				"|maptext    = Deitschlandkartn, Position vo {{#if: {{{Name|}}} | {{{Name}}} | {{PAGENAME}} }} heavoghom\n" + 
+				"|warning    = [[Bild:Missing Map of Germany.png|140px|Koordinaten san außerhoib vom darstellbarn Bereich]]\n" + 
+				"}}\n" + 
+				"| [[Bild:Karte Deutschland.png|140px|Koordinatn san net da]] }}\n" + 
+				"}}"));
+	}
+	
+	public void test010() {
+		assertEquals( 
 				"start\n"
 						+ "{|border=\"0\" cellspacing=\"0\" cellpadding=\"0\" style=\"margin:0 0 0 0; border-style:none; border-width:0px; border-collapse:collapse; empty-cells:show\"\n"
 						+ "|<div style=\"position: relative;\"><div style=\"font-size:16px\">middle</div></div> \n" + "|}\n" + "end",
@@ -588,20 +780,29 @@ public class TemplateParserTest extends FilterTestSupport {
 
 	public void testIssue77_002() {
 		assertEquals(
-				"{| style=\"width: 100%; height: auto; border: 1px solid #88A; background-color: #ACF; vertical-align: top; margin: 0em 0em 0.5em 0em; border-spacing: 0.6em;\" cellspacing=\"6\"\n"
-						+ "|-\n"
-						+ "| style=\"width: 100%; vertical-align:top; color:#000; border: 3px double #AAA; background-color: #ffffff; padding: 0.5em; margin: 0em;\" colspan=\"2\" |\n"
-						+ "{| style=\"vertical-align: top; margin: 0em; width: 100% !important; width: auto; display: table !important; display: inline; background-color: transparent;\"\n"
-						+ "! colspan=\"2\" style=\"background:#F0F0F0; margin: 0em; height: 1em; font-weight:bold; border:1px solid #AAA; text-align:left; color:#000;\" | <div style=\"float:right;\"></div><h1 style=\"text-align: left; font-size: 1.2em; border: none; margin: 0; padding: 1.5px 0 2px 4px;\">'''Knowledge groups'''</h1></div>\n"
-						+ "|-\n"
-						+ "|\n"
-						+ "TEST1\n"
-						+ "|}\n"
-						+ "|-\n"
-						+ "| style=\"width: 100%; vertical-align:top; color:#000; border: 3px double #AAA; background-color: #ffffff; padding: 0.5em; margin: 0em;\" colspan=\"2\" |\n"
-						+ "{| style=\"vertical-align: top; margin: 0em; width: 100% !important; width: auto; display: table !important; display: inline; background-color: transparent;\"\n"
-						+ "! colspan=\"2\" style=\"background:#F0F0F0; margin: 0em; height: 1em; font-weight:bold; border:1px solid #AAA; text-align:left; color:#000;\" | <div style=\"float:right;\"></div><h1 style=\"text-align: left; font-size: 1.2em; border: none; margin: 0; padding: 1.5px 0 2px 4px;\">'''Sister projects'''</h1></div>\n"
-						+ "|-\n" + "|\n" + "TEST2\n" + "|}\n" + "|}", wikiModel.parseTemplates("{{Main Page panel|\n"
+				"{| style=\"width: 100%; height: auto; border: 1px solid #88A; background-color: #ACF; vertical-align: top; margin: 0em 0em 0.5em 0em; border-spacing: 0.6em;\" cellspacing=\"6\"\n" + 
+				"|-\n" + 
+				"\n" + 
+				"| style=\"width: 100%; vertical-align:top; color:#000; border: 3px double #AAA; background-color: #ffffff; padding: 0.5em; margin: 0em;\" colspan=\"2\" |\n" + 
+				"{| style=\"vertical-align: top; margin: 0em; width: 100% !important; width: auto; display: table !important; display: inline; background-color: transparent;\"\n" + 
+				"\n" + 
+				"! colspan=\"2\" style=\"background:#F0F0F0; margin: 0em; height: 1em; font-weight:bold; border:1px solid #AAA; text-align:left; color:#000;\" | <div style=\"float:right;\"></div><h1 style=\"text-align: left; font-size: 1.2em; border: none; margin: 0; padding: 1.5px 0 2px 4px;\">'''Knowledge groups'''</h1></div>\n" + 
+				"|-\n" + 
+				"|\n" + 
+				"TEST1\n" + 
+				"|}\n" + 
+				"\n" + 
+				"|-\n" + 
+				"\n" + 
+				"| style=\"width: 100%; vertical-align:top; color:#000; border: 3px double #AAA; background-color: #ffffff; padding: 0.5em; margin: 0em;\" colspan=\"2\" |\n" + 
+				"{| style=\"vertical-align: top; margin: 0em; width: 100% !important; width: auto; display: table !important; display: inline; background-color: transparent;\"\n" + 
+				"\n" + 
+				"! colspan=\"2\" style=\"background:#F0F0F0; margin: 0em; height: 1em; font-weight:bold; border:1px solid #AAA; text-align:left; color:#000;\" | <div style=\"float:right;\"></div><h1 style=\"text-align: left; font-size: 1.2em; border: none; margin: 0; padding: 1.5px 0 2px 4px;\">'''Sister projects'''</h1></div>\n" + 
+				"|-\n" + 
+				"|\n" + 
+				"TEST2\n" + 
+				"|}\n" + 
+				"|}", wikiModel.parseTemplates("{{Main Page panel|\n"
 						+ "{{Main Page subpanel|column=both|title=Knowledge groups|1=\n" + "TEST1\n" + "}}\n" + "|\n"
 						+ "{{Main Page subpanel|column=both|title=Sister projects|1=\n" + "TEST2\n" + "}}\n" + "}}"));
 	}

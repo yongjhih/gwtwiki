@@ -1,5 +1,6 @@
 package info.bliki.wiki.template;
 
+import info.bliki.htmlcleaner.Utils;
 import info.bliki.wiki.filter.TemplateParser;
 import info.bliki.wiki.model.IWikiModel;
 
@@ -7,6 +8,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * A template parser function for <code>{{safesubst: ... }}</code>. See <a
@@ -24,12 +26,12 @@ public class Safesubst extends AbstractTemplateFunction {
 	@Override
 	public String parseFunction(List<String> parts1, IWikiModel model, char[] src, int beginIndex, int endIndex, boolean isSubst) {
 		String substArg = new String(src, beginIndex, endIndex - beginIndex);
-		String substituted = parsePreprocess(substArg, model, null);
+		String substituted = Safesubst.parsePreprocess(substArg, model, null);
 		char[] src2 = substituted.toCharArray();
 
 		Object[] objs = TemplateParser.createParameterMap(src2, 0, src2.length);
 		List<String> parts = (List<String>) objs[0];
-		String templateName = ((String) objs[1]).trim();
+		String templateName = ((String) objs[1]);
 
 		int currOffset = TemplateParser.checkParserFunction(substituted);
 		if (currOffset > 0) {
@@ -72,8 +74,29 @@ public class Safesubst extends AbstractTemplateFunction {
 		}
 
 		if (plainContent != null) {
-			return parsePreprocess(plainContent, model, parameterMap);
+			return Safesubst.parsePreprocess(plainContent, model, parameterMap);
 		}
 		return "";
+	}
+
+	/**
+	 * Parse the preprocess step for the given content string with the template
+	 * parser and <code>Utils#trimNewlineLeft()</code> the resulting string.
+	 * 
+	 * @param content
+	 * @param model
+	 * @return
+	 */
+	public static String parsePreprocess(String content, IWikiModel model, Map<String, String> templateParameterMap) {
+		if (content == null || content.length() == 0) {
+			return "";
+		}
+		StringBuilder buf = new StringBuilder(content.length());
+		try {
+			TemplateParser.parsePreprocessRecursive(content, model, buf, false, false, templateParameterMap);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return Utils.trimNewlineLeft(buf.toString());
 	}
 }

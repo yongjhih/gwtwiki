@@ -27,7 +27,7 @@ public class Expr extends AbstractTemplateFunction {
 	public String parseFunction(List<String> list, IWikiModel model, char[] src, int beginIndex, int endIndex, boolean isSubst)
 			throws IOException {
 		if (list.size() > 0) {
-			String expression = list.get(0);
+			String expression = list.get(0).trim();
 			if (expression.length() == 0) {
 				return null;
 			}

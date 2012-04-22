@@ -47,17 +47,17 @@ public class DollarContext extends AbstractTemplateFunction {
 			IContext context = (IContext) model;
 			if (list.size() > 0) {
 				// name of the attribute
-				String attribute = parse(list.get(0), model);
+				String attribute = parseTrim(list.get(0), model);
 				if (attribute.length() > 0) {
 					String formatString = null;
 					String separatorString = null;
 					String nullvalueString = null;
 					if (list.size() > 1) {
 						// format string of the attribute
-						formatString = parse(list.get(1), model);
+						formatString = parseTrim(list.get(1), model);
 					}
 					if (list.size() > 2) {
-						separatorString = parse(list.get(2), model);
+						separatorString = parseTrim(list.get(2), model);
 						if (separatorString.length() > 1) {
 							int begin = 0;
 							int end = separatorString.length();
@@ -73,7 +73,7 @@ public class DollarContext extends AbstractTemplateFunction {
 						}
 					}
 					if (list.size() > 3) {
-						nullvalueString = parse(list.get(3), model);
+						nullvalueString = parseTrim(list.get(3), model);
 					}
 					// get the assigned value of the attribute
 					Object value = context.getAttribute(attribute);

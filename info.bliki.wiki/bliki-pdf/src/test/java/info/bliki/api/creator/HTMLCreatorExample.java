@@ -105,7 +105,10 @@ public class HTMLCreatorExample {
 	public static void testCreator011() {
 		testWikipediaENAPI("Main Page", "http://simple.wikipedia.org/w/api.php");
 	}
-
+	
+		public static void testCreator012() {
+		testWikipediaENAPI("Grafenwöhr", "http://bar.wikipedia.org/w/api.php");
+	}
 	public static void main(String[] args) {
 		testCreator001();
 	}

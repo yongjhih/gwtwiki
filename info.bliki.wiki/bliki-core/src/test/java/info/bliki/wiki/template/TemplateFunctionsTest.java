@@ -83,7 +83,7 @@ public class TemplateFunctionsTest extends TestCase {
 
 	public void testIfEq07() {
 		// {{ #ifeq: {{{x}}} | {{concat| {|{|{x}|}|} }} | 1 | 0 }} = 1
-		assertEquals("{{{x}}}", wikiModel.parseTemplates("{{concat| {|{|{x}|}|} }}", false));
+		assertEquals(" {{{x}}} ", wikiModel.parseTemplates("{{concat| {|{|{x}|}|} }}", false));
 
 		assertEquals("1", wikiModel.parseTemplates("{{ #ifeq: {{{x}}} | {{concat| {|{|{x}|}|} }} | 1 | 0 }}", false));
 	}

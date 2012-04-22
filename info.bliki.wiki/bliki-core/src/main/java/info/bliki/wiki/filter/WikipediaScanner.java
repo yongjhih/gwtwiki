@@ -610,7 +610,7 @@ public class WikipediaScanner {
 	 * Replace the wiki template parameters in the given template string
 	 * 
 	 * @param template
-	 * @param fTemplateParameters
+	 * @param templateParameters
 	 * @return <code>null</code> if no replacement could be found
 	 */
 	public StringBuilder replaceTemplateParameters(String template, Map<String, String> templateParameters) {
@@ -637,7 +637,7 @@ public class WikipediaScanner {
 						fScannerPosition = temp[0];
 						List<String> list = splitByPipe(fSource, parameterStart, fScannerPosition - 3, null);
 						if (list.size() > 0) {
-							String parameterString = list.get(0);
+							String parameterString = list.get(0).trim();
 							String value = null;
 							isDefaultValue = false;
 							if (templateParameters != null) {
@@ -708,7 +708,8 @@ public class WikipediaScanner {
 	}
 
 	/**
-	 * Split the given src character array by pipe symbol (i.e. &quot;|&quot;)
+	 * Split the given <code>srcArray</code> character array by pipe symbol (i.e.
+	 * &quot;|&quot;)
 	 * 
 	 * @param srcArray
 	 * @param currOffset
@@ -722,7 +723,6 @@ public class WikipediaScanner {
 			resultList = new ArrayList<String>();
 		}
 		char ch;
-		String value;
 		int[] temp = new int[] { -1, -1 };
 
 		int lastOffset = currOffset;
@@ -750,20 +750,19 @@ public class WikipediaScanner {
 						}
 					}
 				} else if (ch == '|') {
-					value = Utils.trimNewlineRight(new String(srcArray, lastOffset, currOffset - lastOffset - 1));
-					resultList.add(value);
+					resultList.add(new String(srcArray, lastOffset, currOffset - lastOffset - 1));
 					lastOffset = currOffset;
 				}
 			}
 
 			if (currOffset > lastOffset) {
-				resultList.add(Utils.trimNewlineRight(new String(srcArray, lastOffset, currOffset - lastOffset)));
+				resultList.add(new String(srcArray, lastOffset, currOffset - lastOffset));
 			} else if (currOffset == lastOffset) {
 				resultList.add("");
 			}
 		} catch (IndexOutOfBoundsException e) {
 			if (currOffset > lastOffset) {
-				resultList.add(Utils.trimNewlineRight(new String(srcArray, lastOffset, currOffset - lastOffset)));
+				resultList.add(new String(srcArray, lastOffset, currOffset - lastOffset));
 			} else if (currOffset == lastOffset) {
 				resultList.add("");
 			}
@@ -814,31 +813,7 @@ public class WikipediaScanner {
 			while (position < sourceArray.length) {
 				ch = sourceArray[position++];
 				if (ch == '{') {
-					// if (sourceArray[position] == '{') {
-					// position++;
-					// if ((len > position) && sourceArray[position] == '{') {
-					// // template parameter beginning
-					// position++;
-					// int[] temp = findNestedParamEnd(sourceArray, position);
-					// if (temp[0] < 0) {
-					// position--;
-					// temp[0] = findNestedTemplateEnd(sourceArray, position);
-					// if (temp[0] < 0) {
-					// return -1;
-					// }
-					// }
-					// position = temp[0];
-					// } else {
-					// // template beginning
-					// int temp = findNestedTemplateEnd(sourceArray, position);
-					// if (temp < 0) {
-					// return -1;
-					// }
-					// position = temp;
-					// }
-					// } else {
 					countSingleOpenBraces++;
-					// }
 				} else if (ch == '}') {
 					if (countSingleOpenBraces > 0) {
 						countSingleOpenBraces--;

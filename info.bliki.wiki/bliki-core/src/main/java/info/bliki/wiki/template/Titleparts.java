@@ -22,11 +22,11 @@ public class Titleparts extends AbstractTemplateFunction {
 	@Override
 	public String parseFunction(List<String> list, IWikiModel model, char[] src, int beginIndex, int endIndex, boolean isSubst) {
 		if (list.size() > 0) {
-			String pagename = isSubst ? list.get(0) : parse(list.get(0), model);
+			String pagename = isSubst ? list.get(0) : parseTrim(list.get(0), model);
 			int numberOfSegments = 0;
 			if (list.size() > 1) {
 				try {
-					String str = isSubst ? list.get(1) : parse(list.get(1), model);
+					String str = isSubst ? list.get(1) : parseTrim(list.get(1), model);
 					numberOfSegments = Integer.parseInt(str);
 				} catch (NumberFormatException nfe) {
 

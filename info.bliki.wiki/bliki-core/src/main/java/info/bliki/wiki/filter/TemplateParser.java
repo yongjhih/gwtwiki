@@ -586,7 +586,7 @@ public class TemplateParser extends AbstractParser {
 		String plainContent = null;
 		int endOffset = fCurrentPosition - 2;
 		Object[] objs = createParameterMap(fSource, startTemplatePosition, fCurrentPosition - startTemplatePosition - 2);
-		String templateName = ((String) objs[1]).trim();
+		String templateName = ((String) objs[1]);
 		List<String> parts = (List<String>) objs[0];
 		ITemplateFunction templateFunction = null;
 		int currOffset = 0;
@@ -640,7 +640,7 @@ public class TemplateParser extends AbstractParser {
 		int endOffset = fCurrentPosition - 2;
 		Object[] objs = createParameterMap(fSource, startTemplatePosition, fCurrentPosition - startTemplatePosition - 2);
 		List<String> parts = (List<String>) objs[0];
-		String templateName = ((String) objs[1]).trim();
+		String templateName = ((String) objs[1]);
 		StringBuilder buf = new StringBuilder((templateName.length()) + (templateName.length() / 10));
 		TemplateParser.parse(templateName, fWikiModel, buf, false);
 		templateName = buf.toString();
@@ -669,10 +669,11 @@ public class TemplateParser extends AbstractParser {
 		LinkedHashMap<String, String> parameterMap = new LinkedHashMap<String, String>();
 		List<String> unnamedParameters = new ArrayList<String>();
 		for (int i = 1; i < parts.size(); i++) {
+			String temp = parts.get(i);
 			if (i == parts.size() - 1) {
-				createSingleParameter(parts.get(i), parameterMap, unnamedParameters);
+				createSingleParameter(temp, parameterMap, unnamedParameters);
 			} else {
-				createSingleParameter(parts.get(i), parameterMap, unnamedParameters);
+				createSingleParameter(temp, parameterMap, unnamedParameters);
 			}
 		}
 		mergeParameters(parameterMap, unnamedParameters);
@@ -745,9 +746,9 @@ public class TemplateParser extends AbstractParser {
 		resultList = splitByPipe(src, currOffset, endOffset, resultList);
 		if (resultList.size() <= 1) {
 			// set the template name
-			objs[1] = new String(src, startOffset, len);
+			objs[1] = new String(src, startOffset, len).trim();
 		} else {
-			objs[1] = resultList.get(0);
+			objs[1] = resultList.get(0).trim();
 		}
 		return objs;
 	}

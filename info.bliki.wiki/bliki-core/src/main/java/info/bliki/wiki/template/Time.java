@@ -148,7 +148,7 @@ public class Time extends AbstractTemplateFunction {
 		if (list.size() > 0) {
 			Date date;
 			if (list.size() > 1) {
-				String dateTimeParameter = isSubst ? list.get(1) : parse(list.get(1), model);
+				String dateTimeParameter = isSubst ? list.get(1) : parseTrim(list.get(1), model);
 
 				try {
 					date = new StringToTime(dateTimeParameter);
@@ -159,7 +159,7 @@ public class Time extends AbstractTemplateFunction {
 				date = model.getCurrentTimeStamp();
 			}
 
-			String condition = isSubst ? list.get(0) : parse(list.get(0), model);
+			String condition = isSubst ? list.get(0) : parseTrim(list.get(0), model);
 			StringBuilder result = new StringBuilder(condition.length() * 2);
 			boolean inDoubleQuotes = false;
 			GregorianCalendar cal = new GregorianCalendar(model.getLocale());

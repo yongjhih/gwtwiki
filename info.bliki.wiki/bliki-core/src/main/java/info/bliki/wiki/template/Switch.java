@@ -23,21 +23,21 @@ public class Switch extends AbstractTemplateFunction {
 	public String parseFunction(List<String> list, IWikiModel model, char[] src, int beginIndex, int endIndex, boolean isSubst) {
 		if (list.size() > 2) {
 			String defaultResult = null;
-			String conditionString = isSubst ? list.get(0) : parse(list.get(0), model);
+			String conditionString = isSubst ? list.get(0) : parseTrim(list.get(0), model);
 			boolean valueFound = false;
 			for (int i = 1; i < list.size(); i++) {
-				String temp=isSubst ? list.get(i) : parse(list.get(i), model);
+				String temp=isSubst ? list.get(i) : parseTrim(list.get(i), model);
 				int index = temp.indexOf('=');
 				String leftHandSide;
 				if (index >= 0) {
 					if (valueFound) {
 						return temp.substring(index + 1).trim();
 					}
-					leftHandSide = temp.substring(0, index).trim();
+					leftHandSide = temp.substring(0, index);
 				} else {
-					leftHandSide = temp.trim();
+					leftHandSide = temp;
 				}
-				String parsedLHS=isSubst ? leftHandSide.trim() : parse(leftHandSide, model);
+				String parsedLHS=isSubst ? leftHandSide : parseTrimNewlineLeft(leftHandSide, model);
 				if (index >= 0 && "#default".equals(parsedLHS)) {
 					defaultResult = temp.substring(index + 1).trim();
 					continue;

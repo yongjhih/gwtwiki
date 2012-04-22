@@ -20,7 +20,7 @@ public class ImageFormat {
 		List<String> list = WikipediaScanner.splitByPipe(rawImageLink, null);
 		if (list.size() > 0) {
 			String attrValue;
-			String token = list.get(0);
+			String token = list.get(0).trim();
 			img.setFilename("");
 			if (token.length() > imageNamespace.length() && token.charAt(imageNamespace.length()) == ':') {
 				if (imageNamespace.equalsIgnoreCase(token.substring(0, imageNamespace.length()))) {

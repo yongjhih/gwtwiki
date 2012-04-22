@@ -1,65 +1,79 @@
 package info.bliki.wiki.template;
 
+import info.bliki.htmlcleaner.Utils;
 import info.bliki.wiki.filter.TemplateParser;
 import info.bliki.wiki.model.IWikiModel;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.Map;
 
 /**
- * A template parser function for <code>{{ #if: ... }}</code> syntax
+ * An abstract template parser function.
  * 
  */
 public abstract class AbstractTemplateFunction implements ITemplateFunction {
-	// public final static ITemplateFunction CONST = new
-	// AbstractTemplateFunction();
 
 	public AbstractTemplateFunction() {
 
-	}
-
-	public String parseFunction(char[] src, int beginIndex, int endIndex, IWikiModel model) throws IOException {
-		return null;
 	}
 
 	public String getFunctionDoc() {
 		return null;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public abstract String parseFunction(List<String> parts, IWikiModel model, char[] src, int beginIndex, int endIndex,
 			boolean isSubst) throws IOException;
 
 	/**
-	 * Parse the given plain content string with the template parser.
+	 * Parse the given content string with the template parser.
 	 * 
-	 * @param plainContent
+	 * @param content
+	 *          the raw content string
 	 * @param model
+	 *          the wiki model
 	 * @return
 	 */
-	public String parse(String plainContent, IWikiModel model) {
-		if (plainContent == null || plainContent.length() == 0) {
+	public static String parse(String content, IWikiModel model) {
+		if (content == null || content.length() == 0) {
 			return "";
 		}
-		StringBuilder buf = new StringBuilder(plainContent.length());
+		StringBuilder buf = new StringBuilder(content.length());
 		try {
-			TemplateParser.parse(plainContent, model, buf, false);
+			TemplateParser.parse(content, model, buf, false);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		return buf.toString().trim();
+		return buf.toString();
 	}
 
-	public String parsePreprocess(String plainContent, IWikiModel model, Map<String, String> templateParameterMap) {
-		if (plainContent == null || plainContent.length() == 0) {
-			return "";
-		}
-		StringBuilder buf = new StringBuilder(plainContent.length());
-		try {
-			TemplateParser.parsePreprocessRecursive(plainContent, model, buf, false, false, templateParameterMap);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		return buf.toString().trim();
+	/**
+	 * Parse the given content string with the template parser and
+	 * <code>trim()</code> the resulting string.
+	 * 
+	 * @param content
+	 *          the raw content string
+	 * @param model
+	 *          the wiki model
+	 * @return
+	 */
+	public static String parseTrim(String content, IWikiModel model) {
+		return parse(content, model).trim();
+	}
+
+	/**
+	 * Parse the given content string with the template parser and
+	 * <code>Utils#trimNewlineLeft()</code> the resulting string.
+	 * 
+	 * @param content
+	 *          the raw content string
+	 * @param model
+	 *          the wiki model
+	 * @return
+	 */
+	public static String parseTrimNewlineLeft(String content, IWikiModel model) {
+		return Utils.trimNewlineLeft(parse(content, model));
 	}
 }
