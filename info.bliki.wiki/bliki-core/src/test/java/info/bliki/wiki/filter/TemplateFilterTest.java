@@ -425,7 +425,8 @@ public class TemplateFilterTest extends FilterTestSupport {
 	}
 
 	public void testInvalidNoinclude() {
-		assertEquals("\n" + "<p>test123 start\n" + "test123 end</p>", wikiModel.render("test123 start<noinclude>\n" + "test123 end"));
+		assertEquals("\n" + 
+				"<p>test123 start</p>", wikiModel.render("test123 start<noinclude>\n" + "test123 end"));
 	}
 
 	public void testInvalidIncludeonly() {
@@ -433,7 +434,7 @@ public class TemplateFilterTest extends FilterTestSupport {
 	}
 
 	public void testInvalidOnlyinclude() {
-		assertEquals("\n" + "<p>test123 start\n" + "test123 end</p>", wikiModel.render("test123 start<onlyinclude>\n" + "test123 end"));
+		assertEquals("", wikiModel.render("test123 start<onlyinclude>\n" + "test123 end"));
 	}
 
 	public void testIf_image_test() {

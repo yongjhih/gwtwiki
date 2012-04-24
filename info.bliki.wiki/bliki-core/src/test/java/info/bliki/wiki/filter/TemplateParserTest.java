@@ -17,6 +17,27 @@ public class TemplateParserTest extends FilterTestSupport {
 
 	private final String TEST_STRING_03 = "{{{1|{{PAGENAME}}}}}";
 
+	/**
+	 * Issue 86
+	 */
+//	public void testInclude() {
+//		assertEquals("", wikiModel.parseTemplates("{{TestInclude}}"));
+//	}
+//	/**
+//	 * Issue 86
+//	 */
+//	public void testInclude2() {
+//		assertEquals("", wikiModel.parseTemplates("{{TestInclude2}}"));
+//	}
+//	
+//	public void testInclude3() {
+//		assertEquals("", wikiModel.parseTemplates("{{TestInclude3}}"));
+//	}
+	
+	public void testInclude4() {
+		assertEquals("Text ", wikiModel.parseTemplates("{{TestInclude4}}"));
+	}
+	
 	public void test00() {
 		assertEquals("{| class=\"float-right\" style=\"width:290px; font-size:90%; background:#FAFAFA;  border:1px solid #bbb; margin:0px 0px 1em 1em; border-collapse:collapse;\" summary=\"Infobox\"\n" + 
 				"|-\n" + 
@@ -282,7 +303,7 @@ public class TemplateParserTest extends FilterTestSupport {
 	}
 
 	public void testAnarchismSidebar() {
-		assertEquals("{{Sidebar}}\n" + "{{end sidebar page}}\n" + "\n" + "", wikiModel.parseTemplates("{{Anarchism sidebar}}", false));
+		assertEquals("{{Sidebar}}", wikiModel.parseTemplates("{{Anarchism sidebar}}", false));
 	}
 
 	public void testNonExistentTemplate() {
@@ -638,7 +659,7 @@ public class TemplateParserTest extends FilterTestSupport {
 	}
 
 	public void testInvalidNoinclude() {
-		assertEquals("test123 start\n" + "test123 end", wikiModel.parseTemplates("test123 start<noinclude>\n" + "test123 end"));
+		assertEquals("test123 start", wikiModel.parseTemplates("test123 start<noinclude>\n" + "test123 end"));
 	}
 
 	public void testTemplateImage1() {
@@ -667,7 +688,7 @@ public class TemplateParserTest extends FilterTestSupport {
 	}
 
 	public void testInvalidOnlyinclude() {
-		assertEquals("test123 start\n" + "test123 end", wikiModel.parseTemplates("test123 start<onlyinclude>\n" + "test123 end"));
+		assertEquals("test123 start", wikiModel.parseTemplates("test123 start<onlyinclude>\n" + "test123 end"));
 	}
 
 	public void testMagicCURRENTYEAR() {

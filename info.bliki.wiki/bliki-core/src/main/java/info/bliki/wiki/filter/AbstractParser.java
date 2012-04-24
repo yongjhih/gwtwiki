@@ -71,7 +71,9 @@ public abstract class AbstractParser extends WikipediaScanner {
 			fCurrentPosition = index + startString.length() + endString.length();
 			return true;
 		}
-		return false;
+		fCurrentPosition = fStringSource.length();
+		return true;
+		// return false;
 	}
 
 	/**

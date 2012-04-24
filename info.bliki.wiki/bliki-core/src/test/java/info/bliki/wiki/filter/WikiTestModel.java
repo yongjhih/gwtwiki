@@ -18,6 +18,34 @@ import java.util.Map;
  */
 public class WikiTestModel extends WikiModel {
 	/**
+	 * Issue 86
+	 */
+	public static String TEST_INCLUDE = "<includeonly>{| class=\"wikitable float-right\" style=\"width:30%; min-width:250px; max-width:400px; font-size:90%; margin-top:0px;\"\n"
+			+ "|--\n"
+			+ "! colspan=\"2\" style=\"background-color:Khaki; font-size:110%;\" | [[Asteroid]]<br/>{{{Name}}}\n"
+			+ "|--\n"
+			+ "|}</includeonly>";
+
+	/**
+	 * Issue 86
+	 */
+	public static String TEST_INCLUDE2 = "<onlyinclude><includeonly>{| class=\"wikitable float-right\" style=\"width:30%; min-width:250px; max-width:400px; font-size:90%; margin-top:0px;\"\n"
+			+ "|--\n"
+			+ "! colspan=\"2\" style=\"background-color:Khaki; font-size:110%;\" | [[Asteroid]]<br/>{{{Name}}}\n"
+			+ "|--\n"
+			+ "|}</includeonly></onlyinclude>";
+
+	/**
+	 * Issue 86
+	 */
+	public static String TEST_INCLUDE3 = "<includeonly><noinclude>invisible</noinclude>text</includeonly>";
+
+	/**
+	 * Issue 86
+	 */
+	public static String TEST_INCLUDE4 = "Text <noinclude>invisible";
+
+	/**
 	 * Issue 82
 	 */
 	public static String ORDINAL = "{{{1}}}{{{{{|safesubst:}}}#ifeq:{{{sup}}}|yes\n" + " |<sup>\n"
@@ -29,42 +57,41 @@ public class WikiTestModel extends WikiModel {
 	/**
 	 * Issue 77
 	 */
-	public static final String LAGEPLAN = "{{#if: {{{map|}}} | {{{!}} border=\"0\" cellspacing=\"0\" cellpadding=\"0\" style=\"margin:0 0 0 0; border-style:none; border-width:0px; border-collapse:collapse; empty-cells:show\"\n" + 
-			"{{!}}<div style=\"position: relative;\"><div style=\"font-size: {{{markersize|5}}}px; position: absolute; display: block; left:{{#expr: ({{{mapsize_x|140}}}*{{{pos_x|3}}}/100  - {{{markersize|5}}} /2 ) round 0 }}px; top:{{#expr: ({{{mapsize_y|175}}}*{{{pos_y|3}}}/100 - {{{markersize|5}}} /2 ) round 0 }}px; padding:0;\">[[Bild:{{{marker|Reddot.svg}}}|{{{markersize|5}}}px|{{{markertext|}}}]]</div>[[Bild:{{{map|Karte Deutschland.png}}}|{{{mapsize_x|140}}}x{{{mapsize_y|175}}}px|{{{maptext|}}}]]</div>\n" + 
-			"{{!}}} }}";
+	public static final String LAGEPLAN = "{{#if: {{{map|}}} | {{{!}} border=\"0\" cellspacing=\"0\" cellpadding=\"0\" style=\"margin:0 0 0 0; border-style:none; border-width:0px; border-collapse:collapse; empty-cells:show\"\n"
+			+ "{{!}}<div style=\"position: relative;\"><div style=\"font-size: {{{markersize|5}}}px; position: absolute; display: block; left:{{#expr: ({{{mapsize_x|140}}}*{{{pos_x|3}}}/100  - {{{markersize|5}}} /2 ) round 0 }}px; top:{{#expr: ({{{mapsize_y|175}}}*{{{pos_y|3}}}/100 - {{{markersize|5}}} /2 ) round 0 }}px; padding:0;\">[[Bild:{{{marker|Reddot.svg}}}|{{{markersize|5}}}px|{{{markertext|}}}]]</div>[[Bild:{{{map|Karte Deutschland.png}}}|{{{mapsize_x|140}}}x{{{mapsize_y|175}}}px|{{{maptext|}}}]]</div>\n"
+			+ "{{!}}} }}";
 	/**
 	 * Issue 77
 	 */
-	
-	public static final String INFOBOX_ORT_IN_DEUTSCHLAND = "{| class=\"float-right\" style=\"width:290px; font-size:90%; background:#FAFAFA;  border:1px solid #bbb; margin:0px 0px 1em 1em; border-collapse:collapse;\" summary=\"Infobox\"\n" + 
-			"|-\n" + 
-			"| colspan=\"2\" style=\"background:#ffffff; text-align:center; font-size:135%;\" | '''{{#if: {{{Name|}}} | {{{Name}}} | {{PAGENAME}} }}'''</font></br><small>{{{AndereNamen|}}}</small>\n" + 
-			"|- class=\"hintergrundfarbe2\"\n" + 
-			"| colspan=\"2\" style=\"font-weight:bold; padding-left:8px; border-top:solid 1px #bbb;\" |\n" + 
-			"|- class=\"hintergrundfarbe2\" style=\"text-align: center;\"\n" + 
-			"| style=\"width: 50%;\" | [[Bild:Sin escudo.svg|120px|Wappn fêîht]]\n" + 
-			"| align=\"center\" style=\"width: 50%;\" | {{#if: {{{Karte|}}} | [[Bild:{{{Karte}}}|140x175px|Deitschlandkartn, Position vo {{#if: {{{Name|}}} | {{{Name}}} | {{PAGENAME}} }} heavoghobn]] | {{#if: {{{lat_deg|}}} |\n" + 
-			"{{Lageplan\n" + 
-			"|marker     = reddot.svg\n" + 
-			"|markersize = 5\n" + 
-			"|markertext = {{#if: {{{Name|}}} | {{{Name}}} | {{PAGENAME}} }}\n" + 
-			"|pos_y      = {{#expr: (55.1 - {{{lat_deg|52.5}}} - {{{lat_min|0}}} / 60) * 100 / 7.9}}\n" + 
-			"|pos_x      = {{#expr: ({{{lon_deg|13.4}}} + {{{lon_min|0}}} / 60) * 10 - 55}}\n" + 
-			"|map        = Karte Deutschland.svg\n" + 
-			"|mapsize_x  = 140\n" + 
-			"|mapsize_y  = 175\n" + 
-			"|maptext    = Deitschlandkartn, Position vo {{#if: {{{Name|}}} | {{{Name}}} | {{PAGENAME}} }} heavoghom\n" + 
-			"|warning    = [[Bild:Missing Map of Germany.png|140px|Koordinaten san außerhoib vom darstellbarn Bereich]]\n" + 
-			"}}\n" + 
-			"| [[Bild:Karte Deutschland.png|140px|Koordinatn san net da]] }}\n" + 
-			"}}\n" + 
-			"|-\n" + 
-			"! colspan=\"2\" style=\"background-color:#ABCDEF; border:1px solid #bbb;\" | Basisdatn\n" + 
-			"|- class=\"hintergrundfarbe2\"\n" + 
-			"| '''[[Bundesland (Deutschland)|Bundesland]]''': || [[{{{Bundesland|}}}{{#if: {{{Bundesland im Dialekt|}}}|{{!}}{{{Bundesland im Dialekt}}}}}]]\n" + 
-			"|- class=\"hintergrundfarbe2\"\n" + 
-			"|}";
-	
+
+	public static final String INFOBOX_ORT_IN_DEUTSCHLAND = "{| class=\"float-right\" style=\"width:290px; font-size:90%; background:#FAFAFA;  border:1px solid #bbb; margin:0px 0px 1em 1em; border-collapse:collapse;\" summary=\"Infobox\"\n"
+			+ "|-\n"
+			+ "| colspan=\"2\" style=\"background:#ffffff; text-align:center; font-size:135%;\" | '''{{#if: {{{Name|}}} | {{{Name}}} | {{PAGENAME}} }}'''</font></br><small>{{{AndereNamen|}}}</small>\n"
+			+ "|- class=\"hintergrundfarbe2\"\n"
+			+ "| colspan=\"2\" style=\"font-weight:bold; padding-left:8px; border-top:solid 1px #bbb;\" |\n"
+			+ "|- class=\"hintergrundfarbe2\" style=\"text-align: center;\"\n"
+			+ "| style=\"width: 50%;\" | [[Bild:Sin escudo.svg|120px|Wappn fêîht]]\n"
+			+ "| align=\"center\" style=\"width: 50%;\" | {{#if: {{{Karte|}}} | [[Bild:{{{Karte}}}|140x175px|Deitschlandkartn, Position vo {{#if: {{{Name|}}} | {{{Name}}} | {{PAGENAME}} }} heavoghobn]] | {{#if: {{{lat_deg|}}} |\n"
+			+ "{{Lageplan\n"
+			+ "|marker     = reddot.svg\n"
+			+ "|markersize = 5\n"
+			+ "|markertext = {{#if: {{{Name|}}} | {{{Name}}} | {{PAGENAME}} }}\n"
+			+ "|pos_y      = {{#expr: (55.1 - {{{lat_deg|52.5}}} - {{{lat_min|0}}} / 60) * 100 / 7.9}}\n"
+			+ "|pos_x      = {{#expr: ({{{lon_deg|13.4}}} + {{{lon_min|0}}} / 60) * 10 - 55}}\n"
+			+ "|map        = Karte Deutschland.svg\n"
+			+ "|mapsize_x  = 140\n"
+			+ "|mapsize_y  = 175\n"
+			+ "|maptext    = Deitschlandkartn, Position vo {{#if: {{{Name|}}} | {{{Name}}} | {{PAGENAME}} }} heavoghom\n"
+			+ "|warning    = [[Bild:Missing Map of Germany.png|140px|Koordinaten san außerhoib vom darstellbarn Bereich]]\n"
+			+ "}}\n"
+			+ "| [[Bild:Karte Deutschland.png|140px|Koordinatn san net da]] }}\n"
+			+ "}}\n"
+			+ "|-\n"
+			+ "! colspan=\"2\" style=\"background-color:#ABCDEF; border:1px solid #bbb;\" | Basisdatn\n"
+			+ "|- class=\"hintergrundfarbe2\"\n"
+			+ "| '''[[Bundesland (Deutschland)|Bundesland]]''': || [[{{{Bundesland|}}}{{#if: {{{Bundesland im Dialekt|}}}|{{!}}{{{Bundesland im Dialekt}}}}}]]\n"
+			+ "|- class=\"hintergrundfarbe2\"\n" + "|}";
+
 	/**
 	 * Issue 77
 	 */
@@ -2400,6 +2427,14 @@ public class WikiTestModel extends WikiModel {
 				return LAGEPLAN;
 			} else if (name.equals("Infobox_Ort_in_Deutschland")) {
 				return INFOBOX_ORT_IN_DEUTSCHLAND;
+			} else if (name.equals("TestInclude")) {
+				return TEST_INCLUDE;
+			} else if (name.equals("TestInclude2")) {
+				return TEST_INCLUDE2;
+			} else if (name.equals("TestInclude3")) {
+				return TEST_INCLUDE3;
+			} else if (name.equals("TestInclude4")) {
+				return TEST_INCLUDE4;
 			}
 		} else {
 			if (name.equals("Include_Page")) {
