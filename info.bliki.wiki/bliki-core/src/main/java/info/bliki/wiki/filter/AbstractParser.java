@@ -65,15 +65,14 @@ public abstract class AbstractParser extends WikipediaScanner {
 	 *          the end string which should be searched in ignore case mode
 	 * @return
 	 */
-	protected final boolean readUntilIgnoreCase(String startString, String endString) {
+	protected final int readUntilIgnoreCase(String startString, String endString) {
 		int index = Util.indexOfIgnoreCase(fStringSource, startString, endString, fCurrentPosition);
 		if (index != (-1)) {
 			fCurrentPosition = index + startString.length() + endString.length();
-			return true;
+			return startString.length() + endString.length();
 		}
 		fCurrentPosition = fStringSource.length();
-		return true;
-		// return false;
+		return 0;
 	}
 
 	/**
@@ -259,9 +258,8 @@ public abstract class AbstractParser extends WikipediaScanner {
 		String bbEndStr = bbStr + "]";
 		int startPos = fCurrentPosition;
 
-		if (!readUntilIgnoreCase("[/", bbEndStr)) {
-			return false;
-		}
+		readUntilIgnoreCase("[/", bbEndStr);
+
 		String bbAttr = null;
 		if (ch == '=') {
 			bbAttr = name.substring(index, name.length());

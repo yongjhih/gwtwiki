@@ -56,7 +56,9 @@ public class XMLTest extends FilterTestSupport {
 	}
 
 	public void testXmlColon() {
-		String result = wikiModel.render("a '''simple XML''' \n<source lang=\"xml\">\n" + "<ui:remove>\n" + "   <!-- das ist der kommentar -->\n"
+		String result = wikiModel.render("a '''simple XML''' \n<source lang=\"xml\">\n" 
+				+ "<ui:remove>\n" 
+				+ "   <!-- das ist der kommentar -->\n"
 				+ "</ui:remove>\n" + "</source>\n test");
 
 		assertEquals("\n" + 

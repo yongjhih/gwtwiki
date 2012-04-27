@@ -93,7 +93,7 @@ public class Safesubst extends AbstractTemplateFunction {
 		}
 		StringBuilder buf = new StringBuilder(content.length());
 		try {
-			TemplateParser.parsePreprocessRecursive(content, model, buf, false, false, templateParameterMap);
+			TemplateParser.parsePreprocessRecursive(content, model, buf, false, false, false, templateParameterMap);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

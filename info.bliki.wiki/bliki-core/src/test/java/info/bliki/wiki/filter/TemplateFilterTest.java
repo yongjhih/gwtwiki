@@ -68,7 +68,7 @@ public class TemplateFilterTest extends FilterTestSupport {
 						+ "<p>(pronounced <span class=\"IPA\" title=\"Pronunciation in the International Phonetic Alphabet (IPA)\"><a href=\"http://www.bliki.info/wiki/WP:IPA_for_English\" title=\"WP:IPA for English\">/dəˌpeʃˈmoʊd/</a></span>)</p>",
 				wikiModel.render("({{pron-en|dəˌpeʃˈmoʊd}})"));
 	}
-
+	
 	public void testTemplateImage1() {
 		// see method WikiTestModel#getRawWikiContent()
 		assertEquals(
@@ -430,11 +430,14 @@ public class TemplateFilterTest extends FilterTestSupport {
 	}
 
 	public void testInvalidIncludeonly() {
-		assertEquals("\n" + "<p>test123 start</p>", wikiModel.render("test123 start<includeonly>\n" + "test123 end"));
+		assertEquals("\n" + 
+				"<p>test123 start\n" + 
+				"test123 end</p>", wikiModel.render("test123 start<includeonly>\n" + "test123 end"));
 	}
 
 	public void testInvalidOnlyinclude() {
-		assertEquals("", wikiModel.render("test123 start<onlyinclude>\n" + "test123 end"));
+		assertEquals("\n" + 
+				"<p>test123 end</p>", wikiModel.render("test123 start<onlyinclude>\n" + "test123 end"));
 	}
 
 	public void testIf_image_test() {

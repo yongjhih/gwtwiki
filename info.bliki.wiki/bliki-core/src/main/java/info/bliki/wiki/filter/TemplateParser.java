@@ -33,10 +33,14 @@ public class TemplateParser extends AbstractParser {
 	}
 
 	public TemplateParser(String stringSource, boolean parseOnlySignature, boolean renderTemplate) {
+		this(stringSource, parseOnlySignature, renderTemplate, false);
+	}
+
+	public TemplateParser(String stringSource, boolean parseOnlySignature, boolean renderTemplate, boolean onlyIncludeFlag) {
 		super(stringSource);
 		fParseOnlySignature = parseOnlySignature;
 		fRenderTemplate = renderTemplate;
-		fOnlyIncludeFlag = false;
+		fOnlyIncludeFlag = onlyIncludeFlag;
 	}
 
 	public static void parse(String rawWikitext, IWikiModel wikiModel, Appendable writer, boolean renderTemplate) throws IOException {
@@ -65,8 +69,15 @@ public class TemplateParser extends AbstractParser {
 		parseRecursive(rawWikitext, wikiModel, writer, parseOnlySignature, renderTemplate, null);
 	}
 
+	private void parsePreprocessRecursive(StringBuilder writer, int diff) throws IOException {
+		StringBuilder buf = new StringBuilder(fCurrentPosition - fWhiteStartPosition);
+		appendContent(buf, fWhiteStart, fWhiteStartPosition, diff, true);
+		parsePreprocessRecursive(buf.toString(), fWikiModel, writer, fParseOnlySignature, fRenderTemplate, false, null);
+	}
+
 	public static void parsePreprocessRecursive(String rawWikitext, IWikiModel wikiModel, StringBuilder writer,
-			boolean parseOnlySignature, boolean renderTemplate, Map<String, String> templateParameterMap) throws IOException {
+			boolean parseOnlySignature, boolean renderTemplate, boolean onlyIncludeFlag, Map<String, String> templateParameterMap)
+			throws IOException {
 		try {
 			int level = wikiModel.incrementRecursionLevel();
 			if (level > Configuration.PARSER_RECURSION_LIMIT) {
@@ -82,7 +93,7 @@ public class TemplateParser extends AbstractParser {
 				return;
 			}
 			StringBuilder sb = new StringBuilder(rawWikitext.length());
-			TemplateParser parser = new TemplateParser(rawWikitext, parseOnlySignature, renderTemplate);
+			TemplateParser parser = new TemplateParser(rawWikitext, parseOnlySignature, renderTemplate, onlyIncludeFlag);
 			parser.setModel(wikiModel);
 			parser.runPreprocessParser(sb, false);
 
@@ -112,7 +123,7 @@ public class TemplateParser extends AbstractParser {
 	public static void parseRecursive(String rawWikitext, IWikiModel wikiModel, Appendable writer, boolean parseOnlySignature,
 			boolean renderTemplate, Map<String, String> templateParameterMap) throws IOException {
 		StringBuilder sb = new StringBuilder(rawWikitext.length());
-		parsePreprocessRecursive(rawWikitext, wikiModel, sb, parseOnlySignature, renderTemplate, templateParameterMap);
+		parsePreprocessRecursive(rawWikitext, wikiModel, sb, parseOnlySignature, renderTemplate, false, templateParameterMap);
 		if (parseOnlySignature) {
 			writer.append(sb);
 			return;
@@ -130,10 +141,9 @@ public class TemplateParser extends AbstractParser {
 				return;
 			}
 
-			int len = sb.length();
 			TemplateParser parser = new TemplateParser(sb.toString(), false, renderTemplate);
 			parser.setModel(wikiModel);
-			sb = new StringBuilder(len);
+			sb = new StringBuilder(sb.length());
 			parser.runPreprocessParser(sb, true);
 
 			parser = new TemplateParser(sb.toString(), parseOnlySignature, renderTemplate);
@@ -333,24 +343,22 @@ public class TemplateParser extends AbstractParser {
 					// starting tag
 					int lessThanStart = fCurrentPosition - 1;
 					int startPosition = fCurrentPosition;
+					int diff = 0;
 					WikiTagNode tagNode = parseTag(fCurrentPosition);
 					if (tagNode != null && !tagNode.isEmptyXmlTag()) {
 						fCurrentPosition = tagNode.getEndPosition();
 						int tagStart = fCurrentPosition;
 						String tagName = tagNode.getTagName();
 						if (tagName.equals("nowiki")) {
-							if (readUntilIgnoreCase("</", "nowiki>")) {
-								return true;
-							}
+							readUntilIgnoreCase("</", "nowiki>");
+							return true;
 						} else if (tagName.equals("source")) {
-							if (readUntilIgnoreCase("</", "source>")) {
-								appendContentWithComment(writer, startPosition);
-								return true;
-							}
+							readUntilIgnoreCase("</", "source>");
+							appendContentWithComment(writer, startPosition);
+							return true;
 						} else if (tagName.equals("math")) {
-							if (readUntilIgnoreCase("</", "math>")) {
-								return true;
-							}
+							readUntilIgnoreCase("</", "math>");
+							return true;
 						}
 						if (ignoreTemplateTags) {
 							return false;
@@ -358,100 +366,66 @@ public class TemplateParser extends AbstractParser {
 						if (!isTemplate()) {
 							// not rendering a Template namespace directly
 							if (tagName.equals("includeonly")) {
-								if (readUntilIgnoreCase("</", "includeonly>")) {
-									if (!fOnlyIncludeFlag) {
-										appendContent(writer, fWhiteStart, fWhiteStartPosition, fCurrentPosition - lessThanStart, true);
-									}
-									fWhiteStart = true;
-									fWhiteStartPosition = tagStart;
-
-									if (!fOnlyIncludeFlag) {
-										appendContent(writer, fWhiteStart, fWhiteStartPosition, 2 + "includeonly>".length(), true);
-									}
-									fWhiteStart = true;
-									fWhiteStartPosition = fCurrentPosition;
-									return true;
-								}
-
+								diff = readUntilIgnoreCase("</", "includeonly>");
 								if (!fOnlyIncludeFlag) {
 									appendContent(writer, fWhiteStart, fWhiteStartPosition, fCurrentPosition - lessThanStart, true);
 								}
-								fWhiteStart = false;
-								fCurrentPosition = fStringSource.length();
+								fWhiteStart = true;
+								fWhiteStartPosition = tagStart;
+
+								if (!fOnlyIncludeFlag) {
+									parsePreprocessRecursive(writer, diff); 
+								}
+								fWhiteStart = true;
+								fWhiteStartPosition = fCurrentPosition;
 								return true;
 
 							} else if (tagName.equals("noinclude")) {
-								if (readUntilIgnoreCase("</", "noinclude>")) {
-									if (!fOnlyIncludeFlag) {
-										appendContent(writer, fWhiteStart, fWhiteStartPosition, fCurrentPosition - lessThanStart, true);
-									}
-									fWhiteStart = true;
-									fWhiteStartPosition = fCurrentPosition;
-									return true;
+								diff = readUntilIgnoreCase("</", "noinclude>");
+								if (!fOnlyIncludeFlag) {
+									appendContent(writer, fWhiteStart, fWhiteStartPosition, fCurrentPosition - lessThanStart, true);
 								}
-								appendContent(writer, fWhiteStart, fWhiteStartPosition, fCurrentPosition - lessThanStart, true);
 								fWhiteStart = true;
-								fWhiteStartPosition = tagStart;
+								fWhiteStartPosition = fCurrentPosition;
 								return true;
 							} else if (tagName.equals("onlyinclude")) {
-								if (readUntilIgnoreCase("</", "onlyinclude>")) {
-									if (!fOnlyIncludeFlag) {
-										// delete the content, which is already added
-										writer.delete(0, writer.length());
-										fOnlyIncludeFlag = true;
-									}
-
-									fWhiteStart = true;
-									fWhiteStartPosition = tagStart;
-
-									appendContent(writer, fWhiteStart, fWhiteStartPosition, 2 + "onlyinclude>".length(), true);
-									fWhiteStart = true;
-									fWhiteStartPosition = fCurrentPosition;
-									return true;
+								diff = readUntilIgnoreCase("</", "onlyinclude>");
+								if (!fOnlyIncludeFlag) {
+									// delete the content, which is already added
+									writer.delete(0, writer.length());
+									fOnlyIncludeFlag = true;
 								}
-								appendContent(writer, fWhiteStart, fWhiteStartPosition, fCurrentPosition - lessThanStart, true);
+
 								fWhiteStart = true;
 								fWhiteStartPosition = tagStart;
+
+								parsePreprocessRecursive(writer, diff); 
+								fWhiteStart = true;
+								fWhiteStartPosition = fCurrentPosition;
 								return true;
 							}
 						} else {
 							if (tagName.equals("noinclude")) {
-								if (readUntilIgnoreCase("</", "noinclude>")) {
-									appendContent(writer, fWhiteStart, fWhiteStartPosition, fCurrentPosition - lessThanStart, true);
-									fWhiteStart = true;
-									fWhiteStartPosition = tagStart;
-
-									appendContent(writer, fWhiteStart, fWhiteStartPosition, 2 + "noinclude>".length(), true);
-									fWhiteStart = true;
-									fWhiteStartPosition = fCurrentPosition;
-									return true;
-								}
+								diff = readUntilIgnoreCase("</", "noinclude>");
 								appendContent(writer, fWhiteStart, fWhiteStartPosition, fCurrentPosition - lessThanStart, true);
 								fWhiteStart = true;
 								fWhiteStartPosition = tagStart;
+
+								parsePreprocessRecursive(writer, diff); 
+								fWhiteStart = true;
+								fWhiteStartPosition = fCurrentPosition;
 								return true;
 							} else if (tagName.equals("includeonly")) {
-								if (readUntilIgnoreCase("</", "includeonly>")) {
-									appendContent(writer, fWhiteStart, fWhiteStartPosition, fCurrentPosition - lessThanStart, true);
-									fWhiteStart = true;
-									fWhiteStartPosition = fCurrentPosition;
-									return true;
-								}
-
-								appendContent(writer, fWhiteStart, fWhiteStartPosition, fCurrentPosition - lessThanStart, true);
-								fWhiteStart = false;
-								fCurrentPosition = fStringSource.length();
-								return true;
-							} else if (tagName.equals("onlyinclude")) {
-								if (readUntilIgnoreCase("</", "onlyinclude>")) {
-									appendContent(writer, fWhiteStart, fWhiteStartPosition, fCurrentPosition - lessThanStart, true);
-									fWhiteStart = true;
-									fWhiteStartPosition = fCurrentPosition;
-									return true;
-								}
+								readUntilIgnoreCase("</", "includeonly>");
 								appendContent(writer, fWhiteStart, fWhiteStartPosition, fCurrentPosition - lessThanStart, true);
 								fWhiteStart = true;
-								fWhiteStartPosition = tagStart;
+								fWhiteStartPosition = fCurrentPosition;
+								return true;
+							} else if (tagName.equals("onlyinclude")) {
+								readUntilIgnoreCase("</", "onlyinclude>");
+								appendContent(writer, fWhiteStart, fWhiteStartPosition, fCurrentPosition - lessThanStart, true);
+								fWhiteStart = true;
+								fWhiteStartPosition = fCurrentPosition;
 								return true;
 							}
 						}
@@ -483,18 +457,17 @@ public class TemplateParser extends AbstractParser {
 						fCurrentPosition = tagNode.getEndPosition();
 						String tagName = tagNode.getTagName();
 						if (tagName.equals("nowiki")) {
-							if (readUntilIgnoreCase("</", "nowiki>")) {
-								return true;
-							}
+							readUntilIgnoreCase("</", "nowiki>");
+							return true;
+
 						} else if (tagName.equals("source")) {
-							if (readUntilIgnoreCase("</", "source>")) {
-								appendContentWithComment(writer, startPosition);
-								return true;
-							}
+							readUntilIgnoreCase("</", "source>");
+							appendContentWithComment(writer, startPosition);
+							return true;
+
 						} else if (tagName.equals("math")) {
-							if (readUntilIgnoreCase("</", "math>")) {
-								return true;
-							}
+							readUntilIgnoreCase("</", "math>");
+							return true;
 						}
 					}
 					fCurrentPosition = startPosition;
@@ -605,7 +578,7 @@ public class TemplateParser extends AbstractParser {
 		fCurrentPosition = endPosition;
 		if (plainContent != null) {
 			StringBuilder sb = new StringBuilder(plainContent.length());
-			parsePreprocessRecursive(plainContent, fWikiModel, sb, fParseOnlySignature, fRenderTemplate, null);
+			parsePreprocessRecursive(plainContent, fWikiModel, sb, fParseOnlySignature, fRenderTemplate, false, null);
 			writer.append(sb);
 			return true;
 		}
