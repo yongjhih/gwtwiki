@@ -72,15 +72,18 @@ public class XMLTest extends FilterTestSupport {
 	}
 
 	public void testXmlColonNotClosed() {
-		String result = wikiModel.render("a '''simple XML''' \n<source lang=\"xml\">\n" + "<ui:remove>\n" + "   <!-- das ist der kommentar -->\n"
+		String result = wikiModel.render("a '''simple XML''' \n<source lang=\"xml\">\n" 
+				+ "<ui:remove>\n" 
+				+ "   <!-- das ist der kommentar -->\n"
 				+ "</ui:remove>\n" + "</src>\n test");
 
 		assertEquals("\n" + 
 				"<p>a <b>simple XML</b> \n" + 
 				"</p><pre class=\"xml\">\n" + 
 				"<span style=\"color:#7F0055; font-weight: bold; \">&#60;ui:remove&#62;</span>\n" + 
+				"   <span style=\"color:#3F7F5F; \">&#60;!-- das ist der kommentar --&#62;</span>\n" + 
 				"<span style=\"color:#7F0055; font-weight: bold; \">&#60;/ui:remove&#62;</span>\n" + 
 				"<span style=\"color:#7F0055; font-weight: bold; \">&#60;/src&#62;</span>\n" + 
 				" test</pre>", result);
 	}
-}
+} 
