@@ -374,7 +374,7 @@ public class TemplateParser extends AbstractParser {
 								fWhiteStartPosition = tagStart;
 
 								if (!fOnlyIncludeFlag) {
-									parsePreprocessRecursive(writer, diff); 
+									parsePreprocessRecursive(writer, diff);
 								}
 								fWhiteStart = true;
 								fWhiteStartPosition = fCurrentPosition;
@@ -399,7 +399,7 @@ public class TemplateParser extends AbstractParser {
 								fWhiteStart = true;
 								fWhiteStartPosition = tagStart;
 
-								parsePreprocessRecursive(writer, diff); 
+								parsePreprocessRecursive(writer, diff);
 								fWhiteStart = true;
 								fWhiteStartPosition = fCurrentPosition;
 								return true;
@@ -411,7 +411,7 @@ public class TemplateParser extends AbstractParser {
 								fWhiteStart = true;
 								fWhiteStartPosition = tagStart;
 
-								parsePreprocessRecursive(writer, diff); 
+								parsePreprocessRecursive(writer, diff);
 								fWhiteStart = true;
 								fWhiteStartPosition = fCurrentPosition;
 								return true;
@@ -577,9 +577,7 @@ public class TemplateParser extends AbstractParser {
 		plainContent = templateFunction.parseFunction(parts, fWikiModel, fSource, startTemplatePosition + currOffset, endOffset, false);
 		fCurrentPosition = endPosition;
 		if (plainContent != null) {
-			StringBuilder sb = new StringBuilder(plainContent.length());
-			parsePreprocessRecursive(plainContent, fWikiModel, sb, fParseOnlySignature, fRenderTemplate, false, null);
-			writer.append(sb);
+			writer.append(plainContent);
 			return true;
 		}
 		return false;
