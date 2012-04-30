@@ -20,6 +20,30 @@ public class WikiTestModel extends WikiModel {
 	/**
 	 * Issue 86
 	 */
+	public static String ONLYINCLUDE_DEMO = "abc<onlyinclude>def</onlyinclude>ghi<includeonly>jkl</includeonly><!---\n" + 
+			"-----\n" + 
+			"----><noinclude><hr>\n" + 
+			";Only active template content is above.\n" + 
+			"\n" + 
+			";The verbatim active code within reads:\n" + 
+			" abc'''&lt;onlyinclude>'''def'''&lt;/onlyinclude>'''ghi'''&lt;includeonly>'''jkl'''&lt;/includeonly>'''\n" + 
+			"\n" + 
+			"If transposed, the only part included will be the string literal <code>def</code>. \n" + 
+			"\n" + 
+			"==Example==\n" + 
+			"Including [[:Help:Template/onlyinclude demo]] yields only:\n" + 
+			" {{:Help:Template/onlyinclude demo}}\n" + 
+			"\n" + 
+			"<includeonly>Then there's this other stuff one would think would be included... (I)\n" + 
+			"</includeonly><noinclude>\n" + 
+			"\n" + 
+			"[[Category:Handbook templates]]</noinclude>\n" + 
+			"[[Category:Template documentation|{{PAGENAME}}]]\n" + 
+			"</noinclude><includeonly>Then there's this other stuff one would think would be included (II)...</includeonly>\n" + 
+			"";
+	/**
+	 * Issue 86
+	 */
 	public static String TEST_INCLUDE = "<includeonly>{| class=\"wikitable float-right\" style=\"width:30%; min-width:250px; max-width:400px; font-size:90%; margin-top:0px;\"\n"
 			+ "|--\n"
 			+ "! colspan=\"2\" style=\"background-color:Khaki; font-size:110%;\" | [[Asteroid]]<br/>{{{Name}}}\n"
@@ -2435,6 +2459,8 @@ public class WikiTestModel extends WikiModel {
 				return TEST_INCLUDE3;
 			} else if (name.equals("TestInclude4")) {
 				return TEST_INCLUDE4;
+			}else if (name.equals("OnlyicludeDemo")) {
+				return ONLYINCLUDE_DEMO;
 			}
 		} else {
 			if (name.equals("Include_Page")) {

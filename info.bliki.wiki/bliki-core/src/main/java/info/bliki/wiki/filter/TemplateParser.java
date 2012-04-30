@@ -366,7 +366,7 @@ public class TemplateParser extends AbstractParser {
 						if (!isTemplate()) {
 							// not rendering a Template namespace directly
 							if (tagName.equals("includeonly")) {
-								diff = readUntilIgnoreCase("</", "includeonly>");
+								diff = readUntilNestedIgnoreCase("includeonly>");
 								if (!fOnlyIncludeFlag) {
 									appendContent(writer, fWhiteStart, fWhiteStartPosition, fCurrentPosition - lessThanStart, true);
 								}
@@ -381,7 +381,7 @@ public class TemplateParser extends AbstractParser {
 								return true;
 
 							} else if (tagName.equals("noinclude")) {
-								diff = readUntilIgnoreCase("</", "noinclude>");
+								diff = readUntilNestedIgnoreCase("noinclude>");
 								if (!fOnlyIncludeFlag) {
 									appendContent(writer, fWhiteStart, fWhiteStartPosition, fCurrentPosition - lessThanStart, true);
 								}
@@ -389,7 +389,7 @@ public class TemplateParser extends AbstractParser {
 								fWhiteStartPosition = fCurrentPosition;
 								return true;
 							} else if (tagName.equals("onlyinclude")) {
-								diff = readUntilIgnoreCase("</", "onlyinclude>");
+								diff = readUntilNestedIgnoreCase("onlyinclude>");
 								if (!fOnlyIncludeFlag) {
 									// delete the content, which is already added
 									writer.delete(0, writer.length());
@@ -406,7 +406,7 @@ public class TemplateParser extends AbstractParser {
 							}
 						} else {
 							if (tagName.equals("noinclude")) {
-								diff = readUntilIgnoreCase("</", "noinclude>");
+								diff = readUntilNestedIgnoreCase("noinclude>");
 								appendContent(writer, fWhiteStart, fWhiteStartPosition, fCurrentPosition - lessThanStart, true);
 								fWhiteStart = true;
 								fWhiteStartPosition = tagStart;
@@ -416,14 +416,17 @@ public class TemplateParser extends AbstractParser {
 								fWhiteStartPosition = fCurrentPosition;
 								return true;
 							} else if (tagName.equals("includeonly")) {
-								readUntilIgnoreCase("</", "includeonly>");
+								readUntilNestedIgnoreCase("includeonly>");
 								appendContent(writer, fWhiteStart, fWhiteStartPosition, fCurrentPosition - lessThanStart, true);
 								fWhiteStart = true;
 								fWhiteStartPosition = fCurrentPosition;
 								return true;
 							} else if (tagName.equals("onlyinclude")) {
-								readUntilIgnoreCase("</", "onlyinclude>");
+								diff = readUntilNestedIgnoreCase("onlyinclude>");
 								appendContent(writer, fWhiteStart, fWhiteStartPosition, fCurrentPosition - lessThanStart, true);
+								fWhiteStart = true;
+								fWhiteStartPosition = tagStart;
+								parsePreprocessRecursive(writer, diff);
 								fWhiteStart = true;
 								fWhiteStartPosition = fCurrentPosition;
 								return true;

@@ -80,8 +80,6 @@ public class Util {
 	 *         specified substring, starting at the specified index.
 	 */
 	public static int indexOfIgnoreCase(String searchableString, String startPattern, String endPattern, int fromIndex) {
-		// return indexOfIgnoreCase(searchableString, startPattern, null,
-		// endPattern, fromIndex);
 		int n = endPattern.length();
 		int index;
 		int len = startPattern.length();
@@ -99,4 +97,47 @@ public class Util {
 		return -1;
 	}
 
+	/**
+	 * Returns the nested index within the searchable string of the first
+	 * occurrence of <code>&lt;</code> and the <i>end</i> string. The end string
+	 * is matched ignoring case considerations.
+	 * 
+	 * @param searchableString
+	 *          the searchable string
+	 * @param endPattern
+	 *          the end string which should be searched in ignore case mode
+	 * @param fromIndex
+	 *          the index from which to start the search.
+	 * @return the index within this string of the first occurrence of the
+	 *         specified substring, starting at the specified index.
+	 */
+	public static int indexOfNestedIgnoreCase(String searchableString, String endPattern, int fromIndex) {
+		int n = endPattern.length();
+		int index;
+		int level = 0;
+		while (searchableString.length() > ((fromIndex + n) - 1)) {
+			index = searchableString.indexOf('<', fromIndex);
+			if (index >= 0 && searchableString.length() > index + n) {
+				if (searchableString.charAt(index + 1) == '/') {
+					// closing tag
+					fromIndex = index + 2;
+					if (searchableString.regionMatches(true, fromIndex, endPattern, 0, n)) {
+						if (level == 0) {
+							return fromIndex - 2;
+						}
+						level--;
+					}
+				} else {
+					// opening tag
+					fromIndex = index + 1;
+					if (searchableString.regionMatches(true, fromIndex, endPattern, 0, n)) {
+						level++;
+					}
+				}
+			}
+			fromIndex++;
+		}
+
+		return -1;
+	}
 }

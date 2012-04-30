@@ -20,6 +20,37 @@ public class TemplateParserTest extends FilterTestSupport {
 	/**
 	 * Issue 86
 	 */
+	public void testOnlyicludeDemo001() {
+		assertEquals("abcdefghi<hr>\n" + 
+				";Only active template content is above.\n" + 
+				"\n" + 
+				";The verbatim active code within reads:\n" + 
+				" abc'''&lt;onlyinclude>'''def'''&lt;/onlyinclude>'''ghi'''&lt;includeonly>'''jkl'''&lt;/includeonly>'''\n" + 
+				"\n" + 
+				"If transposed, the only part included will be the string literal <code>def</code>. \n" + 
+				"\n" + 
+				"==Example==\n" + 
+				"Including [[:Help:Template/onlyinclude demo]] yields only:\n" + 
+				" {{:Help:Template/onlyinclude demo}}\n" + 
+				"\n" + 
+				"\n" + 
+				"\n" + 
+				"[[Category:Handbook templates]]\n" + 
+				"[[Category:Template documentation|PAGENAME]]\n" + 
+				"\n" + 
+				"", wikiModel.parseTemplates(WikiTestModel.ONLYINCLUDE_DEMO));
+	}
+	 
+	/**
+	 * Issue 86
+	 */
+	public void testOnlyicludeDemo002() {
+		assertEquals("def", wikiModel.parseTemplates("{{OnlyicludeDemo}}"));
+	}
+
+	/**
+	 * Issue 86
+	 */
 	public void testInclude() {
 		assertEquals("{| class=\"wikitable float-right\" style=\"width:30%; min-width:250px; max-width:400px; font-size:90%; margin-top:0px;\"\n" + 
 				"|--\n" + 
@@ -700,7 +731,8 @@ public class TemplateParserTest extends FilterTestSupport {
 	}
 
 	public void testInvalidOnlyinclude() {
-		assertEquals("test123 start", wikiModel.parseTemplates("test123 start<onlyinclude>\n" + "test123 end"));
+		assertEquals("test123 start\n" + 
+				"test123 end", wikiModel.parseTemplates("test123 start<onlyinclude>\n" + "test123 end"));
 	}
 
 	public void testMagicCURRENTYEAR() {

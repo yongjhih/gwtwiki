@@ -76,6 +76,26 @@ public abstract class AbstractParser extends WikipediaScanner {
 	}
 
 	/**
+	 * Read the characters until the <code>&lt;</code> character with following
+	 * <i>end</i> string is found. The end string is matched ignoring case
+	 * considerations.
+	 * 
+	 * @param endString
+	 *          the end string which should be searched in ignore case mode
+	 * @return
+	 */
+
+	protected final int readUntilNestedIgnoreCase(String endString) {
+		int index = Util.indexOfNestedIgnoreCase(fStringSource, endString, fCurrentPosition);
+		if (index != (-1)) {
+			fCurrentPosition = index + 2 + endString.length();
+			return 2 + endString.length();
+		}
+		fCurrentPosition = fStringSource.length();
+		return 0;
+	}
+
+	/**
 	 * Read until character is found
 	 * 
 	 * @param testedChar
