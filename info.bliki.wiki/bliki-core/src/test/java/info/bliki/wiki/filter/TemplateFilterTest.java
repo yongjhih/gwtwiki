@@ -13,11 +13,11 @@ public class TemplateFilterTest extends FilterTestSupport {
 	}
 	
 	public void testTemplate06() {
-		assertEquals("\n" + "<p>start- 5.0 equals +5 -end</p>", wikiModel.render("start- {{ifeq|5.0|+5}} -end"));
+		assertEquals("\n" + "<p>start- 5.0 equals +5 -end</p>", wikiModel.render("start- {{ifeq|5.0|+5}} -end", false));
 	}
 
 	public void testTemplate09() {
-		assertEquals("\n" + "<p>start- test is not equal Test -end</p>", wikiModel.render("start- {{ifeq|test|Test}} -end"));
+		assertEquals("\n" + "<p>start- test is not equal Test -end</p>", wikiModel.render("start- {{ifeq|test|Test}} -end", false));
 	}
 
 	public void testTemplateCall3() {
@@ -25,40 +25,40 @@ public class TemplateFilterTest extends FilterTestSupport {
 		assertEquals("\n" + 
 				"<p>b) First: Test1 Second:  c) First: sdfsf Second: klj </p>\n" + 
 				"", wikiModel.render("{{templ1\n"
-				+ " | a = Test1\n" + " | {{templ2|sdfsf|klj}} \n" + "}}\n" + ""));
+				+ " | a = Test1\n" + " | {{templ2|sdfsf|klj}} \n" + "}}\n" + "", false));
 	}
  
 	public void testSwitch001() {
-		assertEquals("\n" + "<p>{{Templ1/ind&#38;}}</p>", wikiModel.render("{{Templ1/{{ #switch: imperative  | ind | ind&}}}}"));
+		assertEquals("\n" + "<p>{{Templ1/ind&#38;}}</p>", wikiModel.render("{{Templ1/{{ #switch: imperative  | ind | ind&}}}}", false));
 	}
 
 	public void testNonExistentTemplate() {
 		assertEquals("<h2><span class=\"mw-headline\" id=\"Other_areas_of_Wikipedia\">Other areas of Wikipedia</span></h2>\n"
 				+ "<p>{{WikipediaOther}}</p>", wikiModel.render("==Other areas of Wikipedia==\n"
-				+ "{{WikipediaOther}}<!--Template:WikipediaOther-->"));
+				+ "{{WikipediaOther}}<!--Template:WikipediaOther-->", false));
 	}
 
 	public void testTemplateCall1() {
 		// see method WikiTestModel#getRawWikiContent()
-		assertEquals("\n" + "<p>start-an include page-end</p>", wikiModel.render("start-{{:Include Page}}-end"));
+		assertEquals("\n" + "<p>start-an include page-end</p>", wikiModel.render("start-{{:Include Page}}-end", false));
 	}
 
 	public void testTemplateCall2() {
 		// see method WikiTestModel#getRawWikiContent()
 		assertEquals("\n" + "<p>start-b) First: 3 Second: b-end start-c) First: sdfsf Second: klj-end</p>", wikiModel
-				.render("start-{{templ1|a=3|b}}-end start-{{templ2|sdfsf|klj}}-end"));
+				.render("start-{{templ1|a=3|b}}-end start-{{templ2|sdfsf|klj}}-end", false));
 	}
 
 	public void testTemplateCall4() {
 		// see method WikiTestModel#getRawWikiContent() for template tl
 		assertEquals(
 				"\n" + "<p>{{<a href=\"http://www.bliki.info/wiki/Template:example\" title=\"Template:example\">example</a>}}</p>",
-				wikiModel.render("{{tl|example}}"));
+				wikiModel.render("{{tl|example}}", false));
 	}
 
 	public void testTemplateCall4a() {
 		// see method WikiTestModel#getRawWikiContent() for template tl
-		assertEquals("\n" + "<p>{{[[Template:{{{1}}}|{{{1}}}]]}}</p>", wikiModel.render("{{tl}}"));
+		assertEquals("\n" + "<p>{{[[Template:{{{1}}}|{{{1}}}]]}}</p>", wikiModel.render("{{tl}}", false));
 	}
 
 	public void testTemplateCall5() {
@@ -66,7 +66,7 @@ public class TemplateFilterTest extends FilterTestSupport {
 		assertEquals(
 				"\n"
 						+ "<p>(pronounced <span class=\"IPA\" title=\"Pronunciation in the International Phonetic Alphabet (IPA)\"><a href=\"http://www.bliki.info/wiki/WP:IPA_for_English\" title=\"WP:IPA for English\">/dəˌpeʃˈmoʊd/</a></span>)</p>",
-				wikiModel.render("({{pron-en|dəˌpeʃˈmoʊd}})"));
+				wikiModel.render("({{pron-en|dəˌpeʃˈmoʊd}})", false));
 	}
 	
 	public void testTemplateImage1() {
@@ -93,17 +93,17 @@ public class TemplateFilterTest extends FilterTestSupport {
 								+ " |title  = Yoshihiko Noda\n"
 								+ "}}\n"
 								+ "The ruling Democratic Party of Japan selects '''Yoshihiko Noda''' ''(pictured)'' as the country's new prime minister, following the resignation of Naoto Kan\n"
-								+ "</div>\n" + "|}"));
+								+ "</div>\n" + "|}", false));
 	}
 
 	public void testTemplateNowiki() {
 		// see method WikiTestModel#getTemplateContent()
-		assertEquals("\n" + "<p>start-{{templ1|a=3|b}}-end</p>", wikiModel.render("start-<nowiki>{{templ1|a=3|b}}-</noWiKi>end"));
+		assertEquals("\n" + "<p>start-{{templ1|a=3|b}}-end</p>", wikiModel.render("start-<nowiki>{{templ1|a=3|b}}-</noWiKi>end", false));
 	}
 
 	public void testTemplateParameter01() {
 		// see method WikiTestModel#getTemplateContent()
-		assertEquals("\n" + "<p>start-a) First: arg1 Second: arg2-end</p>", wikiModel.render("start-{{Test|arg1|arg2}}-end"));
+		assertEquals("\n" + "<p>start-a) First: arg1 Second: arg2-end</p>", wikiModel.render("start-{{Test|arg1|arg2}}-end", false));
 	}
 
 	public void testTemplateParameter02() {
@@ -112,38 +112,38 @@ public class TemplateFilterTest extends FilterTestSupport {
 				"\n"
 						+ "<p>start- <i><a class=\"externallink\" href=\"http://www.etymonline.com/index.php?search=hello&#38;searchmode=none\" rel=\"nofollow\" title=\"http://www.etymonline.com/index.php?search=hello&#38;searchmode=none\">Online Etymology Dictionary</a></i>. -end</p>",
 				wikiModel
-						.render("start- {{cite web|url=http://www.etymonline.com/index.php?search=hello&searchmode=none|title=Online Etymology Dictionary}} -end"));
+						.render("start- {{cite web|url=http://www.etymonline.com/index.php?search=hello&searchmode=none|title=Online Etymology Dictionary}} -end", false));
 	}
 
 	public void testTemplateParameter03() {
 		// see method WikiTestModel#getTemplateContent()
 		assertEquals("\n" + "<p>start- </p>\n"
 				+ "<div class=\"references-small\" style=\"-moz-column-count:2; -webkit-column-count:2; column-count:2;\"></div> -end",
-				wikiModel.render("start- {{reflist|2}} -end"));
+				wikiModel.render("start- {{reflist|2}} -end", false));
 	}
 
 	public void testTemplate04() {
-		assertEquals("\n" + "<p>A is not equal B</p>", wikiModel.render("{{#ifeq: A | B |A equals B |A is not equal B}}"));
+		assertEquals("\n" + "<p>A is not equal B</p>", wikiModel.render("{{#ifeq: A | B |A equals B |A is not equal B}}", false));
 	}
 
 	public void testTemplate05() {
-		assertEquals("\n" + "<p>start- A is not equal B -end</p>", wikiModel.render("start- {{ifeq|A|B}} -end"));
+		assertEquals("\n" + "<p>start- A is not equal B -end</p>", wikiModel.render("start- {{ifeq|A|B}} -end", false));
 	}
 
 	public void testTemplate07() {
-		assertEquals("\n" + "<p>start- 5.001 is not equal +5 -end</p>", wikiModel.render("start- {{ifeq|5.001|+5}} -end"));
+		assertEquals("\n" + "<p>start- 5.001 is not equal +5 -end</p>", wikiModel.render("start- {{ifeq|5.001|+5}} -end", false));
 	}
 
 	public void testTemplate08() {
-		assertEquals("\n" + "<p>start- test equals test -end</p>", wikiModel.render("start- {{ifeq|test|test}} -end"));
+		assertEquals("\n" + "<p>start- test equals test -end</p>", wikiModel.render("start- {{ifeq|test|test}} -end", false));
 	}
 
 	public void testTemplate10() {
-		assertEquals("", wikiModel.render("{{{x| }}}"));
+		assertEquals("", wikiModel.render("{{{x| }}}", false));
 	}
 
 	public void testTemplate11() {
-		assertEquals("\n" + "<p>{{{title}}}</p>", wikiModel.render("{{{title}}}"));
+		assertEquals("\n" + "<p>{{{title}}}</p>", wikiModel.render("{{{title}}}", false));
 	}
 
 	public void testTemplate12() {
@@ -175,7 +175,7 @@ public class TemplateFilterTest extends FilterTestSupport {
 						+ "|developer = \n" + "|latest_release_version = 0.6.5\n" + "|latest_release_date = [[March 16]], [[2008]]\n"
 						+ "|latest preview version = 0.6.5 \n" + "|latest preview date = \n" + "|operating_system = [[Cross-platform]]\n"
 						+ "|genre = [[wiki software|Wiki software]]\n" + "|license = [[GNU Lesser General Public License|LGPL]]\n"
-						+ "|website = [http://www.jamwiki.org/ JAMWiki wiki]\n" + "}}\n"));
+						+ "|website = [http://www.jamwiki.org/ JAMWiki wiki]\n" + "}}\n", false));
 	}
 
 	public void testTemplateParameter13() {
@@ -202,7 +202,7 @@ public class TemplateFilterTest extends FilterTestSupport {
 								+ "|+Versionsgeschichte von JavaScript<ref>{{cite web|author=John Resig |url=http://ejohn.org/blog/versions-of-javascript |title=Versions of JavaScript |publisher=Ejohn.org |date= |accessdate=2009-05-19}}</ref>\n"
 								+ "|-\n"
 								+ "! Version !! Release !! Entsprechung !! Netscape Navigator !! Mozilla Firefox !! Internet Explorer !! Opera !! Safari !! Google Chrome\n"
-								+ "|}\n" + " <references/>\n"));
+								+ "|}\n" + " <references/>\n", false));
 	}
 
 	// private final String TEST_STRING_01 =
@@ -286,18 +286,18 @@ public class TemplateFilterTest extends FilterTestSupport {
 			+ "{{{disambiguation|}}}}}}}}}|articles|{{#if:{{{mulcat|}}}|categories|an\n" + "article}}}}}} on:\n";
 
 	public void testNestedIf02() {
-		assertEquals("\n" + "<pre>\nan\n</pre>\n" + "<p>article on:\n" + "</p>" + "", wikiModel.render(TEST_STRING_02));
+		assertEquals("\n" + "<pre>\nan\n</pre>\n" + "<p>article on:\n" + "</p>" + "", wikiModel.render(TEST_STRING_02, false));
 	}
 
 	public void testParserFunctionLC001() {
-		assertEquals("\n" + "<p>A lower case text</p>", wikiModel.render("A {{lc: Lower Case}} text"));
+		assertEquals("\n" + "<p>A lower case text</p>", wikiModel.render("A {{lc: Lower Case}} text", false));
 	}
 
 	public void testParserFunctionTag001() {
 		assertEquals("\n"
 				+ "<p><sup id=\"_ref-1\" class=\"reference\"><a href=\"#_note-1\" title=\"\">[1]</a></sup></p><ol class=\"references\">\n"
 				+ "<li id=\"_note-1\"><b><a href=\"#_ref-1\" title=\"\">&#8593;</a></b> <b>a simple test</b></li></ol>", wikiModel
-				.render("{{#tag:ref|'''a simple test'''}}{{#tag:references}}"));
+				.render("{{#tag:ref|'''a simple test'''}}{{#tag:references}}", false));
 	}
 
 	public final static String NAVBOX_STRING = "{{Navbox\n" + "|name  = AcademyAwardBestActor 1981-2000\n"
@@ -378,7 +378,7 @@ public class TemplateFilterTest extends FilterTestSupport {
 				"</tr>\n" + 
 				"</table></td>\n" + 
 				"</tr>\n" + 
-				"</table>", wikiModel.render(NAVBOX_STRING));
+				"</table>", wikiModel.render(NAVBOX_STRING, false));
 	}
 
 	public void test11() {
@@ -386,15 +386,15 @@ public class TemplateFilterTest extends FilterTestSupport {
 				"\n"
 						+ "<p><a href=\"http://www.bliki.info/wiki/Template:AcademyAwardBestActor_1981-2000\" title=\"Template:AcademyAwardBestActor_1981-2000\"><span style=\";background: #EEDD82;border:none;;\" title=\"View this template\">v</span></a></p>",
 				wikiModel
-						.render("[[Template:AcademyAwardBestActor_1981-2000|<span title=\"View this template\" style=\";background: #EEDD82;border:none;;\">v</span>]]"));
+						.render("[[Template:AcademyAwardBestActor_1981-2000|<span title=\"View this template\" style=\";background: #EEDD82;border:none;;\">v</span>]]", false));
 	}
 
 	public void testPipe001a() {
-		assertEquals("\n" + "<p>Hello World\n" + "Hello World\n" + "</p>", wikiModel.render("{{2x|Hello World\n" + "}}"));
+		assertEquals("\n" + "<p>Hello World\n" + "Hello World\n" + "</p>", wikiModel.render("{{2x|Hello World\n" + "}}", false));
 	}
 
 	public void testPipe001() {
-		assertEquals("\n" + "<p>hello worldhello world </p>", wikiModel.render("{{2x|hello world" + "}} "));
+		assertEquals("\n" + "<p>hello worldhello world </p>", wikiModel.render("{{2x|hello world" + "}} ", false));
 	}
 
 	public void testPipe002() {
@@ -402,7 +402,7 @@ public class TemplateFilterTest extends FilterTestSupport {
 				+ "<td>B</td></tr>\n" + "<tr>\n" + "<td>C</td>\n" + "<td>D</td></tr></table></div>\n" + "\n"
 				+ "<div style=\"page-break-inside: avoid;\">\n" + "<table>\n" + "<tr>\n" + "<td>A </td>\n" + "<td>B</td></tr>\n" + "<tr>\n"
 				+ "<td>C</td>\n" + "<td>D</td></tr></table></div>\n" + "", wikiModel.render("{{2x|{{{!}} \n" + "{{!}} A \n" + "{{!}} B\n"
-				+ "{{!}}- \n" + "{{!}} C\n" + "{{!}} D\n" + "{{!}}}\n" + "}}"));
+				+ "{{!}}- \n" + "{{!}} C\n" + "{{!}} D\n" + "{{!}}}\n" + "}}", false));
 	}
 
 	public void testPipe003() {
@@ -413,7 +413,7 @@ public class TemplateFilterTest extends FilterTestSupport {
 				+ "<tr>\n" + "<td>A </td>\n" + "<td>B</td></tr>\n" + "<tr>\n" + "<td>C</td>\n" + "<td>D</td></tr></table></div>\n" + "\n"
 				+ "<div style=\"page-break-inside: avoid;\">\n" + "<table>\n" + "<tr>\n" + "<td>A </td>\n" + "<td>B</td></tr>\n" + "<tr>\n"
 				+ "<td>C</td>\n" + "<td>D</td></tr></table></div>\n" + "", wikiModel.render("{{2x|{{2x|{{{!}} \n" + "{{!}} A \n"
-				+ "{{!}} B\n" + "{{!}}- \n" + "{{!}} C\n" + "{{!}} D\n" + "{{!}}}\n" + "}}}}"));
+				+ "{{!}} B\n" + "{{!}}- \n" + "{{!}} C\n" + "{{!}} D\n" + "{{!}}}\n" + "}}}}", false));
 	}
 
 	public void testFurther() {
@@ -421,38 +421,38 @@ public class TemplateFilterTest extends FilterTestSupport {
 				"\n"
 						+ "<dl>\n"
 						+ "<dd><span class=\"boilerplate further\"><i>Further information: <a href=\"http://www.bliki.info/wiki/History_of_molecular_biology\" title=\"History of molecular biology\">History of molecular biology</a></i></span></dd></dl>",
-				wikiModel.render("{{further|[[History of molecular biology]]}}"));
+				wikiModel.render("{{further|[[History of molecular biology]]}}", false));
 	}
 
 	public void testInvalidNoinclude() {
 		assertEquals("\n" + 
-				"<p>test123 start</p>", wikiModel.render("test123 start<noinclude>\n" + "test123 end"));
+				"<p>test123 start</p>", wikiModel.render("test123 start<noinclude>\n" + "test123 end", false));
 	}
 
 	public void testInvalidIncludeonly() {
 		assertEquals("\n" + 
 				"<p>test123 start\n" + 
-				"test123 end</p>", wikiModel.render("test123 start<includeonly>\n" + "test123 end"));
+				"test123 end</p>", wikiModel.render("test123 start<includeonly>\n" + "test123 end", false));
 	}
 
 	public void testInvalidOnlyinclude() {
 		assertEquals("\n" + 
-				"<p>test123 end</p>", wikiModel.render("test123 start<onlyinclude>\n" + "test123 end"));
+				"<p>test123 end</p>", wikiModel.render("test123 start<onlyinclude>\n" + "test123 end", false));
 	}
 
 	public void testIf_image_test() {
 		assertEquals(
 				"\n"
 						+ "<p>test <div style=\"width:220px;\"><a class=\"internal\" href=\"http://www.bliki.info/wiki/File:220px-test.jpg\" ><img src=\"http://www.bliki.info/wiki/220px-test.jpg\" class=\"location-none\" width=\"220\" />\n"
-						+ "</a></div>\n" + " test123</p>", wikiModel.render("test {{If_image_test|  image =  test.jpg}} test123"));
+						+ "</a></div>\n" + " test123</p>", wikiModel.render("test {{If_image_test|  image =  test.jpg}} test123", false));
 	}
 
 	public void testMONTHNAME() {
-		assertEquals("\n" + "<p>test October test123</p>", wikiModel.render("test {{MONTHNAME | 10 }} test123"));
+		assertEquals("\n" + "<p>test October test123</p>", wikiModel.render("test {{MONTHNAME | 10 }} test123", false));
 	}
 
 	public void testMONTHNUMBER() {
-		assertEquals("\n" + "<p>test 10 test123</p>", wikiModel.render("test {{MONTHNUMBER | OctoBer }} test123"));
+		assertEquals("\n" + "<p>test 10 test123</p>", wikiModel.render("test {{MONTHNUMBER | OctoBer }} test123", false));
 	}
 
 	public void testInfoboxProgrammiersprachen() {
@@ -502,7 +502,7 @@ public class TemplateFilterTest extends FilterTestSupport {
 								+ "|Typisierung = [[Schwache Typisierung|schwach]], [[Dynamische Typisierung|dynamisch]], [[Duck Typing|duck]]"
 								+ "|Implementierung = [[SpiderMonkey]], [[Rhino]], [[SquirrelFish]], [[V8 (JavaScript-Engine)|V8]]"
 								+ "|Beeinflusst_von = [[Self (Programmiersprache)|Self]], [[C (Programmiersprache)|C]], [[Scheme]], [[Perl (Programmiersprache)|Perl]], [[Python (Programmiersprache)|Python]], [[Java (Programmiersprache)|Java]]"
-								+ "}}"));
+								+ "}}", false));
 	}
 
 	public void testProgrammiersprachen() {
@@ -694,7 +694,7 @@ public class TemplateFilterTest extends FilterTestSupport {
 								+ "|\n" + "* 3.2\n" + "* 4.0\n" + "| 1.0\n" + "|-\n"
 								+ "| 1.8 || Juni 2008 || 1.7 + Generator expressions + Expression closures ||  || 3.0 ||  ||  || || \n" + "|-\n"
 								+ "| 1.8.1 ||  || 1.8 + geringfügige Updates ||  || 3.5 ||  ||  || || \n" + "|-\n"
-								+ "| 1.9 ||  || 1.8.1 + ECMAScript 5 Compliance ||  || 4 ||  ||  || || \n" + "|}\n" + "\n" + "<references/>\n"));
+								+ "| 1.9 ||  || 1.8.1 + ECMAScript 5 Compliance ||  || 4 ||  ||  || || \n" + "|}\n" + "\n" + "<references/>\n", false));
 	}
 
 	public void testIssue77_001() {
@@ -725,7 +725,7 @@ public class TemplateFilterTest extends FilterTestSupport {
 								+ " |border = no\n"
 								+ "}}\n"
 								+ "The ruling Democratic Party of Japan selects '''Yoshihiko Noda''' ''(pictured)'' as the country's new Prime Minister of Japan|prime minister, following the resignation of Naoto Kan.</div>\n"
-								+ "|}"));
+								+ "|}", false));
 	}
 
 	public void testIssue77_002() {
@@ -760,11 +760,11 @@ public class TemplateFilterTest extends FilterTestSupport {
 								+ "TEST1\n"
 								+ "}}\n"
 								+ "{{!}}-\n"
-								+ "{{Main Page subpanel|column=both|title=Sister projects|1=\n" + "TEST2\n" + "}}\n" + "|}"));
+								+ "{{Main Page subpanel|column=both|title=Sister projects|1=\n" + "TEST2\n" + "}}\n" + "|}", false));
 	}
 
 	public void testIssue81() {
-		assertEquals("\n" + "<p>104</p>", wikiModel.render("{{#time:z|{{{1|April 14}}}}}"));
+		assertEquals("\n" + "<p>104</p>", wikiModel.render("{{#time:z|{{{1|April 14}}}}}", false));
 	}
 
 	public void testIssue82_001() {

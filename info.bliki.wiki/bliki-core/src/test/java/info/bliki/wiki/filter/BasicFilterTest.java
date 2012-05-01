@@ -18,61 +18,61 @@ public class BasicFilterTest extends FilterTestSupport {
 	}
 
 	public void testTT() {
-		assertEquals("\n" + "<p><b>hosted by:</b><br/></p>", wikiModel.render("'''hosted by:'''<br>"));
+		assertEquals("\n" + "<p><b>hosted by:</b><br/></p>", wikiModel.render("'''hosted by:'''<br>", false));
 	}
 
 	public void testBlankInput() {
-		assertEquals("", wikiModel.render(""));
+		assertEquals("", wikiModel.render("", false));
 	}
 
 	public void testNullInput() {
-		assertEquals("", wikiModel.render(null));
+		assertEquals("", wikiModel.render(null, false));
 	}
 
 	public void testCharInput() {
-		assertEquals("\n" + "<p>[</p>", wikiModel.render("["));
+		assertEquals("\n" + "<p>[</p>", wikiModel.render("[", false));
 	}
 
 	public void testParagraph1() {
-		assertEquals("\n" + "<p>This is a simple paragraph.</p>", wikiModel.render("This is a simple paragraph."));
+		assertEquals("\n" + "<p>This is a simple paragraph.</p>", wikiModel.render("This is a simple paragraph.", false));
 	}
 
 	public void testParagraph2() {
 		assertEquals("\n" + "<p>This is a simple paragraph.</p>\n" + "<p>A second paragraph.</p>", wikiModel
-				.render("This is a simple paragraph.\n\nA second paragraph."));
+				.render("This is a simple paragraph.\n\nA second paragraph.", false));
 	}
 
 	public void testParagraph3() {
 		assertEquals("\n" + "<p>This is a simple paragraph.</p>\n" + "<p>A second paragraph.</p>", wikiModel
-				.render("This is a simple paragraph.\n\nA second paragraph."));
+				.render("This is a simple paragraph.\n\nA second paragraph.", false));
 	}
 
 	public void testNowiki01() {
 		assertEquals("\n" + "<p>\n" + "* This is not an unordered list item.</p>", wikiModel
-				.render("<nowiki>\n* This is not an unordered list item.</nowiki>"));
+				.render("<nowiki>\n* This is not an unordered list item.</nowiki>", false));
 	}
 
 	public void testNowiki02() {
 		assertEquals("\n" + "<p>\n" + "* This is not an unordered list item.</p>", wikiModel
-				.render("<noWiki>\n* This is not an unordered list item.</nowiKi>"));
+				.render("<noWiki>\n* This is not an unordered list item.</nowiKi>", false));
 	}
 
 	public void testSimpleList() {
-		assertEquals("\n" + "<ul>\n" + "<li>Item 1</li>\n" + "<li>Item 2</li></ul>", wikiModel.render("* Item 1\n" + "* Item 2"));
+		assertEquals("\n" + "<ul>\n" + "<li>Item 1</li>\n" + "<li>Item 2</li></ul>", wikiModel.render("* Item 1\n" + "* Item 2", false));
 	}
 
 	public void testSimpleTable() {
 		assertEquals("\n" + "<div style=\"page-break-inside: avoid;\">\n" + "<table>\n" + "<tr>\n" + "<td>a</td>\n"
-				+ "<td>b</td></tr></table></div>", wikiModel.render("{|\n" + "|a\n|b\n" + "|}"));
+				+ "<td>b</td></tr></table></div>", wikiModel.render("{|\n" + "|a\n|b\n" + "|}", false));
 	}
 
 	public void testNOTOC() {
-		assertEquals("\n" + "<p>jhfksd  sflkjsd</p>", wikiModel.render("jhfksd __NOTOC__ sflkjsd"));
+		assertEquals("\n" + "<p>jhfksd  sflkjsd</p>", wikiModel.render("jhfksd __NOTOC__ sflkjsd", false));
 	}
 
 	public void testWrongNOTOC() {
 		assertEquals("\n" + 
-				"<p>jhfksd  sflkjsd</p>", wikiModel.render("jhfksd __WRONGTOC__ sflkjsd"));
+				"<p>jhfksd  sflkjsd</p>", wikiModel.render("jhfksd __WRONGTOC__ sflkjsd", false));
 	}
 
 	public void testbq1() {
@@ -80,14 +80,14 @@ public class BasicFilterTest extends FilterTestSupport {
 				"<blockquote style=\"background: white; border: 1px solid rgb(153, 153, 153); padding: 1em;\">\n"
 						+ "<p><b>Hello World</b></p></blockquote>",
 				wikiModel
-						.render("<blockquote style=\"background: white; border: 1px solid rgb(153, 153, 153); padding: 1em;\">\n'''Hello World'''</blockquote>"));
+						.render("<blockquote style=\"background: white; border: 1px solid rgb(153, 153, 153); padding: 1em;\">\n'''Hello World'''</blockquote>", false));
 	}
 
 	public void testbq2() {
 		assertEquals("<blockquote>\n" + "<p>The <b>blockquote</b> command formats block \n"
 				+ "quotations, typically by surrounding them \n" + "with whitespace and a slightly different font.\n"
 				+ "</p></blockquote>\n" + "", wikiModel.render("<blockquote>\n" + "The \'\'\'blockquote\'\'\' command formats block \n"
-				+ "quotations, typically by surrounding them \n" + "with whitespace and a slightly different font.\n" + "</blockquote>\n"));
+				+ "quotations, typically by surrounding them \n" + "with whitespace and a slightly different font.\n" + "</blockquote>\n", false));
 	}
 
 	public void testbq3() {
@@ -95,13 +95,13 @@ public class BasicFilterTest extends FilterTestSupport {
 				+ "no line above me and i am <b>bold</b></p>\n" + "\n" + "<p>and line above me\n"
 				+ "end of blockquote here</p></blockquote> ", wikiModel.render("<blockquote>start blockquote here\n" + "\n"
 				+ "line above me\n" + "no line above me and i am <b>bold</b>\n" + "\n" + "\n" + "and line above me\n"
-				+ "end of blockquote here</blockquote> "));
+				+ "end of blockquote here</blockquote> ", false));
 	}
 
 	public void testPreBlock() {
 		assertEquals("\n<pre>\n* Lists are easy to do:\n" + "** start every line\n" + "* with a star\n" + "** more stars mean\n"
 				+ "*** deeper levels\n</pre>", wikiModel.render(" * Lists are easy to do:\n" + " ** start every line\n"
-				+ " * with a star\n" + " ** more stars mean\n" + " *** deeper levels"));
+				+ " * with a star\n" + " ** more stars mean\n" + " *** deeper levels", false));
 	}
 
 	public void testNestedPreBlock() {
@@ -109,7 +109,7 @@ public class BasicFilterTest extends FilterTestSupport {
 				+ "<th>wikitext</th></tr>\n" + "<tr>\n" + "<td>\n" + "<pre>\n* Lists are easy to do:\n" + "** start every line\n"
 				+ "* with a star\n" + "** more stars mean\n" + "*** deeper levels\n</pre></td></tr></table></div>", wikiModel
 				.render("{|border=1 width=\"79%\"\n" + "!wikitext\n" + "|-\n" + "|\n" + " * Lists are easy to do:\n"
-						+ " ** start every line\n" + " * with a star\n" + " ** more stars mean\n" + " *** deeper levels\n" + "|}"));
+						+ " ** start every line\n" + " * with a star\n" + " ** more stars mean\n" + " *** deeper levels\n" + "|}", false));
 	}
 
 	public void testPBlock() {
@@ -133,53 +133,53 @@ public class BasicFilterTest extends FilterTestSupport {
 								+ "&amp;#33; Computer &#60;br&nbsp;&#47;> <br />\n"
 								+ "&amp;#124;- &#60;br&nbsp;&#47;> <br />\n"
 								+ "\'\'\'&amp;#124; style=\"color: yellow; background-color: green;\" &amp;#124; Processor Speed: &amp;#60;span style=\"color: red;\"> 1.8 GHz &amp;#60;/span> &#60;br&nbsp;&#47;>\'\'\' <br />\n"
-								+ "&amp;#124;&amp;#125; &#60;br&nbsp;&#47;> <br />\n" + "&#60;/tt> &#60;/p>\n" + "</tt> </p>"));
+								+ "&amp;#124;&amp;#125; &#60;br&nbsp;&#47;> <br />\n" + "&#60;/tt> &#60;/p>\n" + "</tt> </p>", false));
 	}
 
 	public void testALink001() {
 		assertEquals("\n" + "<p><a href=\"http://www.test.com\" rel=\"nofollow\">Test2</a></p>", wikiModel
-				.render("<a href=\"http://www.test.com\">Test2</a>"));
+				.render("<a href=\"http://www.test.com\">Test2</a>", false));
 	}
 
 	public void testXSS001() {
-		assertEquals("<h1>Test</h1>", wikiModel.render("<h1 onmouseover=\"javascript:alert(\'yo\')\">Test</h1>"));
+		assertEquals("<h1>Test</h1>", wikiModel.render("<h1 onmouseover=\"javascript:alert(\'yo\')\">Test</h1>", false));
 	}
 
 	public void testSignature01() {
-		assertEquals("\n" + "<p>a simple~~~~test</p>", wikiModel.render("a simple~~~~test"));
+		assertEquals("\n" + "<p>a simple~~~~test</p>", wikiModel.render("a simple~~~~test", false));
 	}
 
 	public void testSignature02() {
-		assertEquals("\n" + "<p>a simple~~~~</p>", wikiModel.render("a simple~~~~"));
+		assertEquals("\n" + "<p>a simple~~~~</p>", wikiModel.render("a simple~~~~", false));
 	}
 
 	public void testSignature03() {
-		assertEquals("\n" + "<p>a simple~~~~~test</p>", wikiModel.render("a simple~~~~~test"));
+		assertEquals("\n" + "<p>a simple~~~~~test</p>", wikiModel.render("a simple~~~~~test", false));
 	}
 
 	public void testSignature04() {
-		assertEquals("\n" + "<p>a simple~~~~~</p>", wikiModel.render("a simple~~~~~"));
+		assertEquals("\n" + "<p>a simple~~~~~</p>", wikiModel.render("a simple~~~~~", false));
 	}
 
 	public void testSignature05() {
-		assertEquals("\n" + "<p>a simple~~~test</p>", wikiModel.render("a simple~~~test"));
+		assertEquals("\n" + "<p>a simple~~~test</p>", wikiModel.render("a simple~~~test", false));
 	}
 
 	public void testSignature06() {
-		assertEquals("\n" + "<p>a simple~~~</p>", wikiModel.render("a simple~~~"));
+		assertEquals("\n" + "<p>a simple~~~</p>", wikiModel.render("a simple~~~", false));
 	}
 
 	public void testSignature07() {
-		assertEquals("\n" + "<p>~~~test</p>", wikiModel.render("~~~test"));
+		assertEquals("\n" + "<p>~~~test</p>", wikiModel.render("~~~test", false));
 	}
 
 	public void testSignature08() {
-		assertEquals("\n" + "<p>~~~</p>", wikiModel.render("~~~"));
+		assertEquals("\n" + "<p>~~~</p>", wikiModel.render("~~~", false));
 	}
 
 	public void testSpan001() {
 
-		assertEquals("\n" + "<p><span class=\"xxx\">test</span></p>", wikiModel.render("<span class=\"xxx\"\n" + ">test</span>"));
+		assertEquals("\n" + "<p><span class=\"xxx\">test</span></p>", wikiModel.render("<span class=\"xxx\"\n" + ">test</span>", false));
 
 	}
 
@@ -202,7 +202,7 @@ public class BasicFilterTest extends FilterTestSupport {
 					"</ul>\n" + 
 					"</ul></td></tr></table><hr/>\n" + 
 					"\n" + 
-					"<h2><span class=\"mw-headline\" id=\"secA\">secA</span></h2>", wikiModel.render("= My Title 1=\n" + "__TOC__\n" + "== secA =="));
+					"<h2><span class=\"mw-headline\" id=\"secA\">secA</span></h2>", wikiModel.render("= My Title 1=\n" + "__TOC__\n" + "== secA ==", false));
 		} finally {
 			wikiModel.tearDown();
 		}
@@ -224,7 +224,7 @@ public class BasicFilterTest extends FilterTestSupport {
 					"</ul>\n" + 
 					"</ul></td></tr></table><hr/>\n" + 
 					"\n" + 
-					"<h2><span class=\"mw-headline\" id=\"secB\">secB</span></h2>", wikiModel.render("= My Title 2=\n" + "__TOC__\n" + "== secB =="));
+					"<h2><span class=\"mw-headline\" id=\"secB\">secB</span></h2>", wikiModel.render("= My Title 2=\n" + "__TOC__\n" + "== secB ==", false));
 		} finally {
 			wikiModel.tearDown();
 		}

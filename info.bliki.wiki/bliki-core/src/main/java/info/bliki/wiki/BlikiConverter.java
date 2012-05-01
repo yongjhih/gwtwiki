@@ -43,7 +43,7 @@ public class BlikiConverter extends JFrame {
 			WikiModel wikiModel = new WikiModel(Configuration.DEFAULT_CONFIGURATION, Locale.ENGLISH, "${image}", "${title}");
 			wikiModel.setUp();
       try {
-			String result = wikiModel.render(strData);
+			String result = wikiModel.render(strData, false);
 			output.setText(result);
       } finally {
         wikiModel.tearDown();
@@ -58,7 +58,7 @@ public class BlikiConverter extends JFrame {
 			WikiModel wikiModel = new WikiModel(Configuration.DEFAULT_CONFIGURATION, Locale.ENGLISH, "${image}", "${title}");
 			wikiModel.setUp();
       try {
-			String result = wikiModel.render(new PlainTextConverter(), strData);
+			String result = wikiModel.render(new PlainTextConverter(), strData, false);
 			output.setText(result);
       } finally {
         wikiModel.tearDown();

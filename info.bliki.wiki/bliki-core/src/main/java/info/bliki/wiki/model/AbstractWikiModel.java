@@ -75,6 +75,8 @@ public abstract class AbstractWikiModel implements IWikiModel, IContext {
 
 	protected int fSectionCounter;
 
+	protected boolean fTemplateTopic = false;
+
 	/**
 	 * A tag that manages the &quot;table of content&quot;
 	 * 
@@ -1379,7 +1381,7 @@ public abstract class AbstractWikiModel implements IWikiModel, IContext {
 	 * {@inheritDoc}
 	 */
 	public boolean isTemplateTopic() {
-		return false;
+		return fTemplateTopic;
 	}
 
 	/**
@@ -1514,10 +1516,18 @@ public abstract class AbstractWikiModel implements IWikiModel, IContext {
 	 * {@inheritDoc}
 	 */
 	public String render(ITextConverter converter, String rawWikiText) {
+		return render(converter, rawWikiText);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public String render(ITextConverter converter, String rawWikiText, boolean templateTopic) {
 		initialize();
 		if (rawWikiText == null) {
 			return "";
 		}
+		fTemplateTopic = templateTopic;
 		WikipediaParser.parse(rawWikiText, this, true, null);
 		if (converter != null) {
 			StringBuilder buf = new StringBuilder(rawWikiText.length() + rawWikiText.length() / 10);
@@ -1541,14 +1551,21 @@ public abstract class AbstractWikiModel implements IWikiModel, IContext {
 	 * {@inheritDoc}
 	 */
 	public String render(String rawWikiText) {
-		return render(new HTMLConverter(), rawWikiText);
+		return render(rawWikiText, false);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public String render(String rawWikiText, boolean templateTopic) {
+		return render(new HTMLConverter(), rawWikiText, templateTopic);
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
 	public String renderPDF(String rawWikiText) {
-		return render(new PDFConverter(), rawWikiText);
+		return render(new PDFConverter(), rawWikiText, false);
 	}
 
 	/**

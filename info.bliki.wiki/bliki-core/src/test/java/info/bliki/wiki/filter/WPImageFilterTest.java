@@ -20,7 +20,7 @@ public class WPImageFilterTest extends FilterTestSupport {
 						+ "<div class=\"thumb tleft\">\n"
 						+ "<div class=\"thumbinner\" style=\"width:152px;\"><a class=\"internal\" href=\"http://www.bliki.info/wiki/File:150px-Test_4711.jpg\" title=\"Test 4711\"><img src=\"http://www.bliki.info/wiki/150px-Test_4711.jpg\" alt=\"Test 4711\" title=\"Test 4711\" class=\"location-left type-thumb\" width=\"150\" />\n"
 						+ "</a>\n" + "<div class=\"thumbcaption\">Test 4711</div></div>\n" + "</div>\n" + "</p>", wikiModel
-						.render("[[File:Test 4711.jpg|thumb|left|150px|Test 4711]]"));
+						.render("[[File:Test 4711.jpg|thumb|left|150px|Test 4711]]", false));
 	}
 
 	public void testImage00() {
@@ -31,7 +31,7 @@ public class WPImageFilterTest extends FilterTestSupport {
 						+ "<div class=\"thumbinner\" style=\"width:222px;\"><a class=\"internal\" href=\"http://www.bliki.info/wiki/Image:baby_elephant.jpg\" title=\"Link to the Sandbox\"><img src=\"http://www.bliki.info/wiki/baby_elephant.jpg\" alt=\"Link to the Sandbox\" title=\"Link to the Sandbox\" class=\"location-none type-thumb\" width=\"220\" />\n"
 						+ "</a>\n"
 						+ "<div class=\"thumbcaption\">Link to the <a href=\"http://www.bliki.info/wiki/Sandbox\" title=\"Sandbox\">Sandbox</a></div></div>\n"
-						+ "</div>\n" + "</p>", wikiModel.render("[[Image:baby_elephant.jpg|thumb|Link to the [[Sandbox]]]]"));
+						+ "</div>\n" + "</p>", wikiModel.render("[[Image:baby_elephant.jpg|thumb|Link to the [[Sandbox]]]]", false));
 	}
 
 	public void testImage01b() {
@@ -42,7 +42,7 @@ public class WPImageFilterTest extends FilterTestSupport {
 						+ "<div class=\"thumbinner\" style=\"width:222px;\"><a class=\"internal\" href=\"http://www.bliki.info/wiki/Image:baby_elephant.jpg\" title=\"Link to the Sandbox caption\"><img src=\"http://www.bliki.info/wiki/baby_elephant.jpg\" alt=\"Link to the Sandbox caption\" title=\"Link to the Sandbox caption\" class=\"location-none type-thumb\" width=\"220\" />\n"
 						+ "</a>\n"
 						+ "<div class=\"thumbcaption\">Link to the <a href=\"http://www.bliki.info/wiki/Sandbox\" title=\"Sandbox\">Sandbox</a> caption</div></div>\n"
-						+ "</div>\n" + "</p>", wikiModel.render("[[Image:baby_elephant.jpg|thumb|Link to the [[Sandbox]] caption]]"));
+						+ "</div>\n" + "</p>", wikiModel.render("[[Image:baby_elephant.jpg|thumb|Link to the [[Sandbox]] caption]]", false));
 	}
 
 	public void testImage02() {
@@ -52,14 +52,14 @@ public class WPImageFilterTest extends FilterTestSupport {
 						+ "<div class=\"thumb tright\">\n"
 						+ "<div class=\"thumbinner\" style=\"width:222px;\"><a class=\"internal\" href=\"http://www.bliki.info/wiki/Image:220px-FIFA_WM_2006_Teams.png\" title=\"Qualifying countries\"><img src=\"http://www.bliki.info/wiki/220px-FIFA_WM_2006_Teams.png\" alt=\"Qualifying countries\" title=\"Qualifying countries\" class=\"location-none type-thumb\" width=\"220\" />\n"
 						+ "</a>\n" + "<div class=\"thumbcaption\">Qualifying countries</div></div>\n" + "</div>\n" + "...</p>", wikiModel
-						.render("these are the [[Image:FIFA WM 2006 Teams.png|thumb|220px|Qualifying countries]]..."));
+						.render("these are the [[Image:FIFA WM 2006 Teams.png|thumb|220px|Qualifying countries]]...", false));
 	}
 
 	public void testImage03() {
 		assertEquals(
 				"\n"
 						+ "<p><a class=\"externallink\" href=\"http://Westernpad.jpg\" rel=\"nofollow\" title=\"http://Westernpad.jpg\">http://Westernpad.jpg</a></p>",
-				wikiModel.render("http://Westernpad.jpg"));
+				wikiModel.render("http://Westernpad.jpg", false));
 	}
 
 	public void testImage04() {
@@ -72,14 +72,14 @@ public class WPImageFilterTest extends FilterTestSupport {
 						+ "<div class=\"thumbcaption\">Neues <a href=\"http://www.bliki.info/wiki/Kurhaus_Wiesbaden\" title=\"Kurhaus Wiesbaden\">Kurhaus</a> aus dem Jahr 1907 am <a href=\"http://www.bliki.info/wiki/Bowling_Green_(Wiesbaden)\" title=\"Bowling Green (Wiesbaden)\">Bowling Green</a></div></div>\n"
 						+ "</div>\n" + " abc...</p>",
 				wikiModel
-						.render("test [[Image:Kurhaus Wiesbaden A.jpg|thumb|Neues [[Kurhaus Wiesbaden|Kurhaus]] aus dem Jahr 1907 am [[Bowling Green (Wiesbaden)|Bowling Green]]]] abc..."));
+						.render("test [[Image:Kurhaus Wiesbaden A.jpg|thumb|Neues [[Kurhaus Wiesbaden|Kurhaus]] aus dem Jahr 1907 am [[Bowling Green (Wiesbaden)|Bowling Green]]]] abc...", false));
 	}
 
 	public void testImage05() {
 		assertEquals(
 				"\n"
 						+ "<p><div style=\"width:220px;\"><a class=\"internal\" href=\"http://www.bliki.info/wiki/Image:wikipedia_new_project1.png\" ><img src=\"http://www.bliki.info/wiki/wikipedia_new_project1.png\" class=\"location-none\" width=\"220\" />\n"
-						+ "</a></div>\n" + "</p>", wikiModel.render("[[Image:wikipedia_new_project1.png]]"));
+						+ "</a></div>\n" + "</p>", wikiModel.render("[[Image:wikipedia_new_project1.png]]", false));
 	}
 
 	public void testImage06() {
@@ -92,14 +92,14 @@ public class WPImageFilterTest extends FilterTestSupport {
 						+ "<div class=\"thumbcaption\"><i>Henkell-Schlösschen</i> der Sektkellerei <a href=\"http://www.bliki.info/wiki/Henkell_%26_S%C3%B6hnlein_KG\" title=\"Henkell &amp; Söhnlein KG\">Henkell &#38; Söhnlein KG</a></div></div>\n"
 						+ "</div>\n" + " Wiesbaden</p>",
 				wikiModel
-						.render("[[Image:Henkell-Schlösschen.JPG|thumb|\'\'Henkell-Schlösschen\'\' der Sektkellerei [[Henkell & Söhnlein KG]]]] Wiesbaden"));
+						.render("[[Image:Henkell-Schlösschen.JPG|thumb|\'\'Henkell-Schlösschen\'\' der Sektkellerei [[Henkell & Söhnlein KG]]]] Wiesbaden", false));
 	}
 
 	public void testImage07() {
 		assertEquals(
 				"\n"
 						+ "<p><div style=\"width:400px;\"><a class=\"internal\" href=\"http://www.bliki.info/wiki/Image:400px-ImageFileName.jpg\" ><img src=\"http://www.bliki.info/wiki/400px-ImageFileName.jpg\" class=\"location-center\" width=\"400\" />\n"
-						+ "</a></div>\n" + "</p>", wikiModel.render("[[Image:ImageFileName.jpg|400px|Center]]"));
+						+ "</a></div>\n" + "</p>", wikiModel.render("[[Image:ImageFileName.jpg|400px|Center]]", false));
 	}
 
 	public void testImage08() {
@@ -107,7 +107,7 @@ public class WPImageFilterTest extends FilterTestSupport {
 				"\n"
 						+ "<p>[<a class=\"externallink\" href=\"http://www.homeportals.net/downloads/ClassDiagram_3.0.198.jpg\" rel=\"nofollow\" title=\"http://www.homeportals.net/downloads/ClassDiagram_3.0.198.jpg\">http://www.homeportals.net/downloads/ClassDiagram_3.0.198.jpg</a> Class\n"
 						+ "Diagram]</p>", wikiModel.render("[http://www.homeportals.net/downloads/ClassDiagram_3.0.198.jpg Class\n"
-						+ "Diagram]"));
+						+ "Diagram]", false));
 	}
 
 	public void testImage09() {
@@ -115,7 +115,7 @@ public class WPImageFilterTest extends FilterTestSupport {
 				"\n"
 						+ "<p><div style=\"width:150px;\"><a class=\"internal\" href=\"http://www.bliki.info/wiki/Main_Page\" title=\"Alt text\"><img src=\"http://www.bliki.info/wiki/150px-Example.png\" alt=\"Alt text\" title=\"Alt text\" class=\"location-none\" width=\"150\" />\n"
 						+ "</a></div>\n" + "</p>", wikiModel
-						.render("[[Image:Example.png|150px|link=Main Page\n" + "|alt=Alt text|Title text]]"));
+						.render("[[Image:Example.png|150px|link=Main Page\n" + "|alt=Alt text|Title text]]", false));
 	}
 
 	public void testImage10() {
@@ -125,7 +125,7 @@ public class WPImageFilterTest extends FilterTestSupport {
 						+ "<div class=\"thumb tright\">\n"
 						+ "<div class=\"thumbinner\" style=\"width:152px;\"><a class=\"internal\" href=\"http://www.bliki.info/wiki/Main_Page\" title=\"Alt text\"><img src=\"http://www.bliki.info/wiki/150px-Example.png\" alt=\"Alt text\" title=\"Alt text\" class=\"location-none type-thumb\" width=\"150\" />\n"
 						+ "</a>\n" + "<div class=\"thumbcaption\">Caption</div></div>\n" + "</div>\n" + "</p>", wikiModel
-						.render("[[Bild:Example.png|150px|link=Main Page|thumb|alt=Alt text|Caption]]"));
+						.render("[[Bild:Example.png|150px|link=Main Page|thumb|alt=Alt text|Caption]]", false));
 	}
 
 	public void testImage11() {
@@ -135,7 +135,7 @@ public class WPImageFilterTest extends FilterTestSupport {
 						+ "<div class=\"thumb tright\">\n"
 						+ "<div class=\"thumbinner\" style=\"width:152px;\"><img src=\"http://www.bliki.info/wiki/150px-Example.png\" alt=\"Alt text\" title=\"Alt text\" class=\"location-none type-thumb\" width=\"150\" />\n"
 						+ "\n" + "<div class=\"thumbcaption\">Caption</div></div>\n" + "</div>\n" + "</p>", wikiModel
-						.render("[[Bild:Example.png|150px|link=|thumb|alt=Alt text|Caption]]"));
+						.render("[[Bild:Example.png|150px|link=|thumb|alt=Alt text|Caption]]", false));
 	}
 
 	public void testImage12() {
@@ -145,7 +145,7 @@ public class WPImageFilterTest extends FilterTestSupport {
 						+ "<div class=\"thumb tright\">\n"
 						+ "<div class=\"thumbinner\" style=\"height:100px;width:222px;\"><a class=\"internal\" href=\"http://www.bliki.info/wiki/Image:220px-FIFA_WM_2006_Teams.png\" title=\"Qualifying countries\"><img src=\"http://www.bliki.info/wiki/220px-FIFA_WM_2006_Teams.png\" alt=\"Qualifying countries\" title=\"Qualifying countries\" class=\"location-none type-thumb\" height=\"100\" width=\"220\" />\n"
 						+ "</a>\n" + "<div class=\"thumbcaption\">Qualifying countries</div></div>\n" + "</div>\n" + "...</p>", wikiModel
-						.render("these are the [[Image:FIFA WM 2006 Teams.png|thumb|220x100px|Qualifying countries]]..."));
+						.render("these are the [[Image:FIFA WM 2006 Teams.png|thumb|220x100px|Qualifying countries]]...", false));
 	}
 
 	public void testImage13() {
@@ -155,7 +155,7 @@ public class WPImageFilterTest extends FilterTestSupport {
 						+ "<div class=\"thumb tright\">\n"
 						+ "<div class=\"thumbinner\" style=\"height:100px;width:222px;\"><a class=\"internal\" href=\"http://www.bliki.info/wiki/Image:FIFA_WM_2006_Teams.png\" title=\"Qualifying countries\"><img src=\"http://www.bliki.info/wiki/FIFA_WM_2006_Teams.png\" alt=\"Qualifying countries\" title=\"Qualifying countries\" class=\"location-none type-thumb\" height=\"100\" width=\"220\" />\n"
 						+ "</a>\n" + "<div class=\"thumbcaption\">Qualifying countries</div></div>\n" + "</div>\n" + "...</p>", wikiModel
-						.render("these are the [[Image:FIFA WM 2006 Teams.png|thumb|x100px|Qualifying countries]]..."));
+						.render("these are the [[Image:FIFA WM 2006 Teams.png|thumb|x100px|Qualifying countries]]...", false));
 	}
 
 	public void testImage14() {
@@ -167,7 +167,7 @@ public class WPImageFilterTest extends FilterTestSupport {
 						+ "</a>\n" + "<div class=\"thumbcaption\">&#34;Renel the Alchemist&#34;, by Sir William Douglas, 1853</div></div>\n"
 						+ "</div>\n" + "</p>",
 				wikiModel
-						.render("[[Image:William Fettes Douglas - The Alchemist.jpg|thumb|left|\"Renel the Alchemist\", by Sir William Douglas, 1853]]"));
+						.render("[[Image:William Fettes Douglas - The Alchemist.jpg|thumb|left|\"Renel the Alchemist\", by Sir William Douglas, 1853]]", false));
 	}
 
 	public void testImage15() {
@@ -180,14 +180,14 @@ public class WPImageFilterTest extends FilterTestSupport {
 				+ "</a>\n"
 				+ "<div class=\"thumbcaption\">Tsunami hazard sign at <a href=\"http://www.bliki.info/wiki/Bamfield\" title=\"Bamfield\">Bamfield</a>, <a href=\"http://www.bliki.info/wiki/British_Columbia\" title=\"British Columbia\">British Columbia</a></div></div>\n"
 				+ "</div>\n" + "</p>";
-		assertEquals(expected, wikiModel.render(raw));
+		assertEquals(expected, wikiModel.render(raw, false));
 	}
 
 	public void testImage16() {
 		assertEquals(
 				"\n"
 						+ "<p><div style=\"width:220px;\"><a class=\"internal\" href=\"http://www.bliki.info/wiki/Sandbox:createNewPage#Section_Three\" ><img src=\"http://www.bliki.info/wiki/skull.jpg\" class=\"location-none\" width=\"220\" />\n"
-						+ "</a></div>\n" + "</p>", wikiModel.render("[[Image:skull.jpg|link=sandbox:createNewPage#Section Three]]"));
+						+ "</a></div>\n" + "</p>", wikiModel.render("[[Image:skull.jpg|link=sandbox:createNewPage#Section Three]]", false));
 	}
 
 }

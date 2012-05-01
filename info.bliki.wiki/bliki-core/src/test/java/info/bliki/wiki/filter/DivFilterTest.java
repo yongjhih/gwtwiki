@@ -26,6 +26,6 @@ public class DivFilterTest extends FilterTestSupport {
 						.render("<div class=\"TabelleFeldListe\">\n"
 								+ "<div class=\"TabelleFeldListeHeader\">AuftragsKopf Felder</div>\n"
 								+ "*[[item1]]\n" + "*[[item2]]\n" + "*...\n"
-								+ "</div>"));
+								+ "</div>", false));
 	}
 }

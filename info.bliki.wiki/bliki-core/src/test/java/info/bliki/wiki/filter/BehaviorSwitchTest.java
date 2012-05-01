@@ -14,6 +14,6 @@ public class BehaviorSwitchTest extends FilterTestSupport {
 
 	public void test001() {
 		assertEquals("\n" + 
-				"<p>before  after</p>", wikiModel.render("before __NOEDITSECTION__ after"));
+				"<p>before  after</p>", wikiModel.render("before __NOEDITSECTION__ after", false));
 	}
 }

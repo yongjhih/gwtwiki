@@ -41,7 +41,7 @@ public class TOCFilterTest extends FilterTestSupport {
 				"<h3><span class=\"mw-headline\" id=\"hello_world3\">hello world3</span></h3>\n" + 
 				"<p>hello world 3</p>", wikiModel
 				.render("{| align=\"right\" \n" + "| __TOC__ \n" + "|}\n" + "\n" + "==hello world 2==\n" + "hello world 2\n" + "\n"
-						+ "===hello world3===\n" + "hello world 3"));
+						+ "===hello world3===\n" + "hello world 3", false));
 	}
 
 	public void testTOC02() {
@@ -75,7 +75,7 @@ public class TOCFilterTest extends FilterTestSupport {
 				"<p>hello world 1a\n" + 
 				"</p>", wikiModel
 				.render("{| align=\"right\"\n" + "| __TOC__\n" + "|}\n" + "\n" + "=hello world 1=\n" + "hello world 1\n" + "\n"
-						+ "==hello world 2==\n" + "hello world 2\n" + "\n" + "==hello world1a==\n" + "hello world 1a\n" + ""));
+						+ "==hello world 2==\n" + "hello world 2\n" + "\n" + "==hello world1a==\n" + "hello world 1a\n" + "", false));
 	}
 
 	public void testTOC03() {
@@ -84,7 +84,7 @@ public class TOCFilterTest extends FilterTestSupport {
 				"<h2><span class=\"mw-headline\" id=\"hello_world_2\">hello world 2</span></h2>\n" + 
 				"<p>hello world 2\n" + 
 				"</p>", wikiModel
-				.render("=hello world 1=\n" + "hello world 1\n" + "\n" + "==hello world 2==\n" + "hello world 2\n"));
+				.render("=hello world 1=\n" + "hello world 1\n" + "\n" + "==hello world 2==\n" + "hello world 2\n", false));
 	}
 
 	public void testTOC04() {
@@ -117,7 +117,7 @@ public class TOCFilterTest extends FilterTestSupport {
 				"</p><h3><span class=\"mw-headline\" id=\"hello_world_4\">hello world 4</span></h3>\n" + 
 				"<p>hello world 4\n" + 
 				"</p>", wikiModel.render("=hello world 1=\n" + "hello world 1\n" + "\n" + "==hello world 2==\n"
-				+ "hello world 2\n" + "\n" + "==hello world 3==\n" + "hello world 3\n" + "===hello world 4===\n" + "hello world 4\n"));
+				+ "hello world 2\n" + "\n" + "==hello world 3==\n" + "hello world 3\n" + "===hello world 4===\n" + "hello world 4\n", false));
 	}
 
 	public void testTOC05() {
@@ -132,7 +132,7 @@ public class TOCFilterTest extends FilterTestSupport {
 				"<p>hello world 4\n" + 
 				"</p>",
 				wikiModel.render("__NOTOC__ \n" + "=hello world 1=\n" + "hello world 1\n" + "\n" + "==hello world 2==\n"
-						+ "hello world 2\n" + "\n" + "==hello world 3==\n" + "hello world 3\n" + "===hello world 4===\n" + "hello world 4\n"));
+						+ "hello world 2\n" + "\n" + "==hello world 3==\n" + "hello world 3\n" + "===hello world 4===\n" + "hello world 4\n", false));
 	}
 
 	public void testTOC06() {
@@ -143,7 +143,7 @@ public class TOCFilterTest extends FilterTestSupport {
 				"<h2><span class=\"mw-headline\" id=\"hello_world_.C3.9Cbersicht\">hello world Übersicht</span></h2>\n" + 
 				"<p>hello world Übersicht\n" + 
 				"</p>", wikiModel.render("=hello world 1=\n" + "hello world 1\n" + "\n"
-				+ "==hello world 2==\n" + "hello world 2\n" + "\n" + "==hello world Übersicht==\n" + "hello world Übersicht\n"));
+				+ "==hello world 2==\n" + "hello world 2\n" + "\n" + "==hello world Übersicht==\n" + "hello world Übersicht\n", false));
 	}
 
 	public void testTOC07() { 
@@ -164,7 +164,7 @@ public class TOCFilterTest extends FilterTestSupport {
 				"</ul></td></tr></table><hr/>\n" + 
 				"<h2><span class=\"mw-headline\" id=\"-_.2F.:.21.7E.27.28.29\">-_/.:!~&#39;()</span></h2>", wikiModel.render("\n" + 
 				"__FORCETOC__\n" + 
-				"== -_/.:!~'() =="));
+				"== -_/.:!~'() ==", false));
 	}
 	public void testTOC_Listener() {
 		String rawWikiText = wikiModel.parseTemplates("=hello world 1=\n" + "hello world 1\n" + "\n" + "==hello world 2==\n"

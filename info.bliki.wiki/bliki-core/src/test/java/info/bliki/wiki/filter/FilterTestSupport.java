@@ -48,7 +48,7 @@ public class FilterTestSupport extends TestCase {
       wikiModel.setUp();
 
       String htmlStr = wikiModel
-          .render("This is a simple [[Hello World]] wiki tag");
+          .render("This is a simple [[Hello World]] wiki tag", false);
       System.out.print(htmlStr);
     } finally {
       wikiModel.tearDown();

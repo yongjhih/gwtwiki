@@ -20,7 +20,7 @@ public class GroovyTest extends FilterTestSupport {
 
 	public void testGroovy001() {
 		String result = wikiModel.render("'''Groovy Example'''\n" + "<source lang=\"groovy\">\n" + "public class Test {\n"
-				+ "< > \" \' &" + "}\n" + "</source>");
+				+ "< > \" \' &" + "}\n" + "</source>", false);
 
 		assertEquals(
 				"\n"
@@ -36,7 +36,7 @@ public class GroovyTest extends FilterTestSupport {
 				+ "      <item>Chocolate</item>\n" + "      <item>Coffee</item>\n" + "  </category>\n" + "  <category type=\"supplies\">\n"
 				+ "      <item>Paper</item>\n" + "      <item quantity=\"4\">Pens</item>\n" + "  </category>\n"
 				+ "  <category type=\"present\">\n" + "      <item when=\"Aug 10\">Kathryn's Birthday</item>\n" + "  </category>\n"
-				+ "</shopping>\n" + "'''\n" + "</source>");
+				+ "</shopping>\n" + "'''\n" + "</source>", false);
 		assertEquals(
 				"<pre class=\"groovy\">\n" + 
 				"<span style=\"color:#7F0055; font-weight: bold; \">import</span> groovy.xml.StreamingMarkupBuilder\n" + 

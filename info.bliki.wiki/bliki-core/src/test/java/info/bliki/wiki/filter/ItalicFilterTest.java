@@ -13,11 +13,11 @@ public class ItalicFilterTest extends FilterTestSupport {
 	}
 
 	public void testEM() {
-		assertEquals("\n" + "<p>a <em> project </em>.</p>", wikiModel.render("a <em> project </em>."));
+		assertEquals("\n" + "<p>a <em> project </em>.</p>", wikiModel.render("a <em> project </em>.", false));
 	}
 
 	public void testItalic01() { 
-		assertEquals("\n" + "<p><i>Text</i></p>", wikiModel.render("''Text''"));
+		assertEquals("\n" + "<p><i>Text</i></p>", wikiModel.render("''Text''", false));
 	}
 
 //	public void testItalic02() {
@@ -28,6 +28,6 @@ public class ItalicFilterTest extends FilterTestSupport {
 //	}
 
 	public void testItalicWithPunctuation() {
-		assertEquals("\n" + "<p><i>Text</i>:</p>", wikiModel.render("''Text'':"));
+		assertEquals("\n" + "<p><i>Text</i>:</p>", wikiModel.render("''Text'':", false));
 	}
 }

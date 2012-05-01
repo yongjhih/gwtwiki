@@ -20,7 +20,7 @@ public class JavaScriptTest extends FilterTestSupport
 	public void testJavaScript()
 	{
 		String result = wikiModel.render("'''JavaScript Example'''\n" + "<source lang=javascript>\n" + "public class Test {\n" + "< > \" \' &"
-				+ "}\n" + "</source>");
+				+ "}\n" + "</source>", false);
 
 		assertEquals("\n" + 
 				"<p><b>JavaScript Example</b>\n" + 

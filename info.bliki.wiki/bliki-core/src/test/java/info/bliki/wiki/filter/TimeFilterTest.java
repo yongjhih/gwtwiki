@@ -24,7 +24,7 @@ public class TimeFilterTest extends FilterTestSupport {
 
 	public void testTime001() {
 		// TODO implement more options for time
-		assertEquals("\n" + "<p>29 February 2004</p>", wikiModel.render("{{#time: d F Y | 29 Feb 2004 }}"));
+		assertEquals("\n" + "<p>29 February 2004</p>", wikiModel.render("{{#time: d F Y | 29 Feb 2004 }}", false));
 	}
 
 	public void testTime002() {

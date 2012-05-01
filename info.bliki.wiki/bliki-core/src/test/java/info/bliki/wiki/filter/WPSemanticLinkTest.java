@@ -34,7 +34,7 @@ public class WPSemanticLinkTest extends FilterTestSupport {
 		assertEquals(
 				"\n"
 						+ "<p>Berlin is the capital of <a class=\"interwiki\" href=\"http://www.bliki.info/wiki/Germany\" title=\"Germany\">Germany</a>.</p>",
-				wikiModel.render("Berlin is the capital of [[Is capital of::Germany]]."));
+				wikiModel.render("Berlin is the capital of [[Is capital of::Germany]].", false));
 		List<SemanticRelation> list = wikiModel.getSemanticRelations();
 		SemanticRelation rel = list.get(0);
 		assertTrue(rel.getRelation().equals("Is capital of"));
@@ -49,7 +49,7 @@ public class WPSemanticLinkTest extends FilterTestSupport {
 	 */
 	public void testLink02() {
 
-		assertEquals("\n<p>The population is 3,993,933.</p>", wikiModel.render("The population is [[Has population:=3,993,933]]."));
+		assertEquals("\n<p>The population is 3,993,933.</p>", wikiModel.render("The population is [[Has population:=3,993,933]].", false));
 		List<SemanticAttribute> list = wikiModel.getSemanticAttributes();
 		SemanticAttribute rel = list.get(0);
 		assertTrue(rel.getAttribute().equals("Has population"));
@@ -61,7 +61,7 @@ public class WPSemanticLinkTest extends FilterTestSupport {
 		assertEquals(
 				"\n"
 						+ "<p>Make <a class=\"interwiki\" href=\"http://www.bliki.info/wiki/Link\" title=\"link\">alternate text</a> appear in place of the link.</p>",
-				wikiModel.render("Make [[example relation::link|alternate text]] appear in place of the link."));
+				wikiModel.render("Make [[example relation::link|alternate text]] appear in place of the link.", false));
 		List<SemanticRelation> list = wikiModel.getSemanticRelations();
 		SemanticRelation rel = list.get(0);
 		assertTrue(rel.getRelation().equals("example relation"));
@@ -71,7 +71,7 @@ public class WPSemanticLinkTest extends FilterTestSupport {
 	public void testLink04() {
 
 		assertEquals("\n<p>To hide the property  from appearing at all</p>", wikiModel
-				.render("To hide the property [[    example relation::link   | ]] from appearing at all"));
+				.render("To hide the property [[    example relation::link   | ]] from appearing at all", false));
 		List<SemanticRelation> list = wikiModel.getSemanticRelations();
 		SemanticRelation rel = list.get(0);
 		assertTrue(rel.getRelation().equals("example relation"));
@@ -82,7 +82,7 @@ public class WPSemanticLinkTest extends FilterTestSupport {
 
 		assertEquals("\n" + 
 				"<p>The <a href=\"http://www.bliki.info/wiki/C%2B%2B_::_operator\" title=\"C++ :: operator\">C++ :: operator</a>.</p>", wikiModel
-				.render("The [[:C++ :: operator]]."));
+				.render("The [[:C++ :: operator]].", false));
 		List<SemanticRelation> list = wikiModel.getSemanticRelations();
 		assertTrue(list == null);
 	}

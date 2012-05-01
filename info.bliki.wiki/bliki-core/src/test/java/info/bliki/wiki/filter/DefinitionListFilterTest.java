@@ -17,28 +17,28 @@ public class DefinitionListFilterTest extends FilterTestSupport {
 				"\n" + 
 				"<dl>\n" + 
 				"<dd><i>There is also an <a href=\"http://www.bliki.info/wiki/Asteroid\" title=\"asteroid\">asteroid</a> <a href=\"http://www.bliki.info/wiki/9969_Braille\" title=\"9969 Braille\">9969 Braille</a></i></dd></dl>",
-				wikiModel.render(":''There is also an [[asteroid]] [[9969 Braille]]''"));
+				wikiModel.render(":''There is also an [[asteroid]] [[9969 Braille]]''", false));
 	}
 
 	public void testDefinitionList1() {
 		assertEquals("\n" + 
 				"<dl>\n" + 
 				"<dt>name</dt>\n" + 
-				"<dd>Definition</dd></dl>", wikiModel.render(";name:Definition"));
+				"<dd>Definition</dd></dl>", wikiModel.render(";name:Definition", false));
 	}
 
 	public void testDefinitionList2() {
 		assertEquals("\n" + 
 				"<dl>\n" + 
 				"<dt>name </dt>\n" + 
-				"<dd>Definition</dd></dl>", wikiModel.render("; name : Definition"));
+				"<dd>Definition</dd></dl>", wikiModel.render("; name : Definition", false));
 	}
 	 
 	public void testDefinitionList3() {
 		assertEquals("\n" + 
 				"<dl>\n" + 
 				"<dt>foo</dt>\n" + 
-				"<dd>12:30</dd></dl>", wikiModel.render(";foo:12:30"));
+				"<dd>12:30</dd></dl>", wikiModel.render(";foo:12:30", false));
 	}
 
 	public void testDefinitionList10() {
@@ -48,7 +48,7 @@ public class DefinitionListFilterTest extends FilterTestSupport {
 				"  x+y\n" + 
 				"  </dd></dl>\n" + 
 				"<p>test test</p>", wikiModel
-				.render(":a simple test<nowiki>\n" + "  x+y\n" + "  </nowiki>\n" + "test test"));
+				.render(":a simple test<nowiki>\n" + "  x+y\n" + "  </nowiki>\n" + "test test", false));
 	}
 
 	public void testDefinitionList11() {
@@ -58,7 +58,7 @@ public class DefinitionListFilterTest extends FilterTestSupport {
 				"<pre>\n" + 
 				" x+y\n" + 
 				"</pre>\n" + 
-				"<p>test test</p>", wikiModel.render(":a simple test<math>ein text\n" + "  x+y\n" + "  \n" + "test test"));
+				"<p>test test</p>", wikiModel.render(":a simple test<math>ein text\n" + "  x+y\n" + "  \n" + "test test", false));
 	}
 	
 	public void testDefinitionList12() {
@@ -70,6 +70,6 @@ public class DefinitionListFilterTest extends FilterTestSupport {
 				"<pre>\n" + 
 				"test it\n" + 
 				"\n" + 
-				"</pre>", wikiModel.render(":blabla\n::blablabla\n" + " test it\n"));
+				"</pre>", wikiModel.render(":blabla\n::blablabla\n" + " test it\n", false));
 	}
 }

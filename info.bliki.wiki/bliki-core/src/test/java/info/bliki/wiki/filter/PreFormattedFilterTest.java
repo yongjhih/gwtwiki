@@ -24,7 +24,7 @@ public class PreFormattedFilterTest extends FilterTestSupport
 				"And <b>bold</b>\n" + 
 				"And a <a href=\"http://www.bliki.info/wiki/Main_Page\" title=\"Main Page\">link</a>\n</pre>", wikiModel.render(
 				" This is some\n" + " Preformatted text\n" + " With \'\'italic\'\'\n" + " And \'\'\'bold\'\'\'\n"
-						+ " And a [[Main Page|link]]"));
+						+ " And a [[Main Page|link]]", false));
 	}
 
 }

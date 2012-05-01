@@ -25,13 +25,13 @@ public class ChartFilterTest extends FilterTestSupport {
 								"  chco=76A4FB \n" + 
 								"  chls=2.0   " +
 								"  chd=t:1,2,3,6,9,13,20,28,37,49,60,72,83,92,98,100,98,92,83,72,60,49,37,28,20,13,9,6,3,2,1 \n" + 
-								"/>"));
+								"/>", false));
 	}
 
 	public void testChart002() {
 		// TeX formula
 		assertEquals("\n" + 
-				"<p><img border=\"0\" src=\"http://chart.apis.google.com/chart?chl=x+%3D+%5Cfrac%7B-b+%5Cpm+%5Csqrt+%7Bb%5E2-4ac%7D%7D%7B2a%7D&amp;cht=tx\" alt=\"\" /></p>", wikiModel.render("<chart cht=tx chl=\"x = \\frac{-b \\pm \\sqrt {b^2-4ac}}{2a}\" />"));
+				"<p><img border=\"0\" src=\"http://chart.apis.google.com/chart?chl=x+%3D+%5Cfrac%7B-b+%5Cpm+%5Csqrt+%7Bb%5E2-4ac%7D%7D%7B2a%7D&amp;cht=tx\" alt=\"\" /></p>", wikiModel.render("<chart cht=tx chl=\"x = \\frac{-b \\pm \\sqrt {b^2-4ac}}{2a}\" />", false));
 	}
 
 }

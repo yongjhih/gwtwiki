@@ -17,7 +17,7 @@ public class XMLTest extends FilterTestSupport {
 		String result = wikiModel.render("\'\'\'XML example:\'\'\'\n" + "<source lang=xml>\n" + "  <extension\n"
 				+ "           point=\"org.eclipse.help.toc\">\n" + "        <toc\n" + "              file=\"phphelp.xml\"\n"
 				+ "              primary=\"true\">\n" + "     <!-- simple comment -->                      \n" + "        </toc>\n"
-				+ "  </extension>\n" + "</source>");
+				+ "  </extension>\n" + "</source>", false);
 
 		assertEquals(
 				"\n" + 
@@ -38,7 +38,7 @@ public class XMLTest extends FilterTestSupport {
 		String result = wikiModel.render("\'\'\'XML example:\'\'\'\n" + "<source>\n" + "  <extension\n"
 				+ "           point=\"org.eclipse.help.toc\">\n" + "        <toc\n" + "              file=\"phphelp.xml\"\n"
 				+ "              primary=\"true\">\n" + "     <!-- simple comment -->                      \n" + "        </toc>\n"
-				+ "  </extension>\n" + "</source>");
+				+ "  </extension>\n" + "</source>", false);
 
 		assertEquals(
 				"\n" + 
@@ -59,7 +59,7 @@ public class XMLTest extends FilterTestSupport {
 		String result = wikiModel.render("a '''simple XML''' \n<source lang=\"xml\">\n" 
 				+ "<ui:remove>\n" 
 				+ "   <!-- das ist der kommentar -->\n"
-				+ "</ui:remove>\n" + "</source>\n test");
+				+ "</ui:remove>\n" + "</source>\n test", false);
 
 		assertEquals("\n" + 
 				"<p>a <b>simple XML</b> \n" + 
@@ -77,7 +77,7 @@ public class XMLTest extends FilterTestSupport {
 		String result = wikiModel.render("a '''simple XML''' \n<source lang=\"xml\">\n" 
 				+ "<ui:remove>\n" 
 				+ "   <!-- das ist der kommentar -->\n"
-				+ "</ui:remove>\n" + "</src>\n test");
+				+ "</ui:remove>\n" + "</src>\n test", false);
 
 		assertEquals("\n" + 
 				"<p>a <b>simple XML</b> \n" + 

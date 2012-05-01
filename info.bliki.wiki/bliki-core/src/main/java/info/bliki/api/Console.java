@@ -62,7 +62,7 @@ public class Console {
 				char[] wikiChars = getInputStreamAsCharArray(inStream, -1, encoding);
 				String wikiText = new String(wikiChars);
 				WikiModel wikiModel = new WikiModel(image, link);
-				String htmlStr = wikiModel.render(wikiText);
+				String htmlStr = wikiModel.render(wikiText, false);
 				StringBuffer buff = new StringBuffer();
 				buff.append(top);
 				buff.append(header);
@@ -84,7 +84,7 @@ public class Console {
 					WikiModel wikiModel = new WikiModel(image, link);
 					try {
 						wikiModel.setUp();
-						String htmlStr = wikiModel.render(s);
+						String htmlStr = wikiModel.render(s, false);
 						System.out.print(htmlStr);
 					} finally {
 						wikiModel.tearDown();

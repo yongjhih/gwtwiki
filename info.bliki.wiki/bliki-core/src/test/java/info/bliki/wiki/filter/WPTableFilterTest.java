@@ -97,7 +97,7 @@ public class WPTableFilterTest extends FilterTestSupport {
 				"</td></tr></table></div>\n" + 
 				"\n" + 
 				"</td></tr></table></div>", wikiModel
-						.render(TEST));
+						.render(TEST, false));
 	}
 
 	public void testNestedTable2() {
@@ -117,7 +117,7 @@ public class WPTableFilterTest extends FilterTestSupport {
 				"<td>table</td></tr></table></div></td>\n" + 
 				"<td>the original table again</td></tr></table></div>", wikiModel.render("{| border=1\n" + "|[[Test Link|Test]]\n"
 				+ "| &alpha;\n" + "|\n" + "{| bgcolor=#ABCDEF border=2\n" + "|nested\n" + "|-\n" + "|table\n" + "|}\n"
-				+ "|the original table again\n" + "|}"));
+				+ "|the original table again\n" + "|}", false));
 	}
 
 	public void testBlockquoteTable01() {
@@ -155,23 +155,23 @@ public class WPTableFilterTest extends FilterTestSupport {
 				"<tr>\n" + 
 				"<td>C</td>\n" + 
 				"<td>D</td></tr></table></div></blockquote>\n" + 
-				"", wikiModel.render(TEST3));
+				"", wikiModel.render(TEST3, false));
 	}
 
 	public void testBlockquoteTable02() {
 		assertEquals("\n" + "<table>\n" + "\n" + "<tr>\n" + " \n" + "\n" + "<td />\n" + "\n" + "\n" + "</tr>\n" + "\n" + "</table>\n"
-				+ "", wikiModel.render("<table><tr> \n" + "<td></td>\n\n</tr>\n</table>\n"));
+				+ "", wikiModel.render("<table><tr> \n" + "<td></td>\n\n</tr>\n</table>\n", false));
 	}
 
 	public void testBlockquoteTable03() {
 		assertEquals("\n" + "<table>\n" + "\n" + "<tr>\n" + " \n" + "\n" + "<td />\n" + "</tr>\n" + "<tr>\n" + "\n" + "<td />\n"
-				+ "</tr>\n" + "</table>\n" + "", wikiModel.render("<table><tr> \n" + "<td></td><tr><td></tr></table>\n"));
+				+ "</tr>\n" + "</table>\n" + "", wikiModel.render("<table><tr> \n" + "<td></td><tr><td></tr></table>\n", false));
 	}
 
 	public void testBlockquoteTable04() {
 		assertEquals("\n" + "<table>\n" + "\n" + "<tr>\n" + " \n" + "\n" + "<td>number 1</td>\n" + "</tr>\n" + "<tr>\n" + "\n"
 				+ "<td>number2\n" + "</td>\n" + "</tr>\n" + "</table>", wikiModel.render("<table><tr> \n"
-				+ "<td>number 1<tr><td>number2</table>\n"));
+				+ "<td>number 1<tr><td>number2</table>\n", false));
 	}
 
 	public void testBlockquoteTable05() {
@@ -219,7 +219,7 @@ public class WPTableFilterTest extends FilterTestSupport {
 				"<td>15</td></tr></table></div></blockquote></td>\n" + 
 				"</tr>\n" + 
 				"</table>\n" + 
-				"", wikiModel.render(TEST5));
+				"", wikiModel.render(TEST5, false));
 	}
 
 	public void testBlockquoteTable06() {
@@ -228,7 +228,7 @@ public class WPTableFilterTest extends FilterTestSupport {
 				+ "     \n" + "<td>3</td> \n" + "     \n" + "<td>4</td> \n" + "  \n" + "</tr>\n" + "\n" + "</table>\n" + "", wikiModel
 				.render("<table align=\"center\" border=\"1\" cellspacing=\"0\" cellpadding=\"3\">\n" + "   <tr>\n" + "      <td>1</td>\n"
 						+ "      <td>2</td>\n" + "   </tr> \n" + "   <tr>\n" + "      <td>3</td> \n" + "      <td>4</td> \n" + "   </tr>\n"
-						+ "</table>\n"));
+						+ "</table>\n", false));
 	}
 
 	// public void testBlockquoteTable07() {
@@ -239,7 +239,7 @@ public class WPTableFilterTest extends FilterTestSupport {
 		assertEquals("\n" + "<div style=\"page-break-inside: avoid;\">\n" + "<table border=\"1\">\n" + "<tr>\n"
 				+ "<td><span class=\"math\">\\frac{1}{|a|} G \\left( \\frac{\\omega}{a} \\right)\\,</span></td></tr></table></div>",
 				wikiModel.render("{| border=1\n" + "|-\n" + "|<math>\\frac{1}{|a|} G \\left( \\frac{\\omega}{a} \\right)\\,</math>\n"
-						+ "|}"));
+						+ "|}", false));
 	}
 
 	public void testAll() {
@@ -265,7 +265,7 @@ public class WPTableFilterTest extends FilterTestSupport {
 				"</td></tr></table></div>\n" + 
 				"\n" + 
 				"</td></tr></table></div>", wikiModel
-						.render(TEST));
+						.render(TEST, false));
 
 		assertEquals("\n" + 
 				"<div style=\"page-break-inside: avoid;\">\n" + 
@@ -283,19 +283,19 @@ public class WPTableFilterTest extends FilterTestSupport {
 				"<td>table</td></tr></table></div></td>\n" + 
 				"<td>the original table again</td></tr></table></div>", wikiModel.render("{| border=1\n" + "|[[Test Link|Test]]\n"
 				+ "| &alpha;\n" + "|\n" + "{| bgcolor=#ABCDEF border=2\n" + "|nested\n" + "|-\n" + "|table\n" + "|}\n"
-				+ "|the original table again\n" + "|}"));
+				+ "|the original table again\n" + "|}", false));
 
 		assertEquals("\n" + "<div style=\"page-break-inside: avoid;\">\n" + "<table border=\"1\">\n" + "<tr>\n"
 				+ "<td><span class=\"math\">\\frac{1}{|a|} G \\left( \\frac{\\omega}{a} \\right)\\,</span></td></tr></table></div>",
 				wikiModel.render("{| border=1\n" + "|-\n" + "|<math>\\frac{1}{|a|} G \\left( \\frac{\\omega}{a} \\right)\\,</math>\n"
-						+ "|}"));
+						+ "|}", false));
 
 		assertEquals("\n" + "<div style=\"page-break-inside: avoid;\">\n" + "<table class=\"wikitable\" style=\"text-align:left\">\n"
 				+ "<caption align=\"bottom\">My special table caption for &#60;Name of Topic&#62;</caption>\n" + "<tr>\n"
 				+ "<td><b>Start</b></td>\n" + "<td colspan=\"3\">&#60;From Date - To Date&#62;</td></tr></table></div>", wikiModel
 				.render("{| class=\"wikitable\" style=\"text-align:left\"\n"
 						+ "|+align=\"bottom\"|My special table caption for {{{TopicName|<Name of Topic>}}}\n" + "|-\n" + "|\'\'\'Start\'\'\'\n"
-						+ "| colspan=\"3\" | {{{Period|<From Date - To Date>}}}\n" + "|-\n" + "|}"));
+						+ "| colspan=\"3\" | {{{Period|<From Date - To Date>}}}\n" + "|-\n" + "|}", false));
 	}
 
 	public void testTHTableMix001() {
@@ -330,13 +330,13 @@ public class WPTableFilterTest extends FilterTestSupport {
 								+ "|- style=\"text-align: center;\"\n" + "\n" + "|-\n"
 								+ "<th colspan=\"2\" style=\"text-align:center;\">Born: [[18]] [[1978]]<span\n"
 								+ "style=\"display:none\"> (<span class=\"bday\">1978-{{padleft:8}}-{{padleft:\n"
-								+ "18}}</span>)</span><span class=\"noprint\"> (age&nbsp;29)</span></th> \n" + "|-\n" + "|}"));
+								+ "18}}</span>)</span><span class=\"noprint\"> (age&nbsp;29)</span></th> \n" + "|-\n" + "|}", false));
 	}
 
 	public void testEmptyCellTable() {
 		assertEquals("\n" + "<div style=\"page-break-inside: avoid;\">\n" + "<table border=\"1\">\n" + "<tr>\n" + "<td></td>\n"
 				+ "<td>a.</td></tr>\n" + "<tr>\n" + "<td></td>\n" + "<td>b.</td></tr></table></div>\n" + "", wikiModel
-				.render("{|border=\"1\"\n" + "|\n" + "|a.\n" + "|-\n" + "|\n" + "|b.\n" + "|}\n" + ""));
+				.render("{|border=\"1\"\n" + "|\n" + "|a.\n" + "|-\n" + "|\n" + "|b.\n" + "|}\n" + "", false));
 	}
 
 	public void testBlockquoteTableText01() {
@@ -359,16 +359,16 @@ public class WPTableFilterTest extends FilterTestSupport {
 						+ "|}\n"
 						+ "</nowiki>\n"
 						+ "What it looks like in your browser\n"
-						+ "\n" + "\n" + "", wikiModel.render(new PlainTextConverter(), TEST3));
+						+ "\n" + "\n" + "", wikiModel.render(new PlainTextConverter(), TEST3, false));
 	}
 
 	public void testWPTableText01() {
 		assertEquals("\n" + "\n" + "\n" + "\n" + "Plog4u.org is dedicated to developing a Wikipedia Eclipse Plugin\n" + "     \n"
-				+ "\n" + "\n" + " \n" + "\n" + " ", wikiModel.render(new PlainTextConverter(), TEST));
+				+ "\n" + "\n" + " \n" + "\n" + " ", wikiModel.render(new PlainTextConverter(), TEST, false));
 	}
 
 	public void testUmlauts01() {
-		assertEquals("Eine große Überraschung", wikiModel.render(new PlainTextConverter(), "Eine große''' <del>Überraschung</del>"));
+		assertEquals("Eine große Überraschung", wikiModel.render(new PlainTextConverter(), "Eine große''' <del>Überraschung</del>", false));
 	}
 
 	public void testTableCross() {
@@ -386,7 +386,7 @@ public class WPTableFilterTest extends FilterTestSupport {
 				+ "<td align=\"center\"><div style=\"width:140px;\">" + "<a class=\"internal\""
 				+ " href=\"http://www.bliki.info/wiki/Image:140px-test.png\" >" + "<img src=\"http://www.bliki.info/wiki/140px-test.png\""
 				+ " class=\"location-none\" width=\"140\" />\n</a></div>\n</td>" + "</tr></table></div>\n";
-		assertEquals(expected, wikiModel.render(raw));
+		assertEquals(expected, wikiModel.render(raw, false));
 	}
 
 	// public void testWPTable02() {

@@ -15,7 +15,7 @@ public class JavaTest extends FilterTestSupport {
 
 	public void testJava001() {
 		String result = wikiModel.render("'''Java Example'''\n" + "<source lang=java>\n" + "public class Test {\n" + "< > \" \' &"
-				+ "}\n" + "</source>");
+				+ "}\n" + "</source>", false);
 		assertEquals("\n" + 
 				"<p><b>Java Example</b>\n" + 
 				"</p><pre class=\"java\">\n" + 
@@ -26,7 +26,7 @@ public class JavaTest extends FilterTestSupport {
 
 	public void testJava002() {
 		String result = wikiModel.render("'''Java Example'''\n" + "<source lang=java>"
-				+ "Util util = new Util(\"c:\\\\temp\\\\\");\n" +"util.doIt();"+ "</source>");
+				+ "Util util = new Util(\"c:\\\\temp\\\\\");\n" +"util.doIt();"+ "</source>", false);
 		
 		assertEquals("\n" + 
 				"<p><b>Java Example</b>\n" + 

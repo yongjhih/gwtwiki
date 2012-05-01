@@ -687,7 +687,7 @@ public interface IWikiModel extends IConfiguration {
 	/**
 	 * Determine if the currently parsed wiki text is a template.
 	 * 
-	 * @return <code>true</code> if the currently parsed wiki text is a template
+	 * @return <code>true</code> if the currently parsed wiki text is a template.
 	 */
 	public boolean isTemplateTopic();
 
@@ -828,6 +828,26 @@ public interface IWikiModel extends IConfiguration {
 	public String render(ITextConverter converter, String rawWikiText);
 
 	/**
+	 * Render the raw Wikipedia text into a string for a given converter
+	 * 
+	 * @param converter
+	 *          a text converter. <b>Note</b> the converter may be
+	 *          <code>null</code>, if you only would like to analyze the raw wiki
+	 *          text and don't need to convert. This speeds up the parsing
+	 *          process.
+	 * @param rawWikiText
+	 *          a raw wiki text
+	 * @param templateTopic
+	 *          if <code>true</code>, render the wiki text as if a template topic
+	 *          will be displayed directly, otherwise render the text as if a
+	 *          common wiki topic will be displayed.
+	 * @return <code>null</code> if an IOException occurs or
+	 *         <code>converter==null</code>
+	 * @return
+	 */
+	public String render(ITextConverter converter, String rawWikiText, boolean templateTopic);
+
+	/**
 	 * Render the raw Wikipedia text into an HTML string and use the default
 	 * HTMLConverter
 	 * 
@@ -835,6 +855,19 @@ public interface IWikiModel extends IConfiguration {
 	 * @return <code>null</code> if an IOException occurs
 	 */
 	public String render(String rawWikiText);
+
+	/**
+	 * Render the raw Wikipedia text into an HTML string and use the default
+	 * HTMLConverter
+	 * 
+	 * @param rawWikiText
+	 * @param templateTopic
+	 *          if <code>true</code>, render the wiki text as if a template topic
+	 *          will be displayed directly, otherwise render the text as if a
+	 *          common wiki topic will be displayed.
+	 * @return <code>null</code> if an IOException occurs
+	 */
+	public String render(String rawWikiText, boolean templateTopic);
 
 	/**
 	 * Render the raw Wikipedia text into an HTML string and use the default

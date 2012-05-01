@@ -80,7 +80,7 @@ public class DocumentCreator {
 				String rawWikiText = page.getCurrentContent();
 				fModel.setPageName(page.getTitle());
 				// System.out.println(rawWikiText);
-				appendable.append(fModel.render(converter, rawWikiText));
+				appendable.append(fModel.render(converter, rawWikiText, false));
 			}
 			if (fFooter != null) {
 				appendable.append(fFooter);

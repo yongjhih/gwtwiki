@@ -20,7 +20,7 @@ public class CSharpTest extends FilterTestSupport
 	public void testCSharp()
 	{
 		String result = wikiModel.render("'''C# Example'''\n" + "<source lang=csharp>\n" + "public class Test {\n" + "< > \" \' &" + "}\n"
-				+ "</source>");
+				+ "</source>", false);
 
 		assertEquals("\n" + 
 				"<p><b>C# Example</b>\n" + 

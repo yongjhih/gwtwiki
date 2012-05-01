@@ -15,7 +15,7 @@ public class ABAPTest extends FilterTestSupport {
 
 	public void testABAP() {
 		String result = wikiModel.render("'''ABAP Example'''\n" + "<source lang=\"abap\">\n" + "*--- line comment\n"
-				+ "*--- line comment\n" + "WRITE: / '''Hello World''' \"test comment\n" + "< > \" \' &" + "}\n" + "</source>");
+				+ "*--- line comment\n" + "WRITE: / '''Hello World''' \"test comment\n" + "< > \" \' &" + "}\n" + "</source>", false);
 
 		assertEquals(
 				"\n" + 
@@ -32,7 +32,7 @@ public class ABAPTest extends FilterTestSupport {
 	
 	public void testABAPWithoutLangAttr() {
 		String result = wikiModel.render("'''ABAP Example'''\n" + "<source> REPORT ZZTEST00\n" + "*--- line comment\n"
-				+ "*--- line comment\n" + "WRITE: / '''Hello World''' \"test comment\n" + "< > \" \' &" + "}\n" + "</source>");
+				+ "*--- line comment\n" + "WRITE: / '''Hello World''' \"test comment\n" + "< > \" \' &" + "}\n" + "</source>", false);
 
 		assertEquals(
 				"\n" + 

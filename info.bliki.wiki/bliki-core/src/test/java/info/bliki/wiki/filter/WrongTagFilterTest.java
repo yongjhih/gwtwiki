@@ -18,6 +18,6 @@ public class WrongTagFilterTest extends FilterTestSupport {
 //  }
   public void testWrongTag1() {
     assertEquals("\n" + 
-    		"<p>&#60;blubber&#62;...</p>", wikiModel.render("<blubber>..."));
+    		"<p>&#60;blubber&#62;...</p>", wikiModel.render("<blubber>...", false));
   }
 }

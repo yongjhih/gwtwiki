@@ -20,6 +20,28 @@ public class TemplateParserTest extends FilterTestSupport {
 	/**
 	 * Issue 86
 	 */
+	public void testNoincludeDemo001() {
+		assertEquals("test1 noincludetext\n" + 
+				"\n" + 
+				"", wikiModel.parseTemplates("test1<noinclude> noincludetext</noinclude>\n" + 
+				"\n" + 
+				"<includeonly>includeonlytext<noinclude> noincludetext</noinclude></includeonly>"));
+	}
+	
+	/**
+	 * Issue 86
+	 */
+	public void testNoincludeDemo002() {
+		assertEquals("\n" + 
+				"<p>test1 noincludetext</p>\n" + 
+				"", wikiModel.render("test1<noinclude> noincludetext</noinclude>\n" + 
+				"\n" + 
+				"<includeonly>includeonlytext<noinclude> noincludetext</noinclude></includeonly>", true));
+	}
+	
+	/**
+	 * Issue 86
+	 */
 	public void testOnlyicludeDemo001() {
 		assertEquals("abcdefghi<hr>\n" + 
 				";Only active template content is above.\n" + 
@@ -48,6 +70,42 @@ public class TemplateParserTest extends FilterTestSupport {
 		assertEquals("def", wikiModel.parseTemplates("{{OnlyicludeDemo}}"));
 	}
 
+	/**
+	 * Issue 86
+	 */
+	public void testOnlyicludeDemo003() {
+		assertEquals("\n" + 
+				"<p>abcdefghi</p><hr/>\n" + 
+				"\n" + 
+				"<dl>\n" + 
+				"<dt>Only active template content is above.</dt></dl>\n" + 
+				"\n" + 
+				"\n" + 
+				"<dl>\n" + 
+				"<dt>The verbatim active code within reads</dt>\n" + 
+				"<dd></dd></dl>:\n" + 
+				"<pre>\n" + 
+				"abc<b>&#60;onlyinclude&#62;</b>def<b>&#60;/onlyinclude&#62;</b>ghi<b>&#60;includeonly&#62;</b>jkl<b>&#60;/includeonly&#62;</b>\n" + 
+				"</pre>\n" + 
+				"<p>If transposed, the only part included will be the string literal <code>def</code>. </p>\n" + 
+				"<h2><span class=\"mw-headline\" id=\"Example\">Example</span></h2>\n" + 
+				"<p>Including <a href=\"http://www.bliki.info/wiki/Help:Template/onlyinclude_demo\" title=\"Help:Template/onlyinclude demo\">Help:Template/onlyinclude demo</a> yields only:</p>\n" + 
+				"<pre>\n" + 
+				"{{:Help:Template/onlyinclude demo}}\n" + 
+				"</pre>\n" + 
+				"<p>\n" + 
+				"</p>\n" + 
+				"", wikiModel.render(WikiTestModel.ONLYINCLUDE_DEMO, true));
+	}
+	 
+	/**
+	 * Issue 86
+	 */
+	public void testOnlyicludeDemo004() {
+		assertEquals("\n" + 
+				"<p>def</p>", wikiModel.render("{{OnlyicludeDemo}}", false));
+	}
+	
 	/**
 	 * Issue 86
 	 */
@@ -141,7 +199,7 @@ public class TemplateParserTest extends FilterTestSupport {
 								+ "|map        = Karte Deutschland.svg\n" + "|mapsize_x  = 140\n" + "|mapsize_y  = 175\n"
 								+ "|maptext    = Deitschlandkartn, Position vo {{#if: {{{Name|}}} | {{{Name}}} | {{PAGENAME}} }} heavoghom\n"
 								+ "|warning    = [[Bild:Missing Map of Germany.png|140px|Koordinaten san außerhoib vom darstellbarn Bereich]]\n"
-								+ "}}"));
+								+ "}}", false));
 	}
 
 	public void test002() {
@@ -182,7 +240,7 @@ public class TemplateParserTest extends FilterTestSupport {
 						+ "<tr class=\"hintergrundfarbe2\">\n"
 						+ "<td><b><a href=\"http://www.bliki.info/wiki/Bundesland_(Deutschland)\" title=\"Bundesland (Deutschland)\">Bundesland</a></b>: </td>\n"
 						+ "<td><a href=\"http://www.bliki.info/wiki/\" title=\"\" /></td></tr></table></div>", wikiModel
-						.render("{{Infobox Ort in Deutschland}}"));
+						.render("{{Infobox Ort in Deutschland}}", false));
 	}
 
 	public void test004() {
@@ -240,7 +298,7 @@ public class TemplateParserTest extends FilterTestSupport {
 						+ "<td><a href=\"http://www.bliki.info/wiki/Bayern\" title=\"Bayern\">Bayern</a></td></tr></table></div>", wikiModel
 						.render("{{Infobox Ort in Deutschland\n" + "|Art               = Stadt\n"
 								+ "|Wappen            = Wappen_Grafenwöhr.png\n" + "|lat_deg           = 49 |lat_min = 43\n"
-								+ "|lon_deg           = 11 |lon_min = 54\n" + "|Lageplan          = \n" + "|Bundesland        = Bayern\n" + "}}"));
+								+ "|lon_deg           = 11 |lon_min = 54\n" + "|Lageplan          = \n" + "|Bundesland        = Bayern\n" + "}}", false));
 	}
 
 	public void test006() {
@@ -269,7 +327,7 @@ public class TemplateParserTest extends FilterTestSupport {
 								+ "|mapsize_y  = 175\n"
 								+ "|maptext    = Deitschlandkartn, Position vo {{#if: {{{Name|}}} | {{{Name}}} | {{PAGENAME}} }} heavoghom\n"
 								+ "|warning    = [[Bild:Missing Map of Germany.png|140px|Koordinaten san außerhoib vom darstellbarn Bereich]]\n"
-								+ "}}\n" + "| [[Bild:Karte Deutschland.png|140px|Koordinatn san net da]] }}\n" + "}}"));
+								+ "}}\n" + "| [[Bild:Karte Deutschland.png|140px|Koordinatn san net da]] }}\n" + "}}", false));
 	}
 
 	public void test010() {

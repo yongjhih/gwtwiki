@@ -103,7 +103,7 @@ public class HelloRenderTest extends TestCase {
 	}
 
 	public void test996() {
-		String result = wikiModel.render(HELLO_TEXT);
+		String result = wikiModel.render(HELLO_TEXT, false);
 	}
 
 	public void test997() {

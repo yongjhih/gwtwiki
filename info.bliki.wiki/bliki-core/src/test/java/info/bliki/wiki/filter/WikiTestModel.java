@@ -2487,16 +2487,13 @@ public class WikiTestModel extends WikiModel {
 	public boolean isSemanticWebActive() {
 		return fSemanticWebActive;
 	}
-
+	
 	@Override
 	public void setSemanticWebActive(boolean semanticWeb) {
 		this.fSemanticWebActive = semanticWeb;
 	}
 
 	public boolean showSyntax(String tagName) {
-		// if (tagName.equals("groovy")) {
-		// return false;
-		// }
 		return true;
 	}
 

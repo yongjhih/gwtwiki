@@ -21,6 +21,6 @@ public class CiteFilterTest extends FilterTestSupport {
 				wikiModel
 						.render("<cite id=\"Test\">\n"
 								+ "a cite text\n"
-								+ "</cite>"));
+								+ "</cite>", false));
 	}
 }

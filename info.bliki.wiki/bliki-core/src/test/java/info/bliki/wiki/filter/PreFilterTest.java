@@ -23,14 +23,14 @@ public class PreFilterTest extends FilterTestSupport {
             + "It reformats text by removing\n"
             + "newlines    and multiple spaces.\n"
             + "It still interprets special\n" + "characters: & \n"
-            + "</nowiki>"));
+            + "</nowiki>", false));
   }
 
   public void testPre1() {
     assertEquals("\n" + "<p>First line:</p>\n" + "<pre>\n" + "pre text 1\n"
         + "pre text 2\n" + "</pre>\n" + "<p>last line</p>", wikiModel
         .render("First line:\n" + " pre text 1\n" + " pre text 2\n"
-            + "last line"));
+            + "last line", false));
   }
 
   public void testPre3() {
@@ -50,7 +50,7 @@ public class PreFilterTest extends FilterTestSupport {
     				"\n" + 
     				"<pre>\n" + 
     				"preformatted text\n" + 
-    				"</pre>"));
+    				"</pre>", false));
   }
   
   // public void testPre1() {
@@ -65,7 +65,7 @@ public class PreFilterTest extends FilterTestSupport {
   public void testPre2() {
     assertEquals("\n" + "<pre>\n" + "pre text\n" + "</pre>\n"
         + "<p>last line</p>", wikiModel.render("\n" + " pre text\n" + "\n"
-        + "\n" + "\n" + "last line"));
+        + "\n" + "\n" + "last line", false));
   }
 
   public void testPre10() {
@@ -90,7 +90,7 @@ public class PreFilterTest extends FilterTestSupport {
                 + "    Donnerstag,\n"
                 + "    Freitag,\n"
                 + "    Samstag,\n"
-                + "    Sonntag\n" + "  }\n" + ""));
+                + "    Sonntag\n" + "  }\n" + "", false));
   }
 
 }

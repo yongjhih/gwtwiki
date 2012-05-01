@@ -37,7 +37,7 @@ public class PrintArticle implements IArticleFilter {
 		WikiModel wikiModel = new WikiModel("${image}", "${title}");
 		try {
 			wikiModel.setUp();
-			htmlText = wikiModel.render(article.getText());
+			htmlText = wikiModel.render(article.getText(), false);
 			if (htmlText == null) {
 				System.out.println("An IOException occured!");
 			} else {

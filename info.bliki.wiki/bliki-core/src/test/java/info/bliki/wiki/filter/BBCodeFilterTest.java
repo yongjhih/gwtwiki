@@ -25,14 +25,14 @@ public class BBCodeFilterTest extends FilterTestSupport
 	public void testbb1()
 	{
 		assertEquals("\n" + 
-				"<p>This is a <i>simple</i> paragraph.</p>", wikiModel.render("This is a [i]simple[/i] paragraph."));
+				"<p>This is a <i>simple</i> paragraph.</p>", wikiModel.render("This is a [i]simple[/i] paragraph.", false));
 	}
 
 	public void testbb2()
 	{
 		assertEquals("\n" + 
 				"<p>This is a <font color=\"red\">simple</font> paragraph.</p>", wikiModel.render(
-				"This is a [color=red]simple[/color] paragraph."));
+				"This is a [color=red]simple[/color] paragraph.", false));
 	}
 
 	public void testbb3()
@@ -47,7 +47,7 @@ public class BBCodeFilterTest extends FilterTestSupport
 				"</li>\n" + 
 				"<li>Yellow\n" + 
 				"</li></ul></p>", wikiModel.render(
-				"[list]\n[*][b]Red[/b] and [i]Green[/i]\n[*]Blue\n[*]Yellow\n[/list]"));
+				"[list]\n[*][b]Red[/b] and [i]Green[/i]\n[*]Blue\n[*]Yellow\n[/list]", false));
 	}
 
 	public void testbb4()
@@ -58,7 +58,7 @@ public class BBCodeFilterTest extends FilterTestSupport
 				"Red\n" + 
 				"Blue\n" + 
 				"Yellow\n" + 
-				"</ul></p>", wikiModel.render("[list]\nRed\nBlue\nYellow\n[/list]"));
+				"</ul></p>", wikiModel.render("[list]\nRed\nBlue\nYellow\n[/list]", false));
 	}
 
 	public void testbb5()
@@ -68,7 +68,7 @@ public class BBCodeFilterTest extends FilterTestSupport
 				"<pre class=\"code\">\n" + 
 				"A code block \n" + 
 				"</pre></p>", wikiModel.render(
-				"[code]\nA code block \n[/code]"));
+				"[code]\nA code block \n[/code]", false));
 	}
 
 	public void testbb6()
@@ -76,14 +76,14 @@ public class BBCodeFilterTest extends FilterTestSupport
 		assertEquals("\n" + 
 				"<p><a href=\"http://www.example.com\">http://www.example.com\n" + 
 				"</a></p>", wikiModel.render(
-				"[url]http://www.example.com\n[/url]"));
+				"[url]http://www.example.com\n[/url]", false));
 	}
 
 	public void testbb7()
 	{
 		assertEquals("\n" + 
 				"<p><a href=\"http://www.example.com\">Example Site</a></p>", wikiModel.render(
-				"[url=http://www.example.com]Example Site[/url]"));
+				"[url=http://www.example.com]Example Site[/url]", false));
 	}
 	
 	public void testbb8() {
@@ -100,7 +100,7 @@ public class BBCodeFilterTest extends FilterTestSupport
 				"no line above me <\"> and i am [b]bold[/b]\n" + 
 				"\n" + 
 				"and line above me\n" + 
-				"end of blockquote here[/quote] "));
+				"end of blockquote here[/quote] ", false));
 	}
 	
 	public void testbb9()
@@ -115,7 +115,7 @@ public class BBCodeFilterTest extends FilterTestSupport
 				"</li>\n" + 
 				"<li>Yellow\n" + 
 				"</li></ul></p>", wikiModel.render(
-				"[list]\n[*][quote][b]Red[/b] and [i]Green[/i][/quote] colors\n[*]Blue\n[*]Yellow\n[/list]"));
+				"[list]\n[*][quote][b]Red[/b] and [i]Green[/i][/quote] colors\n[*]Blue\n[*]Yellow\n[/list]", false));
 	}
 	
 }

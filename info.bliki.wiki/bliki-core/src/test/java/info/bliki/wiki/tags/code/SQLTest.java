@@ -15,7 +15,7 @@ public class SQLTest extends FilterTestSupport {
 
 	public void test001() {
 		final String result = wikiModel.render("'''SQL Example'''\n" + "<source lang='sql'>create table Hydroxyl (\n"
-				+ " id integer primary key,\n" + " name varchar(42)\n" + ")\n" + "</source>");
+				+ " id integer primary key,\n" + " name varchar(42)\n" + ")\n" + "</source>", false);
 		String expect = "\n" + 
 				"<p><b>SQL Example</b>\n" + 
 				"</p><pre class=\"sql\"><span style=\"color:#7F0055; font-weight: bold; \">create</span> <span style=\"color:#7F0055; font-weight: bold; \">table</span> Hydroxyl (\n" + 
@@ -30,7 +30,7 @@ public class SQLTest extends FilterTestSupport {
 		// test for wrong sql text
 		final String result = wikiModel.render("'''SQL Example'''\n" + "<source lang='sql'>\n"
 				+ "<form><input type=\"button\" onclick=\"alert('Are you sure you want to do this?')\" value=\"Alert\"></form>\n"
-				+ "</source>");
+				+ "</source>", false);
 		String expect = "\n" + 
 				"<p><b>SQL Example</b>\n" + 
 				"</p><pre class=\"sql\">\n" + 
@@ -42,7 +42,7 @@ public class SQLTest extends FilterTestSupport {
 	public void test003() {
 		final String result = wikiModel.render("<source lang=\"sql\">\n-- a line comment\n" + 
 				"select * from testtable WITH UR\n" + 
-				"</source>");
+				"</source>", false);
 		String expect = "<pre class=\"sql\"><span style=\"color:#3F7F5F; \">\n" + 
 				"-- a line comment\n" + 
 				"</span><span style=\"color:#7F0055; font-weight: bold; \">select</span> * <span style=\"color:#7F0055; font-weight: bold; \">from</span> testtable WITH UR\n" + 

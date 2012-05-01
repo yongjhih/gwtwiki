@@ -63,7 +63,7 @@ public class DumpDocumentCreator {
 		String rawWikiText = fArticle.getText();
 		fModel.setPageName(fArticle.getTitle());
 		// System.out.println(rawWikiText);
-		appendable.append(fModel.render(converter, rawWikiText));
+		appendable.append(fModel.render(converter, rawWikiText, false));
 
 		if (fFooter != null) {
 			appendable.append(fFooter);

@@ -20,7 +20,7 @@ public class PythonTest extends FilterTestSupport {
 
 	public void testPython() {
 		String result = wikiModel.render("<source lang=python>\n" + "# Python: \"Hello, world!\"\n" + "print \"Hello, world!\"\n"
-				+ "# last comment line" + "</source>");
+				+ "# last comment line" + "</source>", false);
 
 		assertEquals("<pre class=\"python\">\n" + 
 				"<span style=\"color:#3F7F5F; \"># Python: &#34;Hello, world!&#34;\n" + 
