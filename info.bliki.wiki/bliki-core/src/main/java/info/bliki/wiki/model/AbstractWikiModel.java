@@ -1516,7 +1516,7 @@ public abstract class AbstractWikiModel implements IWikiModel, IContext {
 	 * {@inheritDoc}
 	 */
 	public String render(ITextConverter converter, String rawWikiText) {
-		return render(converter, rawWikiText);
+		return render(converter, rawWikiText, false);
 	}
 
 	/**
