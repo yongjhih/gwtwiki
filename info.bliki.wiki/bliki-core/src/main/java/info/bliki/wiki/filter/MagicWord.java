@@ -20,9 +20,9 @@ import info.bliki.wiki.model.IWikiModel;
 import info.bliki.wiki.namespaces.INamespace;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.TimeZone;
 
 /**
@@ -33,150 +33,148 @@ import java.util.TimeZone;
 public class MagicWord {
 
 	// current date values
-	private static final String MAGIC_CURRENT_DAY = "CURRENTDAY";
+	public static final String MAGIC_CURRENT_DAY = "CURRENTDAY";
 
-	private static final String MAGIC_CURRENT_DAY2 = "CURRENTDAY2";
+	public static final String MAGIC_CURRENT_DAY2 = "CURRENTDAY2";
 
-	private static final String MAGIC_CURRENT_DAY_NAME = "CURRENTDAYNAME";
+	public static final String MAGIC_CURRENT_DAY_NAME = "CURRENTDAYNAME";
 
-	private static final String MAGIC_CURRENT_DAY_OF_WEEK = "CURRENTDOW";
+	public static final String MAGIC_CURRENT_DAY_OF_WEEK = "CURRENTDOW";
 
-	private static final String MAGIC_CURRENT_MONTH = "CURRENTMONTH";
+	public static final String MAGIC_CURRENT_MONTH = "CURRENTMONTH";
 
-	private static final String MAGIC_CURRENT_MONTH_ABBR = "CURRENTMONTHABBREV";
+	public static final String MAGIC_CURRENT_MONTH_ABBR = "CURRENTMONTHABBREV";
 
-	private static final String MAGIC_CURRENT_MONTH_NAME = "CURRENTMONTHNAME";
+	public static final String MAGIC_CURRENT_MONTH_NAME = "CURRENTMONTHNAME";
 
-	private static final String MAGIC_CURRENT_TIME = "CURRENTTIME";
+	public static final String MAGIC_CURRENT_TIME = "CURRENTTIME";
 
-	private static final String MAGIC_CURRENT_HOUR = "CURRENTHOUR";
+	public static final String MAGIC_CURRENT_HOUR = "CURRENTHOUR";
 
-	private static final String MAGIC_CURRENT_WEEK = "CURRENTWEEK";
+	public static final String MAGIC_CURRENT_WEEK = "CURRENTWEEK";
 
-	private static final String MAGIC_CURRENT_YEAR = "CURRENTYEAR";
+	public static final String MAGIC_CURRENT_YEAR = "CURRENTYEAR";
 
-	private static final String MAGIC_CURRENT_TIMESTAMP = "CURRENTTIMESTAMP";
+	public static final String MAGIC_CURRENT_TIMESTAMP = "CURRENTTIMESTAMP";
 
 	// local date values
-	private static final String MAGIC_LOCAL_DAY = "LOCALDAY";
+	public static final String MAGIC_LOCAL_DAY = "LOCALDAY";
 
-	private static final String MAGIC_LOCAL_DAY2 = "LOCALDAY2";
+	public static final String MAGIC_LOCAL_DAY2 = "LOCALDAY2";
 
-	private static final String MAGIC_LOCAL_DAY_NAME = "LOCALDAYNAME";
+	public static final String MAGIC_LOCAL_DAY_NAME = "LOCALDAYNAME";
 
-	private static final String MAGIC_LOCAL_DAY_OF_WEEK = "LOCALDOW";
+	public static final String MAGIC_LOCAL_DAY_OF_WEEK = "LOCALDOW";
 
-	private static final String MAGIC_LOCAL_MONTH = "LOCALMONTH";
+	public static final String MAGIC_LOCAL_MONTH = "LOCALMONTH";
 
-	private static final String MAGIC_LOCAL_MONTH_ABBR = "LOCALMONTHABBREV";
+	public static final String MAGIC_LOCAL_MONTH_ABBR = "LOCALMONTHABBREV";
 
-	private static final String MAGIC_LOCAL_MONTH_NAME = "LOCALMONTHNAME";
+	public static final String MAGIC_LOCAL_MONTH_NAME = "LOCALMONTHNAME";
 
-	private static final String MAGIC_LOCAL_TIME = "LOCALTIME";
+	public static final String MAGIC_LOCAL_TIME = "LOCALTIME";
 
-	private static final String MAGIC_LOCAL_HOUR = "LOCALHOUR";
+	public static final String MAGIC_LOCAL_HOUR = "LOCALHOUR";
 
-	private static final String MAGIC_LOCAL_WEEK = "LOCALWEEK";
+	public static final String MAGIC_LOCAL_WEEK = "LOCALWEEK";
 
-	private static final String MAGIC_LOCAL_YEAR = "LOCALYEAR";
+	public static final String MAGIC_LOCAL_YEAR = "LOCALYEAR";
 
-	private static final String MAGIC_LOCAL_TIMESTAMP = "LOCALTIMESTAMP";
+	public static final String MAGIC_LOCAL_TIMESTAMP = "LOCALTIMESTAMP";
 
 	// statistics
-	private static final String MAGIC_CURRENT_VERSION = "CURRENTVERSION";
+	public static final String MAGIC_CURRENT_VERSION = "CURRENTVERSION";
 
-	private static final String MAGIC_NUMBER_ARTICLES = "NUMBEROFARTICLES";
+	public static final String MAGIC_NUMBER_ARTICLES = "NUMBEROFARTICLES";
 
-	private static final String MAGIC_NUMBER_ARTICLES_R = "NUMBEROFARTICLES:R";
+	public static final String MAGIC_NUMBER_ARTICLES_R = "NUMBEROFARTICLES:R";
 
-	private static final String MAGIC_NUMBER_PAGES = "NUMBEROFPAGES";
+	public static final String MAGIC_NUMBER_PAGES = "NUMBEROFPAGES";
 
-	private static final String MAGIC_NUMBER_PAGES_R = "NUMBEROFPAGES:R";
+	public static final String MAGIC_NUMBER_PAGES_R = "NUMBEROFPAGES:R";
 
-	private static final String MAGIC_NUMBER_FILES = "NUMBEROFFILES";
+	public static final String MAGIC_NUMBER_FILES = "NUMBEROFFILES";
 
-	private static final String MAGIC_NUMBER_FILES_R = "NUMBEROFFILES:R";
+	public static final String MAGIC_NUMBER_FILES_R = "NUMBEROFFILES:R";
 
-	private static final String MAGIC_NUMBER_USERS = "NUMBEROFUSERS";
+	public static final String MAGIC_NUMBER_USERS = "NUMBEROFUSERS";
 
-	private static final String MAGIC_NUMBER_USERS_R = "NUMBEROFUSERS:R";
+	public static final String MAGIC_NUMBER_USERS_R = "NUMBEROFUSERS:R";
 
-	private static final String MAGIC_NUMBER_ADMINS = "NUMBEROFADMINS";
+	public static final String MAGIC_NUMBER_ADMINS = "NUMBEROFADMINS";
 
-	private static final String MAGIC_NUMBER_ADMINS_R = "NUMBEROFADMINS:R";
+	public static final String MAGIC_NUMBER_ADMINS_R = "NUMBEROFADMINS:R";
 
-	private static final String MAGIC_PAGES_IN_NAMESPACE = "PAGESINNAMESPACE";
+	public static final String MAGIC_PAGES_IN_NAMESPACE = "PAGESINNAMESPACE";
 
 	// page values
-	private static final String MAGIC_PAGE_NAME = "PAGENAME";
+	public static final String MAGIC_PAGE_NAME = "PAGENAME";
 
-	private static final String MAGIC_PAGE_NAME_E = "PAGENAMEE";
+	public static final String MAGIC_PAGE_NAME_E = "PAGENAMEE";
 
-	private static final String MAGIC_SUB_PAGE_NAME = "SUBPAGENAME";
+	public static final String MAGIC_SUB_PAGE_NAME = "SUBPAGENAME";
 
-	private static final String MAGIC_SUB_PAGE_NAME_E = "SUBPAGENAMEE";
+	public static final String MAGIC_SUB_PAGE_NAME_E = "SUBPAGENAMEE";
 
-	private static final String MAGIC_BASE_PAGE_NAME = "BASEPAGENAME";
+	public static final String MAGIC_BASE_PAGE_NAME = "BASEPAGENAME";
 
-	private static final String MAGIC_BASE_PAGE_NAME_E = "BASEPAGENAMEE";
+	public static final String MAGIC_BASE_PAGE_NAME_E = "BASEPAGENAMEE";
 
-	private static final String MAGIC_NAMESPACE = "NAMESPACE";
+	public static final String MAGIC_NAMESPACE = "NAMESPACE";
 
-	private static final String MAGIC_NAMESPACE_E = "NAMESPACEE";
+	public static final String MAGIC_NAMESPACE_E = "NAMESPACEE";
 
-	private static final String MAGIC_FULL_PAGE_NAME = "FULLPAGENAME";
+	public static final String MAGIC_FULL_PAGE_NAME = "FULLPAGENAME";
 
-	private static final String MAGIC_FULL_PAGE_NAME_E = "FULLPAGENAMEE";
+	public static final String MAGIC_FULL_PAGE_NAME_E = "FULLPAGENAMEE";
 
-	private static final String MAGIC_TALK_SPACE = "TALKSPACE";
+	public static final String MAGIC_TALK_SPACE = "TALKSPACE";
 
-	private static final String MAGIC_TALK_SPACE_E = "TALKSPACEE";
+	public static final String MAGIC_TALK_SPACE_E = "TALKSPACEE";
 
-	private static final String MAGIC_SUBJECT_SPACE = "SUBJECTSPACE";
+	public static final String MAGIC_SUBJECT_SPACE = "SUBJECTSPACE";
 
-	private static final String MAGIC_SUBJECT_SPACE_E = "SUBJECTSPACEE";
+	public static final String MAGIC_SUBJECT_SPACE_E = "SUBJECTSPACEE";
 
-	private static final String MAGIC_ARTICLE_SPACE = "ARTICLESPACE";
+	public static final String MAGIC_ARTICLE_SPACE = "ARTICLESPACE";
 
-	private static final String MAGIC_ARTICLE_SPACE_E = "ARTICLESPACEE";
+	public static final String MAGIC_ARTICLE_SPACE_E = "ARTICLESPACEE";
 
-	private static final String MAGIC_TALK_PAGE_NAME = "TALKPAGENAME";
+	public static final String MAGIC_TALK_PAGE_NAME = "TALKPAGENAME";
 
-	private static final String MAGIC_TALK_PAGE_NAME_E = "TALKPAGENAMEE";
+	public static final String MAGIC_TALK_PAGE_NAME_E = "TALKPAGENAMEE";
 
-	private static final String MAGIC_SUBJECT_PAGE_NAME = "SUBJECTPAGENAME";
+	public static final String MAGIC_SUBJECT_PAGE_NAME = "SUBJECTPAGENAME";
 
-	private static final String MAGIC_SUBJECT_PAGE_NAME_E = "SUBJECTPAGENAMEE";
+	public static final String MAGIC_SUBJECT_PAGE_NAME_E = "SUBJECTPAGENAMEE";
 
-	private static final String MAGIC_ARTICLE_PAGE_NAME = "ARTICLEPAGENAME";
+	public static final String MAGIC_ARTICLE_PAGE_NAME = "ARTICLEPAGENAME";
 
-	private static final String MAGIC_ARTICLE_PAGE_NAME_E = "ARTICLEPAGENAMEE";
+	public static final String MAGIC_ARTICLE_PAGE_NAME_E = "ARTICLEPAGENAMEE";
 
-	private static final String MAGIC_REVISION_ID = "REVISIONID";
+	public static final String MAGIC_REVISION_ID = "REVISIONID";
 
-	private static final String MAGIC_REVISION_DAY = "REVISIONDAY";
+	public static final String MAGIC_REVISION_DAY = "REVISIONDAY";
 
-	private static final String MAGIC_REVISION_DAY2 = "REVISIONDAY2";
+	public static final String MAGIC_REVISION_DAY2 = "REVISIONDAY2";
 
-	private static final String MAGIC_REVISION_MONTH = "REVISIONMONTH";
+	public static final String MAGIC_REVISION_MONTH = "REVISIONMONTH";
 
-	private static final String MAGIC_REVISION_YEAR = "REVISIONYEAR";
+	public static final String MAGIC_REVISION_YEAR = "REVISIONYEAR";
 
-	private static final String MAGIC_REVISION_TIMESTAMP = "REVISIONTIMESTAMP";
+	public static final String MAGIC_REVISION_TIMESTAMP = "REVISIONTIMESTAMP";
 
-	private static final String MAGIC_SITE_NAME = "SITENAME";
+	public static final String MAGIC_SITE_NAME = "SITENAME";
 
-	private static final String MAGIC_SERVER = "SERVER";
+	public static final String MAGIC_SERVER = "SERVER";
 
-	private static final String MAGIC_SCRIPT_PATH = "SCRIPTPATH";
+	public static final String MAGIC_SCRIPT_PATH = "SCRIPTPATH";
 
-	private static final String MAGIC_SERVER_NAME = "SERVERNAME";
+	public static final String MAGIC_SERVER_NAME = "SERVERNAME";
 
-	private static List<String> MAGIC_WORDS = new ArrayList<String>();
+	protected final static Set<String> MAGIC_WORDS = new HashSet<String>(100, 0.75f);
 
 	protected static final String TEMPLATE_INCLUSION = "template-inclusion";
-
-	// private HashMap parameterValues = new HashMap();
 
 	static {
 		// current date values
@@ -274,8 +272,8 @@ public class MagicWord {
 		TimeZone utc = TimeZone.getTimeZone("GMT+00");
 		Date current = model.getCurrentTimeStamp();
 		if (current == null) {
-		  // set a default value
-	    current = new Date(System.currentTimeMillis());
+			// set a default value
+			current = new Date(System.currentTimeMillis());
 		}
 		// local date values
 		if (name.equals(MAGIC_LOCAL_DAY)) {
@@ -364,7 +362,7 @@ public class MagicWord {
 				return temp;
 			}
 		}
-		
+
 		if (name.equals(MAGIC_FULL_PAGE_NAME)) {
 			String temp = model.getPageName();
 			if (temp != null) {
@@ -374,7 +372,7 @@ public class MagicWord {
 				return temp;
 			}
 		}
-		
+
 		if (name.equals(MAGIC_TALK_PAGE_NAME)) {
 			String temp = model.getPageName();
 			if (temp != null) {

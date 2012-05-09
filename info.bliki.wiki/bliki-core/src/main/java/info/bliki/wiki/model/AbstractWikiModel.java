@@ -1152,7 +1152,6 @@ public abstract class AbstractWikiModel implements IWikiModel, IContext {
 	 * {@inheritDoc}
 	 */
 	public String getRawWikiContent(String namespace, String templateName, Map<String, String> templateParameters) {
-		// String name = Encoder.encodeTitleUrl(articleName);
 		if (isTemplateNamespace(namespace)) {
 			String magicWord = templateName;
 			String parameter = "";
