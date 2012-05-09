@@ -20,6 +20,14 @@ public class TemplateParserTest extends FilterTestSupport {
 	/**
 	 * Issue 86
 	 */
+	public void testSortnameDemo001() {
+		assertEquals("<span style=\"display:none;\">Man with One Red Shoe, The</span><span class=\"vcard\"><span class=\"fn\">[[The Man with One Red Shoe|The Man with One Red Shoe]]</span></span>",
+				wikiModel.parseTemplates("{{sortname|The|Man with One Red Shoe}}"));
+	}
+	
+	/**
+	 * Issue 86
+	 */
 	public void testNoincludeDemo001() {
 		assertEquals("test1 noincludetext\n" + 
 				"\n" + 

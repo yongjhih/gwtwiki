@@ -17,30 +17,27 @@ import java.util.Map;
  * 
  */
 public class WikiTestModel extends WikiModel {
+	public static String SORTNAME = 
+		    "<includeonly><</includeonly><noinclude>&lt;</noinclude>span style=\"display:none;\">{{#if:{{{4|{{{sort|}}}}}} | {{{4|{{{sort}}}}}} | {{{2|{{{last}}}}}}, {{{1|{{{first}}}}}} }}<includeonly><</includeonly><noinclude>&lt;</noinclude>/span>{{#if:{{{nolink|}}}\n"
+			+ "| <span class=\"vcard\"><span class=\"fn\">{{{1|{{{first}}}}}} {{{2|{{{last}}}}}}</span></span>\n"
+			+ "| <span class=\"vcard\"><span class=\"fn\">[[{{#if:{{{3|{{{link|}}}}}}\n"
+			+ "  | {{{3|{{{link}}}}}}|{{{1|{{{first}}}}}} {{{2|{{{last}}}}}} {{#if:{{{dab<includeonly>|</includeonly>}}}\n"
+			+ "    | ({{{dab}}})\n"
+			+ "    }}\n"
+			+ "  }}|{{{1|{{{first}}}}}} {{{2|{{{last}}}}}}]]</span></span>\n"
+			+ "}}{{#ifeq:{{NAMESPACE}}|{{ns:0}}|[[Category:Articles with hCards]]}}<noinclude>{{documentation}}</noinclude>";
+
 	/**
 	 * Issue 86
 	 */
-	public static String ONLYINCLUDE_DEMO = "abc<onlyinclude>def</onlyinclude>ghi<includeonly>jkl</includeonly><!---\n" + 
-			"-----\n" + 
-			"----><noinclude><hr>\n" + 
-			";Only active template content is above.\n" + 
-			"\n" + 
-			";The verbatim active code within reads:\n" + 
-			" abc'''&lt;onlyinclude>'''def'''&lt;/onlyinclude>'''ghi'''&lt;includeonly>'''jkl'''&lt;/includeonly>'''\n" + 
-			"\n" + 
-			"If transposed, the only part included will be the string literal <code>def</code>. \n" + 
-			"\n" + 
-			"==Example==\n" + 
-			"Including [[:Help:Template/onlyinclude demo]] yields only:\n" + 
-			" {{:Help:Template/onlyinclude demo}}\n" + 
-			"\n" + 
-			"<includeonly>Then there's this other stuff one would think would be included... (I)\n" + 
-			"</includeonly><noinclude>\n" + 
-			"\n" + 
-			"[[Category:Handbook templates]]</noinclude>\n" + 
-			"[[Category:Template documentation|{{PAGENAME}}]]\n" + 
-			"</noinclude><includeonly>Then there's this other stuff one would think would be included (II)...</includeonly>\n" + 
-			"";
+	public static String ONLYINCLUDE_DEMO = "abc<onlyinclude>def</onlyinclude>ghi<includeonly>jkl</includeonly><!---\n" + "-----\n"
+			+ "----><noinclude><hr>\n" + ";Only active template content is above.\n" + "\n" + ";The verbatim active code within reads:\n"
+			+ " abc'''&lt;onlyinclude>'''def'''&lt;/onlyinclude>'''ghi'''&lt;includeonly>'''jkl'''&lt;/includeonly>'''\n" + "\n"
+			+ "If transposed, the only part included will be the string literal <code>def</code>. \n" + "\n" + "==Example==\n"
+			+ "Including [[:Help:Template/onlyinclude demo]] yields only:\n" + " {{:Help:Template/onlyinclude demo}}\n" + "\n"
+			+ "<includeonly>Then there's this other stuff one would think would be included... (I)\n" + "</includeonly><noinclude>\n"
+			+ "\n" + "[[Category:Handbook templates]]</noinclude>\n" + "[[Category:Template documentation|{{PAGENAME}}]]\n"
+			+ "</noinclude><includeonly>Then there's this other stuff one would think would be included (II)...</includeonly>\n" + "";
 	/**
 	 * Issue 86
 	 */
@@ -2459,8 +2456,10 @@ public class WikiTestModel extends WikiModel {
 				return TEST_INCLUDE3;
 			} else if (name.equals("TestInclude4")) {
 				return TEST_INCLUDE4;
-			}else if (name.equals("OnlyicludeDemo")) {
+			} else if (name.equals("OnlyicludeDemo")) {
 				return ONLYINCLUDE_DEMO;
+			} else if (name.equals("Sortname")) {
+				return SORTNAME;
 			}
 		} else {
 			if (name.equals("Include_Page")) {
@@ -2487,7 +2486,7 @@ public class WikiTestModel extends WikiModel {
 	public boolean isSemanticWebActive() {
 		return fSemanticWebActive;
 	}
-	
+
 	@Override
 	public void setSemanticWebActive(boolean semanticWeb) {
 		this.fSemanticWebActive = semanticWeb;

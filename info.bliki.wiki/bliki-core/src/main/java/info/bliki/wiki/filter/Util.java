@@ -90,6 +90,8 @@ public class Util {
 				if (searchableString.regionMatches(true, fromIndex, endPattern, 0, n)) {
 					return fromIndex - len;
 				}
+			} else {
+				return -1;
 			}
 			fromIndex++;
 		}
@@ -117,7 +119,10 @@ public class Util {
 		int level = 0;
 		while (searchableString.length() > ((fromIndex + n) - 1)) {
 			index = searchableString.indexOf('<', fromIndex);
-			if (index >= 0 && searchableString.length() > index + n) {
+			if (index < 0) {
+				return -1;
+			}
+			if (searchableString.length() > index + n) {
 				if (searchableString.charAt(index + 1) == '/') {
 					// closing tag
 					fromIndex = index + 2;
@@ -134,8 +139,10 @@ public class Util {
 						level++;
 					}
 				}
+				fromIndex = index + 1;
+			} else {
+				return -1;
 			}
-			fromIndex++;
 		}
 
 		return -1;
