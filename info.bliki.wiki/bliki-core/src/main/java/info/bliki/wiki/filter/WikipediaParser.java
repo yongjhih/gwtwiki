@@ -1034,7 +1034,7 @@ public class WikipediaParser extends AbstractParser implements IParser {
 			}
 			if (ch == '_' && fSource[tocEndPosition] == '_') {
 				String tocIdent = fStringSource.substring(fCurrentPosition, tocEndPosition - 1);
-				if (fWikiModel.parseBehaviorSwitch(tocIdent)){
+				if (fWikiModel.parseBehaviorSwitch(tocIdent)) {
 					createContentToken(2);
 					fCurrentPosition = tocEndPosition + 1;
 					return true;
@@ -1062,7 +1062,7 @@ public class WikipediaParser extends AbstractParser implements IParser {
 				}
 				if (tocRecognized) {
 					return true;
-				}  
+				}
 			}
 		}
 		return false;
@@ -1139,24 +1139,33 @@ public class WikipediaParser extends AbstractParser implements IParser {
 		String uriSchemeName = "";
 		if (name != null) {
 			boolean isEmail = false;
-			urlString = name.trim();
 
 			int index = -1;
 			boolean foundUrl = false;
-			try {
-				index = urlString.indexOf(':', 1);
-				if (index > 0) {
-					uriSchemeName = urlString.substring(0, index);
-					if (uriSchemeName.equalsIgnoreCase("mailto")) {
-						isEmail = true;
-						foundUrl = true;
-					} else {
-						if (fWikiModel.isValidUriScheme(uriSchemeName)) {
+			boolean protocolRelativeURL = false;
+
+			urlString = name.trim();
+			if (urlString.length() >= 2 && urlString.charAt(0) == '/' && urlString.charAt(1) == '/') {
+				// issue 89
+				foundUrl = true;
+				protocolRelativeURL = true;
+			} else {
+
+				try {
+					index = urlString.indexOf(':', 1);
+					if (index > 0) {
+						uriSchemeName = urlString.substring(0, index);
+						if (uriSchemeName.equalsIgnoreCase("mailto")) {
+							isEmail = true;
 							foundUrl = true;
+						} else {
+							if (fWikiModel.isValidUriScheme(uriSchemeName)) {
+								foundUrl = true;
+							}
 						}
 					}
+				} catch (IndexOutOfBoundsException e) {
 				}
-			} catch (IndexOutOfBoundsException e) {
 			}
 
 			if (foundUrl) {
@@ -1167,7 +1176,11 @@ public class WikipediaParser extends AbstractParser implements IParser {
 					alias = urlString.substring(pipeIndex + 1);
 					urlString = urlString.substring(0, pipeIndex);
 				} else {
-					alias = urlString;
+					if (protocolRelativeURL){
+						alias = urlString.substring(2);
+					} else {
+						alias = urlString;
+					}
 				}
 
 				if (isEmail) {
@@ -1182,6 +1195,10 @@ public class WikipediaParser extends AbstractParser implements IParser {
 						return true;
 					}
 				} else {
+					if (protocolRelativeURL){
+						fWikiModel.appendExternalLink(uriSchemeName, urlString, alias, false);
+						return true;
+					}
 					parseURIScheme();
 					String uriSchemeSpecificPart = urlString.substring(index + 1);
 					if (fWikiModel.isValidUriSchemeSpecificPart(uriSchemeName, uriSchemeSpecificPart)) {

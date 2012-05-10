@@ -13,15 +13,23 @@ public class HTTPUrlFilterTest extends FilterTestSupport {
 	}
 
 	/**
+	 * Test for issue 89
+	 */
+	public void testIssue89() {
+		assertEquals("\n" + 
+				"<p>start <a class=\"externallink\" href=\"//en.wikipedia.org/w/index.php?title=Main_Page\" rel=\"nofollow\" title=\"//en.wikipedia.org/w/index.php?title=Main_Page\">en.wikipedia.org/w/index.php?title=Main_Page</a> end</p>", wikiModel.render("start [//en.wikipedia.org/w/index.php?title=Main_Page] end", false));
+	}
+
+	/**
 	 * Test for issue 90
 	 */
 	public void testIssue90() {
 		assertEquals(
-				"\n" + 
-				"<p>start <a class=\"externallink\" href=\"http://www.google.com\" rel=\"nofollow\" title=\"http://www.google.com\">http://www.google.com</a> end</p>",
+				"\n"
+						+ "<p>start <a class=\"externallink\" href=\"http://www.google.com\" rel=\"nofollow\" title=\"http://www.google.com\">http://www.google.com</a> end</p>",
 				wikiModel.render("start [http://www.google.com] end", false));
 	}
-	
+
 	public void testUrlHTTP() {
 		assertEquals(
 				"\n"
@@ -63,7 +71,9 @@ public class HTTPUrlFilterTest extends FilterTestSupport {
 				"\n"
 						+ "<p>Bericht über die Weltkulturerbe-Bewerbung von <a class=\"externallink\" href=\"ftp://www.hr-online.de/website/rubriken/kultur/index.jsp?rubrik=5676&#38;key=standard&#38;key=standard_document_7782534\" rel=\"nofollow\" title=\"ftp://www.hr-online.de/website/rubriken/kultur/index.jsp?rubrik=5676&#38;key=standard&#38;key=standard_document_7782534\">www.hr-online.de?rubrik=5676&#38;key=standard</a> vom 13. Juli 2005</p>",
 				wikiModel
-						.render("Bericht über die Weltkulturerbe-Bewerbung von [ftp://www.hr-online.de/website/rubriken/kultur/index.jsp?rubrik=5676&amp;key=standard&key=standard_document_7782534 www.hr-online.de?rubrik=5676&key=standard] vom 13.&nbsp;Juli 2005", false));
+						.render(
+								"Bericht über die Weltkulturerbe-Bewerbung von [ftp://www.hr-online.de/website/rubriken/kultur/index.jsp?rubrik=5676&amp;key=standard&key=standard_document_7782534 www.hr-online.de?rubrik=5676&key=standard] vom 13.&nbsp;Juli 2005",
+								false));
 	}
 
 	public void testUrl5() {
@@ -71,7 +81,9 @@ public class HTTPUrlFilterTest extends FilterTestSupport {
 				"\n"
 						+ "<p>Bericht über die Weltkulturerbe-Bewerbung von <a class=\"externallink\" href=\"http://www.hr-online.de/website/rubriken/kultur/index.jsp?rubrik=5676&#38;key=standard&#38;key=standard_document_7782534\" rel=\"nofollow\" title=\"http://www.hr-online.de/website/rubriken/kultur/index.jsp?rubrik=5676&#38;key=standard&#38;key=standard_document_7782534\">www.hr-online.de?rubrik=5676&#38;key=standard</a> vom 13. Juli 2005</p>",
 				wikiModel
-						.render("Bericht über die Weltkulturerbe-Bewerbung von [http://www.hr-online.de/website/rubriken/kultur/index.jsp?rubrik=5676&amp;key=standard&key=standard_document_7782534 www.hr-online.de?rubrik=5676&key=standard] vom 13.&nbsp;Juli 2005", false));
+						.render(
+								"Bericht über die Weltkulturerbe-Bewerbung von [http://www.hr-online.de/website/rubriken/kultur/index.jsp?rubrik=5676&amp;key=standard&key=standard_document_7782534 www.hr-online.de?rubrik=5676&key=standard] vom 13.&nbsp;Juli 2005",
+								false));
 	}
 
 	public void testImageUrl() {
@@ -93,7 +105,8 @@ public class HTTPUrlFilterTest extends FilterTestSupport {
 						+ "<dl>\n"
 						+ "<dd><a class=\"external text\" href=\"http://www.amazon.com/exec/obidos/ASIN/9781413304541\" rel=\"nofollow\" title=\"http://www.amazon.com/exec/obidos/ASIN/9781413304541\">ISBN 978-1413304541</a> <b><i>or</i></b> <a class=\"external text\" href=\"http://www.amazon.com/exec/obidos/ASIN/9781413304541\" rel=\"nofollow\" title=\"http://www.amazon.com/exec/obidos/ASIN/9781413304541\">ISBN 9781413304541</a> (without the dash)</dd></dl>",
 				wikiModel.render("Note that the numbers are not automatically made clickable until they are in this format:\n" + "\n"
-						+ ":ISBN 1413304540\n" + "\n" + ":ISBN 978-1413304541 \'\'\'\'\'or\'\'\'\'\' ISBN 9781413304541 (without the dash)", false));
+						+ ":ISBN 1413304540\n" + "\n" + ":ISBN 978-1413304541 \'\'\'\'\'or\'\'\'\'\' ISBN 9781413304541 (without the dash)",
+						false));
 	}
 
 	public void testMailto() {
@@ -117,7 +130,9 @@ public class HTTPUrlFilterTest extends FilterTestSupport {
 				"\n"
 						+ "<p><a class=\"externallink\" href=\"http://en.wikipedia.org/w/index.php?title=Template%3AMilwaukee+Brewers+roster+navbox&#38;action=edit\" rel=\"nofollow\" title=\"http://en.wikipedia.org/w/index.php?title=Template%3AMilwaukee+Brewers+roster+navbox&#38;action=edit\"><span style=\"color:#002bb8;;background:#0a2351; color:#c9b074;;border:none;;\" title=\"You can edit this template. Please use the preview button before saving.\">e</span></a></p>",
 				wikiModel
-						.render("[http://en.wikipedia.org/w/index.php?title=Template%3AMilwaukee+Brewers+roster+navbox&action=edit <span style=\"color:#002bb8;;background:#0a2351; color:#c9b074;;border:none;;\" title=\"You can edit this template. Please use the preview button before saving.\">e</span>]", false));
+						.render(
+								"[http://en.wikipedia.org/w/index.php?title=Template%3AMilwaukee+Brewers+roster+navbox&action=edit <span style=\"color:#002bb8;;background:#0a2351; color:#c9b074;;border:none;;\" title=\"You can edit this template. Please use the preview button before saving.\">e</span>]",
+								false));
 	}
 
 	public void testUrlTEL01() {
