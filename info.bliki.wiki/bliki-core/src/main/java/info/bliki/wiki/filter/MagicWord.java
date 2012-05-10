@@ -87,23 +87,13 @@ public class MagicWord {
 
 	public static final String MAGIC_NUMBER_ARTICLES = "NUMBEROFARTICLES";
 
-	public static final String MAGIC_NUMBER_ARTICLES_R = "NUMBEROFARTICLES:R";
-
 	public static final String MAGIC_NUMBER_PAGES = "NUMBEROFPAGES";
-
-	public static final String MAGIC_NUMBER_PAGES_R = "NUMBEROFPAGES:R";
 
 	public static final String MAGIC_NUMBER_FILES = "NUMBEROFFILES";
 
-	public static final String MAGIC_NUMBER_FILES_R = "NUMBEROFFILES:R";
-
 	public static final String MAGIC_NUMBER_USERS = "NUMBEROFUSERS";
 
-	public static final String MAGIC_NUMBER_USERS_R = "NUMBEROFUSERS:R";
-
 	public static final String MAGIC_NUMBER_ADMINS = "NUMBEROFADMINS";
-
-	public static final String MAGIC_NUMBER_ADMINS_R = "NUMBEROFADMINS:R";
 
 	public static final String MAGIC_PAGES_IN_NAMESPACE = "PAGESINNAMESPACE";
 
@@ -160,9 +150,23 @@ public class MagicWord {
 
 	public static final String MAGIC_REVISION_MONTH = "REVISIONMONTH";
 
+	public static final String MAGIC_REVISION_MONTH1 = "REVISIONMONTH1";
+
 	public static final String MAGIC_REVISION_YEAR = "REVISIONYEAR";
 
 	public static final String MAGIC_REVISION_TIMESTAMP = "REVISIONTIMESTAMP";
+
+	public static final String MAGIC_REVISION_USER = "REVISIONUSER";
+
+	public static final String MAGIC_PROTECTION_LEVEL = "PROTECTIONLEVEL";
+
+	public static final String MAGIC_DISPLAY_TITLE = "DISPLAYTITLE";
+
+	public static final String MAGIC_DEFAULT_SORT = "DEFAULTSORT";
+
+	public static final String MAGIC_DEFAULT_SORT_KEY = "DEFAULTSORTKEY";
+
+	public static final String MAGIC_DEFAULT_CATEGORY_SORT = "DEFAULTCATEGORYSORT";
 
 	public static final String MAGIC_SITE_NAME = "SITENAME";
 
@@ -171,6 +175,12 @@ public class MagicWord {
 	public static final String MAGIC_SCRIPT_PATH = "SCRIPTPATH";
 
 	public static final String MAGIC_SERVER_NAME = "SERVERNAME";
+
+	public static final String MAGIC_STYLE_PATH = "STYLEPATH";
+
+	public static final String MAGIC_CONTENT_LANGUAGE = "CONTENTLANGUAGE";
+
+	public static final String MAGIC_CONTENT_LANG = "CONTENTLANG";
 
 	protected final static Set<String> MAGIC_WORDS = new HashSet<String>(100, 0.75f);
 
@@ -206,15 +216,10 @@ public class MagicWord {
 		// statistics
 		MAGIC_WORDS.add(MAGIC_CURRENT_VERSION);
 		MAGIC_WORDS.add(MAGIC_NUMBER_ARTICLES);
-		MAGIC_WORDS.add(MAGIC_NUMBER_ARTICLES_R);
 		MAGIC_WORDS.add(MAGIC_NUMBER_PAGES);
-		MAGIC_WORDS.add(MAGIC_NUMBER_PAGES_R);
 		MAGIC_WORDS.add(MAGIC_NUMBER_FILES);
-		MAGIC_WORDS.add(MAGIC_NUMBER_FILES_R);
 		MAGIC_WORDS.add(MAGIC_NUMBER_USERS);
-		MAGIC_WORDS.add(MAGIC_NUMBER_USERS_R);
 		MAGIC_WORDS.add(MAGIC_NUMBER_ADMINS);
-		MAGIC_WORDS.add(MAGIC_NUMBER_ADMINS_R);
 		MAGIC_WORDS.add(MAGIC_PAGES_IN_NAMESPACE);
 		// MAGIC_WORDS.add(MAGIC_PAGES_IN_NAMESPACE_NS);
 		// MAGIC_WORDS.add(MAGIC_PAGES_IN_NAMESPACE_NS_R);
