@@ -411,7 +411,11 @@ public abstract class AbstractWikiModel implements IWikiModel, IContext {
 			String trimmedText = linkName.trim();
 			if (trimmedText.length() > 0) {
 				pushNode(aTagNode);
-				WikipediaParser.parseRecursive(trimmedText, this, false, true);
+				if (linkName.equals(link)) {
+					aTagNode.addChild(new ContentToken(trimmedText));
+				} else {
+					WikipediaParser.parseRecursive(trimmedText, this, false, true);
+				}
 				popNode();
 			}
 		}

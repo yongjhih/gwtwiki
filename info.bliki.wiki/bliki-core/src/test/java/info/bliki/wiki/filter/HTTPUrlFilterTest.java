@@ -12,6 +12,16 @@ public class HTTPUrlFilterTest extends FilterTestSupport {
 		return new TestSuite(HTTPUrlFilterTest.class);
 	}
 
+	/**
+	 * Test for issue 90
+	 */
+	public void testIssue90() {
+		assertEquals(
+				"\n" + 
+				"<p>start <a class=\"externallink\" href=\"http://www.google.com\" rel=\"nofollow\" title=\"http://www.google.com\">http://www.google.com</a> end</p>",
+				wikiModel.render("start [http://www.google.com] end", false));
+	}
+	
 	public void testUrlHTTP() {
 		assertEquals(
 				"\n"
