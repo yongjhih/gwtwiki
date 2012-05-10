@@ -1689,6 +1689,7 @@ public abstract class AbstractWikiModel implements IWikiModel, IContext {
 		fParserRecursionCount = 0;
 		fRecursionLevel = 0;
 		fTemplateRecursionCount = 0;
+		fRedirectLink = null;
 		fSectionCounter = 0;
 	}
 
