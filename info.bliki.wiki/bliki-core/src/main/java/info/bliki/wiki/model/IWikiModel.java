@@ -848,11 +848,32 @@ public interface IWikiModel extends IConfiguration {
 	public String render(ITextConverter converter, String rawWikiText, boolean templateTopic);
 
 	/**
+	 * Render the raw Wikipedia text into a string for a given converter
+	 * 
+	 * @param converter
+	 *          a text converter. <b>Note</b> the converter may be
+	 *          <code>null</code>, if you only would like to analyze the raw wiki
+	 *          text and don't need to convert. This speeds up the parsing
+	 *          process.
+	 * @param rawWikiText
+	 *          a raw wiki text
+	 * @param buffer
+	 *          write to this buffer
+	 * @param templateTopic
+	 *          if <code>true</code>, render the wiki text as if a template topic
+	 *          will be displayed directly, otherwise render the text as if a
+	 *          common wiki topic will be displayed.
+	 * @param parseTemplates
+	 *          parses the template expansion step (parses include, onlyinclude, includeonly etc)
+	 */
+	public void render(ITextConverter converter, String rawWikiText, Appendable buffer, boolean templateTopic, boolean parseTemplates)  throws IOException;
+
+	/**
 	 * Render the raw Wikipedia text into an HTML string and use the default
 	 * HTMLConverter
 	 * 
 	 * @param rawWikiText
-	 * @return <code>null</code> if an IOException occurs
+	 * @return <code>null</code> if an IOException occured
 	 */
 	public String render(String rawWikiText);
 

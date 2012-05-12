@@ -50,6 +50,7 @@ public class AllFilterTests extends TestCase {
 		s.addTestSuite(TemplateFunctionsTest.class);
 		
 		s.addTestSuite(ChartFilterTest.class);
+		s.addTestSuite(ToHtmlTest.class);
 		return s;
 	}
 

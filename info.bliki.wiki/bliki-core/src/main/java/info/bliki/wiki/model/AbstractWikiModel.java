@@ -1530,24 +1530,36 @@ public abstract class AbstractWikiModel implements IWikiModel, IContext {
 		if (rawWikiText == null) {
 			return "";
 		}
+		StringBuilder buf = new StringBuilder(rawWikiText.length() + rawWikiText.length() / 10);
+		try {
+			render(converter, rawWikiText, buf, templateTopic, true);
+		} catch (IOException e) {
+			e.printStackTrace();
+			return null;
+		}
+		return buf.toString();
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	public void render(ITextConverter converter, String rawWikiText, Appendable buf, boolean templateTopic, boolean parseTemplates) throws IOException {
+		initialize();
+		if (rawWikiText == null) {
+			return;
+		}
 		fTemplateTopic = templateTopic;
-		WikipediaParser.parse(rawWikiText, this, true, null);
+		WikipediaParser.parse(rawWikiText, this, parseTemplates, null);
 		if (converter != null) {
-			StringBuilder buf = new StringBuilder(rawWikiText.length() + rawWikiText.length() / 10);
 			List<BaseToken> list = fTagStack.getNodeList();
-
 			try {
 				converter.nodesToText(list, buf, this);
-			} catch (IOException e) {
-				e.printStackTrace();
-				return null;
 			} finally {
 				fInitialized = false;
 			}
-			return buf.toString();
+			return;
 		}
 		fInitialized = false;
-		return null;
 	}
 
 	/**

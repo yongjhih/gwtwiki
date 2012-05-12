@@ -2,10 +2,13 @@ package info.bliki.wiki.model;
 
 import info.bliki.htmlcleaner.ContentToken;
 import info.bliki.wiki.filter.Encoder;
+import info.bliki.wiki.filter.HTMLConverter;
+import info.bliki.wiki.filter.ITextConverter;
 import info.bliki.wiki.filter.WikipediaParser;
 import info.bliki.wiki.namespaces.INamespace;
 import info.bliki.wiki.tags.WPATag;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -296,6 +299,89 @@ public class WikiModel extends AbstractWikiModel {
 	 */
 	public INamespace getNamespace() {
 		return fNamespace;
+	}
+
+	/**
+	 * Convert a given text in wiki notation into another format.
+	 * 
+	 * @param model
+	 *          a wiki model
+	 * @param converter
+	 *          a text converter. <b>Note</b> the converter may be
+	 *          <code>null</code>, if you only would like to analyze the raw wiki
+	 *          text and don't need to convert. This speeds up the parsing
+	 *          process.
+	 * @param rawWikiText
+	 *          a raw wiki text
+	 * @param resultBuffer
+	 *          the buffer to which to append the resulting HTML code.
+	 * @param templateTopic
+	 *          if <code>true</code>, render the wiki text as if a template topic
+	 *          will be displayed directly, otherwise render the text as if a
+	 *          common wiki topic will be displayed.
+	 * @param parseTemplates
+	 *          parses the template expansion step (parses include, onlyinclude,
+	 *          includeonly etc)
+	 * @throws IOException
+	 */
+	public static void toText(IWikiModel model, ITextConverter converter, String rawWikiText, Appendable resultBuffer,
+			boolean templateTopic, boolean parseTemplates) throws IOException {
+		model.render(converter, rawWikiText, resultBuffer, templateTopic, parseTemplates);
+	}
+
+	/**
+	 * Convert a given text in wiki notation into HTML text.
+	 * 
+	 * @param rawWikiText
+	 *          a raw wiki text
+	 * @param resultBuffer
+	 *          the buffer to which to append the resulting HTML code.
+	 * @param imageBaseURL
+	 *          a url string which must contains a &quot;${image}&quot; variable
+	 *          which will be replaced by the image name, to create links to
+	 *          images.
+	 * @param linkBaseURL
+	 *          a url string which must contains a &quot;${title}&quot; variable
+	 *          which will be replaced by the topic title, to create links to
+	 *          other wiki topics.
+	 * @throws IOException
+	 */
+	public static void toHtml(String rawWikiText, Appendable resultBuffer, String imageBaseURL, String linkBaseURL)
+			throws IOException {
+		toText(new WikiModel(imageBaseURL, linkBaseURL), new HTMLConverter(), rawWikiText, resultBuffer, false, false);
+	}
+
+	/**
+	 * Convert a given text in wiki notation into HTML text.
+	 * 
+	 * @param rawWikiText
+	 *          a raw wiki text
+	 * @param resultBuffer
+	 *          the buffer to which to append the resulting HTML code.
+	 * @throws IOException
+	 */
+	public static void toHtml(String rawWikiText, Appendable resultBuffer) throws IOException {
+		toText(new WikiModel("/${image}", "/${title}"), new HTMLConverter(), rawWikiText, resultBuffer, false, false);
+	}
+
+	/**
+	 * Convert a given text in wiki notation into HTML text.
+	 * 
+	 * @param rawWikiText
+	 *          a raw wiki text
+	 * @param resultBuffer
+	 *          the buffer to which to append the resulting HTML code.
+	 * @return the resulting HTML text; nay returns <code>null</code>, if an
+	 *         <code>IOException</code> occured.
+	 */
+	public static String toHtml(String rawWikiText) {
+		try {
+			StringBuilder resultBuffer = new StringBuilder();
+			toText(new WikiModel("/${image}", "/${title}"), new HTMLConverter(), rawWikiText, resultBuffer, false, false);
+			return resultBuffer.toString();
+		} catch (IOException e) {
+		}
+		return null;
 	}
 
 }
