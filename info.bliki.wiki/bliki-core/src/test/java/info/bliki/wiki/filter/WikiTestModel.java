@@ -5,6 +5,7 @@ import info.bliki.htmlcleaner.TagNode;
 import info.bliki.htmlcleaner.Utils;
 import info.bliki.wiki.model.Configuration;
 import info.bliki.wiki.model.WikiModel;
+import info.bliki.wiki.tags.IgnoreTag;
 import info.bliki.wiki.tags.extension.ChartTag;
 
 import java.util.HashMap;
@@ -2299,6 +2300,8 @@ public class WikiTestModel extends WikiModel {
 		Configuration.DEFAULT_CONFIGURATION.addUriScheme("tel");
 		Configuration.DEFAULT_CONFIGURATION.addInterwikiLink("intra", "/${title}");
 		Configuration.DEFAULT_CONFIGURATION.addTokenTag("chart", new ChartTag());
+		Configuration.DEFAULT_CONFIGURATION.addTokenTag("inputbox", new IgnoreTag("inputbox"));
+		Configuration.DEFAULT_CONFIGURATION.addTokenTag("imagemap", new IgnoreTag("imagemap"));
 	}
 
 	public WikiTestModel(String imageBaseURL, String linkBaseURL) {

@@ -27,6 +27,7 @@ public class AllFilterTests extends TestCase {
 		s.addTestSuite(HRBRTest.class);
 		s.addTestSuite(HTMLTableFilterTest.class);
 		s.addTestSuite(HTTPUrlFilterTest.class);
+		s.addTestSuite(IgnoreFilterTest.class);
 		s.addTestSuite(InterwikiTest.class);
 		s.addTestSuite(ItalicFilterTest.class);
 		
