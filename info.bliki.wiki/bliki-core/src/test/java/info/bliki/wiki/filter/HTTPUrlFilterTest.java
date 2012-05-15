@@ -16,18 +16,20 @@ public class HTTPUrlFilterTest extends FilterTestSupport {
 	 * Test for issue 89
 	 */
 	public void testIssue89() {
-		assertEquals("\n" + 
-				"<p>start <a class=\"externallink\" href=\"//en.wikipedia.org/w/index.php?title=Main_Page\" rel=\"nofollow\" title=\"//en.wikipedia.org/w/index.php?title=Main_Page\">en.wikipedia.org/w/index.php?title=Main_Page</a> end</p>", wikiModel.render("start [//en.wikipedia.org/w/index.php?title=Main_Page] end", false));
+		assertEquals(
+				"\n"
+						+ "<p>start <a class=\"externallink\" href=\"//en.wikipedia.org/w/index.php?title=Main_Page\" rel=\"nofollow\" title=\"//en.wikipedia.org/w/index.php?title=Main_Page\">en.wikipedia.org/w/index.php?title=Main_Page</a> end</p>",
+				wikiModel.render("start [//en.wikipedia.org/w/index.php?title=Main_Page] end", false));
 	}
 
 	/**
-	 * Test for issue 90
+	 * Test for issue 90, Issue 91
 	 */
 	public void testIssue90() {
 		assertEquals(
 				"\n"
-						+ "<p>start <a class=\"externallink\" href=\"http://www.google.com\" rel=\"nofollow\" title=\"http://www.google.com\">http://www.google.com</a> end</p>",
-				wikiModel.render("start [http://www.google.com] end", false));
+						+ "<p>start <a class=\"external autonumber\" href=\"http://www.google.com\" rel=\"nofollow\">[1]</a> middle <a class=\"external autonumber\" href=\"http://www.google.de\" rel=\"nofollow\">[2]</a> end</p>",
+				wikiModel.render("start [http://www.google.com] middle [http://www.google.de] end", false));
 	}
 
 	public void testUrlHTTP() {

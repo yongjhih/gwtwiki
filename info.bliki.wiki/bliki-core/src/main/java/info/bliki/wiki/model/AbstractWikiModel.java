@@ -77,6 +77,8 @@ public abstract class AbstractWikiModel implements IWikiModel, IContext {
 
 	protected boolean fTemplateTopic = false;
 
+	protected int fExternalLinksCounter;
+	
 	/**
 	 * A tag that manages the &quot;table of content&quot;
 	 * 
@@ -401,10 +403,10 @@ public abstract class AbstractWikiModel implements IWikiModel, IContext {
 		// }
 		TagNode aTagNode = new TagNode("a");
 		aTagNode.addAttribute("href", link, true);
-		aTagNode.addAttribute("class", "externallink", true);
-		aTagNode.addAttribute("title", link, true);
 		aTagNode.addAttribute("rel", "nofollow", true);
 		if (withoutSquareBrackets) {
+			aTagNode.addAttribute("class", "externallink", true);
+			aTagNode.addAttribute("title", link, true);
 			append(aTagNode);
 			aTagNode.addChild(new ContentToken(linkName));
 		} else {
@@ -412,8 +414,17 @@ public abstract class AbstractWikiModel implements IWikiModel, IContext {
 			if (trimmedText.length() > 0) {
 				pushNode(aTagNode);
 				if (linkName.equals(link)) {
-					aTagNode.addChild(new ContentToken(trimmedText));
+					if (withoutSquareBrackets) {
+						aTagNode.addAttribute("class", "externallink", true);
+						aTagNode.addAttribute("title", link, true);
+						aTagNode.addChild(new ContentToken(trimmedText));
+					} else {
+						aTagNode.addAttribute("class", "external autonumber", true);
+						aTagNode.addChild(new ContentToken("["+(++fExternalLinksCounter)+"]"));
+					}
 				} else {
+					aTagNode.addAttribute("class", "externallink", true);
+					aTagNode.addAttribute("title", link, true);
 					WikipediaParser.parseRecursive(trimmedText, this, false, true);
 				}
 				popNode();
@@ -1306,6 +1317,7 @@ public abstract class AbstractWikiModel implements IWikiModel, IContext {
 			fRecursionLevel = 0;
 			fTemplateRecursionCount = 0;
 			fSectionCounter = 0;
+			fExternalLinksCounter = 0;
 			fInitialized = true;
 		}
 	}
@@ -1539,11 +1551,12 @@ public abstract class AbstractWikiModel implements IWikiModel, IContext {
 		}
 		return buf.toString();
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
-	public void render(ITextConverter converter, String rawWikiText, Appendable buf, boolean templateTopic, boolean parseTemplates) throws IOException {
+	public void render(ITextConverter converter, String rawWikiText, Appendable buf, boolean templateTopic, boolean parseTemplates)
+			throws IOException {
 		initialize();
 		if (rawWikiText == null) {
 			return;
@@ -1707,6 +1720,7 @@ public abstract class AbstractWikiModel implements IWikiModel, IContext {
 		fTemplateRecursionCount = 0;
 		fRedirectLink = null;
 		fSectionCounter = 0;
+		fExternalLinksCounter = 0;
 	}
 
 	/**
