@@ -519,8 +519,7 @@ public class WikipediaScanner {
 						ch = fSource[fScannerPosition++];
 					}
 					if (ch == '|' && fSource[fScannerPosition] == '}') {
-						nestedWikiTableCounter--;
-						if (nestedWikiTableCounter == 0) {
+						if (--nestedWikiTableCounter == 0) {
 							return fScannerPosition + 1;
 						}
 					}
@@ -793,7 +792,7 @@ public class WikipediaScanner {
 	}
 
 	/**
-	 * Read the end of a nested block i.e. something like
+	 * Read until the end of a nested block i.e. something like
 	 * <code>[[...[[  ]]...]]</code>
 	 * 
 	 * @param sourceArray
@@ -807,8 +806,9 @@ public class WikipediaScanner {
 		char ch;
 		int level = 1;
 		int position = startPosition;
+		final int sourceArrayLength = sourceArray.length - 1;
 		try {
-			while (position < sourceArray.length) {
+			while (position < sourceArrayLength) {
 				ch = sourceArray[position++];
 				if (ch == startCh && sourceArray[position] == startCh) {
 					position++;
@@ -828,7 +828,6 @@ public class WikipediaScanner {
 
 	public static int findNestedTemplateEnd(final char[] sourceArray, int startPosition) {
 		char ch;
-		// int len = sourceArray.length;
 		int countSingleOpenBraces = 0;
 		int position = startPosition;
 		try {
@@ -867,16 +866,16 @@ public class WikipediaScanner {
 	 */
 	public static int[] findNestedParamEnd(final char[] sourceArray, int startPosition) {
 		char ch;
-		int len = sourceArray.length;
+		final int sourceArrayLength = sourceArray.length;
 		int countSingleOpenBraces = 0;
 		int parameterPosition = startPosition;
 		try {
-			while (parameterPosition < sourceArray.length) {
+			while (parameterPosition < sourceArrayLength) {
 				ch = sourceArray[parameterPosition++];
 				if (ch == '{') {
-					if (sourceArray[parameterPosition] == '{') {
+					if ((sourceArrayLength > parameterPosition) && sourceArray[parameterPosition] == '{') {
 						parameterPosition++;
-						if ((len > parameterPosition) && sourceArray[parameterPosition] == '{' && sourceArray[parameterPosition + 1] != '{') {
+						if ((sourceArrayLength > parameterPosition) && sourceArray[parameterPosition] == '{' && sourceArray[parameterPosition + 1] != '{') {
 							// template parameter beginning
 							parameterPosition++;
 							int[] temp = findNestedParamEnd(sourceArray, parameterPosition);
@@ -904,7 +903,7 @@ public class WikipediaScanner {
 					if (countSingleOpenBraces > 0) {
 						countSingleOpenBraces--;
 					} else {
-						if (sourceArray[parameterPosition] == '}') {
+						if ((sourceArrayLength > parameterPosition) && sourceArray[parameterPosition] == '}') {
 							if (sourceArray[parameterPosition + 1] == '}') {
 								// template parameter ending
 								return new int[] { parameterPosition + 2, -1 };
