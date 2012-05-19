@@ -439,6 +439,12 @@ public class WikipediaScanner {
 		}
 	}
 
+	/**
+	 * Get the offset position behind the next closing HTML comment tag (--&gt;).
+	 * 
+	 * @return the offset position behind the next closing HTML comment tag or
+	 *         <code>-1</code> if no tag could be found.
+	 */
 	public int indexEndOfComment() {
 		char ch;
 		while (fScannerPosition < fSource.length - 2) {
@@ -450,6 +456,12 @@ public class WikipediaScanner {
 		return -1;
 	}
 
+	/**
+	 * Get the offset position behind the next &lt;/nowiki&gt; tag.
+	 * 
+	 * @return the offset position behind the &lt;/nowiki&gt; tag or
+	 *         <code>-1</code> if no tag could be found.
+	 */
 	public int indexEndOfNowiki() {
 		char ch;
 		while (fScannerPosition < fSource.length - 8) {
@@ -463,10 +475,18 @@ public class WikipediaScanner {
 		return -1;
 	}
 
+	/**
+	 * Get the offset position behind the corresponding wiki table closing tag
+	 * (i.e. <code>|}</code>). The scanner detects HTML comment tags,
+	 * &lt;nowiki&gt; tags and nested wiki table tags (i.e.
+	 * <code>{|... {|...  ...|} ...|}</code>).
+	 * 
+	 * @return the offset position behind the corresponding wiki table closing tag
+	 *         or <code>-1</code> if no corresponding tag could be found.
+	 */
 	public int indexEndOfTable() {
-		// check nowiki and html comments?
-		int count = 1;
-		int oldPosition;
+		// check nowiki and html comments
+		int nestedWikiTableCounter = 1;
 		char ch;
 		try {
 			while (fScannerPosition < fSource.length) {
@@ -474,6 +494,7 @@ public class WikipediaScanner {
 				if (ch == '<' && fSource[fScannerPosition] == '!' && fSource[fScannerPosition + 1] == '-'
 						&& fSource[fScannerPosition + 2] == '-') {
 					// start of HTML comment
+					fScannerPosition += 3;
 					fScannerPosition = indexEndOfComment();
 					if (fScannerPosition == (-1)) {
 						return -1;
@@ -481,24 +502,25 @@ public class WikipediaScanner {
 				} else if (ch == '<' && fSource[fScannerPosition] == 'n' && fSource[fScannerPosition + 1] == 'o'
 						&& fSource[fScannerPosition + 2] == 'w' && fSource[fScannerPosition + 3] == 'i' && fSource[fScannerPosition + 4] == 'k'
 						&& fSource[fScannerPosition + 5] == 'i' && fSource[fScannerPosition + 6] == '>') {
-					// <nowiki>
+					// start of <nowiki>
+					fScannerPosition += 7;
 					fScannerPosition = indexEndOfNowiki();
 					if (fScannerPosition == (-1)) {
 						return -1;
 					}
 				} else if (ch == '\n' && fSource[fScannerPosition] == '{' && fSource[fScannerPosition + 1] == '|') {
 					// assume nested table
-					count++;
+					nestedWikiTableCounter++;
 				} else if (ch == '\n') {
-					oldPosition = fScannerPosition;
+					int oldPosition = fScannerPosition;
 					ch = fSource[fScannerPosition++];
 					// ignore SPACES and TABs at the beginning of the line
 					while (ch == ' ' || ch == '\t') {
 						ch = fSource[fScannerPosition++];
 					}
 					if (ch == '|' && fSource[fScannerPosition] == '}') {
-						count--;
-						if (count == 0) {
+						nestedWikiTableCounter--;
+						if (nestedWikiTableCounter == 0) {
 							return fScannerPosition + 1;
 						}
 					}
