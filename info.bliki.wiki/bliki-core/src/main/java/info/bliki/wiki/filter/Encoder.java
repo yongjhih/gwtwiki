@@ -1,8 +1,8 @@
 package info.bliki.wiki.filter;
 
-import java.io.IOException;
-
 import info.bliki.htmlcleaner.Utils;
+
+import java.io.IOException;
 
 /**
  * Some helper methods for encoding strings to HTML, URL or local files system
@@ -342,7 +342,9 @@ public class Encoder {
 	 * Encode name for local file system
 	 * 
 	 */
-	public static String encodeTitleLocalUrl(String wikiTitle) {
+	public static String encodeTitleLocalUrl(final String title) {
+		String wikiTitle = title;
+		int slashIndex = title.lastIndexOf('/');
 		int len = wikiTitle.length();
 		if (len == 0) {
 			return "";
@@ -367,6 +369,10 @@ public class Encoder {
 			if (whiteSpace) {
 				whiteSpace = false;
 				Encoder.encodeLocalUrl(buffer, Character.toUpperCase(ch));
+				continue;
+			}
+			if (ch == '.' && slashIndex > i) {
+				buffer.append(hex2[ch]);
 				continue;
 			}
 			if (colon) {

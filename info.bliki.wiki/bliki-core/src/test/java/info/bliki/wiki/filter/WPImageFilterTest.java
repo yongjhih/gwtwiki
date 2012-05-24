@@ -12,6 +12,14 @@ public class WPImageFilterTest extends FilterTestSupport {
 		return new TestSuite(WPImageFilterTest.class);
 	}
 
+	public void testEncoder001() {
+		assertEquals("/hello/'2E'2E/world.html", Encoder.encodeTitleLocalUrl("/hello/../world.html"));
+ 	}
+	
+	public void testEncoder002() {
+		assertEquals("/hello/you'2Ethis'2Eis'2E'2Ean'2E'2E/exa..mple.html", Encoder.encodeTitleLocalUrl("/hello/you.this.is..an../exa..mple.html"));
+ 	}
+	
 	public void testImage17() {
 		assertEquals("Test_'26_ToDo.jpg", Encoder.encodeTitleLocalUrl("Test & ToDo.jpg"));
 		assertEquals(
