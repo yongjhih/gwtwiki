@@ -5,6 +5,7 @@ import info.bliki.wiki.filter.Encoder;
 import info.bliki.wiki.impl.APIWikiModel;
 
 import java.io.IOException;
+import java.util.Locale;
 
 /**
  * Test to load a page, images and templates from en.wikipedia.org and render it
@@ -17,10 +18,10 @@ public class HTMLCreatorExample {
 	}
 
 	public static void testWikipediaENAPI(String title) {
-		testWikipediaENAPI(title, "http://en.wikipedia.org/w/api.php");
+		testWikipediaENAPI(title, "http://en.wikipedia.org/w/api.php", Locale.ENGLISH);
 	}
 
-	public static void testWikipediaENAPI(String title, String apiLink) {
+	public static void testWikipediaENAPI(String title, String apiLink, Locale locale) {
 		String[] listOfTitleStrings = { title };
 		String titleURL = Encoder.encodeTitleLocalUrl(title);
 		User user = new User("", "", apiLink);
@@ -38,7 +39,7 @@ public class HTMLCreatorExample {
 
 		try {
 			db = new WikiDB(mainDirectory, databaseSubdirectory);
-			APIWikiModel wikiModel = new APIWikiModel(user, db, "${image}", "${title}", imageDirectory);
+			APIWikiModel wikiModel = new APIWikiModel(user, db, locale, "${image}", "${title}", imageDirectory);
 			DocumentCreator creator = new DocumentCreator(wikiModel, user, listOfTitleStrings);
 			// create header and CSS information
 			creator.setHeader(HTMLConstants.HTML_HEADER1 + HTMLConstants.CSS_MAIN_STYLE + HTMLConstants.CSS_SCREEN_STYLE
@@ -46,7 +47,7 @@ public class HTMLCreatorExample {
 			creator.setFooter(HTMLConstants.HTML_FOOTER);
 			wikiModel.setUp();
 			creator.renderToFile(generatedHTMLFilename);
-
+			System.out.println("Created file: " + generatedHTMLFilename);
 		} catch (IOException e) {
 			e.printStackTrace();
 		} catch (Exception e1) {
@@ -87,11 +88,11 @@ public class HTMLCreatorExample {
 	}
 
 	public static void testCreator007() {
-		testWikipediaENAPI("JavaScript", "http://de.wikipedia.org/w/api.php");
+		testWikipediaENAPI("JavaScript", "http://de.wikipedia.org/w/api.php", Locale.GERMAN);
 	}
 
 	public static void testCreator008() {
-		testWikipediaENAPI("libero", "http://en.wiktionary.org/w/api.php");
+		testWikipediaENAPI("libero", "http://en.wiktionary.org/w/api.php", Locale.ENGLISH);
 	}
 
 	public static void testCreator009() {
@@ -99,17 +100,22 @@ public class HTMLCreatorExample {
 	}
 
 	public static void testCreator010() {
-		testWikipediaENAPI("HTTP-Statuscode", "http://de.wikipedia.org/w/api.php");
+		testWikipediaENAPI("HTTP-Statuscode", "http://de.wikipedia.org/w/api.php", Locale.GERMAN);
 	}
 
 	public static void testCreator011() {
-		testWikipediaENAPI("Main Page", "http://simple.wikipedia.org/w/api.php");
+		testWikipediaENAPI("Main Page", "http://simple.wikipedia.org/w/api.php", Locale.ENGLISH);
 	}
-	
-		public static void testCreator012() {
-		testWikipediaENAPI("Grafenwöhr", "http://bar.wikipedia.org/w/api.php");
+
+	public static void testCreator012() {
+		testWikipediaENAPI("Grafenwöhr", "http://bar.wikipedia.org/w/api.php", Locale.GERMAN);
 	}
+
+	public static void testCreator013() {
+		testWikipediaENAPI("Wikipedia:Hauptseite/Artikel_des_Tages/Montag", "http://de.wikipedia.org/w/api.php", Locale.GERMAN);
+	}
+
 	public static void main(String[] args) {
-		testCreator001();
+		testCreator013();
 	}
 }

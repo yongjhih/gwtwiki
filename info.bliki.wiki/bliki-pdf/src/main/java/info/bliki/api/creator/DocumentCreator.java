@@ -115,6 +115,10 @@ public class DocumentCreator {
 	public void renderToFile(ITextConverter converter, String filename)
 			throws IOException {
 		File file = new File(filename);
+		File parent = file.getParentFile();
+		if (parent != null && !parent.exists()) {
+			parent.mkdirs();
+		}
 		Writer fw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file), "UTF-8"));
 		try {
 			render(converter, fw);
