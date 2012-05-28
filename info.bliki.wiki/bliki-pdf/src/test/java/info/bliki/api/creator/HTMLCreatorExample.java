@@ -158,7 +158,7 @@ public class HTMLCreatorExample {
 	}
 
 	public static void testCreateText014() {
-		testWikipediaText("This is a '''hello world''' example.", "Hello World", Locale.GERMAN);
+		testWikipediaText("This is a '''hello world''' example.", "Hello World", Locale.ENGLISH);
 	}
 
 	public static void main(String[] args) {
