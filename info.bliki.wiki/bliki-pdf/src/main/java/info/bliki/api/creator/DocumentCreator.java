@@ -40,8 +40,7 @@ public class DocumentCreator {
 
 	private String fFooter;
 
-	public DocumentCreator(IWikiModel model, User user,
-			String[] listOfTitleStrings) {
+	public DocumentCreator(IWikiModel model, User user, String[] listOfTitleStrings) {
 		fListOfTitleStrings = listOfTitleStrings;
 		fUser = user;
 		fModel = model;
@@ -58,16 +57,15 @@ public class DocumentCreator {
 	 * Render the given Wikipedia texts into a string for a given converter
 	 * 
 	 * @param converter
-	 *            a text converter. <b>Note</b> the converter may be
-	 *            <code>null</code>, if you only would like to analyze the raw
-	 *            wiki text and don't need to convert. This speeds up the
-	 *            parsing process.
+	 *          a text converter. <b>Note</b> the converter may be
+	 *          <code>null</code>, if you only would like to analyze the raw wiki
+	 *          text and don't need to convert. This speeds up the parsing
+	 *          process.
 	 * @return <code>null</code> if an IOException occurs or
 	 *         <code>converter==null</code>
 	 * @return
 	 */
-	public void render(ITextConverter converter, Appendable appendable)
-			throws IOException {
+	public void render(ITextConverter converter, Appendable appendable) throws IOException {
 		if (fListOfPages == null) {
 			readPages();
 		}
@@ -84,6 +82,32 @@ public class DocumentCreator {
 			}
 			if (fFooter != null) {
 				appendable.append(fFooter);
+			}
+		}
+	}
+
+	public void renderToFile(String rawWikiText, String title, ITextConverter converter, String filename) throws IOException {
+		if (rawWikiText != null) {
+			File file = new File(filename);
+			File parent = file.getParentFile();
+			if (parent != null && !parent.exists()) {
+				parent.mkdirs();
+			}
+			Writer fw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file), "UTF-8"));
+			try {
+				if (fHeader != null) {
+					fw.append(fHeader);
+				}
+
+				fModel.setPageName(title);
+				String htmlText = fModel.render(converter, rawWikiText, false);
+				fw.append(htmlText);
+
+				if (fFooter != null) {
+					fw.append(fFooter);
+				}
+			} finally {
+				fw.close();
 			}
 		}
 	}
@@ -108,12 +132,10 @@ public class DocumentCreator {
 	}
 
 	/**
-	 * Render the given Wikipedia texts into an HTML file for the given
-	 * converter.
+	 * Render the given Wikipedia texts into an HTML file for the given converter.
 	 * 
 	 */
-	public void renderToFile(ITextConverter converter, String filename)
-			throws IOException {
+	public void renderToFile(ITextConverter converter, String filename) throws IOException {
 		File file = new File(filename);
 		File parent = file.getParentFile();
 		if (parent != null && !parent.exists()) {
@@ -123,7 +145,7 @@ public class DocumentCreator {
 		try {
 			render(converter, fw);
 		} finally {
-            fw.close();
+			fw.close();
 		}
 	}
 
@@ -139,15 +161,14 @@ public class DocumentCreator {
 	 * Render the given Wikipedia texts into a PDF file.
 	 * 
 	 * @param baseDirectoryName
-	 *            the base directory, where all files should be stored
+	 *          the base directory, where all files should be stored
 	 * @param filename
-	 *            the filename relative to the baseDirectory
+	 *          the filename relative to the baseDirectory
 	 * @param cssStyle
-	 *            CSS styles which should be used for rendering the PDF file
+	 *          CSS styles which should be used for rendering the PDF file
 	 * @throws IOException
 	 */
-	public void renderPDFToFile(String baseDirectoryName, String filename,
-			String cssStyle) throws IOException {
+	public void renderPDFToFile(String baseDirectoryName, String filename, String cssStyle) throws IOException {
 		StringBuffer buffer = new StringBuffer();
 		renderPDF(buffer);
 		String renderedXHTML = buffer.toString();
@@ -156,9 +177,8 @@ public class DocumentCreator {
 		try {
 			URL url = baseDirectory.toURI().toURL();
 			PDFGenerator gen = new PDFGenerator(url);
-			gen.create(baseDirectoryName + '/' + filename, renderedXHTML,
-					PDFGenerator.HEADER_TEMPLATE, PDFGenerator.FOOTER,
-					"Big Test", cssStyle);
+			gen.create(baseDirectoryName + '/' + filename, renderedXHTML, PDFGenerator.HEADER_TEMPLATE, PDFGenerator.FOOTER, "Big Test",
+					cssStyle);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

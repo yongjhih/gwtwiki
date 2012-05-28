@@ -2,6 +2,7 @@ package info.bliki.api.creator;
 
 import info.bliki.api.User;
 import info.bliki.wiki.filter.Encoder;
+import info.bliki.wiki.filter.HTMLConverter;
 import info.bliki.wiki.impl.APIWikiModel;
 
 import java.io.IOException;
@@ -19,6 +20,47 @@ public class HTMLCreatorExample {
 
 	public static void testWikipediaENAPI(String title) {
 		testWikipediaENAPI(title, "http://en.wikipedia.org/w/api.php", Locale.ENGLISH);
+	}
+
+	public static void testWikipediaText(String rawWikiText, String title, Locale locale) {
+		String[] listOfTitleStrings = { title };
+		String titleURL = Encoder.encodeTitleLocalUrl(title);
+		User user = new User("", "", null);
+		String mainDirectory = "c:/temp/";
+		// the following subdirectory should not exist if you would like to create a
+		// new database
+		String databaseSubdirectory = "WikiDB";
+		// the following directory must exist for image downloads
+		String imageDirectory = "c:/temp/WikiImages";
+		// the generated HTML will be stored in this file name:
+		String generatedHTMLFilename = mainDirectory + titleURL + ".html";
+
+		WikiDB db = null;
+
+		try {
+			db = new WikiDB(mainDirectory, databaseSubdirectory);
+			APIWikiModel wikiModel = new APIWikiModel(user, db, locale, "${image}", "${title}", imageDirectory);
+			DocumentCreator creator = new DocumentCreator(wikiModel, user, listOfTitleStrings);
+			// create header and CSS information
+			creator.setHeader(HTMLConstants.HTML_HEADER1 + HTMLConstants.CSS_MAIN_STYLE + HTMLConstants.CSS_SCREEN_STYLE
+					+ HTMLConstants.HTML_HEADER2);
+			creator.setFooter(HTMLConstants.HTML_FOOTER);
+			wikiModel.setUp();
+			creator.renderToFile(rawWikiText, title, new HTMLConverter(), generatedHTMLFilename);
+			System.out.println("Created file: " + generatedHTMLFilename);
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (Exception e1) {
+			e1.printStackTrace();
+		} finally {
+			if (db != null) {
+				try {
+					db.tearDown();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}
 	}
 
 	public static void testWikipediaENAPI(String title, String apiLink, Locale locale) {
@@ -115,7 +157,11 @@ public class HTMLCreatorExample {
 		testWikipediaENAPI("Wikipedia:Hauptseite/Artikel_des_Tages/Montag", "http://de.wikipedia.org/w/api.php", Locale.GERMAN);
 	}
 
+	public static void testCreateText014() {
+		testWikipediaText("This is a '''hello world''' example.", "Hello World", Locale.GERMAN);
+	}
+
 	public static void main(String[] args) {
-		testCreator013();
+		testCreateText014();
 	}
 }
