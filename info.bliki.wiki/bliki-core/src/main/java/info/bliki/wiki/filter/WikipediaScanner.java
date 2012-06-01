@@ -94,9 +94,16 @@ public class WikipediaScanner {
 				ch = fSource[fScannerPosition++];
 				switch (ch) {
 				case '[':
-					int position = findNestedEnd(fSource, '[', ']', fScannerPosition);
+					int position = findNestedEndSingle(fSource, '[', ']', fScannerPosition);
 					if (position >= 0) {
 						fScannerPosition = position;
+						continue;
+					}
+					break;
+				case '{':
+					int cposition = findNestedEndSingle(fSource, '{', '}', fScannerPosition);
+					if (cposition >= 0) {
+						fScannerPosition = cposition;
 						continue;
 					}
 					break;
@@ -109,7 +116,7 @@ public class WikipediaScanner {
 					switch (ch) {
 					case '|': // "\n |"
 						if (cell != null) {
-							cell.createTagStack(table, fStringSource, fWikiModel, fScannerPosition - 2);
+							cell.createTagStack(table, fSource, fWikiModel, fScannerPosition - 2);
 							cell = null;
 						}
 
@@ -120,7 +127,7 @@ public class WikipediaScanner {
 							cells = new ArrayList<WPCell>();
 							row = new WPRow(cells);
 							startPos = fScannerPosition;
-							nextNewline();
+							nextNewlineCell(cell);
 							row.setParams(fStringSource.substring(startPos, fScannerPosition));
 							break;
 						case '+': // new row - "\n|+"
@@ -131,8 +138,8 @@ public class WikipediaScanner {
 							cell = new WPCell(fScannerPosition);
 							cell.setType(WPCell.CAPTION);
 							cells.add(cell);
-							nextNewline();
-							cell.createTagStack(table, fStringSource, fWikiModel, fScannerPosition);
+							nextNewlineCell(cell);
+							cell.createTagStack(table, fSource, fWikiModel, fScannerPosition);
 							cell = null;
 
 							addTableRow(table, row);
@@ -151,7 +158,7 @@ public class WikipediaScanner {
 						break;
 					case '!': // "\n !"
 						if (cell != null) {
-							cell.createTagStack(table, fStringSource, fWikiModel, fScannerPosition - 2);
+							cell.createTagStack(table, fSource, fWikiModel, fScannerPosition - 2);
 							cell = null;
 						}
 						ch = fSource[fScannerPosition++];
@@ -175,20 +182,23 @@ public class WikipediaScanner {
 					ch = fSource[fScannerPosition++];
 					if (ch == '|') {
 						if (cell != null) {
-							cell.createTagStack(table, fStringSource, fWikiModel, fScannerPosition - 2);
+							cell.createTagStack(table, fSource, fWikiModel, fScannerPosition - 2);
 							cell = null;
 						}
 						cell = new WPCell(fScannerPosition);
 						cells.add(cell);
 					} else {
 						fScannerPosition--;
+						if (cell != null) {
+							cell.setAttributesStartPos(fScannerPosition - 1);
+						}
 					}
 					break;
 				case '!':
 					ch = fSource[fScannerPosition++];
 					if (ch == '!') {
 						if (cell != null) {
-							cell.createTagStack(table, fStringSource, fWikiModel, fScannerPosition - 2);
+							cell.createTagStack(table, fSource, fWikiModel, fScannerPosition - 2);
 							cell = null;
 						}
 						cell = new WPCell(fScannerPosition);
@@ -210,7 +220,7 @@ public class WikipediaScanner {
 			// ...
 			fScannerPosition = fSource.length;
 			if (cell != null) {
-				cell.createTagStack(table, fStringSource, fWikiModel, fScannerPosition);
+				cell.createTagStack(table, fSource, fWikiModel, fScannerPosition);
 				cell = null;
 			}
 			if (table != null && row != null && row.size() > 0) {
@@ -266,7 +276,7 @@ public class WikipediaScanner {
 					ch = fSource[fScannerPosition++];
 					if (ch == '|') {
 						if (cell != null) {
-							cell.createTagStack(table, fStringSource, fWikiModel, fScannerPosition - 2);
+							cell.createTagStack(table, fSource, fWikiModel, fScannerPosition - 2);
 							cells.add(cell);
 						}
 						cell = new WPCell(fScannerPosition);
@@ -280,7 +290,7 @@ public class WikipediaScanner {
 			// ...
 			fScannerPosition = fSource.length;
 			if (cell != null) {
-				cell.createTagStack(table, fStringSource, fWikiModel, fScannerPosition);
+				cell.createTagStack(table, fSource, fWikiModel, fScannerPosition);
 				cells.add(cell);
 			}
 			if (table != null && row != null && row.size() > 0) {
@@ -439,6 +449,31 @@ public class WikipediaScanner {
 		}
 	}
 
+	public int nextNewlineCell(WPCell cell) {
+		char ch;
+		while (true) {
+			ch = fSource[fScannerPosition++];
+			if (ch == '\n') {
+				return --fScannerPosition;
+			}
+			if (ch == '|') {
+				if (cell != null) {
+					cell.setAttributesStartPos(fScannerPosition - 1);
+				}
+			} else if (ch == '[') {
+				int position = findNestedEndSingle(fSource, '[', ']', fScannerPosition);
+				if (position >= 0) {
+					fScannerPosition = position;
+				}
+			} else if (ch == '{') {
+				int cposition = findNestedEndSingle(fSource, '{', '}', fScannerPosition);
+				if (cposition >= 0) {
+					fScannerPosition = cposition;
+				}
+			}
+		}
+	}
+
 	/**
 	 * Get the offset position behind the next closing HTML comment tag (--&gt;).
 	 * 
@@ -525,66 +560,6 @@ public class WikipediaScanner {
 					}
 					fScannerPosition = oldPosition;
 				}
-			}
-		} catch (IndexOutOfBoundsException e) {
-			// ..
-		}
-		return -1;
-	}
-
-	/**
-	 * Scan the attributes of a wiki table cell
-	 * 
-	 * @return
-	 */
-	public int indexOfAttributes() {
-		try {
-			char ch = fSource[fScannerPosition];
-			while (true) {
-				// TODO scan for NOWIKI and HTML comments
-
-				if (ch == '[') {
-					// scan for Wiki links, which could contain '|' character
-					int countBrackets = 1;
-					fScannerPosition++;
-					while (countBrackets > 0) {
-						ch = fSource[fScannerPosition++];
-						if (ch == '[') {
-							++countBrackets;
-						} else if (ch == ']') {
-							--countBrackets;
-						}
-					}
-					ch = fSource[fScannerPosition];
-					continue;
-				} else if (ch == '{') {
-					// scan for Wiki templates, which could contain '|' character
-					int countCurlyBrackets = 1;
-					fScannerPosition++;
-					while (countCurlyBrackets > 0) {
-						ch = fSource[fScannerPosition++];
-						if (ch == '{') {
-							++countCurlyBrackets;
-						} else if (ch == '}') {
-							--countCurlyBrackets;
-						}
-					}
-					ch = fSource[fScannerPosition];
-					continue;
-				}
-				if (ch == '|') {
-					if (fSource[fScannerPosition + 1] == '|') {
-						return -1;
-					}
-					return fScannerPosition;
-				}
-				if (fSource[fScannerPosition] == '\n') {
-					return -1;
-				}
-				if (fScannerPosition >= fSource.length) {
-					return -1;
-				}
-				ch = fSource[++fScannerPosition];
 			}
 		} catch (IndexOutOfBoundsException e) {
 			// ..
@@ -826,6 +801,39 @@ public class WikipediaScanner {
 		}
 	}
 
+	/**
+	 * Read until the end of a nested block i.e. something like
+	 * <code>{{{...{...{{  }}...}...}}}</code>
+	 * 
+	 * @param sourceArray
+	 * @param startCh
+	 * @param endChar
+	 * @param startPosition
+	 * @return the position of the nested end charcters or <code>-1</code> if not
+	 *         found
+	 */
+	public static int findNestedEndSingle(final char[] sourceArray, final char startCh, final char endChar, int startPosition) {
+		char ch;
+		int level = 1;
+		int position = startPosition;
+		final int sourceArrayLength = sourceArray.length;
+		try {
+			while (position < sourceArrayLength) {
+				ch = sourceArray[position++];
+				if (ch == startCh) {
+					level++;
+				} else if (ch == endChar) {
+					if (--level == 0) {
+						return position;
+					}
+				}
+			}
+			return -1;
+		} catch (IndexOutOfBoundsException e) {
+			return -1;
+		}
+	}
+
 	public static int findNestedTemplateEnd(final char[] sourceArray, int startPosition) {
 		char ch;
 		int countSingleOpenBraces = 0;
@@ -875,7 +883,8 @@ public class WikipediaScanner {
 				if (ch == '{') {
 					if ((sourceArrayLength > parameterPosition) && sourceArray[parameterPosition] == '{') {
 						parameterPosition++;
-						if ((sourceArrayLength > parameterPosition) && sourceArray[parameterPosition] == '{' && sourceArray[parameterPosition + 1] != '{') {
+						if ((sourceArrayLength > parameterPosition) && sourceArray[parameterPosition] == '{'
+								&& sourceArray[parameterPosition + 1] != '{') {
 							// template parameter beginning
 							parameterPosition++;
 							int[] temp = findNestedParamEnd(sourceArray, parameterPosition);

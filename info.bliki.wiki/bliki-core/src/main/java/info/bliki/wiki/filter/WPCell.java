@@ -30,6 +30,8 @@ public class WPCell {
 
 	int fStartPos;
 
+	int fAttributesStartPos = -1;
+
 	int fEndPos;
 
 	/**
@@ -81,28 +83,22 @@ public class WPCell {
 	 * @param endPos
 	 *          The endPos to set.
 	 */
-	public void createTagStack(WPTable parent, String src, IWikiModel wikiModel, int endPos) {
+	public void createTagStack(WPTable parent, char[] src, IWikiModel wikiModel, int endPos) {
 		fEndPos = endPos;
 		if (fEndPos > fStartPos) {
 			String content;
 			String params = null;
-			WikipediaScanner scan = new WikipediaScanner(src, fStartPos);
-			int index = scan.indexOfAttributes();
-			if (index == (-1) || index >= fEndPos) {
-				content = src.substring(fStartPos, fStartPos + (fEndPos - fStartPos));
-			} else {
-				content = src.substring(index + 1, index + fEndPos - index);
-				params = src.substring(fStartPos, fStartPos + (index - fStartPos));
-			}
+			// WikipediaScanner scan = new WikipediaScanner(src, fStartPos);
 
-			fAttributes = Util.getAttributes(params);
+			// int index = indexOfAttributes(src, fStartPos);
+			if (fAttributesStartPos == (-1) || fAttributesStartPos >= fEndPos) {
+				content = new String(src, fStartPos, fEndPos - fStartPos);
+			} else {
+				content = new String(src, fAttributesStartPos + 1, fEndPos - fAttributesStartPos - 1);
+				params = new String(src, fStartPos, fAttributesStartPos - fStartPos);
+				fAttributes = Util.getAttributes(params);
+			}
 			String rawWikiText = Utils.ltrimNewline(content);
-			// find first newline position
-			// see: http://code.google.com/p/gwtwiki/issues/detail?id=15
-//			int newlineIndex = rawWikiText.indexOf('\n');
-//			if (newlineIndex >= 0) {
-//				rawWikiText = rawWikiText.substring(0, newlineIndex) + "<p>" + rawWikiText.substring(newlineIndex);
-//			}
 
 			AbstractParser parser = wikiModel.createNewInstance(rawWikiText);
 			fStack = parser.parseRecursiveInternal(wikiModel, true, false);
@@ -128,6 +124,16 @@ public class WPCell {
 	 */
 	public void setStartPos(int startPos) {
 		fStartPos = startPos;
+	}
+
+	/**
+	 * @param attributesStartPos
+	 *          the fAttributesStartPos to set
+	 */
+	public void setAttributesStartPos(int attributesStartPos) {
+		if (this.fAttributesStartPos == -1) {
+			this.fAttributesStartPos = attributesStartPos;
+		}
 	}
 
 	public void renderHTML(ITextConverter converter, Appendable buf, IWikiModel wikiModel) throws IOException {
