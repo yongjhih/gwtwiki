@@ -35,6 +35,12 @@ public class ToHtmlTest extends FilterTestSupport {
 			return;
 		} catch (IOException e) {
 			e.printStackTrace();
+		} finally {
+			try {
+				writer.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
 		fail("test002()");
 	}
