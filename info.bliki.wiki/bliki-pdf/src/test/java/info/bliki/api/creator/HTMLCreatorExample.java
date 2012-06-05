@@ -18,8 +18,8 @@ public class HTMLCreatorExample {
 		super();
 	}
 
-	public static void testWikipediaENAPI(String title) {
-		testWikipediaENAPI(title, "http://en.wikipedia.org/w/api.php", Locale.ENGLISH);
+	public static String testWikipediaENAPI(String title) {
+		return testWikipediaENAPI(title, "http://en.wikipedia.org/w/api.php", Locale.ENGLISH);
 	}
 
 	public static void testWikipediaText(String rawWikiText, String title, Locale locale) {
@@ -63,7 +63,23 @@ public class HTMLCreatorExample {
 		}
 	}
 
-	public static void testWikipediaENAPI(String title, String apiLink, Locale locale) {
+	/**
+	 * Get the wiki text throuh the Wikipedia API (i.e. <a
+	 * href="http://en.wikipedia.org/w/api.php"
+	 * >http://en.wikipedia.org/w/api.php</a> for the english Wikipedia) and write
+	 * the generated HTML file to the<code>c:/temp/</code> Windows directory.
+	 * 
+	 * @param title
+	 *          the wiki article's title
+	 * @param apiLink
+	 *          the link to the Wikipedia API
+	 * @param locale
+	 *          the locale (i.e. for english use
+	 *          <code>java.util.Locale.ENGLISH</code>)
+	 * @return the redirected link title if a <code>#REDIRECT [[...]]</code> link
+	 *         is set in the wiki text; <code>null</code> otherwise
+	 */
+	public static String testWikipediaENAPI(String title, String apiLink, Locale locale) {
 		String[] listOfTitleStrings = { title };
 		String titleURL = Encoder.encodeTitleLocalUrl(title);
 		User user = new User("", "", apiLink);
@@ -90,6 +106,7 @@ public class HTMLCreatorExample {
 			wikiModel.setUp();
 			creator.renderToFile(generatedHTMLFilename);
 			System.out.println("Created file: " + generatedHTMLFilename);
+			return wikiModel.getRedirectLink();
 		} catch (IOException e) {
 			e.printStackTrace();
 		} catch (Exception e1) {
@@ -103,6 +120,7 @@ public class HTMLCreatorExample {
 				}
 			}
 		}
+		return null;
 	}
 
 	public static void testCreator001() {
@@ -161,7 +179,15 @@ public class HTMLCreatorExample {
 		testWikipediaText("This is a '''hello world''' example.", "Hello World", Locale.ENGLISH);
 	}
 
+	public static void testCreateText015() {
+		String redirectedLink = testWikipediaENAPI("Manchester United Football Club");
+		if (redirectedLink != null) {
+			// see http://code.google.com/p/gwtwiki/issues/detail?id=38
+			testWikipediaENAPI(redirectedLink);
+		}
+	}
+
 	public static void main(String[] args) {
-		testCreateText014();
+		testCreateText015();
 	}
 }
