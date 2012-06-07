@@ -85,17 +85,6 @@ public class DocumentCreator {
 		}
 	}
 
-	public void render(String rawWikiText, String title, ITextConverter converter, Appendable appendable) throws IOException {
-		if (fHeader != null) {
-			appendable.append(fHeader);
-		}
-		fModel.setPageName(title);
-		appendable.append(fModel.render(converter, rawWikiText, false));
-		if (fFooter != null) {
-			appendable.append(fFooter);
-		}
-	}
-
 	public void renderToFile(String rawWikiText, String title, ITextConverter converter, String filename) throws IOException {
 		if (rawWikiText != null) {
 			File file = new File(filename);
