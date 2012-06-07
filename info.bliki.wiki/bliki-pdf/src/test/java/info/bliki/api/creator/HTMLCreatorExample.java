@@ -14,18 +14,30 @@ import java.util.Locale;
  * which blows up the size of the HTML file.
  */
 public class HTMLCreatorExample {
+
+	private static String TEXT_ISSUE_96 = "{{Shortcut|WP:ADTDO}}{{Wikipedia:Hauptseite/Artikel des Tages/Bearbeitungshinweise}}\n"
+			+ "<onlyinclude> {{AdT-Vorschlag\n"
+			+ "| DATUM = 28.07.2011\n"
+			+ "| LEMMA = Bhaktapur\n"
+			+ "| BILD = Datei:Nyatapole2.jpg \n"
+			+ "| BILDBESCHREIBUNG = Nyata-Tempel, 1708 erbaut, dreißig Meter hoch und der hinduistischen Gottheit Lakshmi geweiht \n"
+			+ "| BILDGROESSE = 116px \n"
+			+ "| BILDUMRANDUNG = \n"
+			+ "| TEASERTEXT = '''[[Bhaktapur]]''' (nepali ??????? ‚Stadt der Frommen‘) oder ''Khwopa'' (newari ???? ''Khvapa'') ist neben Kathmandu und Lalitpur mit über 78.000 Einwohnern die dritte und kleinste der Königsstädte des Kathmandutals in Nepal. Bhaktapur liegt am Fluss Hanumante und wie Kathmandu an einer alten Handelsroute nach Tibet, was für den Reichtum der Stadt verantwortlich war. Das Bild der Stadt wird bestimmt von der Landwirtschaft, der Töpferkunst und besonders von einer lebendigen traditionellen Musikerszene. Wegen seiner über 150 Musik- und 100 Kulturgruppen wird Bhaktapur als Hauptstadt der darstellenden Künste Nepals bezeichnet. Die Einwohner von Bhaktapur gehören ethnisch zu den Newar und zeichnen sich durch einen hohen Anteil von 60 Prozent an Bauern der Jyapu-Kaste aus. Die Bewohner sind zu fast 90 Prozent Hindus und zu zehn Prozent Buddhisten. Vom 14. Jahrhundert bis zur zweiten Hälfte des 18. Jahrhunderts war Bhaktapur Hauptstadt des Malla-Reiches. Aus dieser Zeit stammen viele der 172 Tempelanlagen, der 32 künstlichen Teiche und der mit Holzreliefs verzierten Wohnhäuser. Zwar verursachte ein großes Erdbeben 1934 viele Schäden an den Gebäuden, doch konnten diese wieder so instand gesetzt werden, dass Bhaktapurs architektonisches Erbe bereits seit 1979 auf der UNESCO-Liste des Weltkulturerbes steht.\n"
+			+ "}} </onlyinclude>\n" + "[[Kategorie:Wikipedia:Hauptseite/Artikel des Tages|Donnerstag]]";
+
 	public HTMLCreatorExample() {
-		super();
+		super(); 
 	}
 
 	public static String testWikipediaENAPI(String title) {
 		return testWikipediaENAPI(title, "http://en.wikipedia.org/w/api.php", Locale.ENGLISH);
 	}
 
-	public static void testWikipediaText(String rawWikiText, String title, Locale locale) {
+	public static void testWikipediaText(String rawWikiText, String title, String apiLink, Locale locale) {
 		String[] listOfTitleStrings = { title };
 		String titleURL = Encoder.encodeTitleLocalUrl(title);
-		User user = new User("", "", null);
+		User user = new User("", "", apiLink);
 		String mainDirectory = "c:/temp/";
 		// the following subdirectory should not exist if you would like to create a
 		// new database
@@ -176,7 +188,7 @@ public class HTMLCreatorExample {
 	}
 
 	public static void testCreateText014() {
-		testWikipediaText("This is a '''hello world''' example.", "Hello World", Locale.ENGLISH);
+		testWikipediaText(TEXT_ISSUE_96, "Wikipedia:Hauptseite/Artikel des Tages/Donnerstag", "http://de.wikipedia.org/w/api.php", Locale.GERMAN);
 	}
 
 	public static void testCreateText015() {
@@ -188,6 +200,6 @@ public class HTMLCreatorExample {
 	}
 
 	public static void main(String[] args) {
-		testCreateText015();
+		testCreateText014();
 	}
 }
