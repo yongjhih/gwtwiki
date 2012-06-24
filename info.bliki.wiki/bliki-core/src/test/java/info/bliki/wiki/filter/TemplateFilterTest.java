@@ -194,8 +194,7 @@ public class TemplateFilterTest extends FilterTestSupport {
 						+ "<th>Internet Explorer </th>\n"
 						+ "<th>Opera </th>\n"
 						+ "<th>Safari </th>\n"
-						+ "<th>Google Chrome</th></tr></table></div>\n"
-						+ "<pre /><ol class=\"references\">\n"
+						+ "<th>Google Chrome</th></tr></table></div><ol class=\"references\">\n"
 						+ "<li id=\"_note-1\"><b><a href=\"#_ref-1\" title=\"\">&#8593;</a></b> John Resig. <i><a class=\"externallink\" href=\"http://ejohn.org/blog/versions-of-javascript\" rel=\"nofollow\" title=\"http://ejohn.org/blog/versions-of-javascript\">Versions of JavaScript</a></i>. Ejohn.org. Abgerufen am .</li></ol>",
 				wikiModel
 						.render("{| class=\"wikitable\"\n"
@@ -340,8 +339,7 @@ public class TemplateFilterTest extends FilterTestSupport {
 				"</th>\n" + 
 				"</tr>\n" + 
 				"<tr style=\"height:2px;\">\n" + 
-				"\n" + 
-				"<td />\n" + 
+				"\n" +  
 				"</tr>\n" + 
 				"<tr>\n" + 
 				"\n" + 
@@ -730,29 +728,29 @@ public class TemplateFilterTest extends FilterTestSupport {
 
 	public void testIssue77_002() {
 		assertEquals(
-				"\n"
-						+ "<div style=\"page-break-inside: avoid;\">\n"
-						+ "<table cellspacing=\"6\" style=\"width: 100%; height: auto; border: 1px solid #88A; background-color: #ACF; vertical-align: top; margin: 0em 0em 0.5em 0em; border-spacing: 0.6em;\">\n"
-						+ "<tr>\n"
-						+ "<td colspan=\"2\" style=\"width: 100%; vertical-align:top; color:#000; border: 3px double #AAA; background-color: #ffffff; padding: 0.5em; margin: 0em;\">\n"
-						+ "\n"
-						+ "<div style=\"page-break-inside: avoid;\">\n"
-						+ "<table style=\"vertical-align: top; margin: 0em; width: 100% !important; width: auto; display: table !important; display: inline; background-color: transparent;\">\n"
-						+ "<tr>\n"
-						+ "<th colspan=\"2\" style=\"background:#F0F0F0; margin: 0em; height: 1em; font-weight:bold; border:1px solid #AAA; text-align:left; color:#000;\">\n"
-						+ "<div style=\"float:right;\" /><h1 style=\"text-align: left; font-size: 1.2em; border: none; margin: 0; padding: 1.5px 0 2px 4px;\"><b>Knowledge groups</b></h1></th></tr>\n"
-						+ "<tr>\n"
-						+ "<td>\n"
-						+ "TEST1</td></tr></table></div></td></tr>\n"
-						+ "<tr>\n"
-						+ "<td colspan=\"2\" style=\"width: 100%; vertical-align:top; color:#000; border: 3px double #AAA; background-color: #ffffff; padding: 0.5em; margin: 0em;\">\n"
-						+ "\n"
-						+ "<div style=\"page-break-inside: avoid;\">\n"
-						+ "<table style=\"vertical-align: top; margin: 0em; width: 100% !important; width: auto; display: table !important; display: inline; background-color: transparent;\">\n"
-						+ "<tr>\n"
-						+ "<th colspan=\"2\" style=\"background:#F0F0F0; margin: 0em; height: 1em; font-weight:bold; border:1px solid #AAA; text-align:left; color:#000;\">\n"
-						+ "<div style=\"float:right;\" /><h1 style=\"text-align: left; font-size: 1.2em; border: none; margin: 0; padding: 1.5px 0 2px 4px;\"><b>Sister projects</b></h1></th></tr>\n"
-						+ "<tr>\n" + "<td>\n" + "TEST2</td></tr></table></div></td></tr></table></div>",
+				"\n" + 
+				"<div style=\"page-break-inside: avoid;\">\n" + 
+				"<table cellspacing=\"6\" style=\"width: 100%; height: auto; border: 1px solid #88A; background-color: #ACF; vertical-align: top; margin: 0em 0em 0.5em 0em; border-spacing: 0.6em;\">\n" + 
+				"<tr>\n" + 
+				"<td colspan=\"2\" style=\"width: 100%; vertical-align:top; color:#000; border: 3px double #AAA; background-color: #ffffff; padding: 0.5em; margin: 0em;\">\n" + 
+				"\n" + 
+				"<div style=\"page-break-inside: avoid;\">\n" + 
+				"<table style=\"vertical-align: top; margin: 0em; width: 100% !important; width: auto; display: table !important; display: inline; background-color: transparent;\">\n" + 
+				"<tr>\n" + 
+				"<th colspan=\"2\" style=\"background:#F0F0F0; margin: 0em; height: 1em; font-weight:bold; border:1px solid #AAA; text-align:left; color:#000;\"><h1 style=\"text-align: left; font-size: 1.2em; border: none; margin: 0; padding: 1.5px 0 2px 4px;\"><b>Knowledge groups</b></h1></th></tr>\n" + 
+				"<tr>\n" + 
+				"<td>\n" + 
+				"TEST1</td></tr></table></div></td></tr>\n" + 
+				"<tr>\n" + 
+				"<td colspan=\"2\" style=\"width: 100%; vertical-align:top; color:#000; border: 3px double #AAA; background-color: #ffffff; padding: 0.5em; margin: 0em;\">\n" + 
+				"\n" + 
+				"<div style=\"page-break-inside: avoid;\">\n" + 
+				"<table style=\"vertical-align: top; margin: 0em; width: 100% !important; width: auto; display: table !important; display: inline; background-color: transparent;\">\n" + 
+				"<tr>\n" + 
+				"<th colspan=\"2\" style=\"background:#F0F0F0; margin: 0em; height: 1em; font-weight:bold; border:1px solid #AAA; text-align:left; color:#000;\"><h1 style=\"text-align: left; font-size: 1.2em; border: none; margin: 0; padding: 1.5px 0 2px 4px;\"><b>Sister projects</b></h1></th></tr>\n" + 
+				"<tr>\n" + 
+				"<td>\n" + 
+				"TEST2</td></tr></table></div></td></tr></table></div>",
 				wikiModel
 						.render("{| style=\"width: 100%; height: auto; border: 1px solid #88A; background-color: #ACF; vertical-align: top; margin: 0em 0em 0.5em 0em; border-spacing: 0.6em;\" cellspacing=\"6\"\n"
 								+ "|-\n"

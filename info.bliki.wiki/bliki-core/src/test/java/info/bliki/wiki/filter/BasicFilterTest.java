@@ -17,6 +17,36 @@ public class BasicFilterTest extends FilterTestSupport {
 		return new TestSuite(BasicFilterTest.class);
 	}
 
+	/**
+	 * Issue 98
+	 */
+	public void testEmptyTags001() {
+		assertEquals("\n" + 
+				"<p></p>", wikiModel.render("<s></s>", false));
+	}
+	
+	/**
+	 * Issue 98
+	 */
+	public void testEmptyTags002() {
+		assertEquals("", wikiModel.render("<div class=\"ltrtxt\"></div>", false));
+	}
+	
+	/**
+	 * Issue 98
+	 */
+	public void testEmptyTags003() {
+		assertEquals("\n" + 
+				"<p><br/></p>", wikiModel.render("<br />", false));
+	}
+	
+	/**
+	 * Issue 98
+	 */
+	public void testEmptyTags004() {
+		assertEquals("<hr/>", wikiModel.render("<hr />", false));
+	}
+	
 	public void testTT() {
 		assertEquals("\n" + "<p><b>hosted by:</b><br/></p>", wikiModel.render("'''hosted by:'''<br>", false));
 	}

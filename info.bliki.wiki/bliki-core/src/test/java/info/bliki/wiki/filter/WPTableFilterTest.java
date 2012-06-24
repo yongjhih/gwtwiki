@@ -159,13 +159,23 @@ public class WPTableFilterTest extends FilterTestSupport {
 	}
 
 	public void testBlockquoteTable02() {
-		assertEquals("\n" + "<table>\n" + "\n" + "<tr>\n" + " \n" + "\n" + "<td />\n" + "\n" + "\n" + "</tr>\n" + "\n" + "</table>\n"
+		assertEquals("\n" + "<table>\n" + "\n" + "<tr>\n" + " \n" + "\n" + "\n" + "\n" + "</tr>\n" + "\n" + "</table>\n"
 				+ "", wikiModel.render("<table><tr> \n" + "<td></td>\n\n</tr>\n</table>\n", false));
 	}
 
 	public void testBlockquoteTable03() {
-		assertEquals("\n" + "<table>\n" + "\n" + "<tr>\n" + " \n" + "\n" + "<td />\n" + "</tr>\n" + "<tr>\n" + "\n" + "<td />\n"
-				+ "</tr>\n" + "</table>\n" + "", wikiModel.render("<table><tr> \n" + "<td></td><tr><td></tr></table>\n", false));
+		assertEquals("\n" + 
+				"<table>\n" + 
+				"\n" + 
+				"<tr>\n" + 
+				" \n" + 
+				"\n" + 
+				"</tr>\n" + 
+				"<tr>\n" + 
+				"\n" + 
+				"</tr>\n" + 
+				"</table>\n" + 
+				"" + "", wikiModel.render("<table><tr> \n" + "<td></td><tr><td></tr></table>\n", false));
 	}
 
 	public void testBlockquoteTable04() {
@@ -178,7 +188,6 @@ public class WPTableFilterTest extends FilterTestSupport {
 		assertEquals("\n" + 
 				"<table>\n" + 
 				"\n" + 
-				"<tr />\n" + 
 				"<tr>\n" + 
 				"\n" + 
 				"<td> </td>\n" + 
