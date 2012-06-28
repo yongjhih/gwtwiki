@@ -3,9 +3,9 @@ package info.bliki.wiki.tags.code;
 import java.util.HashMap;
 
 public class SQLCodeFilter extends AbstractCPPBasedCodeFilter implements SourceCodeFormatter {
-	private static final String[] KEYWORDS = { "alter", "and", "blob", "boolean", "character", "clob", "column", "constraint",
-			"create", "default", "delete", "drop", "false", "from", "in", "insert", "integer", "key", "lob", "not", "null", "or",
-			"procedure", "references", "select", "set", "table", "timestamp", "true", "update", "varchar", "where", };
+	private static final String[] KEYWORDS = { "alter", "and", "blob", "boolean", "character", "clob", "column", "comment",
+			"constraint", "create", "default", "delete", "drop", "false", "from", "in", "insert", "integer", "is", "key", "lob", "not", "null",
+			"on", "or", "procedure", "references", "select", "set", "table", "timestamp", "true", "update", "varchar", "where", };
 
 	private static HashMap<String, String> KEYWORD_SET = new HashMap<String, String>();
 

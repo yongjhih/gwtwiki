@@ -50,4 +50,13 @@ public class SQLTest extends FilterTestSupport {
 		assertEquals("SQL test003", expect, result);
 	}
 	
+	public void test004() {
+		final String result = wikiModel.render("<source lang=\"sql\">\n" + 
+				"coMMEnt on column CALCULATEALL_VEHICLE.ACTIVE is 'Flag indicating if the vehicle is active or not';\n" + 
+				"</source>", false);
+		String expect = "<pre class=\"sql\">\n" + 
+				"<span style=\"color:#7F0055; font-weight: bold; \">comment</span> <span style=\"color:#7F0055; font-weight: bold; \">on</span> <span style=\"color:#7F0055; font-weight: bold; \">column</span> CALCULATEALL_VEHICLE.ACTIVE <span style=\"color:#7F0055; font-weight: bold; \">is</span> <span style=\"color:#2A00FF; \">&#39;Flag indicating if the vehicle is active or not&#39;</span>;\n" + 
+				"</pre>";
+		assertEquals("SQL test004", expect, result);
+	}
 }
