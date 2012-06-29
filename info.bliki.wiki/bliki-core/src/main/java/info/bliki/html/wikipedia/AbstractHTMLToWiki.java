@@ -9,8 +9,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.lang.StringUtils;
-
 /**
  * Base class for all HTML to wiki text converters.
  * 
@@ -26,8 +24,7 @@ public class AbstractHTMLToWiki {
 
 	final boolean fNoMSWordTags;
 
-	public AbstractHTMLToWiki(Map<String, HTMLTag> map, boolean noDiv,
-	    boolean noFont, boolean noMSWordTags) {
+	public AbstractHTMLToWiki(Map<String, HTMLTag> map, boolean noDiv, boolean noFont, boolean noMSWordTags) {
 		super();
 		fHashMap = map;
 		fNoDiv = noDiv;
@@ -35,8 +32,7 @@ public class AbstractHTMLToWiki {
 		fNoMSWordTags = noMSWordTags;
 	}
 
-	public AbstractHTMLToWiki(Map<String, HTMLTag> map, boolean noDiv,
-	    boolean noFont) {
+	public AbstractHTMLToWiki(Map<String, HTMLTag> map, boolean noDiv, boolean noFont) {
 		this(map, noDiv, noFont, false);
 	}
 
@@ -67,8 +63,8 @@ public class AbstractHTMLToWiki {
 		if (node instanceof ContentToken) {
 			ContentToken contentToken = (ContentToken) node;
 			String content = contentToken.getContent();
-			// content = content.replaceAll("&nbsp;", " ");
-			content = StringUtils.replace(content, "&nbsp;", " ");
+			content = content.replaceAll("&nbsp;", " ");
+			// content = StringUtils.replace(content, "&nbsp;", " ");
 			wikiText.append(content);
 		} else if (node instanceof TagNode) {
 			TagNode tagNode = (TagNode) node;

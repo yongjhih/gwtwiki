@@ -1,10 +1,5 @@
 package info.bliki.api.query;
 
-import info.bliki.api.Connector;
-import info.bliki.api.ParseData;
-import info.bliki.api.User;
-
-import org.apache.commons.lang.StringEscapeUtils;
 
 /**
  * Tests Parse query.

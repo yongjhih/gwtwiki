@@ -8,7 +8,6 @@ import java.io.StringReader;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
-import org.apache.commons.lang.StringUtils;
 import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
@@ -76,8 +75,8 @@ public class HtmlUtilities {
 		try {
 
 			// &nbsp; screws up the parsing. What a delicate flower SAX is.
-			// html = html.replaceAll("&nbsp;", " ");
-			html = StringUtils.replace(html, "&nbsp;", " ");
+			html = html.replaceAll("&nbsp;", " ");
+			// html = StringUtils.replace(html, "&nbsp;", " ");
 			SAXParser parser = mParserFactory.newSAXParser();
 			XMLReader reader = parser.getXMLReader();
 			reader.setContentHandler(handler);

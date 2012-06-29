@@ -3,8 +3,6 @@ package info.bliki.wiki.filter;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
-import org.apache.commons.lang.StringEscapeUtils;
-
 public class TemplateParserTest extends FilterTestSupport {
 
 	public TemplateParserTest(String name) {
@@ -21,56 +19,40 @@ public class TemplateParserTest extends FilterTestSupport {
 	 * Issue 86
 	 */
 	public void testSortnameDemo001() {
-		assertEquals("<span style=\"display:none;\">Man with One Red Shoe, The</span><span class=\"vcard\"><span class=\"fn\">[[The Man with One Red Shoe|The Man with One Red Shoe]]</span></span>",
+		assertEquals(
+				"<span style=\"display:none;\">Man with One Red Shoe, The</span><span class=\"vcard\"><span class=\"fn\">[[The Man with One Red Shoe|The Man with One Red Shoe]]</span></span>",
 				wikiModel.parseTemplates("{{sortname|The|Man with One Red Shoe}}"));
 	}
-	
+
 	/**
 	 * Issue 86
 	 */
 	public void testNoincludeDemo001() {
-		assertEquals("test1 noincludetext\n" + 
-				"\n" + 
-				"", wikiModel.parseTemplates("test1<noinclude> noincludetext</noinclude>\n" + 
-				"\n" + 
-				"<includeonly>includeonlytext<noinclude> noincludetext</noinclude></includeonly>"));
+		assertEquals("test1 noincludetext\n" + "\n" + "", wikiModel.parseTemplates("test1<noinclude> noincludetext</noinclude>\n"
+				+ "\n" + "<includeonly>includeonlytext<noinclude> noincludetext</noinclude></includeonly>"));
 	}
-	
+
 	/**
 	 * Issue 86
 	 */
 	public void testNoincludeDemo002() {
-		assertEquals("\n" + 
-				"<p>test1 noincludetext</p>\n" + 
-				"", wikiModel.render("test1<noinclude> noincludetext</noinclude>\n" + 
-				"\n" + 
-				"<includeonly>includeonlytext<noinclude> noincludetext</noinclude></includeonly>", true));
+		assertEquals("\n" + "<p>test1 noincludetext</p>\n" + "", wikiModel.render("test1<noinclude> noincludetext</noinclude>\n" + "\n"
+				+ "<includeonly>includeonlytext<noinclude> noincludetext</noinclude></includeonly>", true));
 	}
-	
+
 	/**
 	 * Issue 86
 	 */
 	public void testOnlyicludeDemo001() {
-		assertEquals("abcdefghi<hr>\n" + 
-				";Only active template content is above.\n" + 
-				"\n" + 
-				";The verbatim active code within reads:\n" + 
-				" abc'''&lt;onlyinclude>'''def'''&lt;/onlyinclude>'''ghi'''&lt;includeonly>'''jkl'''&lt;/includeonly>'''\n" + 
-				"\n" + 
-				"If transposed, the only part included will be the string literal <code>def</code>. \n" + 
-				"\n" + 
-				"==Example==\n" + 
-				"Including [[:Help:Template/onlyinclude demo]] yields only:\n" + 
-				" {{:Help:Template/onlyinclude demo}}\n" + 
-				"\n" + 
-				"\n" + 
-				"\n" + 
-				"[[Category:Handbook templates]]\n" + 
-				"[[Category:Template documentation|PAGENAME]]\n" + 
-				"\n" + 
-				"", wikiModel.parseTemplates(WikiTestModel.ONLYINCLUDE_DEMO));
+		assertEquals("abcdefghi<hr>\n" + ";Only active template content is above.\n" + "\n"
+				+ ";The verbatim active code within reads:\n"
+				+ " abc'''&lt;onlyinclude>'''def'''&lt;/onlyinclude>'''ghi'''&lt;includeonly>'''jkl'''&lt;/includeonly>'''\n" + "\n"
+				+ "If transposed, the only part included will be the string literal <code>def</code>. \n" + "\n" + "==Example==\n"
+				+ "Including [[:Help:Template/onlyinclude demo]] yields only:\n" + " {{:Help:Template/onlyinclude demo}}\n" + "\n" + "\n"
+				+ "\n" + "[[Category:Handbook templates]]\n" + "[[Category:Template documentation|PAGENAME]]\n" + "\n" + "", wikiModel
+				.parseTemplates(WikiTestModel.ONLYINCLUDE_DEMO));
 	}
-	 
+
 	/**
 	 * Issue 86
 	 */
@@ -82,60 +64,54 @@ public class TemplateParserTest extends FilterTestSupport {
 	 * Issue 86
 	 */
 	public void testOnlyicludeDemo003() {
-		assertEquals("\n" + 
-				"<p>abcdefghi</p><hr/>\n" + 
-				"\n" + 
-				"<dl>\n" + 
-				"<dt>Only active template content is above.</dt></dl>\n" + 
-				"\n" + 
-				"\n" + 
-				"<dl>\n" + 
-				"<dt>The verbatim active code within reads</dt>\n" + 
-				"<dd></dd></dl>:\n" + 
-				"<pre>\n" + 
-				"abc<b>&#60;onlyinclude&#62;</b>def<b>&#60;/onlyinclude&#62;</b>ghi<b>&#60;includeonly&#62;</b>jkl<b>&#60;/includeonly&#62;</b>\n" + 
-				"</pre>\n" + 
-				"<p>If transposed, the only part included will be the string literal <code>def</code>. </p>\n" + 
-				"<h2><span class=\"mw-headline\" id=\"Example\">Example</span></h2>\n" + 
-				"<p>Including <a href=\"http://www.bliki.info/wiki/Help:Template/onlyinclude_demo\" title=\"Help:Template/onlyinclude demo\">Help:Template/onlyinclude demo</a> yields only:</p>\n" + 
-				"<pre>\n" + 
-				"{{:Help:Template/onlyinclude demo}}\n" + 
-				"</pre>\n" + 
-				"<p>\n" + 
-				"</p>\n" + 
-				"", wikiModel.render(WikiTestModel.ONLYINCLUDE_DEMO, true));
+		assertEquals(
+				"\n"
+						+ "<p>abcdefghi</p><hr/>\n"
+						+ "\n"
+						+ "<dl>\n"
+						+ "<dt>Only active template content is above.</dt></dl>\n"
+						+ "\n"
+						+ "\n"
+						+ "<dl>\n"
+						+ "<dt>The verbatim active code within reads</dt>\n"
+						+ "<dd></dd></dl>:\n"
+						+ "<pre>\n"
+						+ "abc<b>&#60;onlyinclude&#62;</b>def<b>&#60;/onlyinclude&#62;</b>ghi<b>&#60;includeonly&#62;</b>jkl<b>&#60;/includeonly&#62;</b>\n"
+						+ "</pre>\n"
+						+ "<p>If transposed, the only part included will be the string literal <code>def</code>. </p>\n"
+						+ "<h2><span class=\"mw-headline\" id=\"Example\">Example</span></h2>\n"
+						+ "<p>Including <a href=\"http://www.bliki.info/wiki/Help:Template/onlyinclude_demo\" title=\"Help:Template/onlyinclude demo\">Help:Template/onlyinclude demo</a> yields only:</p>\n"
+						+ "<pre>\n" + "{{:Help:Template/onlyinclude demo}}\n" + "</pre>\n" + "<p>\n" + "</p>\n" + "", wikiModel.render(
+						WikiTestModel.ONLYINCLUDE_DEMO, true));
 	}
-	 
+
 	/**
 	 * Issue 86
 	 */
 	public void testOnlyicludeDemo004() {
-		assertEquals("\n" + 
-				"<p>def</p>", wikiModel.render("{{OnlyicludeDemo}}", false));
+		assertEquals("\n" + "<p>def</p>", wikiModel.render("{{OnlyicludeDemo}}", false));
 	}
-	
+
 	/**
 	 * Issue 86
 	 */
 	public void testInclude() {
-		assertEquals("{| class=\"wikitable float-right\" style=\"width:30%; min-width:250px; max-width:400px; font-size:90%; margin-top:0px;\"\n" + 
-				"|--\n" + 
-				"! colspan=\"2\" style=\"background-color:Khaki; font-size:110%;\" | [[Asteroid]]<br/>{{{Name}}}\n" + 
-				"|--\n" + 
-				"|}", wikiModel.parseTemplates("{{TestInclude}}"));
+		assertEquals(
+				"{| class=\"wikitable float-right\" style=\"width:30%; min-width:250px; max-width:400px; font-size:90%; margin-top:0px;\"\n"
+						+ "|--\n" + "! colspan=\"2\" style=\"background-color:Khaki; font-size:110%;\" | [[Asteroid]]<br/>{{{Name}}}\n"
+						+ "|--\n" + "|}", wikiModel.parseTemplates("{{TestInclude}}"));
 	}
 
 	/**
 	 * Issue 86
 	 */
 	public void testInclude2() {
-		assertEquals("{| class=\"wikitable float-right\" style=\"width:30%; min-width:250px; max-width:400px; font-size:90%; margin-top:0px;\"\n" + 
-				"|--\n" + 
-				"! colspan=\"2\" style=\"background-color:Khaki; font-size:110%;\" | [[Asteroid]]<br/>{{{Name}}}\n" + 
-				"|--\n" + 
-				"|}", wikiModel.parseTemplates("{{TestInclude2}}"));
+		assertEquals(
+				"{| class=\"wikitable float-right\" style=\"width:30%; min-width:250px; max-width:400px; font-size:90%; margin-top:0px;\"\n"
+						+ "|--\n" + "! colspan=\"2\" style=\"background-color:Khaki; font-size:110%;\" | [[Asteroid]]<br/>{{{Name}}}\n"
+						+ "|--\n" + "|}", wikiModel.parseTemplates("{{TestInclude2}}"));
 	}
- 
+
 	/**
 	 * Issue 86
 	 */
@@ -199,8 +175,8 @@ public class TemplateParserTest extends FilterTestSupport {
 						+ "<div style=\"font-size: 5px; position: absolute; display: block; left:108px; top:55px; padding:0;\"><div style=\"width:5px;\"><a class=\"internal\" href=\"http://www.bliki.info/wiki/Bild:5px-reddot.svg.png\" title=\"PAGENAME\"><img src=\"http://www.bliki.info/wiki/5px-reddot.svg.png\" alt=\"PAGENAME\" title=\"PAGENAME\" class=\"location-none\" width=\"5\" />\n"
 						+ "</a></div>\n"
 						+ "</div><div style=\"height:175px;width:140px;\"><a class=\"internal\" href=\"http://www.bliki.info/wiki/Bild:140px-Karte_Deutschland.svg.png\" title=\"Deitschlandkartn, Position vo PAGENAME heavoghom\"><img src=\"http://www.bliki.info/wiki/140px-Karte_Deutschland.svg.png\" alt=\"Deitschlandkartn, Position vo PAGENAME heavoghom\" title=\"Deitschlandkartn, Position vo PAGENAME heavoghom\" class=\"location-none\" height=\"175\" width=\"140\" />\n"
-						+ "</a></div>\n" + "</div></td></tr></table></div>", wikiModel
-						.render("{{Lageplan\n" + "|marker     = reddot.svg\n" + "|markersize = 5\n"
+						+ "</a></div>\n" + "</div></td></tr></table></div>", wikiModel.render(
+						"{{Lageplan\n" + "|marker     = reddot.svg\n" + "|markersize = 5\n"
 								+ "|markertext = {{#if: {{{Name|}}} | {{{Name}}} | {{PAGENAME}} }}\n"
 								+ "|pos_y      = {{#expr: (55.1 - {{{lat_deg|52.5}}} - {{{lat_min|0}}} / 60) * 100 / 7.9}}\n"
 								+ "|pos_x      = {{#expr: ({{{lon_deg|13.4}}} + {{{lon_min|0}}} / 60) * 10 - 55}}\n"
@@ -247,8 +223,8 @@ public class TemplateParserTest extends FilterTestSupport {
 						+ "<th colspan=\"2\" style=\"background-color:#ABCDEF; border:1px solid #bbb;\">Basisdatn</th></tr>\n"
 						+ "<tr class=\"hintergrundfarbe2\">\n"
 						+ "<td><b><a href=\"http://www.bliki.info/wiki/Bundesland_(Deutschland)\" title=\"Bundesland (Deutschland)\">Bundesland</a></b>: </td>\n"
-						+ "<td><a href=\"http://www.bliki.info/wiki/\" title=\"\" /></td></tr></table></div>", wikiModel
-						.render("{{Infobox Ort in Deutschland}}", false));
+						+ "<td><a href=\"http://www.bliki.info/wiki/\" title=\"\" /></td></tr></table></div>", wikiModel.render(
+						"{{Infobox Ort in Deutschland}}", false));
 	}
 
 	public void test004() {
@@ -306,7 +282,8 @@ public class TemplateParserTest extends FilterTestSupport {
 						+ "<td><a href=\"http://www.bliki.info/wiki/Bayern\" title=\"Bayern\">Bayern</a></td></tr></table></div>", wikiModel
 						.render("{{Infobox Ort in Deutschland\n" + "|Art               = Stadt\n"
 								+ "|Wappen            = Wappen_Grafenwöhr.png\n" + "|lat_deg           = 49 |lat_min = 43\n"
-								+ "|lon_deg           = 11 |lon_min = 54\n" + "|Lageplan          = \n" + "|Bundesland        = Bayern\n" + "}}", false));
+								+ "|lon_deg           = 11 |lon_min = 54\n" + "|Lageplan          = \n" + "|Bundesland        = Bayern\n" + "}}",
+								false));
 	}
 
 	public void test006() {
@@ -323,19 +300,20 @@ public class TemplateParserTest extends FilterTestSupport {
 						+ "</div><div style=\"height:175px;width:140px;\"><a class=\"internal\" href=\"http://www.bliki.info/wiki/Bild:140px-Karte_Deutschland.svg.png\" title=\"Deitschlandkartn, Position vo PAGENAME heavoghom\"><img src=\"http://www.bliki.info/wiki/140px-Karte_Deutschland.svg.png\" alt=\"Deitschlandkartn, Position vo PAGENAME heavoghom\" title=\"Deitschlandkartn, Position vo PAGENAME heavoghom\" class=\"location-none\" height=\"175\" width=\"140\" />\n"
 						+ "</a></div>\n" + "</div></td></tr></table></div>",
 				wikiModel
-						.render("{{#if: {{{Karte|}}} | [[Bild:{{{Karte}}}|140x175px|Deitschlandkartn, Position vo {{#if: {{{Name|}}} | {{{Name}}} | {{PAGENAME}} }} heavoghobn]] | {{#if: {{{lat_deg|t2}}} |\n"
-								+ "{{Lageplan\n"
-								+ "|marker     = reddot.svg\n"
-								+ "|markersize = 5\n"
-								+ "|markertext = {{#if: {{{Name|}}} | {{{Name}}} | {{PAGENAME}} }}\n"
-								+ "|pos_y      = {{#expr: (55.1 - {{{lat_deg|52.5}}} - {{{lat_min|0}}} / 60) * 100 / 7.9}}\n"
-								+ "|pos_x      = {{#expr: ({{{lon_deg|13.4}}} + {{{lon_min|0}}} / 60) * 10 - 55}}\n"
-								+ "|map        = Karte Deutschland.svg\n"
-								+ "|mapsize_x  = 140\n"
-								+ "|mapsize_y  = 175\n"
-								+ "|maptext    = Deitschlandkartn, Position vo {{#if: {{{Name|}}} | {{{Name}}} | {{PAGENAME}} }} heavoghom\n"
-								+ "|warning    = [[Bild:Missing Map of Germany.png|140px|Koordinaten san außerhoib vom darstellbarn Bereich]]\n"
-								+ "}}\n" + "| [[Bild:Karte Deutschland.png|140px|Koordinatn san net da]] }}\n" + "}}", false));
+						.render(
+								"{{#if: {{{Karte|}}} | [[Bild:{{{Karte}}}|140x175px|Deitschlandkartn, Position vo {{#if: {{{Name|}}} | {{{Name}}} | {{PAGENAME}} }} heavoghobn]] | {{#if: {{{lat_deg|t2}}} |\n"
+										+ "{{Lageplan\n"
+										+ "|marker     = reddot.svg\n"
+										+ "|markersize = 5\n"
+										+ "|markertext = {{#if: {{{Name|}}} | {{{Name}}} | {{PAGENAME}} }}\n"
+										+ "|pos_y      = {{#expr: (55.1 - {{{lat_deg|52.5}}} - {{{lat_min|0}}} / 60) * 100 / 7.9}}\n"
+										+ "|pos_x      = {{#expr: ({{{lon_deg|13.4}}} + {{{lon_min|0}}} / 60) * 10 - 55}}\n"
+										+ "|map        = Karte Deutschland.svg\n"
+										+ "|mapsize_x  = 140\n"
+										+ "|mapsize_y  = 175\n"
+										+ "|maptext    = Deitschlandkartn, Position vo {{#if: {{{Name|}}} | {{{Name}}} | {{PAGENAME}} }} heavoghom\n"
+										+ "|warning    = [[Bild:Missing Map of Germany.png|140px|Koordinaten san außerhoib vom darstellbarn Bereich]]\n"
+										+ "}}\n" + "| [[Bild:Karte Deutschland.png|140px|Koordinatn san net da]] }}\n" + "}}", false));
 	}
 
 	public void test010() {
@@ -498,16 +476,16 @@ public class TemplateParserTest extends FilterTestSupport {
 	}
 
 	private final String TEST_STRING_01 = "[[Category:Interwiki templates|wikipedia]]\n" + "[[zh:Template:Wikipedia]]\n"
-			+ "&lt;/noinclude&gt;&lt;div class=&quot;sister-\n"
-			+ "wikipedia&quot;&gt;&lt;div class=&quot;sister-project&quot;&gt;&lt;div\n"
-			+ "class=&quot;noprint&quot; style=&quot;clear: right; border: solid #aaa\n"
+			+ "</noinclude><div class=\"sister-\n"
+			+ "wikipedia\"><div class=\"sister-project\"><div\n"
+			+ "class=\"noprint\" style=\"clear: right; border: solid #aaa\n"
 			+ "1px; margin: 0 0 1em 1em; font-size: 90%; background: #f9f9f9; width:\n"
-			+ "250px; padding: 4px; text-align: left; float: right;&quot;&gt;\n"
-			+ "&lt;div style=&quot;float: left;&quot;&gt;[[Image:Wikipedia-logo-\n" + "en.png|44px|none| ]]&lt;/div&gt;\n"
-			+ "&lt;div style=&quot;margin-left: 60px;&quot;&gt;{{#if:{{{lang|}}}|\n"
+			+ "250px; padding: 4px; text-align: left; float: right;\">\n"
+			+ "<div style=\"float: left;\">[[Image:Wikipedia-logo-\n" + "en.png|44px|none| ]]</div>\n"
+			+ "<div style=\"margin-left: 60px;\">{{#if:{{{lang|}}}|\n"
 			+ "{{{{{lang}}}}}&amp;nbsp;}}[[Wikipedia]] has {{#if:{{{cat|\n" + "{{{category|}}}}}}|a category|{{#if:{{{mul|{{{dab|\n"
 			+ "{{{disambiguation|}}}}}}}}}|articles|{{#if:{{{mulcat|}}}|categories|an\n" + "article}}}}}} on:\n"
-			+ "&lt;div style=&quot;margin-left: 10px;&quot;&gt;'''''{{#if:{{{cat|\n"
+			+ "<div style=\"margin-left: 10px;\">'''''{{#if:{{{cat|\n"
 			+ "{{{category|}}}}}}|[[w:{{#if:{{{lang|}}}|{{{lang}}}:}}Category:\n"
 			+ "{{ucfirst:{{{cat|{{{category}}}}}}}}|{{ucfirst:{{{1|{{{cat|\n"
 			+ "{{{category}}}}}}}}}}}]]|[[w:{{#if:{{{lang|}}}|{{{lang}}}:}}{{ucfirst:\n"
@@ -517,19 +495,20 @@ public class TemplateParserTest extends FilterTestSupport {
 			+ "'''''{{#if:{{{mulcat|}}}|[[w:{{#if:{{{lang|}}}|{{{lang}}}:}}Category:\n"
 			+ "{{ucfirst:{{{mulcat}}}}}|{{ucfirst:{{{mulcatlabel|{{{mulcat}}}}}}}}]]|\n"
 			+ "[[w:{{#if:{{{lang|}}}|{{{lang}}}:}}{{ucfirst:{{{mul}}}}}|{{ucfirst:\n"
-			+ "{{{mullabel|{{{mul}}}}}}}}]]'''''}}|}}&lt;/div&gt;\n" + "&lt;/div&gt;\n" + "&lt;/div&gt;\n"
-			+ "&lt;/div&gt;&lt;/div&gt;&lt;span class=&quot;interProject&quot;&gt;[[w:\n"
+			+ "{{{mullabel|{{{mul}}}}}}}}]]'''''}}|}}</div>\n" + "</div>\n" + "</div>\n"
+			+ "</div></div><span class=\"interProject\">[[w:\n"
 			+ "{{#if:{{{lang|}}}|{{{lang}}}:}}{{#if:{{{cat|{{{category|}}}}}}|\n"
 			+ "Category:{{ucfirst:{{{cat|{{{category}}}}}}}}|{{ucfirst:{{{dab|\n"
 			+ "{{{disambiguation|{{{1|{{PAGENAME}}}}}}}}}}}}}}}|Wikipedia {{#if:\n"
-			+ "{{{lang|}}}|&lt;sup&gt;{{{lang}}}&lt;/sup&gt;}}]]&lt;/span&gt;{{#if:\n"
-			+ "{{{mul|{{{mulcat|}}}}}}|&lt;span class=&quot;interProject&quot;&gt;[[w:\n"
+			+ "{{{lang|}}}|<sup>{{{lang}}}</sup>}}]]</span>{{#if:\n"
+			+ "{{{mul|{{{mulcat|}}}}}}|<span class=\"interProject\">[[w:\n"
 			+ "{{#if:{{{lang|}}}|{{{lang}}}:}}{{#if:{{{mulcat|}}}|Category:{{ucfirst:\n"
 			+ "{{{mulcat}}}}}|{{ucfirst:{{{mul}}}}}}}|Wikipedia {{#if:{{{lang|}}}|\n"
-			+ "&lt;sup&gt;{{{lang}}}&lt;/sup&gt;}}]]&lt;/span&gt;}}";
+			+ "<sup>{{{lang}}}</sup>}}]]</span>}}";
 
 	public void testNestedIf01() {
-		String temp = StringEscapeUtils.unescapeHtml(TEST_STRING_01);
+		// String temp = StringEscapeUtils.unescapeHtml(TEST_STRING_01);
+		String temp = TEST_STRING_01;
 		assertEquals("[[Category:Interwiki templates|wikipedia]]\n" + "[[zh:Template:Wikipedia]]\n"
 				+ "</noinclude><div class=\"sister-\n" + "wikipedia\"><div class=\"sister-project\"><div\n"
 				+ "class=\"noprint\" style=\"clear: right; border: solid #aaa\n"
@@ -767,8 +746,7 @@ public class TemplateParserTest extends FilterTestSupport {
 	}
 
 	public void testInvalidNoinclude() {
-		assertEquals("test123 start\n" + 
-				"test123 end", wikiModel.parseTemplates("test123 start<noinclude>\n" + "test123 end"));
+		assertEquals("test123 start\n" + "test123 end", wikiModel.parseTemplates("test123 start<noinclude>\n" + "test123 end"));
 	}
 
 	public void testTemplateImage1() {
@@ -797,8 +775,7 @@ public class TemplateParserTest extends FilterTestSupport {
 	}
 
 	public void testInvalidOnlyinclude() {
-		assertEquals("test123 start\n" + 
-				"test123 end", wikiModel.parseTemplates("test123 start<onlyinclude>\n" + "test123 end"));
+		assertEquals("test123 start\n" + "test123 end", wikiModel.parseTemplates("test123 start<onlyinclude>\n" + "test123 end"));
 	}
 
 	public void testMagicCURRENTYEAR() {

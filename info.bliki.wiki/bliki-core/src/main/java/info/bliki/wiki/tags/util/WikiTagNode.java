@@ -3,8 +3,6 @@ package info.bliki.wiki.tags.util;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.lang.StringUtils;
-
 /**
  * WikiTagNode represents a generic tag. If no scanner is registered for a given
  * tag name, this is what you get. This is also the base class for all tags
@@ -100,8 +98,8 @@ public class WikiTagNode extends AbstractNode {
 		boolean needed;
 		boolean singleq;
 		boolean doubleq;
-//		String ref;
-//		StringBuffer buffer;
+		// String ref;
+		// StringBuffer buffer;
 		char quote;
 		Attribute attribute;
 
@@ -132,9 +130,11 @@ public class WikiTagNode extends AbstractNode {
 				// references
 				// convert all double quotes into &#34;
 				quote = '"';
-				//ref = "&quot;"; // Translate.encode (quote);
+				// ref = "&quot;"; // Translate.encode (quote);
 				// JDK 1.4: value = value.replaceAll ("\"", ref);
-				value = StringUtils.replace(value, "\"", "&quot;");
+				value = value.replaceAll("\"", "&quot;");
+				// value = StringUtils.replace(value, "\"", "&quot;");
+
 				// buffer = new StringBuffer(value.length() * 5);
 				// for (int i = 0; i < value.length(); i++) {
 				// ch = value.charAt(i);
