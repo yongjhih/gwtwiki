@@ -9,8 +9,6 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 
 /**
  * A Java implementation of the PHP function strtotime(String, int): accepts
@@ -99,8 +97,6 @@ import org.apache.commons.logging.LogFactory;
 public class StringToTime extends Date {
 
 	private static final long serialVersionUID = 7889493424407815134L;
-
-	private static final Log log = LogFactory.getLog(StringToTime.class);
 
 	// default SimpleDateFormat string is the standard MySQL date format
 	private static final String defaultSimpleDateFormat = "yyyy-MM-dd HH:mm:ss.SSS";
@@ -320,21 +316,15 @@ public class StringToTime extends Date {
 						Long time = paf.parse(trimmed, now, m);
 						// System.out.println(String.format("[%s] triggered format [%s]: %s",
 						// dateTimeString, paf.f, new Date(time)));
-						if (log.isDebugEnabled())
-							log.debug(String.format("[%s] triggered format [%s]: %s", dateTimeString, paf.f, new Date(time)));
 						return time;
 					}
 				}
 
 				// no match
-				if (log.isDebugEnabled())
-					log.debug(String.format("Unrecognized date/time string [%s]", dateTimeString));
 				return Boolean.FALSE;
 			}
 		} catch (Exception e) { // thrown by various features of the parser
 			if (!Boolean.parseBoolean(System.getProperty(StringToTime.class + ".EXCEPTION_ON_PARSE_FAILURE", "false"))) {
-				if (log.isDebugEnabled())
-					log.debug(String.format("Failed to parse [%s] into a java.util.Date instance", dateTimeString));
 				return Boolean.FALSE;
 			} else
 				throw new StringToTimeException(dateTimeString, e);
@@ -345,7 +335,6 @@ public class StringToTime extends Date {
 		for (PatternAndFormat paf : known) {
 			Matcher m = paf.matches(trimmedDateTimeString);
 			if (m.matches()) {
-				log.debug(String.format("Date/time string [%s] triggered format [%s]", trimmedDateTimeString, paf.f));
 				return new ParserResult(paf.parse(trimmedDateTimeString, now, m), paf.f.type);
 			}
 		}
