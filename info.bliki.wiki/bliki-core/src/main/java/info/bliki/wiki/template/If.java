@@ -24,11 +24,11 @@ public class If extends AbstractTemplateFunction {
 			String ifCondition = isSubst ? list.get(0) : parseTrim(list.get(0), model);
 			if (ifCondition.length() > 0) {
 				// &lt;then text&gt;
-				return isSubst ? list.get(1) : parseTrimNewlineLeft(list.get(1), model);
+				return isSubst ? list.get(1) : parseTrim(list.get(1), model);
 			} else {
 				if (list.size() >= 3) {
 					// &lt;else text&gt;
-					return isSubst ? list.get(2) : parseTrimNewlineLeft(list.get(2), model);
+					return isSubst ? list.get(2) : parseTrim(list.get(2), model);
 				}
 			}
 		}

@@ -31,13 +31,13 @@ public class Iferror extends AbstractTemplateFunction {
 			if (error) {
 				// &lt;then text&gt;
 				if (list.size() >= 2) {
-					return isSubst ? list.get(1) : parseTrimNewlineLeft(list.get(1), model);
+					return isSubst ? list.get(1) : parseTrim(list.get(1), model);
 				}
 				return "";
 			} else {
 				if (list.size() >= 3) {
 					// &lt;else text&gt;
-					return isSubst ? list.get(2) : parseTrimNewlineLeft(list.get(2), model);
+					return isSubst ? list.get(2) : parseTrim(list.get(2), model);
 				}
 				return iferrorCondition;
 			}

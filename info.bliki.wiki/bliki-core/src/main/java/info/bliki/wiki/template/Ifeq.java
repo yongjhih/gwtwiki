@@ -24,9 +24,9 @@ public class Ifeq extends AbstractTemplateFunction {
 			String first = isSubst ? list.get(0) : parseTrim(list.get(0), model);
 			String second = isSubst ? list.get(1) : parseTrim(list.get(1), model);
 			if (equalsTypes(first, second)) {
-				return isSubst ? list.get(2) : parseTrimNewlineLeft(list.get(2), model);
+				return isSubst ? list.get(2) : parseTrim(list.get(2), model);
 			} else if (list.size() >= 4) {
-				return isSubst ? list.get(3) : parseTrimNewlineLeft(list.get(3), model);
+				return isSubst ? list.get(3) : parseTrim(list.get(3), model);
 			}
 		}
 		return null;

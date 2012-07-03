@@ -31,18 +31,18 @@ public class Ifexpr extends AbstractTemplateFunction {
 					if (Math.abs(d - 0.0) < DoubleEvaluator.EPSILON) {
 						if (list.size() >= 3) {
 							// &lt;else text&gt;
-							return isSubst ? list.get(2) : parseTrimNewlineLeft(list.get(2), model);
+							return isSubst ? list.get(2) : parseTrim(list.get(2), model);
 						}
 						return null;
 					}
-					return isSubst ? list.get(1) : parseTrimNewlineLeft(list.get(1), model);
+					return isSubst ? list.get(1) : parseTrim(list.get(1), model);
 				} catch (Exception e) {
 					return "<div class=\"error\">Expression error: " + e.getMessage() + "</div>";
 				}
 			} else {
 				if (list.size() >= 3) {
 					// &lt;else text&gt;
-					return isSubst ? list.get(2) : parseTrimNewlineLeft(list.get(2), model);
+					return isSubst ? list.get(2) : parseTrim(list.get(2), model);
 				}
 			}
 		}

@@ -33,11 +33,11 @@ public class Ifexist extends AbstractTemplateFunction {
 				}
 			}
 			if (model.getRawWikiContent(namespace, templateName, null) != null) {
-				return isSubst ? list.get(1) : parseTrimNewlineLeft(list.get(1), model);
+				return isSubst ? list.get(1) : parseTrim(list.get(1), model);
 			} else {
 				// the requested templateName doesn't exist
 				if (list.size() >= 3) {
-					return isSubst ? list.get(2) : parseTrimNewlineLeft(list.get(2), model);
+					return isSubst ? list.get(2) : parseTrim(list.get(2), model);
 				}
 			}
 		}

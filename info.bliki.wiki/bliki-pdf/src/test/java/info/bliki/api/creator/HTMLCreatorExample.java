@@ -200,6 +200,6 @@ public class HTMLCreatorExample {
 	}
 
 	public static void main(String[] args) {
-		testCreateText014();
+		testCreator001();
 	}
 }

@@ -135,8 +135,7 @@ public class TemplateParserTest extends FilterTestSupport {
 						+ "| colspan=\"2\" style=\"font-weight:bold; padding-left:8px; border-top:solid 1px #bbb;\" |\n"
 						+ "|- class=\"hintergrundfarbe2\" style=\"text-align: center;\"\n"
 						+ "| style=\"width: 50%;\" | [[Bild:Sin escudo.svg|120px|Wappn fêîht]]\n"
-						+ "| align=\"center\" style=\"width: 50%;\" | \n"
-						+ "{| border=\"0\" cellspacing=\"0\" cellpadding=\"0\" style=\"margin:0 0 0 0; border-style:none; border-width:0px; border-collapse:collapse; empty-cells:show\"\n"
+						+ "| align=\"center\" style=\"width: 50%;\" | {| border=\"0\" cellspacing=\"0\" cellpadding=\"0\" style=\"margin:0 0 0 0; border-style:none; border-width:0px; border-collapse:collapse; empty-cells:show\"\n"
 						+ "|<div style=\"position: relative;\"><div style=\"font-size: 5px; position: absolute; display: block; left:87px; top:117px; padding:0;\">[[Bild:reddot.svg|5px|PAGENAME]]</div>[[Bild:Karte Deutschland.svg|140x175px|Deitschlandkartn, Position vo PAGENAME heavoghom]]</div>\n"
 						+ "|}\n"
 						+ "|-\n"
@@ -236,8 +235,7 @@ public class TemplateParserTest extends FilterTestSupport {
 						+ "| colspan=\"2\" style=\"font-weight:bold; padding-left:8px; border-top:solid 1px #bbb;\" |\n"
 						+ "|- class=\"hintergrundfarbe2\" style=\"text-align: center;\"\n"
 						+ "| style=\"width: 50%;\" | [[Bild:Sin escudo.svg|120px|Wappn fêîht]]\n"
-						+ "| align=\"center\" style=\"width: 50%;\" | \n"
-						+ "{| border=\"0\" cellspacing=\"0\" cellpadding=\"0\" style=\"margin:0 0 0 0; border-style:none; border-width:0px; border-collapse:collapse; empty-cells:show\"\n"
+						+ "| align=\"center\" style=\"width: 50%;\" | {| border=\"0\" cellspacing=\"0\" cellpadding=\"0\" style=\"margin:0 0 0 0; border-style:none; border-width:0px; border-collapse:collapse; empty-cells:show\"\n"
 						+ "|<div style=\"position: relative;\"><div style=\"font-size: 5px; position: absolute; display: block; left:87px; top:117px; padding:0;\">[[Bild:reddot.svg|5px|PAGENAME]]</div>[[Bild:Karte Deutschland.svg|140x175px|Deitschlandkartn, Position vo PAGENAME heavoghom]]</div>\n"
 						+ "|}\n"
 						+ "|-\n"
@@ -264,7 +262,6 @@ public class TemplateParserTest extends FilterTestSupport {
 						+ "</a></div>\n"
 						+ "</td>\n"
 						+ "<td align=\"center\" style=\"width: 50%;\">\n"
-						+ "\n"
 						+ "<div style=\"page-break-inside: avoid;\">\n"
 						+ "<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" style=\"margin:0 0 0 0; border-style:none; border-width:0px; border-collapse:collapse; empty-cells:show\">\n"
 						+ "<tr>\n"
@@ -289,7 +286,6 @@ public class TemplateParserTest extends FilterTestSupport {
 	public void test006() {
 		assertEquals(
 				"\n"
-						+ "\n"
 						+ "<div style=\"page-break-inside: avoid;\">\n"
 						+ "<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" style=\"margin:0 0 0 0; border-style:none; border-width:0px; border-collapse:collapse; empty-cells:show\">\n"
 						+ "<tr>\n"
@@ -363,6 +359,19 @@ public class TemplateParserTest extends FilterTestSupport {
 
 	public void testIf05() {
 		assertEquals("startend", wikiModel.parseTemplates("start{{#if: foo | | no}}end"));
+	}
+
+	/**
+	 * See issue 102
+	 */
+	public void testIf06() {
+		assertEquals("== SpaceInIfTest1 ==\n" + "Not article space", wikiModel.parseTemplates("== SpaceInIfTest1 ==\n"
+				+ "{{#if:{{NAMESPACE}}\n" + "| <!--Not article space, do nothing-->Not article space\n"
+				+ "| <!--Article space-->Article space\n" + "}}"));
+
+		assertEquals("== SpaceInIfTest2 ==\n" + "Not article space\n" + "", wikiModel.parseTemplates("== SpaceInIfTest2 ==\n"
+				+ "{{#if:{{NAMESPACE}}\n" + "| <!--Not article space, do nothing-->\n" + "  Not article space\n"
+				+ "| <!--Article space-->\n" + "  Article space\n" + "}}\n" + ""));
 	}
 
 	public void testIfexpr01() {
@@ -476,13 +485,11 @@ public class TemplateParserTest extends FilterTestSupport {
 	}
 
 	private final String TEST_STRING_01 = "[[Category:Interwiki templates|wikipedia]]\n" + "[[zh:Template:Wikipedia]]\n"
-			+ "</noinclude><div class=\"sister-\n"
-			+ "wikipedia\"><div class=\"sister-project\"><div\n"
+			+ "</noinclude><div class=\"sister-\n" + "wikipedia\"><div class=\"sister-project\"><div\n"
 			+ "class=\"noprint\" style=\"clear: right; border: solid #aaa\n"
 			+ "1px; margin: 0 0 1em 1em; font-size: 90%; background: #f9f9f9; width:\n"
-			+ "250px; padding: 4px; text-align: left; float: right;\">\n"
-			+ "<div style=\"float: left;\">[[Image:Wikipedia-logo-\n" + "en.png|44px|none| ]]</div>\n"
-			+ "<div style=\"margin-left: 60px;\">{{#if:{{{lang|}}}|\n"
+			+ "250px; padding: 4px; text-align: left; float: right;\">\n" + "<div style=\"float: left;\">[[Image:Wikipedia-logo-\n"
+			+ "en.png|44px|none| ]]</div>\n" + "<div style=\"margin-left: 60px;\">{{#if:{{{lang|}}}|\n"
 			+ "{{{{{lang}}}}}&amp;nbsp;}}[[Wikipedia]] has {{#if:{{{cat|\n" + "{{{category|}}}}}}|a category|{{#if:{{{mul|{{{dab|\n"
 			+ "{{{disambiguation|}}}}}}}}}|articles|{{#if:{{{mulcat|}}}|categories|an\n" + "article}}}}}} on:\n"
 			+ "<div style=\"margin-left: 10px;\">'''''{{#if:{{{cat|\n"
@@ -494,17 +501,14 @@ public class TemplateParserTest extends FilterTestSupport {
 			+ "{{PAGENAME}}}}}}}}}}}}}}}}]]}}''''' {{#if:{{{mul|{{{mulcat|}}}}}}|and\n"
 			+ "'''''{{#if:{{{mulcat|}}}|[[w:{{#if:{{{lang|}}}|{{{lang}}}:}}Category:\n"
 			+ "{{ucfirst:{{{mulcat}}}}}|{{ucfirst:{{{mulcatlabel|{{{mulcat}}}}}}}}]]|\n"
-			+ "[[w:{{#if:{{{lang|}}}|{{{lang}}}:}}{{ucfirst:{{{mul}}}}}|{{ucfirst:\n"
-			+ "{{{mullabel|{{{mul}}}}}}}}]]'''''}}|}}</div>\n" + "</div>\n" + "</div>\n"
-			+ "</div></div><span class=\"interProject\">[[w:\n"
+			+ "[[w:{{#if:{{{lang|}}}|{{{lang}}}:}}{{ucfirst:{{{mul}}}}}|{{ucfirst:\n" + "{{{mullabel|{{{mul}}}}}}}}]]'''''}}|}}</div>\n"
+			+ "</div>\n" + "</div>\n" + "</div></div><span class=\"interProject\">[[w:\n"
 			+ "{{#if:{{{lang|}}}|{{{lang}}}:}}{{#if:{{{cat|{{{category|}}}}}}|\n"
 			+ "Category:{{ucfirst:{{{cat|{{{category}}}}}}}}|{{ucfirst:{{{dab|\n"
 			+ "{{{disambiguation|{{{1|{{PAGENAME}}}}}}}}}}}}}}}|Wikipedia {{#if:\n"
-			+ "{{{lang|}}}|<sup>{{{lang}}}</sup>}}]]</span>{{#if:\n"
-			+ "{{{mul|{{{mulcat|}}}}}}|<span class=\"interProject\">[[w:\n"
+			+ "{{{lang|}}}|<sup>{{{lang}}}</sup>}}]]</span>{{#if:\n" + "{{{mul|{{{mulcat|}}}}}}|<span class=\"interProject\">[[w:\n"
 			+ "{{#if:{{{lang|}}}|{{{lang}}}:}}{{#if:{{{mulcat|}}}|Category:{{ucfirst:\n"
-			+ "{{{mulcat}}}}}|{{ucfirst:{{{mul}}}}}}}|Wikipedia {{#if:{{{lang|}}}|\n"
-			+ "<sup>{{{lang}}}</sup>}}]]</span>}}";
+			+ "{{{mulcat}}}}}|{{ucfirst:{{{mul}}}}}}}|Wikipedia {{#if:{{{lang|}}}|\n" + "<sup>{{{lang}}}</sup>}}]]</span>}}";
 
 	public void testNestedIf01() {
 		// String temp = StringEscapeUtils.unescapeHtml(TEST_STRING_01);
@@ -568,6 +572,15 @@ public class TemplateParserTest extends FilterTestSupport {
 
 	public void testSwitch008() {
 		assertEquals("{{Templ1/ind&}}", wikiModel.parseTemplates("{{Templ1/{{ #switch: imperative  | ind | ind&}}}}", false));
+	}
+
+	/**
+	 * <a href="https://meta.wikimedia.org/wiki/Help:Newlines_and_spaces#Parameter_selection_templates"
+	 * >Help:Newlines_and_spaces#Parameter_selection_templates</a>
+	 */
+	public void testSwitch009() {
+		assertEquals("*\"q\"", wikiModel.parseTemplates("*\"{{#switch: p |p= q |r=s}}\"", false));
+		assertEquals("*\"q\"", wikiModel.parseTemplates("*\"{{#switch:p| p = q |r=s}}\"", false));
 	}
 
 	public void testExpr001() {
@@ -893,18 +906,15 @@ public class TemplateParserTest extends FilterTestSupport {
 						+ "\n"
 						+ "| style=\"width: 100%; vertical-align:top; color:#000; border: 3px double #AAA; background-color: #ffffff; padding: 0.5em; margin: 0em;\" colspan=\"2\" |\n"
 						+ "{| style=\"vertical-align: top; margin: 0em; width: 100% !important; width: auto; display: table !important; display: inline; background-color: transparent;\"\n"
-						+ "\n"
 						+ "! colspan=\"2\" style=\"background:#F0F0F0; margin: 0em; height: 1em; font-weight:bold; border:1px solid #AAA; text-align:left; color:#000;\" | <div style=\"float:right;\"></div><h1 style=\"text-align: left; font-size: 1.2em; border: none; margin: 0; padding: 1.5px 0 2px 4px;\">'''Knowledge groups'''</h1></div>\n"
 						+ "|-\n"
 						+ "|\n"
 						+ "TEST1\n"
 						+ "|}\n"
-						+ "\n"
 						+ "|-\n"
 						+ "\n"
 						+ "| style=\"width: 100%; vertical-align:top; color:#000; border: 3px double #AAA; background-color: #ffffff; padding: 0.5em; margin: 0em;\" colspan=\"2\" |\n"
 						+ "{| style=\"vertical-align: top; margin: 0em; width: 100% !important; width: auto; display: table !important; display: inline; background-color: transparent;\"\n"
-						+ "\n"
 						+ "! colspan=\"2\" style=\"background:#F0F0F0; margin: 0em; height: 1em; font-weight:bold; border:1px solid #AAA; text-align:left; color:#000;\" | <div style=\"float:right;\"></div><h1 style=\"text-align: left; font-size: 1.2em; border: none; margin: 0; padding: 1.5px 0 2px 4px;\">'''Sister projects'''</h1></div>\n"
 						+ "|-\n" + "|\n" + "TEST2\n" + "|}\n" + "|}", wikiModel.parseTemplates("{{Main Page panel|\n"
 						+ "{{Main Page subpanel|column=both|title=Knowledge groups|1=\n" + "TEST1\n" + "}}\n" + "|\n"

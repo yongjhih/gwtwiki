@@ -72,6 +72,8 @@ public abstract class AbstractTemplateFunction implements ITemplateFunction {
 	 * @param model
 	 *          the wiki model
 	 * @return
+	 * 
+	 * @deprecated
 	 */
 	public static String parseTrimNewlineLeft(String content, IWikiModel model) {
 		return Utils.trimNewlineLeft(parse(content, model));

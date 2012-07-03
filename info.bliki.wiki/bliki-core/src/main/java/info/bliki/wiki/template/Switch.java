@@ -37,7 +37,7 @@ public class Switch extends AbstractTemplateFunction {
 				} else {
 					leftHandSide = temp;
 				}
-				String parsedLHS=isSubst ? leftHandSide : parseTrimNewlineLeft(leftHandSide, model);
+				String parsedLHS=isSubst ? leftHandSide : parseTrim(leftHandSide, model);
 				if (index >= 0 && "#default".equals(parsedLHS)) {
 					defaultResult = temp.substring(index + 1).trim();
 					continue;
