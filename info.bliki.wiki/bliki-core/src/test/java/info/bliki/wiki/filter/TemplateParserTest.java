@@ -223,7 +223,7 @@ public class TemplateParserTest extends FilterTestSupport {
 						+ "<th colspan=\"2\" style=\"background-color:#ABCDEF; border:1px solid #bbb;\">Basisdatn</th></tr>\n"
 						+ "<tr class=\"hintergrundfarbe2\">\n"
 						+ "<td><b><a href=\"http://www.bliki.info/wiki/Bundesland_(Deutschland)\" title=\"Bundesland (Deutschland)\">Bundesland</a></b>: </td>\n"
-						+ "<td><a href=\"http://www.bliki.info/wiki/\" title=\"\" /></td></tr></table></div>", wikiModel.render(
+						+ "<td><a href=\"http://www.bliki.info/wiki/\" /></td></tr></table></div>", wikiModel.render(
 						"{{Infobox Ort in Deutschland}}", false));
 	}
 

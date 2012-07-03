@@ -128,7 +128,10 @@ public class WikiModel extends AbstractWikiModel {
 	@Override
 	public void appendInternalLink(String topic, String hashSection, String topicDescription, String cssClass, boolean parseRecursive) {
 		String hrefLink;
+		String description = topicDescription;
+		WPATag aTagNode = new WPATag();
 		if (topic.length() > 0) {
+			aTagNode.addAttribute("title", topic, true);
 			String encodedtopic = encodeTitleToUrl(topic, true);
 			if (replaceColon()) {
 				encodedtopic = encodedtopic.replace(':', '/');
@@ -137,14 +140,14 @@ public class WikiModel extends AbstractWikiModel {
 		} else {
 			if (hashSection != null) {
 				hrefLink = "";
+				if (description.length() == 0) {
+					description = "&#35;" + hashSection; // #....
+				}
 			} else {
 				hrefLink = fExternalWikiBaseURL.replace("${title}", "");
 			}
 		}
 
-		WPATag aTagNode = new WPATag();
-		// append(aTagNode);
-		aTagNode.addAttribute("title", topic, true);
 		String href = hrefLink;
 		if (hashSection != null) {
 			href = href + '#' + encodeTitleDotUrl(hashSection, true);
@@ -157,9 +160,9 @@ public class WikiModel extends AbstractWikiModel {
 
 		pushNode(aTagNode);
 		if (parseRecursive) {
-			WikipediaParser.parseRecursive(topicDescription.trim(), this, false, true);
+			WikipediaParser.parseRecursive(description.trim(), this, false, true);
 		} else {
-			aTagNode.addChild(new ContentToken(topicDescription));
+			aTagNode.addChild(new ContentToken(description));
 		}
 		popNode();
 	}

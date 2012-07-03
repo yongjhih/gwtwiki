@@ -143,8 +143,20 @@ public class WPLinkFilterTest extends FilterTestSupport {
 	}
 
 	public void testSectionLink01() {
-		assertEquals("\n" + "<p><a href=\"#Section_Link\" title=\"\">A Section Link</a></p>", wikiModel
+		assertEquals("\n" + "<p><a href=\"#Section_Link\">A Section Link</a></p>", wikiModel
 				.render("[[#Section Link|A Section Link]]", false));
+	}
+	
+	public void testSectionLink02() {
+		assertEquals("\n" + "<p><a href=\"#Section.C3.A4.C3.B6.C3.BC\">#Sectionäöü</a></p>", wikiModel.render("[[#Sectionäöü]]", false));
+	}
+	
+	/**
+	 * See issue 101
+	 */
+	public void testSectionLink03() {
+		assertEquals("\n" + "<p><a href=\"#Section_Link\">#Section Link</a></p>", wikiModel
+				.render("[[#Section Link]]", false));
 	}
 
 	public void testSpecialLink01() {
@@ -155,9 +167,6 @@ public class WPLinkFilterTest extends FilterTestSupport {
 				wikiModel.render("* [[Special:Specialpages|Special Pages]]", false));
 	}
 
-	public void testSectionLink02() {
-		assertEquals("\n" + "<p><a href=\"#Section.C3.A4.C3.B6.C3.BC\" title=\"\" /></p>", wikiModel.render("[[#Sectionäöü]]", false));
-	}
 	
 	public void testSubLink01() {
 		assertEquals("\n" + "<p><a href=\"http://www.bliki.info/wiki/Test/testing\" title=\"test/testing\">test/testing</a></p>",
