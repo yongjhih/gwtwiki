@@ -170,7 +170,7 @@ public class HTMLCreatorExample {
 	public static void testCreator009() {
 		testWikipediaENAPI("Metallica");
 	}
-
+	
 	public static void testCreator010() {
 		testWikipediaENAPI("HTTP-Statuscode", "http://de.wikipedia.org/w/api.php", Locale.GERMAN);
 	}
@@ -186,12 +186,16 @@ public class HTMLCreatorExample {
 	public static void testCreator013() {
 		testWikipediaENAPI("Wikipedia:Hauptseite/Artikel_des_Tages/Montag", "http://de.wikipedia.org/w/api.php", Locale.GERMAN);
 	}
-
-	public static void testCreateText014() {
+	
+	public static void testCreator014() {
+		testWikipediaENAPI("Pakistan");
+	}
+	
+	public static void testCreateText001() {
 		testWikipediaText(TEXT_ISSUE_96, "Wikipedia:Hauptseite/Artikel des Tages/Donnerstag", "http://de.wikipedia.org/w/api.php", Locale.GERMAN);
 	}
 
-	public static void testCreateText015() {
+	public static void testCreateText002() {
 		String redirectedLink = testWikipediaENAPI("Manchester United Football Club");
 		if (redirectedLink != null) {
 			// see http://code.google.com/p/gwtwiki/issues/detail?id=38

@@ -72,18 +72,17 @@ public class TemplateFilterTest extends FilterTestSupport {
 	public void testTemplateImage1() {
 		// see method WikiTestModel#getRawWikiContent()
 		assertEquals(
-				"\n"
-						+ "<div style=\"page-break-inside: avoid;\">\n"
-						+ "<table>\n"
-						+ "<tr>\n"
-						+ "<th><h2 style=\"background:#cedff2;\">In the news</h2></th></tr>\n"
-						+ "<tr>\n"
-						+ "<td style=\"color:#000; padding:2px 5px;\">\n"
-						+ "<div id=\"mp-itn\"><div style=\"width:220px;\"><a class=\"internal\" href=\"http://www.bliki.info/wiki/File:Yoshihiko_Noda-1.jpg\" title=\"Yoshihiko Noda\"><img src=\"http://www.bliki.info/wiki/Yoshihiko_Noda-1.jpg\" alt=\"Yoshihiko Noda\" title=\"Yoshihiko Noda\" class=\"location-none\" width=\"220\" />\n"
-						+ "</a></div>\n"
-						+ "\n"
-						+ "The ruling Democratic Party of Japan selects <b>Yoshihiko Noda</b> <i>(pictured)</i> as the country&#39;s new prime minister, following the resignation of Naoto Kan\n"
-						+ "</div></td></tr></table></div>",
+				"\n" + 
+				"<div style=\"page-break-inside: avoid;\">\n" + 
+				"<table>\n" + 
+				"<tr>\n" + 
+				"<th><h2 style=\"background:#cedff2;\">In the news</h2></th></tr>\n" + 
+				"<tr>\n" + 
+				"<td style=\"color:#000; padding:2px 5px;\">\n" + 
+				"<div id=\"mp-itn\"><a class=\"image\" href=\"http://www.bliki.info/wiki/File:Yoshihiko_Noda-1.jpg\" title=\"Yoshihiko Noda\"><img src=\"http://www.bliki.info/wiki/Yoshihiko_Noda-1.jpg\" alt=\"Yoshihiko Noda\" width=\"220\" />\n" + 
+				"</a>\n" + 
+				"The ruling Democratic Party of Japan selects <b>Yoshihiko Noda</b> <i>(pictured)</i> as the country&#39;s new prime minister, following the resignation of Naoto Kan\n" + 
+				"</div></td></tr></table></div>",
 				wikiModel
 						.render("{|\n"
 								+ "! | <h2 style=\"background:#cedff2;\">In the news</h2>\n"
@@ -440,9 +439,9 @@ public class TemplateFilterTest extends FilterTestSupport {
 
 	public void testIf_image_test() {
 		assertEquals(
-				"\n"
-						+ "<p>test <div style=\"width:220px;\"><a class=\"internal\" href=\"http://www.bliki.info/wiki/File:220px-test.jpg\" ><img src=\"http://www.bliki.info/wiki/220px-test.jpg\" class=\"location-none\" width=\"220\" />\n"
-						+ "</a></div>\n" + " test123</p>", wikiModel.render("test {{If_image_test|  image =  test.jpg}} test123", false));
+				"\n" + 
+				"<p>test <a class=\"image\" href=\"http://www.bliki.info/wiki/File:220px-test.jpg\" ><img src=\"http://www.bliki.info/wiki/220px-test.jpg\" width=\"220\" />\n" + 
+				"</a> test123</p>", wikiModel.render("test {{If_image_test|  image =  test.jpg}} test123", false));
 	}
 
 	public void testMONTHNAME() {
@@ -697,20 +696,19 @@ public class TemplateFilterTest extends FilterTestSupport {
 
 	public void testIssue77_001() {
 		assertEquals(
-				"\n"
-						+ "<div style=\"page-break-inside: avoid;\">\n"
-						+ "<table>\n"
-						+ "<tr>\n"
-						+ "<th><h2 style=\"background:#cedff2;\">In the news</h2></th></tr>\n"
-						+ "<tr>\n"
-						+ "<td>\n"
-						+ "<div>\n"
-						+ "<div style=\"float:right;margin-left:0.5em;\">\n"
-						+ "<div style=\"height:100px;width:100px;\"><a class=\"internal\" href=\"http://www.bliki.info/wiki/File:Yoshihiko_Noda-1.jpg\" title=\"Yoshihiko Noda\"><img src=\"http://www.bliki.info/wiki/100px-Yoshihiko_Noda-1.jpg\" alt=\"Yoshihiko Noda\" title=\"Yoshihiko Noda\" class=\"location-none\" height=\"100\" width=\"100\" />\n"
-						+ "</a></div>\n"
-						+ "\n"
-						+ "</div>\n"
-						+ "The ruling Democratic Party of Japan selects <b>Yoshihiko Noda</b> <i>(pictured)</i> as the country&#39;s new Prime Minister of Japan|prime minister, following the resignation of Naoto Kan.</div></td></tr></table></div>",
+				"\n" + 
+				"<div style=\"page-break-inside: avoid;\">\n" + 
+				"<table>\n" + 
+				"<tr>\n" + 
+				"<th><h2 style=\"background:#cedff2;\">In the news</h2></th></tr>\n" + 
+				"<tr>\n" + 
+				"<td>\n" + 
+				"<div>\n" + 
+				"<div style=\"float:right;margin-left:0.5em;\">\n" + 
+				"<a class=\"image\" href=\"http://www.bliki.info/wiki/File:Yoshihiko_Noda-1.jpg\" title=\"Yoshihiko Noda\"><img src=\"http://www.bliki.info/wiki/100px-Yoshihiko_Noda-1.jpg\" alt=\"Yoshihiko Noda\" height=\"100\" width=\"100\" />\n" + 
+				"</a>\n" + 
+				"</div>\n" + 
+				"The ruling Democratic Party of Japan selects <b>Yoshihiko Noda</b> <i>(pictured)</i> as the country&#39;s new Prime Minister of Japan|prime minister, following the resignation of Naoto Kan.</div></td></tr></table></div>",
 				wikiModel
 						.render("{|\n"
 								+ "! | <h2 style=\"background:#cedff2;\">In the news</h2>\n"

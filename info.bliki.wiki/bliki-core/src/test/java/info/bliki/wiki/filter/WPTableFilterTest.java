@@ -316,9 +316,8 @@ public class WPTableFilterTest extends FilterTestSupport {
 				"<th class=\"fn\" colspan=\"2\" style=\"text-align:center; font-size:larger;\">Chris Capuano</th></tr>\n" + 
 				"<tr>\n" + 
 				"<th colspan=\"2\" style=\"text-align:center;\">\n" + 
-				"<div style=\"width:300px;\"><a class=\"internal\" href=\"http://www.bliki.info/wiki/Image:300px-Cap.jpg\" ><img src=\"http://www.bliki.info/wiki/300px-Cap.jpg\" class=\"location-none\" width=\"300\" />\n" + 
-				"</a></div>\n" + 
-				"<br/>\n" + 
+				"<a class=\"image\" href=\"http://www.bliki.info/wiki/Image:300px-Cap.jpg\" ><img src=\"http://www.bliki.info/wiki/300px-Cap.jpg\" width=\"300\" />\n" + 
+				"</a><br/>\n" + 
 				"</th></tr>\n" + 
 				"<tr>\n" + 
 				"<td colspan=\"2\" style=\"text-align:center; background: #042462;\"><span class=\"note\" style=\"color:white;\"><b><span style=\"color:white;\">Milwaukee Brewers</span> — No. 39</b></span></td></tr>\n" + 
@@ -385,16 +384,20 @@ public class WPTableFilterTest extends FilterTestSupport {
 		String raw = "{| class=\"wikitable\"\n" + "|-\n" + "! col1 !! col2 !! col3\n"
 				+ "|-| | '''[[lorem ipsum]]''' (test malformed table)\n" + "| | '''[[testing]]'''\n" + "|\n"
 				+ "This is a test of a malformed table.\n" + "|align=\"center\"|[[Image:test.png|140px]]\n" + "|}\n";
-		String expected = "\n"
-				+ "<div style=\"page-break-inside: avoid;\">\n"
-				+ "<table class=\"wikitable\">\n"
-				+ "<tr>\n<th>col1 </th>\n<th>col2 </th>\n<th>col3</th></tr>\n"
-				// this is the result of the malformed input
-				+ "<tr malformed=\"\">\n" + "<td><b><a href=\"http://www.bliki.info/wiki/Testing\""
-				+ " title=\"testing\">testing</a></b></td>\n" + "<td>\nThis is a test of a malformed table.</td>\n"
-				+ "<td align=\"center\"><div style=\"width:140px;\">" + "<a class=\"internal\""
-				+ " href=\"http://www.bliki.info/wiki/Image:140px-test.png\" >" + "<img src=\"http://www.bliki.info/wiki/140px-test.png\""
-				+ " class=\"location-none\" width=\"140\" />\n</a></div>\n</td>" + "</tr></table></div>\n";
+		String expected = "\n" + 
+				"<div style=\"page-break-inside: avoid;\">\n" + 
+				"<table class=\"wikitable\">\n" + 
+				"<tr>\n" + 
+				"<th>col1 </th>\n" + 
+				"<th>col2 </th>\n" + 
+				"<th>col3</th></tr>\n" + 
+				"<tr malformed=\"\">\n" + 
+				"<td><b><a href=\"http://www.bliki.info/wiki/Testing\" title=\"testing\">testing</a></b></td>\n" + 
+				"<td>\n" + 
+				"This is a test of a malformed table.</td>\n" + 
+				"<td align=\"center\"><a class=\"image\" href=\"http://www.bliki.info/wiki/Image:140px-test.png\" ><img src=\"http://www.bliki.info/wiki/140px-test.png\" width=\"140\" />\n" + 
+				"</a></td></tr></table></div>\n" + 
+				"";
 		assertEquals(expected, wikiModel.render(raw, false));
 	}
 

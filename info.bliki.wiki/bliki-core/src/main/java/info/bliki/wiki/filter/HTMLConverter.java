@@ -132,18 +132,24 @@ public class HTMLConverter implements ITextConverter {
 		String type = imageFormat.getType();
 		int pxWidth = imageFormat.getWidth();
 		int pxHeight = imageFormat.getHeight();
-
-		if ("thumb".equals(type)) {
-			resultBuffer.append("\n<div class=\"thumb ");
-			if ("left".equals(location)) {
-				resultBuffer.append("tleft\"");
-			} else if ("right".equals(location)) {
-				resultBuffer.append("tright\"");
-			} else {
-				resultBuffer.append("tright\"");
-			}
-			resultBuffer.append('>');
+		if ("thumb".equals(type) || "frame".equals(type)) {
+			imageThumbToHTML(imageTagNode, resultBuffer, model, map, caption, alt, location, type, pxWidth, pxHeight);
+		} else {
+			imageSimpleToHTML(imageTagNode, resultBuffer, model, map, caption, alt, location, type, pxWidth, pxHeight);
 		}
+	}
+
+	private void imageThumbToHTML(TagNode imageTagNode, Appendable resultBuffer, IWikiModel model, Map<String, String> map,
+			String caption, String alt, String location, String type, int pxWidth, int pxHeight) throws IOException {
+		resultBuffer.append("\n<div class=\"thumb ");
+		if ("left".equals(location)) {
+			resultBuffer.append("tleft\"");
+		} else if ("right".equals(location)) {
+			resultBuffer.append("tright\"");
+		} else {
+			resultBuffer.append("tright\"");
+		}
+		resultBuffer.append('>');
 
 		boolean hasDimensions = pxHeight != -1 || pxWidth != -1;
 		if (hasDimensions) {
@@ -182,17 +188,25 @@ public class HTMLConverter implements ITextConverter {
 			}
 		}
 
-		if (location != null || type != null) {
-			StringBuilder clazz = new StringBuilder(64);
-			resultBuffer.append(" class=\"");
-			if (location != null) {
-				clazz.append(" location-").append(location);
-			}
-			if (type != null) {
-				clazz.append(" type-").append(type);
-			}
-			resultBuffer.append(clazz.toString().trim()).append('"');
+		StringBuilder clazz = null;
+		if (location != null && !(location.equalsIgnoreCase("none"))) {
+			clazz = new StringBuilder(64);
+			clazz.append(" class=\"location-");
+			clazz.append(location);
 		}
+		if (type != null) {
+			if (clazz == null) {
+				clazz = new StringBuilder(64);
+				clazz.append(" class=\"");
+			} else {
+				clazz.append(" ");
+			}
+			clazz.append("type-").append(type);
+		}
+		if (clazz != null) {
+			resultBuffer.append(clazz).append('"');
+		}
+
 		if (pxHeight != -1) {
 			resultBuffer.append(" height=\"").append(Integer.toString(pxHeight)).append('"');
 		}
@@ -208,21 +222,68 @@ public class HTMLConverter implements ITextConverter {
 		if (children.size() != 0) {
 			nodesToText(children, resultBuffer, model);
 		}
-		// if (caption != null && caption.length() > 0) {
-		// writer.append("<div class=\"");
-		// if (type != null) {
-		// writer.append(type);
-		// }
-		// writer.append("caption\">\n");
-		// writer.append(WikipediaParser.parseRecursive(caption, this));
-		// writer.append("</div>\n");
-		// }
 
 		if (hasDimensions) {
 			resultBuffer.append("</div>\n");
 		}
-		if ("thumb".equals(type)) {
-			resultBuffer.append("</div>\n");
+		resultBuffer.append("</div>\n");
+	}
+
+	private void imageSimpleToHTML(TagNode imageTagNode, Appendable resultBuffer, IWikiModel model, Map<String, String> map,
+			String caption, String alt, String location, String type, int pxWidth, int pxHeight) throws IOException {
+		String href = map.get("href");
+		if (href != null) {
+			resultBuffer.append("<a class=\"image\" href=\"").append(href).append("\" ");
+
+			if (caption != null && caption.length() > 0) {
+				resultBuffer.append("title=\"").append((alt.length() == 0) ? caption : alt).append('"');
+			}
+			resultBuffer.append('>');
+		}
+
+		resultBuffer.append("<img src=\"").append(map.get("src")).append('"');
+
+		if (caption != null && caption.length() > 0) {
+			if (alt.length() == 0) {
+				resultBuffer.append(" alt=\"").append(caption).append('"');
+			} else {
+				resultBuffer.append(" alt=\"").append(alt).append('"');
+			}
+		}
+
+		StringBuilder clazz = null;
+		if (location != null && !(location.equalsIgnoreCase("none"))) {
+			clazz = new StringBuilder(64);
+			clazz.append(" class=\"location-");
+			clazz.append(location);
+		}
+		if (type != null) {
+			if (clazz == null) {
+				clazz = new StringBuilder(64);
+				clazz.append(" class=\"");
+			} else {
+				clazz.append(" ");
+			}
+			clazz.append(" type-").append(type);
+		}
+		if (clazz != null) {
+			resultBuffer.append(clazz).append('"');
+		}
+
+		if (pxHeight != -1) {
+			resultBuffer.append(" height=\"").append(Integer.toString(pxHeight)).append('"');
+		}
+		if (pxWidth != -1) {
+			resultBuffer.append(" width=\"").append(Integer.toString(pxWidth)).append('\"');
+		}
+		resultBuffer.append(" />\n");
+
+		if (href != null) {
+			resultBuffer.append("</a>");
+		}
+		List<Object> children = imageTagNode.getChildren();
+		if (children.size() != 0) {
+			nodesToText(children, resultBuffer, model);
 		}
 	}
 
