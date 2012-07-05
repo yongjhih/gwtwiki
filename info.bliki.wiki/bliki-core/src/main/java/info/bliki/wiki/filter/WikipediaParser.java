@@ -805,29 +805,30 @@ public class WikipediaParser extends AbstractParser implements IParser {
 			// Dolphins are [[aquatic mammal]]s that are closely related to [[whale]]s
 			// and [[porpoise]]s.
 			temp = fCurrentPosition;
-			StringBuilder suffixBuffer = new StringBuilder();
-
+			String suffix = "";
 			try {
-				while (true) {
-					fCurrentCharacter = fSource[fCurrentPosition++];
-					if (!Character.isLowerCase(fCurrentCharacter)) {
-						fCurrentPosition--;
-						break;
-					}
+				fCurrentCharacter = fSource[fCurrentPosition];
+				if (Character.isLowerCase(fCurrentCharacter)) {
+					fCurrentPosition++;
+					StringBuilder suffixBuffer = new StringBuilder();
 					suffixBuffer.append(fCurrentCharacter);
+					while (true) {
+						fCurrentCharacter = fSource[fCurrentPosition++];
+						if (!Character.isLowerCase(fCurrentCharacter)) {
+							fCurrentPosition--;
+							break;
+						}
+						suffixBuffer.append(fCurrentCharacter);
+					}
+					suffix = suffixBuffer.toString();
 				}
-				String suffix = suffixBuffer.toString();
-				fEventListener.onWikiLink(fSource, startLinkPosition, endLinkPosition, suffix);
-				if (!fWikiModel.appendRawWikipediaLink(name, suffix)) {
-					fCurrentPosition = temp;
-				}
-				return true;
 			} catch (IndexOutOfBoundsException e) {
 				fCurrentPosition = temp;
 			}
-
-			fEventListener.onWikiLink(fSource, startLinkPosition, endLinkPosition, "");
-			fWikiModel.appendRawWikipediaLink(name, "");
+			fEventListener.onWikiLink(fSource, startLinkPosition, endLinkPosition, suffix);
+			if (!fWikiModel.appendRawWikipediaLink(name, suffix)) {
+				fCurrentPosition = temp;
+			}
 			return true;
 		} else {
 			fWhiteStart = true;
@@ -1178,7 +1179,7 @@ public class WikipediaParser extends AbstractParser implements IParser {
 					alias = urlString.substring(pipeIndex + 1);
 					urlString = urlString.substring(0, pipeIndex);
 				} else {
-					if (protocolRelativeURL){
+					if (protocolRelativeURL) {
 						alias = urlString.substring(2);
 					} else {
 						alias = urlString;
@@ -1197,7 +1198,7 @@ public class WikipediaParser extends AbstractParser implements IParser {
 						return true;
 					}
 				} else {
-					if (protocolRelativeURL){
+					if (protocolRelativeURL) {
 						fWikiModel.appendExternalLink(uriSchemeName, urlString, alias, false);
 						return true;
 					}

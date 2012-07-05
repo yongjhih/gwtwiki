@@ -287,8 +287,9 @@ public interface IWikiModel extends IConfiguration {
 	 *          a String of lowercase letters which directly follow the link after
 	 *          the closing ]] brackets. Useful for topic plurals.
 	 * @return <code>true</code> if the method used the suffix for rendering the
-	 *         wiki link. If <code>false</code> the parser appends the suffix as
-	 *         normal text after the wiki link.
+	 *         wiki link. If <code>false</code> the parser should append the
+	 *         suffix as normal text after the wiki link (i.e. in the case of an
+	 *         image of file wiki link).
 	 */
 	public boolean appendRawWikipediaLink(String rawLinkText, String suffix);
 
