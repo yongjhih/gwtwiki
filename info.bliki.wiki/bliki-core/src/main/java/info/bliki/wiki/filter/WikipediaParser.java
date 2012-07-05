@@ -818,7 +818,9 @@ public class WikipediaParser extends AbstractParser implements IParser {
 				}
 				String suffix = suffixBuffer.toString();
 				fEventListener.onWikiLink(fSource, startLinkPosition, endLinkPosition, suffix);
-				fWikiModel.appendRawWikipediaLink(name, suffix);
+				if (!fWikiModel.appendRawWikipediaLink(name, suffix)) {
+					fCurrentPosition = temp;
+				}
 				return true;
 			} catch (IndexOutOfBoundsException e) {
 				fCurrentPosition = temp;

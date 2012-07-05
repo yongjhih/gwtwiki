@@ -286,8 +286,11 @@ public interface IWikiModel extends IConfiguration {
 	 * @param suffix
 	 *          a String of lowercase letters which directly follow the link after
 	 *          the closing ]] brackets. Useful for topic plurals.
+	 * @return <code>true</code> if the method used the suffix for rendering the
+	 *         wiki link. If <code>false</code> the parser appends the suffix as
+	 *         normal text after the wiki link.
 	 */
-	public void appendRawWikipediaLink(String rawLinkText, String suffix);
+	public boolean appendRawWikipediaLink(String rawLinkText, String suffix);
 
 	/**
 	 * Append the redirect link to the model
@@ -864,9 +867,11 @@ public interface IWikiModel extends IConfiguration {
 	 *          will be displayed directly, otherwise render the text as if a
 	 *          common wiki topic will be displayed.
 	 * @param parseTemplates
-	 *          parses the template expansion step (parses include, onlyinclude, includeonly etc)
+	 *          parses the template expansion step (parses include, onlyinclude,
+	 *          includeonly etc)
 	 */
-	public void render(ITextConverter converter, String rawWikiText, Appendable buffer, boolean templateTopic, boolean parseTemplates)  throws IOException;
+	public void render(ITextConverter converter, String rawWikiText, Appendable buffer, boolean templateTopic, boolean parseTemplates)
+			throws IOException;
 
 	/**
 	 * Render the raw Wikipedia text into an HTML string and use the default

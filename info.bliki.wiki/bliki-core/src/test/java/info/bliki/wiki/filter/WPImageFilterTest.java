@@ -20,24 +20,7 @@ public class WPImageFilterTest extends FilterTestSupport {
 		assertEquals("/hello/you'2Ethis'2Eis'2E'2Ean'2E'2E/exa..mple.html", Encoder
 				.encodeTitleLocalUrl("/hello/you.this.is..an../exa..mple.html"));
 	}
-
-	public void testImage18() {
-		assertEquals("\n" + 
-				"<p><a class=\"image\" href=\"http://www.bliki.info/wiki/Speakerlink.png\" title=\"Listen\"><img src=\"http://www.bliki.info/wiki/11px-Speakerlink.png\" alt=\"Listen\" width=\"11\" />\n" + 
-				"</a></p>", wikiModel.render("[[Image:Speakerlink.png|11px|link=Speakerlink.png|Listen]]", false));
-	}
-
-	public void testImage17() {
-		assertEquals("Test_'26_ToDo.jpg", Encoder.encodeTitleLocalUrl("Test & ToDo.jpg"));
-		assertEquals(
-				"\n"
-						+ "<p>\n"
-						+ "<div class=\"thumb tleft\">\n"
-						+ "<div class=\"thumbinner\" style=\"width:152px;\"><a class=\"internal\" href=\"http://www.bliki.info/wiki/File:150px-Test_4711.jpg\" title=\"Test 4711\"><img src=\"http://www.bliki.info/wiki/150px-Test_4711.jpg\" alt=\"Test 4711\" title=\"Test 4711\" class=\"location-left type-thumb\" width=\"150\" />\n"
-						+ "</a>\n" + "<div class=\"thumbcaption\">Test 4711</div></div>\n" + "</div>\n" + "</p>", wikiModel.render(
-						"[[File:Test 4711.jpg|thumb|left|150px|Test 4711]]", false));
-	}
-
+	
 	public void testImage00() {
 		assertEquals(
 				"\n" + 
@@ -229,5 +212,27 @@ public class WPImageFilterTest extends FilterTestSupport {
 				"<p><a class=\"image\" href=\"http://www.bliki.info/wiki/Sandbox:createNewPage#Section_Three\" ><img src=\"http://www.bliki.info/wiki/skull.jpg\" width=\"220\" />\n" + 
 				"</a></p>", wikiModel.render("[[Image:skull.jpg|link=sandbox:createNewPage#Section Three]]", false));
 	}
-
+	
+	public void testImage17() {
+		assertEquals("Test_'26_ToDo.jpg", Encoder.encodeTitleLocalUrl("Test & ToDo.jpg"));
+		assertEquals(
+				"\n"
+						+ "<p>\n"
+						+ "<div class=\"thumb tleft\">\n"
+						+ "<div class=\"thumbinner\" style=\"width:152px;\"><a class=\"internal\" href=\"http://www.bliki.info/wiki/File:150px-Test_4711.jpg\" title=\"Test 4711\"><img src=\"http://www.bliki.info/wiki/150px-Test_4711.jpg\" alt=\"Test 4711\" title=\"Test 4711\" class=\"location-left type-thumb\" width=\"150\" />\n"
+						+ "</a>\n" + "<div class=\"thumbcaption\">Test 4711</div></div>\n" + "</div>\n" + "</p>", wikiModel.render(
+						"[[File:Test 4711.jpg|thumb|left|150px|Test 4711]]", false));
+	}
+	
+	public void testImage19() {
+		assertEquals("\n" + 
+				"<p>test1<a class=\"image\" href=\"http://www.bliki.info/wiki/Image:PeanutButter.jpg\" ><img src=\"http://www.bliki.info/wiki/PeanutButter.jpg\" width=\"220\" />\n" + 
+				"</a>test2</p>", wikiModel.render("test1[[Image:PeanutButter.jpg]]test2", false));
+	}
+	
+	public void testImage18() {
+		assertEquals("\n" + 
+				"<p><a class=\"image\" href=\"http://www.bliki.info/wiki/Speakerlink.png\" title=\"Listen\"><img src=\"http://www.bliki.info/wiki/11px-Speakerlink.png\" alt=\"Listen\" width=\"11\" />\n" + 
+				"</a></p>", wikiModel.render("[[Image:Speakerlink.png|11px|link=Speakerlink.png|Listen]]", false));
+	}
 }

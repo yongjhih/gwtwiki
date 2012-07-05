@@ -30,7 +30,9 @@ public class WPLinkFilterTest extends FilterTestSupport {
 				"\n"
 						+ "<p>You could open the <a href=\"http://www.bliki.info/wiki/Wikipedia:sandbox\" title=\"Wikipedia:sandbox\">sandbox</a> in a separate window or tab to be able to see both this text and your tests in the sandbox.</p>",
 				wikiModel
-						.render("You could open the [[Wikipedia:sandbox|sandbox]] in a separate window or tab to be able to see both this text and your tests in the sandbox.", false));
+						.render(
+								"You could open the [[Wikipedia:sandbox|sandbox]] in a separate window or tab to be able to see both this text and your tests in the sandbox.",
+								false));
 	}
 
 	public void testLink0() {
@@ -38,12 +40,13 @@ public class WPLinkFilterTest extends FilterTestSupport {
 	}
 
 	public void testLink1() {
-		assertEquals("\n" + "<p><a href=\"http://en.wikipedia.org/wiki/Test\">Test</a></p>", wikiModel.render("[[en:Test|Test]]", false));
+		assertEquals("\n" + "<p><a href=\"http://en.wikipedia.org/wiki/Test\">Test</a></p>", wikiModel
+				.render("[[en:Test|Test]]", false));
 	}
 
 	public void testLink2() {
-		assertEquals("\n" + "<p><a href=\"http://www.bliki.info/wiki/Test\" title=\"Test\">Test</a></p>", wikiModel
-				.render("[[Test|Test]]", false));
+		assertEquals("\n" + "<p><a href=\"http://www.bliki.info/wiki/Test\" title=\"Test\">Test</a></p>", wikiModel.render(
+				"[[Test|Test]]", false));
 	}
 
 	public void testLink3() {
@@ -70,8 +73,8 @@ public class WPLinkFilterTest extends FilterTestSupport {
 	}
 
 	public void testLink5() {
-		assertEquals("\n" + "<p><a href=\"http://wikitravel.org/en/test\">wikitravel:test</a></p>", wikiModel
-				.render("[[wikitravel:test]]", false));
+		assertEquals("\n" + "<p><a href=\"http://wikitravel.org/en/test\">wikitravel:test</a></p>", wikiModel.render(
+				"[[wikitravel:test]]", false));
 	}
 
 	public void testLink6() {
@@ -92,8 +95,8 @@ public class WPLinkFilterTest extends FilterTestSupport {
 	}
 
 	public void testLink9() {
-		assertEquals("\n" + "<p>test [[lets start\n" + "a 2 rows link]] test</p>", wikiModel
-				.render("test [[lets start\na 2 rows link]] test", false));
+		assertEquals("\n" + "<p>test [[lets start\n" + "a 2 rows link]] test</p>", wikiModel.render(
+				"test [[lets start\na 2 rows link]] test", false));
 	}
 
 	public void testLink9a() {
@@ -110,7 +113,8 @@ public class WPLinkFilterTest extends FilterTestSupport {
 
 	public void testLink11() {
 		assertEquals("\n" + "<p>test\n" + "</p>\n" + "<ul>\n" + "<li>blabla[[List of cities by country#Morocco|</li></ul>\n"
-				+ "<p>Cities in Morocco]]</p>", wikiModel.render("test\n*blabla[[List of cities by country#Morocco|\nCities in Morocco]]", false));
+				+ "<p>Cities in Morocco]]</p>", wikiModel.render("test\n*blabla[[List of cities by country#Morocco|\nCities in Morocco]]",
+				false));
 	}
 
 	//
@@ -132,31 +136,37 @@ public class WPLinkFilterTest extends FilterTestSupport {
 		assertTrue(set.contains("nested"));
 	}
 
+	public void testLink14() {
+		assertEquals(
+				"\n"
+						+ "<p>Dolphins are <a href=\"http://www.bliki.info/wiki/Aquatic_mammal\" title=\"aquatic mammal\">aquatic mammals</a> that are closely related to <a href=\"http://www.bliki.info/wiki/Whale\" title=\"whale\">whales</a> and <a href=\"http://www.bliki.info/wiki/Porpoise\" title=\"porpoise\">porpoises</a>.</p>",
+				wikiModel.render("Dolphins are [[aquatic mammal]]s that are closely related to [[whale]]s and [[porpoise]]s.", false));
+	}
+
 	public void testInterwiki1() {
 		assertEquals("\n" + "<p><a href=\"http://de.wikipedia.org/wiki/Johann_Wolfgang_von_Goethe\">Goethes</a> Faust</p>", wikiModel
 				.render("[[de:Johann Wolfgang von Goethe|Goethe]]s Faust", false));
 	}
 
 	public void testInterwiki2() {
-		assertEquals("\n" + "<p><a href=\"/page/directory\">Page directory</a></p>", wikiModel
-				.render("[[intra:page/directory|Page directory]]", false));
+		assertEquals("\n" + "<p><a href=\"/page/directory\">Page directory</a></p>", wikiModel.render(
+				"[[intra:page/directory|Page directory]]", false));
 	}
 
 	public void testSectionLink01() {
-		assertEquals("\n" + "<p><a href=\"#Section_Link\">A Section Link</a></p>", wikiModel
-				.render("[[#Section Link|A Section Link]]", false));
+		assertEquals("\n" + "<p><a href=\"#Section_Link\">A Section Link</a></p>", wikiModel.render("[[#Section Link|A Section Link]]",
+				false));
 	}
-	
+
 	public void testSectionLink02() {
 		assertEquals("\n" + "<p><a href=\"#Section.C3.A4.C3.B6.C3.BC\">#Sectionäöü</a></p>", wikiModel.render("[[#Sectionäöü]]", false));
 	}
-	
+
 	/**
 	 * See issue 101
 	 */
 	public void testSectionLink03() {
-		assertEquals("\n" + "<p><a href=\"#Section_Link\">#Section Link</a></p>", wikiModel
-				.render("[[#Section Link]]", false));
+		assertEquals("\n" + "<p><a href=\"#Section_Link\">#Section Link</a></p>", wikiModel.render("[[#Section Link]]", false));
 	}
 
 	public void testSpecialLink01() {
@@ -167,7 +177,6 @@ public class WPLinkFilterTest extends FilterTestSupport {
 				wikiModel.render("* [[Special:Specialpages|Special Pages]]", false));
 	}
 
-	
 	public void testSubLink01() {
 		assertEquals("\n" + "<p><a href=\"http://www.bliki.info/wiki/Test/testing\" title=\"test/testing\">test/testing</a></p>",
 				wikiModel.render("[[test/testing]]", false));
@@ -204,7 +213,8 @@ public class WPLinkFilterTest extends FilterTestSupport {
 	}
 
 	public void testPlainTextConverter001() {
-		assertEquals("An external link.", wikiModel.render(new PlainTextConverter(), "An [http://www.example.com external link].", false));
+		assertEquals("An external link.", wikiModel.render(new PlainTextConverter(), "An [http://www.example.com external link].",
+				false));
 	}
 
 	public void testPlainTextConverter002() {

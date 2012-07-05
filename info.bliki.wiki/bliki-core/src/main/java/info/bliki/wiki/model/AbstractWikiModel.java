@@ -78,7 +78,7 @@ public abstract class AbstractWikiModel implements IWikiModel, IContext {
 	protected boolean fTemplateTopic = false;
 
 	protected int fExternalLinksCounter;
-	
+
 	/**
 	 * A tag that manages the &quot;table of content&quot;
 	 * 
@@ -420,7 +420,7 @@ public abstract class AbstractWikiModel implements IWikiModel, IContext {
 						aTagNode.addChild(new ContentToken(trimmedText));
 					} else {
 						aTagNode.addAttribute("class", "external autonumber", true);
-						aTagNode.addChild(new ContentToken("["+(++fExternalLinksCounter)+"]"));
+						aTagNode.addChild(new ContentToken("[" + (++fExternalLinksCounter) + "]"));
 					}
 				} else {
 					aTagNode.addAttribute("class", "externallink", true);
@@ -730,7 +730,7 @@ public abstract class AbstractWikiModel implements IWikiModel, IContext {
 	/**
 	 * {@inheritDoc}
 	 */
-	public void appendRawWikipediaLink(String rawLinkText, String suffix) {
+	public boolean appendRawWikipediaLink(String rawLinkText, String suffix) {
 		String rawTopicName = rawLinkText;
 		if (rawTopicName != null) {
 			// trim the name for whitespace characters on the left side
@@ -799,7 +799,7 @@ public abstract class AbstractWikiModel implements IWikiModel, IContext {
 			}
 
 			if (appendRawNamespaceLinks(rawTopicName, viewableLinkDescription, pipeIndex == (-1))) {
-				return;
+				return true;
 			}
 
 			int indx = rawTopicName.indexOf(':');
@@ -809,7 +809,7 @@ public abstract class AbstractWikiModel implements IWikiModel, IContext {
 			}
 			if (namespace != null && isImageNamespace(namespace)) {
 				parseInternalImageLink(namespace, rawLinkText);
-				return;
+				return false;
 			} else {
 				if (rawTopicName.length() > 0 && rawTopicName.charAt(0) == ':') {
 					rawTopicName = rawTopicName.substring(1);
@@ -823,8 +823,10 @@ public abstract class AbstractWikiModel implements IWikiModel, IContext {
 				} else {
 					appendInternalLink(rawTopicName, null, viewableLinkDescription, null, true);
 				}
+				return true;
 			}
 		}
+		return false;
 	}
 
 	/**
