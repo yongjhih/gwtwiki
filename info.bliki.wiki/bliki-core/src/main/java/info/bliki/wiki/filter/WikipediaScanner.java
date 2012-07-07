@@ -1,6 +1,5 @@
 package info.bliki.wiki.filter;
 
-import info.bliki.htmlcleaner.Utils;
 import info.bliki.wiki.model.Configuration;
 import info.bliki.wiki.model.ITableOfContent;
 import info.bliki.wiki.model.IWikiModel;

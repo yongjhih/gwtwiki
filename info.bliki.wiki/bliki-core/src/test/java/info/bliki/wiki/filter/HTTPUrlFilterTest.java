@@ -111,7 +111,7 @@ public class HTTPUrlFilterTest extends FilterTestSupport {
 						false));
 	}
 
-	public void testMailto() {
+	public void testMailto001() {
 		assertEquals(
 				"\n"
 						+ "<p>Linking to an e-mail address works the same way: \n"
@@ -119,6 +119,16 @@ public class HTTPUrlFilterTest extends FilterTestSupport {
 						+ "<a class=\"external free\" href=\"mailto:someone@domain.com\" rel=\"nofollow\" title=\"mailto:someone@domain.com\">someone</a></p>",
 				wikiModel.render("Linking to an e-mail address works the same way: \n" + "mailto:someone@domain.com or \n"
 						+ "[mailto:someone@domain.com someone]", false));
+	}
+	
+	public void testMailto002() {
+		assertEquals(
+				"\n" + 
+				"<p>Linking to an e-mail address works the same way: \n" + 
+				"<a class=\"external free\" href=\"maILto:someone@domain.com\" rel=\"nofollow\" title=\"maILto:someone@domain.com\">maILto:someone@domain.com</a> or \n" + 
+				"<a class=\"external free\" href=\"mAilTo:someone@domain.com\" rel=\"nofollow\" title=\"mAilTo:someone@domain.com\">someone</a></p>",
+				wikiModel.render("Linking to an e-mail address works the same way: \n" + "maILto:someone@domain.com or \n"
+						+ "[mAilTo:someone@domain.com someone]", false));
 	}
 
 	public void testWrongMailto() {

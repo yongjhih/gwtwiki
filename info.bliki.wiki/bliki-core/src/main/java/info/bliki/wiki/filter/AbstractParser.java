@@ -31,14 +31,6 @@ public abstract class AbstractParser extends WikipediaScanner {
 		fWhiteStartPosition = 0;
 	}
 
-	// public void initialize(String src) {
-	// super.initialize(src, 0);
-	// fCurrentPosition = 0;
-	// fCurrentCharacter = '\000';
-	// fWhiteStart = false;
-	// fWhiteStartPosition = 0;
-	// }
-
 	/**
 	 * Read the characters until the given string is found
 	 * 
@@ -165,55 +157,18 @@ public abstract class AbstractParser extends WikipediaScanner {
 		}
 	}
 
-	// protected boolean readSpecialWikiTags() {
-	// try {
-	// if (fSource[fCurrentPosition] != '/') {
-	// // starting tag
-	// WikiTagNode tagNode = parseTag(fCurrentPosition);
-	// if (tagNode != null) {
-	// String tagName = tagNode.getTagName();
-	// if (tagName.equals("nowiki")) {
-	// if (readUntilIgnoreCase("</", "nowiki>")) {
-	// return true;
-	// }
-	// } else if (tagName.equals("source")) {
-	// if (readUntilIgnoreCase("</", "source>")) {
-	// return true;
-	// }
-	// } else if (tagName.equals("math")) {
-	// if (readUntilIgnoreCase("</", "math>")) {
-	// return true;
-	// }
-	// } else if (tagName.equals("span")) {
-	// if (readUntilIgnoreCase("</", "span>")) {
-	// return true;
-	// }
-	// } else if (tagName.equals("div")) {
-	// if (readUntilIgnoreCase("</", "div>")) {
-	// return true;
-	// }
-	// }
-	// }
-	// }
-	// } catch (IndexOutOfBoundsException e) {
-	// // do nothing
-	// }
-	// return false;
-	// }
-
 	protected boolean isEmptyLine(int diff) {
 		int temp = fCurrentPosition - diff;
 		char ch;
 		try {
 			while (true) {
-				ch = fSource[temp];
+				ch = fSource[temp++];
 				if (!Character.isWhitespace(ch)) {
 					return false;
 				}
 				if (ch == '\n') {
 					return true;
 				}
-				temp++;
 			}
 		} catch (IndexOutOfBoundsException e) {
 			// ..

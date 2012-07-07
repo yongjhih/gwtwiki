@@ -102,8 +102,7 @@ public class WikipediaParser extends AbstractParser implements IParser {
 	private void createContentToken(final int diff) {
 		if (fWhiteStart) {
 			try {
-				final int whiteEndPosition = fCurrentPosition - diff;
-				int count = whiteEndPosition - fWhiteStartPosition;
+				final int count = fCurrentPosition - diff - fWhiteStartPosition;
 				if (count > 0) {
 					fWikiModel.append(new ContentToken(fStringSource.substring(fWhiteStartPosition, fWhiteStartPosition + count)));
 				}
@@ -283,36 +282,37 @@ public class WikipediaParser extends AbstractParser implements IParser {
 				}
 
 				if (isStartOfLine() && fWikiModel.getRecursionLevel() == 1) {
-					if (fWikiModel.stackSize() > 0 && (fWikiModel.peekNode() instanceof PTag) && isEmptyLine(1)) {
-						createContentToken(2);
-						reduceTokenStack(Configuration.HTML_PARAGRAPH_OPEN);
+					if (isEmptyLine(1)) {
+						if (fWikiModel.stackSize() > 0 && (fWikiModel.peekNode() instanceof PTag)) {
+							// close <p> tag:
+							createContentToken(2);
+							reduceTokenStack(Configuration.HTML_PARAGRAPH_OPEN);
+						}
 					} else {
-						if (!isEmptyLine(1)) {
-							if (fWikiModel.stackSize() == 0) {
-								addParagraph();
-								// if (fWikiModel.getRecursionLevel() == 1) {
-								// addParagraph();
-								// } else {
-								// if (fCurrentPosition > 1) {
-								// addParagraph();
-								// }
-								// }
+						if (fWikiModel.stackSize() == 0) {
+							addParagraph();
+							// if (fWikiModel.getRecursionLevel() == 1) {
+							// addParagraph();
+							// } else {
+							// if (fCurrentPosition > 1) {
+							// addParagraph();
+							// }
+							// }
+						} else {
+							TagToken tag = fWikiModel.peekNode();
+							if (tag instanceof WPPreTag) {
+								addPreformattedText();
+								// } else if (tag instanceof PTag) {
+								// createContentToken(fWhiteStart, fWhiteStartPosition, 2);
+								// reduceTokenStack(Configuration.HTML_PARAGRAPH_OPEN);
 							} else {
-								TagToken tag = fWikiModel.peekNode();
-								if (tag instanceof WPPreTag) {
-									addPreformattedText();
-									// } else if (tag instanceof PTag) {
-									// createContentToken(fWhiteStart, fWhiteStartPosition, 2);
-									// reduceTokenStack(Configuration.HTML_PARAGRAPH_OPEN);
-								} else {
-									String allowedParents = Configuration.HTML_PARAGRAPH_OPEN.getParents();
-									if (allowedParents != null) {
+								String allowedParents = Configuration.HTML_PARAGRAPH_OPEN.getParents();
+								if (allowedParents != null) {
 
-										int index = -1;
-										index = allowedParents.indexOf("|" + tag.getName() + "|");
-										if (index >= 0) {
-											addParagraph();
-										}
+									int index = -1;
+									index = allowedParents.indexOf("|" + tag.getName() + "|");
+									if (index >= 0) {
+										addParagraph();
 									}
 								}
 							}
@@ -432,22 +432,25 @@ public class WikipediaParser extends AbstractParser implements IParser {
 					break;
 				default:
 					if (Character.isLetter(fCurrentCharacter)) {
-						if (fCurrentCharacter == 'i' || fCurrentCharacter == 'I') {
-							// ISBN ?
-							if (parseISBNLinks()) {
+						if (fCurrentPosition < 2 || !Character.isLetterOrDigit(fSource[fCurrentPosition - 2])) {
+							if (fCurrentCharacter == 'i' || fCurrentCharacter == 'I') {
+								// ISBN ?
+								if (parseISBNLinks()) {
+									continue;
+								}
+							}
+
+							if (parseURIScheme()) {
+								// a URI scheme registered in the wiki model (ftp, http,
+								// https,...)
 								continue;
 							}
-						}
 
-						if (parseURIScheme()) {
-							// a URI scheme registered in the wiki model (ftp, http,
-							// https,...)
-							continue;
-						}
-
-						if (fWikiModel.isCamelCaseEnabled() && Character.isUpperCase(fCurrentCharacter) && fWikiModel.getRecursionLevel() <= 1) {
-							if (parseCamelCaseLink()) {
-								continue;
+							if (fWikiModel.isCamelCaseEnabled() && Character.isUpperCase(fCurrentCharacter)
+									&& fWikiModel.getRecursionLevel() <= 1) {
+								if (parseCamelCaseLink()) {
+									continue;
+								}
 							}
 						}
 					}
@@ -521,16 +524,15 @@ public class WikipediaParser extends AbstractParser implements IParser {
 	}
 
 	private boolean parseISBNLinks() {
-		int urlStartPosition = fCurrentPosition;
+		final int urlStartPosition = fCurrentPosition;
 		boolean foundISBN = false;
 		try {
-			String urlString = fStringSource.substring(fCurrentPosition - 1, fCurrentPosition + 4);
-			if (urlString.equalsIgnoreCase("isbn ")) {
-				fCurrentPosition += 4;
-				fCurrentCharacter = fSource[fCurrentPosition++];
-
-				createContentToken(6);
-				fWhiteStart = false;
+			if ((fCurrentCharacter == 'i' || fCurrentCharacter == 'I')
+					&& (fSource[fCurrentPosition] == 's' || fSource[fCurrentPosition] == 'S')
+					&& (fSource[++fCurrentPosition] == 'b' || fSource[fCurrentPosition] == 'B')
+					&& (fSource[++fCurrentPosition] == 'n' || fSource[fCurrentPosition] == 'N') && fSource[++fCurrentPosition] == ' ') {
+				fCurrentPosition++;
+				createContentToken(5);
 				foundISBN = true;
 				char ch;
 				ch = fSource[fCurrentPosition++];
@@ -539,10 +541,6 @@ public class WikipediaParser extends AbstractParser implements IParser {
 				}
 			}
 		} catch (IndexOutOfBoundsException e) {
-			if (!foundISBN) {
-				// rollback work :-)
-				fCurrentPosition = urlStartPosition;
-			}
 		}
 		if (foundISBN) {
 			String urlString = fStringSource.substring(urlStartPosition - 1, fCurrentPosition - 1);
@@ -550,91 +548,22 @@ public class WikipediaParser extends AbstractParser implements IParser {
 			fWikiModel.appendISBNLink(urlString);
 			return true;
 		}
+		// rollback work :-)
+		fCurrentPosition = urlStartPosition;
 		return false;
 	}
 
-	// private boolean parseFTPLinks() {
-	// int urlStartPosition = fCurrentPosition;
-	// boolean foundUrl = false;
-	// try {
-	// String urlString = fStringSource.substring(fCurrentPosition - 1,
-	// fCurrentPosition + 2);
-	// if (urlString.equalsIgnoreCase("ftp")) {
-	// fCurrentPosition += 2;
-	// fCurrentCharacter = fSource[fCurrentPosition++];
-	//
-	// if (fCurrentCharacter == ':' && fSource[fCurrentPosition++] == '/' &&
-	// fSource[fCurrentPosition++] == '/') {
-	// createContentToken(fWhiteStart, fWhiteStartPosition, 6);
-	// fWhiteStart = false;
-	// foundUrl = true;
-	// while (Encoder.isUrlIdentifierPart(fSource[fCurrentPosition++])) {
-	// }
-	// }
-	// }
-	// } catch (IndexOutOfBoundsException e) {
-	// if (!foundUrl) {
-	// // rollback work :-)
-	// fCurrentPosition = urlStartPosition;
-	// }
-	// }
-	// if (foundUrl) {
-	// String urlString = new String(fSource, urlStartPosition - 1,
-	// fCurrentPosition - urlStartPosition);
-	// fCurrentPosition--;
-	// fWikiModel.appendExternalLink(urlString, urlString, true);
-	// return true;
-	// }
-	// return false;
-	// }
-
-	// private boolean parseHTTPLinks() {
-	// int urlStartPosition = fCurrentPosition;
-	// boolean foundUrl = false;
-	// try {
-	// int diff = 7;
-	// String urlString = fStringSource.substring(fCurrentPosition - 1,
-	// fCurrentPosition + 3);
-	// if (urlString.equalsIgnoreCase("http")) {
-	// fCurrentPosition += 3;
-	// fCurrentCharacter = fSource[fCurrentPosition++];
-	// if (fCurrentCharacter == 's') { // optional
-	// fCurrentCharacter = fSource[fCurrentPosition++];
-	// diff++;
-	// }
-	//
-	// if (fCurrentCharacter == ':' && fSource[fCurrentPosition++] == '/' &&
-	// fSource[fCurrentPosition++] == '/') {
-	// createContentToken(fWhiteStart, fWhiteStartPosition, diff);
-	// fWhiteStart = false;
-	// foundUrl = true;
-	// while (Encoder.isUrlIdentifierPart(fSource[fCurrentPosition++])) {
-	// }
-	// }
-	// }
-	// } catch (IndexOutOfBoundsException e) {
-	// if (!foundUrl) {
-	// // rollback work :-)
-	// fCurrentPosition = urlStartPosition;
-	// }
-	// }
-	// if (foundUrl) {
-	// String urlString = new String(fSource, urlStartPosition - 1,
-	// fCurrentPosition - urlStartPosition);
-	// fCurrentPosition--;
-	// fWikiModel.appendExternalLink(urlString, urlString, true);
-	// return true;
-	// }
-	// return false;
-	// }
-
 	private boolean parseMailtoLinks() {
-		int urlStartPosition = fCurrentPosition;
+		final int urlStartPosition = fCurrentPosition;
 		int tempPosition = fCurrentPosition;
 		boolean foundUrl = false;
 		try {
-			String urlString = fStringSource.substring(fCurrentPosition - 1, fCurrentPosition + 6);
-			if (urlString.equalsIgnoreCase("mailto:")) {
+			if ((fCurrentCharacter == 'm' || fCurrentCharacter == 'M')
+					&& (fSource[fCurrentPosition] == 'a' || fSource[fCurrentPosition] == 'A')
+					&& (fSource[++fCurrentPosition] == 'i' || fSource[fCurrentPosition] == 'I')
+					&& (fSource[++fCurrentPosition] == 'l' || fSource[fCurrentPosition] == 'L')
+					&& (fSource[++fCurrentPosition] == 't' || fSource[fCurrentPosition] == 'T')
+					&& (fSource[++fCurrentPosition] == 'o' || fSource[fCurrentPosition] == 'O')) {
 				tempPosition += 6;
 				fCurrentCharacter = fSource[tempPosition++];
 
@@ -648,7 +577,7 @@ public class WikipediaParser extends AbstractParser implements IParser {
 			String urlString = fStringSource.substring(urlStartPosition - 1, tempPosition - 1);
 			String email = urlString.substring(7);
 			if (EmailValidator.getInstance().isValid(email)) {
-				createContentToken(1);
+				createContentToken(5);
 				fWhiteStart = false;
 				fCurrentPosition = tempPosition;
 				fCurrentPosition--;
