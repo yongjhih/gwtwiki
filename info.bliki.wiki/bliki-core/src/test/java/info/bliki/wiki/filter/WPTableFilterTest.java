@@ -232,9 +232,30 @@ public class WPTableFilterTest extends FilterTestSupport {
 	}
 
 	public void testBlockquoteTable06() {
-		assertEquals("\n" + "<table align=\"center\" border=\"1\" cellpadding=\"3\" cellspacing=\"0\">\n" + "\n" + "  \n" + "<tr>\n"
-				+ "\n" + "     \n" + "<td>1</td>\n" + "     \n" + "<td>2</td>\n" + "  \n" + "</tr> \n" + "  \n" + "<tr>\n" + "\n"
-				+ "     \n" + "<td>3</td> \n" + "     \n" + "<td>4</td> \n" + "  \n" + "</tr>\n" + "\n" + "</table>\n" + "", wikiModel
+		assertEquals("\n" + 
+				"<table align=\"center\" border=\"1\" cellpadding=\"3\" cellspacing=\"0\">\n" + 
+				"\n" + 
+				"   \n" + 
+				"<tr>\n" + 
+				"\n" + 
+				"      \n" + 
+				"<td>1</td>\n" + 
+				"      \n" + 
+				"<td>2</td>\n" + 
+				"   \n" + 
+				"</tr> \n" + 
+				"   \n" + 
+				"<tr>\n" + 
+				"\n" + 
+				"      \n" + 
+				"<td>3</td> \n" + 
+				"      \n" + 
+				"<td>4</td> \n" + 
+				"   \n" + 
+				"</tr>\n" + 
+				"\n" + 
+				"</table>\n" + 
+				"", wikiModel
 				.render("<table align=\"center\" border=\"1\" cellspacing=\"0\" cellpadding=\"3\">\n" + "   <tr>\n" + "      <td>1</td>\n"
 						+ "      <td>2</td>\n" + "   </tr> \n" + "   <tr>\n" + "      <td>3</td> \n" + "      <td>4</td> \n" + "   </tr>\n"
 						+ "</table>\n", false));

@@ -433,6 +433,103 @@ public abstract class AbstractParser extends WikipediaScanner {
 		return false;
 	}
 
+	protected final boolean getNextChar(char testedChar) {
+		int temp = fCurrentPosition;
+		try {
+			fCurrentCharacter = fSource[fCurrentPosition++];
+			if (fCurrentCharacter != testedChar) {
+				fCurrentPosition = temp;
+				return false;
+			}
+			return true;
+
+		} catch (IndexOutOfBoundsException e) {
+			fCurrentPosition = temp;
+			return false;
+		}
+	}
+
+	protected final int getNextChar(char testedChar1, char testedChar2) {
+		int temp = fCurrentPosition;
+		try {
+			int result;
+			fCurrentCharacter = fSource[fCurrentPosition++];
+			if (fCurrentCharacter == testedChar1)
+				result = 0;
+			else if (fCurrentCharacter == testedChar2)
+				result = 1;
+			else {
+				fCurrentPosition = temp;
+				return -1;
+			}
+			return result;
+		} catch (IndexOutOfBoundsException e) {
+			fCurrentPosition = temp;
+			return -1;
+		}
+	}
+
+	protected final boolean getNextCharAsDigit() {
+		int temp = fCurrentPosition;
+		try {
+			fCurrentCharacter = fSource[fCurrentPosition++];
+			if (!Character.isDigit(fCurrentCharacter)) {
+				fCurrentPosition = temp;
+				return false;
+			}
+			return true;
+		} catch (IndexOutOfBoundsException e) {
+			fCurrentPosition = temp;
+			return false;
+		}
+	}
+
+	protected final boolean getNextCharAsDigit(int radix) {
+
+		int temp = fCurrentPosition;
+		try {
+			fCurrentCharacter = fSource[fCurrentPosition++];
+
+			if (Character.digit(fCurrentCharacter, radix) == -1) {
+				fCurrentPosition = temp;
+				return false;
+			}
+			return true;
+		} catch (IndexOutOfBoundsException e) {
+			fCurrentPosition = temp;
+			return false;
+		}
+	}
+
+	protected final int getNumberOfChar(char testedChar) {
+		int number = 0;
+		try {
+			while ((fCurrentCharacter = fSource[fCurrentPosition++]) == testedChar) {
+				number++;
+			}
+		} catch (IndexOutOfBoundsException e) {
+
+		}
+		fCurrentPosition--;
+		return number;
+	}
+
+	protected final boolean getNextCharAsWikiPluginIdentifierPart() {
+		int temp = fCurrentPosition;
+		try {
+			fCurrentCharacter = fSource[fCurrentPosition++];
+
+			if (!Encoder.isWikiPluginIdentifierPart(fCurrentCharacter)) {
+				fCurrentPosition = temp;
+				return false;
+			}
+			return true;
+		} catch (IndexOutOfBoundsException e) {
+			fCurrentPosition = temp;
+			return false;
+		}
+	}
+	
 	private void parseNextPHPBBCode(String rawWikitext) {
 		int index = rawWikitext.indexOf('[');
 		int lastIndex = 0;

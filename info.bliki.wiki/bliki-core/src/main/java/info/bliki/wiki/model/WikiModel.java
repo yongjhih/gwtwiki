@@ -1,11 +1,13 @@
 package info.bliki.wiki.model;
 
 import info.bliki.htmlcleaner.ContentToken;
+import info.bliki.htmlcleaner.TagToken;
 import info.bliki.wiki.filter.Encoder;
 import info.bliki.wiki.filter.HTMLConverter;
 import info.bliki.wiki.filter.ITextConverter;
 import info.bliki.wiki.filter.WikipediaParser;
 import info.bliki.wiki.namespaces.INamespace;
+import info.bliki.wiki.tags.PTag;
 import info.bliki.wiki.tags.WPATag;
 
 import java.io.IOException;
@@ -271,8 +273,19 @@ public class WikiModel extends AbstractWikiModel {
 				}
 			}
 			imageSrc = imageSrc.replace("${image}", imageName);
+			String type = imageFormat.getType();
+			TagToken tag = null;
+			if ("thumb".equals(type) || "frame".equals(type)) {
+				if (fTagStack.size() > 0) {
+					tag = peekNode();
+				}
+				reduceTokenStack(Configuration.HTML_DIV_OPEN);
 
+			}
 			appendInternalImageLink(imageHref, imageSrc, imageFormat);
+			if (tag instanceof PTag) {
+				pushNode(new PTag());
+			}
 		}
 	}
 

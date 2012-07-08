@@ -17,14 +17,14 @@ import java.util.Map;
  * highlighting extension</a>.
  * 
  */
-public class SourceTag extends HTMLTag implements INoBodyParsingTag {
+public class SourceTag extends HTMLBlockTag implements INoBodyParsingTag {
 
 	protected final static String SOURCE_START_1 = "<pre class=\"";
 	protected final static String SOURCE_START_2 = "\">";
 	protected final static String SOURCE_END = "</pre>";
 
 	public SourceTag() {
-		super("source");
+		super("source", null);
 	}
 
 	@Override

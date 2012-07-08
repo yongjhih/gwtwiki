@@ -1,5 +1,6 @@
 package info.bliki.wiki.filter;
 
+import info.bliki.htmlcleaner.TagToken;
 import info.bliki.wiki.model.Configuration;
 import info.bliki.wiki.model.ITableOfContent;
 import info.bliki.wiki.model.IWikiModel;
@@ -1479,4 +1480,31 @@ public class WikipediaScanner {
 		return -1;
 	}
 
+	/**
+	 * Reduce the current token stack until the given nodes name is at the top of
+	 * the stack. Useful for closing HTML tags.
+	 */
+	protected void reduceStackUntilToken(TagToken node) {
+		TagToken tag;
+		int index = -1;
+		String allowedParents = node.getParents();
+		while (fWikiModel.stackSize() > 0) {
+			tag = fWikiModel.peekNode();
+			if (node.getName().equals(tag.getName())) {
+				fWikiModel.popNode();
+				break;
+			}
+			if (allowedParents == null) {
+				fWikiModel.popNode();
+			} else {
+				index = allowedParents.indexOf("|" + tag.getName() + "|");
+				if (index < 0) {
+					fWikiModel.popNode();
+				} else {
+					break;
+				}
+			}
+		}
+	}
+	
 }

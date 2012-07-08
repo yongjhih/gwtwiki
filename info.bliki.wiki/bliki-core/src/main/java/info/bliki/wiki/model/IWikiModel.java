@@ -972,4 +972,9 @@ public interface IWikiModel extends IConfiguration {
 	 */
 	public void tearDown();
 
+	/**
+	 * Reduce the current token stack until an allowed parent is at the top of the
+	 * stack
+	 */
+	public void reduceTokenStack(TagToken node);
 }

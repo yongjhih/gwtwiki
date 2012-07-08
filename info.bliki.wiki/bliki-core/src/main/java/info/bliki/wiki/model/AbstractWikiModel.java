@@ -522,33 +522,32 @@ public abstract class AbstractWikiModel implements IWikiModel, IContext {
 		// }
 		// }
 		pushNode(divInnerTagNode);
+		try {
+			// TODO: test all these cases
+			if (caption != null && caption.length() > 0
+					&& ("frame".equals(imageType) || "thumb".equals(imageType) || "thumbnail".equals(imageType))) {
 
-		// TODO: test all these cases
-		if (caption != null && caption.length() > 0
-				&& ("frame".equals(imageType) || "thumb".equals(imageType) || "thumbnail".equals(imageType))) {
-
-			TagNode captionTagNode = new TagNode("div");
-			String clazzValue = "caption";
-			String type = imageFormat.getType();
-			if (type != null) {
-				clazzValue = type + clazzValue;
+				TagNode captionTagNode = new TagNode("div");
+				String clazzValue = "caption";
+				String type = imageFormat.getType();
+				if (type != null) {
+					clazzValue = type + clazzValue;
+				}
+				captionTagNode.addAttribute("class", clazzValue, false);
+				//			
+				TagStack localStack = WikipediaParser.parseRecursive(caption, this, true, true);
+				captionTagNode.addChildren(localStack.getNodeList());
+				String altAttribute = imageFormat.getAlt();
+				if (altAttribute == null) {
+					altAttribute = captionTagNode.getBodyString();
+					imageFormat.setAlt(Encoder.encodeHtml(altAttribute));// see issue #25
+				}
+				pushNode(captionTagNode);
+				popNode();
 			}
-			captionTagNode.addAttribute("class", clazzValue, false);
-			//			
-			TagStack localStack = WikipediaParser.parseRecursive(caption, this, true, true);
-			captionTagNode.addChildren(localStack.getNodeList());
-			String altAttribute = imageFormat.getAlt();
-			if (altAttribute == null) {
-				altAttribute = captionTagNode.getBodyString();
-				imageFormat.setAlt(Encoder.encodeHtml(altAttribute));// see issue #25
-			}
-			pushNode(captionTagNode);
-			// WikipediaParser.parseRecursive(caption, this);
-			popNode();
+		} finally {
+			popNode(); // div
 		}
-
-		popNode(); // div
-
 	}
 
 	/**
@@ -1845,4 +1844,34 @@ public abstract class AbstractWikiModel implements IWikiModel, IContext {
 		return fTagStack.getNodeList();
 	}
 
+	/**
+	 * Reduce the current token stack until an allowed parent is at the top of the
+	 * stack
+	 */
+	public void reduceTokenStack(TagToken node) {
+		String allowedParents = node.getParents();
+		if (allowedParents != null) {
+			TagToken tag;
+			int index = -1;
+
+			while (stackSize() > 0) {
+				tag = peekNode();
+				index = allowedParents.indexOf("|" + tag.getName() + "|");
+				if (index < 0) {
+					popNode();
+					if (tag.getName().equals(node.getName())) {
+						// for wrong nested HTML tags like <table> <tr><td>number
+						// 1<tr><td>number 2</table>
+						break;
+					}
+				} else {
+					break;
+				}
+			}
+		} else {
+			while (stackSize() > 0) {
+				popNode();
+			}
+		}
+	}
 }
