@@ -25,31 +25,8 @@ import java.util.List;
  * A Wikipedia syntax parser for parsing in wiki preformatted blocks (rendered
  * as &lt;pre&gt;...&lt;/pre&gt;)
  * 
- */ 
+ */
 public class WikipediaPreTagParser extends AbstractParser {
-	final static int TokenNotFound = -2;
-
-	final static int TokenIgnore = -1;
-
-	final static int TokenSTART = 0;
-
-	final static int TokenEOF = 1;
-
-	final static int TokenBOLD = 3;
-
-	final static int TokenITALIC = 4;
-
-	final static int TokenBOLDITALIC = 5;
-
-	final static HTMLTag BOLD = new WPTag("b");
-
-	final static HTMLTag ITALIC = new WPTag("i");
-
-	final static HTMLTag BOLDITALIC = new WPBoldItalicTag();
-
-	final static HTMLTag STRONG = new WPTag("strong");
-
-	final static HTMLTag EM = new WPTag("em");
 
 	/**
 	 * Enable HTML tags
@@ -71,27 +48,7 @@ public class WikipediaPreTagParser extends AbstractParser {
 		}
 	}
 
-	/**
-	 * Copy the read ahead content in the resulting HTML text token.
-	 * 
-	 * @param diff
-	 *          subtract <code>diff</code> form the current parser position to get
-	 *          the HTML text token end position.
-	 */
-	private void createContentToken(final int diff) {
-		if (fWhiteStart) {
-			try {
-				final int count = fCurrentPosition - diff - fWhiteStartPosition;
-				if (count > 0) {
-					fWikiModel.append(new ContentToken(fStringSource.substring(fWhiteStartPosition, fWhiteStartPosition + count)));
-				}
-			} finally {
-				fWhiteStart = false;
-			}
-		}
-	}
-
-	protected int getNextToken() // throws InvalidInputException
+	public int getNextToken() // throws InvalidInputException
 	{
 		fWhiteStart = true;
 		fWhiteStartPosition = fCurrentPosition;
@@ -495,66 +452,6 @@ public class WikipediaPreTagParser extends AbstractParser {
 		}
 		reduceTokenStack();
 
-	}
-
-	/**
-	 * Reduce the current token stack completely
-	 */
-	private void reduceTokenStack() {
-		while (fWikiModel.stackSize() > 0) {
-			fWikiModel.popNode();
-		}
-	}
-
-	private void reduceTokenStackBoldItalic() {
-		boolean found = false;
-		while (fWikiModel.stackSize() > 0) {
-			TagToken token = fWikiModel.peekNode();//
-			if (token.equals(BOLD) || token.equals(ITALIC) || token.equals(BOLDITALIC)) {
-				if (fWhiteStart) {
-					found = true;
-					createContentToken(1);
-				}
-				fWikiModel.popNode();
-			} else {
-				return;
-			}
-		}
-		if (found) {
-			fWhiteStart = true;
-			fWhiteStartPosition = fCurrentPosition;
-		}
-	}
-
-	/**
-	 * Reduce the current token stack until an allowed parent is at the top of the
-	 * stack
-	 */
-	private void reduceTokenStack(TagToken node) {
-		String allowedParents = node.getParents();
-		if (allowedParents != null) {
-			TagToken tag;
-			int index = -1;
-
-			while (fWikiModel.stackSize() > 0) {
-				tag = fWikiModel.peekNode();
-				index = allowedParents.indexOf("|" + tag.getName() + "|");
-				if (index < 0) {
-					fWikiModel.popNode();
-					if (tag.getName().equals(node.getName())) {
-						// for wrong nested HTML tags like <table> <tr><td>number
-						// 1<tr><td>number 2</table>
-						break;
-					}
-				} else {
-					break;
-				}
-			}
-		} else {
-			while (fWikiModel.stackSize() > 0) {
-				fWikiModel.popNode();
-			}
-		}
 	}
 
 	public boolean isNoToC() {

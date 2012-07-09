@@ -33,34 +33,6 @@ import java.util.List;
  * @see TemplateParser for the first pass
  */
 public class WikipediaParser extends AbstractParser implements IParser {
-	public static final String[] TOC_IDENTIFIERS = { "TOC", "NOTOC", "FORCETOC" };
-
-	final static String HEADER_STRINGS[] = { "=", "==", "===", "====", "=====", "======" };
-
-	final static int TokenNotFound = -2;
-
-	final static int TokenIgnore = -1;
-
-	final static int TokenSTART = 0;
-
-	final static int TokenEOF = 1;
-
-	final static int TokenBOLD = 3;
-
-	final static int TokenITALIC = 4;
-
-	final static int TokenBOLDITALIC = 5;
-
-	final static HTMLTag BOLD = new WPTag("b");
-
-	final static HTMLTag ITALIC = new WPTag("i");
-
-	final static HTMLTag BOLDITALIC = new WPBoldItalicTag();
-
-	final static HTMLTag STRONG = new WPTag("strong");
-
-	final static HTMLTag EM = new WPTag("em");
-
 	private ITableOfContent fTableOfContentTag = null;
 
 	private int fHeadCounter = 0;
@@ -99,26 +71,6 @@ public class WikipediaParser extends AbstractParser implements IParser {
 	 *          subtract <code>diff</code> form the current parser position to get
 	 *          the HTML text token end position.
 	 */
-	private void createContentToken(final int diff) {
-		if (fWhiteStart) {
-			try {
-				final int count = fCurrentPosition - diff - fWhiteStartPosition;
-				if (count > 0) {
-					fWikiModel.append(new ContentToken(fStringSource.substring(fWhiteStartPosition, fWhiteStartPosition + count)));
-				}
-			} finally {
-				fWhiteStart = false;
-			}
-		}
-	}
-
-	/**
-	 * Copy the read ahead content in the resulting HTML text token.
-	 * 
-	 * @param diff
-	 *          subtract <code>diff</code> form the current parser position to get
-	 *          the HTML text token end position.
-	 */
 	private boolean createPreContentToken(final int diff) {
 		if (fWhiteStart) {
 			try {
@@ -135,9 +87,7 @@ public class WikipediaParser extends AbstractParser implements IParser {
 		return false;
 	}
 
-	
-
-	protected int getNextToken() // throws InvalidInputException
+	public int getNextToken() // throws InvalidInputException
 	{
 		fWhiteStart = true;
 		fWhiteStartPosition = fCurrentPosition;
@@ -700,24 +650,15 @@ public class WikipediaParser extends AbstractParser implements IParser {
 				fWikiModel.pushNode(new WPPreTag());
 
 				char ch = ' ';
-//				boolean emptyLine;
 				try {
 					while (ch == ' ' || ch == '\t') {
 						// SPACE or TAB => check if it's a pre-formatted text
 						fWhiteStart = true;
 						fWhiteStartPosition = fCurrentPosition;
 						ch = fSource[fCurrentPosition++];
-//						emptyLine = true;
 						while (ch != '\n' && fCurrentPosition < fSource.length) {
-//							if (!Character.isWhitespace(ch)) {
-//								emptyLine = false;
-//							}
 							ch = fSource[fCurrentPosition++];
 						}
-//						if (emptyLine) {
-//							fCurrentPosition = fWhiteStartPosition;
-//							return false;
-//						}
 						if (fCurrentPosition == fSource.length) {
 							// scanner reached end of text
 							if (!createPreContentToken(0)) {
@@ -755,7 +696,6 @@ public class WikipediaParser extends AbstractParser implements IParser {
 				}
 
 			}
-			// createContentToken(1);
 			return true;
 		}
 		return false;
@@ -1161,17 +1101,14 @@ public class WikipediaParser extends AbstractParser implements IParser {
 			case TokenBOLDITALIC:
 				if (fWikiModel.stackSize() > 0 && fWikiModel.peekNode().equals(BOLDITALIC)) {
 					fWikiModel.popNode();
-					// fResultBuffer.append("</i></b>");
 				} else if (fWikiModel.stackSize() > 1 && fWikiModel.peekNode().equals(BOLD)
 						&& fWikiModel.getNode(fWikiModel.stackSize() - 2).equals(ITALIC)) {
 					fWikiModel.popNode();
 					fWikiModel.popNode();
-					// fResultBuffer.append("</b></i>");
 				} else if (fWikiModel.stackSize() > 1 && fWikiModel.peekNode().equals(ITALIC)
 						&& fWikiModel.getNode(fWikiModel.stackSize() - 2).equals(BOLD)) {
 					fWikiModel.popNode();
 					fWikiModel.popNode();
-					// fResultBuffer.append("</i></b>");
 				} else if (fWikiModel.stackSize() > 0 && fWikiModel.peekNode().equals(BOLD)) {
 					fWikiModel.popNode();
 					fWikiModel.pushNode(new WPTag("i"));
@@ -1180,7 +1117,6 @@ public class WikipediaParser extends AbstractParser implements IParser {
 					fWikiModel.pushNode(new WPTag("b"));
 				} else {
 					fWikiModel.pushNode(new WPBoldItalicTag());
-					// fResultBuffer.append("<b><i>");
 				}
 				break;
 			case TokenBOLD:
@@ -1190,23 +1126,18 @@ public class WikipediaParser extends AbstractParser implements IParser {
 					// fResultBuffer.append("</b>");
 				} else if (fWikiModel.stackSize() > 0 && fWikiModel.peekNode().equals(BOLD)) {
 					fWikiModel.popNode();
-					// fResultBuffer.append("</b>");
 				} else {
 					fWikiModel.pushNode(new WPTag("b"));
-					// fResultBuffer.append("<b>");
 				}
 				break;
 			case TokenITALIC:
 				if (fWikiModel.stackSize() > 0 && fWikiModel.peekNode().equals(BOLDITALIC)) {
 					fWikiModel.popNode();
 					fWikiModel.pushNode(new WPTag("b"));
-					// fResultBuffer.append("</i>");
 				} else if (fWikiModel.stackSize() > 0 && fWikiModel.peekNode().equals(ITALIC)) {
 					fWikiModel.popNode();
-					// fResultBuffer.append("</i>");
 				} else {
 					fWikiModel.pushNode(new WPTag("i"));
-					// fResultBuffer.append("<i>");
 				}
 				break;
 			}
@@ -1219,35 +1150,6 @@ public class WikipediaParser extends AbstractParser implements IParser {
 			}
 		}
 
-	}
-
-	/**
-	 * Reduce the current token stack completely
-	 */
-	private void reduceTokenStack() {
-		while (fWikiModel.stackSize() > 0) {
-			fWikiModel.popNode();
-		}
-	}
-
-	private void reduceTokenStackBoldItalic() {
-		boolean found = false;
-		while (fWikiModel.stackSize() > 0) {
-			TagToken token = fWikiModel.peekNode();//
-			if (token.equals(BOLD) || token.equals(ITALIC) || token.equals(BOLDITALIC)) {
-				if (fWhiteStart) {
-					found = true;
-					createContentToken(1);
-				}
-				fWikiModel.popNode();
-			} else {
-				return;
-			}
-		}
-		if (found) {
-			fWhiteStart = true;
-			fWhiteStartPosition = fCurrentPosition;
-		}
 	}
 
 	public boolean isNoToC() {
