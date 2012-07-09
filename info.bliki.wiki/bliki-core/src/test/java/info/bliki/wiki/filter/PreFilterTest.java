@@ -112,12 +112,10 @@ public class PreFilterTest extends FilterTestSupport {
 					"<pre>\n" + 
 					"test1\n" + 
 					"\n" + 
-					"</pre>  	 \n" + 
-					"<pre>\n" + 
 					"test2\n" + 
 					"</pre>", wikiModel.render("== TestLBPre ==\n" + 
 					" test1\n" + 
-					"   \t \n" + 
+					" \n" + 
 					" test2", false));
 	}
 	

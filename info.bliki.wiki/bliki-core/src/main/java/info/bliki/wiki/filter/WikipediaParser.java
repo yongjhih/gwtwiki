@@ -690,12 +690,8 @@ public class WikipediaParser extends AbstractParser implements IParser {
 
 	private boolean parsePreformattedWikiBlock() {
 		if (isStartOfLine() && !isEmptyLine(1)) {
-			// if (fWikiModel.stackSize() == 0 ||
-			// !fWikiModel.peekNode().equals("pre")) {
 			if (fWikiModel.stackSize() == 0 || !(fWikiModel.peekNode() instanceof HTMLBlockTag)
 					|| (fWikiModel.peekNode() instanceof PTag)) {
-				// !(fWikiModel.peekNode() instanceof PreTag || fWikiModel.peekNode()
-				// instanceof WPPreTag)) {
 				createContentToken(2);
 				fWikiModel.reduceTokenStack(Configuration.HTML_PRE_OPEN);
 
@@ -704,24 +700,24 @@ public class WikipediaParser extends AbstractParser implements IParser {
 				fWikiModel.pushNode(new WPPreTag());
 
 				char ch = ' ';
-				boolean emptyLine;
+//				boolean emptyLine;
 				try {
 					while (ch == ' ' || ch == '\t') {
 						// SPACE or TAB => check if it's a pre-formatted text
 						fWhiteStart = true;
 						fWhiteStartPosition = fCurrentPosition;
 						ch = fSource[fCurrentPosition++];
-						emptyLine = true;
+//						emptyLine = true;
 						while (ch != '\n' && fCurrentPosition < fSource.length) {
-							if (!Character.isWhitespace(ch)) {
-								emptyLine = false;
-							}
+//							if (!Character.isWhitespace(ch)) {
+//								emptyLine = false;
+//							}
 							ch = fSource[fCurrentPosition++];
 						}
-						if (emptyLine) {
-							fCurrentPosition = fWhiteStartPosition;
-							return false;
-						}
+//						if (emptyLine) {
+//							fCurrentPosition = fWhiteStartPosition;
+//							return false;
+//						}
 						if (fCurrentPosition == fSource.length) {
 							// scanner reached end of text
 							if (!createPreContentToken(0)) {
@@ -752,7 +748,6 @@ public class WikipediaParser extends AbstractParser implements IParser {
 						}
 
 					}
-					// fCurrentPosition--;
 				} catch (IndexOutOfBoundsException e) {
 					fCurrentPosition--;
 				} finally {
