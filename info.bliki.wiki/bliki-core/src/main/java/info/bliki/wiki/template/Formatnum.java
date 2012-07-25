@@ -1,7 +1,9 @@
 package info.bliki.wiki.template;
 
+import info.bliki.wiki.model.Configuration;
 import info.bliki.wiki.model.IWikiModel;
 
+import java.text.NumberFormat;
 import java.util.List;
 
 /**
@@ -22,7 +24,17 @@ public class Formatnum extends AbstractTemplateFunction {
 	public String parseFunction(List<String> list, IWikiModel model, char[] src, int beginIndex, int endIndex, boolean isSubst) {
 		if (list.size() > 0) {
 			String result = isSubst ? list.get(0) : parseTrim(list.get(0), model);
-			// TODO add formatting rules here
+			try {
+				Double dbl = new Double(result);
+				result = NumberFormat.getNumberInstance(model.getLocale()).format(dbl);
+			} catch (Exception ex) {
+				if (Configuration.DEBUG) {
+					System.out.println("formatnum error: " + ex.getMessage());
+				}
+				if (Configuration.STACKTRACE) {
+					ex.printStackTrace();
+				}
+			}
 			return result;
 		}
 		return null;

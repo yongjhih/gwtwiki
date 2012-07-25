@@ -59,7 +59,7 @@ public abstract class AbstractWikiModel implements IWikiModel, IContext {
 
 	private boolean fInitialized;
 
-	private final Locale fLocale;
+	protected Locale fLocale;
 
 	private IConfiguration fConfiguration;
 

@@ -68,6 +68,22 @@ import java.util.regex.Pattern;
  * 
  */
 public class Configuration implements IConfiguration {
+	
+	/**
+	 * Print additional debug information to System.out
+	 */
+	public final static boolean DEBUG = false;
+	
+	/**
+	 * Print additional stack trace information to System.out
+	 */
+	public final static boolean STACKTRACE = false;
+
+	/**
+	 * Print parser function calls (ITemplateFunction calls) with isSubst==false
+	 */
+	public final static boolean PARSER_FUNCTIONS = false;
+
 	private static final String INTERWIKI_RESOURCE_NAME = "/interwiki.properties";
 
 	public static Properties interwikiMapping;
@@ -316,7 +332,7 @@ public class Configuration implements IConfiguration {
 	 * Limits the recursive call of the Wikipedia and Template parser to a depth
 	 * of PARSER_RECURSION_LIMIT
 	 */
-	public final static int PARSER_RECURSION_LIMIT = 32;
+	public final static int PARSER_RECURSION_LIMIT = 64;
 
 	/**
 	 * Limits the recursive call of the HTMLConverter renderer to a depth of

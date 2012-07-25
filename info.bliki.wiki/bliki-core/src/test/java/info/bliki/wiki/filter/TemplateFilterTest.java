@@ -790,4 +790,13 @@ public class TemplateFilterTest extends FilterTestSupport {
 	// wikiModel.render("test {{birth date and age|1956|7|9}} test123"));
 	// }
 
+	public void testRndfracTemplate001() {
+		assertEquals("\n" + 
+				"<p><span class=\"frac nowrap\"><sup>1</sup>⁄<sub>8</sub></span></p>", wikiModel.render("{{rndfrac|0.1234|8}}", false));
+	}
+	
+	public void testRndfracTemplate002() {
+		assertEquals("\n" + 
+				"<p><span class=\"frac nowrap\">12<sup> </sup><sup>4</sup>⁄<sub>6</sub></span></p>", wikiModel.render("{{rndfrac|12.65|6}}", false));
+	}
 }

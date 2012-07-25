@@ -1,5 +1,6 @@
 package info.bliki.wiki.template;
 
+import info.bliki.wiki.model.Configuration;
 import info.bliki.wiki.model.IWikiModel;
 import info.bliki.wiki.template.expr.eval.DoubleEvaluator;
 
@@ -37,6 +38,12 @@ public class Ifexpr extends AbstractTemplateFunction {
 					}
 					return isSubst ? list.get(1) : parseTrim(list.get(1), model);
 				} catch (Exception e) {
+					if (Configuration.DEBUG) {
+						System.out.println("#ifexpr error: "+condition);
+					}
+					if (Configuration.STACKTRACE) {
+						e.printStackTrace();
+					}
 					return "<div class=\"error\">Expression error: " + e.getMessage() + "</div>";
 				}
 			} else {

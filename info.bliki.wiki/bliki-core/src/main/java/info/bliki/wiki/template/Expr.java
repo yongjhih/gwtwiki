@@ -1,6 +1,7 @@
 package info.bliki.wiki.template;
 
 import info.bliki.wiki.filter.TemplateParser;
+import info.bliki.wiki.model.Configuration;
 import info.bliki.wiki.model.IWikiModel;
 import info.bliki.wiki.template.expr.eval.DoubleEvaluator;
 
@@ -27,7 +28,7 @@ public class Expr extends AbstractTemplateFunction {
 	public String parseFunction(List<String> list, IWikiModel model, char[] src, int beginIndex, int endIndex, boolean isSubst)
 			throws IOException {
 		if (list.size() > 0) {
-			String expression = list.get(0).trim();
+			String expression = parseTrim(list.get(0), model);
 			if (expression.length() == 0) {
 				return null;
 			}
@@ -51,6 +52,12 @@ public class Expr extends AbstractTemplateFunction {
 				String result = Double.toString(d);
 				return result.toUpperCase();
 			} catch (Exception e) {
+				if (Configuration.DEBUG) {
+					System.out.println("#expr error: "+expression);
+				}
+				if (Configuration.STACKTRACE) {
+					e.printStackTrace();
+				}
 				return "<div class=\"error\">Expression error: " + e.getMessage() + "</div>";
 				// e.printStackTrace();
 			}

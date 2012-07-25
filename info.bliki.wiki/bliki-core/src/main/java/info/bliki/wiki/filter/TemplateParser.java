@@ -81,6 +81,9 @@ public class TemplateParser extends AbstractParser {
 		try {
 			int level = wikiModel.incrementRecursionLevel();
 			if (level > Configuration.PARSER_RECURSION_LIMIT) {
+				if (Configuration.DEBUG) {
+					System.out.println("Recursion1 error: " + rawWikitext);
+				}
 				writer.append("Error - recursion limit exceeded parsing templates.");
 				return;
 			}
@@ -131,6 +134,9 @@ public class TemplateParser extends AbstractParser {
 		try {
 			int level = wikiModel.incrementRecursionLevel();
 			if (level > Configuration.PARSER_RECURSION_LIMIT) {
+				if (Configuration.DEBUG) {
+					System.out.println("Recursion2 error: " + rawWikitext);
+				}
 				writer.append("Error - recursion limit exceeded parsing templates.");
 				return;
 			}
@@ -627,6 +633,9 @@ public class TemplateParser extends AbstractParser {
 					// if (function.charAt(0) == '#') {
 					// #if:, #ifeq:,...
 					parts.set(0, templateName.substring(currOffset));
+					if (Configuration.PARSER_FUNCTIONS) {
+						System.out.println(function + ": " + parts);
+					}
 					plainContent = templateFunction.parseFunction(parts, fWikiModel, fSource, startTemplatePosition + currOffset, endOffset,
 							false);
 					fCurrentPosition = endPosition;

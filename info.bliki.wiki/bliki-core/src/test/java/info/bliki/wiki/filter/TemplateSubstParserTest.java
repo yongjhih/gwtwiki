@@ -73,7 +73,7 @@ public class TemplateSubstParserTest extends FilterTestSupport {
 	}
 
 	public void testSubst009() {
-		assertEquals("<div class=\"error\">Expression error: Unrecognised punctuation character: \"{\"</div>", wikiModel
+		assertEquals("6", wikiModel
 				.parseTemplates("{{subst:#expr:2*{{{p|3}}}}}"));
 	}
 }

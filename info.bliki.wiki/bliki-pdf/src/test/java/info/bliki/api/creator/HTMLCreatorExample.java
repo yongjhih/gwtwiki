@@ -191,6 +191,10 @@ public class HTMLCreatorExample {
 		testWikipediaENAPI("Pakistan");
 	}
 	
+	public static void testCreator015() {
+		testWikipediaENAPI("Alps");
+	}
+	
 	public static void testCreateText001() {
 		testWikipediaText(TEXT_ISSUE_96, "Wikipedia:Hauptseite/Artikel des Tages/Donnerstag", "http://de.wikipedia.org/w/api.php", Locale.GERMAN);
 	}

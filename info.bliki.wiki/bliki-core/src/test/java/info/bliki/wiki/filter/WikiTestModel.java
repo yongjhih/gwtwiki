@@ -18,8 +18,10 @@ import java.util.Map;
  * 
  */
 public class WikiTestModel extends WikiModel {
-	public static String SORTNAME = 
-		    "<includeonly><</includeonly><noinclude>&lt;</noinclude>span style=\"display:none;\">{{#if:{{{4|{{{sort|}}}}}} | {{{4|{{{sort}}}}}} | {{{2|{{{last}}}}}}, {{{1|{{{first}}}}}} }}<includeonly><</includeonly><noinclude>&lt;</noinclude>/span>{{#if:{{{nolink|}}}\n"
+
+	public static String RNDFRAC = "<includeonly>{{#ifexpr:({{{2}}}-1)round0=abs({{{2}}}-1)|{{#ifexpr:{{{1}}}*{{{2}}}round0<0|−}}{{formatnum:{{rndfrac/out|{{#expr:floor((abs{{{1}}}*{{{2}}}round0)/{{{2}}})}}|{{#expr:(abs{{{1}}}*{{{2}}}round0)mod{{{2}}}}}|{{{2}}}|{{gcd|{{#expr:(abs{{{1}}}*{{{2}}}round0)mod{{{2}}}}}|{{{2}}}}}}}}}|{{color|red|This fractional rounding function only accepts positive intergers as the denominator.}}}}</includeonly><noinclude>{{documentation}}</noinclude>\n";
+	public static String RNDFRAC_OUT = "<includeonly>{{#ifeq:{{{2}}}|0|{{{1}}}|<span class=\"frac nowrap\">{{#ifexpr:{{{1}}}>0|{{{1}}}<sup>&#32;</sup>}}{{#iferror:{{#expr:1/{{{4}}}}}|<sup>{{{2}}}</sup>&frasl;<sub>{{{3}}}</sub>|<sup>{{#expr:{{{2}}}/{{{4}}}}}</sup>&frasl;<sub>{{#expr:{{{3}}}/{{{4}}}}}</sub>}}</span>}}</includeonly><noinclude>{{documentation}}</noinclude>";
+	public static String SORTNAME = "<includeonly><</includeonly><noinclude>&lt;</noinclude>span style=\"display:none;\">{{#if:{{{4|{{{sort|}}}}}} | {{{4|{{{sort}}}}}} | {{{2|{{{last}}}}}}, {{{1|{{{first}}}}}} }}<includeonly><</includeonly><noinclude>&lt;</noinclude>/span>{{#if:{{{nolink|}}}\n"
 			+ "| <span class=\"vcard\"><span class=\"fn\">{{{1|{{{first}}}}}} {{{2|{{{last}}}}}}</span></span>\n"
 			+ "| <span class=\"vcard\"><span class=\"fn\">[[{{#if:{{{3|{{{link|}}}}}}\n"
 			+ "  | {{{3|{{{link}}}}}}|{{{1|{{{first}}}}}} {{{2|{{{last}}}}}} {{#if:{{{dab<includeonly>|</includeonly>}}}\n"
@@ -2463,6 +2465,10 @@ public class WikiTestModel extends WikiModel {
 				return ONLYINCLUDE_DEMO;
 			} else if (name.equals("Sortname")) {
 				return SORTNAME;
+			} else if (name.equals("Rndfrac")) {
+				return RNDFRAC;
+			} else if (name.equals("Rndfrac/out")) {
+				return RNDFRAC_OUT;
 			}
 		} else {
 			if (name.equals("Include_Page")) {
