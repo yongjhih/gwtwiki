@@ -70,6 +70,11 @@ public class WikiTestModel extends WikiModel {
 	public static String TEST_INCLUDE4 = "Text <noinclude>invisible";
 
 	/**
+	 * http://www.mediawiki.org/wiki/Template:T1
+	 */
+	public static String T1 = "<noinclude>Used for demonstration purposes\n" + "----\n" + "</noinclude>start{{{1}}}end<noinclude>\n"
+			+ "\n" + "[[Category:Demo templates]]</noinclude>";
+	/**
 	 * Issue 82
 	 */
 	public static String ORDINAL = "{{{1}}}{{{{{|safesubst:}}}#ifeq:{{{sup}}}|yes\n" + " |<sup>\n"
@@ -2469,6 +2474,8 @@ public class WikiTestModel extends WikiModel {
 				return RNDFRAC;
 			} else if (name.equals("Rndfrac/out")) {
 				return RNDFRAC_OUT;
+			} else if (name.equals("T1")) {
+				return T1;
 			}
 		} else {
 			if (name.equals("Include_Page")) {

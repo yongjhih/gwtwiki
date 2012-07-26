@@ -22,6 +22,7 @@ import info.bliki.wiki.tags.WPATag;
 import info.bliki.wiki.tags.WPTag;
 import info.bliki.wiki.tags.code.SourceCodeFormatter;
 import info.bliki.wiki.tags.util.TagStack;
+import info.bliki.wiki.template.AbstractTemplateFunction;
 import info.bliki.wiki.template.ITemplateFunction;
 import info.bliki.wiki.template.extension.AttributeList;
 import info.bliki.wiki.template.extension.AttributeRenderer;
@@ -72,6 +73,8 @@ public abstract class AbstractWikiModel implements IWikiModel, IContext {
 	protected String fRedirectLink = null;
 
 	protected String fPageTitle = "PAGENAME";
+
+	protected String fNamespaceName = "";
 
 	protected int fSectionCounter;
 
@@ -1173,7 +1176,10 @@ public abstract class AbstractWikiModel implements IWikiModel, IContext {
 			String parameter = "";
 			int index = magicWord.indexOf(':');
 			if (index > 0) {
-				parameter = magicWord.substring(index + 1).trim();
+				parameter = magicWord.substring(index + 1);
+				if (parameter.length() != 0) {
+					parameter = AbstractTemplateFunction.parseTrim(parameter, this);
+				}
 				magicWord = magicWord.substring(0, index);
 			}
 			if (MagicWord.isMagicWord(magicWord)) {
@@ -1872,6 +1878,21 @@ public abstract class AbstractWikiModel implements IWikiModel, IContext {
 			while (stackSize() > 0) {
 				popNode();
 			}
+		}
+	}
+
+	public String getNamespaceName() {
+		return fNamespaceName;
+	}
+
+	public void setNamespaceName(String namespaceLowercase) {
+		if (namespaceLowercase == null) {
+			fNamespaceName = "";
+			return;
+		}
+		fNamespaceName = fNamespace.getNamespaceByLowercase(namespaceLowercase);
+		if (fNamespaceName == null) {
+			fNamespaceName = namespaceLowercase;
 		}
 	}
 }

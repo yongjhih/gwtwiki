@@ -59,9 +59,12 @@ public class TemplateSubstParserTest extends FilterTestSupport {
 		assertEquals("IN", wikiModel.parseTemplates("{{subst:UC:{{subst:tc}}}}", false));
 	}
 
-	public void testSubst006() {
-		assertEquals("{{[[Template:NAMESPACE|NAMESPACE]]}}", wikiModel.parseTemplates("{{subst:tl|{{subst:NAMESPACE}}}}", true));
-		assertEquals("{{[[Template:NAMESPACE|NAMESPACE]]}}", wikiModel.parseTemplates("{{subst:tl|{{subst:NAMESPACE}}}}", false));
+	public void testSubst006() { 
+		// http://www.mediawiki.org/wiki/Manual:Substitution#Predefined_templates
+		wikiModel.setNamespaceName("help");
+		assertEquals("startHelpend", wikiModel.parseTemplates("{{subst:t1|{{subst:NAMESPACE}}}}", true));
+		assertEquals("startHelpend", wikiModel.parseTemplates("{{subst:t1|{{subst:NAMESPACE}}}}", false));
+		wikiModel.setNamespaceName("");
 	}
 
 	public void testSubst007() {

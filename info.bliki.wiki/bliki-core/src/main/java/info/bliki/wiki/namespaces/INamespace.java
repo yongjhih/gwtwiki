@@ -149,6 +149,8 @@ public interface INamespace {
 
 	public String getMeta2();
 
+	public String getNamespace(String namespace);
+	
 	public String getNamespaceByLowercase(String lowercaseNamespace);
 
 	public String getNamespaceByNumber(int numberCode);

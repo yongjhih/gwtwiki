@@ -255,6 +255,20 @@ public class Namespace implements INamespace {
 		return fNamespaces2[6];
 	}
 
+	public String getNamespace(String namespace) {
+		for (int i = 0; i < fNamespaces1.length; i++) {
+			if (fNamespaces1[i].equals(namespace)) {
+				return namespace;
+			}
+		}
+		for (int i = 0; i < fNamespaces2.length; i++) {
+			if (fNamespaces2[i].equals(namespace)) {
+				return namespace;
+			}
+		}
+		return "";
+	}
+
 	public String getNamespaceByLowercase(String lowercaseNamespace) {
 		return NAMESPACE_MAP.get(lowercaseNamespace);
 	}

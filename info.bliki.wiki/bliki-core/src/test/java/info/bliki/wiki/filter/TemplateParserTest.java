@@ -22,7 +22,7 @@ public class TemplateParserTest extends FilterTestSupport {
 	 */
 	public void testSortnameDemo001() {
 		assertEquals(
-				"<span style=\"display:none;\">Man with One Red Shoe, The</span><span class=\"vcard\"><span class=\"fn\">[[The Man with One Red Shoe|The Man with One Red Shoe]]</span></span>",
+				"<span style=\"display:none;\">Man with One Red Shoe, The</span><span class=\"vcard\"><span class=\"fn\">[[The Man with One Red Shoe|The Man with One Red Shoe]]</span></span>[[Category:Articles with hCards]]",
 				wikiModel.parseTemplates("{{sortname|The|Man with One Red Shoe}}"));
 	}
 
@@ -360,11 +360,14 @@ public class TemplateParserTest extends FilterTestSupport {
 	 * See issue 102
 	 */
 	public void testIf06() {
-		assertEquals("== SpaceInIfTest1 ==\n" + "Not article space", wikiModel.parseTemplates("== SpaceInIfTest1 ==\n"
+		assertEquals("== SpaceInIfTest1 ==\n" + 
+				"Article space", wikiModel.parseTemplates("== SpaceInIfTest1 ==\n"
 				+ "{{#if:{{NAMESPACE}}\n" + "| <!--Not article space, do nothing-->Not article space\n"
 				+ "| <!--Article space-->Article space\n" + "}}"));
 
-		assertEquals("== SpaceInIfTest2 ==\n" + "Not article space\n" + "", wikiModel.parseTemplates("== SpaceInIfTest2 ==\n"
+		assertEquals("== SpaceInIfTest2 ==\n" + 
+				"Article space\n" + 
+				"", wikiModel.parseTemplates("== SpaceInIfTest2 ==\n"
 				+ "{{#if:{{NAMESPACE}}\n" + "| <!--Not article space, do nothing-->\n" + "  Not article space\n"
 				+ "| <!--Article space-->\n" + "  Article space\n" + "}}\n" + ""));
 	}
@@ -708,7 +711,13 @@ public class TemplateParserTest extends FilterTestSupport {
 		assertEquals("MediaWiki_talk", wikiModel.parseTemplates("{{ns:{{ns:8}} talk  }}", false));
 		assertEquals("[[:Template:Ns:MediaWikitalk]]", wikiModel.parseTemplates("{{ns:{{ns:8}}talk}}", false));
 	}
-
+	
+	public void testNAMESPACE001() {
+		assertEquals("", wikiModel.parseTemplates("{{NAMESPACE}}", false));
+		assertEquals("Template", wikiModel.parseTemplates("{{NAMESPACE:Template:Main Page}}", false));
+		assertEquals("", wikiModel.parseTemplates("{{NAMESPACE:Bad:Main Page}}", false));
+	}
+	
 	public void testURLEncode001() {
 		assertEquals("%22%23%24%25%26%27%28%29*%2C%3B%3F%5B%5D%5E%60%7B%7D", wikiModel.parseTemplates(
 				"{{urlencode: \"#$%&'()*,;?[]^`{}}}", false));

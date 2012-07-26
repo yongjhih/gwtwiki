@@ -465,6 +465,13 @@ public interface IWikiModel extends IConfiguration {
 	public INamespace getNamespace();
 
 	/**
+	 * Get the namespace name of this model for the current locale.
+	 * 
+	 * @return the namespace in the current locale for this model
+	 */
+	public String getNamespaceName();
+
+	/**
 	 * Get the next unique number
 	 * 
 	 * @return the next <code>int</code> number.
@@ -913,6 +920,20 @@ public interface IWikiModel extends IConfiguration {
 	 * @return
 	 */
 	public boolean replaceColon();
+
+	/**
+	 * Set the "lower-case" namespace name of the article rendered with this
+	 * model. This name will be converted with the
+	 * Namespace#getNamespaceByLowercase() method to a string in the current
+	 * Locale.
+	 * 
+	 * @param namespaceLowercase
+	 *          the lowercase key for the namespace.
+	 * @return the namespace for this model
+	 * @see java.util.Locale
+	 * @see info.bliki.wiki.namespaces.Namespace#getNamespaceByLowercase(String)
+	 */
+	public void setNamespaceName(String namespaceLowercase);
 
 	/**
 	 * Set the title of the currently rendered page data.
