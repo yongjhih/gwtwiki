@@ -371,12 +371,13 @@ public class Scanner {
 					getChar();
 				}
 			}
-			if (dFlag != ' ') {
-				numFormat = -1;
-			}
+			// if (dFlag != ' ') {
+			// numFormat = -1;
+			// }
 		}
-		if (numFormat < 0) {
+		if (numFormat == 10) {
 			if ((fCurrentChar == 'E') || (fCurrentChar == 'e')) {
+				dFlag = '.';
 				getChar();
 				if ((fCurrentChar == '+') || (fCurrentChar == '-')) {
 					getChar();
@@ -387,6 +388,9 @@ public class Scanner {
 			}
 		}
 		// }
+		if (dFlag != ' ') {
+			numFormat = -1;
+		}
 		int endPosition = fCurrentPosition--;
 		result[0] = fInputString.substring(startPosition, --endPosition);
 		result[1] = Integer.valueOf(numFormat);

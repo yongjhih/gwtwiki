@@ -663,6 +663,15 @@ public class TemplateParserTest extends FilterTestSupport {
 		// reset to english locale
 		wikiModel.setLocale(Locale.ENGLISH);
 	}
+	
+	public void testFormatnum002() {
+		// default locale is ENGLISH
+		assertEquals("9.87654321654321E8", wikiModel.parseTemplates("{{formatnum:987,654,321.654321|R}}", false));
+
+		wikiModel.setLocale(Locale.GERMAN);
+		// reset to english locale
+		wikiModel.setLocale(Locale.ENGLISH);
+	}
 
 	public void testPlural001() {
 		assertEquals("is", wikiModel.parseTemplates("{{plural:n|is|are}}", false));
@@ -703,6 +712,12 @@ public class TemplateParserTest extends FilterTestSupport {
 		assertEquals("6.123233995736766E-17", wikiModel.parseTemplates("{{#expr:sin pi/2 }}", false));
 	}
 	 
+	
+	public void testExpr018() {
+		assertEquals("0", wikiModel.parseTemplates("{{#expr:1e-92round400}}", false));  
+		assertEquals("1", wikiModel.parseTemplates("{{#expr:(15782.316272965878)round((3))<1E9}}", false)); 
+		assertEquals("1578200000", wikiModel.parseTemplates("{{#expr:((15782.316272965878)round((3))/1E5round0)E5}}", false));  
+	}
 	public void testNS001() {
 		assertEquals("User_talk", wikiModel.parseTemplates("{{ns:3}}", false));
 		assertEquals("Help_talk", wikiModel.parseTemplates("{{ns:{{ns:12}}_talk}}", false));

@@ -25,11 +25,21 @@ public class Formatnum extends AbstractTemplateFunction {
 		if (list.size() > 0) {
 			String result = isSubst ? list.get(0) : parseTrim(list.get(0), model);
 			try {
-				Double dbl = new Double(result);
-				result = NumberFormat.getNumberInstance(model.getLocale()).format(dbl);
+				NumberFormat nf = NumberFormat.getNumberInstance(model.getLocale());
+				if (list.size() > 1 && list.get(1).equalsIgnoreCase("r")) {
+					Number num = nf.parse(result);
+					if (num instanceof Double) {
+						result = Expr.getWikiNumberFormat(num.doubleValue(),model);
+					} else {
+						result = num.toString();
+					}
+				} else {
+					Double dbl = new Double(result);
+					result = nf.format(dbl);
+				}
 			} catch (Exception ex) {
 				if (Configuration.DEBUG) {
-					System.out.println("formatnum error: " + ex.getMessage());
+					System.out.println("formatnum error: " + list.toString());
 				}
 				if (Configuration.STACKTRACE) {
 					ex.printStackTrace();

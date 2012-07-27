@@ -6,6 +6,8 @@ import info.bliki.wiki.model.IWikiModel;
 import info.bliki.wiki.template.expr.eval.DoubleEvaluator;
 
 import java.io.IOException;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.List;
 
 /**
@@ -44,13 +46,7 @@ public class Expr extends AbstractTemplateFunction {
 			try {
 				DoubleEvaluator engine = new DoubleEvaluator();
 				double d = engine.evaluate(expression);
-				double dInt = Math.rint(d);
-				// if (dInt == d) {
-				if (Math.abs(dInt - d) < DoubleEvaluator.EPSILON) {
-					return Long.toString(Math.round(d));
-				}
-				String result = Double.toString(d);
-				return result.toUpperCase();
+				return getWikiNumberFormat(d,model);
 			} catch (Exception e) {
 				if (Configuration.DEBUG) {
 					System.out.println("#expr error: "+expression);
@@ -65,4 +61,14 @@ public class Expr extends AbstractTemplateFunction {
 		}
 		return null;
 	}
+
+	public static String getWikiNumberFormat(double d,IWikiModel model) {
+		double dInt = Math.rint(d);
+		// if (dInt == d) {
+		if (Math.abs(dInt - d) < DoubleEvaluator.EPSILON) {
+			return Long.toString(Math.round(d));
+		}
+		return Double.toString(d).toUpperCase();
+	}
+
 }

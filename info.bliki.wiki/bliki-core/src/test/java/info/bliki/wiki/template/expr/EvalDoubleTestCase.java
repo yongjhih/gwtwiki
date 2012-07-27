@@ -30,6 +30,9 @@ public class EvalDoubleTestCase extends TestCase {
 	}
 
 	public void testEval001() {
+		check("2+2*2", "6.0");
+		check("((15782.316272965878)round((3))/1E5round0)E5", "1.5782E9");
+		check("1e-92", "1.0E-92");
 		check("42", "42.0");
 		check("1.5", "1.5");
 		check("-42", "-42.0");
@@ -56,13 +59,16 @@ public class EvalDoubleTestCase extends TestCase {
 	}
 
 	public void testEval004() {
+		check("((15782.316272965878)round((3))/1E5round0)E5", "1.5782E9");
+		check("(4/7)*1e-290round300", "9.223372036854776E-282");
+		check("30 / 7 round 0", "4.0");
 		check("30 / 7 round 4", "4.2857");
 		check("30 / 7 round 1", "4.3");
 		check("1911 round -2", "1900.0");
 		check("2.5 round 0", "3.0");
 		check("-2.5 round 0", "-3.0");
 	}
-	
+
 	public void testEval005() {
 		check("trunc1.2", "1.0");
 		check("trunc-1.2", "-1.0");
@@ -71,5 +77,5 @@ public class EvalDoubleTestCase extends TestCase {
 		check("ceil 1.2", "2.0");
 		check("ceil-1.2", "-1.0");
 	}
-	
+
 }

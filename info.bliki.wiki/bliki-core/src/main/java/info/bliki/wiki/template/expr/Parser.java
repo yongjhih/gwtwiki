@@ -212,6 +212,9 @@ public class Parser extends Scanner {
 				throwSyntaxError("Too many closing ')'; End-of-file not reached.");
 			}
 
+			if (fOperatorString=="E") {
+				fCurrentPosition--;
+			}
 			throwSyntaxError("End-of-file not reached.");
 		}
 

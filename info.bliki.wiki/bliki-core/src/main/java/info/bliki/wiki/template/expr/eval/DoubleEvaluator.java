@@ -7,14 +7,17 @@ import info.bliki.wiki.template.expr.ast.FunctionNode;
 import info.bliki.wiki.template.expr.ast.NumberNode;
 import info.bliki.wiki.template.expr.ast.SymbolNode;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
  * Evaluate math expressions to <code>double</code> numbers.
  * 
  * Use the expression syntax describe here: <a
- * href="http://meta.wikimedia.org/wiki/Help:ParserFunctions#.23expr:">http://meta.wikimedia.org/wiki/Help:ParserFunctions#.23expr:</a>
+ * href="http://meta.wikimedia.org/wiki/Help:ParserFunctions#.23expr:"
+ * >http://meta.wikimedia.org/wiki/Help:ParserFunctions#.23expr:</a>
  */
 public class DoubleEvaluator {
 	/**
@@ -280,21 +283,67 @@ public class DoubleEvaluator {
 		return doubleEvaluator.parse(expression);
 	}
 
-	/**
-	 * Parse the given <code>expression String</code> and evaluate it to a
-	 * double value
-	 * 
-	 * @param expression
-	 * @return
-	 * @throws SyntaxError
-	 */
-	public double evaluate(String expression) {
+	public double evalStep(String expression) {
 		Parser p = new Parser();
 		fNode = p.parse(expression);
 		if (fNode instanceof FunctionNode) {
 			fNode = optimizeFunction((FunctionNode) fNode);
 		}
 		return evaluateNode(fNode);
+	}
+
+	private List<String> splitByBrackets(String expression) {
+		ArrayList<String> sp = new ArrayList<String>();
+		int level = 0;
+		int lastPos = 0;
+		int startPos = -1;
+		for (int i = 0; i < expression.length(); i++) {
+			if (expression.charAt(i) == '(') {
+				if (level == 0) {
+					sp.add(expression.substring(lastPos, i));
+					lastPos = i;
+					startPos = i;
+				}
+				level++;
+			} else if (expression.charAt(i) == ')') {
+				level--;
+				if (level == 0 && startPos >= 0) {
+					lastPos = i + 1;
+					double val = evaluate(expression.substring(startPos+1, i));
+					sp.add(Double.toString(val));
+				}
+			}
+		}
+		if (level == 0) {
+			if (lastPos == 0) {
+				double val = evalStep(expression.substring(0, expression.length()));
+				sp.add(Double.toString(val));
+			} else {
+				sp.add(expression.substring(lastPos, expression.length()));
+			}
+		}
+		return sp;
+	}
+
+	/**
+	 * Parse the given <code>expression String</code> and evaluate it to a double
+	 * value
+	 * 
+	 * @param expression
+	 * @return
+	 * @throws SyntaxError
+	 */
+	public double evaluate(String expression) {
+		String expr = expression;
+		List<String> list = splitByBrackets(expr);
+		while (list.size() > 1) {
+			StringBuilder buf = new StringBuilder();
+			for (int i = 0; i < list.size(); i++) {
+				buf.append(list.get(i));
+			}
+			list = splitByBrackets(buf.toString());
+		}
+		return Double.parseDouble(list.get(0));
 	}
 
 	/**
@@ -371,8 +420,7 @@ public class DoubleEvaluator {
 			} else if (functionNode.size() == 3) {
 				Object obj = FUNCTION_DOUBLE_MAP.get(symbol);
 				if (obj instanceof IDouble2Function) {
-					return ((IDouble2Function) obj).evaluate(evaluateNode(functionNode.get(1)), evaluateNode(functionNode
-							.get(2)));
+					return ((IDouble2Function) obj).evaluate(evaluateNode(functionNode.get(1)), evaluateNode(functionNode.get(2)));
 				}
 				return evaluateNodeLogical(functionNode) ? 1.0 : 0.0;
 			} else {
@@ -391,11 +439,11 @@ public class DoubleEvaluator {
 		}
 		if (node instanceof DoubleNode) {
 			double d = ((DoubleNode) node).doubleValue();
-			return ! (Math.abs(d - 0.0) < DoubleEvaluator.EPSILON);
+			return !(Math.abs(d - 0.0) < DoubleEvaluator.EPSILON);
 		}
 		if (node instanceof NumberNode) {
 			double d = ((NumberNode) node).doubleValue();
-			return ! (Math.abs(d - 0.0) < DoubleEvaluator.EPSILON);
+			return !(Math.abs(d - 0.0) < DoubleEvaluator.EPSILON);
 		}
 
 		throw new ArithmeticException("EvalDouble#evaluateNodeLogical(ASTNode) not possible for: " + node.toString());
@@ -412,8 +460,7 @@ public class DoubleEvaluator {
 			} else if (functionNode.size() == 3) {
 				Object obj = FUNCTION_BOOLEAN_MAP.get(symbol);
 				if (obj instanceof IBooleanDouble2Function) {
-					return ((IBooleanDouble2Function) obj).evaluate(evaluateNode(functionNode.get(1)),
-							evaluateNode(functionNode.get(2)));
+					return ((IBooleanDouble2Function) obj).evaluate(evaluateNode(functionNode.get(1)), evaluateNode(functionNode.get(2)));
 				} else if (obj instanceof IBooleanBoolean2Function) {
 					return ((IBooleanBoolean2Function) obj).evaluate(evaluateNodeLogical(functionNode.get(1)),
 							evaluateNodeLogical(functionNode.get(2)));
