@@ -360,14 +360,11 @@ public class TemplateParserTest extends FilterTestSupport {
 	 * See issue 102
 	 */
 	public void testIf06() {
-		assertEquals("== SpaceInIfTest1 ==\n" + 
-				"Article space", wikiModel.parseTemplates("== SpaceInIfTest1 ==\n"
+		assertEquals("== SpaceInIfTest1 ==\n" + "Article space", wikiModel.parseTemplates("== SpaceInIfTest1 ==\n"
 				+ "{{#if:{{NAMESPACE}}\n" + "| <!--Not article space, do nothing-->Not article space\n"
 				+ "| <!--Article space-->Article space\n" + "}}"));
 
-		assertEquals("== SpaceInIfTest2 ==\n" + 
-				"Article space\n" + 
-				"", wikiModel.parseTemplates("== SpaceInIfTest2 ==\n"
+		assertEquals("== SpaceInIfTest2 ==\n" + "Article space\n" + "", wikiModel.parseTemplates("== SpaceInIfTest2 ==\n"
 				+ "{{#if:{{NAMESPACE}}\n" + "| <!--Not article space, do nothing-->\n" + "  Not article space\n"
 				+ "| <!--Article space-->\n" + "  Article space\n" + "}}\n" + ""));
 	}
@@ -381,9 +378,10 @@ public class TemplateParserTest extends FilterTestSupport {
 	}
 
 	public void testIfexpr03() {
-		assertEquals("start<div class=\"error\">Expression error: Error in factor at character: ' ' (0)</div>end", wikiModel.parseTemplates("start{{#ifexpr: 1 + |no| }}end"));
+		assertEquals("start<div class=\"error\">Expression error: Error in factor at character: ' ' (0)</div>end", wikiModel
+				.parseTemplates("start{{#ifexpr: 1 + |no| }}end"));
 	}
-	
+
 	public void testBORN_DATA() {
 		assertEquals(
 				"test Thomas Jeffrey Hanks<br />[[Concord, California]],  [[United States|U.S.]] test123",
@@ -585,6 +583,23 @@ public class TemplateParserTest extends FilterTestSupport {
 		assertEquals("*\"q\"", wikiModel.parseTemplates("*\"{{#switch:p| p = q |r=s}}\"", false));
 	}
 
+	/**
+	 * See <a href="http://www.mediawiki.org/wiki/Help:Extension:ParserFunctions#Comparison_behaviour"
+	 * >Help:Extension:ParserFunctions - Comparison behaviour</a>
+	 */
+	public void testSwitch010() {
+		assertEquals("three", wikiModel.parseTemplates("{{#switch: 0 + 1 | 1 = one | 2 = two | three}}", false));
+		assertEquals("one", wikiModel.parseTemplates("{{#switch: {{#expr: 0 + 1}} | 1 = one | 2 = two | three}}", false));
+		assertEquals("A", wikiModel.parseTemplates("{{#switch: a | a = A | b = B | C}}", false));
+		assertEquals("C", wikiModel.parseTemplates("{{#switch: A | a = A | b = B | C}}", false));
+		assertEquals("Nothing", wikiModel.parseTemplates("{{#switch: | = Nothing | foo = Foo | Something }}", false));
+		assertEquals("Bar", wikiModel.parseTemplates("{{#switch: b | f = Foo | b = Bar | b = Baz | }}", false));
+		assertEquals("B", wikiModel.parseTemplates("{{#switch: 12345678901234567 | 12345678901234568 = A | B}}", false));
+
+		assertEquals("A", wikiModel.parseTemplates("{{#ifexpr: 12345678901234567 = 12345678901234568 | A | B}}", false));
+
+	}
+
 	public void testExpr001() {
 		assertEquals("1.0E-6", wikiModel.parseTemplates("{{ #expr: 0.000001 }}", false));
 	}
@@ -663,7 +678,7 @@ public class TemplateParserTest extends FilterTestSupport {
 		// reset to english locale
 		wikiModel.setLocale(Locale.ENGLISH);
 	}
-	
+
 	public void testFormatnum002() {
 		// default locale is ENGLISH
 		assertEquals("9.87654321654321E8", wikiModel.parseTemplates("{{formatnum:987,654,321.654321|R}}", false));
@@ -711,13 +726,29 @@ public class TemplateParserTest extends FilterTestSupport {
 		assertEquals("6.123233995736766E-17", wikiModel.parseTemplates("{{#expr:(sin pi)/2 }}", false));
 		assertEquals("6.123233995736766E-17", wikiModel.parseTemplates("{{#expr:sin pi/2 }}", false));
 	}
-	 
-	
+
 	public void testExpr018() {
-		assertEquals("0", wikiModel.parseTemplates("{{#expr:1e-92round400}}", false));  
-		assertEquals("1", wikiModel.parseTemplates("{{#expr:(15782.316272965878)round((3))<1E9}}", false)); 
-		assertEquals("1578200000", wikiModel.parseTemplates("{{#expr:((15782.316272965878)round((3))/1E5round0)E5}}", false));  
+		assertEquals("0", wikiModel.parseTemplates("{{#expr:1e-92round400}}", false));
+		assertEquals("1", wikiModel.parseTemplates("{{#expr:(15782.316272965878)round((3))<1E9}}", false));
+		assertEquals("1578200000", wikiModel.parseTemplates("{{#expr:((15782.316272965878)round((3))/1E5round0)E5}}", false));
 	}
+
+	/**
+	 * See <a href=
+	 * "http://www.mediawiki.org/wiki/Help:Extension:ParserFunctions#Rounding"
+	 * >Help:Extension:ParserFunctions Expr Rounding</a>
+	 */
+	public void testExpr019() {
+		assertEquals("9.88", wikiModel.parseTemplates("{{#expr: 9.876 round2 }}", false));
+		assertEquals("1200", wikiModel.parseTemplates("{{#expr: (trunc1234) round trunc-2 }}", false));
+		assertEquals("5", wikiModel.parseTemplates("{{#expr: 4.5 round0 }}", false));
+		assertEquals("-5", wikiModel.parseTemplates("{{#expr: -4.5 round0 }}", false));
+		// assertEquals("46.9",
+		// wikiModel.parseTemplates("{{#expr: 46.857 round1.8 }}", false));
+		// assertEquals("50",
+		// wikiModel.parseTemplates("{{#expr: 46.857 round-1.8 }}", false));
+	}
+
 	public void testNS001() {
 		assertEquals("User_talk", wikiModel.parseTemplates("{{ns:3}}", false));
 		assertEquals("Help_talk", wikiModel.parseTemplates("{{ns:{{ns:12}}_talk}}", false));
@@ -726,13 +757,13 @@ public class TemplateParserTest extends FilterTestSupport {
 		assertEquals("MediaWiki_talk", wikiModel.parseTemplates("{{ns:{{ns:8}} talk  }}", false));
 		assertEquals("[[:Template:Ns:MediaWikitalk]]", wikiModel.parseTemplates("{{ns:{{ns:8}}talk}}", false));
 	}
-	
+
 	public void testNAMESPACE001() {
 		assertEquals("", wikiModel.parseTemplates("{{NAMESPACE}}", false));
 		assertEquals("Template", wikiModel.parseTemplates("{{NAMESPACE:Template:Main Page}}", false));
 		assertEquals("", wikiModel.parseTemplates("{{NAMESPACE:Bad:Main Page}}", false));
 	}
-	
+
 	public void testURLEncode001() {
 		assertEquals("%22%23%24%25%26%27%28%29*%2C%3B%3F%5B%5D%5E%60%7B%7D", wikiModel.parseTemplates(
 				"{{urlencode: \"#$%&'()*,;?[]^`{}}}", false));
@@ -977,7 +1008,6 @@ public class TemplateParserTest extends FilterTestSupport {
 	}
 
 	public void testIssue82_004() {
-		assertEquals("105", wikiModel
-				.parseTemplates("{{subst:#expr:{{#time:z|{{{1|April 14}}}}}+1}}"));
+		assertEquals("105", wikiModel.parseTemplates("{{subst:#expr:{{#time:z|{{{1|April 14}}}}}+1}}"));
 	}
 }

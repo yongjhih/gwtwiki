@@ -24,9 +24,29 @@ public class Switch extends AbstractTemplateFunction {
 		if (list.size() > 2) {
 			String defaultResult = null;
 			String conditionString = isSubst ? list.get(0) : parseTrim(list.get(0), model);
+			boolean checkNumerically = false;
+			if (conditionString.length() > 0) {
+				if (conditionString.charAt(0) == '+' || 
+						conditionString.charAt(0) == '-' ||  
+						conditionString.charAt(0) == '0' ||
+						conditionString.charAt(0) == '.' || 
+						conditionString.charAt(0) == ',' || 
+						conditionString.charAt(0) == 'e' || 
+						conditionString.charAt(0) == 'E') {
+					checkNumerically = true;
+				} else {
+					for (int i = 0; i < conditionString.length(); i++) {
+						if (conditionString.charAt(i) == '+' || conditionString.charAt(i) == '-' || conditionString.charAt(i) == '.'
+								|| conditionString.charAt(i) == ',' || conditionString.charAt(i) == 'e' || conditionString.charAt(i) == 'E') {
+							checkNumerically = true;
+							break;
+						}
+					}
+				}
+			}
 			boolean valueFound = false;
 			for (int i = 1; i < list.size(); i++) {
-				String temp=isSubst ? list.get(i) : parseTrim(list.get(i), model);
+				String temp = isSubst ? list.get(i) : parseTrim(list.get(i), model);
 				int index = temp.indexOf('=');
 				String leftHandSide;
 				if (index >= 0) {
@@ -37,7 +57,7 @@ public class Switch extends AbstractTemplateFunction {
 				} else {
 					leftHandSide = temp;
 				}
-				String parsedLHS=isSubst ? leftHandSide : parseTrim(leftHandSide, model);
+				String parsedLHS = isSubst ? leftHandSide : parseTrim(leftHandSide, model);
 				if (index >= 0 && "#default".equals(parsedLHS)) {
 					defaultResult = temp.substring(index + 1).trim();
 					continue;
@@ -45,7 +65,7 @@ public class Switch extends AbstractTemplateFunction {
 				if (index < 0 && i == list.size() - 1) {
 					return parsedLHS;
 				}
-				if (equalsTypes(conditionString, parsedLHS)) {
+				if (equalsTypes(conditionString, parsedLHS, checkNumerically)) {
 					if (index >= 0) {
 						return temp.substring(index + 1).trim();
 					} else {
@@ -59,7 +79,7 @@ public class Switch extends AbstractTemplateFunction {
 		return null;
 	}
 
-	private boolean equalsTypes(String first, String second) {
+	private boolean equalsTypes(String first, String second, boolean checkNumerically) {
 
 		boolean result = false;
 		if (first.length() == 0) {
@@ -75,16 +95,17 @@ public class Switch extends AbstractTemplateFunction {
 			second = second.substring(1);
 		}
 
-		try {
-			double d1 = Double.parseDouble(first);
-			double d2 = Double.parseDouble(second);
-			if (d1 == d2) {
-				result = true;
+		if (checkNumerically) {
+			try {
+				double d1 = Double.parseDouble(first);
+				double d2 = Double.parseDouble(second);
+				if (d1 == d2) {
+					return true;
+				}
+			} catch (NumberFormatException e) {
 			}
-		} catch (NumberFormatException e) {
-			result = first.equals(second);
 		}
 
-		return result;
+		return first.equals(second);
 	}
 }

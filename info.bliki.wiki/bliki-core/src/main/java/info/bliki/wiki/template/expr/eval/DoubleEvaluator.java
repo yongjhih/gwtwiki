@@ -234,10 +234,11 @@ public class DoubleEvaluator {
 
 		FUNCTION_DOUBLE_MAP.put("Round", new IDouble2Function() {
 			public double evaluate(double arg1, double arg2) {
+				double pow10arg2 = Math.pow(10, arg2);
 				if (arg1 > 0) {
-					return Math.round((arg1 + EPSILON_ROUND) * Math.pow(10, arg2)) / Math.pow(10, arg2);
+					return Math.round((arg1 + EPSILON_ROUND) * pow10arg2) / pow10arg2;
 				} else {
-					return Math.round((arg1 - EPSILON_ROUND) * Math.pow(10, arg2)) / Math.pow(10, arg2);
+					return Math.round((arg1 - EPSILON_ROUND) * pow10arg2) / pow10arg2;
 				}
 			}
 		});
@@ -309,7 +310,7 @@ public class DoubleEvaluator {
 				level--;
 				if (level == 0 && startPos >= 0) {
 					lastPos = i + 1;
-					double val = evaluate(expression.substring(startPos+1, i));
+					double val = evaluate(expression.substring(startPos + 1, i));
 					sp.add(Double.toString(val));
 				}
 			}
