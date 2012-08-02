@@ -506,13 +506,13 @@ public class WikipediaPreTagParser extends AbstractParser {
 		TagStack globalWikiModelStack = wikiModel.swapStack(localStack);
 		try {
 			// fix for infinite recursion
-			if (wikiModel.incrementParserRecursionCount() > Configuration.GLOBAL_RECURSION_LIMIT) {
-				TagNode error = new TagNode("span");
-				error.addAttribute("class", "error", true);
-				error.addChild(new ContentToken("Error - total recursion count limit exceeded parsing wiki tags."));
-				localStack.append(error);
-				return localStack;
-			}
+//			if (wikiModel.incrementParserRecursionLevel() > Configuration.PARSER_RECURSION_LIMIT) {
+//				TagNode error = new TagNode("span");
+//				error.addAttribute("class", "error", true);
+//				error.addChild(new ContentToken("Error - total recursion count limit exceeded parsing wiki tags."));
+//				localStack.append(error);
+//				return localStack;
+//			}
 
 			int level = wikiModel.incrementRecursionLevel();
 

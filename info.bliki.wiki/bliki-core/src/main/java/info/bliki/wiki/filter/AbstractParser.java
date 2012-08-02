@@ -600,15 +600,16 @@ public abstract class AbstractParser extends WikipediaScanner {
 		TagStack globalWikiModelStack = wikiModel.swapStack(localStack);
 		try {
 			// fix for infinite recursion
-			if (wikiModel.incrementParserRecursionCount() > Configuration.GLOBAL_RECURSION_LIMIT) {
-				TagNode error = new TagNode("span");
-				error.addAttribute("class", "error", true);
-				error.addChild(new ContentToken("Error - total recursion count limit exceeded parsing wiki tags."));
-				localStack.append(error);
-				return localStack;
-			}
 
 			int level = wikiModel.incrementRecursionLevel();
+//			int parserRecursionLevel = wikiModel.incrementParserRecursionLevel();
+//			if (parserRecursionLevel > Configuration.PARSER_RECURSION_LIMIT) {
+//				TagNode error = new TagNode("span");
+//				error.addAttribute("class", "error", true);
+//				error.addChild(new ContentToken("Error - total recursion count limit exceeded parsing wiki tags."));
+//				localStack.append(error);
+//				return localStack;
+//			}
 
 			if (level > Configuration.PARSER_RECURSION_LIMIT) {
 				TagNode error = new TagNode("span");
@@ -637,6 +638,7 @@ public abstract class AbstractParser extends WikipediaScanner {
 			localStack.append(error);
 		} finally {
 			wikiModel.decrementRecursionLevel();
+//			wikiModel.decrementParserRecursionLevel();
 			if (!createOnlyLocalStack) {
 				// append the resursively parsed local stack to the global wiki
 				// model

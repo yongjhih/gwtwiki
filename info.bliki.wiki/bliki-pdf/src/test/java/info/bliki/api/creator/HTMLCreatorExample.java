@@ -4,8 +4,10 @@ import info.bliki.api.User;
 import info.bliki.wiki.filter.Encoder;
 import info.bliki.wiki.filter.HTMLConverter;
 import info.bliki.wiki.impl.APIWikiModel;
+import info.bliki.wiki.model.Configuration;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.Locale;
 
 /**
@@ -27,7 +29,7 @@ public class HTMLCreatorExample {
 			+ "}} </onlyinclude>\n" + "[[Kategorie:Wikipedia:Hauptseite/Artikel des Tages|Donnerstag]]";
 
 	public HTMLCreatorExample() {
-		super(); 
+		super();
 	}
 
 	public static String testWikipediaENAPI(String title) {
@@ -116,6 +118,9 @@ public class HTMLCreatorExample {
 					+ HTMLConstants.HTML_HEADER2);
 			creator.setFooter(HTMLConstants.HTML_FOOTER);
 			wikiModel.setUp();
+			// set up a simple cache for this example. HashMap is not usable for
+			// production!
+			Configuration.DEFAULT_CONFIGURATION.setTemplateCallsCache(new HashMap());
 			creator.renderToFile(generatedHTMLFilename);
 			System.out.println("Created file: " + generatedHTMLFilename);
 			return wikiModel.getRedirectLink();
@@ -170,7 +175,7 @@ public class HTMLCreatorExample {
 	public static void testCreator009() {
 		testWikipediaENAPI("Metallica");
 	}
-	
+
 	public static void testCreator010() {
 		testWikipediaENAPI("HTTP-Statuscode", "http://de.wikipedia.org/w/api.php", Locale.GERMAN);
 	}
@@ -186,17 +191,18 @@ public class HTMLCreatorExample {
 	public static void testCreator013() {
 		testWikipediaENAPI("Wikipedia:Hauptseite/Artikel_des_Tages/Montag", "http://de.wikipedia.org/w/api.php", Locale.GERMAN);
 	}
-	
+
 	public static void testCreator014() {
 		testWikipediaENAPI("Pakistan");
 	}
-	
+
 	public static void testCreator015() {
 		testWikipediaENAPI("Alps");
 	}
-	
+
 	public static void testCreateText001() {
-		testWikipediaText(TEXT_ISSUE_96, "Wikipedia:Hauptseite/Artikel des Tages/Donnerstag", "http://de.wikipedia.org/w/api.php", Locale.GERMAN);
+		testWikipediaText(TEXT_ISSUE_96, "Wikipedia:Hauptseite/Artikel des Tages/Donnerstag", "http://de.wikipedia.org/w/api.php",
+				Locale.GERMAN);
 	}
 
 	public static void testCreateText002() {

@@ -19,6 +19,42 @@ import java.util.Map;
  */
 public class WikiTestModel extends WikiModel {
 
+	public static String RELLINK = "<div class=\"rellink{{#if:{{{extraclasses|}}}|<nowiki> </nowiki>{{{extraclasses}}}}}\">{{{1}}}</div><noinclude>\n"
+			+ "{{documentation}}\n" + "</noinclude>\n" + "";
+
+	public static String MAIN = "{{Rellink|extraclasses=relarticle mainarticle|{{#ifeq:{{SUBJECTSPACE}}|Category|The main {{#ifeq:{{NAMESPACE:{{{1}}}}}||article|page}}{{#if:{{{2|}}}|s}} for this [[Wikipedia:Categorization|category]] {{#if:{{{2|}}}|are|is}}|Main {{#ifeq:{{NAMESPACE:{{{1}}}}}||article|page}}{{#if:{{{2|}}}|s}}:}} [[{{{1|{{PAGENAME}}}}}|{{{l1|{{{1|{{PAGENAME}}}}}}}}]]{{#if:{{{2| }}}\n"
+			+ " |{{#if:{{{3|}}}|,&#32;|&#32;and&#32;}}[[{{{2}}}|{{{l2|{{{2}}}}}}]]}}{{#if:{{{3|}}}\n"
+			+ " |{{#if:{{{4|}}}|,&#32;|,&#32;and&#32;}}[[{{{3}}}|{{{l3|{{{3}}}}}}]]}}{{#if:{{{4|}}}\n"
+			+ " |{{#if:{{{5|}}}|,&#32;|,&#32;and&#32;}}[[{{{4}}}|{{{l4|{{{4}}}}}}]]}}{{#if:{{{5|}}}\n"
+			+ " |{{#if:{{{6|}}}|,&#32;|,&#32;and&#32;}}[[{{{5}}}|{{{l5|{{{5}}}}}}]]}}{{#if:{{{6|}}}\n"
+			+ " |{{#if:{{{7|}}}|,&#32;|,&#32;and&#32;}}[[{{{6}}}|{{{l6|{{{6}}}}}}]]}}{{#if:{{{7|}}}\n"
+			+ " |{{#if:{{{8|}}}|,&#32;|,&#32;and&#32;}}[[{{{7}}}|{{{l7|{{{7}}}}}}]]}}{{#if:{{{8|}}}\n"
+			+ " |{{#if:{{{9|}}}|,&#32;|,&#32;and&#32;}}[[{{{8}}}|{{{l8|{{{8}}}}}}]]}}{{#if:{{{9|}}}\n"
+			+ " |{{#if:{{{10|}}}|,&#32;|,&#32;and&#32;}}[[{{{9}}}|{{{l9|{{{9}}}}}}]]}}{{#if:{{{10|}}}\n"
+			+ " |, and [[{{{10}}}|{{{l10|{{{10}}}}}}]]}}{{#if:{{{11| }}}|&#32; (too many parameters in &#123;&#123;[[Template:main|main]]&#125;&#125;)}}}}<noinclude>\n"
+			+ "\n" + "{{Documentation}}\n" + "\n" + "</noinclude>";
+
+	public static String SEE_ALSO  = "{{rellink|extraclasses=boilerplate seealso|{{{altphrase|See also}}}: {{#if:{{{1<includeonly>|</includeonly>}}} |<!--then:-->[[:{{{1}}}{{#if:{{{label 1|{{{l1|}}}}}}|{{!}}{{{label 1|{{{l1}}}}}}}}]] |<!--else:-->'''Error: [[Template:See also|Template must be given at least one article name]]'''\n" + 
+	"}}{{#if:{{{2|}}}|{{#if:{{{3|}}}|, |&nbsp;and }} [[:{{{2}}}{{#if:{{{label 2|{{{l2|}}}}}}|{{!}}{{{label 2|{{{l2}}}}}}}}]]\n" + 
+	"}}{{#if:{{{3|}}}|{{#if:{{{4|}}}|, |,&nbsp;and }} [[:{{{3}}}{{#if:{{{label 3|{{{l3|}}}}}}|{{!}}{{{label 3|{{{l3}}}}}}}}]]\n" + 
+	"}}{{#if:{{{4|}}}|{{#if:{{{5|}}}|, |,&nbsp;and }} [[:{{{4}}}{{#if:{{{label 4|{{{l4|}}}}}}|{{!}}{{{label 4|{{{l4}}}}}}}}]]\n" + 
+	"}}{{#if:{{{5|}}}|{{#if:{{{6|}}}|, |,&nbsp;and }} [[:{{{5}}}{{#if:{{{label 5|{{{l5|}}}}}}|{{!}}{{{label 5|{{{l5}}}}}}}}]]\n" + 
+	"}}{{#if:{{{6|}}}|{{#if:{{{7|}}}|, |,&nbsp;and }} [[:{{{6}}}{{#if:{{{label 6|{{{l6|}}}}}}|{{!}}{{{label 6|{{{l6}}}}}}}}]]\n" + 
+	"}}{{#if:{{{7|}}}|{{#if:{{{8|}}}|, |,&nbsp;and }} [[:{{{7}}}{{#if:{{{label 7|{{{l7|}}}}}}|{{!}}{{{label 7|{{{l7}}}}}}}}]]\n" + 
+	"}}{{#if:{{{8|}}}|{{#if:{{{9|}}}|, |,&nbsp;and }} [[:{{{8}}}{{#if:{{{label 8|{{{l8|}}}}}}|{{!}}{{{label 8|{{{l8}}}}}}}}]]\n" + 
+	"}}{{#if:{{{9|}}}|{{#if:{{{10|}}}|, |,&nbsp;and }} [[:{{{9}}}{{#if:{{{label 9|{{{l9|}}}}}}|{{!}}{{{label 9|{{{l9}}}}}}}}]]\n" + 
+	"}}{{#if:{{{10|}}}|{{#if:{{{11|}}}|, |,&nbsp;and }} [[:{{{10}}}{{#if:{{{label 10|{{{l10|}}}}}}|{{!}}{{{label 10|{{{l10}}}}}}}}]]\n" + 
+	"}}{{#if:{{{11|}}}|{{#if:{{{12|}}}|, |,&nbsp;and }} [[:{{{11}}}{{#if:{{{label 11|{{{l11|}}}}}}|{{!}}{{{label 11|{{{l11}}}}}}}}]]\n" + 
+	"}}{{#if:{{{12|}}}|{{#if:{{{13|}}}|, |,&nbsp;and }} [[:{{{12}}}{{#if:{{{label 12|{{{l12|}}}}}}|{{!}}{{{label 12|{{{l12}}}}}}}}]]\n" + 
+	"}}{{#if:{{{13|}}}|{{#if:{{{14|}}}|, |,&nbsp;and }} [[:{{{13}}}{{#if:{{{label 13|{{{l13|}}}}}}|{{!}}{{{label 13|{{{l13}}}}}}}}]]\n" + 
+	"}}{{#if:{{{14|}}}|{{#if:{{{15|}}}|, |,&nbsp;and }} [[:{{{14}}}{{#if:{{{label 14|{{{l14|}}}}}}|{{!}}{{{label 14|{{{l14}}}}}}}}]]\n" + 
+	"}}{{#if:{{{15|}}}|,&nbsp;and [[:{{{15}}}{{#if:{{{label 15|{{{l15|}}} }}}|{{!}}{{{label 15|{{{l15|}}} }}} }}]]\n" + 
+	"}}{{#if:{{{16|}}}| &mdash; '''<br/>Error: [[Template:See also|Too many links specified (maximum is 15)]]'''\n" + 
+	"}}}}<noinclude>\n" + 
+	"{{documentation}}\n" + 
+	"</noinclude>\n" + 
+	"";
+	
 	public static String RNDFRAC = "<includeonly>{{#ifexpr:({{{2}}}-1)round0=abs({{{2}}}-1)|{{#ifexpr:{{{1}}}*{{{2}}}round0<0|−}}{{formatnum:{{rndfrac/out|{{#expr:floor((abs{{{1}}}*{{{2}}}round0)/{{{2}}})}}|{{#expr:(abs{{{1}}}*{{{2}}}round0)mod{{{2}}}}}|{{{2}}}|{{gcd|{{#expr:(abs{{{1}}}*{{{2}}}round0)mod{{{2}}}}}|{{{2}}}}}}}}}|{{color|red|This fractional rounding function only accepts positive intergers as the denominator.}}}}</includeonly><noinclude>{{documentation}}</noinclude>\n";
 	public static String RNDFRAC_OUT = "<includeonly>{{#ifeq:{{{2}}}|0|{{{1}}}|<span class=\"frac nowrap\">{{#ifexpr:{{{1}}}>0|{{{1}}}<sup>&#32;</sup>}}{{#iferror:{{#expr:1/{{{4}}}}}|<sup>{{{2}}}</sup>&frasl;<sub>{{{3}}}</sub>|<sup>{{#expr:{{{2}}}/{{{4}}}}}</sup>&frasl;<sub>{{#expr:{{{3}}}/{{{4}}}}}</sub>}}</span>}}</includeonly><noinclude>{{documentation}}</noinclude>";
 	public static String SORTNAME = "<includeonly><</includeonly><noinclude>&lt;</noinclude>span style=\"display:none;\">{{#if:{{{4|{{{sort|}}}}}} | {{{4|{{{sort}}}}}} | {{{2|{{{last}}}}}}, {{{1|{{{first}}}}}} }}<includeonly><</includeonly><noinclude>&lt;</noinclude>/span>{{#if:{{{nolink|}}}\n"
@@ -2476,6 +2512,12 @@ public class WikiTestModel extends WikiModel {
 				return RNDFRAC_OUT;
 			} else if (name.equals("T1")) {
 				return T1;
+			} else if (name.equals("Rellink")) {
+				return RELLINK;
+			} else if (name.equals("Main")) {
+				return MAIN;
+			} else if (name.equals("See_also")) {
+				return SEE_ALSO;
 			}
 		} else {
 			if (name.equals("Include_Page")) {

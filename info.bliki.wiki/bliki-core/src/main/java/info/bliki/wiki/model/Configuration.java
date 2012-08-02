@@ -83,7 +83,20 @@ public class Configuration implements IConfiguration {
 	 * Print parser function calls (ITemplateFunction calls) with isSubst==false
 	 */
 	public final static boolean PARSER_FUNCTIONS = false;
-
+	
+	/**
+	 * Print template calls 
+	 * @see AbstractWikiModel#substituteTemplateCall(String, Map, Appendable)
+	 */
+	public final static boolean TEMPLATE_NAMES = false;
+	
+	/**
+	 * Print raw content calls   
+	 * 
+	 * @see IWikiModel#getRawWikiContent(String, String, Map)
+	 */
+	public final static boolean RAW_CONTENT = false;
+	
 	private static final String INTERWIKI_RESOURCE_NAME = "/interwiki.properties";
 
 	public static Properties interwikiMapping;
@@ -332,7 +345,7 @@ public class Configuration implements IConfiguration {
 	 * Limits the recursive call of the Wikipedia and Template parser to a depth
 	 * of PARSER_RECURSION_LIMIT
 	 */
-	public final static int PARSER_RECURSION_LIMIT = 64;
+	public final static int PARSER_RECURSION_LIMIT = 256;
 
 	/**
 	 * Limits the recursive call of the HTMLConverter renderer to a depth of
@@ -344,7 +357,7 @@ public class Configuration implements IConfiguration {
 	 * Limits the recursive call of the Template parser to a depth of
 	 * TEMPLATE_RECURSION_LIMIT
 	 */
-	public final static int TEMPLATE_RECURSION_LIMIT = 100000;
+	public final static int TEMPLATE_RECURSION_LIMIT = 256;
 
 	/**
 	 * Limits the Scanner buffer.
@@ -360,7 +373,7 @@ public class Configuration implements IConfiguration {
 	 * Limits the recursive call of the AbstractParser parser to a depth of
 	 * GLOBAL_RECURSION_LIMIT
 	 */
-	public final static int GLOBAL_RECURSION_LIMIT = 100000;
+//	public final static int GLOBAL_RECURSION_LIMIT = 100000;
 
 	public Configuration() {
 	}

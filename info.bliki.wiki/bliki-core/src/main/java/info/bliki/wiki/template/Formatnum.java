@@ -24,25 +24,27 @@ public class Formatnum extends AbstractTemplateFunction {
 	public String parseFunction(List<String> list, IWikiModel model, char[] src, int beginIndex, int endIndex, boolean isSubst) {
 		if (list.size() > 0) {
 			String result = isSubst ? list.get(0) : parseTrim(list.get(0), model);
-			try {
-				NumberFormat nf = NumberFormat.getNumberInstance(model.getLocale());
-				if (list.size() > 1 && list.get(1).equalsIgnoreCase("r")) {
-					Number num = nf.parse(result);
-					if (num instanceof Double) {
-						result = Expr.getWikiNumberFormat(num.doubleValue(),model);
+			if (result.length() > 0) {
+				try {
+					NumberFormat nf = NumberFormat.getNumberInstance(model.getLocale());
+					if (list.size() > 1 && list.get(1).equalsIgnoreCase("r")) {
+						Number num = nf.parse(result);
+						if (num instanceof Double) {
+							result = Expr.getWikiNumberFormat(num.doubleValue(), model);
+						} else {
+							result = num.toString();
+						}
 					} else {
-						result = num.toString();
+						Double dbl = new Double(result);
+						result = nf.format(dbl);
 					}
-				} else {
-					Double dbl = new Double(result);
-					result = nf.format(dbl);
-				}
-			} catch (Exception ex) {
-				if (Configuration.DEBUG) {
-					System.out.println("formatnum error: " + list.toString());
-				}
-				if (Configuration.STACKTRACE) {
-					ex.printStackTrace();
+				} catch (Exception ex) {
+					if (Configuration.DEBUG) {
+						System.out.println("formatnum error: " + list.toString());
+					}
+					if (Configuration.STACKTRACE) {
+						ex.printStackTrace();
+					}
 				}
 			}
 			return result;

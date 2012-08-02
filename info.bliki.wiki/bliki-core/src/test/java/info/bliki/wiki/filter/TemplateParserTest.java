@@ -481,7 +481,7 @@ public class TemplateParserTest extends FilterTestSupport {
 	}
 
 	public void testEndlessRecursion() {
-		assertEquals("{{Error - recursion limit exceeded parsing templates.}}", wikiModel.parseTemplates("{{recursion}}", false));
+		assertEquals("{{Error - template recursion limit exceeded parsing templates.}}", wikiModel.parseTemplates("{{recursion}}", false));
 	}
 
 	private final String TEST_STRING_01 = "[[Category:Interwiki templates|wikipedia]]\n" + "[[zh:Template:Wikipedia]]\n"
@@ -749,6 +749,11 @@ public class TemplateParserTest extends FilterTestSupport {
 		// wikiModel.parseTemplates("{{#expr: 46.857 round-1.8 }}", false));
 	}
 
+	public void testExpr020() {
+		assertEquals("2.718281828459045", wikiModel.parseTemplates("{{#expr: e }}", false));
+		assertEquals("3.141592653589793", wikiModel.parseTemplates("{{#expr: pi }}", false));
+	}
+
 	public void testNS001() {
 		assertEquals("User_talk", wikiModel.parseTemplates("{{ns:3}}", false));
 		assertEquals("Help_talk", wikiModel.parseTemplates("{{ns:{{ns:12}}_talk}}", false));
@@ -920,24 +925,40 @@ public class TemplateParserTest extends FilterTestSupport {
 		assertEquals("Talk:Foo/bar/baz", wikiModel.parseTemplates("{{#titleparts: Talk:Foo/bar/baz/quok | 3 }}", false));
 	}
 
-	public void testTitlepartsn01() {
+	public void testTitleparts004() {
 		assertEquals("Talk:Foo/bar/baz", wikiModel.parseTemplates("{{#titleparts: Talk:Foo/bar/baz/quok | -1 }}", false));
 	}
 
-	public void testTitlepartsn02() {
+	public void testTitleparts005() {
 		assertEquals("Talk:Foo/bar", wikiModel.parseTemplates("{{#titleparts: Talk:Foo/bar/baz/quok | -2 }}", false));
 	}
 
-	public void testTitlepartsn03() {
+	public void testTitleparts006() {
 		assertEquals("Talk:Foo", wikiModel.parseTemplates("{{#titleparts: Talk:Foo/bar/baz/quok | -3 }}", false));
 	}
 
-	public void testTitlepartsn04() {
+	public void testTitleparts007() {
 		assertEquals("", wikiModel.parseTemplates("{{#titleparts: Talk:Foo/bar/baz/quok | -4 }}", false));
 	}
 
-	public void testTitlepartsn05() {
+	public void testTitleparts008() {
 		assertEquals("", wikiModel.parseTemplates("{{#titleparts: Talk:Foo/bar/baz/quok | -5 }}", false));
+	}
+
+	public void testTitleparts06() {
+		assertEquals("bar/baz", wikiModel.parseTemplates("{{#titleparts: Talk:Foo/bar/baz/quok | 2 | 2 }}", false));
+	}
+
+	public void testTitleparts07() {
+		assertEquals("bar/baz/quok", wikiModel.parseTemplates("{{#titleparts: Talk:Foo/bar/baz/quok | | 2 }}", false));
+	}
+
+	public void testTitleparts08() {
+		assertEquals("quok", wikiModel.parseTemplates("{{#titleparts: Talk:Foo/bar/baz/quok | | -1 }}", false));
+	}
+
+	public void testTitleparts09() {
+		assertEquals("bar/baz", wikiModel.parseTemplates("{{#titleparts: Talk:Foo/bar/baz/quok | -1 | 2 }}", false));
 	}
 
 	public void testIssue77_001() {
@@ -1010,4 +1031,17 @@ public class TemplateParserTest extends FilterTestSupport {
 	public void testIssue82_004() {
 		assertEquals("105", wikiModel.parseTemplates("{{subst:#expr:{{#time:z|{{{1|April 14}}}}}+1}}"));
 	}
+
+	public void testTemplateMain() {
+		assertEquals(
+				"<div class=\"rellink<nowiki> </nowiki>relarticle mainarticle\">Main articles: [[Demographics of Pakistan|Demographics of Pakistan]]&#32;and&#32;[[Pakistani people|Pakistani people]]</div>",
+				wikiModel.parseTemplates("{{Main|Demographics of Pakistan|Pakistani people}}"));
+	}
+
+	public void testTemplateSeeAlso() {
+		assertEquals(
+				"<div class=\"rellink<nowiki> </nowiki>boilerplate seealso\">See also: [[:Ethnic groups in Pakistan]]&nbsp;and [[:Religion in Pakistan]]</div>",
+				wikiModel.parseTemplates("{{See also|Ethnic groups in Pakistan|Religion in Pakistan}}"));
+	}
+
 }

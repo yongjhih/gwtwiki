@@ -79,20 +79,19 @@ public class TemplateParser extends AbstractParser {
 			boolean parseOnlySignature, boolean renderTemplate, boolean onlyIncludeFlag, Map<String, String> templateParameterMap)
 			throws IOException {
 		try {
-			int level = wikiModel.incrementRecursionLevel();
-			if (level > Configuration.PARSER_RECURSION_LIMIT) {
-				if (Configuration.DEBUG) {
-					System.out.println("Recursion1 error: " + rawWikitext);
-				}
-				writer.append("Error - recursion limit exceeded parsing templates.");
-				return;
-			}
+			// int level = wikiModel.incrementRecursionLevel();
+			int templateLevel = wikiModel.incrementTemplateRecursionLevel();
+			// if (level > Configuration.PARSER_RECURSION_LIMIT) {
+			// if (Configuration.DEBUG) {
+			// System.out.println("Recursion1 error: " + rawWikitext);
+			// }
+			// writer.append("Error - recursion limit exceeded parsing templates.");
+			// return;
+			// }
 			// recursion limit on level is not sufficient as it is possible to recurse
 			// indefinitely at fixed level upper bound
-			if (wikiModel.incrementTemplateRecursionCount() > Configuration.TEMPLATE_RECURSION_LIMIT) {
-				// writer.append("Error - total recursion count limit (" +
-				// wikiModel.getTemplateRecursionCount() +
-				// ") exceeded parsing templates.");
+			if (templateLevel > Configuration.TEMPLATE_RECURSION_LIMIT) {
+				writer.append("Error - template recursion limit exceeded parsing templates.");
 				return;
 			}
 			StringBuilder sb = new StringBuilder(rawWikitext.length());
@@ -119,7 +118,8 @@ public class TemplateParser extends AbstractParser {
 			e.printStackTrace();
 			writer.append(e.getClass().getSimpleName());
 		} finally {
-			wikiModel.decrementRecursionLevel();
+			// wikiModel.decrementRecursionLevel();
+			wikiModel.decrementTemplateRecursionLevel();
 		}
 	}
 
@@ -132,18 +132,20 @@ public class TemplateParser extends AbstractParser {
 			return;
 		}
 		try {
-			int level = wikiModel.incrementRecursionLevel();
-			if (level > Configuration.PARSER_RECURSION_LIMIT) {
-				if (Configuration.DEBUG) {
-					System.out.println("Recursion2 error: " + rawWikitext);
-				}
-				writer.append("Error - recursion limit exceeded parsing templates.");
-				return;
-			}
+			// int level = wikiModel.incrementRecursionLevel();
+			int templateLevel = wikiModel.incrementTemplateRecursionLevel();
+			// if (level > Configuration.PARSER_RECURSION_LIMIT) {
+			// if (Configuration.DEBUG) {
+			// System.out.println("Recursion2 error: " + rawWikitext);
+			// }
+			// writer.append("Error - recursion limit exceeded parsing templates.");
+			// return;
+			// }
 
 			// recursion limit on level is not sufficient as it is possible to recurse
 			// indefinitely at fixed level upper bound
-			if (wikiModel.incrementTemplateRecursionCount() > Configuration.TEMPLATE_RECURSION_LIMIT) {
+			if (templateLevel > Configuration.TEMPLATE_RECURSION_LIMIT) {
+				writer.append("Error - template recursion limit exceeded parsing templates.");
 				return;
 			}
 
@@ -176,7 +178,8 @@ public class TemplateParser extends AbstractParser {
 			e.printStackTrace();
 			writer.append(e.getClass().getSimpleName());
 		} finally {
-			wikiModel.decrementRecursionLevel();
+			// wikiModel.decrementRecursionLevel();
+			wikiModel.decrementTemplateRecursionLevel();
 		}
 	}
 
@@ -270,13 +273,24 @@ public class TemplateParser extends AbstractParser {
 				// ---------Identify the next token-------------
 				switch (fCurrentCharacter) {
 				case '{': // wikipedia template handling
+				// if (Configuration.TEMPLATE_NAMES) {
+				// int level = fWikiModel.getRecursionLevel();
+				// if (level == 1) {
+				// try {
+				// String temp = fStringSource.substring(fCurrentPosition,
+				// fCurrentPosition + 10);
+				// System.out.println("==>" + temp);
+				// } catch (Exception ex) {
+				//
+				// }
+				// }
+				// }
 					if (!fParseOnlySignature && parseTemplateOrTemplateParameter(writer)) {
 						fWhiteStart = true;
 						fWhiteStartPosition = fCurrentPosition;
 						continue;
 					}
 					break;
-
 				case '<':
 					int htmlStartPosition = fCurrentPosition;
 					if (!fParseOnlySignature && parseSpecialWikiTags(writer)) {
@@ -628,14 +642,17 @@ public class TemplateParser extends AbstractParser {
 		if (currOffset > 0) {
 			String function = templateName.substring(0, currOffset - 1).trim();
 			if (function != null) {
+				if (Configuration.PARSER_FUNCTIONS) {
+					System.out.println(function);
+				}
 				ITemplateFunction templateFunction = fWikiModel.getTemplateFunction(function);
 				if (templateFunction != null) {
 					// if (function.charAt(0) == '#') {
 					// #if:, #ifeq:,...
 					parts.set(0, templateName.substring(currOffset));
-					if (Configuration.PARSER_FUNCTIONS) {
-						System.out.println(function + ": " + parts);
-					}
+					// if (Configuration.PARSER_FUNCTIONS) {
+					// System.out.println(function + ": " + parts);
+					// }
 					plainContent = templateFunction.parseFunction(parts, fWikiModel, fSource, startTemplatePosition + currOffset, endOffset,
 							false);
 					fCurrentPosition = endPosition;

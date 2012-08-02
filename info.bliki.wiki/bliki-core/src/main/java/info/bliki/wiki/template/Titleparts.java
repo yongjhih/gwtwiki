@@ -23,6 +23,8 @@ public class Titleparts extends AbstractTemplateFunction {
 	public String parseFunction(List<String> list, IWikiModel model, char[] src, int beginIndex, int endIndex, boolean isSubst) {
 		if (list.size() > 0) {
 			String pagename = isSubst ? list.get(0) : parseTrim(list.get(0), model);
+			// If the number of segments parameter is not specified, it defaults to
+			// "0", which returns all the segments from first segment (included).
 			int numberOfSegments = 0;
 			if (list.size() > 1) {
 				try {
@@ -32,8 +34,51 @@ public class Titleparts extends AbstractTemplateFunction {
 
 				}
 			}
-			if (numberOfSegments > 0) {
-				int indx = -1;
+			// If the first segment parameter is not specified or is "0", it
+			// defaults to "1":
+			int firstSegment = 1;
+			if (list.size() > 2) {
+				try {
+					String str = isSubst ? list.get(2) : parseTrim(list.get(2), model);
+					firstSegment = Integer.parseInt(str);
+					if (firstSegment == 0) {
+						firstSegment = 1;
+					}
+				} catch (NumberFormatException nfe) {
+
+				}
+			}
+			int indx = -1;
+			if (firstSegment > 0) {
+				indx = -1;
+				while (firstSegment > 1) {
+					indx = pagename.indexOf('/', ++indx);
+					if (indx < 0) {
+						return "";
+					}
+					firstSegment--;
+				}
+				if (indx > 0) {
+					pagename = pagename.substring(indx + 1);
+				}
+			} else {
+				// Negative values for first segment translates to
+				// "add this value to the total number of segments", loosely equivalent
+				// to "count from the right":
+				indx = pagename.length();
+				while (firstSegment < 0) {
+					indx = pagename.lastIndexOf('/', --indx);
+					if (indx < 0) {
+						return "";
+					}
+					firstSegment++;
+				}
+				if (indx >= 0) {
+					pagename = pagename.substring(indx + 1);
+				}
+			}
+			if (numberOfSegments >= 0) {
+				indx = -1;
 				while (numberOfSegments > 0) {
 					indx = pagename.indexOf('/', ++indx);
 					if (--numberOfSegments == 0) {
@@ -47,12 +92,12 @@ public class Titleparts extends AbstractTemplateFunction {
 					}
 				}
 			} else {
-				int indx = pagename.length();
+				indx = pagename.length();
 				while (numberOfSegments < 0) {
 					indx = pagename.lastIndexOf('/', --indx);
 					if (++numberOfSegments == 0) {
 						if (indx >= 0) {
-							return pagename.substring(0, indx);
+							break;
 						}
 						return "";
 					}
@@ -60,8 +105,10 @@ public class Titleparts extends AbstractTemplateFunction {
 						return "";
 					}
 				}
+				if (indx >= 0) {
+					pagename = pagename.substring(0, indx);
+				}
 			}
-
 			return pagename;
 		}
 		return null;

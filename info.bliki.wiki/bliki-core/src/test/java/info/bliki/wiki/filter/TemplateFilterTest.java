@@ -799,4 +799,29 @@ public class TemplateFilterTest extends FilterTestSupport {
 		assertEquals("\n" + 
 				"<p><span class=\"frac nowrap\">12<sup> </sup><sup>4</sup>⁄<sub>6</sub></span></p>", wikiModel.render("{{rndfrac|12.65|6}}", false));
 	}
+	
+	public void testTemplateMain() {
+		assertEquals("\n" + 
+				"<div class=\"rellink relarticle mainarticle\">Main articles: <a href=\"http://www.bliki.info/wiki/Demographics_of_Pakistan\" title=\"Demographics of Pakistan\">Demographics of Pakistan</a> and <a href=\"http://www.bliki.info/wiki/Pakistani_people\" title=\"Pakistani people\">Pakistani people</a></div>", wikiModel.render("{{Main|Demographics of Pakistan|Pakistani people}}",false));
+	}
+	
+	public void testTemplateSeeAlso() {
+		assertEquals("\n" + 
+				"<div class=\"rellink boilerplate seealso\">See also: <a href=\"http://www.bliki.info/wiki/Ethnic_groups_in_Pakistan\" title=\"Ethnic groups in Pakistan\">Ethnic groups in Pakistan</a> and <a href=\"http://www.bliki.info/wiki/Religion_in_Pakistan\" title=\"Religion in Pakistan\">Religion in Pakistan</a></div>", wikiModel.render("{{See also|Ethnic groups in Pakistan|Religion in Pakistan}}",false));
+	}
+	
+	public void testTemplateMain002() {
+		assertEquals("<h2><span class=\"mw-headline\" id=\"Demographics\">Demographics</span></h2>\n" + 
+				"<div class=\"rellink relarticle mainarticle\">Main articles: <a href=\"http://www.bliki.info/wiki/Demographics_of_Pakistan\" title=\"Demographics of Pakistan\">Demographics of Pakistan</a> and <a href=\"http://www.bliki.info/wiki/Pakistani_people\" title=\"Pakistani people\">Pakistani people</a></div>\n" + 
+				"<div class=\"rellink boilerplate seealso\">See also: <a href=\"http://www.bliki.info/wiki/Ethnic_groups_in_Pakistan\" title=\"Ethnic groups in Pakistan\">Ethnic groups in Pakistan</a> and <a href=\"http://www.bliki.info/wiki/Religion_in_Pakistan\" title=\"Religion in Pakistan\">Religion in Pakistan</a></div>", wikiModel.render("==Demographics==\n" + "{{Main|Demographics of Pakistan|Pakistani people}}\n"
+				+ "{{See also|Ethnic groups in Pakistan|Religion in Pakistan}}", false));
+	}
+	
+	public void testUnknownTag001() {
+		assertEquals("\n" + 
+				"<p>start&#60;unknowntag&#62;\n" + 
+				"some text\n" + 
+				" new line\n" + 
+				"test&#60;/unknowntag&#62;end</p>", wikiModel.render("start<unknowntag>\nsome text\n new line\ntest</unknowntag>end", false));
+	}
 }

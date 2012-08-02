@@ -52,8 +52,6 @@ public abstract class AbstractWikiModel implements IWikiModel, IContext {
 
 	protected int fRecursionLevel;
 
-	protected int fParserRecursionCount;
-
 	protected int fTemplateRecursionCount;
 
 	protected TagStack fTagStack;
@@ -934,6 +932,13 @@ public abstract class AbstractWikiModel implements IWikiModel, IContext {
 	/**
 	 * {@inheritDoc}
 	 */
+	public int decrementTemplateRecursionLevel() {
+		return --fTemplateRecursionCount;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
 	public String encodeTitleDotUrl(String wikiTitle, boolean firstCharacterAsUpperCase) {
 		return Encoder.encodeTitleDotUrl(wikiTitle, firstCharacterAsUpperCase);
 	}
@@ -1171,6 +1176,9 @@ public abstract class AbstractWikiModel implements IWikiModel, IContext {
 	 * {@inheritDoc}
 	 */
 	public String getRawWikiContent(String namespace, String templateName, Map<String, String> templateParameters) {
+		if (Configuration.RAW_CONTENT) {
+			System.out.println("AbstractWikiModel raw: " + " " + namespace + " " + templateName);
+		}
 		if (isTemplateNamespace(namespace)) {
 			String magicWord = templateName;
 			String parameter = "";
@@ -1290,13 +1298,6 @@ public abstract class AbstractWikiModel implements IWikiModel, IContext {
 	/**
 	 * {@inheritDoc}
 	 */
-	public int incrementParserRecursionCount() {
-		return ++fParserRecursionCount;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
 	public int incrementRecursionLevel() {
 		return ++fRecursionLevel;
 	}
@@ -1304,7 +1305,7 @@ public abstract class AbstractWikiModel implements IWikiModel, IContext {
 	/**
 	 * {@inheritDoc}
 	 */
-	public int incrementTemplateRecursionCount() {
+	public int incrementTemplateRecursionLevel() {
 		return ++fTemplateRecursionCount;
 	}
 
@@ -1320,7 +1321,6 @@ public abstract class AbstractWikiModel implements IWikiModel, IContext {
 			fTagStack = new TagStack();
 			fReferences = null;
 			fReferenceNames = null;
-			fParserRecursionCount = 0;
 			fRecursionLevel = 0;
 			fTemplateRecursionCount = 0;
 			fSectionCounter = 0;
@@ -1722,7 +1722,6 @@ public abstract class AbstractWikiModel implements IWikiModel, IContext {
 		fTagStack = new TagStack();
 		fReferences = null;
 		fReferenceNames = null;
-		fParserRecursionCount = 0;
 		fRecursionLevel = 0;
 		fTemplateRecursionCount = 0;
 		fRedirectLink = null;
@@ -1761,30 +1760,36 @@ public abstract class AbstractWikiModel implements IWikiModel, IContext {
 	public void substituteTemplateCall(String templateName, Map<String, String> parameterMap, Appendable writer) throws IOException {
 
 		Map<String, String> templateCallsCache = null;
-		String cacheKey = null;
-		if (this instanceof IConfiguration) {
-			IConfiguration config = this;
-			templateCallsCache = config.getTemplateCallsCache();
-			if (templateCallsCache != null) {
-				StringBuilder cacheKeyBuffer = new StringBuilder();
-				cacheKeyBuffer.append(templateName);
+		String cacheKey = "";
+		// if (this instanceof IConfiguration) {
+		// IConfiguration config = this;
+		templateCallsCache = fConfiguration.getTemplateCallsCache();
+		if (templateCallsCache != null) {
+			StringBuilder cacheKeyBuffer = new StringBuilder();
+			cacheKeyBuffer.append(templateName);
+			cacheKeyBuffer.append("|");
+			for (Entry<String, String> entry : parameterMap.entrySet()) {
+				cacheKeyBuffer.append(entry.getKey());
+				cacheKeyBuffer.append("=");
+				cacheKeyBuffer.append(entry.getValue());
 				cacheKeyBuffer.append("|");
-				for (Entry<String, String> entry : parameterMap.entrySet()) {
-					cacheKeyBuffer.append(entry.getKey());
-					cacheKeyBuffer.append("=");
-					cacheKeyBuffer.append(entry.getValue());
-					cacheKeyBuffer.append("|");
-				}
-				cacheKey = cacheKeyBuffer.toString();
-				if (cacheKey.length() < 256) {
-					String value = templateCallsCache.get(cacheKey);
-					if (value != null) {
-						// System.out.println("Cache key: " + cacheKey);
-						writer.append(value);
-						return;
+			}
+			cacheKey = cacheKeyBuffer.toString();
+			if (cacheKey.length() < 256) {
+				String value = templateCallsCache.get(cacheKey);
+				if (value != null) {
+					// System.out.println("Cache key: " + cacheKey);
+					writer.append(value);
+					if (Configuration.TEMPLATE_NAMES) {
+						System.out.println("Cached: " + templateName + "-" + cacheKey);
 					}
+					return;
 				}
 			}
+		}
+		// }
+		if (Configuration.TEMPLATE_NAMES) {
+			System.out.println("Not Cached: " + templateName + "-" + cacheKey);
 		}
 		String plainContent;
 		if (templateName.length() > 0 && templateName.charAt(0) == ':') {

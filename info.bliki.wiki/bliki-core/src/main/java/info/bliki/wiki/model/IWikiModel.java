@@ -358,6 +358,15 @@ public interface IWikiModel extends IConfiguration {
 	public int decrementRecursionLevel();
 
 	/**
+	 * Decrement the current template recursion level of the temlate parser. The
+	 * recursion level is used to prevent infinite nesting of templates, tables,
+	 * lists and other parser objects.
+	 * 
+	 * @return the decremented recursion level
+	 */
+	public int decrementTemplateRecursionLevel();
+
+	/**
 	 * Encode the <i>wiki links title</i> into a URL for HTML hyperlinks (i.e.
 	 * create the <i>href</i> attribute representation for the <i>a</i> tag). This
 	 * method uses the '.' character to encode special characters. To get the <a
@@ -596,8 +605,6 @@ public interface IWikiModel extends IConfiguration {
 	 */
 	public IEventListener getWikiListener();
 
-	public int incrementParserRecursionCount();
-
 	/**
 	 * Increment the current recursion level of the parser. The recursion level is
 	 * used to prevent infinite nesting of templates, tables, lists and other
@@ -607,7 +614,13 @@ public interface IWikiModel extends IConfiguration {
 	 */
 	public int incrementRecursionLevel();
 
-	public int incrementTemplateRecursionCount();
+	/**
+	 * Increment the current recursion level of the template parser. The recursion
+	 * level is used to prevent infinite nesting of templates.
+	 * 
+	 * @return the current recursion level counter
+	 */
+	public int incrementTemplateRecursionLevel();
 
 	/**
 	 * Checks if <a href="http://en.wikipedia.org/wiki/CamelCase">CamelCase</a>

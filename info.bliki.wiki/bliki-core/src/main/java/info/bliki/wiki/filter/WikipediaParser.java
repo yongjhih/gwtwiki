@@ -244,9 +244,14 @@ public class WikipediaParser extends AbstractParser implements IParser {
 												TagNode node = (TagNode) tag;
 												List<NodeAttribute> attributes = tagNode.getAttributesEx();
 												Attribute attr;
+												String temp;
 												for (int i = 1; i < attributes.size(); i++) {
 													attr = attributes.get(i);
-													node.addAttribute(attr.getName(), attr.getValue(), true);
+													temp = attr.getValue();
+													if (temp != null) {
+														temp = parseNowiki(temp);
+													}
+													node.addAttribute(attr.getName(), temp, true);
 												}
 											}
 											if (tag instanceof HTMLTag) {
@@ -263,9 +268,13 @@ public class WikipediaParser extends AbstractParser implements IParser {
 											}
 											createTag(tag, tagNode, tagNode.getEndPosition());
 											return TokenIgnore;
-
+										} else {
+											fWhiteStart = true;
+											skipUntilEndOfTag(tagNode, tagNode.getEndPosition());
+											createContentToken(0);
+											return TokenIgnore;
 										}
-										break;
+										// break;
 									}
 								} else {
 									// closing HTML tag
@@ -343,6 +352,36 @@ public class WikipediaParser extends AbstractParser implements IParser {
 			// end of scanner text
 		}
 		return TokenEOF;
+	}
+
+	/**
+	 * Parse nowiki tags.
+	 * 
+	 * @param input
+	 * @return
+	 */
+	private String parseNowiki(String input) {
+		int indx = input.indexOf("<nowiki>");
+		int indx2;
+		int lastIndx = 0;
+		if (indx >= 0) {
+			StringBuilder buf = new StringBuilder();
+			while (indx >= 0) {
+				buf.append(input.substring(lastIndx, indx));
+				lastIndx = indx + 8; // <nowiki> length
+				indx2 = input.indexOf("</nowiki>", indx + 1);
+				if (indx2 >= 0) {
+					buf.append(input.substring(lastIndx, indx2));
+					lastIndx = indx2 + 9;// </nowiki> length
+				} else {
+					break;
+				}
+				indx = input.indexOf("<nowiki>", indx2 + 1);
+			}
+			buf.append(input.substring(lastIndx, input.length()));
+			return buf.toString();
+		}
+		return input;
 	}
 
 	private void addParagraph() {
@@ -978,6 +1017,21 @@ public class WikipediaParser extends AbstractParser implements IParser {
 		}
 
 		handleTag(tag, tagNode, macroBodyString);
+	}
+
+	private void skipUntilEndOfTag(WikiTagNode tagNode, int startMacroPosition) {
+		String endTag;
+		int index0;
+		String command = tagNode.getTagName();
+		if (!tagNode.isEmptyXmlTag()) {
+			endTag = command + '>';
+			index0 = Util.indexOfIgnoreCase(fStringSource, "</", endTag, startMacroPosition);
+			if (index0 >= 0) {
+				fCurrentPosition = index0 + endTag.length() + 2;
+			} else {
+				fCurrentPosition = fSource.length;
+			}
+		}
 	}
 
 	private boolean handleHTTPLink(String name) {

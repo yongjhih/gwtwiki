@@ -247,8 +247,12 @@ public class APIWikiModel extends WikiModel {
 					}
 					if (fImageDirectoryName != null) {
 						String filename = fImageDirectoryName + urlImageName;
-						os = new FileOutputStream(filename);
-						page.downloadImageUrl(os, imageUrl);
+						File file = new File(filename);
+						if (!file.exists()) {
+							// if the file doesn't exist try to download from Wikipedia
+							os = new FileOutputStream(filename);
+							page.downloadImageUrl(os, imageUrl); 
+						}
 						imageData.setUrl(imageUrl);
 						imageData.setFilename(filename);
 						fWikiDB.insertImage(imageData);
