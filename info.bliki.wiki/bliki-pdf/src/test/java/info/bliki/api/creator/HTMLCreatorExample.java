@@ -56,8 +56,12 @@ public class HTMLCreatorExample {
 			APIWikiModel wikiModel = new APIWikiModel(user, db, locale, "${image}", "${title}", imageDirectory);
 			DocumentCreator creator = new DocumentCreator(wikiModel, user, listOfTitleStrings);
 			// create header and CSS information
-			creator.setHeader(HTMLConstants.HTML_HEADER1 + HTMLConstants.CSS_MAIN_STYLE + HTMLConstants.CSS_SCREEN_STYLE
-					+ HTMLConstants.HTML_HEADER2);
+			StringBuilder buf = new StringBuilder();
+			buf.append(HTMLConstants.HTML_HEADER1);
+			buf.append(HTMLConstants.CSS_MAIN_STYLE);
+			buf.append(HTMLConstants.CSS_SCREEN_STYLE);
+			buf.append(HTMLConstants.HTML_HEADER2);
+			creator.setHeader(buf.toString());
 			creator.setFooter(HTMLConstants.HTML_FOOTER);
 			wikiModel.setUp();
 			creator.renderToFile(rawWikiText, title, new HTMLConverter(), generatedHTMLFilename);
@@ -114,8 +118,12 @@ public class HTMLCreatorExample {
 			APIWikiModel wikiModel = new APIWikiModel(user, db, locale, "${image}", "${title}", imageDirectory);
 			DocumentCreator creator = new DocumentCreator(wikiModel, user, listOfTitleStrings);
 			// create header and CSS information
-			creator.setHeader(HTMLConstants.HTML_HEADER1 + HTMLConstants.CSS_MAIN_STYLE + HTMLConstants.CSS_SCREEN_STYLE
-					+ HTMLConstants.HTML_HEADER2);
+			StringBuilder buf = new StringBuilder();
+			buf.append(HTMLConstants.HTML_HEADER1);
+			buf.append(HTMLConstants.CSS_MAIN_STYLE);
+			buf.append(HTMLConstants.CSS_SCREEN_STYLE);
+			buf.append(HTMLConstants.HTML_HEADER2);
+			creator.setHeader(buf.toString());
 			creator.setFooter(HTMLConstants.HTML_FOOTER);
 			wikiModel.setUp();
 			// set up a simple cache for this example. HashMap is not usable for
