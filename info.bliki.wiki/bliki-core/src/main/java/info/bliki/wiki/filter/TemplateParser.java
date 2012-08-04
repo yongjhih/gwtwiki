@@ -273,18 +273,18 @@ public class TemplateParser extends AbstractParser {
 				// ---------Identify the next token-------------
 				switch (fCurrentCharacter) {
 				case '{': // wikipedia template handling
-				// if (Configuration.TEMPLATE_NAMES) {
-				// int level = fWikiModel.getRecursionLevel();
-				// if (level == 1) {
-				// try {
-				// String temp = fStringSource.substring(fCurrentPosition,
-				// fCurrentPosition + 10);
-				// System.out.println("==>" + temp);
-				// } catch (Exception ex) {
-				//
-				// }
-				// }
-				// }
+					// if (Configuration.TEMPLATE_NAMES) {
+					// int level = fWikiModel.getRecursionLevel();
+					// if (level == 1) {
+					// try {
+					// String temp = fStringSource.substring(fCurrentPosition,
+					// fCurrentPosition + 10);
+					// System.out.println("==>" + temp);
+					// } catch (Exception ex) {
+					//
+					// }
+					// }
+					// }
 					if (!fParseOnlySignature && parseTemplateOrTemplateParameter(writer)) {
 						fWhiteStart = true;
 						fWhiteStartPosition = fCurrentPosition;
@@ -828,7 +828,7 @@ public class TemplateParser extends AbstractParser {
 			if (currOffset > lastOffset) {
 				value = srcString.substring(lastOffset, currOffset);
 				if (parameter != null) {
-					value = value.trim();
+					value = Util.trimNewlineRight(value);
 					namedParameterMap.put(parameter, value);
 				} else {
 					// whitespace characters are not automatically stripped from the start
@@ -838,6 +838,8 @@ public class TemplateParser extends AbstractParser {
 			}
 		}
 	}
+
+	
 
 	/**
 	 * Check if this template contains a template function

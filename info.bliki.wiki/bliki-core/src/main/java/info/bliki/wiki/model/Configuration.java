@@ -72,7 +72,7 @@ public class Configuration implements IConfiguration {
 	/**
 	 * Print additional debug information to System.out
 	 */
-	public final static boolean DEBUG = false;
+	public final static boolean DEBUG = true;
 	
 	/**
 	 * Print additional stack trace information to System.out

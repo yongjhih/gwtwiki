@@ -147,4 +147,29 @@ public class Util {
 
 		return -1;
 	}
+
+	/**
+	 * Trim whitespace characters from the left and right side of the string,
+	 * until we find a non whitespace character or a new line character on the
+	 * righ side. Delete the first newline found on the right side of the string.
+	 * 
+	 * @param str
+	 * @return
+	 */
+	public static String trimNewlineRight(String str) {
+		int end = str.length();
+		int start = 0;
+
+		while ((start < end) && Character.isWhitespace(str.charAt(start))) {
+			start++;
+		}
+		while ((start < end) && Character.isWhitespace(str.charAt(end - 1))) {
+			if (str.charAt(end - 1) == '\n') {
+				end--;
+				break;
+			}
+			end--;
+		}
+		return ((start > 0) || (end < str.length())) ? str.substring(start, end) : str;
+	}
 }
