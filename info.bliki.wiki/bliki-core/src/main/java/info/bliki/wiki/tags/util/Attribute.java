@@ -505,7 +505,7 @@ public abstract class Attribute implements Serializable {
 		if (isValued()) {
 			quote = getQuote();
 			if (0 != quote) {
-				buffer = new StringBuilder(); // todo: what is the value
+				buffer = new StringBuilder(16);  
 				// length?
 				buffer.append(quote);
 				getValue(buffer);

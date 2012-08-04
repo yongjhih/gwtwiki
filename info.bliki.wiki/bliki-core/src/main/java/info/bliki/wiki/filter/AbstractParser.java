@@ -64,10 +64,12 @@ public abstract class AbstractParser extends WikipediaScanner {
 	}
 
 	/**
-	 * Read the characters until the given string is found
+	 * Read the characters until the given string is found and set the current
+	 * position of the parser behind the found string.
 	 * 
 	 * @param untilString
-	 * @return
+	 * @return <code>true</code> if the string was found; <code>false</code>
+	 *         otherwise
 	 */
 	protected final boolean readUntil(String untilString) {
 		int index = fStringSource.indexOf(untilString, fCurrentPosition);
@@ -679,9 +681,9 @@ public abstract class AbstractParser extends WikipediaScanner {
 
 	/**
 	 * Read the characters until the end position of the current wiki link is
-	 * found
+	 * found.
 	 * 
-	 * @return
+	 * @return <code>true</code> if the end of the wiki link was found.
 	 */
 	protected final boolean findWikiLinkEnd() {
 		char ch;

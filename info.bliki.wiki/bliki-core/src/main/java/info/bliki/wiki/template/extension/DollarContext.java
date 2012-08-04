@@ -93,7 +93,7 @@ public class DollarContext extends AbstractTemplateFunction {
 							return builder.toString();
 
 						} else {
-							builder = new StringBuilder();
+							builder = new StringBuilder(16);
 							// single attribute values assigned
 							builder.append(toString(context, value, formatString, nullvalueString));
 							return builder.toString();

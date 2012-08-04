@@ -365,7 +365,7 @@ public class WikipediaParser extends AbstractParser implements IParser {
 		int indx2;
 		int lastIndx = 0;
 		if (indx >= 0) {
-			StringBuilder buf = new StringBuilder();
+			StringBuilder buf = new StringBuilder(input.length());
 			while (indx >= 0) {
 				buf.append(input.substring(lastIndx, indx));
 				lastIndx = indx + 8; // <nowiki> length
@@ -652,7 +652,7 @@ public class WikipediaParser extends AbstractParser implements IParser {
 				fCurrentCharacter = fSource[fCurrentPosition];
 				if (Character.isLowerCase(fCurrentCharacter)) {
 					fCurrentPosition++;
-					StringBuilder suffixBuffer = new StringBuilder();
+					StringBuilder suffixBuffer = new StringBuilder(16);
 					suffixBuffer.append(fCurrentCharacter);
 					while (true) {
 						fCurrentCharacter = fSource[fCurrentPosition++];

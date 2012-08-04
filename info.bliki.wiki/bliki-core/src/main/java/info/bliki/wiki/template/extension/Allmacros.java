@@ -33,7 +33,7 @@ public class Allmacros extends AbstractTemplateFunction {
 	@Override
 	public String parseFunction(List<String> parts, IWikiModel model, char[] src, int beginIndex, int endIndex, boolean isSubst) throws IOException {
 		Map<String, ITemplateFunction> t = model.getTemplateMap();
-		StringBuilder sb = new StringBuilder();
+		StringBuilder sb = new StringBuilder(16);
 		String doc;
 		sb.append("<table border=\"1\"><th>Template name</th><th>Implemented in class</th><th>Description</th>");
 		for (Map.Entry<String, ITemplateFunction> e : t.entrySet()) {

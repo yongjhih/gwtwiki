@@ -392,7 +392,7 @@ public class WikiModel extends AbstractWikiModel {
 	 */
 	public static String toHtml(String rawWikiText) {
 		try {
-			StringBuilder resultBuffer = new StringBuilder();
+			StringBuilder resultBuffer = new StringBuilder(rawWikiText.length() + rawWikiText.length() / 10);
 			toText(new WikiModel("/${image}", "/${title}"), new HTMLConverter(), rawWikiText, resultBuffer, false, false);
 			return resultBuffer.toString();
 		} catch (IOException e) {

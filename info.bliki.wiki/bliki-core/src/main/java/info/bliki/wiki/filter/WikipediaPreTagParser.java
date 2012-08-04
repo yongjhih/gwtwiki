@@ -303,7 +303,7 @@ public class WikipediaPreTagParser extends AbstractParser {
 				fCurrentCharacter = fSource[fCurrentPosition];
 				if (Character.isLowerCase(fCurrentCharacter)) {
 					fCurrentPosition++;
-					StringBuilder suffixBuffer = new StringBuilder();
+					StringBuilder suffixBuffer = new StringBuilder(16);
 					suffixBuffer.append(fCurrentCharacter);
 					while (true) {
 						fCurrentCharacter = fSource[fCurrentPosition++];

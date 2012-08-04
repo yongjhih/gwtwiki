@@ -368,7 +368,7 @@ public class WPList extends WPTag {
 	public String toString() {
 		if (!isEmpty()) {
 			try {
-				StringBuilder buf = new StringBuilder();
+				StringBuilder buf = new StringBuilder(fNestedElements.size() * 32);
 				for (int i = 0; i < fNestedElements.size(); i++) {
 					Object element = fNestedElements.get(i);
 					if (element instanceof InternalList) {

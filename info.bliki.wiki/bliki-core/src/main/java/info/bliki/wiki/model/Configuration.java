@@ -68,12 +68,12 @@ import java.util.regex.Pattern;
  * 
  */
 public class Configuration implements IConfiguration {
-	
+
 	/**
 	 * Print additional debug information to System.out
 	 */
 	public final static boolean DEBUG = false;
-	
+
 	/**
 	 * Print additional stack trace information to System.out
 	 */
@@ -83,20 +83,21 @@ public class Configuration implements IConfiguration {
 	 * Print parser function calls (ITemplateFunction calls) with isSubst==false
 	 */
 	public final static boolean PARSER_FUNCTIONS = false;
-	
+
 	/**
-	 * Print template calls 
+	 * Print template calls
+	 * 
 	 * @see AbstractWikiModel#substituteTemplateCall(String, Map, Appendable)
 	 */
 	public final static boolean TEMPLATE_NAMES = false;
-	
+
 	/**
-	 * Print raw content calls   
+	 * Print raw content calls
 	 * 
 	 * @see IWikiModel#getRawWikiContent(String, String, Map)
 	 */
 	public final static boolean RAW_CONTENT = false;
-	
+
 	private static final String INTERWIKI_RESOURCE_NAME = "/interwiki.properties";
 
 	public static Properties interwikiMapping;
@@ -342,6 +343,11 @@ public class Configuration implements IConfiguration {
 	public final static Configuration DEFAULT_CONFIGURATION = new Configuration();
 
 	/**
+	 * Limits the length of the template cache key to this length.
+	 */
+	public final static int MAX_CACHE_KEY_LENGTH = 256;
+
+	/**
 	 * Limits the recursive call of the Wikipedia and Template parser to a depth
 	 * of PARSER_RECURSION_LIMIT
 	 */
@@ -373,7 +379,7 @@ public class Configuration implements IConfiguration {
 	 * Limits the recursive call of the AbstractParser parser to a depth of
 	 * GLOBAL_RECURSION_LIMIT
 	 */
-//	public final static int GLOBAL_RECURSION_LIMIT = 100000;
+	// public final static int GLOBAL_RECURSION_LIMIT = 100000;
 
 	public Configuration() {
 	}

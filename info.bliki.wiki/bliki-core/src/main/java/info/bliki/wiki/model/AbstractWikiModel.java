@@ -1760,22 +1760,26 @@ public abstract class AbstractWikiModel implements IWikiModel, IContext {
 	public void substituteTemplateCall(String templateName, Map<String, String> parameterMap, Appendable writer) throws IOException {
 
 		Map<String, String> templateCallsCache = null;
-		String cacheKey = "";
-		// if (this instanceof IConfiguration) {
-		// IConfiguration config = this;
+		String cacheKey = null;
+		int cacheKeyLength = 0;
 		templateCallsCache = fConfiguration.getTemplateCallsCache();
 		if (templateCallsCache != null) {
-			StringBuilder cacheKeyBuffer = new StringBuilder();
-			cacheKeyBuffer.append(templateName);
-			cacheKeyBuffer.append("|");
+			cacheKeyLength += templateName.length() + 1;
 			for (Entry<String, String> entry : parameterMap.entrySet()) {
-				cacheKeyBuffer.append(entry.getKey());
-				cacheKeyBuffer.append("=");
-				cacheKeyBuffer.append(entry.getValue());
-				cacheKeyBuffer.append("|");
+				cacheKeyLength += entry.getKey().length() + entry.getValue().length() + 2;
 			}
-			cacheKey = cacheKeyBuffer.toString();
-			if (cacheKey.length() < 256) {
+			if (cacheKeyLength < Configuration.MAX_CACHE_KEY_LENGTH) {
+				StringBuilder cacheKeyBuffer = new StringBuilder(cacheKeyLength);
+				cacheKeyBuffer.append(templateName);
+				cacheKeyBuffer.append("|");
+				for (Entry<String, String> entry : parameterMap.entrySet()) {
+					cacheKeyBuffer.append(entry.getKey());
+					cacheKeyBuffer.append("=");
+					cacheKeyBuffer.append(entry.getValue());
+					cacheKeyBuffer.append("|");
+				}
+				cacheKey = cacheKeyBuffer.toString();
+
 				String value = templateCallsCache.get(cacheKey);
 				if (value != null) {
 					// System.out.println("Cache key: " + cacheKey);
@@ -1786,11 +1790,11 @@ public abstract class AbstractWikiModel implements IWikiModel, IContext {
 					return;
 				}
 			}
+			if (Configuration.TEMPLATE_NAMES) {
+				System.out.println("Not Cached: " + templateName + "-" + cacheKeyLength);
+			}
 		}
-		// }
-		if (Configuration.TEMPLATE_NAMES) {
-			System.out.println("Not Cached: " + templateName + "-" + cacheKey);
-		}
+
 		String plainContent;
 		if (templateName.length() > 0 && templateName.charAt(0) == ':') {
 			// invalidate cache:
@@ -1804,7 +1808,7 @@ public abstract class AbstractWikiModel implements IWikiModel, IContext {
 		if (plainContent != null) {
 			StringBuilder templateBuffer = new StringBuilder(plainContent.length());
 			TemplateParser.parseRecursive(plainContent.trim(), this, templateBuffer, false, false, parameterMap);
-			if (templateCallsCache != null && cacheKey != null && cacheKey.length() < 256) {
+			if (templateCallsCache != null && cacheKey != null) {
 				// save this template call in the cache
 				String cacheValue = templateBuffer.toString();
 				templateCallsCache.put(cacheKey, cacheValue);

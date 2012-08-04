@@ -28,7 +28,7 @@ public class RefTag extends HTMLTag implements IBodyTag {
 		int len = children.size();
 		StringBuilder buf = null;
 		if (len == 0) {
-			buf = new StringBuilder();
+			buf = new StringBuilder(16);
 		} else {
 			buf = new StringBuilder(len * 64);
 		}
