@@ -593,6 +593,9 @@ public class WikipediaParser extends AbstractParser implements IParser {
 		int startLinkPosition = fCurrentPosition;
 		if (getNextChar('[')) {
 			return parseWikiTag();
+		} else if (getNextCharAsWhitespace()) {
+			fCurrentPosition--;
+			return false;
 		} else {
 			createContentToken(1);
 			fWhiteStart = false;
