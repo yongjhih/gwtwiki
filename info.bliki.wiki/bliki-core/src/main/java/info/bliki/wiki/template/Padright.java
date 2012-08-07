@@ -47,7 +47,7 @@ public class Padright extends AbstractTemplateFunction {
 			}
 			arg1Int = arg1Int - arg0.length();
 			char arg2Char = arg2.charAt(0);
-			StringBuilder buffer = new StringBuilder(arg1Int);
+			StringBuilder buffer = new StringBuilder(arg1Int + arg0.length());
 			buffer.append(arg0);
 			for (int i = 0; i < arg1Int; i++) {
 				buffer.append(arg2Char);

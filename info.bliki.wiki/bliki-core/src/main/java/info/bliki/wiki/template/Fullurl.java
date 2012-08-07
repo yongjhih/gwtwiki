@@ -8,7 +8,7 @@ import java.net.URLEncoder;
 import java.util.List;
 
 /**
- * A template parser function for <code>{{localurl: ... }}</code> syntax
+ * A template parser function for <code>{{fullurl: ... }}</code> syntax
  * 
  */
 public class Fullurl extends AbstractTemplateFunction {

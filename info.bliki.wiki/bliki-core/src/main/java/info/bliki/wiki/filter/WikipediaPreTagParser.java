@@ -257,10 +257,10 @@ public class WikipediaPreTagParser extends AbstractParser {
 				// bbcode start
 				if (fWikiModel.parseBBCodes() && name.length() > 0) {
 					// parse start tokens like phpBB forum syntax style (bbcode)
-					StringBuilder bbCode = new StringBuilder(name.length());
 					char ch = name.charAt(0);
 					if ('a' <= ch && ch <= 'z') {
 						// first character must be a letter
+						StringBuilder bbCode = new StringBuilder(name.length());
 						bbCode.append(ch);
 						if (parsePHPBBCode(name, bbCode)) {
 							return true;

@@ -337,8 +337,13 @@ public class DoubleEvaluator {
 	public double evaluate(String expression) {
 		String expr = expression;
 		List<String> list = splitByBrackets(expr);
+		int len;
 		while (list.size() > 1) {
-			StringBuilder buf = new StringBuilder(expression.length());
+			len = 0;
+			for (int i = 0; i < list.size(); i++) {
+				len += list.get(i).length();
+			}
+			StringBuilder buf = new StringBuilder(len);
 			for (int i = 0; i < list.size(); i++) {
 				buf.append(list.get(i));
 			}

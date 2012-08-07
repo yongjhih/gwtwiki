@@ -606,10 +606,10 @@ public class WikipediaParser extends AbstractParser implements IParser {
 				// bbcode start
 				if (fWikiModel.parseBBCodes() && name.length() > 0) {
 					// parse start tokens like phpBB forum syntax style (bbcode)
-					StringBuilder bbCode = new StringBuilder(name.length());
 					char ch = name.charAt(0);
 					if ('a' <= ch && ch <= 'z') {
 						// first character must be a letter
+						StringBuilder bbCode = new StringBuilder(name.length());
 						bbCode.append(ch);
 						if (parsePHPBBCode(name, bbCode)) {
 							return true;
@@ -1245,13 +1245,13 @@ public class WikipediaParser extends AbstractParser implements IParser {
 			// initialize the wiki model
 			wikiModel.setUp();
 
-			Appendable buf;
-			if (templateParserBuffer != null) {
-				buf = templateParserBuffer;
-			} else {
-				buf = new StringBuilder(rawWikiText.length() + rawWikiText.length() / 10);
-			}
 			if (parseTemplates) {
+				Appendable buf;
+				if (templateParserBuffer != null) {
+					buf = templateParserBuffer;
+				} else {
+					buf = new StringBuilder(rawWikiText.length() + rawWikiText.length() / 10);
+				}
 				String pass1Text = null;
 				try {
 					TemplateParser.parse(rawWikiText, wikiModel, buf, wikiModel.isTemplateTopic());

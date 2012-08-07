@@ -47,7 +47,7 @@ public class Padleft extends AbstractTemplateFunction {
 			}
 			arg1Int = arg1Int - arg0.length();
 			char arg2Char = arg2.charAt(0);
-			StringBuilder buffer = new StringBuilder(arg1Int);
+			StringBuilder buffer = new StringBuilder(arg1Int+arg0.length());
 			for (int i = 0; i < arg1Int; i++) {
 				buffer.append(arg2Char);
 			}
