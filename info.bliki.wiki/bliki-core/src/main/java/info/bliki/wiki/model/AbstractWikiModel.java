@@ -28,6 +28,7 @@ import info.bliki.wiki.template.extension.AttributeList;
 import info.bliki.wiki.template.extension.AttributeRenderer;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -37,6 +38,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.Set;
+import java.util.TimeZone;
 import java.util.Map.Entry;
 
 /**
@@ -85,6 +87,8 @@ public abstract class AbstractWikiModel implements IWikiModel, IContext {
 	 * 
 	 */
 	protected TableOfContentTag fTableOfContentTag = null;
+
+	protected SimpleDateFormat fFormatter = null;
 
 	/**
 	 * &quot;table of content&quot;
@@ -1242,6 +1246,19 @@ public abstract class AbstractWikiModel implements IWikiModel, IContext {
 	/**
 	 * {@inheritDoc}
 	 */
+	public SimpleDateFormat getSimpleDateFormat() {
+		if (fFormatter != null) {
+			return fFormatter;
+		}
+		fFormatter = new SimpleDateFormat();
+		TimeZone utc = TimeZone.getTimeZone("GMT+00");
+		fFormatter.setTimeZone(utc);
+		return fFormatter;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
 	public ITableOfContent getTableOfContent() {
 		return fTableOfContentTag;
 	}
@@ -1315,6 +1332,7 @@ public abstract class AbstractWikiModel implements IWikiModel, IContext {
 	protected void initialize() {
 		if (!fInitialized) {
 			fWikiListener = null;
+			fFormatter = null;
 			fToCSet = null;
 			fTableOfContent = null;
 			fTableOfContentTag = null;
@@ -1716,6 +1734,7 @@ public abstract class AbstractWikiModel implements IWikiModel, IContext {
 	 * {@inheritDoc}
 	 */
 	public void setUp() {
+		fFormatter = null;
 		fToCSet = null;
 		fTableOfContent = null;
 		fTableOfContentTag = null;

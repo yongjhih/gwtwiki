@@ -9,6 +9,7 @@ import info.bliki.wiki.tags.util.TagStack;
 import info.bliki.wiki.template.ITemplateFunction;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -441,7 +442,7 @@ public interface IWikiModel extends IConfiguration {
 	 * This method typically returns the value
 	 * <code>new Date(System.currentTimeMillis());</code>.
 	 * 
-	 * @return
+	 * @return a date value
 	 */
 	public Date getCurrentTimeStamp();
 
@@ -570,6 +571,14 @@ public interface IWikiModel extends IConfiguration {
 	 *         SemanticRelation exists
 	 */
 	public List<SemanticRelation> getSemanticRelations();
+
+	/**
+	 * Get a simple date formatter.
+	 * 
+	 * 
+	 * @return a simple date formatter
+	 */
+	public SimpleDateFormat getSimpleDateFormat();
 
 	/**
 	 * Get the parsed &quot;table of content&quot; data after parsing the

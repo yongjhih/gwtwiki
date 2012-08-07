@@ -23,12 +23,10 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.TimeZone;
 
 /**
- * See Wikipedia's <a
- * href="http://en.wikipedia.org/wiki/Help:Magic_words">Help:Magic words</a>
- * reference.
+ * See <a href="http://www.mediawiki.org/wiki/Help:Magic_words">Help:Magic
+ * words</a> for a list of Mediawiki magic words.
  */
 public class MagicWord {
 
@@ -282,8 +280,9 @@ public class MagicWord {
 
 	/**
 	 * Determine if a template name corresponds to a magic word requiring special
-	 * handling. See http://meta.wikimedia.org/wiki/Help:Magic_words for a list of
-	 * Mediawiki magic words.
+	 * handling. See <a
+	 * href="http://www.mediawiki.org/wiki/Help:Magic_words">Help:Magic words</a>
+	 * for a list of Mediawiki magic words.
 	 */
 	public static boolean isMagicWord(String name) {
 		return MAGIC_WORDS.contains(name);
@@ -291,12 +290,12 @@ public class MagicWord {
 
 	/**
 	 * Process a magic word, returning the value corresponding to the magic word
-	 * value. See http://meta.wikimedia.org/wiki/Help:Magic_words for a list of
-	 * Mediawiki magic words.
+	 * value. See <a
+	 * href="http://www.mediawiki.org/wiki/Help:Magic_words">Help:Magic words</a>
+	 * for a list of Mediawiki magic words.
 	 */
 	public static String processMagicWord(String name, String parameter, IWikiModel model) {
-		SimpleDateFormat formatter = new SimpleDateFormat();
-		TimeZone utc = TimeZone.getTimeZone("GMT+00");
+		SimpleDateFormat formatter = model.getSimpleDateFormat();
 		Date current = model.getCurrentTimeStamp();
 		if (current == null) {
 			// set a default value
@@ -341,7 +340,7 @@ public class MagicWord {
 			return formatter.format(current);
 		}
 		// current date values
-		formatter.setTimeZone(utc);
+
 		if (name.equals(MAGIC_CURRENT_DAY)) {
 			formatter.applyPattern("d");
 			return formatter.format(current);
