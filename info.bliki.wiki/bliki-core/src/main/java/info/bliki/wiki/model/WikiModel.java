@@ -38,9 +38,9 @@ public class WikiModel extends AbstractWikiModel {
 
 	protected List<SemanticAttribute> semanticAttributes = null;
 
-	protected String fExternalImageBaseURL;
+	private String fExternalImageBaseURL;
 
-	protected String fExternalWikiBaseURL;
+	private String fExternalWikiBaseURL;
 
 	/**
 	 * 
@@ -138,7 +138,7 @@ public class WikiModel extends AbstractWikiModel {
 			if (replaceColon()) {
 				encodedtopic = encodedtopic.replace(':', '/');
 			}
-			hrefLink = fExternalWikiBaseURL.replace("${title}", encodedtopic);
+			hrefLink = getWikiBaseURL().replace("${title}", encodedtopic);
 		} else {
 			if (hashSection != null) {
 				hrefLink = "";
@@ -146,7 +146,7 @@ public class WikiModel extends AbstractWikiModel {
 					description = "&#35;" + hashSection; // #....
 				}
 			} else {
-				hrefLink = fExternalWikiBaseURL.replace("${title}", "");
+				hrefLink = getWikiBaseURL().replace("${title}", "");
 			}
 		}
 
@@ -239,9 +239,9 @@ public class WikiModel extends AbstractWikiModel {
 	 *          <code>[[...]]</code>
 	 */
 	public void parseInternalImageLink(String imageNamespace, String rawImageLink) {
-		if (fExternalImageBaseURL != null) {
-			String imageHref = fExternalWikiBaseURL;
-			String imageSrc = fExternalImageBaseURL;
+		String imageSrc = getImageBaseURL();
+		if (imageSrc != null) {
+			String imageHref = getWikiBaseURL();
 			ImageFormat imageFormat = ImageFormat.getImageFormat(rawImageLink, imageNamespace);
 
 			String imageName = imageFormat.getFilename();
@@ -409,5 +409,19 @@ public class WikiModel extends AbstractWikiModel {
 	 */
 	public void setLocale(Locale locale) {
 		fLocale = locale;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public String getImageBaseURL() {
+		return fExternalImageBaseURL;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public String getWikiBaseURL() {
+		return fExternalWikiBaseURL;
 	}
 }

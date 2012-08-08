@@ -494,8 +494,8 @@ public abstract class AbstractWikiModel implements IWikiModel, IContext {
 	 * {@inheritDoc}
 	 */
 	public void appendInternalImageLink(String hrefImageLink, String srcImageLink, ImageFormat imageFormat) {
-		int pxWidth = imageFormat.getWidth();
-		int pxHeight = imageFormat.getHeight();
+		// int pxWidth = imageFormat.getWidth();
+		// int pxHeight = imageFormat.getHeight();
 		String caption = imageFormat.getCaption();
 		String imageType = imageFormat.getType();
 		TagNode divInnerTagNode = new TagNode("div");
@@ -1922,5 +1922,30 @@ public abstract class AbstractWikiModel implements IWikiModel, IContext {
 		if (fNamespaceName == null) {
 			fNamespaceName = namespaceLowercase;
 		}
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public String getImageBaseURL() {
+		return "/wiki/${image}";
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public String getWikiBaseURL() {
+		return "/wiki/${title}";
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public String getWikiBaseEditURL() {
+		if (fLocale != null) {
+			String lang = fLocale.getLanguage();
+			return "http://" + lang + ".wikipedia.org/w/index.php?title=${title}";
+		}
+		return "http://en.wikipedia.org/w/index.php?title=${title}";
 	}
 }

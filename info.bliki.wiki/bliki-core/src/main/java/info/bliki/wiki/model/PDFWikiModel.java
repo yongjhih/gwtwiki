@@ -10,7 +10,6 @@ import info.bliki.wiki.model.WikiModel; //import info.bliki.wiki.tags.WPATag;
 import java.util.Locale;
 import java.util.Map;
 
-
 /**
  * PDF Wiki model implementation
  * 
@@ -84,9 +83,9 @@ public class PDFWikiModel extends WikiModel {
 
 	@Override
 	public void parseInternalImageLink(String imageNamespace, String rawImageLink) {
-		if (fExternalImageBaseURL != null) {
-			String imageHref = fExternalWikiBaseURL;
-			String imageSrc = fExternalImageBaseURL;
+		String imageSrc = getImageBaseURL();
+		if (imageSrc != null) {
+			String imageHref = getWikiBaseURL();
 			ImageFormat imageFormat = ImageFormat.getImageFormat(rawImageLink, imageNamespace);
 
 			String imageName = imageFormat.getFilename();
@@ -98,7 +97,7 @@ public class PDFWikiModel extends WikiModel {
 			// imageName += ".png";
 			// }
 			imageName = Encoder.encodeUrl(imageName);
- 
+
 			if (replaceColon()) {
 				imageHref = imageHref.replace("${title}", imageNamespace + '/' + imageName);
 				imageSrc = imageSrc.replace("${image}", imageName);

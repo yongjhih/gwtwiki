@@ -251,7 +251,7 @@ public class APIWikiModel extends WikiModel {
 						if (!file.exists()) {
 							// if the file doesn't exist try to download from Wikipedia
 							os = new FileOutputStream(filename);
-							page.downloadImageUrl(os, imageUrl); 
+							page.downloadImageUrl(os, imageUrl);
 						}
 						imageData.setUrl(imageUrl);
 						imageData.setFilename(filename);
@@ -316,9 +316,9 @@ public class APIWikiModel extends WikiModel {
 	}
 
 	public void parseInternalImageLink(String imageNamespace, String rawImageLink) {
-		if (fExternalImageBaseURL != null) {
-			String imageHref = fExternalWikiBaseURL;
-			String imageSrc = fExternalImageBaseURL;
+		String imageSrc = getImageBaseURL();
+		if (imageSrc != null) {
+			String imageHref = getWikiBaseURL();
 			ImageFormat imageFormat = ImageFormat.getImageFormat(rawImageLink, imageNamespace);
 
 			String imageName = imageFormat.getFilename();

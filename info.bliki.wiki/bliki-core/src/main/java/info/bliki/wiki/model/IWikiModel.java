@@ -447,6 +447,17 @@ public interface IWikiModel extends IConfiguration {
 	public Date getCurrentTimeStamp();
 
 	/**
+	 * Return a URL string which contains a &quot;${image}&quot; variable, which
+	 * will be replaced by the image name, to create links to images.
+	 * 
+	 * @return the wiki images URL
+	 * 
+	 * @see #getWikiBaseURL()
+	 * @see #getWikiBaseEditURL()
+	 */
+	public String getImageBaseURL();
+
+	/**
 	 * Get the primary namespace for images in this wiki
 	 * 
 	 * @return the primary image namespace
@@ -606,6 +617,41 @@ public interface IWikiModel extends IConfiguration {
 	 * @return the primary namespace for templates
 	 */
 	public String getTemplateNamespace();
+
+	/**
+	 * Return a URL string which contains, a &quot;${title}&quot; variable which
+	 * will be replaced by the topic title, to create links edit pages of wiki
+	 * topics.
+	 * 
+	 * For the english Wikipedia this URL would look like:
+	 * 
+	 * <pre>
+	 * http://en.wikipedia.org/w/index.php?title=${title}
+	 * </pre>
+	 * 
+	 * @return the wiki articles edit action URL
+	 * 
+	 * @see #getWikiBaseURL()
+	 * @see #getImageBaseURL()
+	 */
+	public String getWikiBaseEditURL();
+
+	/**
+	 * Return a URL string which contains, a &quot;${title}&quot; variable which
+	 * will be replaced by the topic title, to create links to other wiki topics.
+	 * 
+	 * For the english Wikipedia this URL would look like:
+	 * 
+	 * <pre>
+	 * http://en.wikipedia.org/wiki/${title}
+	 * </pre>
+	 * 
+	 * @return the wiki articles URL
+	 * 
+	 * @see #getImageBaseURL()
+	 * @see #getWikiBaseEditURL()
+	 */
+	public String getWikiBaseURL();
 
 	/**
 	 * Get the current defined wiki listener
@@ -845,6 +891,12 @@ public interface IWikiModel extends IConfiguration {
 	public boolean pushNode(TagToken node);
 
 	/**
+	 * Reduce the current token stack until an allowed parent is at the top of the
+	 * stack
+	 */
+	public void reduceTokenStack(TagToken node);
+
+	/**
 	 * Render the raw Wikipedia text into a string for a given converter
 	 * 
 	 * @param converter
@@ -870,26 +922,6 @@ public interface IWikiModel extends IConfiguration {
 	 *          process.
 	 * @param rawWikiText
 	 *          a raw wiki text
-	 * @param templateTopic
-	 *          if <code>true</code>, render the wiki text as if a template topic
-	 *          will be displayed directly, otherwise render the text as if a
-	 *          common wiki topic will be displayed.
-	 * @return <code>null</code> if an IOException occurs or
-	 *         <code>converter==null</code>
-	 * @return
-	 */
-	public String render(ITextConverter converter, String rawWikiText, boolean templateTopic);
-
-	/**
-	 * Render the raw Wikipedia text into a string for a given converter
-	 * 
-	 * @param converter
-	 *          a text converter. <b>Note</b> the converter may be
-	 *          <code>null</code>, if you only would like to analyze the raw wiki
-	 *          text and don't need to convert. This speeds up the parsing
-	 *          process.
-	 * @param rawWikiText
-	 *          a raw wiki text
 	 * @param buffer
 	 *          write to this buffer
 	 * @param templateTopic
@@ -902,6 +934,26 @@ public interface IWikiModel extends IConfiguration {
 	 */
 	public void render(ITextConverter converter, String rawWikiText, Appendable buffer, boolean templateTopic, boolean parseTemplates)
 			throws IOException;
+
+	/**
+	 * Render the raw Wikipedia text into a string for a given converter
+	 * 
+	 * @param converter
+	 *          a text converter. <b>Note</b> the converter may be
+	 *          <code>null</code>, if you only would like to analyze the raw wiki
+	 *          text and don't need to convert. This speeds up the parsing
+	 *          process.
+	 * @param rawWikiText
+	 *          a raw wiki text
+	 * @param templateTopic
+	 *          if <code>true</code>, render the wiki text as if a template topic
+	 *          will be displayed directly, otherwise render the text as if a
+	 *          common wiki topic will be displayed.
+	 * @return <code>null</code> if an IOException occurs or
+	 *         <code>converter==null</code>
+	 * @return
+	 */
+	public String render(ITextConverter converter, String rawWikiText, boolean templateTopic);
 
 	/**
 	 * Render the raw Wikipedia text into an HTML string and use the default
@@ -1014,10 +1066,4 @@ public interface IWikiModel extends IConfiguration {
 	 * 
 	 */
 	public void tearDown();
-
-	/**
-	 * Reduce the current token stack until an allowed parent is at the top of the
-	 * stack
-	 */
-	public void reduceTokenStack(TagToken node);
 }

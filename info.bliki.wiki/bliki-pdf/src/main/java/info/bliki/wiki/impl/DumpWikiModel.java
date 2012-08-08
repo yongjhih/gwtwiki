@@ -209,9 +209,9 @@ public class DumpWikiModel extends WikiModel {
 	}
 
 	public void parseInternalImageLink(String imageNamespace, String rawImageLink) {
-		if (fExternalImageBaseURL != null) {
-			String imageHref = fExternalWikiBaseURL;
-			String imageSrc = fExternalImageBaseURL;
+		String imageSrc = getImageBaseURL();
+		if (imageSrc != null) {
+			String imageHref = getWikiBaseURL();
 			ImageFormat imageFormat = ImageFormat.getImageFormat(rawImageLink, imageNamespace);
 
 			String imageName = imageFormat.getFilename();
