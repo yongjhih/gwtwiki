@@ -1477,6 +1477,7 @@ public class WikiTestModel extends WikiModel {
 	public final static String IFEQ_TEST = "{{#ifeq: {{{1}}}|{{{2}}} | {{{1}}} equals {{{2}}} | {{{1}}} is not equal {{{2}}}}}";
 
 	public final static String ENDLESS_RECURSION_TEST = " {{recursion}} ";
+	
 	public final static String TNAVBAR_TEXT = "<includeonly>{{#if:{{{nodiv|}}}|<!--then:\n"
 			+ "-->&nbsp;<span class=\"noprint plainlinksneverexpand\" style=\"white-space:nowrap; font-weight:normal; font-size:xx-small; {{{fontstyle|}}}; {{#if:{{{fontcolor|}}}|color:{{{fontcolor}}};}} {{{style|}}}\">|<!--else:\n"
 			+ "--><div class=\"noprint plainlinksneverexpand\" style=\"background-color:transparent; padding:0; white-space:nowrap; font-weight:normal; font-size:xx-small; {{{fontstyle|}}}; {{#if:{{{fontcolor|}}}|color:{{{fontcolor}}};}} {{{style|}}}\"><!--\n"
