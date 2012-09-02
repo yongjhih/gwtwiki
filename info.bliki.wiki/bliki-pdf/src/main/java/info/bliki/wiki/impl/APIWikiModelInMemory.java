@@ -72,24 +72,34 @@ public class APIWikiModelInMemory extends WikiModel
 
     @Override
     public void appendInternalImageLink(String hrefImageLink, String srcImageLink, ImageFormat imageFormat) {
-        super.appendInternalImageLink(removeSizeFromImageName(hrefImageLink), removeSizeFromImageName(srcImageLink), imageFormat);
+        super.appendInternalImageLink(normalizeImageName(hrefImageLink), normalizeImageName(srcImageLink), imageFormat);
     }
 
+	@Override
+	public boolean isImageNamespace(String namespace) {
+		return (super.isImageNamespace(namespace) || namespace.equalsIgnoreCase("File"));
+	}
+	
     /**
-     * TODO Why is the size appended to the original image name/link?! This ugly method is only required to revert this strange modification...
+     * TODO Why is the size and ".png" appended to the original image name/link?! This bad method is only required to revert this strange modification...
      * @param imageLink
      * @return
      */
-    private static String removeSizeFromImageName(String imageLink) {
+    private static String normalizeImageName(String imageLink) {
         final int sizeSplitPos = imageLink.indexOf('-');
+		String modifiedImageLink = imageLink;
         if(sizeSplitPos > -1) {
             final int typeSplitPos = imageLink.indexOf(':');
             if(typeSplitPos > -1) {
                 String type = imageLink.substring(0, typeSplitPos + 1);
-                return type + imageLink.substring(sizeSplitPos + 1);
-            }
-            return imageLink.substring(sizeSplitPos + 1);
+                modifiedImageLink = type + imageLink.substring(sizeSplitPos + 1);
+            } else {
+				modifiedImageLink = imageLink.substring(sizeSplitPos + 1);
+			}
         }
-        return imageLink;
+		if(modifiedImageLink.endsWith(".svg.png")) {
+			modifiedImageLink = modifiedImageLink.substring(0, modifiedImageLink.length() - 4);
+		}
+        return modifiedImageLink;
     }
 }
