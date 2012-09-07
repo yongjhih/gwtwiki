@@ -105,7 +105,7 @@ public class TemplateParser extends AbstractParser {
 				String preprocessedContent = parameterBuffer.toString();
 				WikipediaScanner scanner = new WikipediaScanner(preprocessedContent);
 				scanner.setModel(wikiModel);
-				parameterBuffer = scanner.replaceTemplateParameters(preprocessedContent, templateParameterMap);
+				parameterBuffer = scanner.replaceTemplateParameters(templateParameterMap);
 				if (parameterBuffer != null) {
 					plainBuffer = parameterBuffer;
 				}
@@ -561,7 +561,8 @@ public class TemplateParser extends AbstractParser {
 						return parseTemplate(writer, startTemplatePosition + 1, templateEndPosition[1]);
 					}
 				} else {
-					return parseTemplateParameter(writer, startTemplatePosition, templateEndPosition[0]);
+					parseTemplateParameter(writer, startTemplatePosition, templateEndPosition[0]);
+					return true;
 				}
 			} else {
 				int templateEndPosition = findNestedTemplateEnd(fSource, fCurrentPosition);
@@ -612,10 +613,10 @@ public class TemplateParser extends AbstractParser {
 	 * <ol>
 	 * <li>Check if the call is a parser function in the
 	 * <code>checkParserFunction()</code> method; if <code>true</code> execute the
-	 * parser function and return</li>
+	 * parser function and return.</li>
 	 * <li>Split the template call in the <code>createParameterMap()</code method
 	 * into a <code>templateName</code> and a parameter/value map.</li>
-	 * <li>Substitute the raw template text into th existing text and replace all
+	 * <li>Substitute the raw template text into the existing text and replace all
 	 * template parameters with their value in
 	 * <code>TemplateParser.parseRecursive()</code method.</li>
 	 * </ol>
@@ -638,7 +639,7 @@ public class TemplateParser extends AbstractParser {
 		StringBuilder buf = new StringBuilder((templateName.length()) + (templateName.length() / 10));
 		TemplateParser.parse(templateName, fWikiModel, buf, false);
 		templateName = buf.toString();
-		int currOffset = TemplateParser.checkParserFunction(templateName);
+		int currOffset = TemplateParser.checkParserFunction(buf);
 		if (currOffset > 0) {
 			String function = templateName.substring(0, currOffset - 1).trim();
 			if (function != null) {
@@ -667,16 +668,13 @@ public class TemplateParser extends AbstractParser {
 		}
 		fCurrentPosition = endPosition;
 		LinkedHashMap<String, String> parameterMap = new LinkedHashMap<String, String>();
-		List<String> unnamedParameters = new ArrayList<String>();
-		for (int i = 1; i < parts.size(); i++) {
-			String temp = parts.get(i);
-			if (i == parts.size() - 1) {
-				createSingleParameter(temp, parameterMap, unnamedParameters);
-			} else {
-				createSingleParameter(temp, parameterMap, unnamedParameters);
+		if (parts.size() > 1) {
+			List<String> unnamedParameters = new ArrayList<String>();
+			for (int i = 1; i < parts.size(); i++) {
+				createSingleParameter(parts.get(i), parameterMap, unnamedParameters);
 			}
+			mergeParameters(parameterMap, unnamedParameters);
 		}
-		mergeParameters(parameterMap, unnamedParameters);
 
 		fWikiModel.substituteTemplateCall(templateName, parameterMap, writer);
 		return true;
@@ -684,7 +682,7 @@ public class TemplateParser extends AbstractParser {
 
 	/**
 	 * If template calls have a mix between named and unnamed parameters, the
-	 * collected <code>unnamedParameters</code> are merge into the
+	 * collected <code>unnamedParameters</code> are merged into the
 	 * <code>parameterMap</code>.
 	 * 
 	 * 
@@ -695,6 +693,9 @@ public class TemplateParser extends AbstractParser {
 	 * @param unnamedParameters
 	 */
 	public static void mergeParameters(LinkedHashMap<String, String> parameterMap, List<String> unnamedParameters) {
+		if (unnamedParameters.size() == 0) {
+			return;
+		}
 		int unnamedParameterIndex = 1;
 		for (String param : unnamedParameters) {
 			String key = Integer.toString(unnamedParameterIndex++);
@@ -712,29 +713,24 @@ public class TemplateParser extends AbstractParser {
 	 * @return
 	 * @throws IOException
 	 */
-	private boolean parseTemplateParameter(Appendable writer, int startTemplatePosition, int templateEndPosition) throws IOException {
+	private void parseTemplateParameter(Appendable writer, int startTemplatePosition, int templateEndPosition) throws IOException {
 		String plainContent = fStringSource.substring(startTemplatePosition - 2, templateEndPosition);
-
-		if (plainContent != null) {
-			fCurrentPosition = templateEndPosition;
-			WikipediaScanner scanner = new WikipediaScanner(plainContent);
-			scanner.setModel(fWikiModel);
-			StringBuilder plainBuffer = scanner.replaceTemplateParameters(plainContent, null);
-			if (plainBuffer == null) {
-				writer.append(plainContent);
-				return true;
-			}
-			TemplateParser.parseRecursive(plainBuffer.toString().trim(), fWikiModel, writer, false, false);
-			return true;
+		fCurrentPosition = templateEndPosition;
+		WikipediaScanner scanner = new WikipediaScanner(plainContent);
+		scanner.setModel(fWikiModel);
+		StringBuilder plainBuffer = scanner.replaceTemplateParameters(null);
+		if (plainBuffer == null) {
+			writer.append(plainContent);
+			return;
 		}
-		return false;
+		TemplateParser.parseRecursive(plainBuffer.toString().trim(), fWikiModel, writer, false, false);
 	}
 
 	/**
 	 * Create a map from the parameters defined in a template call
 	 * 
-	 * @return the templates parameters <code>java.util.List</code> at index [0];
-	 *         the template name at index [1]
+	 * @return the templates parameters <code>java.util.List</code> at index [0]
+	 *         and the template name at index [1]
 	 * 
 	 */
 	public static Object[] createParameterMap(char[] src, int startOffset, int len) {
@@ -839,8 +835,6 @@ public class TemplateParser extends AbstractParser {
 		}
 	}
 
-	
-
 	/**
 	 * Check if this template contains a template function
 	 * 
@@ -852,7 +846,7 @@ public class TemplateParser extends AbstractParser {
 	 *         parser function name or <code>-1</code> if no parser function can
 	 *         be found in this template.
 	 */
-	public static int checkParserFunction(String plainContent) {
+	public static int checkParserFunction(CharSequence plainContent) {
 		int currOffset = 0;
 		int len = plainContent.length();
 		char ch;
@@ -876,20 +870,18 @@ public class TemplateParser extends AbstractParser {
 	}
 
 	protected boolean parseHTMLCommentTags(Appendable writer) throws IOException {
-		int temp = readWhitespaceUntilStartOfLine(2);
-		String htmlCommentString = fStringSource.substring(fCurrentPosition - 1, fCurrentPosition + 3);
-		if (htmlCommentString.equals("<!--")) {
-			if (temp >= 0) {
-				if (!fOnlyIncludeFlag) {
-					appendContent(writer, fWhiteStart, fWhiteStartPosition, fCurrentPosition - temp - 1, true);
+		if (fStringSource.startsWith("<!--", fCurrentPosition - 1)) {
+			int temp = readWhitespaceUntilStartOfLine(2);
+			if (!fOnlyIncludeFlag) {
+				int diff = 1;
+				if (temp >= 0) {
+					diff = fCurrentPosition - temp - 1;
 				}
-			} else {
-				if (!fOnlyIncludeFlag) {
-					appendContent(writer, fWhiteStart, fWhiteStartPosition, 1, true);
-				}
+				appendContent(writer, fWhiteStart, fWhiteStartPosition, diff, true);
 			}
 			fCurrentPosition += 3;
 			if (readUntil("-->")) {
+				// end of HTML comment
 				if (temp >= 0) {
 					temp = readWhitespaceUntilEndOfLine(0);
 					if (temp >= 0) {

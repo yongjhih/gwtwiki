@@ -189,7 +189,7 @@ public class Encoder {
 	 * @return The encoded string
 	 */
 	public static String encodeDotUrl(String s) {
-		int len = s.length();
+		final int len = s.length();
 		if (len == 0) {
 			return "";
 		}

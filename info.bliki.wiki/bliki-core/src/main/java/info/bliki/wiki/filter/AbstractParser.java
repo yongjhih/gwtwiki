@@ -10,6 +10,7 @@ import info.bliki.wiki.tags.WPBoldItalicTag;
 import info.bliki.wiki.tags.WPTag;
 import info.bliki.wiki.tags.util.TagStack;
 
+import java.io.IOException;
 import java.util.Map;
 
 public abstract class AbstractParser extends WikipediaScanner {
@@ -256,7 +257,7 @@ public abstract class AbstractParser extends WikipediaScanner {
 		return temp;
 	}
 
-	protected boolean parsePHPBBCode(String name, StringBuilder bbCode) {
+	protected boolean parsePHPBBCode(String name, StringBuilder bbCode)  {
 		int index = 1;
 		char ch = ' ';
 
@@ -587,6 +588,23 @@ public abstract class AbstractParser extends WikipediaScanner {
 			fCurrentPosition = temp;
 			return false;
 		}
+	}
+
+	/**
+	 * Parse an HTML comment.
+	 * 
+	 * @return
+	 */
+	protected boolean parseHTMLCommentTags() {
+		if (fStringSource.startsWith("<!--", fCurrentPosition - 1)) {
+			int htmlStartPosition = fCurrentPosition;
+			fCurrentPosition += 3;
+			if (readUntil("-->")) {
+				createContentToken(fCurrentPosition - htmlStartPosition + 1);
+				return true;
+			}
+		}
+		return false;
 	}
 
 	private void parseNextPHPBBCode(String rawWikitext) {

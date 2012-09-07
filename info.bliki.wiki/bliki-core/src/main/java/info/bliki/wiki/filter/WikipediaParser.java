@@ -24,6 +24,7 @@ import info.bliki.wiki.tags.util.NodeAttribute;
 import info.bliki.wiki.tags.util.TagStack;
 import info.bliki.wiki.tags.util.WikiTagNode;
 
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -87,7 +88,7 @@ public class WikipediaParser extends AbstractParser implements IParser {
 		return false;
 	}
 
-	public int getNextToken() // throws InvalidInputException
+	public int getNextToken()  // throws InvalidInputException
 	{
 		fWhiteStart = true;
 		fWhiteStartPosition = fCurrentPosition;
@@ -362,9 +363,9 @@ public class WikipediaParser extends AbstractParser implements IParser {
 	 */
 	private String parseNowiki(String input) {
 		int indx = input.indexOf("<nowiki>");
-		int indx2;
-		int lastIndx = 0;
 		if (indx >= 0) {
+			int indx2;
+			int lastIndx = 0;
 			StringBuilder buf = new StringBuilder(input.length());
 			while (indx >= 0) {
 				buf.append(input.substring(lastIndx, indx));
@@ -414,23 +415,6 @@ public class WikipediaParser extends AbstractParser implements IParser {
 		}
 		fWikiModel.reduceTokenStack(Configuration.HTML_PARAGRAPH_OPEN);
 		fWikiModel.pushNode(new PTag());
-	}
-
-	private boolean parseHTMLCommentTags() {
-		int htmlStartPosition = fCurrentPosition;
-		String htmlCommentString = fStringSource.substring(fCurrentPosition - 1, fCurrentPosition + 3);
-
-		if (htmlCommentString.equals("<!--")) {
-			fCurrentPosition += 3;
-			if (readUntil("-->")) {
-				String htmlCommentContent = fStringSource.substring(htmlStartPosition + 3, fCurrentPosition - 3);
-				if (htmlCommentContent != null) {
-					createContentToken(fCurrentPosition - htmlStartPosition + 1);
-					return true;
-				}
-			}
-		}
-		return false;
 	}
 
 	private boolean parseISBNLinks() {

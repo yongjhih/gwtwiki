@@ -335,19 +335,19 @@ public class DoubleEvaluator {
 	 * @throws SyntaxError
 	 */
 	public double evaluate(String expression) {
-		String expr = expression;
-		List<String> list = splitByBrackets(expr);
-		int len;
-		while (list.size() > 1) {
-			len = 0;
-			for (int i = 0; i < list.size(); i++) {
+		List<String> list = splitByBrackets(expression);
+		int listSize = list.size();
+		while (listSize > 1) {
+			int len = 0;
+			for (int i = 0; i < listSize; i++) {
 				len += list.get(i).length();
 			}
 			StringBuilder buf = new StringBuilder(len);
-			for (int i = 0; i < list.size(); i++) {
+			for (int i = 0; i < listSize; i++) {
 				buf.append(list.get(i));
 			}
 			list = splitByBrackets(buf.toString());
+			listSize = list.size();
 		}
 		return Double.parseDouble(list.get(0));
 	}
