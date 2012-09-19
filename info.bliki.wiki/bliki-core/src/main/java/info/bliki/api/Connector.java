@@ -25,10 +25,14 @@ import org.xml.sax.SAXException;
 
 /**
  * Manages the queries for the <a
- * href="http://meta.wikimedia.org/w/api.php">Wikimedia API</a>
+ * href="http://meta.wikimedia.org/w/api.php">Wikimedia API</a>. See the <a
+ * href="http://www.mediawiki.org/wiki/API:Main_page">API Documentation</a>.
+ * 
+ * The queries set their own user-agent string. See <a
+ * href="http://meta.wikimedia.org/wiki/User-Agent_policy">User-Agent policy</a>
  */
 public class Connector {
-	final static public String USER_AGENT = "plog4u.org/3.0";
+	final static public String USER_AGENT = "JavaWikipediaAPI/3.0 http://code.google.com/p/gwtwiki/";
 
 	final static public String UTF8_CHARSET = "utf-8";
 
@@ -170,7 +174,7 @@ public class Connector {
 					XMLUserParser parser = new XMLUserParser(user, responseBody);
 					parser.parse();
 					if (i == 0 && user.getResult().equals(User.NEED_TOKEN_ID)) {
-						 // try again
+						// try again
 					} else if (user.getResult().equals(User.SUCCESS_ID)) {
 						return user;
 					} else {
