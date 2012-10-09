@@ -46,24 +46,12 @@ public class TemplateParserTest extends FilterTestSupport {
 	 * Issue 86
 	 */
 	public void testOnlyicludeDemo001() {
-		assertEquals("abcdefghi<hr>\n" + 
-				";Only active template content is above.\n" + 
-				"\n" + 
-				";The verbatim active code within reads:\n" + 
-				" abc'''&lt;onlyinclude>'''def'''&lt;/onlyinclude>'''ghi'''&lt;includeonly>'''jkl'''&lt;/includeonly>'''\n" + 
-				"\n" + 
-				"If transposed, the only part included will be the string literal <code>def</code>. \n" + 
-				"\n" + 
-				"==Example==\n" + 
-				"Including [[:Help:Template/onlyinclude demo]] yields only:\n" + 
-				" [[:Template::Help:Template/onlyinclude demo]]\n" + 
-				"\n" + 
-				"\n" + 
-				"\n" + 
-				"[[Category:Handbook templates]]\n" + 
-				"[[Category:Template documentation|PAGENAME]]\n" + 
-				"\n" + 
-				"", wikiModel
+		assertEquals("abcdefghi<hr>\n" + ";Only active template content is above.\n" + "\n"
+				+ ";The verbatim active code within reads:\n"
+				+ " abc'''&lt;onlyinclude>'''def'''&lt;/onlyinclude>'''ghi'''&lt;includeonly>'''jkl'''&lt;/includeonly>'''\n" + "\n"
+				+ "If transposed, the only part included will be the string literal <code>def</code>. \n" + "\n" + "==Example==\n"
+				+ "Including [[:Help:Template/onlyinclude demo]] yields only:\n" + " [[:Help:Template/onlyinclude demo]]\n" + "\n" + "\n"
+				+ "\n" + "[[Category:Handbook templates]]\n" + "[[Category:Template documentation|PAGENAME]]\n" + "\n" + "", wikiModel
 				.parseTemplates(WikiTestModel.ONLYINCLUDE_DEMO));
 	}
 
@@ -79,34 +67,28 @@ public class TemplateParserTest extends FilterTestSupport {
 	 */
 	public void testOnlyicludeDemo003() {
 		assertEquals(
-				"\n" + 
-				"<p>abcdefghi</p><hr/>\n" + 
-				"\n" + 
-				"<dl>\n" + 
-				"<dt>Only active template content is above.</dt></dl>\n" + 
-				"\n" + 
-				"\n" + 
-				"<dl>\n" + 
-				"<dt>The verbatim active code within reads</dt>\n" + 
-				"<dd></dd></dl>:\n" + 
-				"<pre>\n" + 
-				"abc<b>&#60;onlyinclude&#62;</b>def<b>&#60;/onlyinclude&#62;</b>ghi<b>&#60;includeonly&#62;</b>jkl<b>&#60;/includeonly&#62;</b>\n" + 
-				"</pre>\n" + 
-				"<p>If transposed, the only part included will be the string literal <code>def</code>. </p>\n" + 
-				"<h2><span class=\"mw-headline\" id=\"Example\">Example</span></h2>\n" + 
-				"<p>Including <a href=\"http://www.bliki.info/wiki/Help:Template/onlyinclude_demo\" title=\"Help:Template/onlyinclude demo\">Help:Template/onlyinclude demo</a> yields only:</p>\n" + 
-				"<pre>\n" + 
-				"<a href=\"http://www.bliki.info/wiki/Template::Help:Template/onlyinclude_demo\" title=\"Template::Help:Template/onlyinclude demo\">Template::Help:Template/onlyinclude demo</a>\n" + 
-				"</pre>\n" + 
-				"\n" + 
-				"\n" + 
-				"<p>\n" + 
-				"</p>\n" + 
-				"", wikiModel
-						.render(WikiTestModel.ONLYINCLUDE_DEMO, true));
+				"\n"
+						+ "<p>abcdefghi</p><hr/>\n"
+						+ "\n"
+						+ "<dl>\n"
+						+ "<dt>Only active template content is above.</dt></dl>\n"
+						+ "\n"
+						+ "\n"
+						+ "<dl>\n"
+						+ "<dt>The verbatim active code within reads</dt>\n"
+						+ "<dd></dd></dl>:\n"
+						+ "<pre>\n"
+						+ "abc<b>&#60;onlyinclude&#62;</b>def<b>&#60;/onlyinclude&#62;</b>ghi<b>&#60;includeonly&#62;</b>jkl<b>&#60;/includeonly&#62;</b>\n"
+						+ "</pre>\n"
+						+ "<p>If transposed, the only part included will be the string literal <code>def</code>. </p>\n"
+						+ "<h2><span class=\"mw-headline\" id=\"Example\">Example</span></h2>\n"
+						+ "<p>Including <a href=\"http://www.bliki.info/wiki/Help:Template/onlyinclude_demo\" title=\"Help:Template/onlyinclude demo\">Help:Template/onlyinclude demo</a> yields only:</p>\n"
+						+ "<pre>\n"
+						+ "<a href=\"http://www.bliki.info/wiki/Help:Template/onlyinclude_demo\" title=\"Help:Template/onlyinclude demo\">Help:Template/onlyinclude demo</a>\n"
+						+ "</pre>\n" + "\n" + "\n" + "<p>\n" + "</p>\n" + "", wikiModel.render(WikiTestModel.ONLYINCLUDE_DEMO, true));
 	}
 
-	/** 
+	/**
 	 * Issue 86
 	 */
 	public void testOnlyicludeDemo004() {
@@ -421,9 +403,8 @@ public class TemplateParserTest extends FilterTestSupport {
 	}
 
 	public void testNonExistentTemplate() {
-		assertEquals("==Other areas of Wikipedia==\n" + 
-				"[[:Template:WikipediaOther]]", wikiModel.parseTemplates("==Other areas of Wikipedia==\n"
-				+ "{{WikipediaOther}}<!--Template:WikipediaOther-->", false));
+		assertEquals("==Other areas of Wikipedia==\n" + "[[:Template:WikipediaOther]]", wikiModel.parseTemplates(
+				"==Other areas of Wikipedia==\n" + "{{WikipediaOther}}<!--Template:WikipediaOther-->", false));
 	}
 
 	public void testTemplateCall1() {
@@ -501,8 +482,7 @@ public class TemplateParserTest extends FilterTestSupport {
 	}
 
 	public void testEndlessRecursion() {
-		assertEquals("Error - template recursion limit exceeded parsing templates.", wikiModel.parseTemplates("{{recursion}}",
-				false));
+		assertEquals("Error - template recursion limit exceeded parsing templates.", wikiModel.parseTemplates("{{recursion}}", false));
 	}
 
 	private final String TEST_STRING_01 = "[[Category:Interwiki templates|wikipedia]]\n" + "[[zh:Template:Wikipedia]]\n"
@@ -1067,100 +1047,97 @@ public class TemplateParserTest extends FilterTestSupport {
 
 	public void testTemplateNavbox() {
 		assertEquals(
-				"<table cellspacing=\"0\" class=\"navbox\" style=\"border-spacing:0;;\"><tr><td style=\"padding:2px;\"><table cellspacing=\"0\" class=\"nowraplinks  collapsible autocollapse navbox-inner\" style=\"border-spacing:0;background:transparent;color:inherit;;\"><tr><th scope=\"col\" style=\";\" class=\"navbox-title\" colspan=2><div class=\"noprint plainlinks hlist navbar mini\" style=\"\"><ul><li class=\"nv-view\">[[Template:National Board of Review Award for Best Actor|<span title=\"View this template\" style=\";;background:none transparent;border:none;\">v</span>]]</li><li class=\"nv-talk\">[[Template_talk:National Board of Review Award for Best Actor|<span title=\"Discuss this template\" style=\";;background:none transparent;border:none;\">t</span>]]</li><li class=\"nv-edit\">[http://en.wikipedia.org/w/index.php?title=Template%3ANational+Board+of+Review+Award+for+Best+Actor&amp;action=edit <span title=\"Edit this template\" style=\";;background:none transparent;border:none;\">e</span>]</li></ul></div><div class=\"\" style=\"font-size:110%;\">\n" + 
-				"[[National Board of Review Award for Best Actor]]</div></th></tr><tr style=\"height:2px;\"><td></td></tr><tr><td colspan=2 style=\"width:100%;padding:0px;;;\" class=\"navbox-list navbox-odd hlist\n" + 
-				"\"><div style=\"padding:0em 0.25em\">\n" + 
-				"* [[Ray Milland]] (1945)\n" + 
-				"* [[Laurence Olivier]] (1946)\n" + 
-				"* [[Michael Redgrave]] (1947)\n" + 
-				"* [[Walter Huston]] (1948)\n" + 
-				"* [[Ralph Richardson]] (1949)\n" + 
-				"</div></td></tr><tr style=\"height:2px\"><td></td></tr><tr><td colspan=2 style=\"width:100%;padding:0px;;;\" class=\"navbox-list navbox-even hlist\n" + 
-				"\"><div style=\"padding:0em 0.25em\">\n" + 
-				"* [[Alec Guinness]] (1950)\n" + 
-				"* [[Richard Basehart]] (1951)\n" + 
-				"* [[Ralph Richardson]] (1952)\n" + 
-				"* [[James Mason]] (1953)\n" + 
-				"* [[Bing Crosby]] (1954)\n" + 
-				"* [[Ernest Borgnine]] (1955)\n" + 
-				"* [[Yul Brynner]] (1956)\n" + 
-				"* [[Alec Guinness]] (1957)\n" + 
-				"* [[Spencer Tracy]] (1958)\n" + 
-				"* [[Victor Sjöström]] (1959)\n" + 
-				"</div></td></tr><tr style=\"height:2px\"><td></td></tr><tr><td colspan=2 style=\"width:100%;padding:0px;;;\" class=\"navbox-list navbox-odd hlist\n" + 
-				"\"><div style=\"padding:0em 0.25em\">\n" + 
-				"* [[Robert Mitchum]] (1960)\n" + 
-				"* [[Albert Finney]] (1961)\n" + 
-				"* [[Jason Robards]] (1962)\n" + 
-				"* [[Rex Harrison]] (1963)\n" + 
-				"* [[Anthony Quinn]] (1964)\n" + 
-				"* [[Lee Marvin]] (1965)\n" + 
-				"* [[Paul Scofield]] (1966)\n" + 
-				"* [[Peter Finch]] (1967)\n" + 
-				"* [[Cliff Robertson]] (1968)\n" + 
-				"* [[Peter O'Toole]] (1969)\n" + 
-				"</div></td></tr><tr style=\"height:2px\"><td></td></tr><tr><td colspan=2 style=\"width:100%;padding:0px;;;\" class=\"navbox-list navbox-even hlist\n" + 
-				"\"><div style=\"padding:0em 0.25em\">\n" + 
-				"* [[George C. Scott]] (1970)\n" + 
-				"* [[Gene Hackman]] (1971)\n" + 
-				"* [[Peter O'Toole]] (1972)\n" + 
-				"* [[Al Pacino]] / [[Robert Ryan]] (1973)\n" + 
-				"* [[Gene Hackman]] (1974)\n" + 
-				"* [[Jack Nicholson]] (1975)\n" + 
-				"* [[David Carradine]] (1976)\n" + 
-				"* [[John Travolta]] (1977)\n" + 
-				"* [[Jon Voight]] / [[Laurence Olivier]] (1978)\n" + 
-				"* [[Peter Sellers]] (1979)\n" + 
-				"</div></td></tr><tr style=\"height:2px\"><td></td></tr><tr><td colspan=2 style=\"width:100%;padding:0px;;;\" class=\"navbox-list navbox-odd hlist\n" + 
-				"\"><div style=\"padding:0em 0.25em\">\n" + 
-				"* [[Robert De Niro]] (1980)\n" + 
-				"* [[Peter Fonda]] (1981)\n" + 
-				"* [[Ben Kingsley]] (1982)\n" + 
-				"* [[Tom Conti]] (1983)\n" + 
-				"* [[Victor Banerjee]] (1984)\n" + 
-				"* [[William Hurt]] / [[Raúl Juliá]] (1985)\n" + 
-				"* [[Paul Newman]] (1986)\n" + 
-				"* [[Michael Douglas]] (1987)\n" + 
-				"* [[Gene Hackman]] (1988)\n" + 
-				"* [[Morgan Freeman]] (1989)\n" + 
-				"</div></td></tr><tr style=\"height:2px\"><td></td></tr><tr><td colspan=2 style=\"width:100%;padding:0px;;;\" class=\"navbox-list navbox-even hlist\n" + 
-				"\"><div style=\"padding:0em 0.25em\">\n" + 
-				"* [[Robert De Niro]] / [[Robin Williams]] (1990)\n" + 
-				"* [[Warren Beatty]] (1991)\n" + 
-				"* [[Jack Lemmon]] (1992)\n" + 
-				"* [[Anthony Hopkins]] (1993)\n" + 
-				"* [[Tom Hanks]] (1994)\n" + 
-				"* [[Nicolas Cage]] (1995)\n" + 
-				"* [[Tom Cruise]] (1996)\n" + 
-				"* [[Jack Nicholson]] (1997)\n" + 
-				"* [[Ian McKellen]] (1998)\n" + 
-				"* [[Russell Crowe]] (1999)\n" + 
-				"</div></td></tr><tr style=\"height:2px\"><td></td></tr><tr><td colspan=2 style=\"width:100%;padding:0px;;;\" class=\"navbox-list navbox-odd hlist\n" + 
-				"\"><div style=\"padding:0em 0.25em\">\n" + 
-				"* [[Javier Bardem]] (2000)\n" + 
-				"* [[Billy Bob Thornton]] (2001)\n" + 
-				"* [[Campbell Scott]] (2002)\n" + 
-				"* [[Sean Penn]] (2003)\n" + 
-				"* [[Jamie Foxx]] (2004)\n" + 
-				"* [[Philip Seymour Hoffman]] (2005)\n" + 
-				"* [[Forest Whitaker]] (2006)\n" + 
-				"* [[George Clooney]] (2007)\n" + 
-				"* [[Clint Eastwood]] (2008)\n" + 
-				"* [[George Clooney]] / [[Morgan Freeman]] (2009)\n" + 
-				"</div></td></tr><tr style=\"height:2px\"><td></td></tr><tr><td colspan=2 style=\"width:100%;padding:0px;;;\" class=\"navbox-list navbox-even hlist\n" + 
-				"\"><div style=\"padding:0em 0.25em\">\n" + 
-				"* [[Jesse Eisenberg]] (2010)\n" + 
-				"* [[George Clooney]] (2011)\n" + 
-				"\n" + 
-				"</div></td></tr></table></td></tr></table>\n" + 
-				"\n" + 
-				"[[Category:National Board of Review Awards|*|National Board of Review Award for Best Actor]]\n" + 
-				"[[Category:National Board of Review Awards|*]]\n" + 
-				"[[Category:Film award templates|PAGENAME]]\n" + 
-				"[[fr:Modèle:Palette Critics Choice Awards]]\n" + 
-				"[[ja:Template:ナショナル・ボード・オブ・レビュー賞]]\n" + 
-				"\n" + 
-				"", wikiModel
+				"<table cellspacing=\"0\" class=\"navbox\" style=\"border-spacing:0;;\"><tr><td style=\"padding:2px;\"><table cellspacing=\"0\" class=\"nowraplinks  collapsible autocollapse navbox-inner\" style=\"border-spacing:0;background:transparent;color:inherit;;\"><tr><th scope=\"col\" style=\";\" class=\"navbox-title\" colspan=2><div class=\"noprint plainlinks hlist navbar mini\" style=\"\"><ul><li class=\"nv-view\">[[Template:National Board of Review Award for Best Actor|<span title=\"View this template\" style=\";;background:none transparent;border:none;\">v</span>]]</li><li class=\"nv-talk\">[[Template_talk:National Board of Review Award for Best Actor|<span title=\"Discuss this template\" style=\";;background:none transparent;border:none;\">t</span>]]</li><li class=\"nv-edit\">[http://en.wikipedia.org/w/index.php?title=Template%3ANational+Board+of+Review+Award+for+Best+Actor&amp;action=edit <span title=\"Edit this template\" style=\";;background:none transparent;border:none;\">e</span>]</li></ul></div><div class=\"\" style=\"font-size:110%;\">\n"
+						+ "[[National Board of Review Award for Best Actor]]</div></th></tr><tr style=\"height:2px;\"><td></td></tr><tr><td colspan=2 style=\"width:100%;padding:0px;;;\" class=\"navbox-list navbox-odd hlist\n"
+						+ "\"><div style=\"padding:0em 0.25em\">\n"
+						+ "* [[Ray Milland]] (1945)\n"
+						+ "* [[Laurence Olivier]] (1946)\n"
+						+ "* [[Michael Redgrave]] (1947)\n"
+						+ "* [[Walter Huston]] (1948)\n"
+						+ "* [[Ralph Richardson]] (1949)\n"
+						+ "</div></td></tr><tr style=\"height:2px\"><td></td></tr><tr><td colspan=2 style=\"width:100%;padding:0px;;;\" class=\"navbox-list navbox-even hlist\n"
+						+ "\"><div style=\"padding:0em 0.25em\">\n"
+						+ "* [[Alec Guinness]] (1950)\n"
+						+ "* [[Richard Basehart]] (1951)\n"
+						+ "* [[Ralph Richardson]] (1952)\n"
+						+ "* [[James Mason]] (1953)\n"
+						+ "* [[Bing Crosby]] (1954)\n"
+						+ "* [[Ernest Borgnine]] (1955)\n"
+						+ "* [[Yul Brynner]] (1956)\n"
+						+ "* [[Alec Guinness]] (1957)\n"
+						+ "* [[Spencer Tracy]] (1958)\n"
+						+ "* [[Victor Sjöström]] (1959)\n"
+						+ "</div></td></tr><tr style=\"height:2px\"><td></td></tr><tr><td colspan=2 style=\"width:100%;padding:0px;;;\" class=\"navbox-list navbox-odd hlist\n"
+						+ "\"><div style=\"padding:0em 0.25em\">\n"
+						+ "* [[Robert Mitchum]] (1960)\n"
+						+ "* [[Albert Finney]] (1961)\n"
+						+ "* [[Jason Robards]] (1962)\n"
+						+ "* [[Rex Harrison]] (1963)\n"
+						+ "* [[Anthony Quinn]] (1964)\n"
+						+ "* [[Lee Marvin]] (1965)\n"
+						+ "* [[Paul Scofield]] (1966)\n"
+						+ "* [[Peter Finch]] (1967)\n"
+						+ "* [[Cliff Robertson]] (1968)\n"
+						+ "* [[Peter O'Toole]] (1969)\n"
+						+ "</div></td></tr><tr style=\"height:2px\"><td></td></tr><tr><td colspan=2 style=\"width:100%;padding:0px;;;\" class=\"navbox-list navbox-even hlist\n"
+						+ "\"><div style=\"padding:0em 0.25em\">\n"
+						+ "* [[George C. Scott]] (1970)\n"
+						+ "* [[Gene Hackman]] (1971)\n"
+						+ "* [[Peter O'Toole]] (1972)\n"
+						+ "* [[Al Pacino]] / [[Robert Ryan]] (1973)\n"
+						+ "* [[Gene Hackman]] (1974)\n"
+						+ "* [[Jack Nicholson]] (1975)\n"
+						+ "* [[David Carradine]] (1976)\n"
+						+ "* [[John Travolta]] (1977)\n"
+						+ "* [[Jon Voight]] / [[Laurence Olivier]] (1978)\n"
+						+ "* [[Peter Sellers]] (1979)\n"
+						+ "</div></td></tr><tr style=\"height:2px\"><td></td></tr><tr><td colspan=2 style=\"width:100%;padding:0px;;;\" class=\"navbox-list navbox-odd hlist\n"
+						+ "\"><div style=\"padding:0em 0.25em\">\n"
+						+ "* [[Robert De Niro]] (1980)\n"
+						+ "* [[Peter Fonda]] (1981)\n"
+						+ "* [[Ben Kingsley]] (1982)\n"
+						+ "* [[Tom Conti]] (1983)\n"
+						+ "* [[Victor Banerjee]] (1984)\n"
+						+ "* [[William Hurt]] / [[Raúl Juliá]] (1985)\n"
+						+ "* [[Paul Newman]] (1986)\n"
+						+ "* [[Michael Douglas]] (1987)\n"
+						+ "* [[Gene Hackman]] (1988)\n"
+						+ "* [[Morgan Freeman]] (1989)\n"
+						+ "</div></td></tr><tr style=\"height:2px\"><td></td></tr><tr><td colspan=2 style=\"width:100%;padding:0px;;;\" class=\"navbox-list navbox-even hlist\n"
+						+ "\"><div style=\"padding:0em 0.25em\">\n"
+						+ "* [[Robert De Niro]] / [[Robin Williams]] (1990)\n"
+						+ "* [[Warren Beatty]] (1991)\n"
+						+ "* [[Jack Lemmon]] (1992)\n"
+						+ "* [[Anthony Hopkins]] (1993)\n"
+						+ "* [[Tom Hanks]] (1994)\n"
+						+ "* [[Nicolas Cage]] (1995)\n"
+						+ "* [[Tom Cruise]] (1996)\n"
+						+ "* [[Jack Nicholson]] (1997)\n"
+						+ "* [[Ian McKellen]] (1998)\n"
+						+ "* [[Russell Crowe]] (1999)\n"
+						+ "</div></td></tr><tr style=\"height:2px\"><td></td></tr><tr><td colspan=2 style=\"width:100%;padding:0px;;;\" class=\"navbox-list navbox-odd hlist\n"
+						+ "\"><div style=\"padding:0em 0.25em\">\n"
+						+ "* [[Javier Bardem]] (2000)\n"
+						+ "* [[Billy Bob Thornton]] (2001)\n"
+						+ "* [[Campbell Scott]] (2002)\n"
+						+ "* [[Sean Penn]] (2003)\n"
+						+ "* [[Jamie Foxx]] (2004)\n"
+						+ "* [[Philip Seymour Hoffman]] (2005)\n"
+						+ "* [[Forest Whitaker]] (2006)\n"
+						+ "* [[George Clooney]] (2007)\n"
+						+ "* [[Clint Eastwood]] (2008)\n"
+						+ "* [[George Clooney]] / [[Morgan Freeman]] (2009)\n"
+						+ "</div></td></tr><tr style=\"height:2px\"><td></td></tr><tr><td colspan=2 style=\"width:100%;padding:0px;;;\" class=\"navbox-list navbox-even hlist\n"
+						+ "\"><div style=\"padding:0em 0.25em\">\n"
+						+ "* [[Jesse Eisenberg]] (2010)\n"
+						+ "* [[George Clooney]] (2011)\n"
+						+ "\n"
+						+ "</div></td></tr></table></td></tr></table>\n"
+						+ "\n"
+						+ "[[Category:National Board of Review Awards|*|National Board of Review Award for Best Actor]]\n"
+						+ "[[Category:National Board of Review Awards|*]]\n"
+						+ "[[Category:Film award templates|PAGENAME]]\n"
+						+ "[[fr:Modèle:Palette Critics Choice Awards]]\n" + "[[ja:Template:ナショナル・ボード・オブ・レビュー賞]]\n" + "\n" + "", wikiModel
 						.parseTemplates("{{Navbox \n" + "| name       = National Board of Review Award for Best Actor\n"
 								+ "| title      = [[National Board of Review Award for Best Actor]]\n" + "| listclass = hlist\n" + "\n"
 								+ "|group 1 = 1945-1949\n" + "|list1=\n" + "* [[Ray Milland]] (1945)\n" + "* [[Laurence Olivier]] (1946)\n"
@@ -1198,8 +1175,8 @@ public class TemplateParserTest extends FilterTestSupport {
 
 	public void testTemplateNavbar() {
 		assertEquals(
-				"<div class=\"noprint plainlinks hlist navbar \" style=\"\"><span style=\"word-spacing:0;\">This box: </span><ul><li class=\"nv-view\">[[Template:Screen Actors Guild Award for Outstanding Performance by a Cast in a Motion Picture (1995–2000)|<span title=\"View this template\" style=\"\">view</span>]]</li><li class=\"nv-talk\">[[Template_talk:Screen Actors Guild Award for Outstanding Performance by a Cast in a Motion Picture (1995–2000)|<span title=\"Discuss this template\" style=\"\">talk</span>]]</li><li class=\"nv-edit\">[http://en.wikipedia.org/w/index.php?title=Template%3AScreen+Actors+Guild+Award+for+Outstanding+Performance+by+a+Cast+in+a+Motion+Picture+%281995%E2%80%932000%29&amp;action=edit <span title=\"Edit this template\" style=\"\">edit</span>]</li></ul></div>\n" + 
-				"",
+				"<div class=\"noprint plainlinks hlist navbar \" style=\"\"><span style=\"word-spacing:0;\">This box: </span><ul><li class=\"nv-view\">[[Template:Screen Actors Guild Award for Outstanding Performance by a Cast in a Motion Picture (1995–2000)|<span title=\"View this template\" style=\"\">view</span>]]</li><li class=\"nv-talk\">[[Template_talk:Screen Actors Guild Award for Outstanding Performance by a Cast in a Motion Picture (1995–2000)|<span title=\"Discuss this template\" style=\"\">talk</span>]]</li><li class=\"nv-edit\">[http://en.wikipedia.org/w/index.php?title=Template%3AScreen+Actors+Guild+Award+for+Outstanding+Performance+by+a+Cast+in+a+Motion+Picture+%281995%E2%80%932000%29&amp;action=edit <span title=\"Edit this template\" style=\"\">edit</span>]</li></ul></div>\n"
+						+ "",
 				wikiModel
 						.parseTemplates("{{Navbar|Screen Actors Guild Award for Outstanding Performance by a Cast in a Motion Picture (1995–2000)}}\n"));
 	}

@@ -1819,33 +1819,30 @@ public abstract class AbstractWikiModel implements IWikiModel, IContext {
 			// invalidate cache:
 			templateCallsCache = null;
 			plainContent = getRawWikiContent("", templateName.substring(1), parameterMap);
+			if (plainContent == null) {
+				// content of this "ordinary wiki link" is missing => render as link:
+				plainContent = "[[" + templateName + "]]";
+			}
 		} else {
 			addTemplate(templateName);
 			plainContent = getRawWikiContent(getTemplateNamespace(), templateName, parameterMap);
-		}
-
-		if (plainContent == null) {
-			// render template as wiki link, if no content was found:
-			plainContent = "[[:Template:" + templateName + "]]";
-		}
-
-		if (plainContent != null) {
-			StringBuilder templateBuffer = new StringBuilder(plainContent.length());
-			TemplateParser.parseRecursive(plainContent.trim(), this, templateBuffer, false, false, parameterMap);
-			if (templateCallsCache != null && cacheKey != null) {
-				// save this template call in the cache
-				String cacheValue = templateBuffer.toString();
-				templateCallsCache.put(cacheKey, cacheValue);
-				writer.append(cacheValue);
-			} else {
-				writer.append(templateBuffer);
+			if (plainContent == null) {
+				// content of this "template wiki link" is missing => render as template
+				// link:
+				plainContent = "[[:" + getTemplateNamespace() + ":" + templateName + "]]";
 			}
-			return;
 		}
-		// if no template found insert plain template name string:
-		// writer.append("{{");
-		// writer.append(templateName);
-		// writer.append("}}");
+
+		StringBuilder templateBuffer = new StringBuilder(plainContent.length());
+		TemplateParser.parseRecursive(plainContent.trim(), this, templateBuffer, false, false, parameterMap);
+		if (templateCallsCache != null && cacheKey != null) {
+			// save this template call in the cache
+			String cacheValue = templateBuffer.toString();
+			templateCallsCache.put(cacheKey, cacheValue);
+			writer.append(cacheValue);
+		} else {
+			writer.append(templateBuffer);
+		}
 	}
 
 	/**
