@@ -1824,6 +1824,11 @@ public abstract class AbstractWikiModel implements IWikiModel, IContext {
 			plainContent = getRawWikiContent(getTemplateNamespace(), templateName, parameterMap);
 		}
 
+		if (plainContent == null) {
+			// render template as wiki link, if no content was found:
+			plainContent = "[[:Template:" + templateName + "]]";
+		}
+
 		if (plainContent != null) {
 			StringBuilder templateBuffer = new StringBuilder(plainContent.length());
 			TemplateParser.parseRecursive(plainContent.trim(), this, templateBuffer, false, false, parameterMap);
@@ -1838,9 +1843,9 @@ public abstract class AbstractWikiModel implements IWikiModel, IContext {
 			return;
 		}
 		// if no template found insert plain template name string:
-		writer.append("{{");
-		writer.append(templateName);
-		writer.append("}}");
+		// writer.append("{{");
+		// writer.append(templateName);
+		// writer.append("}}");
 	}
 
 	/**

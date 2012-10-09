@@ -11,7 +11,7 @@ public class TemplateFilterTest extends FilterTestSupport {
 	public static Test suite() {
 		return new TestSuite(TemplateFilterTest.class);
 	}
-
+	
 	public void testTemplate06() {
 		assertEquals("\n" + "<p>start- 5.0 equals +5 -end</p>", wikiModel.render("start- {{ifeq|5.0|+5}} -end", false));
 	}
@@ -27,15 +27,21 @@ public class TemplateFilterTest extends FilterTestSupport {
 	}
 
 	public void testSwitch001() {
-		assertEquals("\n" + "<p>{{Templ1/ind&#38;}}</p>", wikiModel.render("{{Templ1/{{ #switch: imperative  | ind | ind&}}}}", false));
+		assertEquals("\n" + 
+				"<p><a href=\"http://www.bliki.info/wiki/Template:Templ1/ind%26\" title=\"Template:Templ1/ind&amp;\">Template:Templ1/ind&#38;</a></p>", wikiModel.render("{{Templ1/{{ #switch: imperative  | ind | ind&}}}}", false));
 	}
 
-	public void testNonExistentTemplate() {
-		assertEquals("<h2><span class=\"mw-headline\" id=\"Other_areas_of_Wikipedia\">Other areas of Wikipedia</span></h2>\n"
-				+ "<p>{{WikipediaOther}}</p>", wikiModel.render("==Other areas of Wikipedia==\n"
+	public void testNonExistingTemplate01() {
+		assertEquals("<h2><span class=\"mw-headline\" id=\"Other_areas_of_Wikipedia\">Other areas of Wikipedia</span></h2>\n" + 
+				"<p><a href=\"http://www.bliki.info/wiki/Template:WikipediaOther\" title=\"Template:WikipediaOther\">Template:WikipediaOther</a></p>", wikiModel.render("==Other areas of Wikipedia==\n"
 				+ "{{WikipediaOther}}<!--Template:WikipediaOther-->", false));
 	}
-
+	
+	public void testNonExistingTemplate02() {
+		assertEquals("\n" + 
+				"<p>start <a href=\"http://www.bliki.info/wiki/Template:NonExistingTemplate\" title=\"Template:NonExistingTemplate\">Template:NonExistingTemplate</a> end</p>", wikiModel.render("start {{NonExistingTemplate}} end", false));
+	}
+	
 	public void testTemplateCall1() {
 		// see method WikiTestModel#getRawWikiContent()
 		assertEquals("\n" + "<p>start-an include page-end</p>", wikiModel.render("start-{{:Include Page}}-end", false));
@@ -50,13 +56,15 @@ public class TemplateFilterTest extends FilterTestSupport {
 	public void testTemplateCall4() {
 		// see method WikiTestModel#getRawWikiContent() for template tl
 		assertEquals(
-				"\n" + "<p>{{<a href=\"http://www.bliki.info/wiki/Template:example\" title=\"Template:example\">example</a>}}</p>",
+				"\n" + 
+				"<p>[[:Template:<a href=\"http://www.bliki.info/wiki/Template:example\" title=\"Template:example\">example</a>]]</p>",
 				wikiModel.render("{{tl|example}}", false));
 	}
 
 	public void testTemplateCall4a() {
 		// see method WikiTestModel#getRawWikiContent() for template tl
-		assertEquals("\n" + "<p>{{[[Template:{{{1}}}|{{{1}}}]]}}</p>", wikiModel.render("{{tl}}", false));
+		assertEquals("\n" + 
+				"<p>[[:Template:[[Template:{{{1}}}|{{{1}}}]]]]</p>", wikiModel.render("{{tl}}", false));
 	}
 
 	public void testTemplateCall5() {
@@ -181,24 +189,24 @@ public class TemplateFilterTest extends FilterTestSupport {
 	public void testTemplateParameter13() {
 		// see method WikiTestModel#getTemplateContent()
 		assertEquals(
-				"\n"
-						+ "<div style=\"page-break-inside: avoid;\">\n"
-						+ "<table class=\"wikitable\">\n"
-						+ "<caption>Versionsgeschichte von JavaScript<sup id=\"_ref-1\" class=\"reference\"><a href=\"#_note-1\" title=\"\">[1]</a></sup></caption>\n"
-						+ "<tr>\n"
-						+ "<th>Version </th>\n"
-						+ "<th>Release </th>\n"
-						+ "<th>Entsprechung </th>\n"
-						+ "<th>Netscape Navigator </th>\n"
-						+ "<th>Mozilla Firefox </th>\n"
-						+ "<th>Internet Explorer </th>\n"
-						+ "<th>Opera </th>\n"
-						+ "<th>Safari </th>\n"
-						+ "<th>Google Chrome</th></tr></table></div>\n"
-						+ "<pre>\n"
-						+ "<ol class=\"references\">\n"
-						+ "<li id=\"_note-1\"><b><a href=\"#_ref-1\" title=\"\">&#8593;</a></b> John Resig. <i><a class=\"externallink\" href=\"http://ejohn.org/blog/versions-of-javascript\" rel=\"nofollow\" title=\"http://ejohn.org/blog/versions-of-javascript\">Versions of JavaScript</a></i>. Ejohn.org. Abgerufen am .</li></ol>\n"
-						+ "</pre>",
+				"\n" + 
+				"<div style=\"page-break-inside: avoid;\">\n" + 
+				"<table class=\"wikitable\">\n" + 
+				"<caption>Versionsgeschichte von JavaScript<sup id=\"_ref-1\" class=\"reference\"><a href=\"#_note-1\" title=\"\">[1]</a></sup></caption>\n" + 
+				"<tr>\n" + 
+				"<th>Version </th>\n" + 
+				"<th>Release </th>\n" + 
+				"<th>Entsprechung </th>\n" + 
+				"<th>Netscape Navigator </th>\n" + 
+				"<th>Mozilla Firefox </th>\n" + 
+				"<th>Internet Explorer </th>\n" + 
+				"<th>Opera </th>\n" + 
+				"<th>Safari </th>\n" + 
+				"<th>Google Chrome</th></tr></table></div>\n" + 
+				"<pre>\n" + 
+				"<ol class=\"references\">\n" + 
+				"<li id=\"_note-1\"><b><a href=\"#_ref-1\" title=\"\">&#8593;</a></b> John Resig. <i><a class=\"externallink\" href=\"http://ejohn.org/blog/versions-of-javascript\" rel=\"nofollow\" title=\"http://ejohn.org/blog/versions-of-javascript\">Versions of JavaScript</a></i>. Ejohn.org. Abgerufen am <a href=\"http://www.bliki.info/wiki/Template:safesubst:#Switch:none\" title=\"Template:safesubst:\">Template:safesubst:</a>.</li></ol>\n" + 
+				"</pre>",
 				wikiModel
 						.render(
 								"{| class=\"wikitable\"\n"
@@ -517,153 +525,153 @@ public class TemplateFilterTest extends FilterTestSupport {
 
 	public void testProgrammiersprachen() {
 		assertEquals(
-				"<h3><span class=\"mw-headline\" id=\"Versionsgeschichte\">Versionsgeschichte</span></h3>\n"
-						+ "\n"
-						+ "<div style=\"page-break-inside: avoid;\">\n"
-						+ "<table class=\"wikitable\">\n"
-						+ "<caption>Versionsgeschichte von JavaScript<sup id=\"_ref-1\" class=\"reference\"><a href=\"#_note-1\" title=\"\">[1]</a></sup></caption>\n"
-						+ "<tr>\n"
-						+ "<th>Version </th>\n"
-						+ "<th>Release </th>\n"
-						+ "<th>Entsprechung </th>\n"
-						+ "<th>Netscape Navigator </th>\n"
-						+ "<th>Mozilla Firefox </th>\n"
-						+ "<th>Internet Explorer </th>\n"
-						+ "<th>Opera </th>\n"
-						+ "<th>Safari </th>\n"
-						+ "<th>Google Chrome </th></tr>\n"
-						+ "<tr>\n"
-						+ "<td>1.0 </td>\n"
-						+ "<td>März 1996 </td>\n"
-						+ "<td />\n"
-						+ "<td>2.0 </td>\n"
-						+ "<td />\n"
-						+ "<td>3.0 </td>\n"
-						+ "<td />\n"
-						+ "<td />\n"
-						+ "<td /></tr>\n"
-						+ "<tr>\n"
-						+ "<td>1.1 </td>\n"
-						+ "<td>August 1996 </td>\n"
-						+ "<td />\n"
-						+ "<td>3.0 </td>\n"
-						+ "<td />\n"
-						+ "<td />\n"
-						+ "<td />\n"
-						+ "<td />\n"
-						+ "<td /></tr>\n"
-						+ "<tr>\n"
-						+ "<td>1.2 </td>\n"
-						+ "<td>Juni 1997 </td>\n"
-						+ "<td />\n"
-						+ "<td>4.0-4.05 </td>\n"
-						+ "<td />\n"
-						+ "<td />\n"
-						+ "<td />\n"
-						+ "<td />\n"
-						+ "<td /></tr>\n"
-						+ "<tr>\n"
-						+ "<td>1.3 </td>\n"
-						+ "<td>Oktober 1998 </td>\n"
-						+ "<td>ECMA-262 1<sup>st</sup> edition / ECMA-262 2<sup>nd</sup> edition </td>\n"
-						+ "<td>4.06-4.7x </td>\n"
-						+ "<td />\n"
-						+ "<td>4.0 </td>\n"
-						+ "<td />\n"
-						+ "<td />\n"
-						+ "<td /></tr>\n"
-						+ "<tr>\n"
-						+ "<td>1.4 </td>\n"
-						+ "<td />\n"
-						+ "<td />\n"
-						+ "<td>Netscape Server </td>\n"
-						+ "<td />\n"
-						+ "<td />\n"
-						+ "<td />\n"
-						+ "<td />\n"
-						+ "<td /></tr>\n"
-						+ "<tr>\n"
-						+ "<td>1.5 </td>\n"
-						+ "<td>November 2000 </td>\n"
-						+ "<td>ECMA-262 3<sup>rd</sup> edition </td>\n"
-						+ "<td>6.0 </td>\n"
-						+ "<td>1.0</td>\n"
-						+ "<td>\n"
-						+ "\n"
-						+ "<ul>\n"
-						+ "<li>5.5 (JScript 5.5)</li>\n"
-						+ "<li>6 (JScript 5.6)</li>\n"
-						+ "<li>7 (JScript 5.7)</li>\n"
-						+ "<li>8 (JScript 6)</li></ul></td>\n"
-						+ "<td>\n"
-						+ "\n"
-						+ "<ul>\n"
-						+ "<li>6.0</li>\n"
-						+ "<li>7.0</li>\n"
-						+ "<li>8.0</li>\n"
-						+ "<li>9.0</li></ul></td>\n"
-						+ "<td />\n"
-						+ "<td /></tr>\n"
-						+ "<tr>\n"
-						+ "<td>1.6 </td>\n"
-						+ "<td>November 2005 </td>\n"
-						+ "<td>1.5 + Array extras + Array &#38; String generics + E4X </td>\n"
-						+ "<td />\n"
-						+ "<td>1.5 </td>\n"
-						+ "<td />\n"
-						+ "<td></td>\n"
-						+ "<td>\n"
-						+ "\n"
-						+ "<ul>\n"
-						+ "<li>3.0</li>\n"
-						+ "<li>3.1</li></ul></td>\n"
-						+ "<td /></tr>\n"
-						+ "<tr>\n"
-						+ "<td>1.7 </td>\n"
-						+ "<td>Oktober 2006 </td>\n"
-						+ "<td>1.6 + Pythonic generators + Iterators + let + destructuring assignments </td>\n"
-						+ "<td />\n"
-						+ "<td>2.0 </td>\n"
-						+ "<td />\n"
-						+ "<td></td>\n"
-						+ "<td>\n"
-						+ "\n"
-						+ "<ul>\n"
-						+ "<li>3.2</li>\n"
-						+ "<li>4.0</li></ul></td>\n"
-						+ "<td>1.0</td></tr>\n"
-						+ "<tr>\n"
-						+ "<td>1.8 </td>\n"
-						+ "<td>Juni 2008 </td>\n"
-						+ "<td>1.7 + Generator expressions + Expression closures </td>\n"
-						+ "<td />\n"
-						+ "<td>3.0 </td>\n"
-						+ "<td />\n"
-						+ "<td />\n"
-						+ "<td />\n"
-						+ "<td /></tr>\n"
-						+ "<tr>\n"
-						+ "<td>1.8.1 </td>\n"
-						+ "<td />\n"
-						+ "<td>1.8 + geringfügige Updates </td>\n"
-						+ "<td />\n"
-						+ "<td>3.5 </td>\n"
-						+ "<td />\n"
-						+ "<td />\n"
-						+ "<td />\n"
-						+ "<td /></tr>\n"
-						+ "<tr>\n"
-						+ "<td>1.9 </td>\n"
-						+ "<td />\n"
-						+ "<td>1.8.1 + ECMAScript 5 Compliance </td>\n"
-						+ "<td />\n"
-						+ "<td>4 </td>\n"
-						+ "<td />\n"
-						+ "<td />\n"
-						+ "<td />\n"
-						+ "<td /></tr></table></div>\n"
-						+ "<ol class=\"references\">\n"
-						+ "<li id=\"_note-1\"><b><a href=\"#_ref-1\" title=\"\">&#8593;</a></b> John Resig. <i><a class=\"externallink\" href=\"http://ejohn.org/blog/versions-of-javascript\" rel=\"nofollow\" title=\"http://ejohn.org/blog/versions-of-javascript\">Versions of JavaScript</a></i>. Ejohn.org. Abgerufen am .</li></ol>",
+				"<h3><span class=\"mw-headline\" id=\"Versionsgeschichte\">Versionsgeschichte</span></h3>\n" + 
+				"\n" + 
+				"<div style=\"page-break-inside: avoid;\">\n" + 
+				"<table class=\"wikitable\">\n" + 
+				"<caption>Versionsgeschichte von JavaScript<sup id=\"_ref-1\" class=\"reference\"><a href=\"#_note-1\" title=\"\">[1]</a></sup></caption>\n" + 
+				"<tr>\n" + 
+				"<th>Version </th>\n" + 
+				"<th>Release </th>\n" + 
+				"<th>Entsprechung </th>\n" + 
+				"<th>Netscape Navigator </th>\n" + 
+				"<th>Mozilla Firefox </th>\n" + 
+				"<th>Internet Explorer </th>\n" + 
+				"<th>Opera </th>\n" + 
+				"<th>Safari </th>\n" + 
+				"<th>Google Chrome </th></tr>\n" + 
+				"<tr>\n" + 
+				"<td>1.0 </td>\n" + 
+				"<td>März 1996 </td>\n" + 
+				"<td />\n" + 
+				"<td>2.0 </td>\n" + 
+				"<td />\n" + 
+				"<td>3.0 </td>\n" + 
+				"<td />\n" + 
+				"<td />\n" + 
+				"<td /></tr>\n" + 
+				"<tr>\n" + 
+				"<td>1.1 </td>\n" + 
+				"<td>August 1996 </td>\n" + 
+				"<td />\n" + 
+				"<td>3.0 </td>\n" + 
+				"<td />\n" + 
+				"<td />\n" + 
+				"<td />\n" + 
+				"<td />\n" + 
+				"<td /></tr>\n" + 
+				"<tr>\n" + 
+				"<td>1.2 </td>\n" + 
+				"<td>Juni 1997 </td>\n" + 
+				"<td />\n" + 
+				"<td>4.0-4.05 </td>\n" + 
+				"<td />\n" + 
+				"<td />\n" + 
+				"<td />\n" + 
+				"<td />\n" + 
+				"<td /></tr>\n" + 
+				"<tr>\n" + 
+				"<td>1.3 </td>\n" + 
+				"<td>Oktober 1998 </td>\n" + 
+				"<td>ECMA-262 1<sup>st</sup> edition / ECMA-262 2<sup>nd</sup> edition </td>\n" + 
+				"<td>4.06-4.7x </td>\n" + 
+				"<td />\n" + 
+				"<td>4.0 </td>\n" + 
+				"<td />\n" + 
+				"<td />\n" + 
+				"<td /></tr>\n" + 
+				"<tr>\n" + 
+				"<td>1.4 </td>\n" + 
+				"<td />\n" + 
+				"<td />\n" + 
+				"<td>Netscape Server </td>\n" + 
+				"<td />\n" + 
+				"<td />\n" + 
+				"<td />\n" + 
+				"<td />\n" + 
+				"<td /></tr>\n" + 
+				"<tr>\n" + 
+				"<td>1.5 </td>\n" + 
+				"<td>November 2000 </td>\n" + 
+				"<td>ECMA-262 3<sup>rd</sup> edition </td>\n" + 
+				"<td>6.0 </td>\n" + 
+				"<td>1.0</td>\n" + 
+				"<td>\n" + 
+				"\n" + 
+				"<ul>\n" + 
+				"<li>5.5 (JScript 5.5)</li>\n" + 
+				"<li>6 (JScript 5.6)</li>\n" + 
+				"<li>7 (JScript 5.7)</li>\n" + 
+				"<li>8 (JScript 6)</li></ul></td>\n" + 
+				"<td>\n" + 
+				"\n" + 
+				"<ul>\n" + 
+				"<li>6.0</li>\n" + 
+				"<li>7.0</li>\n" + 
+				"<li>8.0</li>\n" + 
+				"<li>9.0</li></ul></td>\n" + 
+				"<td />\n" + 
+				"<td /></tr>\n" + 
+				"<tr>\n" + 
+				"<td>1.6 </td>\n" + 
+				"<td>November 2005 </td>\n" + 
+				"<td>1.5 + Array extras + Array &#38; String generics + E4X </td>\n" + 
+				"<td />\n" + 
+				"<td>1.5 </td>\n" + 
+				"<td />\n" + 
+				"<td></td>\n" + 
+				"<td>\n" + 
+				"\n" + 
+				"<ul>\n" + 
+				"<li>3.0</li>\n" + 
+				"<li>3.1</li></ul></td>\n" + 
+				"<td /></tr>\n" + 
+				"<tr>\n" + 
+				"<td>1.7 </td>\n" + 
+				"<td>Oktober 2006 </td>\n" + 
+				"<td>1.6 + Pythonic generators + Iterators + let + destructuring assignments </td>\n" + 
+				"<td />\n" + 
+				"<td>2.0 </td>\n" + 
+				"<td />\n" + 
+				"<td></td>\n" + 
+				"<td>\n" + 
+				"\n" + 
+				"<ul>\n" + 
+				"<li>3.2</li>\n" + 
+				"<li>4.0</li></ul></td>\n" + 
+				"<td>1.0</td></tr>\n" + 
+				"<tr>\n" + 
+				"<td>1.8 </td>\n" + 
+				"<td>Juni 2008 </td>\n" + 
+				"<td>1.7 + Generator expressions + Expression closures </td>\n" + 
+				"<td />\n" + 
+				"<td>3.0 </td>\n" + 
+				"<td />\n" + 
+				"<td />\n" + 
+				"<td />\n" + 
+				"<td /></tr>\n" + 
+				"<tr>\n" + 
+				"<td>1.8.1 </td>\n" + 
+				"<td />\n" + 
+				"<td>1.8 + geringfügige Updates </td>\n" + 
+				"<td />\n" + 
+				"<td>3.5 </td>\n" + 
+				"<td />\n" + 
+				"<td />\n" + 
+				"<td />\n" + 
+				"<td /></tr>\n" + 
+				"<tr>\n" + 
+				"<td>1.9 </td>\n" + 
+				"<td />\n" + 
+				"<td>1.8.1 + ECMAScript 5 Compliance </td>\n" + 
+				"<td />\n" + 
+				"<td>4 </td>\n" + 
+				"<td />\n" + 
+				"<td />\n" + 
+				"<td />\n" + 
+				"<td /></tr></table></div>\n" + 
+				"<ol class=\"references\">\n" + 
+				"<li id=\"_note-1\"><b><a href=\"#_ref-1\" title=\"\">&#8593;</a></b> John Resig. <i><a class=\"externallink\" href=\"http://ejohn.org/blog/versions-of-javascript\" rel=\"nofollow\" title=\"http://ejohn.org/blog/versions-of-javascript\">Versions of JavaScript</a></i>. Ejohn.org. Abgerufen am <a href=\"http://www.bliki.info/wiki/Template:safesubst:#Switch:none\" title=\"Template:safesubst:\">Template:safesubst:</a>.</li></ol>",
 				wikiModel
 						.render(
 								"=== Versionsgeschichte ===\n"

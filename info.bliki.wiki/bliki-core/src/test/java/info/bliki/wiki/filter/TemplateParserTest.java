@@ -46,12 +46,24 @@ public class TemplateParserTest extends FilterTestSupport {
 	 * Issue 86
 	 */
 	public void testOnlyicludeDemo001() {
-		assertEquals("abcdefghi<hr>\n" + ";Only active template content is above.\n" + "\n"
-				+ ";The verbatim active code within reads:\n"
-				+ " abc'''&lt;onlyinclude>'''def'''&lt;/onlyinclude>'''ghi'''&lt;includeonly>'''jkl'''&lt;/includeonly>'''\n" + "\n"
-				+ "If transposed, the only part included will be the string literal <code>def</code>. \n" + "\n" + "==Example==\n"
-				+ "Including [[:Help:Template/onlyinclude demo]] yields only:\n" + " {{:Help:Template/onlyinclude demo}}\n" + "\n" + "\n"
-				+ "\n" + "[[Category:Handbook templates]]\n" + "[[Category:Template documentation|PAGENAME]]\n" + "\n" + "", wikiModel
+		assertEquals("abcdefghi<hr>\n" + 
+				";Only active template content is above.\n" + 
+				"\n" + 
+				";The verbatim active code within reads:\n" + 
+				" abc'''&lt;onlyinclude>'''def'''&lt;/onlyinclude>'''ghi'''&lt;includeonly>'''jkl'''&lt;/includeonly>'''\n" + 
+				"\n" + 
+				"If transposed, the only part included will be the string literal <code>def</code>. \n" + 
+				"\n" + 
+				"==Example==\n" + 
+				"Including [[:Help:Template/onlyinclude demo]] yields only:\n" + 
+				" [[:Template::Help:Template/onlyinclude demo]]\n" + 
+				"\n" + 
+				"\n" + 
+				"\n" + 
+				"[[Category:Handbook templates]]\n" + 
+				"[[Category:Template documentation|PAGENAME]]\n" + 
+				"\n" + 
+				"", wikiModel
 				.parseTemplates(WikiTestModel.ONLYINCLUDE_DEMO));
 	}
 
@@ -67,27 +79,34 @@ public class TemplateParserTest extends FilterTestSupport {
 	 */
 	public void testOnlyicludeDemo003() {
 		assertEquals(
-				"\n"
-						+ "<p>abcdefghi</p><hr/>\n"
-						+ "\n"
-						+ "<dl>\n"
-						+ "<dt>Only active template content is above.</dt></dl>\n"
-						+ "\n"
-						+ "\n"
-						+ "<dl>\n"
-						+ "<dt>The verbatim active code within reads</dt>\n"
-						+ "<dd></dd></dl>:\n"
-						+ "<pre>\n"
-						+ "abc<b>&#60;onlyinclude&#62;</b>def<b>&#60;/onlyinclude&#62;</b>ghi<b>&#60;includeonly&#62;</b>jkl<b>&#60;/includeonly&#62;</b>\n"
-						+ "</pre>\n"
-						+ "<p>If transposed, the only part included will be the string literal <code>def</code>. </p>\n"
-						+ "<h2><span class=\"mw-headline\" id=\"Example\">Example</span></h2>\n"
-						+ "<p>Including <a href=\"http://www.bliki.info/wiki/Help:Template/onlyinclude_demo\" title=\"Help:Template/onlyinclude demo\">Help:Template/onlyinclude demo</a> yields only:</p>\n"
-						+ "<pre>\n" + "{{:Help:Template/onlyinclude demo}}\n" + "</pre>\n" + "\n" + "\n" + "<p>\n" + "</p>\n" + "", wikiModel
+				"\n" + 
+				"<p>abcdefghi</p><hr/>\n" + 
+				"\n" + 
+				"<dl>\n" + 
+				"<dt>Only active template content is above.</dt></dl>\n" + 
+				"\n" + 
+				"\n" + 
+				"<dl>\n" + 
+				"<dt>The verbatim active code within reads</dt>\n" + 
+				"<dd></dd></dl>:\n" + 
+				"<pre>\n" + 
+				"abc<b>&#60;onlyinclude&#62;</b>def<b>&#60;/onlyinclude&#62;</b>ghi<b>&#60;includeonly&#62;</b>jkl<b>&#60;/includeonly&#62;</b>\n" + 
+				"</pre>\n" + 
+				"<p>If transposed, the only part included will be the string literal <code>def</code>. </p>\n" + 
+				"<h2><span class=\"mw-headline\" id=\"Example\">Example</span></h2>\n" + 
+				"<p>Including <a href=\"http://www.bliki.info/wiki/Help:Template/onlyinclude_demo\" title=\"Help:Template/onlyinclude demo\">Help:Template/onlyinclude demo</a> yields only:</p>\n" + 
+				"<pre>\n" + 
+				"<a href=\"http://www.bliki.info/wiki/Template::Help:Template/onlyinclude_demo\" title=\"Template::Help:Template/onlyinclude demo\">Template::Help:Template/onlyinclude demo</a>\n" + 
+				"</pre>\n" + 
+				"\n" + 
+				"\n" + 
+				"<p>\n" + 
+				"</p>\n" + 
+				"", wikiModel
 						.render(WikiTestModel.ONLYINCLUDE_DEMO, true));
 	}
 
-	/**
+	/** 
 	 * Issue 86
 	 */
 	public void testOnlyicludeDemo004() {
@@ -319,7 +338,7 @@ public class TemplateParserTest extends FilterTestSupport {
 
 	public void testIf00() {
 		assertEquals(
-				"start{{es-verb form of/indicative}}end",
+				"start[[:Template:es-verb form of/indicative]]end",
 				wikiModel
 						.parseTemplates("start{{{{ #if:  | l | u }}cfirst:  {{ es-verb form of/{{ #switch: indicative  | ind | indicative = indicative  | subj | subjunctive = subjunctive  | imp | imperative = imperative  | cond | conditional = conditional  | par | part | participle | past participle  | past-participle = participle  | adv | adverbial | ger | gerund | gerundive  | gerundio | present participle  | present-participle = adverbial  | error  }}  | tense =  {{ #switch: present  | pres | present = present  | imp | imperfect = imperfect  | pret | preterit | preterite = preterite  | fut | future = future  | cond | conditional = conditional  }}  | number =  {{ #switch: singular  | s | sg | sing | singular = singular  | p | pl | plural = plural  }}  | person =  {{ #switch: 1  | 1 | first | first person | first-person = first  | 2 | second|second person | second-person = second  | 3 | third | third person | third-person = third  | 0 | - | imp | impersonal = impersonal  }}  | formal =  {{ #switch: {{{formal}}}  | y | yes = yes  | n | no = no  }}  | gender =  {{ #switch:   | m | masc | masculine = masculine  | f | fem | feminine = feminine  }}  | sense =  {{ #switch: {{{sense}}}  | + | aff | affirmative = affirmative  | - | neg | negative = negative  }}  | sera = {{ #switch: {{{sera}}} | se = se | ra = ra }}  | ending =  {{ #switch: ar  | ar | -ar = -ar  | er | -er = -er  | ir | -ir = -ir  }}  | participle =   | voseo = {{ #if:  | yes | no }}  }}}}end"));
 	}
@@ -398,11 +417,12 @@ public class TemplateParserTest extends FilterTestSupport {
 	}
 
 	public void testAnarchismSidebar() {
-		assertEquals("{{Sidebar}}", wikiModel.parseTemplates("{{Anarchism sidebar}}", false));
+		assertEquals("[[:Template:Sidebar]]", wikiModel.parseTemplates("{{Anarchism sidebar}}", false));
 	}
 
 	public void testNonExistentTemplate() {
-		assertEquals("==Other areas of Wikipedia==\n" + "{{WikipediaOther}}", wikiModel.parseTemplates("==Other areas of Wikipedia==\n"
+		assertEquals("==Other areas of Wikipedia==\n" + 
+				"[[:Template:WikipediaOther]]", wikiModel.parseTemplates("==Other areas of Wikipedia==\n"
 				+ "{{WikipediaOther}}<!--Template:WikipediaOther-->", false));
 	}
 
@@ -425,7 +445,7 @@ public class TemplateParserTest extends FilterTestSupport {
 
 	public void testTemplateCall4() {
 		// see method WikiTestModel#getRawWikiContent()
-		assertEquals("{{[[Template:example|example]]}}", wikiModel.parseTemplates("{{tl|example}}", false));
+		assertEquals("[[:Template:[[Template:example|example]]]]", wikiModel.parseTemplates("{{tl|example}}", false));
 	}
 
 	public void testTemplateCall5() {
@@ -481,7 +501,7 @@ public class TemplateParserTest extends FilterTestSupport {
 	}
 
 	public void testEndlessRecursion() {
-		assertEquals("{{Error - template recursion limit exceeded parsing templates.}}", wikiModel.parseTemplates("{{recursion}}",
+		assertEquals("Error - template recursion limit exceeded parsing templates.", wikiModel.parseTemplates("{{recursion}}",
 				false));
 	}
 
@@ -572,7 +592,7 @@ public class TemplateParserTest extends FilterTestSupport {
 	}
 
 	public void testSwitch008() {
-		assertEquals("{{Templ1/ind&}}", wikiModel.parseTemplates("{{Templ1/{{ #switch: imperative  | ind | ind&}}}}", false));
+		assertEquals("[[:Template:Templ1/ind&]]", wikiModel.parseTemplates("{{Templ1/{{ #switch: imperative  | ind | ind&}}}}", false));
 	}
 
 	/**
