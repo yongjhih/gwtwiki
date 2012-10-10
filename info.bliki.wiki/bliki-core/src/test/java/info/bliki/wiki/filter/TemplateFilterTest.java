@@ -42,6 +42,17 @@ public class TemplateFilterTest extends FilterTestSupport {
 				"<p>start <a href=\"http://www.bliki.info/wiki/Template:NonExistingTemplate\" title=\"Template:NonExistingTemplate\">Template:NonExistingTemplate</a> end</p>", wikiModel.render("start {{NonExistingTemplate}} end", false));
 	}
 	
+	public void testNonExistingTemplate03() {
+		assertEquals("\n" + 
+				"<p><a href=\"http://www.bliki.info/wiki/Help:NonExistingPage\" title=\"Help:NonExistingPage\">Help:NonExistingPage</a></p>\n" + 
+				"<p><a href=\"http://www.bliki.info/wiki/Template:NonExistingTemplate\" title=\"Template:NonExistingTemplate\">Template:NonExistingTemplate</a></p>\n" + 
+				"<p><a href=\"http://www.bliki.info/wiki/NonExistingTemplate\" title=\"NonExistingTemplate\">NonExistingTemplate</a></p>", wikiModel.render("{{Help:NonExistingPage}}\n" + 
+				"\n" + 
+				"{{NonExistingTemplate}}\n" + 
+				"\n" + 
+				"{{:NonExistingTemplate}}", false));
+	}
+	
 	public void testTemplateCall1() {
 		// see method WikiTestModel#getRawWikiContent()
 		assertEquals("\n" + "<p>start-an include page-end</p>", wikiModel.render("start-{{:Include Page}}-end", false));

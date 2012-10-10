@@ -66,9 +66,7 @@ public abstract class AbstractWikiModel implements IWikiModel, IContext {
 
 	private IEventListener fWikiListener = null;
 
-	protected INamespace fNamespace;
-
-	// private ResourceBundle fResourceBundle;
+	final protected INamespace fNamespace;
 
 	protected String fRedirectLink = null;
 
@@ -157,47 +155,6 @@ public abstract class AbstractWikiModel implements IWikiModel, IContext {
 		// initializeNamespaces();
 		initialize();
 	}
-
-	// private void initializeNamespaces() {
-	// String ns1, ns2;
-	//
-	// ns1 = Messages.getString(fResourceBundle, Messages.WIKI_API_MEDIA1);
-	// if (ns1 != null) {
-	// fImageNamespaces[0] = ns1;
-	// ns2 = Messages.getString(fResourceBundle, Messages.WIKI_API_MEDIA2);
-	// if (ns2 != null) {
-	// fImageNamespaces[1] = ns2;
-	// }
-	// }
-	//
-	// ns1 = Messages.getString(fResourceBundle, Messages.WIKI_API_IMAGE1);
-	// if (ns1 != null) {
-	// fImageNamespaces[0] = ns1;
-	// ns2 = Messages.getString(fResourceBundle, Messages.WIKI_API_IMAGE2);
-	// if (ns2 != null) {
-	// fImageNamespaces[1] = ns2;
-	// }
-	// }
-	//
-	// ns1 = Messages.getString(fResourceBundle, Messages.WIKI_API_TEMPLATE1);
-	// if (ns1 != null) {
-	// fTemplateNamespaces[0] = ns1;
-	// ns2 = Messages.getString(fResourceBundle, Messages.WIKI_API_TEMPLATE2);
-	// if (ns2 != null) {
-	// fTemplateNamespaces[1] = ns2;
-	// }
-	// }
-	//
-	// ns1 = Messages.getString(fResourceBundle, Messages.WIKI_API_CATEGORY1);
-	// if (ns1 != null) {
-	// fCategoryNamespaces[0] = ns1;
-	// ns2 = Messages.getString(fResourceBundle, Messages.WIKI_API_CATEGORY2);
-	// if (ns2 != null) {
-	// fCategoryNamespaces[1] = ns2;
-	// }
-	// }
-	//
-	// }
 
 	/**
 	 * {@inheritDoc}
@@ -395,17 +352,7 @@ public abstract class AbstractWikiModel implements IWikiModel, IContext {
 	 */
 	public void appendExternalLink(String uriSchemeName, String link, String linkName, boolean withoutSquareBrackets) {
 		link = Utils.escapeXml(link, true, false, false);
-		// is the given link an image?
-		// int indx = link.lastIndexOf(".");
-		// if (indx > 0 && indx < (link.length() - 3)) {
-		// String ext = link.substring(indx + 1);
-		// if (ext.equalsIgnoreCase("gif") || ext.equalsIgnoreCase("png") ||
-		// ext.equalsIgnoreCase("jpg") || ext.equalsIgnoreCase("jpeg")
-		// || ext.equalsIgnoreCase("bmp")) {
-		// appendExternalImageLink(link, linkName);
-		// return;
-		// }
-		// }
+
 		TagNode aTagNode = new TagNode("a");
 		aTagNode.addAttribute("href", link, true);
 		aTagNode.addAttribute("rel", "nofollow", true);
@@ -494,38 +441,18 @@ public abstract class AbstractWikiModel implements IWikiModel, IContext {
 	 * {@inheritDoc}
 	 */
 	public void appendInternalImageLink(String hrefImageLink, String srcImageLink, ImageFormat imageFormat) {
-		// int pxWidth = imageFormat.getWidth();
-		// int pxHeight = imageFormat.getHeight();
 		String caption = imageFormat.getCaption();
 		String imageType = imageFormat.getType();
 		TagNode divInnerTagNode = new TagNode("div");
 		divInnerTagNode.addAttribute("id", "image", false);
-		// String link = imageFormat.getLink();
-		// if (link != null) {
-		// String href = encodeTitleToUrl(link, true);
-		// divTagNode.addAttribute("href", href, false);
-		// } else {
+
 		if (hrefImageLink.length() != 0) {
 			divInnerTagNode.addAttribute("href", hrefImageLink, false);
 		}
-		// }
 
 		divInnerTagNode.addAttribute("src", srcImageLink, false);
 		setDefaultThumbWidth(imageFormat);
 		divInnerTagNode.addObjectAttribute("wikiobject", imageFormat);
-		// if (pxHeight != -1) {
-		// if (pxWidth != -1) {
-		// divInnerTagNode.addAttribute("style", "height:" + pxHeight + "px; " +
-		// "width:" + pxWidth + "px", false);
-		// } else {
-		// divInnerTagNode.addAttribute("style", "height:" + pxHeight + "px",
-		// false);
-		// }
-		// } else {
-		// if (pxWidth != -1) {
-		// divInnerTagNode.addAttribute("style", "width:" + pxWidth + "px", false);
-		// }
-		// }
 		pushNode(divInnerTagNode);
 		try {
 			// TODO: test all these cases
@@ -576,8 +503,6 @@ public abstract class AbstractWikiModel implements IWikiModel, IContext {
 	 */
 	public void appendInternalLink(String topic, String hashSection, String topicDescription, String cssClass, boolean parseRecursive) {
 		WPATag aTagNode = new WPATag();
-		// append(aTagNode);
-		// aTagNode.addAttribute("id", "w", true);
 		String href = encodeTitleToUrl(topic, true);
 		if (hashSection != null) {
 			href = href + '#' + encodeTitleDotUrl(hashSection, true);
@@ -595,9 +520,6 @@ public abstract class AbstractWikiModel implements IWikiModel, IContext {
 			aTagNode.addChild(new ContentToken(topicDescription));
 		}
 		popNode();
-
-		// ContentToken text = new ContentToken(topicDescription);
-		// aTagNode.addChild(text);
 	}
 
 	/**
@@ -653,18 +575,6 @@ public abstract class AbstractWikiModel implements IWikiModel, IContext {
 	 * {@inheritDoc}
 	 */
 	public void appendMailtoLink(String link, String linkName, boolean withoutSquareBrackets) {
-		// is it an image?
-		// link = Utils.escapeXml(link, true, false, false);
-		// int indx = link.lastIndexOf(".");
-		// if (indx > 0 && indx < (link.length() - 3)) {
-		// String ext = link.substring(indx + 1);
-		// if (ext.equalsIgnoreCase("gif") || ext.equalsIgnoreCase("png") ||
-		// ext.equalsIgnoreCase("jpg") || ext.equalsIgnoreCase("jpeg")
-		// || ext.equalsIgnoreCase("bmp")) {
-		// appendExternalImageLink(link, linkName);
-		// return;
-		// }
-		// }
 		TagNode aTagNode = new TagNode("a");
 		append(aTagNode);
 		aTagNode.addAttribute("href", link, true);
@@ -753,8 +663,7 @@ public abstract class AbstractWikiModel implements IWikiModel, IContext {
 				rawTopicName = rawTopicName.substring(0, pipeIndex);
 				if (alias.length() == 0) {
 					// special cases like: [[Test:hello world|]] or [[Test(hello
-					// world)|]]
-					// or [[Test, hello world|]]
+					// world)|]] or [[Test, hello world|]]
 					alias = rawTopicName;
 					int index = alias.indexOf(':');
 					if (index != -1) {
@@ -1072,17 +981,8 @@ public abstract class AbstractWikiModel implements IWikiModel, IContext {
 			renderer = (AttributeRenderer) attributeRenderers.get(attributeClassType);
 		}
 		if (renderer != null) {
-			// found it!
 			return renderer;
 		}
-
-		// we have no renderer overrides for the template or none for class arg
-		// check parent template if we are embedded
-		// if ( enclosingInstance!=null ) {
-		// return enclosingInstance.getAttributeRenderer(attributeClassType);
-		// }
-		// // else check group
-		// return group.getAttributeRenderer(attributeClassType);
 		return null;
 	}
 
@@ -1393,7 +1293,7 @@ public abstract class AbstractWikiModel implements IWikiModel, IContext {
 	 * {@inheritDoc}
 	 */
 	public boolean isNamespace(String namespace) {
-		return isImageNamespace(namespace) || isTemplateNamespace(namespace) || isCategoryNamespace(namespace);
+		return fNamespace.getNamespaceByLowercase(namespace.toLowerCase()) != null;
 	}
 
 	/**
@@ -1527,14 +1427,6 @@ public abstract class AbstractWikiModel implements IWikiModel, IContext {
 	 * argument list exists.
 	 */
 	protected void rawSetAttribute(Map attributes, String name, Object value) {
-		// if ( formalArguments!=FormalArgument.UNKNOWN &&
-		// getFormalArgument(name)==null )
-		// {
-		// // a normal call to setAttribute with unknown attribute
-		// throw new NoSuchElementException("no such attribute: "+name+
-		// " in template context "+
-		// getEnclosingInstanceStackString());
-		// }
 		if (value == null) {
 			return;
 		}
@@ -1824,12 +1716,23 @@ public abstract class AbstractWikiModel implements IWikiModel, IContext {
 				plainContent = "[[" + templateName + "]]";
 			}
 		} else {
+			String templateStr = templateName;
+			String namespaceStr = getTemplateNamespace();
+			int indx = templateName.indexOf(':');
+			if (indx > 0) {
+				namespaceStr = fNamespace.getNamespaceByLowercase(templateName.substring(0, indx).toLowerCase());
+				if (namespaceStr != null) {
+					templateStr = templateStr.substring(indx + 1);
+				} else {
+					namespaceStr = getTemplateNamespace();
+				}
+			}
 			addTemplate(templateName);
-			plainContent = getRawWikiContent(getTemplateNamespace(), templateName, parameterMap);
+			plainContent = getRawWikiContent(namespaceStr, templateStr, parameterMap);
 			if (plainContent == null) {
 				// content of this "template wiki link" is missing => render as template
 				// link:
-				plainContent = "[[:" + getTemplateNamespace() + ":" + templateName + "]]";
+				plainContent = "[[:" + namespaceStr + ":" + templateStr + "]]";
 			}
 		}
 
