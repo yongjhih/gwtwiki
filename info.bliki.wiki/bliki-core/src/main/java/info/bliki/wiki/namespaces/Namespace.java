@@ -22,10 +22,6 @@ public class Namespace implements INamespace {
 	protected final String[] fNamespaces2 = { "Media", "Special", "", "Talk", "User", "User_talk", "Meta", "Meta_talk", "File",
 			"File_talk", "MediaWiki", "MediaWiki_talk", "Template", "Template_talk", "Help", "Help_talk", "Category", "Category_talk" };
 
-	protected final String[] fTalkNamespaces = { null, null, null, null, "User_talk", "User_talk", "Meta_talk", "Meta_talk",
-			"Image_talk", "Image_talk", "MediaWiki_talk", "MediaWiki_talk", "Template_talk", "Template_talk", "Help_talk", "Help_talk",
-			"Category_talk", "Category_talk" };
-
 	protected final String[] fNamespacesLowercase = { "media", "special", "", "talk", "user", "user_talk", "project", "project_talk",
 			"image", "image_talk", "mediawiki", "mediawiki_talk", "template", "template_talk", "help", "help_talk", "category",
 			"category_talk" };
@@ -50,11 +46,25 @@ public class Namespace implements INamespace {
 		for (int i = 0; i < fNamespacesLowercase.length; i++) {
 			NAMESPACE_MAP.put(fNamespacesLowercase[i], fNamespaces1[i]);
 		}
-		for (int i = 0; i < fNamespacesLowercase.length; i++) {
-			if (fTalkNamespaces[i] != null) {
-				TALKSPACE_MAP.put(fNamespacesLowercase[i], fTalkNamespaces[i]);
-			}
-		}
+		TALKSPACE_MAP.put(getNamespaceByNumber(MEDIA_NAMESPACE_KEY), null); // media
+		TALKSPACE_MAP.put(getNamespaceByNumber(SPECIAL_NAMESPACE_KEY), null); // special
+		TALKSPACE_MAP.put(getNamespaceByNumber(MAIN_NAMESPACE_KEY), getTalk()); // ""
+		TALKSPACE_MAP.put(getNamespaceByNumber(TALK_NAMESPACE_KEY), getTalk()); // talk
+		TALKSPACE_MAP.put(getNamespaceByNumber(USER_NAMESPACE_KEY), getUser_talk()); // user
+		TALKSPACE_MAP.put(getNamespaceByNumber(USER_TALK_NAMESPACE_KEY), getUser_talk()); // user_talk
+		TALKSPACE_MAP.put(getNamespaceByNumber(PROJECT_NAMESPACE_KEY), getMeta_talk()); // project
+		TALKSPACE_MAP.put(getNamespaceByNumber(PROJECT_TALK_NAMESPACE_KEY), getMeta_talk()); // project_talk
+		TALKSPACE_MAP.put(getNamespaceByNumber(FILE_NAMESPACE_KEY), getImage_talk()); // image
+		TALKSPACE_MAP.put(getNamespaceByNumber(FILE_TALK_NAMESPACE_KEY), getImage_talk()); // image_talk
+		TALKSPACE_MAP.put(getNamespaceByNumber(MEDIAWIKI_NAMESPACE_KEY), getMediaWiki_talk()); // mediawiki
+		TALKSPACE_MAP.put(getNamespaceByNumber(MEDIAWIKI_TALK_NAMESPACE_KEY), getMediaWiki_talk()); // mediawiki_talk
+		TALKSPACE_MAP.put(getNamespaceByNumber(TEMPLATE_NAMESPACE_KEY), getTemplate_talk()); // template
+		TALKSPACE_MAP.put(getNamespaceByNumber(TEMPLATE_TALK_NAMESPACE_KEY), getTemplate_talk()); // template_talk
+		TALKSPACE_MAP.put(getNamespaceByNumber(HELP_NAMESPACE_KEY), getHelp_talk()); // help
+		TALKSPACE_MAP.put(getNamespaceByNumber(HELP_TALK_NAMESPACE_KEY), getHelp_talk()); // help_talk
+		TALKSPACE_MAP.put(getNamespaceByNumber(CATEGORY_NAMESPACE_KEY), getCategory_talk()); // category
+		TALKSPACE_MAP.put(getNamespaceByNumber(CATEGORY_TALK_NAMESPACE_KEY), getCategory_talk()); // category_talk
+
 	}
 
 	/*
