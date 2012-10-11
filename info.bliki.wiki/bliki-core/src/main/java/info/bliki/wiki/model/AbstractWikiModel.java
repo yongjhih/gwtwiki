@@ -208,6 +208,12 @@ public abstract class AbstractWikiModel implements IWikiModel, IContext {
 	/**
 	 * {@inheritDoc}
 	 */
+	public void addInclude(String pageName) {
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
 	public ITemplateFunction addTemplateFunction(String key, ITemplateFunction value) {
 		return fConfiguration.addTemplateFunction(key, value);
 	}
@@ -1733,6 +1739,7 @@ public abstract class AbstractWikiModel implements IWikiModel, IContext {
 		if (namespaceStr.equals(getTemplateNamespace())) {
 			addTemplate(templateStr);
 		} else {
+			addInclude(fullTemplateStr);
 			// invalidate cache:
 			templateCallsCache = null;
 		}

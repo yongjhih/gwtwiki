@@ -34,6 +34,8 @@ public class WikiModel extends AbstractWikiModel {
 
 	protected Set<String> templates = null;
 
+	protected Set<String> includes = null;
+
 	protected List<SemanticRelation> semanticRelations = null;
 
 	protected List<SemanticAttribute> semanticAttributes = null;
@@ -128,6 +130,14 @@ public class WikiModel extends AbstractWikiModel {
 	 * {@inheritDoc}
 	 */
 	@Override
+	public void addInclude(String pageName) {
+		includes.add(pageName);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
 	public void appendInternalLink(String topic, String hashSection, String topicDescription, String cssClass, boolean parseRecursive) {
 		String hrefLink;
 		String description = topicDescription;
@@ -208,6 +218,13 @@ public class WikiModel extends AbstractWikiModel {
 	 */
 	public Set<String> getTemplates() {
 		return templates;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public Set<String> getIncludes() {
+		return includes;
 	}
 
 	/**
@@ -306,6 +323,7 @@ public class WikiModel extends AbstractWikiModel {
 		categories = new HashMap<String, String>();
 		links = new HashSet<String>();
 		templates = new HashSet<String>();
+		includes = new HashSet<String>();
 		semanticRelations = null;
 		semanticAttributes = null;
 	}

@@ -76,9 +76,25 @@ public interface IWikiModel extends IConfiguration {
 	 * output metadata.
 	 * 
 	 * @param template
-	 *          The name of the template that is being included.
+	 *          The name of the template that is being included (excluding the
+	 *          template namespace).
 	 */
 	public void addTemplate(String template);
+
+	/**
+	 * When a document contains a token indicating that the document includes an
+	 * other Wiki page, i.e. transclusion, this method should be called to add
+	 * that page to the output metadata.
+	 * 
+	 * This excludes pages f
+	 * 
+	 * @param pageName
+	 *          The name of the page that is being included (including its
+	 *          namespace).
+	 * 
+	 * @see #addTemplate(String)
+	 */
+	public void addInclude(String pageName);
 
 	/**
 	 * Add a reference (i.e. footnote) to the internal list
