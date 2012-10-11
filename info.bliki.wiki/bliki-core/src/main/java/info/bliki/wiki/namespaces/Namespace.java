@@ -33,6 +33,8 @@ public class Namespace implements INamespace {
 	 */
 	public final Map<String, String> TALKSPACE_MAP = new TreeMap<String, String>(String.CASE_INSENSITIVE_ORDER);
 
+	public final Map<String, Integer> NAMESPACE_INT_MAP = new TreeMap<String, Integer>(String.CASE_INSENSITIVE_ORDER);
+
 	protected ResourceBundle fResourceBundle = null;
 
 	public Namespace() {
@@ -76,6 +78,26 @@ public class Namespace implements INamespace {
 			TALKSPACE_MAP.put(namespaces[convertNumberCode(HELP_TALK_NAMESPACE_KEY)], getHelp_talk()); // help_talk
 			TALKSPACE_MAP.put(namespaces[convertNumberCode(CATEGORY_NAMESPACE_KEY)], getCategory_talk()); // category
 			TALKSPACE_MAP.put(namespaces[convertNumberCode(CATEGORY_TALK_NAMESPACE_KEY)], getCategory_talk()); // category_talk
+
+			NAMESPACE_INT_MAP.put(namespaces[convertNumberCode(MEDIA_NAMESPACE_KEY)], MEDIA_NAMESPACE_KEY);
+			NAMESPACE_INT_MAP.put(namespaces[convertNumberCode(SPECIAL_NAMESPACE_KEY)], SPECIAL_NAMESPACE_KEY);
+			NAMESPACE_INT_MAP.put(namespaces[convertNumberCode(MAIN_NAMESPACE_KEY)], MAIN_NAMESPACE_KEY);
+			NAMESPACE_INT_MAP.put(namespaces[convertNumberCode(TALK_NAMESPACE_KEY)], TALK_NAMESPACE_KEY);
+			NAMESPACE_INT_MAP.put(namespaces[convertNumberCode(USER_NAMESPACE_KEY)], USER_NAMESPACE_KEY);
+			NAMESPACE_INT_MAP.put(namespaces[convertNumberCode(USER_TALK_NAMESPACE_KEY)], USER_TALK_NAMESPACE_KEY);
+			NAMESPACE_INT_MAP.put(namespaces[convertNumberCode(PROJECT_NAMESPACE_KEY)], PROJECT_NAMESPACE_KEY);
+			NAMESPACE_INT_MAP.put(namespaces[convertNumberCode(PROJECT_TALK_NAMESPACE_KEY)], PROJECT_TALK_NAMESPACE_KEY);
+			NAMESPACE_INT_MAP.put(namespaces[convertNumberCode(FILE_NAMESPACE_KEY)], FILE_NAMESPACE_KEY);
+			NAMESPACE_INT_MAP.put(namespaces[convertNumberCode(FILE_TALK_NAMESPACE_KEY)], FILE_TALK_NAMESPACE_KEY);
+			NAMESPACE_INT_MAP.put(namespaces[convertNumberCode(MEDIAWIKI_NAMESPACE_KEY)], MEDIAWIKI_NAMESPACE_KEY);
+			NAMESPACE_INT_MAP.put(namespaces[convertNumberCode(MEDIAWIKI_TALK_NAMESPACE_KEY)], MEDIAWIKI_TALK_NAMESPACE_KEY);
+			NAMESPACE_INT_MAP.put(namespaces[convertNumberCode(TEMPLATE_NAMESPACE_KEY)], TEMPLATE_NAMESPACE_KEY);
+			NAMESPACE_INT_MAP.put(namespaces[convertNumberCode(TEMPLATE_TALK_NAMESPACE_KEY)], TEMPLATE_TALK_NAMESPACE_KEY);
+			NAMESPACE_INT_MAP.put(namespaces[convertNumberCode(HELP_NAMESPACE_KEY)], HELP_NAMESPACE_KEY);
+			NAMESPACE_INT_MAP.put(namespaces[convertNumberCode(HELP_TALK_NAMESPACE_KEY)], HELP_TALK_NAMESPACE_KEY);
+			NAMESPACE_INT_MAP.put(namespaces[convertNumberCode(CATEGORY_NAMESPACE_KEY)], CATEGORY_NAMESPACE_KEY);
+			NAMESPACE_INT_MAP.put(namespaces[convertNumberCode(CATEGORY_TALK_NAMESPACE_KEY)], CATEGORY_TALK_NAMESPACE_KEY);
+
 		}
 	}
 
@@ -297,6 +319,13 @@ public class Namespace implements INamespace {
 
 	public String getNamespaceByNumber(int numberCode) {
 		return fNamespaces1[convertNumberCode(numberCode)];
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public Integer getNumberByName(String namespace) {
+		return NAMESPACE_INT_MAP.get(namespace);
 	}
 
 	/**

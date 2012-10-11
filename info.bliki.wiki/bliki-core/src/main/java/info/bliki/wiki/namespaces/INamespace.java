@@ -150,10 +150,21 @@ public interface INamespace {
 	public String getMeta2();
 
 	public String getNamespace(String namespace);
-	
+
 	public String getNamespaceByLowercase(String lowercaseNamespace);
 
 	public String getNamespaceByNumber(int numberCode);
+
+	/**
+	 * Gets the integer number of the given namespace.
+	 * 
+	 * @param namespace
+	 *          the namespace
+	 * 
+	 * @return an <code>Integer</code> or <code>null</code> if this is no
+	 *         namespace
+	 */
+	public Integer getNumberByName(String namespace);
 
 	public ResourceBundle getResourceBundle();
 
