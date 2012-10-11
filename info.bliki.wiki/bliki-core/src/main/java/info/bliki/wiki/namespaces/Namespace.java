@@ -39,28 +39,31 @@ public class Namespace implements INamespace {
 	public Namespace(ResourceBundle resourceBundle) {
 		fResourceBundle = resourceBundle;
 		initializeNamespaces();
-		for (String namespace : fNamespaces1) {
-			NAMESPACE_MAP.put(namespace.toLowerCase(fResourceBundle.getLocale()), namespace);
-		}
-		TALKSPACE_MAP.put(getNamespaceByNumber(MEDIA_NAMESPACE_KEY), null); // media
-		TALKSPACE_MAP.put(getNamespaceByNumber(SPECIAL_NAMESPACE_KEY), null); // special
-		TALKSPACE_MAP.put(getNamespaceByNumber(MAIN_NAMESPACE_KEY), getTalk()); // ""
-		TALKSPACE_MAP.put(getNamespaceByNumber(TALK_NAMESPACE_KEY), getTalk()); // talk
-		TALKSPACE_MAP.put(getNamespaceByNumber(USER_NAMESPACE_KEY), getUser_talk()); // user
-		TALKSPACE_MAP.put(getNamespaceByNumber(USER_TALK_NAMESPACE_KEY), getUser_talk()); // user_talk
-		TALKSPACE_MAP.put(getNamespaceByNumber(PROJECT_NAMESPACE_KEY), getMeta_talk()); // project
-		TALKSPACE_MAP.put(getNamespaceByNumber(PROJECT_TALK_NAMESPACE_KEY), getMeta_talk()); // project_talk
-		TALKSPACE_MAP.put(getNamespaceByNumber(FILE_NAMESPACE_KEY), getImage_talk()); // image
-		TALKSPACE_MAP.put(getNamespaceByNumber(FILE_TALK_NAMESPACE_KEY), getImage_talk()); // image_talk
-		TALKSPACE_MAP.put(getNamespaceByNumber(MEDIAWIKI_NAMESPACE_KEY), getMediaWiki_talk()); // mediawiki
-		TALKSPACE_MAP.put(getNamespaceByNumber(MEDIAWIKI_TALK_NAMESPACE_KEY), getMediaWiki_talk()); // mediawiki_talk
-		TALKSPACE_MAP.put(getNamespaceByNumber(TEMPLATE_NAMESPACE_KEY), getTemplate_talk()); // template
-		TALKSPACE_MAP.put(getNamespaceByNumber(TEMPLATE_TALK_NAMESPACE_KEY), getTemplate_talk()); // template_talk
-		TALKSPACE_MAP.put(getNamespaceByNumber(HELP_NAMESPACE_KEY), getHelp_talk()); // help
-		TALKSPACE_MAP.put(getNamespaceByNumber(HELP_TALK_NAMESPACE_KEY), getHelp_talk()); // help_talk
-		TALKSPACE_MAP.put(getNamespaceByNumber(CATEGORY_NAMESPACE_KEY), getCategory_talk()); // category
-		TALKSPACE_MAP.put(getNamespaceByNumber(CATEGORY_TALK_NAMESPACE_KEY), getCategory_talk()); // category_talk
 
+		for (String[] namespaces : new String[][] { fNamespaces1, fNamespaces2 }) {
+			for (String namespace : namespaces) {
+				NAMESPACE_MAP.put(namespace.toLowerCase(fResourceBundle.getLocale()), namespace);
+			}
+
+			TALKSPACE_MAP.put(namespaces[convertNumberCode(MEDIA_NAMESPACE_KEY)], null); // media
+			TALKSPACE_MAP.put(namespaces[convertNumberCode(SPECIAL_NAMESPACE_KEY)], null); // special
+			TALKSPACE_MAP.put(namespaces[convertNumberCode(MAIN_NAMESPACE_KEY)], getTalk()); // ""
+			TALKSPACE_MAP.put(namespaces[convertNumberCode(TALK_NAMESPACE_KEY)], getTalk()); // talk
+			TALKSPACE_MAP.put(namespaces[convertNumberCode(USER_NAMESPACE_KEY)], getUser_talk()); // user
+			TALKSPACE_MAP.put(namespaces[convertNumberCode(USER_TALK_NAMESPACE_KEY)], getUser_talk()); // user_talk
+			TALKSPACE_MAP.put(namespaces[convertNumberCode(PROJECT_NAMESPACE_KEY)], getMeta_talk()); // project
+			TALKSPACE_MAP.put(namespaces[convertNumberCode(PROJECT_TALK_NAMESPACE_KEY)], getMeta_talk()); // project_talk
+			TALKSPACE_MAP.put(namespaces[convertNumberCode(FILE_NAMESPACE_KEY)], getImage_talk()); // image
+			TALKSPACE_MAP.put(namespaces[convertNumberCode(FILE_TALK_NAMESPACE_KEY)], getImage_talk()); // image_talk
+			TALKSPACE_MAP.put(namespaces[convertNumberCode(MEDIAWIKI_NAMESPACE_KEY)], getMediaWiki_talk()); // mediawiki
+			TALKSPACE_MAP.put(namespaces[convertNumberCode(MEDIAWIKI_TALK_NAMESPACE_KEY)], getMediaWiki_talk()); // mediawiki_talk
+			TALKSPACE_MAP.put(namespaces[convertNumberCode(TEMPLATE_NAMESPACE_KEY)], getTemplate_talk()); // template
+			TALKSPACE_MAP.put(namespaces[convertNumberCode(TEMPLATE_TALK_NAMESPACE_KEY)], getTemplate_talk()); // template_talk
+			TALKSPACE_MAP.put(namespaces[convertNumberCode(HELP_NAMESPACE_KEY)], getHelp_talk()); // help
+			TALKSPACE_MAP.put(namespaces[convertNumberCode(HELP_TALK_NAMESPACE_KEY)], getHelp_talk()); // help_talk
+			TALKSPACE_MAP.put(namespaces[convertNumberCode(CATEGORY_NAMESPACE_KEY)], getCategory_talk()); // category
+			TALKSPACE_MAP.put(namespaces[convertNumberCode(CATEGORY_TALK_NAMESPACE_KEY)], getCategory_talk()); // category_talk
+		}
 	}
 
 	/*
@@ -280,7 +283,20 @@ public class Namespace implements INamespace {
 	}
 
 	public String getNamespaceByNumber(int numberCode) {
-		return fNamespaces1[numberCode + 2];
+		return fNamespaces1[convertNumberCode(numberCode)];
+	}
+
+	/**
+	 * Converts an (external) namespace number code to the position in the
+	 * {@link #fNamespaces1} and {@link #fNamespaces2} arrays.
+	 * 
+	 * @param numberCode
+	 *          a code like {@link INamespace#MEDIA_NAMESPACE_KEY}
+	 * 
+	 * @return an array index
+	 */
+	protected final int convertNumberCode(int numberCode) {
+		return numberCode + 2;
 	}
 
 	public ResourceBundle getResourceBundle() {
