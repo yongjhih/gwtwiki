@@ -42,7 +42,13 @@ public class Namespace implements INamespace {
 
 		for (String[] namespaces : new String[][] { fNamespaces1, fNamespaces2 }) {
 			for (String namespace : namespaces) {
-				NAMESPACE_MAP.put(namespace.toLowerCase(fResourceBundle.getLocale()), namespace);
+				String namespaceLower;
+				if (fResourceBundle == null || fResourceBundle.getLocale() == null) {
+					namespaceLower = namespace.toLowerCase();
+				} else {
+					namespaceLower = namespace.toLowerCase(fResourceBundle.getLocale());
+				}
+				NAMESPACE_MAP.put(namespaceLower, namespace);
 			}
 
 			TALKSPACE_MAP.put(namespaces[convertNumberCode(MEDIA_NAMESPACE_KEY)], null); // media
