@@ -22,10 +22,6 @@ public class Namespace implements INamespace {
 	protected final String[] fNamespaces2 = { "Media", "Special", "", "Talk", "User", "User_talk", "Meta", "Meta_talk", "File",
 			"File_talk", "MediaWiki", "MediaWiki_talk", "Template", "Template_talk", "Help", "Help_talk", "Category", "Category_talk" };
 
-	protected final String[] fNamespacesLowercase = { "media", "special", "", "talk", "user", "user_talk", "project", "project_talk",
-			"image", "image_talk", "mediawiki", "mediawiki_talk", "template", "template_talk", "help", "help_talk", "category",
-			"category_talk" };
-
 	public final Map<String, String> NAMESPACE_MAP = new HashMap<String, String>();
 
 	public final Map<String, String> TALKSPACE_MAP = new TreeMap<String, String>(String.CASE_INSENSITIVE_ORDER);
@@ -43,8 +39,8 @@ public class Namespace implements INamespace {
 	public Namespace(ResourceBundle resourceBundle) {
 		fResourceBundle = resourceBundle;
 		initializeNamespaces();
-		for (int i = 0; i < fNamespacesLowercase.length; i++) {
-			NAMESPACE_MAP.put(fNamespacesLowercase[i], fNamespaces1[i]);
+		for (String namespace : fNamespaces1) {
+			NAMESPACE_MAP.put(namespace.toLowerCase(fResourceBundle.getLocale()), namespace);
 		}
 		TALKSPACE_MAP.put(getNamespaceByNumber(MEDIA_NAMESPACE_KEY), null); // media
 		TALKSPACE_MAP.put(getNamespaceByNumber(SPECIAL_NAMESPACE_KEY), null); // special
