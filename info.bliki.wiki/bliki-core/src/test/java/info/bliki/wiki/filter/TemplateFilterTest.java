@@ -54,6 +54,13 @@ public class TemplateFilterTest extends FilterTestSupport {
 		if (templateName != null) {
 			assertTrue(wikiText + ", wikiModel.getTemplates().contains(" + templateName + ")", wikiModel.getTemplates().contains(
 					templateName));
+			assertFalse(wikiText + ", !wikiModel.getIncludes().contains(" + templateName + ")", wikiModel.getIncludes().contains(
+					linkTitle));
+			assertFalse(wikiText + ", !wikiModel.getIncludes().contains(" + linkTitle + ")", wikiModel.getIncludes().contains(linkTitle));
+		} else {
+			assertFalse(wikiText + ", !wikiModel.getTemplates().contains(" + linkTitle + ")", wikiModel.getTemplates().contains(
+					templateName));
+			assertTrue(wikiText + ", wikiModel.getIncludes().contains(" + linkTitle + ")", wikiModel.getIncludes().contains(linkTitle));
 		}
 	}
 
