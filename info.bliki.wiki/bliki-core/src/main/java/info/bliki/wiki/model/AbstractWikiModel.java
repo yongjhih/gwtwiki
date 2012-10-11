@@ -1707,33 +1707,39 @@ public abstract class AbstractWikiModel implements IWikiModel, IContext {
 		}
 
 		String plainContent;
-		if (templateName.length() > 0 && templateName.charAt(0) == ':') {
+		String templateStr = templateName;
+		String namespaceStr = getTemplateNamespace();
+		if (templateStr.length() > 0 && templateStr.charAt(0) == ':') {
+			if (templateStr.length() > 1 && templateStr.charAt(1) == ':') {
+				// double "::" are not parsed as template/transclusion
+				writer.append("{{");
+				writer.append(templateStr);
+				writer.append("}}");
+				return;
+			}
+			namespaceStr = ""; // assume main namespace for now
+			templateStr = templateStr.substring(1);
+		}
+
+		int indx = templateStr.indexOf(':');
+		if (indx > 0) {
+			String maybeNamespaceStr = fNamespace.getNamespaceByLowercase(templateStr.substring(0, indx).toLowerCase());
+			if (maybeNamespaceStr != null) {
+				templateStr = templateStr.substring(indx + 1);
+				namespaceStr = maybeNamespaceStr;
+			}
+		}
+		String fullTemplateStr = namespaceStr.length() == 0 ? templateStr : (namespaceStr + ":" + templateStr);
+		if (namespaceStr.equals(getTemplateNamespace())) {
+			addTemplate(templateStr);
+		} else {
 			// invalidate cache:
 			templateCallsCache = null;
-			plainContent = getRawWikiContent("", templateName.substring(1), parameterMap);
-			if (plainContent == null) {
-				// content of this "ordinary wiki link" is missing => render as link:
-				plainContent = "[[" + templateName + "]]";
-			}
-		} else {
-			String templateStr = templateName;
-			String namespaceStr = getTemplateNamespace();
-			int indx = templateName.indexOf(':');
-			if (indx > 0) {
-				namespaceStr = fNamespace.getNamespaceByLowercase(templateName.substring(0, indx).toLowerCase());
-				if (namespaceStr != null) {
-					templateStr = templateStr.substring(indx + 1);
-				} else {
-					namespaceStr = getTemplateNamespace();
-				}
-			}
-			addTemplate(templateName);
-			plainContent = getRawWikiContent(namespaceStr, templateStr, parameterMap);
-			if (plainContent == null) {
-				// content of this "template wiki link" is missing => render as template
-				// link:
-				plainContent = "[[:" + namespaceStr + ":" + templateStr + "]]";
-			}
+		}
+		plainContent = getRawWikiContent(namespaceStr, templateStr, parameterMap);
+		if (plainContent == null) {
+			// content of this transclusion is missing => render as link:
+			plainContent = "[[:" + fullTemplateStr + "]]";
 		}
 
 		StringBuilder templateBuffer = new StringBuilder(plainContent.length());
