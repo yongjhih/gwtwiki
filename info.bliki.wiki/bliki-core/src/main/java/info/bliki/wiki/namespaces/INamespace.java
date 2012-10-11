@@ -196,7 +196,23 @@ public interface INamespace {
 	 * Get the Talk namespace.
 	 * 
 	 * @param namespace
-	 * @return
+	 *          the namespace
+	 * @return the talk namespace for the given namespace or <tt>null</tt> if the
+	 *         namespace is invalid or there is no talk namespace
+	 * 
+	 * @see #getContentspace(String)
 	 */
 	public String getTalkspace(String namespace);
+
+	/**
+	 * Gets the content namespace for a given (talk) namespace.
+	 * 
+	 * @param talkNamespace
+	 *          the namespace, potentially a talkspace
+	 * 
+	 * @return the content namespace or <tt>null</tt>
+	 * 
+	 * @see #getTalkspace(String)
+	 */
+	public String getContentspace(String talkNamespace);
 }

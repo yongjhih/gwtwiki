@@ -7,6 +7,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.TreeMap;
+import java.util.Map.Entry;
 
 /**
  * Mediawiki Namespaces. See <a
@@ -33,6 +34,15 @@ public class Namespace implements INamespace {
 	 */
 	public final Map<String, String> TALKSPACE_MAP = new TreeMap<String, String>(String.CASE_INSENSITIVE_ORDER);
 
+	/**
+	 * Maps (talk) namespaces case-insensitively to their according content
+	 * namespaces.
+	 */
+	public final Map<String, String> CONTENTSPACE_MAP = new TreeMap<String, String>(String.CASE_INSENSITIVE_ORDER);
+
+	/**
+	 * Maps namespace strings to their IDs
+	 */
 	public final Map<String, Integer> NAMESPACE_INT_MAP = new TreeMap<String, Integer>(String.CASE_INSENSITIVE_ORDER);
 
 	protected ResourceBundle fResourceBundle = null;
@@ -98,6 +108,12 @@ public class Namespace implements INamespace {
 			NAMESPACE_INT_MAP.put(namespaces[convertNumberCode(CATEGORY_NAMESPACE_KEY)], CATEGORY_NAMESPACE_KEY);
 			NAMESPACE_INT_MAP.put(namespaces[convertNumberCode(CATEGORY_TALK_NAMESPACE_KEY)], CATEGORY_TALK_NAMESPACE_KEY);
 
+		}
+		for (Entry<String, String> entry : TALKSPACE_MAP.entrySet()) {
+			String value = entry.getValue();
+			if (value != null) {
+				CONTENTSPACE_MAP.put(entry.getValue(), entry.getKey());
+			}
 		}
 	}
 
@@ -501,5 +517,9 @@ public class Namespace implements INamespace {
 
 	public String getTalkspace(String namespace) {
 		return TALKSPACE_MAP.get(namespace);
+	}
+
+	public String getContentspace(String talkNamespace) {
+		return CONTENTSPACE_MAP.get(talkNamespace);
 	}
 }
