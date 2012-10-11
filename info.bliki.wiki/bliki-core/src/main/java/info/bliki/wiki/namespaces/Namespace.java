@@ -22,8 +22,15 @@ public class Namespace implements INamespace {
 	protected final String[] fNamespaces2 = { "Media", "Special", "", "Talk", "User", "User_talk", "Meta", "Meta_talk", "File",
 			"File_talk", "MediaWiki", "MediaWiki_talk", "Template", "Template_talk", "Help", "Help_talk", "Category", "Category_talk" };
 
+	/**
+	 * 
+	 * Maps lower-case namespace names to the original names.
+	 */
 	public final Map<String, String> NAMESPACE_MAP = new HashMap<String, String>();
 
+	/**
+	 * Maps namespaces case-insensitively to their according talkspaces.
+	 */
 	public final Map<String, String> TALKSPACE_MAP = new TreeMap<String, String>(String.CASE_INSENSITIVE_ORDER);
 
 	protected ResourceBundle fResourceBundle = null;
@@ -417,165 +424,50 @@ public class Namespace implements INamespace {
 		return fNamespaces2[4];
 	}
 
+	/**
+	 * Extracts the two namespace strings from the resource bundle into the
+	 * {@link #fNamespaces1} and {@link #fNamespaces2} arrays.
+	 * 
+	 * @param ns1Id
+	 *          the first id in the bundle, e.g. {@link Messages#WIKI_API_MEDIA1}
+	 * @param ns2Id
+	 *          the first id in the bundle, e.g. {@link Messages#WIKI_API_MEDIA2}
+	 * @param arrayPos
+	 *          the position in the arrays
+	 */
+	private void extractFromResource(String ns1Id, String ns2Id, int arrayPos) {
+		String ns1 = Messages.getString(fResourceBundle, ns1Id);
+		if (ns1 != null) {
+			fNamespaces1[arrayPos] = ns1;
+			String ns2 = Messages.getString(fResourceBundle, ns2Id);
+			if (ns2 != null) {
+				fNamespaces2[arrayPos] = ns2;
+			}
+		}
+	}
+
 	private void initializeNamespaces() {
 		if (fResourceBundle == null) {
 			return;
 		}
-		String ns1, ns2;
 
-		ns1 = Messages.getString(fResourceBundle, Messages.WIKI_API_MEDIA1);
-		if (ns1 != null) {
-			fNamespaces1[0] = ns1;
-			ns2 = Messages.getString(fResourceBundle, Messages.WIKI_API_MEDIA2);
-			if (ns2 != null) {
-				fNamespaces2[0] = ns2;
-			}
-		}
-
-		ns1 = Messages.getString(fResourceBundle, Messages.WIKI_API_SPECIAL1);
-		if (ns1 != null) {
-			fNamespaces1[1] = ns1;
-			ns2 = Messages.getString(fResourceBundle, Messages.WIKI_API_SPECIAL2);
-			if (ns2 != null) {
-				fNamespaces2[1] = ns2;
-			}
-		}
-
-		ns1 = Messages.getString(fResourceBundle, Messages.WIKI_API_TALK1);
-		if (ns1 != null) {
-			fNamespaces1[3] = ns1;
-			ns2 = Messages.getString(fResourceBundle, Messages.WIKI_API_TALK2);
-			if (ns2 != null) {
-				fNamespaces2[3] = ns2;
-			}
-		}
-
-		ns1 = Messages.getString(fResourceBundle, Messages.WIKI_API_USER1);
-		if (ns1 != null) {
-			fNamespaces1[4] = ns1;
-			ns2 = Messages.getString(fResourceBundle, Messages.WIKI_API_USER2);
-			if (ns2 != null) {
-				fNamespaces2[4] = ns2;
-			}
-		}
-
-		ns1 = Messages.getString(fResourceBundle, Messages.WIKI_API_USERTALK1);
-		if (ns1 != null) {
-			fNamespaces1[5] = ns1;
-			ns2 = Messages.getString(fResourceBundle, Messages.WIKI_API_USERTALK2);
-			if (ns2 != null) {
-				fNamespaces2[5] = ns2;
-			}
-		}
-
-		ns1 = Messages.getString(fResourceBundle, Messages.WIKI_API_META1);
-		if (ns1 != null) {
-			fNamespaces1[6] = ns1;
-			ns2 = Messages.getString(fResourceBundle, Messages.WIKI_API_META2);
-			if (ns2 != null) {
-				fNamespaces2[6] = ns2;
-			}
-		}
-
-		ns1 = Messages.getString(fResourceBundle, Messages.WIKI_API_METATALK1);
-		if (ns1 != null) {
-			fNamespaces1[7] = ns1;
-			ns2 = Messages.getString(fResourceBundle, Messages.WIKI_API_METATALK2);
-			if (ns2 != null) {
-				fNamespaces2[7] = ns2;
-			}
-		}
-
-		ns1 = Messages.getString(fResourceBundle, Messages.WIKI_API_IMAGE1);
-		if (ns1 != null) {
-			fNamespaces1[8] = ns1;
-			ns2 = Messages.getString(fResourceBundle, Messages.WIKI_API_IMAGE2);
-			if (ns2 != null) {
-				fNamespaces2[8] = ns2;
-			}
-		}
-
-		ns1 = Messages.getString(fResourceBundle, Messages.WIKI_API_IMAGETALK1);
-		if (ns1 != null) {
-			fNamespaces1[9] = ns1;
-			ns2 = Messages.getString(fResourceBundle, Messages.WIKI_API_IMAGETALK2);
-			if (ns2 != null) {
-				fNamespaces2[9] = ns2;
-			}
-		}
-
-		ns1 = Messages.getString(fResourceBundle, Messages.WIKI_API_MEDIAWIKI1);
-		if (ns1 != null) {
-			fNamespaces1[10] = ns1;
-			ns2 = Messages.getString(fResourceBundle, Messages.WIKI_API_MEDIAWIKI2);
-			if (ns2 != null) {
-				fNamespaces2[10] = ns2;
-			}
-		}
-
-		ns1 = Messages.getString(fResourceBundle, Messages.WIKI_API_MEDIAWIKITALK1);
-		if (ns1 != null) {
-			fNamespaces1[11] = ns1;
-			ns2 = Messages.getString(fResourceBundle, Messages.WIKI_API_MEDIAWIKITALK2);
-			if (ns2 != null) {
-				fNamespaces2[11] = ns2;
-			}
-		}
-
-		ns1 = Messages.getString(fResourceBundle, Messages.WIKI_API_TEMPLATE1);
-		if (ns1 != null) {
-			fNamespaces1[12] = ns1;
-			ns2 = Messages.getString(fResourceBundle, Messages.WIKI_API_TEMPLATE2);
-			if (ns2 != null) {
-				fNamespaces2[12] = ns2;
-			}
-		}
-
-		ns1 = Messages.getString(fResourceBundle, Messages.WIKI_API_TEMPLATETALK1);
-		if (ns1 != null) {
-			fNamespaces1[13] = ns1;
-			ns2 = Messages.getString(fResourceBundle, Messages.WIKI_API_TEMPLATETALK2);
-			if (ns2 != null) {
-				fNamespaces2[13] = ns2;
-			}
-		}
-
-		ns1 = Messages.getString(fResourceBundle, Messages.WIKI_API_HELP1);
-		if (ns1 != null) {
-			fNamespaces1[14] = ns1;
-			ns2 = Messages.getString(fResourceBundle, Messages.WIKI_API_HELP2);
-			if (ns2 != null) {
-				fNamespaces2[14] = ns2;
-			}
-		}
-
-		ns1 = Messages.getString(fResourceBundle, Messages.WIKI_API_HELPTALK1);
-		if (ns1 != null) {
-			fNamespaces1[15] = ns1;
-			ns2 = Messages.getString(fResourceBundle, Messages.WIKI_API_HELPTALK2);
-			if (ns2 != null) {
-				fNamespaces2[15] = ns2;
-			}
-		}
-
-		ns1 = Messages.getString(fResourceBundle, Messages.WIKI_API_CATEGORY1);
-		if (ns1 != null) {
-			fNamespaces1[16] = ns1;
-			ns2 = Messages.getString(fResourceBundle, Messages.WIKI_API_CATEGORY2);
-			if (ns2 != null) {
-				fNamespaces2[16] = ns2;
-			}
-		}
-
-		ns1 = Messages.getString(fResourceBundle, Messages.WIKI_API_CATEGORYTALK1);
-		if (ns1 != null) {
-			fNamespaces1[17] = ns1;
-			ns2 = Messages.getString(fResourceBundle, Messages.WIKI_API_CATEGORYTALK2);
-			if (ns2 != null) {
-				fNamespaces2[17] = ns2;
-			}
-		}
-
+		extractFromResource(Messages.WIKI_API_MEDIA1, Messages.WIKI_API_MEDIA2, 0);
+		extractFromResource(Messages.WIKI_API_SPECIAL1, Messages.WIKI_API_SPECIAL2, 1);
+		extractFromResource(Messages.WIKI_API_TALK1, Messages.WIKI_API_TALK2, 3);
+		extractFromResource(Messages.WIKI_API_USER1, Messages.WIKI_API_USER2, 4);
+		extractFromResource(Messages.WIKI_API_USERTALK1, Messages.WIKI_API_USERTALK2, 5);
+		extractFromResource(Messages.WIKI_API_META1, Messages.WIKI_API_META2, 6);
+		extractFromResource(Messages.WIKI_API_METATALK1, Messages.WIKI_API_METATALK2, 7);
+		extractFromResource(Messages.WIKI_API_IMAGE1, Messages.WIKI_API_IMAGE2, 8);
+		extractFromResource(Messages.WIKI_API_IMAGETALK1, Messages.WIKI_API_IMAGETALK2, 9);
+		extractFromResource(Messages.WIKI_API_MEDIAWIKI1, Messages.WIKI_API_MEDIAWIKI2, 10);
+		extractFromResource(Messages.WIKI_API_MEDIAWIKITALK1, Messages.WIKI_API_MEDIAWIKITALK2, 11);
+		extractFromResource(Messages.WIKI_API_TEMPLATE1, Messages.WIKI_API_TEMPLATE2, 12);
+		extractFromResource(Messages.WIKI_API_TEMPLATETALK1, Messages.WIKI_API_TEMPLATETALK2, 13);
+		extractFromResource(Messages.WIKI_API_HELP1, Messages.WIKI_API_HELP2, 14);
+		extractFromResource(Messages.WIKI_API_HELPTALK1, Messages.WIKI_API_HELPTALK2, 15);
+		extractFromResource(Messages.WIKI_API_CATEGORY1, Messages.WIKI_API_CATEGORY2, 16);
+		extractFromResource(Messages.WIKI_API_CATEGORYTALK1, Messages.WIKI_API_CATEGORYTALK2, 17);
 	}
 
 	public String getTalkspace(String namespace) {
