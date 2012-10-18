@@ -429,7 +429,10 @@ public class MagicWord {
 				return ns.getTalk() + ":" + parameter;
 			}
 			if (pageName != null) {
-				return ns.getTalk() + pageName;
+				String talkspace = ns.getTalkspace(model.getNamespaceName());
+				if (talkspace != null) {
+					return talkspace + ":" + pageName;
+				}
 			}
 		}
 

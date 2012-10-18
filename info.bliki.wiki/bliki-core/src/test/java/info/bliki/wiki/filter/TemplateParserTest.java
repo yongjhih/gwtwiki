@@ -898,6 +898,18 @@ public class TemplateParserTest extends FilterTestSupport {
 		assertEquals("test [[Help_talk:Sandbox]] test123", wikiModel.parseTemplates("test [[{{TALKPAGENAME:\nHelp:Sandbox}}]] test123"));
 	}
 
+	public void testMagicTALKPAGENAME04() {
+		wikiModel.setPageName("MyPage");
+		wikiModel.setNamespaceName("");
+		assertEquals("test [[Talk:MyPage]] test123", wikiModel.parseTemplates("test [[{{TALKPAGENAME}}]] test123"));
+	}
+
+	public void testMagicTALKPAGENAME05() {
+		wikiModel.setPageName("MyPage");
+		wikiModel.setNamespaceName("category");
+		assertEquals("test [[Category_talk:MyPage]] test123", wikiModel.parseTemplates("test [[{{TALKPAGENAME}}]] test123"));
+	}
+
 	// public void testRef001() {
 	// assertEquals(
 	// "",
