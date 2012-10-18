@@ -42,7 +42,7 @@ public class NS extends AbstractTemplateFunction {
 				if (value != null) {
 					return value;
 				}
-				return "[[:Template:Ns:" + arg0 + "]]";
+				return "[[:" + model.getTemplateNamespace() + ":Ns:" + arg0 + "]]";
 			}
 		}
 		return null;
