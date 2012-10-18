@@ -214,14 +214,18 @@ public class WikiModel extends AbstractWikiModel {
 	}
 
 	/**
-	 * {@inheritDoc}
+	 * Gets the names of all included pages in the template namespace.
+	 * 
+	 * @return page names without the template namespace prefix
 	 */
 	public Set<String> getTemplates() {
 		return templates;
 	}
 
 	/**
-	 * {@inheritDoc}
+	 * Gets the names of all included pages outside the template namespace.
+	 * 
+	 * @return page names including their namespace prefix
 	 */
 	public Set<String> getIncludes() {
 		return includes;

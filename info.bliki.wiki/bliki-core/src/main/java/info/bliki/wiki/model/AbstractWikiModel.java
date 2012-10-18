@@ -782,9 +782,6 @@ public abstract class AbstractWikiModel implements IWikiModel, IContext {
 		}
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	public TagNode appendToCAnchor(String anchor) {
 		TagNode aTagNode = new TagNode("a");
 		aTagNode.addAttribute("name", anchor, true);

@@ -184,7 +184,7 @@ public class StringToTime extends Date {
 	/** Date/Time string parsed */
 	private Object dateTimeString;
 
-	/** The format to use in {@link #toString()) */
+	/** The format to use in {@link #toString()} */
 	private String simpleDateFormat;
 
 	/**
