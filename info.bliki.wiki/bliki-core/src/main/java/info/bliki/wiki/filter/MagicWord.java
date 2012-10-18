@@ -380,12 +380,13 @@ public class MagicWord {
 		}
 
 		if (name.equals(MAGIC_PAGE_NAME)) {
-			String temp = model.getPageName();
-			if (temp != null) {
-				if (parameter.length() > 0) {
-					return parameter;
+			if (parameter.length() > 0) {
+				return parameter;
+			} else {
+				String temp = model.getPageName();
+				if (temp != null) {
+					return temp;
 				}
-				return temp;
 			}
 		} else if (name.equals(MAGIC_NAMESPACE)) {
 			if (parameter.length() > 0) {
@@ -395,38 +396,40 @@ public class MagicWord {
 					return model.getNamespace().getNamespace(subStr);
 				}
 				return "";
-			}
-			String temp = model.getNamespaceName();
-			if (temp != null) {
-				return temp;
+			} else {
+				String temp = model.getNamespaceName();
+				if (temp != null) {
+					return temp;
+				}
 			}
 		} else if (name.equals(MAGIC_FULL_PAGE_NAME)) {
-			String temp = model.getPageName();
-			if (temp != null) {
-				if (parameter.length() > 0) {
-					return parameter;
+			if (parameter.length() > 0) {
+				return parameter;
+			} else {
+				String temp = model.getPageName();
+				if (temp != null) {
+					return temp;
 				}
-				return temp;
 			}
 		} else if (name.equals(MAGIC_TALK_PAGE_NAME)) {
-			String temp = model.getPageName();
-			if (temp != null) {
-				INamespace ns = model.getNamespace();
-				if (parameter.length() > 0) {
-					String namespace = parameter;
-					int index = namespace.indexOf(':');
-					if (index > 0) {
-						// {{TALKPAGENAME:Template:Sandbox}}
-						String rest = namespace.substring(index + 1);
-						namespace = namespace.substring(0, index);
-						String talkspace = ns.getTalkspace(namespace);
-						if (talkspace != null) {
-							return talkspace + ":" + rest;
-						}
+			String pageName = model.getPageName();
+			INamespace ns = model.getNamespace();
+			if (parameter.length() > 0) {
+				String namespace = parameter;
+				int index = namespace.indexOf(':');
+				if (index > 0) {
+					// {{TALKPAGENAME:Template:Sandbox}}
+					String rest = namespace.substring(index + 1);
+					namespace = namespace.substring(0, index);
+					String talkspace = ns.getTalkspace(namespace);
+					if (talkspace != null) {
+						return talkspace + ":" + rest;
 					}
-					return ns.getTalk() + ":" + parameter;
 				}
-				return ns.getTalk() + temp;
+				return ns.getTalk() + ":" + parameter;
+			}
+			if (pageName != null) {
+				return ns.getTalk() + pageName;
 			}
 		}
 
