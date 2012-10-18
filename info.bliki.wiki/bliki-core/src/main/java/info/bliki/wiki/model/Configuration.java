@@ -40,6 +40,7 @@ import info.bliki.wiki.template.LC;
 import info.bliki.wiki.template.LCFirst;
 import info.bliki.wiki.template.Localurl;
 import info.bliki.wiki.template.NS;
+import info.bliki.wiki.template.NSE;
 import info.bliki.wiki.template.Padleft;
 import info.bliki.wiki.template.Padright;
 import info.bliki.wiki.template.Plural;
@@ -246,6 +247,7 @@ public class Configuration implements IConfiguration {
 		TEMPLATE_FUNCTION_MAP.put("formatnum", Formatnum.CONST);
 		TEMPLATE_FUNCTION_MAP.put("fullurl", Fullurl.CONST);
 		TEMPLATE_FUNCTION_MAP.put("ns", NS.CONST);
+		TEMPLATE_FUNCTION_MAP.put("nse", NSE.CONST);
 		TEMPLATE_FUNCTION_MAP.put("urlencode", URLEncode.CONST);
 		TEMPLATE_FUNCTION_MAP.put("lc", LC.CONST);
 		TEMPLATE_FUNCTION_MAP.put("uc", UC.CONST);

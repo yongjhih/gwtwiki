@@ -9,6 +9,14 @@ import java.util.List;
  * A template parser function for <code>{{ns: ... }}</code> <i>namespace/i>
  * syntax
  * 
+ * From <a href="https://www.mediawiki.org/wiki/Help:Magic_words#Namespaces_2">
+ * MediaWiki</a>:
+ * 
+ * {{ns:}} returns the current localized name for the namespace with that index,
+ * canonical name, or local alias. Thus {{ns:6}}, {{ns:File}}, and {{ns:Image}}
+ * (an old name for the File namespace) all return "File". On a wiki where the
+ * content language was French, {{ns:Fichier}} would also be valid, but
+ * {{ns:Datei}} (the localisation of "File" into German) would not.
  */
 public class NS extends AbstractTemplateFunction {
 	public final static ITemplateFunction CONST = new NS();

@@ -756,12 +756,22 @@ public class TemplateParserTest extends FilterTestSupport {
 	}
 
 	public void testNS001() {
+		// TODO: these namespaces should actually have spaces
 		assertEquals("User_talk", wikiModel.parseTemplates("{{ns:3}}", false));
 		assertEquals("Help_talk", wikiModel.parseTemplates("{{ns:{{ns:12}}_talk}}", false));
 		assertEquals("MediaWiki_talk", wikiModel.parseTemplates("{{ns:{{ns:8}}_talk}}", false));
 		assertEquals("MediaWiki_talk", wikiModel.parseTemplates("{{ns:{{ns:8}} talk}}", false));
 		assertEquals("MediaWiki_talk", wikiModel.parseTemplates("{{ns:{{ns:8}} talk  }}", false));
 		assertEquals("[[:Template:Ns:MediaWikitalk]]", wikiModel.parseTemplates("{{ns:{{ns:8}}talk}}", false));
+	}
+
+	public void testNSE001() {
+		assertEquals("User_talk", wikiModel.parseTemplates("{{nse:3}}", false));
+		assertEquals("Help_talk", wikiModel.parseTemplates("{{nse:{{nse:12}}_talk}}", false));
+		assertEquals("MediaWiki_talk", wikiModel.parseTemplates("{{nse:{{nse:8}}_talk}}", false));
+		assertEquals("MediaWiki_talk", wikiModel.parseTemplates("{{nse:{{nse:8}} talk}}", false));
+		assertEquals("MediaWiki_talk", wikiModel.parseTemplates("{{nse:{{nse:8}} talk  }}", false));
+		assertEquals("[[:Template:Ns:MediaWikitalk]]", wikiModel.parseTemplates("{{nse:{{nse:8}}talk}}", false));
 	}
 
 	public void testNAMESPACE001() {
