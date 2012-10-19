@@ -24,8 +24,8 @@ public class Namespace implements INamespace {
 			String.CASE_INSENSITIVE_ORDER);
 
 	/**
-	 * Fast access to each {@link NamespaceValue} via an integer index similar
-	 * to its number code.
+	 * Fast access to each {@link NamespaceValue} via an integer index similar to
+	 * its number code.
 	 * 
 	 * @see Namespace#numberCodeToInt(int)
 	 * @see Namespace#intToNumberCode(int)
@@ -67,7 +67,8 @@ public class Namespace implements INamespace {
 	/**
 	 * The &quot;File talk&quot; namespace for the current language.
 	 */
-	public final NamespaceValue IMAGE_TALK = new NamespaceValue(NamespaceCode.FILE_TALK_NAMESPACE_KEY, true, "File_talk", "Image_talk");
+	public final NamespaceValue IMAGE_TALK = new NamespaceValue(NamespaceCode.FILE_TALK_NAMESPACE_KEY, true, "File_talk",
+			"Image_talk");
 	/**
 	 * The &quot;File&quot; namespace for the current language.
 	 */
@@ -75,7 +76,8 @@ public class Namespace implements INamespace {
 	/**
 	 * The &quot;MediaWiki talk&quot; namespace for the current language.
 	 */
-	public final NamespaceValue MEDIAWIKI_TALK = new NamespaceValue(NamespaceCode.MEDIAWIKI_TALK_NAMESPACE_KEY, true, "MediaWiki_talk");
+	public final NamespaceValue MEDIAWIKI_TALK = new NamespaceValue(NamespaceCode.MEDIAWIKI_TALK_NAMESPACE_KEY, true,
+			"MediaWiki_talk");
 	/**
 	 * The &quot;MediaWiki&quot; namespace for the current language.
 	 */
@@ -120,19 +122,18 @@ public class Namespace implements INamespace {
 		 * Constructor for talk namespaces.
 		 * 
 		 * @param code
-		 *            the (internal) integer code of this namespace
+		 *          the (internal) integer code of this namespace
 		 * @param isTalkspace
-		 *            must be <tt>true</tt> (needed to distinguish this
-		 *            constructor from the other in case of <tt>null</tt> talk
-		 *            spaces)
+		 *          must be <tt>true</tt> (needed to distinguish this constructor
+		 *          from the other in case of <tt>null</tt> talk spaces)
 		 * @param aliases
-		 *            all aliases identifying this namespace
+		 *          all aliases identifying this namespace
 		 */
 		private NamespaceValue(NamespaceCode code, boolean isTalkspace, String... aliases) {
-			assert(isTalkspace);
+			assert (isTalkspace);
 			this.code = code;
 			int arrayPos = numberCodeToInt(code.code);
-			assert(INT_TO_NAMESPACE[arrayPos] == null);
+			assert (INT_TO_NAMESPACE[arrayPos] == null);
 			INT_TO_NAMESPACE[arrayPos] = this;
 			this.talkspace = this;
 			// contentspace is set by the content NamespaceValue
@@ -143,36 +144,41 @@ public class Namespace implements INamespace {
 		 * Constructor for content namespaces.
 		 * 
 		 * @param code
-		 *            the (internal) integer code of this namespace
+		 *          the (internal) integer code of this namespace
 		 * @param talkspace
-		 *            the associated talk namespace (must not be <tt>null</tt>)
+		 *          the associated talk namespace (must not be <tt>null</tt>)
 		 * @param aliases
-		 *            all aliases identifying this namespace
+		 *          all aliases identifying this namespace
 		 */
 		private NamespaceValue(NamespaceCode code, NamespaceValue talkspace, String... aliases) {
 			this.code = code;
 			int arrayPos = numberCodeToInt(code.code);
-			assert(INT_TO_NAMESPACE[arrayPos] == null);
+			assert (INT_TO_NAMESPACE[arrayPos] == null);
 			INT_TO_NAMESPACE[arrayPos] = this;
 			this.talkspace = talkspace;
 			// mapping of talkspace to content space is 1:1 if a talkspace exists
 			if (this.talkspace != null) {
-				assert(this.talkspace.contentspace == null);
+				assert (this.talkspace.contentspace == null);
 				this.talkspace.contentspace = this;
 			}
 			this.contentspace = this;
 			setTexts(aliases);
 		}
 
-		/* (non-Javadoc)
+		/*
+		 * (non-Javadoc)
+		 * 
 		 * @see info.bliki.wiki.namespaces.INamespaceValue#getCode()
 		 */
 		public NamespaceCode getCode() {
 			return code;
 		}
 
-		/* (non-Javadoc)
-		 * @see info.bliki.wiki.namespaces.INamespaceValue#setTexts(java.lang.String)
+		/*
+		 * (non-Javadoc)
+		 * 
+		 * @see
+		 * info.bliki.wiki.namespaces.INamespaceValue#setTexts(java.lang.String)
 		 */
 		public void setTexts(String... aliases) {
 			assert (aliases.length >= 1);
@@ -188,8 +194,11 @@ public class Namespace implements INamespace {
 			}
 		}
 
-		/* (non-Javadoc)
-		 * @see info.bliki.wiki.namespaces.INamespaceValue#addAlias(java.lang.String)
+		/*
+		 * (non-Javadoc)
+		 * 
+		 * @see
+		 * info.bliki.wiki.namespaces.INamespaceValue#addAlias(java.lang.String)
 		 */
 		public void addAlias(String alias) {
 			texts.add(alias);
@@ -198,54 +207,70 @@ public class Namespace implements INamespace {
 			TEXT_TO_NAMESPACE_MAP.put(alias.replace('_', ' '), this);
 		}
 
-		/* (non-Javadoc)
+		/*
+		 * (non-Javadoc)
+		 * 
 		 * @see info.bliki.wiki.namespaces.INamespaceValue#getPrimaryText()
 		 */
 		public String getPrimaryText() {
 			return texts.get(0);
 		}
 
-		/* (non-Javadoc)
+		/*
+		 * (non-Javadoc)
+		 * 
 		 * @see info.bliki.wiki.namespaces.INamespaceValue#getTexts()
 		 */
 		public List<String> getTexts() {
 			return texts;
 		}
 
-		/* (non-Javadoc)
+		/*
+		 * (non-Javadoc)
+		 * 
 		 * @see info.bliki.wiki.namespaces.INamespaceValue#getTalkspace()
 		 */
 		public NamespaceValue getTalkspace() {
 			return talkspace;
 		}
 
-		/* (non-Javadoc)
+		/*
+		 * (non-Javadoc)
+		 * 
 		 * @see info.bliki.wiki.namespaces.INamespaceValue#getContentspace()
 		 */
 		public NamespaceValue getContentspace() {
 			return contentspace;
 		}
 
-		/* (non-Javadoc)
+		/*
+		 * (non-Javadoc)
+		 * 
 		 * @see info.bliki.wiki.namespaces.INamespaceValue#makeFullPagename(String)
 		 */
 		public String makeFullPagename(String pageName) {
 			String primaryText = getPrimaryText();
-			if (primaryText.isEmpty()) {
+			if (primaryText == null || primaryText.length() == 0) {
 				return pageName;
 			} else {
 				return primaryText + ":" + pageName;
 			}
 		}
 
-		/* (non-Javadoc)
-		 * @see info.bliki.wiki.namespaces.INamespace.INamespaceValue#isType(info.bliki.wiki.namespaces.INamespace.NamespaceCode)
+		/*
+		 * (non-Javadoc)
+		 * 
+		 * @see
+		 * info.bliki.wiki.namespaces.INamespace.INamespaceValue#isType(info.bliki
+		 * .wiki.namespaces.INamespace.NamespaceCode)
 		 */
 		public boolean isType(NamespaceCode code) {
 			return this.code == code;
 		}
 
-		/* (non-Javadoc)
+		/*
+		 * (non-Javadoc)
+		 * 
 		 * @see java.lang.Object#toString()
 		 */
 		@Override
@@ -276,6 +301,7 @@ public class Namespace implements INamespace {
 		}
 		return false;
 	}
+
 	public boolean isNamespace(INamespaceValue namespace, NamespaceCode code) {
 		if (namespace == null) {
 			return false;
@@ -342,7 +368,7 @@ public class Namespace implements INamespace {
 	 */
 	private void extractFromResource(String ns1Id, String ns2Id, NamespaceCode code) {
 		NamespaceValue namespace = getNamespaceByNumber(code);
-		assert(namespace != null) : "undefined namespace code: " + code;
+		assert (namespace != null) : "undefined namespace code: " + code;
 		String ns1 = Messages.getString(fResourceBundle, ns1Id);
 		if (ns1 != null) {
 			String ns2 = Messages.getString(fResourceBundle, ns2Id);
@@ -369,7 +395,8 @@ public class Namespace implements INamespace {
 		extractFromResource(Messages.WIKI_API_IMAGE1, Messages.WIKI_API_IMAGE2, NamespaceCode.FILE_NAMESPACE_KEY);
 		extractFromResource(Messages.WIKI_API_IMAGETALK1, Messages.WIKI_API_IMAGETALK2, NamespaceCode.FILE_TALK_NAMESPACE_KEY);
 		extractFromResource(Messages.WIKI_API_MEDIAWIKI1, Messages.WIKI_API_MEDIAWIKI2, NamespaceCode.MEDIAWIKI_NAMESPACE_KEY);
-		extractFromResource(Messages.WIKI_API_MEDIAWIKITALK1, Messages.WIKI_API_MEDIAWIKITALK2, NamespaceCode.MEDIAWIKI_TALK_NAMESPACE_KEY);
+		extractFromResource(Messages.WIKI_API_MEDIAWIKITALK1, Messages.WIKI_API_MEDIAWIKITALK2,
+				NamespaceCode.MEDIAWIKI_TALK_NAMESPACE_KEY);
 		extractFromResource(Messages.WIKI_API_TEMPLATE1, Messages.WIKI_API_TEMPLATE2, NamespaceCode.TEMPLATE_NAMESPACE_KEY);
 		extractFromResource(Messages.WIKI_API_TEMPLATETALK1, Messages.WIKI_API_TEMPLATETALK2, NamespaceCode.TEMPLATE_TALK_NAMESPACE_KEY);
 		extractFromResource(Messages.WIKI_API_HELP1, Messages.WIKI_API_HELP2, NamespaceCode.HELP_NAMESPACE_KEY);
