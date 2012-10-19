@@ -3,9 +3,11 @@ package info.bliki.wiki.impl;
 import info.bliki.api.Page;
 import info.bliki.api.User;
 import info.bliki.wiki.filter.WikipediaParser;
+import info.bliki.wiki.filter.AbstractParser.ParsedPageName;
 import info.bliki.wiki.model.Configuration;
 import info.bliki.wiki.model.ImageFormat;
 import info.bliki.wiki.model.WikiModel;
+import info.bliki.wiki.namespaces.INamespace.NamespaceCode;
 import info.bliki.wiki.tags.WPATag;
 
 import java.util.*;
@@ -22,15 +24,14 @@ public class APIWikiModelInMemory extends WikiModel
     }
 
     @Override
-    public String getRawWikiContent(String namespace, String articleName, Map<String, String> templateParameters) {
-        final String result = super.getRawWikiContent(namespace, articleName, templateParameters);
+    public String getRawWikiContent(ParsedPageName parsedPagename, Map<String, String> templateParameters) {
+        final String result = super.getRawWikiContent(parsedPagename, templateParameters);
         if(result != null) {
             return result;
         }
 
-        final String templateNamespace = getTemplateNamespace() + ":";
-        if(namespace.equals(getTemplateNamespace())) {
-            final String contentKey = templateNamespace + articleName;
+        if (parsedPagename.namespace.isType(NamespaceCode.TEMPLATE_NAMESPACE_KEY)) {
+            final String contentKey = parsedPagename.namespace.makeFullPagename(parsedPagename.pagename);
             String content = contentCache.get(contentKey);
             if(content == null) {
                 final String[] pageTitles = new String[]{contentKey};
@@ -75,10 +76,11 @@ public class APIWikiModelInMemory extends WikiModel
         super.appendInternalImageLink(normalizeImageName(hrefImageLink), normalizeImageName(srcImageLink), imageFormat);
     }
 
-	@Override
-	public boolean isImageNamespace(String namespace) {
-		return (super.isImageNamespace(namespace) || namespace.equalsIgnoreCase("File"));
-	}
+    // TODO: add "File" as a language-independent alias for the File namespace
+//	@Override
+//	public boolean isImageNamespace(String namespace) {
+//		return (super.isImageNamespace(namespace) || namespace.equalsIgnoreCase("File"));
+//	}
 	
     /**
      * TODO Why is the size and ".png" appended to the original image name/link?! This bad method is only required to revert this strange modification...
