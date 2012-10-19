@@ -1014,4 +1014,17 @@ public interface IWikiModel extends IConfiguration {
 	 * 
 	 */
 	public void tearDown();
+
+	/**
+	 * Gets the magic word object for the given string.
+	 * 
+	 * @param name
+	 *            the (potential) magic word
+	 * 
+	 * @return a magic word object (e.g.
+	 *         {@link info.bliki.wiki.filter.MagicWord.MagicWordE} in case
+	 *         {@link info.bliki.wiki.filter.MagicWord} is used) or
+	 *         <tt>null</tt> if this is no valid magic word
+	 */
+	public abstract Object getMagicWord(String name);
 }

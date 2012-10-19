@@ -12,6 +12,7 @@ import info.bliki.wiki.filter.Encoder;
 import info.bliki.wiki.filter.HTMLConverter;
 import info.bliki.wiki.filter.ITextConverter;
 import info.bliki.wiki.filter.MagicWord;
+import info.bliki.wiki.filter.MagicWord.MagicWordE;
 import info.bliki.wiki.filter.PDFConverter;
 import info.bliki.wiki.filter.SectionHeader;
 import info.bliki.wiki.filter.TemplateParser;
@@ -1046,7 +1047,11 @@ public abstract class AbstractWikiModel implements IWikiModel, IContext {
 	public String getPageName() {
 		return fPageTitle;
 	}
-
+	
+	public MagicWordE getMagicWord(String name) {
+		return MagicWord.getMagicWord(name);
+	}
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -1056,20 +1061,8 @@ public abstract class AbstractWikiModel implements IWikiModel, IContext {
 		if (Configuration.RAW_CONTENT) {
 			System.out.println("AbstractWikiModel raw: " + " " + namespace + " " + templateName);
 		}
-		if (namespace.isType(NamespaceCode.TEMPLATE_NAMESPACE_KEY)) {
-			String magicWord = templateName;
-			String parameter = "";
-			int index = magicWord.indexOf(':');
-			if (index > 0) {
-				parameter = magicWord.substring(index + 1);
-				if (parameter.length() != 0) {
-					parameter = AbstractTemplateFunction.parseTrim(parameter, this);
-				}
-				magicWord = magicWord.substring(0, index);
-			}
-			if (MagicWord.isMagicWord(magicWord)) {
-				return MagicWord.processMagicWord(magicWord, parameter, this);
-			}
+		if (parsedPagename.magicWord != null) {
+			return MagicWord.processMagicWord((MagicWordE) parsedPagename.magicWord, parsedPagename.magicWordParameter, this);
 		}
 		return null;
 	}

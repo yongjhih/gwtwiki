@@ -7,12 +7,13 @@ import info.bliki.wiki.model.Configuration;
 import info.bliki.wiki.model.IWikiModel;
 import info.bliki.wiki.namespaces.INamespace;
 import info.bliki.wiki.namespaces.INamespace.INamespaceValue;
+import info.bliki.wiki.namespaces.INamespace.NamespaceCode;
 import info.bliki.wiki.tags.HTMLTag;
 import info.bliki.wiki.tags.WPBoldItalicTag;
 import info.bliki.wiki.tags.WPTag;
 import info.bliki.wiki.tags.util.TagStack;
+import info.bliki.wiki.template.AbstractTemplateFunction;
 
-import java.io.IOException;
 import java.util.Map;
 
 public abstract class AbstractParser extends WikipediaScanner {
@@ -753,6 +754,10 @@ public abstract class AbstractParser extends WikipediaScanner {
 	/**
 	 * Represents the result of parsing a (potential) page name.
 	 * 
+	 * Note that {@link #magicWord} takes precedence over {@link #pagename},
+	 * i.e. if {@link #magicWord} if not <tt>null</tt>, the parsed name is a
+	 * magic word!
+	 * 
 	 * @author Nico Kruber, kruber@zib.de
 	 */
 	public static class ParsedPageName {
@@ -768,9 +773,23 @@ public abstract class AbstractParser extends WikipediaScanner {
 		 * Whether this pagename was successfully parsed or not.
 		 */
 		public final boolean valid;
-		
 		/**
-		 * Creates a new parsed page name object.
+		 * If the pagename was a magic word it will be this, otherwise
+		 * <tt>null</tt>.
+		 * 
+		 * The object type depends on the concrete
+		 * {@link info.bliki.wiki.filter.MagicWord} implementation used by the
+		 * {@link IWikiModel}, e.g.
+		 * {@link info.bliki.wiki.filter.MagicWord.MagicWordE} in case
+		 * {@link info.bliki.wiki.filter.MagicWord} is used.
+		 */
+		public final Object magicWord;
+		/**
+		 * Parameters of the magic word.
+		 */
+		public final String magicWordParameter;
+		/**
+		 * Creates a new parsed page name object (no magic word).
 		 * 
 		 * @param namespace
 		 *            the namespace the page is in
@@ -783,6 +802,31 @@ public abstract class AbstractParser extends WikipediaScanner {
 			this.namespace = namespace;
 			this.pagename = pagename;
 			this.valid = valid;
+			this.magicWord = null;
+			this.magicWordParameter = null;
+		}
+		
+		/**
+		 * Creates a new parsed page name object.
+		 * 
+		 * @param namespace
+		 *            the namespace the page is in
+		 * @param pagename
+		 *            the name of the page (without the namespace)
+		 * @param magicWord
+		 *            the magic word object if the pagename was a magic word,
+		 *            otherwise <tt>null</tt>
+		 * @param magicWordParameter
+		 *            parameters of the magic word
+		 * @param valid
+		 *            whether this pagename was successfully parsed or not
+		 */
+		public ParsedPageName(INamespaceValue namespace, String pagename, Object magicWord, String magicWordParameter, boolean valid) {
+			this.namespace = namespace;
+			this.pagename = pagename;
+			this.valid = valid;
+			this.magicWord = magicWord;
+			this.magicWordParameter = magicWordParameter;
 		}
 	}
 	
@@ -801,7 +845,12 @@ public abstract class AbstractParser extends WikipediaScanner {
 	 * @return a parsed page name
 	 */
 	public static ParsedPageName parsePageName(IWikiModel wikiModel, String pagename, INamespaceValue namespace) {
+		// if a magic word is recognised, it will be non-null:
+		Object magicWord = null;
+		String magicWordParameter = null;
+		boolean magicWordAllowed = true;
 		if (pagename.length() > 0 && pagename.charAt(0) == ':') {
+			magicWordAllowed = false; // this is not allowed for magic words
 			if (pagename.length() > 1 && pagename.charAt(1) == ':') {
 				// double "::" are not parsed as template/transclusion
 				return new ParsedPageName(namespace, pagename, false);
@@ -813,14 +862,30 @@ public abstract class AbstractParser extends WikipediaScanner {
 		
 		int indx = pagename.indexOf(':');
 		if (indx > 0) {
+			String maybeNamespaceStr0 = pagename.substring(0, indx);
 			INamespaceValue maybeNamespace = wikiModel.getNamespace()
-					.getNamespace(pagename.substring(0, indx));
+					.getNamespace(maybeNamespaceStr0);
 			if (maybeNamespace != null) {
 				return new ParsedPageName(maybeNamespace,
 						pagename.substring(indx + 1), true);
+			} else if (magicWordAllowed) {
+				// no namespace? maybe a magic word with a parameter?
+				magicWord = wikiModel.getMagicWord(maybeNamespaceStr0);
+				if (magicWord != null) {
+					magicWordParameter = pagename.substring(indx + 1);
+					if (magicWordParameter.length() != 0) {
+						magicWordParameter = AbstractTemplateFunction.parseTrim(magicWordParameter, wikiModel);
+					}
+				}
+			}
+		} else if (magicWordAllowed && namespace.isType(NamespaceCode.TEMPLATE_NAMESPACE_KEY)) {
+			Object maybeMagicWord = wikiModel.getMagicWord(pagename);
+			if (maybeMagicWord != null) {
+				magicWord = maybeMagicWord;
+				magicWordParameter = "";
 			}
 		}
-		return new ParsedPageName(namespace, pagename, true);
+		return new ParsedPageName(namespace, pagename, magicWord, magicWordParameter, true);
 	}
 
 	public static String getRedirectedTemplateContent(IWikiModel wikiModel, String redirectedLink,
