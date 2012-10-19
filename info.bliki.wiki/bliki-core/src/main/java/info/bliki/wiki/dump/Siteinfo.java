@@ -1,30 +1,30 @@
 package info.bliki.wiki.dump;
 
+import info.bliki.wiki.namespaces.Namespace;
+
 import java.util.HashMap;
 import java.util.Map;
 
 /**
  * The site and namespace information found in the header of a Mediawiki dump
  * 
+ * TODO: use the {@link info.bliki.wiki.namespaces.Namespace} class for mapping namespaces
  */
 public class Siteinfo {
 	private String sitename;
 	private String base;
 	private String generator;
 	private String characterCase;
-	private final Map<Integer, String> namespaceMap;
-	private final Map<String, Integer> reversedNamespaceMap;
+	private final Namespace fnamespace;
 
 	public Siteinfo() {
-		namespaceMap = new HashMap<Integer, String>();
-		reversedNamespaceMap = new HashMap<String, Integer>();
+		fnamespace = new Namespace();
 	}
 
 	public void addNamespace(String integerKey, String namespace) {
 		try {
 			Integer key = Integer.parseInt(integerKey);
-			namespaceMap.put(key, namespace);
-			reversedNamespaceMap.put(namespace, key);
+			fnamespace.getNamespaceByNumber(key).setTexts(namespace);
 		} catch (NumberFormatException nfe) {
 			nfe.printStackTrace();
 		}
@@ -40,7 +40,16 @@ public class Siteinfo {
 	 * @return <code>null</code> if no namespace is defined for the given key.
 	 */
 	public String getNamespace(Integer key) {
-		return namespaceMap.get(key);
+		return fnamespace.getNamespaceByNumber(key).getPrimaryText();
+	}
+	
+	/**
+	 * Gets the full namespace mappings.
+	 * 
+	 * @return the namespace object
+	 */
+	public Namespace getNamespace() {
+		return fnamespace;
 	}
 
 	/**
@@ -54,7 +63,7 @@ public class Siteinfo {
 	 *         namespace.
 	 */
 	public Integer getIntegerNamespace(String namespace) {
-		return reversedNamespaceMap.get(namespace);
+		return fnamespace.getNamespace(namespace).getCode().code;
 	}
 
 	/**
