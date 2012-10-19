@@ -396,8 +396,9 @@ public class MagicWord {
 				int indx = parameter.indexOf(':');
 				if (indx >= 0) {
 					String subStr = parameter.substring(0, indx);
-					if (model.isNamespace(subStr)) {
-						return subStr;
+					INamespaceValue namespace = model.getNamespace().getNamespace(subStr);
+					if (namespace != null) {
+						return namespace.getPrimaryText();
 					}
 				}
 				return "";

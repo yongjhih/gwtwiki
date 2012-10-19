@@ -780,6 +780,17 @@ public class TemplateParserTest extends FilterTestSupport {
 		assertEquals("", wikiModel.parseTemplates("{{NAMESPACE:Bad:Main Page}}", false));
 	}
 
+	public void testNAMESPACE002() {
+		assertEquals("", wikiModel.parseTemplates("{{NAMESPACE}}", false));
+		assertEquals("File", wikiModel.parseTemplates("{{NAMESPACE:Image:Main Page}}", false));
+	}
+
+	public void testNAMESPACE003() {
+		wikiModel.setNamespaceName("category");
+		assertEquals("Category", wikiModel.parseTemplates("{{NAMESPACE}}", false));
+		assertEquals("File", wikiModel.parseTemplates("{{NAMESPACE:Image:Main Page}}", false));
+	}
+
 	public void testURLEncode001() {
 		assertEquals("%22%23%24%25%26%27%28%29*%2C%3B%3F%5B%5D%5E%60%7B%7D", wikiModel.parseTemplates(
 				"{{urlencode: \"#$%&'()*,;?[]^`{}}}", false));
