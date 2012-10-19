@@ -56,6 +56,7 @@ public class Namespace implements INamespace {
 	}
 
 	public Namespace(ResourceBundle resourceBundle) {
+		assert(fNamespaces1.length == fNamespaces2.length);
 		fResourceBundle = resourceBundle;
 		initializeNamespaces();
 
@@ -317,13 +318,8 @@ public class Namespace implements INamespace {
 
 	public String getNamespace(String namespace) {
 		for (int i = 0; i < fNamespaces1.length; i++) {
-			if (fNamespaces1[i].equals(namespace)) {
-				return namespace;
-			}
-		}
-		for (int i = 0; i < fNamespaces2.length; i++) {
-			if (fNamespaces2[i].equals(namespace)) {
-				return namespace;
+			if (fNamespaces1[i].equals(namespace) || fNamespaces2[i].equals(namespace)) {
+				return fNamespaces1[i];
 			}
 		}
 		return "";
