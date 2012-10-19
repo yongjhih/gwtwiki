@@ -2,12 +2,12 @@ package info.bliki.wiki.namespaces;
 
 import info.bliki.Messages;
 
-import java.util.HashMap;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.TreeMap;
-import java.util.Map.Entry;
 
 /**
  * Mediawiki Namespaces. See <a
@@ -16,34 +16,243 @@ import java.util.Map.Entry;
  * 
  */
 public class Namespace implements INamespace {
-
-	protected final String[] fNamespaces1 = { "Media", "Special", "", "Talk", "User", "User_talk", "Meta", "Meta_talk", "Image",
-			"Image_talk", "MediaWiki", "MediaWiki_talk", "Template", "Template_talk", "Help", "Help_talk", "Category", "Category_talk" };
-
-	protected final String[] fNamespaces2 = { "Media", "Special", "", "Talk", "User", "User_talk", "Meta", "Meta_talk", "File",
-			"File_talk", "MediaWiki", "MediaWiki_talk", "Template", "Template_talk", "Help", "Help_talk", "Category", "Category_talk" };
+	/**
+	 * Maps namespaces case-insensitively to their according
+	 * {@link NamespaceValue} objects.
+	 */
+	protected final Map<String, NamespaceValue> TEXT_TO_NAMESPACE_MAP = new TreeMap<String, NamespaceValue>(
+			String.CASE_INSENSITIVE_ORDER);
 
 	/**
+	 * Fast access to each {@link NamespaceValue} via an integer index similar
+	 * to its number code.
 	 * 
-	 * Maps lower-case namespace names to the original names.
+	 * @see Namespace#numberCodeToInt(int)
+	 * @see Namespace#intToNumberCode(int)
 	 */
-	public final Map<String, String> NAMESPACE_MAP = new HashMap<String, String>();
+	protected final NamespaceValue[] INT_TO_NAMESPACE = new NamespaceValue[18];
 
 	/**
-	 * Maps namespaces case-insensitively to their according talkspaces.
+	 * The &quot;Media&quot; namespace for the current language.
 	 */
-	public final Map<String, String> TALKSPACE_MAP = new TreeMap<String, String>(String.CASE_INSENSITIVE_ORDER);
+	public final NamespaceValue MEDIA = new NamespaceValue(NamespaceCode.MEDIA_NAMESPACE_KEY, null, "Media");
+	/**
+	 * The &quot;Special&quot; namespace for the current language.
+	 */
+	public final NamespaceValue SPECIAL = new NamespaceValue(NamespaceCode.SPECIAL_NAMESPACE_KEY, null, "Special");
+	/**
+	 * The &quot;Talk&quot; namespace for the current language.
+	 */
+	public final NamespaceValue TALK = new NamespaceValue(NamespaceCode.TALK_NAMESPACE_KEY, true, "Talk");
+	/**
+	 * The main namespace for the current language.
+	 */
+	public final NamespaceValue MAIN = new NamespaceValue(NamespaceCode.MAIN_NAMESPACE_KEY, TALK, "");
+	/**
+	 * The &quot;User talk&quot; namespace for the current language.
+	 */
+	public final NamespaceValue USER_TALK = new NamespaceValue(NamespaceCode.USER_TALK_NAMESPACE_KEY, true, "User_talk");
+	/**
+	 * The &quot;User&quot; namespace for the current language.
+	 */
+	public final NamespaceValue USER = new NamespaceValue(NamespaceCode.USER_NAMESPACE_KEY, USER_TALK, "User");
+	/**
+	 * The &quot;Meta talk&quot; namespace for the current language.
+	 */
+	public final NamespaceValue META_TALK = new NamespaceValue(NamespaceCode.PROJECT_TALK_NAMESPACE_KEY, true, "Meta_talk");
+	/**
+	 * The &quot;Meta&quot; namespace for the current language.
+	 */
+	public final NamespaceValue META = new NamespaceValue(NamespaceCode.PROJECT_NAMESPACE_KEY, META_TALK, "Meta");
+	/**
+	 * The &quot;File talk&quot; namespace for the current language.
+	 */
+	public final NamespaceValue IMAGE_TALK = new NamespaceValue(NamespaceCode.FILE_TALK_NAMESPACE_KEY, true, "File_talk", "Image_talk");
+	/**
+	 * The &quot;File&quot; namespace for the current language.
+	 */
+	public final NamespaceValue IMAGE = new NamespaceValue(NamespaceCode.FILE_NAMESPACE_KEY, IMAGE_TALK, "File", "Image");
+	/**
+	 * The &quot;MediaWiki talk&quot; namespace for the current language.
+	 */
+	public final NamespaceValue MEDIAWIKI_TALK = new NamespaceValue(NamespaceCode.MEDIAWIKI_TALK_NAMESPACE_KEY, true, "MediaWiki_talk");
+	/**
+	 * The &quot;MediaWiki&quot; namespace for the current language.
+	 */
+	public final NamespaceValue MEDIAWIKI = new NamespaceValue(NamespaceCode.MEDIAWIKI_NAMESPACE_KEY, MEDIAWIKI_TALK, "MediaWiki");
+	/**
+	 * The &quot;Template talk&quot; namespace for the current language.
+	 */
+	public final NamespaceValue TEMPLATE_TALK = new NamespaceValue(NamespaceCode.TEMPLATE_TALK_NAMESPACE_KEY, true, "Template_talk");
+	/**
+	 * The &quot;Template&quot; namespace for the current language.
+	 */
+	public final NamespaceValue TEMPLATE = new NamespaceValue(NamespaceCode.TEMPLATE_NAMESPACE_KEY, TEMPLATE_TALK, "Template");
+	/**
+	 * The &quot;Help talk&quot; namespace for the current language.
+	 */
+	public final NamespaceValue HELP_TALK = new NamespaceValue(NamespaceCode.HELP_TALK_NAMESPACE_KEY, true, "Help_talk");
+	/**
+	 * The &quot;Help&quot; namespace for the current language.
+	 */
+	public final NamespaceValue HELP = new NamespaceValue(NamespaceCode.HELP_NAMESPACE_KEY, HELP_TALK, "Help");
+	/**
+	 * The &quot;Category talk&quot; namespace for the current language.
+	 */
+	public final NamespaceValue CATEGORY_TALK = new NamespaceValue(NamespaceCode.CATEGORY_TALK_NAMESPACE_KEY, true, "Category_talk");
+	/**
+	 * The &quot;Category&quot; namespace for the current language.
+	 */
+	public final NamespaceValue CATEGORY = new NamespaceValue(NamespaceCode.CATEGORY_NAMESPACE_KEY, CATEGORY_TALK, "Category");
 
 	/**
-	 * Maps (talk) namespaces case-insensitively to their according content
-	 * namespaces.
+	 * Base class for all namespace constants.
+	 * 
+	 * @author Nico Kruber, kruber@zib.de
 	 */
-	public final Map<String, String> CONTENTSPACE_MAP = new TreeMap<String, String>(String.CASE_INSENSITIVE_ORDER);
+	public class NamespaceValue implements INamespaceValue {
+		private final NamespaceCode code;
+		private List<String> texts = new ArrayList<String>(2);
+		private final NamespaceValue talkspace;
+		private NamespaceValue contentspace = null;
 
-	/**
-	 * Maps namespace strings to their IDs
-	 */
-	public final Map<String, Integer> NAMESPACE_INT_MAP = new TreeMap<String, Integer>(String.CASE_INSENSITIVE_ORDER);
+		/**
+		 * Constructor for talk namespaces.
+		 * 
+		 * @param code
+		 *            the (internal) integer code of this namespace
+		 * @param isTalkspace
+		 *            must be <tt>true</tt> (needed to distinguish this
+		 *            constructor from the other in case of <tt>null</tt> talk
+		 *            spaces)
+		 * @param aliases
+		 *            all aliases identifying this namespace
+		 */
+		private NamespaceValue(NamespaceCode code, boolean isTalkspace, String... aliases) {
+			assert(isTalkspace);
+			this.code = code;
+			int arrayPos = numberCodeToInt(code.code);
+			assert(INT_TO_NAMESPACE[arrayPos] == null);
+			INT_TO_NAMESPACE[arrayPos] = this;
+			this.talkspace = this;
+			// contentspace is set by the content NamespaceValue
+			setTexts(aliases);
+		}
+
+		/**
+		 * Constructor for content namespaces.
+		 * 
+		 * @param code
+		 *            the (internal) integer code of this namespace
+		 * @param talkspace
+		 *            the associated talk namespace (must not be <tt>null</tt>)
+		 * @param aliases
+		 *            all aliases identifying this namespace
+		 */
+		private NamespaceValue(NamespaceCode code, NamespaceValue talkspace, String... aliases) {
+			this.code = code;
+			int arrayPos = numberCodeToInt(code.code);
+			assert(INT_TO_NAMESPACE[arrayPos] == null);
+			INT_TO_NAMESPACE[arrayPos] = this;
+			this.talkspace = talkspace;
+			// mapping of talkspace to content space is 1:1 if a talkspace exists
+			if (this.talkspace != null) {
+				assert(this.talkspace.contentspace == null);
+				this.talkspace.contentspace = this;
+			}
+			this.contentspace = this;
+			setTexts(aliases);
+		}
+
+		/* (non-Javadoc)
+		 * @see info.bliki.wiki.namespaces.INamespaceValue#getCode()
+		 */
+		public NamespaceCode getCode() {
+			return code;
+		}
+
+		/* (non-Javadoc)
+		 * @see info.bliki.wiki.namespaces.INamespaceValue#setTexts(java.lang.String)
+		 */
+		public void setTexts(String... aliases) {
+			assert (aliases.length >= 1);
+			// remove old texts:
+			for (String text : this.texts) {
+				TEXT_TO_NAMESPACE_MAP.remove(text);
+			}
+			// note: don't assign the fixed-size list of Arrays.asList to texts!
+			texts = new ArrayList<String>(aliases.length);
+			for (String alias : aliases) {
+				assert (alias != null);
+				addAlias(alias);
+			}
+		}
+
+		/* (non-Javadoc)
+		 * @see info.bliki.wiki.namespaces.INamespaceValue#addAlias(java.lang.String)
+		 */
+		public void addAlias(String alias) {
+			texts.add(alias);
+			TEXT_TO_NAMESPACE_MAP.put(alias, this);
+			TEXT_TO_NAMESPACE_MAP.put(alias.replace(' ', '_'), this);
+			TEXT_TO_NAMESPACE_MAP.put(alias.replace('_', ' '), this);
+		}
+
+		/* (non-Javadoc)
+		 * @see info.bliki.wiki.namespaces.INamespaceValue#getPrimaryText()
+		 */
+		public String getPrimaryText() {
+			return texts.get(0);
+		}
+
+		/* (non-Javadoc)
+		 * @see info.bliki.wiki.namespaces.INamespaceValue#getTexts()
+		 */
+		public List<String> getTexts() {
+			return texts;
+		}
+
+		/* (non-Javadoc)
+		 * @see info.bliki.wiki.namespaces.INamespaceValue#getTalkspace()
+		 */
+		public NamespaceValue getTalkspace() {
+			return talkspace;
+		}
+
+		/* (non-Javadoc)
+		 * @see info.bliki.wiki.namespaces.INamespaceValue#getContentspace()
+		 */
+		public NamespaceValue getContentspace() {
+			return contentspace;
+		}
+
+		/* (non-Javadoc)
+		 * @see info.bliki.wiki.namespaces.INamespaceValue#makeFullPagename(String)
+		 */
+		public String makeFullPagename(String pageName) {
+			String primaryText = getPrimaryText();
+			if (primaryText.isEmpty()) {
+				return pageName;
+			} else {
+				return primaryText + ":" + pageName;
+			}
+		}
+
+		/* (non-Javadoc)
+		 * @see info.bliki.wiki.namespaces.INamespace.INamespaceValue#isType(info.bliki.wiki.namespaces.INamespace.NamespaceCode)
+		 */
+		public boolean isType(NamespaceCode code) {
+			return this.code == code;
+		}
+
+		/* (non-Javadoc)
+		 * @see java.lang.Object#toString()
+		 */
+		@Override
+		public String toString() {
+			return getPrimaryText();
+		}
+	}
 
 	protected ResourceBundle fResourceBundle = null;
 
@@ -58,415 +267,66 @@ public class Namespace implements INamespace {
 	public Namespace(ResourceBundle resourceBundle) {
 		fResourceBundle = resourceBundle;
 		initializeNamespaces();
+	}
 
-		for (String[] namespaces : new String[][] { fNamespaces1, fNamespaces2 }) {
-			for (String namespace : namespaces) {
-				String namespaceLower;
-				if (fResourceBundle == null || fResourceBundle.getLocale() == null) {
-					namespaceLower = namespace.toLowerCase();
-				} else {
-					namespaceLower = namespace.toLowerCase(fResourceBundle.getLocale());
-				}
-				NAMESPACE_MAP.put(namespaceLower, namespace);
-			}
-
-			TALKSPACE_MAP.put(namespaces[convertNumberCode(MEDIA_NAMESPACE_KEY)], null); // media
-			TALKSPACE_MAP.put(namespaces[convertNumberCode(SPECIAL_NAMESPACE_KEY)], null); // special
-			TALKSPACE_MAP.put(namespaces[convertNumberCode(MAIN_NAMESPACE_KEY)], getTalk()); // ""
-			TALKSPACE_MAP.put(namespaces[convertNumberCode(TALK_NAMESPACE_KEY)], getTalk()); // talk
-			TALKSPACE_MAP.put(namespaces[convertNumberCode(USER_NAMESPACE_KEY)], getUser_talk()); // user
-			TALKSPACE_MAP.put(namespaces[convertNumberCode(USER_TALK_NAMESPACE_KEY)], getUser_talk()); // user_talk
-			TALKSPACE_MAP.put(namespaces[convertNumberCode(PROJECT_NAMESPACE_KEY)], getMeta_talk()); // project
-			TALKSPACE_MAP.put(namespaces[convertNumberCode(PROJECT_TALK_NAMESPACE_KEY)], getMeta_talk()); // project_talk
-			TALKSPACE_MAP.put(namespaces[convertNumberCode(FILE_NAMESPACE_KEY)], getImage_talk()); // image
-			TALKSPACE_MAP.put(namespaces[convertNumberCode(FILE_TALK_NAMESPACE_KEY)], getImage_talk()); // image_talk
-			TALKSPACE_MAP.put(namespaces[convertNumberCode(MEDIAWIKI_NAMESPACE_KEY)], getMediaWiki_talk()); // mediawiki
-			TALKSPACE_MAP.put(namespaces[convertNumberCode(MEDIAWIKI_TALK_NAMESPACE_KEY)], getMediaWiki_talk()); // mediawiki_talk
-			TALKSPACE_MAP.put(namespaces[convertNumberCode(TEMPLATE_NAMESPACE_KEY)], getTemplate_talk()); // template
-			TALKSPACE_MAP.put(namespaces[convertNumberCode(TEMPLATE_TALK_NAMESPACE_KEY)], getTemplate_talk()); // template_talk
-			TALKSPACE_MAP.put(namespaces[convertNumberCode(HELP_NAMESPACE_KEY)], getHelp_talk()); // help
-			TALKSPACE_MAP.put(namespaces[convertNumberCode(HELP_TALK_NAMESPACE_KEY)], getHelp_talk()); // help_talk
-			TALKSPACE_MAP.put(namespaces[convertNumberCode(CATEGORY_NAMESPACE_KEY)], getCategory_talk()); // category
-			TALKSPACE_MAP.put(namespaces[convertNumberCode(CATEGORY_TALK_NAMESPACE_KEY)], getCategory_talk()); // category_talk
-
-			NAMESPACE_INT_MAP.put(namespaces[convertNumberCode(MEDIA_NAMESPACE_KEY)], MEDIA_NAMESPACE_KEY);
-			NAMESPACE_INT_MAP.put(namespaces[convertNumberCode(SPECIAL_NAMESPACE_KEY)], SPECIAL_NAMESPACE_KEY);
-			NAMESPACE_INT_MAP.put(namespaces[convertNumberCode(MAIN_NAMESPACE_KEY)], MAIN_NAMESPACE_KEY);
-			NAMESPACE_INT_MAP.put(namespaces[convertNumberCode(TALK_NAMESPACE_KEY)], TALK_NAMESPACE_KEY);
-			NAMESPACE_INT_MAP.put(namespaces[convertNumberCode(USER_NAMESPACE_KEY)], USER_NAMESPACE_KEY);
-			NAMESPACE_INT_MAP.put(namespaces[convertNumberCode(USER_TALK_NAMESPACE_KEY)], USER_TALK_NAMESPACE_KEY);
-			NAMESPACE_INT_MAP.put(namespaces[convertNumberCode(PROJECT_NAMESPACE_KEY)], PROJECT_NAMESPACE_KEY);
-			NAMESPACE_INT_MAP.put(namespaces[convertNumberCode(PROJECT_TALK_NAMESPACE_KEY)], PROJECT_TALK_NAMESPACE_KEY);
-			NAMESPACE_INT_MAP.put(namespaces[convertNumberCode(FILE_NAMESPACE_KEY)], FILE_NAMESPACE_KEY);
-			NAMESPACE_INT_MAP.put(namespaces[convertNumberCode(FILE_TALK_NAMESPACE_KEY)], FILE_TALK_NAMESPACE_KEY);
-			NAMESPACE_INT_MAP.put(namespaces[convertNumberCode(MEDIAWIKI_NAMESPACE_KEY)], MEDIAWIKI_NAMESPACE_KEY);
-			NAMESPACE_INT_MAP.put(namespaces[convertNumberCode(MEDIAWIKI_TALK_NAMESPACE_KEY)], MEDIAWIKI_TALK_NAMESPACE_KEY);
-			NAMESPACE_INT_MAP.put(namespaces[convertNumberCode(TEMPLATE_NAMESPACE_KEY)], TEMPLATE_NAMESPACE_KEY);
-			NAMESPACE_INT_MAP.put(namespaces[convertNumberCode(TEMPLATE_TALK_NAMESPACE_KEY)], TEMPLATE_TALK_NAMESPACE_KEY);
-			NAMESPACE_INT_MAP.put(namespaces[convertNumberCode(HELP_NAMESPACE_KEY)], HELP_NAMESPACE_KEY);
-			NAMESPACE_INT_MAP.put(namespaces[convertNumberCode(HELP_TALK_NAMESPACE_KEY)], HELP_TALK_NAMESPACE_KEY);
-			NAMESPACE_INT_MAP.put(namespaces[convertNumberCode(CATEGORY_NAMESPACE_KEY)], CATEGORY_NAMESPACE_KEY);
-			NAMESPACE_INT_MAP.put(namespaces[convertNumberCode(CATEGORY_TALK_NAMESPACE_KEY)], CATEGORY_TALK_NAMESPACE_KEY);
-
+	public boolean isNamespace(String namespace, NamespaceCode code) {
+		NamespaceValue nsVal = getNamespace(namespace);
+		if (nsVal != null) {
+			return isNamespace(nsVal, code);
 		}
-		for (Entry<String, String> entry : TALKSPACE_MAP.entrySet()) {
-			String value = entry.getValue();
-			if (value != null) {
-				CONTENTSPACE_MAP.put(entry.getValue(), entry.getKey());
-			}
+		return false;
+	}
+	public boolean isNamespace(INamespaceValue namespace, NamespaceCode code) {
+		if (namespace == null) {
+			return false;
 		}
+		return namespace.getCode() == code;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see info.bliki.wiki.namespaces.INamespcae#getCategory()
-	 */
-	public String getCategory() {
-		return fNamespaces1[16];
+	public NamespaceValue getNamespace(String namespace) {
+		return TEXT_TO_NAMESPACE_MAP.get(namespace);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see info.bliki.wiki.namespaces.INamespcae#getCategory_talk()
-	 */
-	public String getCategory_talk() {
-		return fNamespaces1[17];
+	public NamespaceValue getNamespaceByNumber(NamespaceCode numberCode) {
+		return getNamespaceByNumber(numberCode.code);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see info.bliki.wiki.namespaces.INamespcae#getCategory_talk2()
-	 */
-	public String getCategory_talk2() {
-		return fNamespaces2[17];
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see info.bliki.wiki.namespaces.INamespcae#getCategory2()
-	 */
-	public String getCategory2() {
-		return fNamespaces2[16];
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see info.bliki.wiki.namespaces.INamespcae#getHelp()
-	 */
-	public String getHelp() {
-		return fNamespaces1[14];
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see info.bliki.wiki.namespaces.INamespcae#getHelp_talk()
-	 */
-	public String getHelp_talk() {
-		return fNamespaces1[15];
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see info.bliki.wiki.namespaces.INamespcae#getHelp_talk2()
-	 */
-	public String getHelp_talk2() {
-		return fNamespaces2[15];
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see info.bliki.wiki.namespaces.INamespcae#getHelp2()
-	 */
-	public String getHelp2() {
-		return fNamespaces2[14];
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see info.bliki.wiki.namespaces.INamespcae#getImage()
-	 */
-	public String getImage() {
-		return fNamespaces1[8];
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see info.bliki.wiki.namespaces.INamespcae#getImage_talk()
-	 */
-	public String getImage_talk() {
-		return fNamespaces1[9];
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see info.bliki.wiki.namespaces.INamespcae#getImage_talk2()
-	 */
-	public String getImage_talk2() {
-		return fNamespaces2[9];
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see info.bliki.wiki.namespaces.INamespcae#getImage2()
-	 */
-	public String getImage2() {
-		return fNamespaces2[8];
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see info.bliki.wiki.namespaces.INamespcae#getMedia()
-	 */
-	public String getMedia() {
-		return fNamespaces1[0];
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see info.bliki.wiki.namespaces.INamespcae#getMedia2()
-	 */
-	public String getMedia2() {
-		return fNamespaces2[0];
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see info.bliki.wiki.namespaces.INamespcae#getMediaWiki()
-	 */
-	public String getMediaWiki() {
-		return fNamespaces1[10];
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see info.bliki.wiki.namespaces.INamespcae#getMediaWiki_talk()
-	 */
-	public String getMediaWiki_talk() {
-		return fNamespaces1[11];
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see info.bliki.wiki.namespaces.INamespcae#getMediaWiki_talk2()
-	 */
-	public String getMediaWiki_talk2() {
-		return fNamespaces2[11];
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see info.bliki.wiki.namespaces.INamespcae#getMediaWiki2()
-	 */
-	public String getMediaWiki2() {
-		return fNamespaces2[10];
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see info.bliki.wiki.namespaces.INamespcae#getMeta()
-	 */
-	public String getMeta() {
-		return fNamespaces1[6];
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see info.bliki.wiki.namespaces.INamespcae#getMeta_talk()
-	 */
-	public String getMeta_talk() {
-		return fNamespaces1[7];
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see info.bliki.wiki.namespaces.INamespcae#getMeta_talk2()
-	 */
-	public String getMeta_talk2() {
-		return fNamespaces2[7];
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see info.bliki.wiki.namespaces.INamespcae#getMeta2()
-	 */
-	public String getMeta2() {
-		return fNamespaces2[6];
-	}
-
-	public String getNamespace(String namespace) {
-		for (int i = 0; i < fNamespaces1.length; i++) {
-			if (fNamespaces1[i].equals(namespace)) {
-				return namespace;
-			}
+	public NamespaceValue getNamespaceByNumber(int numberCode) {
+		final int arrayPos = numberCodeToInt(numberCode);
+		if (arrayPos >= 0 && arrayPos < INT_TO_NAMESPACE.length) {
+			return INT_TO_NAMESPACE[arrayPos];
 		}
-		for (int i = 0; i < fNamespaces2.length; i++) {
-			if (fNamespaces2[i].equals(namespace)) {
-				return namespace;
-			}
-		}
-		return "";
-	}
-
-	public String getNamespaceByLowercase(String lowercaseNamespace) {
-		return NAMESPACE_MAP.get(lowercaseNamespace);
-	}
-
-	public String getNamespaceByNumber(int numberCode) {
-		return fNamespaces1[convertNumberCode(numberCode)];
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public Integer getNumberByName(String namespace) {
-		return NAMESPACE_INT_MAP.get(namespace);
+		return null;
 	}
 
 	/**
 	 * Converts an (external) namespace number code to the position in the
-	 * {@link #fNamespaces1} and {@link #fNamespaces2} arrays.
+	 * {@link #INT_TO_NAMESPACE} array.
 	 * 
 	 * @param numberCode
 	 *          a code like {@link INamespace#MEDIA_NAMESPACE_KEY}
 	 * 
 	 * @return an array index
 	 */
-	protected final int convertNumberCode(int numberCode) {
+	protected static int numberCodeToInt(int numberCode) {
 		return numberCode + 2;
+	}
+
+	/**
+	 * Converts an (internal) namespace number code (the position in the
+	 * {@link #INT_TO_NAMESPACE} array) to the external namespace number.
+	 * 
+	 * @param numberCode
+	 *          internal array index
+	 * 
+	 * @return a number code like {@link INamespace#MEDIA_NAMESPACE_KEY}
+	 */
+	protected static int intToNumberCode(int numberCode) {
+		return numberCode - 2;
 	}
 
 	public ResourceBundle getResourceBundle() {
 		return fResourceBundle;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see info.bliki.wiki.namespaces.INamespcae#getSpecial()
-	 */
-	public String getSpecial() {
-		return fNamespaces1[1];
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see info.bliki.wiki.namespaces.INamespcae#getSpecial2()
-	 */
-	public String getSpecial2() {
-		return fNamespaces2[1];
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see info.bliki.wiki.namespaces.INamespcae#getTalk()
-	 */
-	public String getTalk() {
-		return fNamespaces1[3];
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see info.bliki.wiki.namespaces.INamespcae#getTalk2()
-	 */
-	public String getTalk2() {
-		return fNamespaces2[3];
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see info.bliki.wiki.namespaces.INamespcae#getTemplate()
-	 */
-	public String getTemplate() {
-		return fNamespaces1[12];
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see info.bliki.wiki.namespaces.INamespcae#getTemplate_talk()
-	 */
-	public String getTemplate_talk() {
-		return fNamespaces1[13];
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see info.bliki.wiki.namespaces.INamespcae#getTemplate_talk2()
-	 */
-	public String getTemplate_talk2() {
-		return fNamespaces2[13];
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see info.bliki.wiki.namespaces.INamespcae#getTemplate2()
-	 */
-	public String getTemplate2() {
-		return fNamespaces2[12];
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see info.bliki.wiki.namespaces.INamespcae#getUser()
-	 */
-	public String getUser() {
-		return fNamespaces1[4];
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see info.bliki.wiki.namespaces.INamespcae#getUser_talk()
-	 */
-	public String getUser_talk() {
-		return fNamespaces1[5];
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see info.bliki.wiki.namespaces.INamespcae#getUser_talk2()
-	 */
-	public String getUser_talk2() {
-		return fNamespaces2[5];
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see info.bliki.wiki.namespaces.INamespcae#getUser2()
-	 */
-	public String getUser2() {
-		return fNamespaces2[4];
 	}
 
 	/**
@@ -477,16 +337,19 @@ public class Namespace implements INamespace {
 	 *          the first id in the bundle, e.g. {@link Messages#WIKI_API_MEDIA1}
 	 * @param ns2Id
 	 *          the first id in the bundle, e.g. {@link Messages#WIKI_API_MEDIA2}
-	 * @param arrayPos
-	 *          the position in the arrays
+	 * @param code
+	 *          the namespace code
 	 */
-	private void extractFromResource(String ns1Id, String ns2Id, int arrayPos) {
+	private void extractFromResource(String ns1Id, String ns2Id, NamespaceCode code) {
+		NamespaceValue namespace = getNamespaceByNumber(code);
+		assert(namespace != null) : "undefined namespace code: " + code;
 		String ns1 = Messages.getString(fResourceBundle, ns1Id);
 		if (ns1 != null) {
-			fNamespaces1[arrayPos] = ns1;
 			String ns2 = Messages.getString(fResourceBundle, ns2Id);
 			if (ns2 != null) {
-				fNamespaces2[arrayPos] = ns2;
+				namespace.setTexts(ns1, ns2);
+			} else {
+				namespace.setTexts(ns1);
 			}
 		}
 	}
@@ -496,30 +359,110 @@ public class Namespace implements INamespace {
 			return;
 		}
 
-		extractFromResource(Messages.WIKI_API_MEDIA1, Messages.WIKI_API_MEDIA2, 0);
-		extractFromResource(Messages.WIKI_API_SPECIAL1, Messages.WIKI_API_SPECIAL2, 1);
-		extractFromResource(Messages.WIKI_API_TALK1, Messages.WIKI_API_TALK2, 3);
-		extractFromResource(Messages.WIKI_API_USER1, Messages.WIKI_API_USER2, 4);
-		extractFromResource(Messages.WIKI_API_USERTALK1, Messages.WIKI_API_USERTALK2, 5);
-		extractFromResource(Messages.WIKI_API_META1, Messages.WIKI_API_META2, 6);
-		extractFromResource(Messages.WIKI_API_METATALK1, Messages.WIKI_API_METATALK2, 7);
-		extractFromResource(Messages.WIKI_API_IMAGE1, Messages.WIKI_API_IMAGE2, 8);
-		extractFromResource(Messages.WIKI_API_IMAGETALK1, Messages.WIKI_API_IMAGETALK2, 9);
-		extractFromResource(Messages.WIKI_API_MEDIAWIKI1, Messages.WIKI_API_MEDIAWIKI2, 10);
-		extractFromResource(Messages.WIKI_API_MEDIAWIKITALK1, Messages.WIKI_API_MEDIAWIKITALK2, 11);
-		extractFromResource(Messages.WIKI_API_TEMPLATE1, Messages.WIKI_API_TEMPLATE2, 12);
-		extractFromResource(Messages.WIKI_API_TEMPLATETALK1, Messages.WIKI_API_TEMPLATETALK2, 13);
-		extractFromResource(Messages.WIKI_API_HELP1, Messages.WIKI_API_HELP2, 14);
-		extractFromResource(Messages.WIKI_API_HELPTALK1, Messages.WIKI_API_HELPTALK2, 15);
-		extractFromResource(Messages.WIKI_API_CATEGORY1, Messages.WIKI_API_CATEGORY2, 16);
-		extractFromResource(Messages.WIKI_API_CATEGORYTALK1, Messages.WIKI_API_CATEGORYTALK2, 17);
+		extractFromResource(Messages.WIKI_API_MEDIA1, Messages.WIKI_API_MEDIA2, NamespaceCode.MEDIA_NAMESPACE_KEY);
+		extractFromResource(Messages.WIKI_API_SPECIAL1, Messages.WIKI_API_SPECIAL2, NamespaceCode.SPECIAL_NAMESPACE_KEY);
+		extractFromResource(Messages.WIKI_API_TALK1, Messages.WIKI_API_TALK2, NamespaceCode.TALK_NAMESPACE_KEY);
+		extractFromResource(Messages.WIKI_API_USER1, Messages.WIKI_API_USER2, NamespaceCode.USER_NAMESPACE_KEY);
+		extractFromResource(Messages.WIKI_API_USERTALK1, Messages.WIKI_API_USERTALK2, NamespaceCode.USER_TALK_NAMESPACE_KEY);
+		extractFromResource(Messages.WIKI_API_META1, Messages.WIKI_API_META2, NamespaceCode.PROJECT_NAMESPACE_KEY);
+		extractFromResource(Messages.WIKI_API_METATALK1, Messages.WIKI_API_METATALK2, NamespaceCode.PROJECT_TALK_NAMESPACE_KEY);
+		extractFromResource(Messages.WIKI_API_IMAGE1, Messages.WIKI_API_IMAGE2, NamespaceCode.FILE_NAMESPACE_KEY);
+		extractFromResource(Messages.WIKI_API_IMAGETALK1, Messages.WIKI_API_IMAGETALK2, NamespaceCode.FILE_TALK_NAMESPACE_KEY);
+		extractFromResource(Messages.WIKI_API_MEDIAWIKI1, Messages.WIKI_API_MEDIAWIKI2, NamespaceCode.MEDIAWIKI_NAMESPACE_KEY);
+		extractFromResource(Messages.WIKI_API_MEDIAWIKITALK1, Messages.WIKI_API_MEDIAWIKITALK2, NamespaceCode.MEDIAWIKI_TALK_NAMESPACE_KEY);
+		extractFromResource(Messages.WIKI_API_TEMPLATE1, Messages.WIKI_API_TEMPLATE2, NamespaceCode.TEMPLATE_NAMESPACE_KEY);
+		extractFromResource(Messages.WIKI_API_TEMPLATETALK1, Messages.WIKI_API_TEMPLATETALK2, NamespaceCode.TEMPLATE_TALK_NAMESPACE_KEY);
+		extractFromResource(Messages.WIKI_API_HELP1, Messages.WIKI_API_HELP2, NamespaceCode.HELP_NAMESPACE_KEY);
+		extractFromResource(Messages.WIKI_API_HELPTALK1, Messages.WIKI_API_HELPTALK2, NamespaceCode.HELP_TALK_NAMESPACE_KEY);
+		extractFromResource(Messages.WIKI_API_CATEGORY1, Messages.WIKI_API_CATEGORY2, NamespaceCode.CATEGORY_NAMESPACE_KEY);
+		extractFromResource(Messages.WIKI_API_CATEGORYTALK1, Messages.WIKI_API_CATEGORYTALK2, NamespaceCode.CATEGORY_TALK_NAMESPACE_KEY);
 	}
 
-	public String getTalkspace(String namespace) {
-		return TALKSPACE_MAP.get(namespace);
+	public NamespaceValue getTalkspace(String namespace) {
+		NamespaceValue nsVal = getNamespace(namespace);
+		if (nsVal != null) {
+			return nsVal.getTalkspace();
+		}
+		return null;
 	}
 
-	public String getContentspace(String talkNamespace) {
-		return CONTENTSPACE_MAP.get(talkNamespace);
+	public NamespaceValue getContentspace(String talkNamespace) {
+		NamespaceValue nsVal = getNamespace(talkNamespace);
+		if (nsVal != null) {
+			return nsVal.getContentspace();
+		}
+		return null;
+	}
+
+	public INamespaceValue getMedia() {
+		return MEDIA;
+	}
+
+	public INamespaceValue getSpecial() {
+		return SPECIAL;
+	}
+
+	public INamespaceValue getMain() {
+		return MAIN;
+	}
+
+	public INamespaceValue getTalk() {
+		return TALK;
+	}
+
+	public INamespaceValue getUser() {
+		return USER;
+	}
+
+	public INamespaceValue getUser_talk() {
+		return USER_TALK;
+	}
+
+	public INamespaceValue getMeta() {
+		return META;
+	}
+
+	public INamespaceValue getMeta_talk() {
+		return META_TALK;
+	}
+
+	public INamespaceValue getImage() {
+		return IMAGE;
+	}
+
+	public INamespaceValue getImage_talk() {
+		return IMAGE_TALK;
+	}
+
+	public INamespaceValue getMediaWiki() {
+		return MEDIAWIKI;
+	}
+
+	public INamespaceValue getMediaWiki_talk() {
+		return MEDIAWIKI_TALK;
+	}
+
+	public INamespaceValue getTemplate() {
+		return TEMPLATE;
+	}
+
+	public INamespaceValue getTemplate_talk() {
+		return TEMPLATE_TALK;
+	}
+
+	public INamespaceValue getHelp() {
+		return HELP;
+	}
+
+	public INamespaceValue getHelp_talk() {
+		return HELP_TALK;
+	}
+
+	public INamespaceValue getCategory() {
+		return CATEGORY;
+	}
+
+	public INamespaceValue getCategory_talk() {
+		return CATEGORY_TALK;
 	}
 }

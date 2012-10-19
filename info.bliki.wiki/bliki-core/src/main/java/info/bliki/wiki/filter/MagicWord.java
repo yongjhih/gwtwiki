@@ -18,6 +18,9 @@ package info.bliki.wiki.filter;
 
 import info.bliki.wiki.model.IWikiModel;
 import info.bliki.wiki.namespaces.INamespace;
+import info.bliki.wiki.namespaces.INamespace.INamespaceValue;
+import info.bliki.wiki.namespaces.Namespace;
+import info.bliki.wiki.namespaces.Namespace.NamespaceValue;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -393,7 +396,9 @@ public class MagicWord {
 				int indx = parameter.indexOf(':');
 				if (indx >= 0) {
 					String subStr = parameter.substring(0, indx);
-					return model.getNamespace().getNamespace(subStr);
+					if (model.isNamespace(subStr)) {
+						return subStr;
+					}
 				}
 				return "";
 			} else {
@@ -412,26 +417,32 @@ public class MagicWord {
 				}
 			}
 		} else if (name.equals(MAGIC_TALK_PAGE_NAME)) {
-			String pageName = model.getPageName();
+			String pageName;
+			INamespaceValue talkspace = null;
 			INamespace ns = model.getNamespace();
 			if (parameter.length() > 0) {
-				String namespace = parameter;
-				int index = namespace.indexOf(':');
+				pageName = parameter;
+				int index = pageName.indexOf(':');
+				// assume main namespace for now:
+				talkspace = ns.getMain().getTalkspace();
 				if (index > 0) {
 					// {{TALKPAGENAME:Template:Sandbox}}
-					String rest = namespace.substring(index + 1);
-					namespace = namespace.substring(0, index);
-					String talkspace = ns.getTalkspace(namespace);
-					if (talkspace != null) {
-						return talkspace + ":" + rest;
+					INamespaceValue namespace = ns.getNamespace(pageName.substring(0, index));
+					if (namespace != null) {
+						pageName = pageName.substring(index + 1);
+						talkspace = namespace.getTalkspace();
 					}
 				}
-				return ns.getTalk() + ":" + parameter;
+			} else {
+				pageName = model.getPageName();
+				talkspace = ns.getTalkspace(model.getNamespaceName());
 			}
 			if (pageName != null) {
-				String talkspace = ns.getTalkspace(model.getNamespaceName());
 				if (talkspace != null) {
-					return talkspace + ":" + pageName;
+					return talkspace.getPrimaryText() + ":" + pageName;
+				} else {
+					// if there is no talkspace, MediaWiki returns an empty string
+					return "";
 				}
 			}
 		}

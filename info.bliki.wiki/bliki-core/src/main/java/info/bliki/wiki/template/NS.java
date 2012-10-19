@@ -2,6 +2,7 @@ package info.bliki.wiki.template;
 
 import info.bliki.wiki.model.IWikiModel;
 import info.bliki.wiki.namespaces.INamespace;
+import info.bliki.wiki.namespaces.INamespace.INamespaceValue;
 
 import java.util.List;
 
@@ -33,16 +34,15 @@ public class NS extends AbstractTemplateFunction {
 			try {
 				int numberCode = Integer.valueOf(arg0).intValue();
 				if (numberCode >= (-2) || numberCode <= 15) {
-					return namespace.getNamespaceByNumber(numberCode);
+					return namespace.getNamespaceByNumber(numberCode).getPrimaryText();
 				}
 			} catch (NumberFormatException nfe) {
 				// the given argument could not be parsed as integer number
-				arg0 = arg0.replace(' ', '_');
-				String value = namespace.getNamespaceByLowercase(arg0.toLowerCase());
+				INamespaceValue value = namespace.getNamespace(arg0);
 				if (value != null) {
-					return value;
+					return value.getPrimaryText();
 				}
-				return "[[:" + model.getTemplateNamespace() + ":Ns:" + arg0 + "]]";
+				return "[[:" + namespace.getTemplate().getPrimaryText() + ":Ns:" + arg0 + "]]";
 			}
 		}
 		return null;

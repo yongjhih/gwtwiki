@@ -3,8 +3,10 @@ package info.bliki.wiki.model;
 import info.bliki.htmlcleaner.BaseToken;
 import info.bliki.htmlcleaner.TagToken;
 import info.bliki.wiki.filter.AbstractParser;
+import info.bliki.wiki.filter.AbstractParser.ParsedPageName;
 import info.bliki.wiki.filter.ITextConverter;
 import info.bliki.wiki.namespaces.INamespace;
+import info.bliki.wiki.namespaces.INamespace.INamespaceValue;
 import info.bliki.wiki.tags.util.TagStack;
 import info.bliki.wiki.template.ITemplateFunction;
 
@@ -421,37 +423,6 @@ public interface IWikiModel extends IConfiguration {
 	public String encodeTitleToUrl(String wikiTitle, boolean firstCharacterAsUpperCase);
 
 	/**
-	 * Get the secondary namespace (i.e. the namespace for a non-englich locale)
-	 * for categories in this wiki
-	 * 
-	 * @return the secondary category namespace
-	 */
-	public String get2ndCategoryNamespace();
-
-	/**
-	 * Get the secondary namespace (i.e. the namespace for a non-englich locale)
-	 * for images in this wiki
-	 * 
-	 * @return the secondary image namespace
-	 */
-	public String get2ndImageNamespace();
-
-	/**
-	 * Get the secondary namespace (i.e. the namespace for a non-englich locale)
-	 * for templates in this wiki
-	 * 
-	 * @return the secondary template namespace
-	 */
-	public String get2ndTemplateNamespace();
-
-	/**
-	 * Get the primary namespace for categories in this wiki
-	 * 
-	 * @return the primary category namespace
-	 */
-	public String getCategoryNamespace();
-
-	/**
 	 * Get the current time stamp. This is the value for the magic word
 	 * &quot;CURRENTTIMESTAMP&quot;.
 	 * 
@@ -472,13 +443,6 @@ public interface IWikiModel extends IConfiguration {
 	 * @see #getWikiBaseEditURL()
 	 */
 	public String getImageBaseURL();
-
-	/**
-	 * Get the primary namespace for images in this wiki
-	 * 
-	 * @return the primary image namespace
-	 */
-	public String getImageNamespace();
 
 	/**
 	 * Get the set of Wikipedia link names
@@ -535,17 +499,16 @@ public interface IWikiModel extends IConfiguration {
 	/**
 	 * Get the raw wiki text for the given namespace and article name
 	 * 
-	 * @param namespace
-	 *          the namespace of this article
 	 * @param templateName
-	 *          the name of the template
+	 *          the parsed template name
 	 * @param templateParameters
 	 *          if the namespace is the <b>Template</b> namespace, the current
 	 *          template parameters are stored as <code>String</code>s in this map
 	 * 
 	 * @return <code>null</code> if no content was found
+	 * @see AbstractParser#parsePageName(IWikiModel, String, INamespaceValue)
 	 */
-	public String getRawWikiContent(String namespace, String templateName, Map<String, String> templateParameters);
+	public String getRawWikiContent(ParsedPageName templateName, Map<String, String> templateParameters);
 
 	/**
 	 * Get the current recursion level of the parser. The recursion level is used
@@ -628,13 +591,6 @@ public interface IWikiModel extends IConfiguration {
 	public ITemplateFunction getTemplateFunction(String name);
 
 	/**
-	 * Get the primary namespace for templates in this wiki model
-	 * 
-	 * @return the primary namespace for templates
-	 */
-	public String getTemplateNamespace();
-
-	/**
 	 * Return a URL string which contains, a &quot;${title}&quot; variable which
 	 * will be replaced by the topic title, to create links edit pages of wiki
 	 * topics.
@@ -704,27 +660,11 @@ public interface IWikiModel extends IConfiguration {
 	public boolean isCamelCaseEnabled();
 
 	/**
-	 * Check if the given namespace is a category namespace
-	 * 
-	 * @param namespace
-	 * @return <code>true</code> if the namespace is a category namespace.
-	 */
-	public boolean isCategoryNamespace(String namespace);
-
-	/**
 	 * The current model is used to render a wikipage in editor mode
 	 * 
 	 * @return <code>true</code> if your model is used in an editor mode
 	 */
 	public boolean isEditorMode();
-
-	/**
-	 * Check if the given namespace is an image namespace
-	 * 
-	 * @param namespace
-	 * @return <code>true</code> if the namespace is a image namespace.
-	 */
-	public boolean isImageNamespace(String namespace);
 
 	/**
 	 * Check if the given namespace is an interwiki link prefix.
@@ -770,14 +710,6 @@ public interface IWikiModel extends IConfiguration {
 	 *         enabled
 	 */
 	public boolean isSemanticWebActive();
-
-	/**
-	 * Check if the given namespace is a template namespace
-	 * 
-	 * @param namespace
-	 * @return <code>true</code> if the namespace is a template namespace.
-	 */
-	public boolean isTemplateNamespace(String namespace);
 
 	/**
 	 * Determine if the currently parsed wiki text is a template.
@@ -1014,14 +946,14 @@ public interface IWikiModel extends IConfiguration {
 	/**
 	 * Set the "lower-case" namespace name of the article rendered with this
 	 * model. This name will be converted with the
-	 * Namespace#getNamespaceByLowercase() method to a string in the current
+	 * Namespace#getNamespace() method to a string in the current
 	 * Locale.
 	 * 
 	 * @param namespaceLowercase
 	 *          the lowercase key for the namespace.
 	 * @return the namespace for this model
 	 * @see java.util.Locale
-	 * @see info.bliki.wiki.namespaces.Namespace#getNamespaceByLowercase(String)
+	 * @see info.bliki.wiki.namespaces.Namespace#getNamespace(String)
 	 */
 	public void setNamespaceName(String namespaceLowercase);
 

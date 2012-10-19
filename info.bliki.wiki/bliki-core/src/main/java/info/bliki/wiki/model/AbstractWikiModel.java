@@ -7,6 +7,7 @@ import info.bliki.htmlcleaner.TagNode;
 import info.bliki.htmlcleaner.TagToken;
 import info.bliki.htmlcleaner.Utils;
 import info.bliki.wiki.filter.AbstractParser;
+import info.bliki.wiki.filter.AbstractParser.ParsedPageName;
 import info.bliki.wiki.filter.Encoder;
 import info.bliki.wiki.filter.HTMLConverter;
 import info.bliki.wiki.filter.ITextConverter;
@@ -16,6 +17,8 @@ import info.bliki.wiki.filter.SectionHeader;
 import info.bliki.wiki.filter.TemplateParser;
 import info.bliki.wiki.filter.WikipediaParser;
 import info.bliki.wiki.namespaces.INamespace;
+import info.bliki.wiki.namespaces.INamespace.INamespaceValue;
+import info.bliki.wiki.namespaces.INamespace.NamespaceCode;
 import info.bliki.wiki.namespaces.Namespace;
 import info.bliki.wiki.tags.TableOfContentTag;
 import info.bliki.wiki.tags.WPATag;
@@ -626,7 +629,7 @@ public abstract class AbstractWikiModel implements IWikiModel, IContext {
 				}
 
 			}
-			if (isCategoryNamespace(nameSpace)) {
+			if (fNamespace.isNamespace(nameSpace, NamespaceCode.CATEGORY_NAMESPACE_KEY)) {
 				// add the category to this texts metadata
 				String category = rawNamespaceTopic.substring(colonIndex + 1).trim();
 				if (category != null && category.length() > 0) {
@@ -726,7 +729,7 @@ public abstract class AbstractWikiModel implements IWikiModel, IContext {
 			if (indx >= 0) {
 				namespace = rawTopicName.substring(0, indx);
 			}
-			if (namespace != null && isImageNamespace(namespace)) {
+			if (namespace != null && fNamespace.isNamespace(namespace, NamespaceCode.FILE_NAMESPACE_KEY)) {
 				parseInternalImageLink(namespace, rawLinkText);
 				return false;
 			} else {
@@ -867,27 +870,6 @@ public abstract class AbstractWikiModel implements IWikiModel, IContext {
 	}
 
 	/**
-	 * {@inheritDoc}
-	 */
-	public String get2ndCategoryNamespace() {
-		return fNamespace.getCategory2();
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public String get2ndImageNamespace() {
-		return fNamespace.getImage2();
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public String get2ndTemplateNamespace() {
-		return fNamespace.getTemplate2();
-	}
-
-	/**
 	 * Resolve an attribute reference. It can be in four possible places:
 	 * 
 	 * 1. the attribute list for the current template 2. if self is an embedded
@@ -992,13 +974,6 @@ public abstract class AbstractWikiModel implements IWikiModel, IContext {
 	/**
 	 * {@inheritDoc}
 	 */
-	public String getCategoryNamespace() {
-		return fNamespace.getCategory();
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
 	public Map<String, SourceCodeFormatter> getCodeFormatterMap() {
 		return fConfiguration.getCodeFormatterMap();
 	}
@@ -1008,13 +983,6 @@ public abstract class AbstractWikiModel implements IWikiModel, IContext {
 	 */
 	public Date getCurrentTimeStamp() {
 		return new Date(System.currentTimeMillis());
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public String getImageNamespace() {
-		return fNamespace.getImage();
 	}
 
 	/**
@@ -1082,11 +1050,13 @@ public abstract class AbstractWikiModel implements IWikiModel, IContext {
 	/**
 	 * {@inheritDoc}
 	 */
-	public String getRawWikiContent(String namespace, String templateName, Map<String, String> templateParameters) {
+	public String getRawWikiContent(ParsedPageName parsedPagename, Map<String, String> templateParameters) {
+		INamespaceValue namespace = parsedPagename.namespace;
+		String templateName = parsedPagename.pagename;
 		if (Configuration.RAW_CONTENT) {
 			System.out.println("AbstractWikiModel raw: " + " " + namespace + " " + templateName);
 		}
-		if (isTemplateNamespace(namespace)) {
+		if (namespace.isType(NamespaceCode.TEMPLATE_NAMESPACE_KEY)) {
 			String magicWord = templateName;
 			String parameter = "";
 			int index = magicWord.indexOf(':');
@@ -1190,13 +1160,6 @@ public abstract class AbstractWikiModel implements IWikiModel, IContext {
 	/**
 	 * {@inheritDoc}
 	 */
-	public String getTemplateNamespace() {
-		return fNamespace.getTemplate();
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
 	public Map<String, TagToken> getTokenMap() {
 		return fConfiguration.getTokenMap();
 	}
@@ -1260,22 +1223,8 @@ public abstract class AbstractWikiModel implements IWikiModel, IContext {
 	/**
 	 * {@inheritDoc}
 	 */
-	public boolean isCategoryNamespace(String namespace) {
-		return namespace.equalsIgnoreCase(fNamespace.getCategory()) || namespace.equalsIgnoreCase(fNamespace.getCategory2());
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
 	public boolean isEditorMode() {
 		return false;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public boolean isImageNamespace(String namespace) {
-		return namespace.equalsIgnoreCase(fNamespace.getImage()) || namespace.equalsIgnoreCase(fNamespace.getImage2());
 	}
 
 	/**
@@ -1296,7 +1245,7 @@ public abstract class AbstractWikiModel implements IWikiModel, IContext {
 	 * {@inheritDoc}
 	 */
 	public boolean isNamespace(String namespace) {
-		return fNamespace.getNamespaceByLowercase(namespace.toLowerCase()) != null;
+		return fNamespace.getNamespace(namespace) != null;
 	}
 
 	/**
@@ -1311,13 +1260,6 @@ public abstract class AbstractWikiModel implements IWikiModel, IContext {
 	 */
 	public boolean isSemanticWebActive() {
 		return false;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public boolean isTemplateNamespace(String namespace) {
-		return namespace.equalsIgnoreCase(fNamespace.getTemplate()) || namespace.equalsIgnoreCase(fNamespace.getTemplate2());
 	}
 
 	/**
@@ -1709,38 +1651,23 @@ public abstract class AbstractWikiModel implements IWikiModel, IContext {
 			}
 		}
 
-		String plainContent;
-		String templateStr = templateName;
-		String namespaceStr = getTemplateNamespace();
-		if (templateStr.length() > 0 && templateStr.charAt(0) == ':') {
-			if (templateStr.length() > 1 && templateStr.charAt(1) == ':') {
-				// double "::" are not parsed as template/transclusion
-				writer.append("{{");
-				writer.append(templateStr);
-				writer.append("}}");
-				return;
-			}
-			namespaceStr = ""; // assume main namespace for now
-			templateStr = templateStr.substring(1);
+		ParsedPageName parsedPagename = AbstractParser.parsePageName(this, templateName, fNamespace.getTemplate());
+		if (!parsedPagename.valid) {
+			writer.append("{{");
+			writer.append(parsedPagename.pagename);
+			writer.append("}}");
+			return;
 		}
-
-		int indx = templateStr.indexOf(':');
-		if (indx > 0) {
-			String maybeNamespaceStr = fNamespace.getNamespaceByLowercase(templateStr.substring(0, indx).toLowerCase());
-			if (maybeNamespaceStr != null) {
-				templateStr = templateStr.substring(indx + 1);
-				namespaceStr = maybeNamespaceStr;
-			}
-		}
-		String fullTemplateStr = namespaceStr.length() == 0 ? templateStr : (namespaceStr + ":" + templateStr);
-		if (namespaceStr.equals(getTemplateNamespace())) {
-			addTemplate(templateStr);
+		String fullTemplateStr = parsedPagename.namespace.makeFullPagename(parsedPagename.pagename);
+		if (parsedPagename.namespace.isType(NamespaceCode.TEMPLATE_NAMESPACE_KEY)) {
+			addTemplate(parsedPagename.pagename);
 		} else {
 			addInclude(fullTemplateStr);
 			// invalidate cache:
 			templateCallsCache = null;
 		}
-		plainContent = getRawWikiContent(namespaceStr, templateStr, parameterMap);
+		
+		String plainContent = getRawWikiContent(parsedPagename, parameterMap);
 		if (plainContent == null) {
 			// content of this transclusion is missing => render as link:
 			plainContent = "[[:" + fullTemplateStr + "]]";
@@ -1833,8 +1760,11 @@ public abstract class AbstractWikiModel implements IWikiModel, IContext {
 			fNamespaceName = "";
 			return;
 		}
-		fNamespaceName = fNamespace.getNamespaceByLowercase(namespaceLowercase);
-		if (fNamespaceName == null) {
+		// TODO: we should only allow valid namespaces and probably set pagename and namespace in one go
+		INamespaceValue nsVal = fNamespace.getNamespace(namespaceLowercase);
+		if (nsVal != null) {
+			fNamespaceName = nsVal.getPrimaryText();
+		} else {
 			fNamespaceName = namespaceLowercase;
 		}
 	}

@@ -5,6 +5,8 @@ import info.bliki.htmlcleaner.TagNode;
 import info.bliki.htmlcleaner.TagToken;
 import info.bliki.wiki.model.Configuration;
 import info.bliki.wiki.model.IWikiModel;
+import info.bliki.wiki.namespaces.INamespace;
+import info.bliki.wiki.namespaces.INamespace.INamespaceValue;
 import info.bliki.wiki.tags.HTMLTag;
 import info.bliki.wiki.tags.WPBoldItalicTag;
 import info.bliki.wiki.tags.WPTag;
@@ -747,28 +749,97 @@ public abstract class AbstractParser extends WikipediaScanner {
 	public abstract void setNoToC(boolean noToC);
 
 	public abstract void runParser();
+	
+	/**
+	 * Represents the result of parsing a (potential) page name.
+	 * 
+	 * @author Nico Kruber, kruber@zib.de
+	 */
+	public static class ParsedPageName {
+		/**
+		 * The namespace the page is in.
+		 */
+		public final INamespaceValue namespace;
+		/**
+		 * The name of the page (without the namespace).
+		 */
+		public final String pagename;
+		/**
+		 * Whether this pagename was successfully parsed or not.
+		 */
+		public final boolean valid;
+		
+		/**
+		 * Creates a new parsed page name object.
+		 * 
+		 * @param namespace
+		 *            the namespace the page is in
+		 * @param pagename
+		 *            the name of the page (without the namespace)
+		 * @param valid
+		 *            whether this pagename was successfully parsed or not
+		 */
+		public ParsedPageName(INamespaceValue namespace, String pagename, boolean valid) {
+			this.namespace = namespace;
+			this.pagename = pagename;
+			this.valid = valid;
+		}
+	}
+	
+	/**
+	 * Parses a given page name into its components, e.g. namespace and pagename
+	 * or magic word and parameters.
+	 * 
+	 * @param wikiModel
+	 *            the wiki model to use
+	 * @param pagename
+	 *            the name in wiki text
+	 * @param namespace
+	 *            the default namespace to use if there is no namespace in the
+	 *            pagename
+	 * 
+	 * @return a parsed page name
+	 */
+	public static ParsedPageName parsePageName(IWikiModel wikiModel, String pagename, INamespaceValue namespace) {
+		if (pagename.length() > 0 && pagename.charAt(0) == ':') {
+			if (pagename.length() > 1 && pagename.charAt(1) == ':') {
+				// double "::" are not parsed as template/transclusion
+				return new ParsedPageName(namespace, pagename, false);
+			}
+			// assume main namespace for now:
+			namespace = wikiModel.getNamespace().getMain();
+			pagename = pagename.substring(1);
+		}
+		
+		int indx = pagename.indexOf(':');
+		if (indx > 0) {
+			INamespaceValue maybeNamespace = wikiModel.getNamespace()
+					.getNamespace(pagename.substring(0, indx));
+			if (maybeNamespace != null) {
+				return new ParsedPageName(maybeNamespace,
+						pagename.substring(indx + 1), true);
+			}
+		}
+		return new ParsedPageName(namespace, pagename, true);
+	}
 
 	public static String getRedirectedTemplateContent(IWikiModel wikiModel, String redirectedLink,
 			Map<String, String> templateParameters) {
-		String redirNamespace = "";
-		String redirArticle = redirectedLink;
-		int index = redirectedLink.indexOf(":");
-		if (index > 0) {
-			redirNamespace = redirectedLink.substring(0, index);
-			if (wikiModel.isTemplateNamespace(redirNamespace)) {
-				redirArticle = redirectedLink.substring(index + 1);
-				try {
-					int level = wikiModel.incrementRecursionLevel();
-					if (level > Configuration.PARSER_RECURSION_LIMIT) {
-						return "Error - getting content of redirected template link: " + redirNamespace + ":" + redirArticle;
-					}
-					return wikiModel.getRawWikiContent(redirNamespace, redirArticle, templateParameters);
-				} finally {
-					wikiModel.decrementRecursionLevel();
-				}
+		try {
+			final INamespace namespace = wikiModel.getNamespace();
+			ParsedPageName parsedPagename = AbstractParser.parsePageName(wikiModel, redirectedLink, namespace.getMain());
+			// note: don't just get redirect content if the namespace is the template namespace!
+			if (!parsedPagename.valid) {
+				return null;
 			}
+			int level = wikiModel.incrementRecursionLevel();
+			if (level > Configuration.PARSER_RECURSION_LIMIT) {
+				return "Error - getting content of redirected template link: " + parsedPagename.namespace + ":" + parsedPagename.pagename;
+			}
+			return wikiModel.getRawWikiContent(parsedPagename, templateParameters);
+		} finally {
+			wikiModel.decrementRecursionLevel();
 		}
-		return null;
 	}
 
 	/**
@@ -778,8 +849,8 @@ public abstract class AbstractParser extends WikipediaScanner {
 	 * @param rawWikiText
 	 *          the wiki text
 	 * @param wikiModel
-	 * @return <code>null</code> if a redirect was found and further parsing
-	 *         should be canceled according to the model.
+	 * @return <code>non-null</code> if a redirect was found and further parsing
+	 *         should be cancelled according to the model.
 	 */
 	public static String parseRedirect(String rawWikiText, IWikiModel wikiModel) {
 		int redirectStart = -1;

@@ -1,5 +1,8 @@
 package info.bliki.wiki.namespaces;
 
+import info.bliki.wiki.namespaces.Namespace.NamespaceValue;
+
+import java.util.List;
 import java.util.ResourceBundle;
 
 /**
@@ -10,187 +13,341 @@ import java.util.ResourceBundle;
  */
 public interface INamespace {
 	/**
-	 * Alias for direct links to media files.
+	 * Enum of all valid namespace codes.
 	 */
-	public final static Integer MEDIA_NAMESPACE_KEY = Integer.valueOf(-2);
+	public enum NamespaceCode {
+		/**
+		 * Alias for direct links to media files.
+		 */
+		MEDIA_NAMESPACE_KEY(Integer.valueOf(-2)),
+
+		/**
+		 * Holds special pages.
+		 */
+		SPECIAL_NAMESPACE_KEY(Integer.valueOf(-1)),
+
+		/**
+		 * "Real" content; articles. Has no prefix.
+		 */
+		MAIN_NAMESPACE_KEY(Integer.valueOf(0)),
+
+		/**
+		 * Talk pages of "Real" content
+		 */
+		TALK_NAMESPACE_KEY(Integer.valueOf(1)),
+
+		/**
+		 * 
+		 */
+		USER_NAMESPACE_KEY(Integer.valueOf(2)),
+
+		/**
+		 * Talk pages for User Pages
+		 */
+		USER_TALK_NAMESPACE_KEY(Integer.valueOf(3)),
+
+		/**
+		 * Information about the wiki. Prefix is the same as $wgSitename of the PHP
+		 * installation.
+		 */
+		PROJECT_NAMESPACE_KEY(Integer.valueOf(4)),
+
+		/**
+		 * 
+		 */
+		PROJECT_TALK_NAMESPACE_KEY(Integer.valueOf(5)),
+
+		/**
+		 * Media description pages.
+		 */
+		FILE_NAMESPACE_KEY(Integer.valueOf(6)),
+
+		/**
+		 * 
+		 */
+		FILE_TALK_NAMESPACE_KEY(Integer.valueOf(7)),
+
+		/**
+		 * Site interface customisation. Protected.
+		 */
+		MEDIAWIKI_NAMESPACE_KEY(Integer.valueOf(8)),
+
+		/**
+		 * 
+		 */
+		MEDIAWIKI_TALK_NAMESPACE_KEY(Integer.valueOf(9)),
+
+		/**
+		 * Template pages.
+		 */
+		TEMPLATE_NAMESPACE_KEY(Integer.valueOf(10)),
+
+		/**
+		 * 
+		 */
+		TEMPLATE_TALK_NAMESPACE_KEY(Integer.valueOf(11)),
+
+		/**
+		 * Help pages.
+		 */
+		HELP_NAMESPACE_KEY(Integer.valueOf(12)),
+
+		/**
+		 * 
+		 */
+		HELP_TALK_NAMESPACE_KEY(Integer.valueOf(13)),
+
+		/**
+		 * Category description pages.
+		 */
+		CATEGORY_NAMESPACE_KEY(Integer.valueOf(14)),
+
+		/**
+		 * 
+		 */
+		CATEGORY_TALK_NAMESPACE_KEY(Integer.valueOf(15));
+
+		/**
+		 * The integer number code of this namespace.
+		 */
+		public final Integer code;
+		private NamespaceCode(Integer code) {
+			this.code = code;
+		}
+	}
 
 	/**
-	 * Holds special pages.
+	 * Interface for all namespace constants.
+	 * 
+	 * @author Nico Kruber, kruber@zib.de
 	 */
-	public final static Integer SPECIAL_NAMESPACE_KEY = Integer.valueOf(-1);
+	public interface INamespaceValue {
 
-	/**
-	 * "Real" content; articles. Has no prefix.
-	 */
-	public final static Integer MAIN_NAMESPACE_KEY = Integer.valueOf(0);
+		/**
+		 * @return the (internal) integer code of this namespace
+		 */
+		public abstract NamespaceCode getCode();
 
-	/**
-	 * Talk pages of "Real" content
-	 */
-	public final static Integer TALK_NAMESPACE_KEY = Integer.valueOf(1);
+		/**
+		 * Re-sets the texts used for this namespace. The first will be the
+		 * primary text.
+		 * 
+		 * @param aliases
+		 *            all aliases for the namespace
+		 */
+		public abstract void setTexts(String... aliases);
 
-	/**
-   * 
-   */
-	public final static Integer USER_NAMESPACE_KEY = Integer.valueOf(2);
+		/**
+		 * Adds a single alias to the namespace.
+		 * 
+		 * @param alias
+		 *            the alias
+		 */
+		public abstract void addAlias(String alias);
 
-	/**
-	 * Talk pages for User Pages
-	 */
-	public final static Integer USER_TALK_NAMESPACE_KEY = Integer.valueOf(3);
+		/**
+		 * Provided for convenience.
+		 * 
+		 * @return the primary text for the namespace, i.e. the first value of
+		 *         {@link #getTexts()}.
+		 */
+		public abstract String getPrimaryText();
 
-	/**
-	 * Information about the wiki. Prefix is the same as $wgSitename of the PHP
-	 * installation.
-	 */
-	public final static Integer PROJECT_NAMESPACE_KEY = Integer.valueOf(4);
+		/**
+		 * @return the texts
+		 */
+		public abstract List<String> getTexts();
 
-	/**
-   * 
-   */
-	public final static Integer PROJECT_TALK_NAMESPACE_KEY = Integer.valueOf(5);
+		/**
+		 * @return the associated talk namespace (may be <tt>null</tt>)
+		 */
+		public abstract NamespaceValue getTalkspace();
 
-	/**
-	 * Media description pages.
-	 */
-	public final static Integer FILE_NAMESPACE_KEY = Integer.valueOf(6);
+		/**
+		 * @return the associated content namespace
+		 */
+		public abstract NamespaceValue getContentspace();
 
-	/**
-   * 
-   */
-	public final static Integer FILE_TALK_NAMESPACE_KEY = Integer.valueOf(7);
+		/**
+		 * Prepends the namespace to the given pagename and returns the full
+		 * name with a separation character between a (non-empty) namespace and
+		 * the page name.
+		 * 
+		 * @param pageName
+		 *            the page name without a namespace, e.g. &quot;Test&quot;
+		 * 
+		 * @return the full page name, e.g. &quot;Template:Test&quot;
+		 */
+		public abstract String makeFullPagename(String pageName);
 
-	/**
-	 * Site interface customisation. Protected.
-	 */
-	public final static Integer MEDIAWIKI_NAMESPACE_KEY = Integer.valueOf(8);
+		/**
+		 * Checks whether the namespace is a namespace of the given type.
+		 * 
+		 * @param code
+		 *            the code
+		 * 
+		 * @return <tt>true</tt> if the namespace is of the given code,
+		 *         <tt>false</tt> otherwise
+		 */
+		public abstract boolean isType(NamespaceCode code);
 
-	/**
-   * 
-   */
-	public final static Integer MEDIAWIKI_TALK_NAMESPACE_KEY = Integer.valueOf(9);
-
-	/**
-	 * Template pages.
-	 */
-	public final static Integer TEMPLATE_NAMESPACE_KEY = Integer.valueOf(10);
-
-	/**
-   * 
-   */
-	public final static Integer TEMPLATE_TALK_NAMESPACE_KEY = Integer.valueOf(11);
-
-	/**
-	 * Help pages.
-	 */
-	public final static Integer HELP_NAMESPACE_KEY = Integer.valueOf(12);
-
-	/**
-   * 
-   */
-	public final static Integer HELP_TALK_NAMESPACE_KEY = Integer.valueOf(13);
-
-	/**
-	 * Category description pages.
-	 */
-	public final static Integer CATEGORY_NAMESPACE_KEY = Integer.valueOf(14);
-
-	/**
-   * 
-   */
-	public final static Integer CATEGORY_TALK_NAMESPACE_KEY = Integer.valueOf(15);
-
-	public String getCategory();
-
-	public String getCategory_talk();
-
-	public String getCategory_talk2();
-
-	public String getCategory2();
-
-	public String getHelp();
-
-	public String getHelp_talk();
-
-	public String getHelp_talk2();
-
-	public String getHelp2();
-
-	public String getImage();
-
-	public String getImage_talk();
-
-	public String getImage_talk2();
-
-	public String getImage2();
-
+	}
 	/**
 	 * Get the &quot;Media&quot; namespace for the current language.
 	 * 
 	 * @return the namespace
 	 */
-	public String getMedia();
-
-	public String getMedia2();
-
-	public String getMediaWiki();
-
-	public String getMediaWiki_talk();
-
-	public String getMediaWiki_talk2();
-
-	public String getMediaWiki2();
-
-	public String getMeta();
-
-	public String getMeta_talk();
-
-	public String getMeta_talk2();
-
-	public String getMeta2();
-
-	public String getNamespace(String namespace);
-
-	public String getNamespaceByLowercase(String lowercaseNamespace);
-
-	public String getNamespaceByNumber(int numberCode);
+	public INamespaceValue getMedia();
 
 	/**
-	 * Gets the integer number of the given namespace.
+	 * Get the &quot;Special&quot; namespace for the current language.
+	 * 
+	 * @return the namespace
+	 */
+	public INamespaceValue getSpecial();
+
+	/**
+	 * The main namespace for the current language.
+	 * 
+	 * @return the namespace
+	 */
+	public INamespaceValue getMain();
+
+	/**
+	 * The &quot;Talk&quot; namespace for the current language.
+	 * 
+	 * @return the namespace
+	 */
+	public INamespaceValue getTalk();
+
+	/**
+	 * The &quot;User&quot; namespace for the current language.
+	 * 
+	 * @return the namespace
+	 */
+	public INamespaceValue getUser();
+
+	/**
+	 * The &quot;User talk&quot; namespace for the current language.
+	 * 
+	 * @return the namespace
+	 */
+	public INamespaceValue getUser_talk();
+
+	/**
+	 * The &quot;Meta&quot; namespace for the current language.
+	 * 
+	 * @return the namespace
+	 */
+	public INamespaceValue getMeta();
+
+	/**
+	 * The &quot;Meta talk&quot; namespace for the current language.
+	 * 
+	 * @return the namespace
+	 */
+	public INamespaceValue getMeta_talk();
+
+	/**
+	 * The &quot;File&quot; namespace for the current language.
+	 * 
+	 * @return the namespace
+	 */
+	public INamespaceValue getImage();
+
+	/**
+	 * The &quot;File talk&quot; namespace for the current language.
+	 * 
+	 * @return the namespace
+	 */
+	public INamespaceValue getImage_talk();
+
+	/**
+	 * The &quot;MediaWiki&quot; namespace for the current language.
+	 * 
+	 * @return the namespace
+	 */
+	public INamespaceValue getMediaWiki();
+
+	/**
+	 * The &quot;MediaWiki talk&quot; namespace for the current language.
+	 * 
+	 * @return the namespace
+	 */
+	public INamespaceValue getMediaWiki_talk();
+
+	/**
+	 * The &quot;Template&quot; namespace for the current language.
+	 * 
+	 * @return the namespace
+	 */
+	public INamespaceValue getTemplate();
+
+	/**
+	 * The &quot;Template talk&quot; namespace for the current language.
+	 * 
+	 * @return the namespace
+	 */
+	public INamespaceValue getTemplate_talk();
+
+	/**
+	 * The &quot;Help&quot; namespace for the current language.
+	 * 
+	 * @return the namespace
+	 */
+	public INamespaceValue getHelp();
+
+	/**
+	 * The &quot;Help talk&quot; namespace for the current language.
+	 * 
+	 * @return the namespace
+	 */
+	public INamespaceValue getHelp_talk();
+
+	/**
+	 * The &quot;Category&quot; namespace for the current language.
+	 * 
+	 * @return the namespace
+	 */
+	public INamespaceValue getCategory();
+
+	/**
+	 * The &quot;Category talk&quot; namespace for the current language.
+	 */
+	public INamespaceValue getCategory_talk();
+
+	/**
+	 * Checks whether the given string is a valid namespace of the given type.
 	 * 
 	 * @param namespace
-	 *          the namespace
+	 *            the potential namespace string
+	 * @param code
+	 *            the code
 	 * 
-	 * @return an <code>Integer</code> or <code>null</code> if this is no
-	 *         namespace
+	 * @return <tt>true</tt> if the given namespace is of the given code,
+	 *         <tt>false</tt> otherwise
 	 */
-	public Integer getNumberByName(String namespace);
+	public abstract boolean isNamespace(String namespace, NamespaceCode code);
+
+	/**
+	 * Checks whether the given namespace is a namespace of the given type.
+	 * 
+	 * @param namespace
+	 *            the namespace
+	 * @param code
+	 *            the code
+	 * 
+	 * @return <tt>true</tt> if the given namespace is of the given code,
+	 *         <tt>false</tt> otherwise
+	 */
+	public abstract boolean isNamespace(INamespaceValue namespace, NamespaceCode code);
+
+	public INamespaceValue getNamespace(String namespace);
+
+	public INamespaceValue getNamespaceByNumber(NamespaceCode numberCode);
+	public INamespaceValue getNamespaceByNumber(int numberCode);
 
 	public ResourceBundle getResourceBundle();
-
-	public String getSpecial();
-
-	public String getSpecial2();
-
-	public String getTalk();
-
-	public String getTalk2();
-
-	public String getTemplate();
-
-	public String getTemplate_talk();
-
-	public String getTemplate_talk2();
-
-	public String getTemplate2();
-
-	public String getUser();
-
-	public String getUser_talk();
-
-	public String getUser_talk2();
-
-	public String getUser2();
 
 	/**
 	 * Get the Talk namespace.
@@ -202,7 +359,7 @@ public interface INamespace {
 	 * 
 	 * @see #getContentspace(String)
 	 */
-	public String getTalkspace(String namespace);
+	public INamespaceValue getTalkspace(String namespace);
 
 	/**
 	 * Gets the content namespace for a given (talk) namespace.
@@ -214,5 +371,5 @@ public interface INamespace {
 	 * 
 	 * @see #getTalkspace(String)
 	 */
-	public String getContentspace(String talkNamespace);
+	public INamespaceValue getContentspace(String talkNamespace);
 }

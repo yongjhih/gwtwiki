@@ -1,7 +1,9 @@
 package info.bliki.wiki.template;
 
+import info.bliki.wiki.filter.AbstractParser.ParsedPageName;
 import info.bliki.wiki.model.Configuration;
 import info.bliki.wiki.model.WikiModel;
+import info.bliki.wiki.namespaces.INamespace.INamespaceValue;
 import info.bliki.wiki.template.extension.AttributeRenderer;
 import info.bliki.wiki.template.extension.DollarContext;
 
@@ -65,12 +67,12 @@ public class ParserFunctionModel extends WikiModel {
 	 * 
 	 */
 	@Override
-	public String getRawWikiContent(String namespace, String articleName, Map<String, String> map) {
-		String result = super.getRawWikiContent(namespace, articleName, map);
+	public String getRawWikiContent(ParsedPageName parsedPagename, Map<String, String> map) {
+		String result = super.getRawWikiContent(parsedPagename, map);
 		if (result != null) {
 			return result;
 		}
-		String name = encodeTitleToUrl(articleName, true);
+		String name = encodeTitleToUrl(parsedPagename.pagename, true);
 		if (name.equals("Concat")) {
 			return CONCAT;
 		}

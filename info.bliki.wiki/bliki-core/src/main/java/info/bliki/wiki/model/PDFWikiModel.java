@@ -3,9 +3,12 @@ package info.bliki.wiki.model;
 import info.bliki.htmlcleaner.ContentToken;
 import info.bliki.htmlcleaner.TagNode;
 import info.bliki.wiki.filter.Encoder;
+import info.bliki.wiki.filter.AbstractParser.ParsedPageName;
 import info.bliki.wiki.model.Configuration;
 import info.bliki.wiki.model.ImageFormat;
 import info.bliki.wiki.model.WikiModel; //import info.bliki.wiki.tags.WPATag;
+import info.bliki.wiki.namespaces.INamespace.INamespaceValue;
+import info.bliki.wiki.namespaces.INamespace.NamespaceCode;
 
 import java.util.Locale;
 import java.util.Map;
@@ -42,13 +45,13 @@ public class PDFWikiModel extends WikiModel {
 	 * 
 	 */
 	@Override
-	public String getRawWikiContent(String namespace, String articleName, Map<String, String> map) {
-		String result = super.getRawWikiContent(namespace, articleName, map);
+	public String getRawWikiContent(ParsedPageName parsedPagename, Map<String, String> map) {
+		String result = super.getRawWikiContent(parsedPagename, map);
 		if (result != null) {
 			return result;
 		}
-		String name = encodeTitleToUrl(articleName, true);
-		if (namespace.equals("Template")) {
+		String name = encodeTitleToUrl(parsedPagename.pagename, true);
+		if (parsedPagename.namespace.isType(NamespaceCode.TEMPLATE_NAMESPACE_KEY)) {
 			// if (name.equals("Mytemplate")) {
 			// return MYTEMPLATE_TEXT;
 			// }

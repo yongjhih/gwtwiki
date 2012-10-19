@@ -3,8 +3,11 @@ package info.bliki.wiki.filter;
 import info.bliki.htmlcleaner.ContentToken;
 import info.bliki.htmlcleaner.TagNode;
 import info.bliki.htmlcleaner.Utils;
+import info.bliki.wiki.filter.AbstractParser.ParsedPageName;
 import info.bliki.wiki.model.Configuration;
 import info.bliki.wiki.model.WikiModel;
+import info.bliki.wiki.namespaces.INamespace.INamespaceValue;
+import info.bliki.wiki.namespaces.INamespace.NamespaceCode;
 import info.bliki.wiki.tags.IgnoreTag;
 import info.bliki.wiki.tags.extension.ChartTag;
 
@@ -2455,6 +2458,8 @@ public class WikiTestModel extends WikiModel {
 
 	public WikiTestModel(String imageBaseURL, String linkBaseURL) {
 		this(Locale.ENGLISH, imageBaseURL, linkBaseURL);
+		// add the German image namespace as an alias
+		fNamespace.getImage().addAlias("Bild");
 	}
 
 	/**
@@ -2470,6 +2475,8 @@ public class WikiTestModel extends WikiModel {
 		Configuration.DEFAULT_CONFIGURATION.setTemplateCallsCache(new HashMap());
 
 		fSemanticWebActive = false;
+		// add the German image namespace as an alias
+		fNamespace.getImage().addAlias("Bild");
 	}
 
 	/**
@@ -2478,14 +2485,14 @@ public class WikiTestModel extends WikiModel {
 	 * 
 	 */
 	@Override
-	public String getRawWikiContent(String namespace, String articleName, Map<String, String> map) {
-		String result = super.getRawWikiContent(namespace, articleName, map);
+	public String getRawWikiContent(ParsedPageName parsedPagename, Map<String, String> map) {
+		String result = super.getRawWikiContent(parsedPagename, map);
 		if (result != null) {
 			// found magic word template
 			return result;
 		}
-		String name = encodeTitleToUrl(articleName, true);
-		if (isTemplateNamespace(namespace)) {
+		String name = encodeTitleToUrl(parsedPagename.pagename, true);
+		if (parsedPagename.namespace.isType(NamespaceCode.TEMPLATE_NAMESPACE_KEY)) {
 			// if (MagicWord.isMagicWord(articleName)) {
 			// return MagicWord.processMagicWord(articleName, this);
 			// }
@@ -2635,19 +2642,6 @@ public class WikiTestModel extends WikiModel {
 			}
 		}
 		return null;
-	}
-
-	/**
-	 * Set the German image namespace
-	 */
-	@Override
-	public String getImageNamespace() {
-		return "Bild";
-	}
-
-	@Override
-	public boolean isImageNamespace(String name) {
-		return super.isImageNamespace(name) || name.equals(getImageNamespace());
 	}
 
 	@Override

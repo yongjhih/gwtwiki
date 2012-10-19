@@ -1,8 +1,12 @@
 package info.bliki.wiki.template;
 
 import info.bliki.htmlcleaner.Utils;
+import info.bliki.wiki.filter.AbstractParser;
 import info.bliki.wiki.filter.TemplateParser;
+import info.bliki.wiki.filter.AbstractParser.ParsedPageName;
 import info.bliki.wiki.model.IWikiModel;
+import info.bliki.wiki.namespaces.INamespace;
+import info.bliki.wiki.namespaces.INamespace.INamespaceValue;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -66,13 +70,13 @@ public class Safesubst extends AbstractTemplateFunction {
 		}
 		TemplateParser.mergeParameters(parameterMap, unnamedParameters);
 
-		String plainContent;
-		if (templateName.length() > 0 && templateName.charAt(0) == ':') {
-			plainContent = model.getRawWikiContent("", templateName.substring(1), parameterMap);
-		} else {
-			plainContent = model.getRawWikiContent(model.getTemplateNamespace(), templateName, parameterMap);
+		final INamespace namespace = model.getNamespace();
+		ParsedPageName parsedPagename = AbstractParser.parsePageName(model, templateName, namespace.getTemplate());
+		if (!parsedPagename.valid) {
+			return "{{" + parsedPagename.pagename + "}}";
 		}
-
+		
+		String plainContent = model.getRawWikiContent(parsedPagename, parameterMap);
 		if (plainContent != null) {
 			return Safesubst.parsePreprocess(plainContent, model, parameterMap);
 		}
