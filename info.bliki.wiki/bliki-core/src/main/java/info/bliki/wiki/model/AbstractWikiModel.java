@@ -136,20 +136,6 @@ public abstract class AbstractWikiModel implements IWikiModel, IContext {
 		this(configuration, locale, Messages.getResourceBundle(locale), new Namespace(locale));
 	}
 
-	/**
-	 * 
-	 * @deprecated use the
-	 *             <code>(Configuration configuration, Locale locale,...)</code>
-	 *             constructors instead.
-	 * @param configuration
-	 * @param resourceBundle
-	 * @param namespace
-	 */
-	@Deprecated
-	public AbstractWikiModel(Configuration configuration, ResourceBundle resourceBundle, INamespace namespace) {
-		this(configuration, Locale.ENGLISH, resourceBundle, namespace);
-	}
-
 	public AbstractWikiModel(Configuration configuration, Locale locale, ResourceBundle resourceBundle, INamespace namespace) {
 		fLocale = locale;
 		fInitialized = false;
@@ -324,28 +310,6 @@ public abstract class AbstractWikiModel implements IWikiModel, IContext {
 	 * in <a href="http://en.wikipedia.org/wiki/Help:Link#External_links">Help
 	 * Links</a>
 	 * 
-	 * @param link
-	 *          the external link with <code>http://, https:// or ftp://</code>
-	 *          prefix
-	 * @param linkName
-	 *          the link name which is separated from the URL by a space
-	 * @param withoutSquareBrackets
-	 *          if <code>true</code> a link with no square brackets around the
-	 *          link was parsed
-	 * @deprecated use
-	 *             {@link IWikiModel#appendExternalLink(String, String, String, boolean)}
-	 *             instead.
-	 */
-	@Deprecated
-	public void appendExternalLink(String link, String linkName, boolean withoutSquareBrackets) {
-		appendExternalLink("", link, linkName, withoutSquareBrackets);
-	}
-
-	/**
-	 * Append an external link (starting with http, https, ftp,...) as described
-	 * in <a href="http://en.wikipedia.org/wiki/Help:Link#External_links">Help
-	 * Links</a>
-	 * 
 	 * @param uriSchemeName
 	 *          the top level URI (Uniform Resource Identifier) scheme name
 	 *          (without the following colon character ":"). Example "ftp",
@@ -392,13 +356,6 @@ public abstract class AbstractWikiModel implements IWikiModel, IContext {
 				popNode();
 			}
 		}
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public ITableOfContent appendHead(String rawHead, int headLevel, boolean noToC, int headCounter) {
-		return appendHead(rawHead, headLevel, noToC, headCounter, 0, 0);
 	}
 
 	/**
@@ -1692,25 +1649,6 @@ public abstract class AbstractWikiModel implements IWikiModel, IContext {
 	 */
 	public void tearDown() {
 
-	}
-
-	/**
-	 * Initialize the wiki model and parse the <code>rawWikiText</code> and return
-	 * the parsed node list.
-	 * 
-	 * @param rawWikiText
-	 * @return
-	 * @deprecated
-	 */
-	@Deprecated
-	public List<BaseToken> toNodeList(String rawWikiText) {
-		initialize();
-		if (rawWikiText == null) {
-			return new ArrayList<BaseToken>();
-		}
-		WikipediaParser.parse(rawWikiText, this, true, null);
-		fInitialized = false;
-		return fTagStack.getNodeList();
 	}
 
 	/**

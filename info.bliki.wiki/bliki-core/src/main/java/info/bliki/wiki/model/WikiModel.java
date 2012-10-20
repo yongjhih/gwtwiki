@@ -71,24 +71,6 @@ public class WikiModel extends AbstractWikiModel {
 		fExternalWikiBaseURL = linkBaseURL;
 	}
 
-	/**
-	 * @deprecated use the
-	 *             <code>(Configuration configuration, Locale locale,...)</code>
-	 *             constructors instead.
-	 * @param configuration
-	 * @param resourceBundle
-	 * @param namespace
-	 * @param imageBaseURL
-	 * @param linkBaseURL
-	 */
-	@Deprecated
-	public WikiModel(Configuration configuration, ResourceBundle resourceBundle, INamespace namespace, String imageBaseURL,
-			String linkBaseURL) {
-		super(configuration, resourceBundle, namespace);
-		fExternalImageBaseURL = imageBaseURL;
-		fExternalWikiBaseURL = linkBaseURL;
-	}
-
 	public WikiModel(Configuration configuration, Locale locale, ResourceBundle resourceBundle, INamespace namespace, String imageBaseURL,
 			String linkBaseURL) {
 		super(configuration, locale, resourceBundle, namespace);

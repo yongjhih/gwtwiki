@@ -144,16 +144,6 @@ public class WikiArticle {
 		this.timeStamp = timeStamp;
 	}
 
-	/**
-	 * 
-	 * @param newTitle
-	 * @deprecated
-	 */
-	@Deprecated
-	public void setTitle(String newTitle) {
-		setTitle(newTitle, null);
-	}
-
 	public void setTitle(String newTitle, Siteinfo siteinfo) {
 		title = newTitle;
 		if (siteinfo != null) {

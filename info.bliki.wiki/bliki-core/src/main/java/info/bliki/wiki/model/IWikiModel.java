@@ -132,26 +132,6 @@ public interface IWikiModel extends IConfiguration {
 	 * in <a href="http://en.wikipedia.org/wiki/Help:Link#External_links">Help
 	 * Links</a>
 	 * 
-	 * @param link
-	 *          the external link with <code>http://, https:// or ftp://</code>
-	 *          prefix
-	 * @param linkName
-	 *          the link name which is separated from the URL by a space
-	 * @param withoutSquareBrackets
-	 *          if <code>true</code> a link with no square brackets around the
-	 *          link was parsed
-	 * @deprecated use
-	 *             {@link IWikiModel#appendExternalLink(String, String, String, boolean)}
-	 *             instead.
-	 */
-	@Deprecated
-	public void appendExternalLink(String link, String linkName, boolean withoutSquareBrackets);
-
-	/**
-	 * Append an external link (starting with http, https, ftp,...) as described
-	 * in <a href="http://en.wikipedia.org/wiki/Help:Link#External_links">Help
-	 * Links</a>
-	 * 
 	 * @param uriSchemeName
 	 *          the top level URI (Uniform Resource Identifier) scheme name
 	 *          (without the following colon character ":"). Example "ftp",
@@ -167,25 +147,6 @@ public interface IWikiModel extends IConfiguration {
 	 *          link was parsed
 	 */
 	public void appendExternalLink(String uriSchemeName, String link, String linkName, boolean withoutSquareBrackets);
-
-	/**
-	 * Add a single wiki head (i.e. ==...==, ===...===, ====...====,...) to the
-	 * table of content
-	 * 
-	 * @param rawHead
-	 *          the unparsed header string
-	 * @param headLevel
-	 *          level of header (i.e. h1, h2, h3, h4, 5h,..)
-	 * @param noToc
-	 *          don't show the &quot;table of content&quot;
-	 * @param headCounter
-	 *          the total number of headers parsed
-	 * @return the &quot;table of content&quot; tag
-	 * 
-	 * @deprecated
-	 */
-	@Deprecated
-	public ITableOfContent appendHead(String rawHead, int headLevel, boolean noToC, int headCounter);
 
 	/**
 	 * Add a single wiki head (i.e. ==...==, ===...===, ====...====,...) to the

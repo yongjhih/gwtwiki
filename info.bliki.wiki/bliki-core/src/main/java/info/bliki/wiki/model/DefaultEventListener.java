@@ -11,16 +11,15 @@ package info.bliki.wiki.model;
 public class DefaultEventListener implements IEventListener {
 	public final static IEventListener CONST = new DefaultEventListener();
 
-	public void onHeader(char[] src, int rawStart, int rawEnd, int level) {
-	}
-
+	/** {@inheritDoc} */
 	public void onHeader(char[] src, int startPosition, int endPosition, int rawStart, int rawEnd, int level) {
-		onHeader(src, rawStart, rawEnd, level);
 	}
 
+	/** {@inheritDoc} */
 	public void onWikiLink(char[] src, int rawStart, int rawEnd, String suffix) {
 	}
 
+	/** {@inheritDoc} */
 	public void onTemplate(char[] src, int rawStart, int rawEnd) {
 	}
 
