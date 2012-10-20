@@ -6,7 +6,6 @@ import info.bliki.wiki.template.expr.ast.FractionNode;
 import info.bliki.wiki.template.expr.ast.FunctionNode;
 import info.bliki.wiki.template.expr.ast.IParserFactory;
 import info.bliki.wiki.template.expr.ast.IntegerNode;
-import info.bliki.wiki.template.expr.ast.StringNode;
 import info.bliki.wiki.template.expr.ast.SymbolNode;
 
 import java.util.ArrayList;
@@ -189,10 +188,6 @@ public class ASTNodeFactory implements IParserFactory {
 
 	public FractionNode createFraction(final IntegerNode numerator, final IntegerNode denominator) {
 		return new FractionNode(numerator, denominator);
-	}
-
-	public StringNode createString(final StringBuffer buffer) {
-		return new StringNode(buffer.toString());
 	}
 
 	public SymbolNode createSymbol(final String symbolName) {

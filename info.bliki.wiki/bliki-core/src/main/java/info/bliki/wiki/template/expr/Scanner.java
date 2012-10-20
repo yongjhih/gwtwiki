@@ -1,9 +1,16 @@
 package info.bliki.wiki.template.expr;
 
 import info.bliki.wiki.template.expr.ast.IParserFactory;
+import info.bliki.wiki.template.expr.operator.Operator;
 
 import java.util.List;
 
+/**
+ * Determine the tokens from a math formulas string representation.
+ * 
+ * See <a
+ * href="http://en.wikipedia.org/wiki/Lexical_analysis">Lexical analysis</a>.
+ */
 public class Scanner {
 	/**
 	 * Current parser input string
@@ -33,7 +40,7 @@ public class Scanner {
 	/**
 	 * protected List<Operator> fOperList;
 	 */
-	protected List fOperList;
+	protected List<Operator> fOperList;
 
 	/**
 	 * Row counter for syntax errors.
@@ -75,10 +82,6 @@ public class Scanner {
 	 */
 	final static public int TT_OPERATOR = 30;
 
-	/**
-	 * Token type: string surrounded by &quot;....&quot;
-	 */
-	// final static public int TT_STRING = 136;
 	/**
 	 * Token type: digit 0,1,2,3,4,5,6,7,8,9
 	 */
@@ -127,11 +130,11 @@ public class Scanner {
 		fToken = TT_EOF;
 	}
 
-	protected List getOperator() {
+	protected List<Operator> getOperator() {
 		final int startPosition = fCurrentPosition - 1;
 		fOperatorString = fInputString.substring(startPosition, fCurrentPosition);
-		List list = fFactory.getOperatorList(fOperatorString);
-		List lastList = null;
+		List<Operator> list = fFactory.getOperatorList(fOperatorString);
+		List<Operator> lastList = null;
 		int lastOperatorPosition = -1;
 		if (list != null) {
 			lastList = list;
@@ -212,19 +215,12 @@ public class Scanner {
 					// token = TT_DOT;
 					if (fInputString.length() > fCurrentPosition) {
 						if ((fInputString.charAt(fCurrentPosition) >= '0') && (fInputString.charAt(fCurrentPosition) <= '9')) {
-							// don't increment fCurrentPosition (see
-							// getNumberString())
-							// fCurrentPosition++;
 							fToken = TT_DIGIT; // floating-point number
 							break;
 						}
 					}
 
 					break;
-				// case '"':
-				// fToken = TT_STRING;
-				//
-				// break;
 				default:
 					String str;
 					switch (fCurrentChar) {
@@ -293,10 +289,7 @@ public class Scanner {
 			getChar();
 		}
 
-		int endPosition = fCurrentPosition--;
-		final int length = (--endPosition) - startPosition;
-
-		return fInputString.substring(startPosition, endPosition);
+		return fInputString.substring(startPosition, --fCurrentPosition);
 	}
 
 	protected Object[] getNumberString() {
@@ -360,7 +353,6 @@ public class Scanner {
 			}
 		} else {
 			while (((fCurrentChar >= '0') && (fCurrentChar <= '9')) || (fCurrentChar == '.')) {
-				// if ((ch == '.') || (ch == 'E') || (ch == 'e')) {
 				if (fCurrentChar == '.') {
 					if ((fCurrentChar == '.') && (dFlag != ' ')) {
 						break;
@@ -371,9 +363,6 @@ public class Scanner {
 					getChar();
 				}
 			}
-			// if (dFlag != ' ') {
-			// numFormat = -1;
-			// }
 		}
 		if (numFormat == 10) {
 			if ((fCurrentChar == 'E') || (fCurrentChar == 'e')) {
@@ -387,7 +376,6 @@ public class Scanner {
 				}
 			}
 		}
-		// }
 		if (dFlag != ' ') {
 			numFormat = -1;
 		}
