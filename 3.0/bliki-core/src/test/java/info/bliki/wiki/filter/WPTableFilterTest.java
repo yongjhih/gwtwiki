@@ -370,25 +370,26 @@ public class WPTableFilterTest extends FilterTestSupport {
 
 	public void testBlockquoteTableText01() {
 		assertEquals(
-				"Simple exampleBoth of these generate the same output.  Choose a style based on the number of cells in each row and the total text inside each cell.Wiki markup\n"
-						+ "<nowiki>\n"
-						+ "{| \n"
-						+ "| A \n"
-						+ "| B\n"
-						+ "|- \n"
-						+ "| C\n"
-						+ "| D\n"
-						+ "|}\n"
-						+ "</nowiki>\n"
-						+ "<nowiki>\n"
-						+ "{| \n"
-						+ "| A || B\n"
-						+ "|- \n"
-						+ "| C || D \n"
-						+ "|}\n"
-						+ "</nowiki>\n"
-						+ "What it looks like in your browser\n"
-						+ "\n" + "\n" + "", wikiModel.render(new PlainTextConverter(), TEST3, false));
+				"Simple exampleBoth of these generate the same output.  Choose a style based on the number of cells in each row and the total text inside each cell. Wiki markup\n" + 
+				"<nowiki>\n" + 
+				"{| \n" + 
+				"| A \n" + 
+				"| B\n" + 
+				"|- \n" + 
+				"| C\n" + 
+				"| D\n" + 
+				"|}\n" + 
+				"</nowiki>\n" + 
+				"<nowiki>\n" + 
+				"{| \n" + 
+				"| A || B\n" + 
+				"|- \n" + 
+				"| C || D \n" + 
+				"|}\n" + 
+				"</nowiki>\n" + 
+				"What it looks like in your browser\n" + 
+				"\n" + 
+				"\n", wikiModel.render(new PlainTextConverter(), TEST3, false));
 	}
 
 	public void testWPTableText01() {

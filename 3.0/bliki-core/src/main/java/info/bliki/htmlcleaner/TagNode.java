@@ -294,7 +294,7 @@ public class TagNode extends TagToken {
 	public void getBodyString(Appendable buf) throws IOException {
 		List<Object> children = getChildren();
 		if (children.size() == 1 && children.get(0) instanceof ContentToken) {
-			buf.append(((ContentToken) children.get(0)).getContent());
+			((ContentToken) children.get(0)).appendPlainText(buf);
 			// buf.append(Utils.escapeXml(((ContentToken)
 			// children.get(0)).getContent(),
 			// true, true, true));
@@ -302,7 +302,7 @@ public class TagNode extends TagToken {
 			if (children.size() > 0) {
 				for (int i = 0; i < children.size(); i++) {
 					if (children.get(i) instanceof ContentToken) {
-						buf.append(((ContentToken) children.get(i)).getContent());
+						((ContentToken) children.get(i)).appendPlainText(buf);
 						// buf.append(Utils.escapeXml(((ContentToken) children.get(i))
 						// .getContent(), true, true, true));
 					} else if (children.get(i) instanceof HTMLTag) {
