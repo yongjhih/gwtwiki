@@ -260,4 +260,20 @@ public class BasicFilterTest extends FilterTestSupport {
 		}
 
 	}
+
+	public void testAbbr01() {
+		assertEquals("\n" + "<p>" + "<abbr title=\"test\">[?]</abbr></p>",
+				wikiModel.render("<abbr title=\"test\">[?]</abbr>", false));
+	}
+
+	public void testAbbr02() {
+		assertEquals("\n" + "<p>" + "<abbr title=\"test\">[?]</abbr></p>",
+				wikiModel.render("<abbr title=\"<nowiki>test</nowiki>\">[?]</abbr>", false));
+	}
+
+	// TODO: should this work, too?!
+//	public void testAbbr03() {
+//		assertEquals("\n" + "<p>" + "<abbr title=\"test\">[?]</abbr></p>",
+//				wikiModel.render("<abbr title=\"<noWiki>test</nowiKi>\">[?]</abbr>", false));
+//	}
 }
