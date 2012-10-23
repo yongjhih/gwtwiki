@@ -111,6 +111,8 @@ public class Configuration implements IConfiguration {
 
 	final static HTMLTag HTML_A_OPEN = new ATag();
 
+	final public static HTMLTag HTML_ABBR_OPEN = new HTMLTag("abbr");
+
 	final public static HTMLTag HTML_EM_OPEN = new HTMLTag("em");
 
 	final public static HTMLTag HTML_H1_OPEN = new HTMLBlockTag("h1", SPECIAL_BLOCK_TAGS);
@@ -339,6 +341,7 @@ public class Configuration implements IConfiguration {
 		TAG_TOKEN_MAP.put("div", HTML_DIV_OPEN);
 		TAG_TOKEN_MAP.put("span", HTML_SPAN_OPEN);
 
+		TAG_TOKEN_MAP.put("abbr", HTML_ABBR_OPEN);
 		TAG_TOKEN_MAP.put("cite", HTML_CITE_OPEN);
 	}
 
