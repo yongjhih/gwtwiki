@@ -250,7 +250,7 @@ public class Namespace implements INamespace {
 		 */
 		public String makeFullPagename(String pageName) {
 			String primaryText = getPrimaryText();
-			if (primaryText == null || primaryText.length() == 0) {
+			if (primaryText.isEmpty()) {
 				return pageName;
 			} else {
 				return primaryText + ":" + pageName;
