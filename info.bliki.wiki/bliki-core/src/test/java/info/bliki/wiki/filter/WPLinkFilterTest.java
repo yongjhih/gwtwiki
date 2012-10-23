@@ -213,7 +213,7 @@ public class WPLinkFilterTest extends FilterTestSupport {
 	}
 
 	public void testPlainTextConverter001() {
-		assertEquals("An external link.", wikiModel.render(new PlainTextConverter(), "An [http://www.example.com external link].",
+		assertEquals("An external link. ", wikiModel.render(new PlainTextConverter(), "An [http://www.example.com external link]. ",
 				false));
 	}
 
@@ -222,7 +222,7 @@ public class WPLinkFilterTest extends FilterTestSupport {
 				+ "<!--Note: French does not have tonic accents, so do not add stress marks to this pronunciation-->)"
 				+ " is a 19th century ";
 
-		assertEquals("The Eiffel Tower,French pronunciation:&nbsp;[tuʀ ɛfɛl]) is a 19th century ", wikiModel.render(
+		assertEquals("The Eiffel Tower,French pronunciation: [tuʀ ɛfɛl]) is a 19th century ", wikiModel.render(
 				new PlainTextConverter(), wikitext, false));
 	}
 	// public static void main(String[] args) {
