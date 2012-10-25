@@ -1,5 +1,11 @@
 package info.bliki.wiki.tags;
 
+import info.bliki.htmlcleaner.TagNode;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.TreeMap;
+
 /**
  * A wiki tag that's partitioning the HTML document
  * 
@@ -7,10 +13,22 @@ package info.bliki.wiki.tags;
 public class HTMLBlockTag extends HTMLTag {
 
 	private final String fAllowedParents;
+	private final HTMLTag fDefaultParentTag;
 
-	public HTMLBlockTag(String name, String allowedParents) {
+	public HTMLBlockTag(String name, String allowedParents, HTMLTag defaultParentTag) {
 		super(name);
 		fAllowedParents = allowedParents;
+		fDefaultParentTag = defaultParentTag;
+	}
+
+	public HTMLBlockTag(String name, String allowedParents) {
+		this(name, allowedParents, null);
+	}
+
+	@Override
+	public Object clone() {
+		HTMLBlockTag bt = new HTMLBlockTag(name, fAllowedParents, fDefaultParentTag);
+		return bt;
 	}
 
 	@Override
@@ -25,5 +43,15 @@ public class HTMLBlockTag extends HTMLTag {
 
 	public String getCloseTag() {
 		return "\n</" + name + ">";
+	}
+
+	/**
+	 * Use this tag if no parent tag was found on the wiki model's tag stack.
+	 * 
+	 * @return the default parent tag
+	 */
+	@Override
+	public HTMLTag getDefaultParentTag() {
+		return fDefaultParentTag;
 	}
 }

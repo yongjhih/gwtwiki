@@ -17,6 +17,7 @@ import info.bliki.wiki.filter.TemplateParser;
 import info.bliki.wiki.filter.WikipediaParser;
 import info.bliki.wiki.namespaces.INamespace;
 import info.bliki.wiki.namespaces.Namespace;
+import info.bliki.wiki.tags.HTMLTag;
 import info.bliki.wiki.tags.TableOfContentTag;
 import info.bliki.wiki.tags.WPATag;
 import info.bliki.wiki.tags.WPTag;
@@ -1815,6 +1816,12 @@ public abstract class AbstractWikiModel implements IWikiModel, IContext {
 					}
 				} else {
 					break;
+				}
+			}
+			if (stackSize() == 0 && (node instanceof HTMLTag)) {
+				HTMLTag defParent = ((HTMLTag) node).getDefaultParentTag();
+				if (defParent != null) {
+					pushNode((HTMLTag) defParent.clone());
 				}
 			}
 		} else {
