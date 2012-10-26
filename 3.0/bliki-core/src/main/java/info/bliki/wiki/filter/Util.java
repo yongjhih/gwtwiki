@@ -170,6 +170,9 @@ public class Util {
 			}
 			end--;
 		}
+		if ((start < end) && str.charAt(end - 1) == '\r') {
+			end--;
+		}
 		return ((start > 0) || (end < str.length())) ? str.substring(start, end) : str;
 	}
 }
