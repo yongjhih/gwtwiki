@@ -163,7 +163,7 @@ public class Configuration implements IConfiguration {
 
 	final public static HTMLTag HTML_OL_OPEN = new HTMLBlockTag("ol", SPECIAL_BLOCK_TAGS);
 
-	final public static HTMLTag HTML_LI_OPEN = new HTMLBlockTag("li", "|dir|menu|ol|ul|");
+	final public static HTMLTag HTML_LI_OPEN = new HTMLBlockTag("li", "|dir|menu|ol|ul|", HTML_UL_OPEN);
 
 	final public static HTMLTag HTML_FONT_OPEN = new HTMLTag("font");
 

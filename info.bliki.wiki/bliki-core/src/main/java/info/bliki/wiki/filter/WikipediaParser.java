@@ -24,7 +24,6 @@ import info.bliki.wiki.tags.util.NodeAttribute;
 import info.bliki.wiki.tags.util.TagStack;
 import info.bliki.wiki.tags.util.WikiTagNode;
 
-import java.io.IOException;
 import java.util.List;
 
 /**

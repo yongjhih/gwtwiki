@@ -124,4 +124,14 @@ public class HTMLTag extends TagNode {
 	public void setTemplate(boolean isTemplate) {
 		// empty function
 	}
+
+	/**
+	 * Use this tag if no parent tag was found on the wiki model's tag stack.
+	 * 
+	 * @return the default parent tag or <code>null</code>, if there's no default
+	 *         parent tag
+	 */
+	public HTMLTag getDefaultParentTag() {
+		return null;
+	}
 }

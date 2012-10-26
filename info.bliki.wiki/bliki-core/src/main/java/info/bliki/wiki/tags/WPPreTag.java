@@ -17,6 +17,12 @@ public class WPPreTag extends HTMLBlockTag {
 	}
 
 	@Override
+	public Object clone() {
+		WPPreTag wppt = new WPPreTag();
+		return wppt;
+	}
+
+	@Override
 	public void renderHTML(ITextConverter converter, Appendable buf, IWikiModel model) throws IOException {
 		super.renderHTML(converter, buf, model);
 	}

@@ -21,6 +21,12 @@ public class PreTag extends HTMLBlockTag implements INoBodyParsingTag {// implem
 	}
 
 	@Override
+	public Object clone() {
+		PreTag pt = new PreTag( );
+		return pt;
+	}
+	
+	@Override
 	public void renderHTML(ITextConverter converter, Appendable writer, IWikiModel model) throws IOException {
 		String content = getBodyString();
 		if (content != null && content.length() > 0) {
