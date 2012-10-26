@@ -478,7 +478,7 @@ public class Connector {
 	}
 
 	/**
-	 * Sends request for parse action.
+	 * Sends request to get the raw format from the Wikipedia API.
 	 * 
 	 * @param user
 	 *          user login data
@@ -487,16 +487,9 @@ public class Connector {
 	 * @return the raw XML string produced by the query; <code>null</code>
 	 *         otherwise
 	 */
-	private String sendXML(User user, RequestBuilder requestBuilder) {
+	public String sendXML(User user, RequestBuilder requestBuilder) {
 		PostMethod method = createAuthenticatedPostMethod(user);
 		method.addParameters(requestBuilder.getParameters());
-		// if (params != null && !params.isEmpty()) {
-		// for (Map.Entry entry : params.entrySet()) {
-		// method.addParameter(new NameValuePair((String) entry.getKey(), (String)
-		// entry.getValue()));
-		// }
-		// }
-		// method.addParameter(new NameValuePair(PARAM_ACTION, "parse"));
 		return executeHttpMethod(method);
 	}
 
