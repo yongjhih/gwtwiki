@@ -17,6 +17,13 @@ public class TemplateParserTest extends FilterTestSupport {
 
 	private final String TEST_STRING_03 = "{{{1|{{PAGENAME}}}}}";
 
+	public void testWeather07() {
+		assertEquals("20\n", wikiModel.parseTemplates("{{WeatherBox03}}\n"));
+	}
+	
+	public void testWeather06() {
+		assertEquals("10\n", wikiModel.parseTemplates("{{WeatherBox03|show1=1}}\n"));
+	}
 	/**
 	 * Issue 86
 	 */
@@ -1231,7 +1238,6 @@ public class TemplateParserTest extends FilterTestSupport {
 	}
 
 	public void testWeather05() {
-		assertEquals("10\n" + 
-				"", wikiModel.parseTemplates("{{WeatherVal03\n\r" + "|show=1\n\r" + "|jan1=10\n\r" + "}}\n"));
+		assertEquals("10\n" + "", wikiModel.parseTemplates("{{WeatherVal03\n\r" + "|show=1\n\r" + "|jan1=10\n\r" + "}}\n"));
 	}
 }

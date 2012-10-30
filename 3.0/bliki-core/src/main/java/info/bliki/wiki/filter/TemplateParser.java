@@ -79,17 +79,7 @@ public class TemplateParser extends AbstractParser {
 			boolean parseOnlySignature, boolean renderTemplate, boolean onlyIncludeFlag, Map<String, String> templateParameterMap)
 			throws IOException {
 		try {
-			// int level = wikiModel.incrementRecursionLevel();
 			int templateLevel = wikiModel.incrementTemplateRecursionLevel();
-			// if (level > Configuration.PARSER_RECURSION_LIMIT) {
-			// if (Configuration.DEBUG) {
-			// System.out.println("Recursion1 error: " + rawWikitext);
-			// }
-			// writer.append("Error - recursion limit exceeded parsing templates.");
-			// return;
-			// }
-			// recursion limit on level is not sufficient as it is possible to recurse
-			// indefinitely at fixed level upper bound
 			if (templateLevel > Configuration.TEMPLATE_RECURSION_LIMIT) {
 				writer.append("Error - template recursion limit exceeded parsing templates.");
 				return;
@@ -103,11 +93,14 @@ public class TemplateParser extends AbstractParser {
 			StringBuilder plainBuffer = sb;
 			if (templateParameterMap != null && (!templateParameterMap.isEmpty())) {
 				String preprocessedContent = parameterBuffer.toString();
-				WikipediaScanner scanner = new WikipediaScanner(preprocessedContent);
-				scanner.setModel(wikiModel);
-				parameterBuffer = scanner.replaceTemplateParameters(templateParameterMap);
-				if (parameterBuffer != null) {
-					plainBuffer = parameterBuffer;
+				int indx = preprocessedContent.indexOf("{{{");
+				if (indx >= 0) {
+					WikipediaScanner scanner = new WikipediaScanner(preprocessedContent);
+					scanner.setModel(wikiModel);
+					parameterBuffer = scanner.replaceTemplateParameters(templateParameterMap, 0);
+					if (parameterBuffer != null) {
+						plainBuffer = parameterBuffer;
+					}
 				}
 			}
 			writer.append(plainBuffer);
@@ -118,7 +111,6 @@ public class TemplateParser extends AbstractParser {
 			e.printStackTrace();
 			writer.append(e.getClass().getSimpleName());
 		} finally {
-			// wikiModel.decrementRecursionLevel();
 			wikiModel.decrementTemplateRecursionLevel();
 		}
 	}
@@ -132,18 +124,7 @@ public class TemplateParser extends AbstractParser {
 			return;
 		}
 		try {
-			// int level = wikiModel.incrementRecursionLevel();
 			int templateLevel = wikiModel.incrementTemplateRecursionLevel();
-			// if (level > Configuration.PARSER_RECURSION_LIMIT) {
-			// if (Configuration.DEBUG) {
-			// System.out.println("Recursion2 error: " + rawWikitext);
-			// }
-			// writer.append("Error - recursion limit exceeded parsing templates.");
-			// return;
-			// }
-
-			// recursion limit on level is not sufficient as it is possible to recurse
-			// indefinitely at fixed level upper bound
 			if (templateLevel > Configuration.TEMPLATE_RECURSION_LIMIT) {
 				writer.append("Error - template recursion limit exceeded parsing templates.");
 				return;
@@ -156,7 +137,6 @@ public class TemplateParser extends AbstractParser {
 
 			parser = new TemplateParser(sb.toString(), parseOnlySignature, renderTemplate);
 			parser.setModel(wikiModel);
-			// parser.initialize(plainBuffer.toString());
 			sb = new StringBuilder(sb.length());
 			parser.runParser(sb);
 
@@ -177,8 +157,7 @@ public class TemplateParser extends AbstractParser {
 		} catch (Error e) {
 			e.printStackTrace();
 			writer.append(e.getClass().getSimpleName());
-		} finally {
-			// wikiModel.decrementRecursionLevel();
+		} finally { 
 			wikiModel.decrementTemplateRecursionLevel();
 		}
 	}
@@ -671,7 +650,7 @@ public class TemplateParser extends AbstractParser {
 		if (parts.size() > 1) {
 			List<String> unnamedParameters = new ArrayList<String>();
 			for (int i = 1; i < parts.size(); i++) {
-				createSingleParameter(parts.get(i), parameterMap, unnamedParameters);
+				createSingleParameter(parts.get(i), fWikiModel, parameterMap, unnamedParameters);
 			}
 			mergeParameters(parameterMap, unnamedParameters);
 		}
@@ -716,14 +695,17 @@ public class TemplateParser extends AbstractParser {
 	private void parseTemplateParameter(Appendable writer, int startTemplatePosition, int templateEndPosition) throws IOException {
 		String plainContent = fStringSource.substring(startTemplatePosition - 2, templateEndPosition);
 		fCurrentPosition = templateEndPosition;
-		WikipediaScanner scanner = new WikipediaScanner(plainContent);
-		scanner.setModel(fWikiModel);
-		StringBuilder plainBuffer = scanner.replaceTemplateParameters(null);
-		if (plainBuffer == null) {
-			writer.append(plainContent);
-			return;
+		int indx = plainContent.indexOf("{{{");
+		if (indx >= 0) {
+			WikipediaScanner scanner = new WikipediaScanner(plainContent);
+			scanner.setModel(fWikiModel);
+			StringBuilder plainBuffer = scanner.replaceTemplateParameters(null, 0);
+			if (plainBuffer == null) {
+				writer.append(plainContent);
+				return;
+			}
+			TemplateParser.parseRecursive(plainBuffer.toString().trim(), fWikiModel, writer, false, false);
 		}
-		TemplateParser.parseRecursive(plainBuffer.toString().trim(), fWikiModel, writer, false, false);
 	}
 
 	/**
@@ -770,7 +752,8 @@ public class TemplateParser extends AbstractParser {
 	 * @param unnamedParams
 	 *          a list of unnamed parameter values
 	 */
-	public static void createSingleParameter(String srcString, Map<String, String> namedParameterMap, List<String> unnamedParams) {
+	public static void createSingleParameter(String srcString, IWikiModel wikiModel, Map<String, String> namedParameterMap,
+			List<String> unnamedParams) {
 		int currOffset = 0;
 		char[] src = srcString.toCharArray();
 		int endOffset = srcString.length();
@@ -822,14 +805,21 @@ public class TemplateParser extends AbstractParser {
 
 		} finally {
 			if (currOffset > lastOffset) {
-				value = srcString.substring(lastOffset, currOffset);
-				if (parameter != null) {
-					value = Util.trimNewlineRight(value);
-					namedParameterMap.put(parameter, value);
-				} else {
-					// whitespace characters are not automatically stripped from the start
-					// and end of unnamed parameters!
-					unnamedParams.add(value);
+				try {
+					StringBuilder buf = new StringBuilder();
+					value = srcString.substring(lastOffset, currOffset);
+					if (parameter != null) {
+						value = Util.trimNewlineRight(value);
+						TemplateParser.parseRecursive(value, wikiModel, buf, false, false);
+						namedParameterMap.put(parameter, buf.toString());
+					} else {
+						// whitespace characters are not automatically stripped from the
+						// start and end of unnamed parameters!
+						unnamedParams.add(value);
+					}
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
 				}
 			}
 		}
