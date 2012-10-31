@@ -373,12 +373,12 @@ public class Configuration implements IConfiguration {
 	/**
 	 * Limits the Scanner buffer.
 	 */
-	public final static int TEMPLATE_BUFFER_LIMIT = 65536;
+	public final static int TEMPLATE_BUFFER_LIMIT = 262144;
 
 	/**
 	 * Limits the template parameter value length
 	 */
-	public final static int TEMPLATE_VALUE_LIMIT = 8192;
+	public final static int TEMPLATE_VALUE_LIMIT = 65536;
 
 	/**
 	 * Limits the recursive call of the AbstractParser parser to a depth of
