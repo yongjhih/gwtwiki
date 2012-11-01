@@ -202,7 +202,7 @@ public class TemplateParser extends AbstractParser {
 					break;
 				case '~':
 					int tildeCounter = 0;
-					if (fSource[fCurrentPosition] == '~' && fSource[fCurrentPosition + 1] == '~') {
+					if ((fSource.length > fCurrentPosition + 1) && fSource[fCurrentPosition] == '~' && fSource[fCurrentPosition + 1] == '~') {
 						// parse signatures '~~~', '~~~~' or '~~~~~'
 						tildeCounter = 3;
 						try {
@@ -279,7 +279,7 @@ public class TemplateParser extends AbstractParser {
 					break;
 				case '~':
 					int tildeCounter = 0;
-					if (fSource[fCurrentPosition] == '~' && fSource[fCurrentPosition + 1] == '~') {
+					if ((fSource.length > fCurrentPosition + 1) && fSource[fCurrentPosition] == '~' && fSource[fCurrentPosition + 1] == '~') {
 						// parse signatures '~~~', '~~~~' or '~~~~~'
 						tildeCounter = 3;
 						try {
