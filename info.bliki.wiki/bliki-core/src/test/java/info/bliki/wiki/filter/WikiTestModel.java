@@ -28,7 +28,8 @@ public class WikiTestModel extends WikiModel {
 	public final static String WEATHERVAL01 = "{{{show}}}";
 	public final static String WEATHERVAL02 = "{{{jan1}}}";
 	public final static String WEATHERVAL03 = "{{{jan{{{show}}}}}}";
-
+	public final static String WEATHERBOX03 = "{{WeatherVal03\n|show={{#if:{{{show1|}}}|1|2}}|jan1=10|jan2=20}}";
+	
 	public static String MAIN = "{{Rellink|extraclasses=relarticle mainarticle|{{#ifeq:{{SUBJECTSPACE}}|Category|The main {{#ifeq:{{NAMESPACE:{{{1}}}}}||article|page}}{{#if:{{{2|}}}|s}} for this [[Wikipedia:Categorization|category]] {{#if:{{{2|}}}|are|is}}|Main {{#ifeq:{{NAMESPACE:{{{1}}}}}||article|page}}{{#if:{{{2|}}}|s}}:}} [[{{{1|{{PAGENAME}}}}}|{{{l1|{{{1|{{PAGENAME}}}}}}}}]]{{#if:{{{2| }}}\n"
 			+ " |{{#if:{{{3|}}}|,&#32;|&#32;and&#32;}}[[{{{2}}}|{{{l2|{{{2}}}}}}]]}}{{#if:{{{3|}}}\n"
 			+ " |{{#if:{{{4|}}}|,&#32;|,&#32;and&#32;}}[[{{{3}}}|{{{l3|{{{3}}}}}}]]}}{{#if:{{{4|}}}\n"
@@ -2618,6 +2619,8 @@ public class WikiTestModel extends WikiModel {
 				return WEATHERVAL02;
 			} else if (name.equals("WeatherVal03")) {
 				return WEATHERVAL03;
+			} else if (name.equals("WeatherBox03")) {
+				return WEATHERBOX03;
 			}
 		} else {
 			if (name.equals("Include_Page")) {

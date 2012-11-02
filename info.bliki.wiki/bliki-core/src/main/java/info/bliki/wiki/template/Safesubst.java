@@ -63,9 +63,9 @@ public class Safesubst extends AbstractTemplateFunction {
 		List<String> unnamedParameters = new ArrayList<String>();
 		for (int i = 1; i < parts.size(); i++) {
 			if (i == parts.size() - 1) {
-				TemplateParser.createSingleParameter(parts.get(i), parameterMap, unnamedParameters);
+				TemplateParser.createSingleParameter(parts.get(i), model, parameterMap, unnamedParameters);
 			} else {
-				TemplateParser.createSingleParameter(parts.get(i), parameterMap, unnamedParameters);
+				TemplateParser.createSingleParameter(parts.get(i), model, parameterMap, unnamedParameters);
 			}
 		}
 		TemplateParser.mergeParameters(parameterMap, unnamedParameters);

@@ -605,11 +605,14 @@ public class WikipediaScanner {
 	/**
 	 * Replace the wiki template parameters in the given template string
 	 * 
-	 * @param template
 	 * @param templateParameters
+	 * @param curlyBraceOffset
+	 *          TODO
+	 * @param template
+	 * 
 	 * @return <code>null</code> if no replacement could be found
 	 */
-	public StringBuilder replaceTemplateParameters(Map<String, String> templateParameters) {
+	public StringBuilder replaceTemplateParameters(Map<String, String> templateParameters, int curlyBraceOffset) {
 		StringBuilder buffer = null;
 		int bufferStart = 0;
 		try {
@@ -617,6 +620,7 @@ public class WikipediaScanner {
 			if (level > Configuration.PARSER_RECURSION_LIMIT) {
 				return null; // no further processing
 			}
+			fScannerPosition += curlyBraceOffset;
 			char ch;
 			int parameterStart = -1;
 			StringBuilder recursiveResult;
@@ -637,7 +641,7 @@ public class WikipediaScanner {
 
 							WikipediaScanner scanner1 = new WikipediaScanner(parameterString);
 							scanner1.setModel(fWikiModel);
-							recursiveResult = scanner1.replaceTemplateParameters(templateParameters);
+							recursiveResult = scanner1.replaceTemplateParameters(templateParameters, curlyBraceOffset);
 							if (recursiveResult != null) {
 								parameterString = recursiveResult.toString();
 							}
@@ -664,9 +668,9 @@ public class WikipediaScanner {
 									WikipediaScanner scanner2 = new WikipediaScanner(value);
 									scanner2.setModel(fWikiModel);
 									if (isDefaultValue) {
-										recursiveResult = scanner2.replaceTemplateParameters(templateParameters);
+										recursiveResult = scanner2.replaceTemplateParameters(templateParameters, curlyBraceOffset);
 									} else {
-										recursiveResult = scanner2.replaceTemplateParameters(null);
+										recursiveResult = scanner2.replaceTemplateParameters(null, curlyBraceOffset);
 									}
 									if (recursiveResult != null) {
 										buffer.append(recursiveResult);
