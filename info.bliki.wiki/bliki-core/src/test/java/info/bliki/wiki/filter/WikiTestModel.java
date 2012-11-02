@@ -1316,6 +1316,7 @@ public class WikiTestModel extends WikiModel {
 	public final static String XHTML_END = "</body>\n" + "</html>";
 
 	public final static String PIPE_SYMBOL = "|<noinclude>{{template doc}}</noinclude>";
+	public final static String SINGLE_PARAMETER = "{{{1}}}";
 	public final static String DOUBLE_PARAMETER = "{{{1}}}{{{1}}}";
 	public final static String REFLIST_TEXT = "<div class=\"references-small\" {{#if: {{{colwidth|}}}| style=\"-moz-column-width:{{{colwidth}}}; -webkit-column-width:{{{colwidth}}}; column-width:{{{colwidth}}};\" | {{#if: {{{1|}}}| style=\"-moz-column-count:{{{1}}}; -webkit-column-count:{{{1}}}; column-count:{{{1}}} }};\" |}}>\n"
 			+ "<references /></div><noinclude>{{pp-template|small=yes}}{{template doc}}</noinclude>\n";
@@ -2423,8 +2424,6 @@ public class WikiTestModel extends WikiModel {
 			+ "      }}|{{{1|}}} }}<noinclude><!-- default='dmy'/'iso'/'mdy'/null/\"\"/unsupported option --></noinclude>\n" + "    }}\n"
 			+ "  }}    \n" + "}}<noinclude>\n" + "{{documentation}}\n" + "</noinclude>";
 
-	private static final String ONEX = "{{{1}}}";
-	private static final String TWOX = "{{{1}}}{{{1}}}";
 	private static final String NLN = "{{1x|\n}}";
 	private static final String SPC = "{{1x| }}";
 
@@ -2505,6 +2504,8 @@ public class WikiTestModel extends WikiModel {
 				return SIDE_BOX;
 			} else if (name.equals("!")) {
 				return PIPE_SYMBOL;
+			} else if (name.equals("1x")) {
+				return SINGLE_PARAMETER;
 			} else if (name.equals("2x")) {
 				return DOUBLE_PARAMETER;
 			} else if (name.equals("Cat")) {
@@ -2626,10 +2627,6 @@ public class WikiTestModel extends WikiModel {
 				return WEATHERVAL03;
 			} else if (name.equals("WeatherBox03")) {
 				return WEATHERBOX03;
-			} else if (name.equals("1x")) {
-				return ONEX;
-			} else if (name.equals("2x")) {
-				return TWOX;
 			} else if (name.equals("Nln")) {
 				return NLN;
 			} else if (name.equals("Spc")) {
