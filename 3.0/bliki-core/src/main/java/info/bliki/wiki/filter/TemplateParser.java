@@ -721,7 +721,7 @@ public class TemplateParser extends AbstractParser {
 		int endOffset = startOffset + len;
 		List<String> resultList = new ArrayList<String>();
 		objs[0] = resultList;
-		resultList = splitByPipe(src, currOffset, endOffset, resultList);
+		splitByPipe(src, currOffset, endOffset, resultList);
 		if (resultList.size() <= 1) {
 			// set the template name
 			objs[1] = new String(src, startOffset, len).trim();
@@ -804,7 +804,7 @@ public class TemplateParser extends AbstractParser {
 		} catch (IndexOutOfBoundsException e) {
 
 		} finally {
-			if (currOffset > lastOffset) {
+			if (currOffset >= lastOffset) {
 				try {
 					StringBuilder buf = new StringBuilder();
 					value = srcString.substring(lastOffset, currOffset);

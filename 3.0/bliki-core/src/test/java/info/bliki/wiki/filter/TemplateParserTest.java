@@ -1277,6 +1277,10 @@ public class TemplateParserTest extends FilterTestSupport {
 		assertTrue(wikiModel.getTemplates().contains("ShouldBeParsed"));
 		assertTrue(!wikiModel.getTemplates().contains("ShouldNotBeParsed"));
 	}
+	
+	public void testMissingImplicitParameter01() {
+		assertEquals("", wikiModel.parseTemplates("{{1x||2}}"));
+	}
 
 	// some tests from https://meta.wikimedia.org/wiki/Help:Newlines_and_spaces#Trimming_on_expansion
 	public void testNewlineSpaces01() {
