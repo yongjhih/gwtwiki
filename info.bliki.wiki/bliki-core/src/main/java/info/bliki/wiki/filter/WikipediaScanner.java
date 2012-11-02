@@ -708,25 +708,75 @@ public class WikipediaScanner {
 	 * @param sourceString
 	 * @param resultList
 	 *          the list which contains the splitted strings
-	 * @return
+	 * @return splitted strings
 	 */
 	public static List<String> splitByPipe(String sourceString, List<String> resultList) {
-		// TODO optimize this to avoid new char[] generation inside toCharArray() ?
-		return splitByPipe(sourceString.toCharArray(), 0, sourceString.length(), resultList);
+		return splitByChar('|', sourceString, resultList, -1);
 	}
 
 	/**
 	 * Split the given <code>srcArray</code> character array by pipe symbol (i.e.
-	 * &quot;|&quot;)
+	 * &quot;|&quot;).
 	 * 
 	 * @param srcArray
+	 *          the array to split
 	 * @param currOffset
+	 *          start position in <tt>srcArray</tt>
 	 * @param endOffset
+	 *          end position in <tt>srcArray</tt>
 	 * @param resultList
 	 *          the list which contains the splitted strings
-	 * @return
+	 *
+	 * @return splitted strings
 	 */
 	public static List<String> splitByPipe(char[] srcArray, int currOffset, int endOffset, List<String> resultList) {
+		return splitByChar('|', srcArray, currOffset, endOffset, resultList, -1);
+	}
+
+	/**
+	 * Split the given src string by pipe symbol (i.e. &quot;|&quot;)
+	 * 
+	 * @param splitChar
+	 *          the character to split by
+	 * @param sourceString
+	 *          the string to split
+	 * @param resultList
+	 *          the list which contains the splitted strings
+	 * @param maxParts
+	 *          max number of parts to split the source into (less than <tt>0</tt>
+	 *          for infinite number of parts, otherwise only values greater than
+	 *          <tt>0</tt> allowed!)
+	 * @return splitted strings
+	 */
+	public static List<String> splitByChar(final char splitChar, String sourceString, List<String> resultList, final int maxParts) {
+		// TODO optimize this to avoid new char[] generation inside toCharArray() ?
+		return splitByChar(splitChar, sourceString.toCharArray(), 0, sourceString.length(), resultList, maxParts);
+	}
+
+	/**
+	 * Split the given <code>srcArray</code> character array by the given character.
+	 * 
+	 * @param splitChar
+	 *          the character to split by
+	 * @param srcArray
+	 *          the array to split
+	 * @param currOffset
+	 *          start position in <tt>srcArray</tt>
+	 * @param endOffset
+	 *          end position in <tt>srcArray</tt>
+	 * @param resultList
+	 *          the list which contains the splitted strings
+	 * @param maxParts
+	 *          max number of parts to split the source into (less than <tt>0</tt>
+	 *          for infinite number of parts, otherwise only values greater than
+	 *          <tt>0</tt> allowed!)
+	 *
+	 * @return splitted strings
+	 */
+	protected static List<String> splitByChar(final char splitChar,
+			char[] srcArray, int currOffset, int endOffset,
+			List<String> resultList, final int maxParts) {
+		assert(maxParts != 0 && maxParts != 1); // this doesn't make any sense!
 		if (resultList == null) {
 			resultList = new ArrayList<String>();
 		}
@@ -757,7 +807,12 @@ public class WikipediaScanner {
 							currOffset = temp[0];
 						}
 					}
-				} else if (ch == '|') {
+				} else if (ch == splitChar) {
+					if (maxParts > 0 && resultList.size() >= maxParts - 1) {
+						// take rest and put it into the last part
+						currOffset = endOffset;
+						break;
+					}
 					resultList.add(new String(srcArray, lastOffset, currOffset - lastOffset - 1));
 					lastOffset = currOffset;
 				}

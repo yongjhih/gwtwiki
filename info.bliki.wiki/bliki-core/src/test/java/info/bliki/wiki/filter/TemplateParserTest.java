@@ -1244,6 +1244,39 @@ public class TemplateParserTest extends FilterTestSupport {
 	public void testTemplateLastTilde01() {
 		assertEquals("[[:Template:TestTemplateName01~]]" + "", wikiModel.parseTemplates("{{TestTemplateName01~}}"));
 	}
+	
+	public void testShouldNotBeParsed01() {
+		wikiModel.parseTemplates("{{#switch:TestPage\n|OtherPage={{ShouldNotBeParsed}}\n|#default={{ShouldBeParsed}}\n}}");
+		assertTrue(wikiModel.getTemplates().contains("ShouldBeParsed"));
+		assertTrue(!wikiModel.getTemplates().contains("ShouldNotBeParsed"));
+	}
+	
+	public void testShouldNotBeParsed02() {
+		wikiModel.parseTemplates("{{#switch:TestPage\n|TestPage={{ShouldBeParsed}}\n|OtherPage={{ShouldNotBeParsed1}}\n|#default={{ShouldNotBeParsed2}}\n}}");
+		assertTrue(wikiModel.getTemplates().contains("ShouldBeParsed"));
+		assertTrue(!wikiModel.getTemplates().contains("ShouldNotBeParsed1"));
+		assertTrue(!wikiModel.getTemplates().contains("ShouldNotBeParsed2"));
+	}
+	
+	public void testShouldNotBeParsed03() {
+		wikiModel.parseTemplates("{{#switch:TestPage\n|OtherPage={{ShouldNotBeParsed1}}\n|TestPage={{ShouldBeParsed}}\n|#default={{ShouldNotBeParsed2}}\n}}");
+		assertTrue(wikiModel.getTemplates().contains("ShouldBeParsed"));
+		assertTrue(!wikiModel.getTemplates().contains("ShouldNotBeParsed1"));
+		assertTrue(!wikiModel.getTemplates().contains("ShouldNotBeParsed2"));
+	}
+	
+	public void testShouldNotBeParsed04() {
+		wikiModel.parseTemplates("{{#switch:TestPage\n|#default={{ShouldNotBeParsed2}}\n|OtherPage={{ShouldNotBeParsed1}}\n|TestPage={{ShouldBeParsed}}\n}}");
+		assertTrue(wikiModel.getTemplates().contains("ShouldBeParsed"));
+		assertTrue(!wikiModel.getTemplates().contains("ShouldNotBeParsed1"));
+		assertTrue(!wikiModel.getTemplates().contains("ShouldNotBeParsed2"));
+	}
+	
+	public void testShouldNotBeParsed05() {
+		wikiModel.parseTemplates("{{#switch:TestPage\n|TestPage={{ShouldBeParsed}}\n|#default={{ShouldNotBeParsed}}\n}}");
+		assertTrue(wikiModel.getTemplates().contains("ShouldBeParsed"));
+		assertTrue(!wikiModel.getTemplates().contains("ShouldNotBeParsed"));
+	}
 
 	// some tests from https://meta.wikimedia.org/wiki/Help:Newlines_and_spaces#Trimming_on_expansion
 	public void testNewlineSpaces01() {
