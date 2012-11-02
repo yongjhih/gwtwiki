@@ -634,6 +634,14 @@ public class WikipediaScanner {
 						List<String> list = splitByPipe(fSource, parameterStart, fScannerPosition - 3, null);
 						if (list.size() > 0) {
 							String parameterString = list.get(0).trim();
+
+							WikipediaScanner scanner1 = new WikipediaScanner(parameterString);
+							scanner1.setModel(fWikiModel);
+							recursiveResult = scanner1.replaceTemplateParameters(templateParameters);
+							if (recursiveResult != null) {
+								parameterString = recursiveResult.toString();
+							}
+
 							String value = null;
 							isDefaultValue = false;
 							if (templateParameters != null) {
@@ -653,12 +661,12 @@ public class WikipediaScanner {
 										buffer.append(fSource, bufferStart, parameterStart - bufferStart - 3);
 									}
 
-									WikipediaScanner scanner = new WikipediaScanner(value);
-									scanner.setModel(fWikiModel);
+									WikipediaScanner scanner2 = new WikipediaScanner(value);
+									scanner2.setModel(fWikiModel);
 									if (isDefaultValue) {
-										recursiveResult = scanner.replaceTemplateParameters(templateParameters);
+										recursiveResult = scanner2.replaceTemplateParameters(templateParameters);
 									} else {
-										recursiveResult = scanner.replaceTemplateParameters(null);
+										recursiveResult = scanner2.replaceTemplateParameters(null);
 									}
 									if (recursiveResult != null) {
 										buffer.append(recursiveResult);
@@ -1506,5 +1514,5 @@ public class WikipediaScanner {
 			}
 		}
 	}
-	
+
 }

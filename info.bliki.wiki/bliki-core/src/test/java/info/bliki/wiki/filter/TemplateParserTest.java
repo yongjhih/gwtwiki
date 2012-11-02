@@ -1213,4 +1213,16 @@ public class TemplateParserTest extends FilterTestSupport {
 				wikiModel
 						.parseTemplates("{{Navbar|Screen Actors Guild Award for Outstanding Performance by a Cast in a Motion Picture (1995–2000)}}\n"));
 	}
+
+	public void testWeather01() {
+		assertEquals("1\n", wikiModel.parseTemplates("{{WeatherVal01\n" + "|show=1\n" + "|jan1=10\n" + "}}\n"));
+	}
+
+	public void testWeather02() {
+		assertEquals("10\n", wikiModel.parseTemplates("{{WeatherVal02\n" + "|show=1\n" + "|jan1=10\n" + "}}\n"));
+	}
+
+	public void testWeather03() {
+		assertEquals("10\n", wikiModel.parseTemplates("{{WeatherVal03\n" + "|show=1\n" + "|jan1=10\n" + "}}\n"));
+	}
 }
