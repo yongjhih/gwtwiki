@@ -2423,6 +2423,11 @@ public class WikiTestModel extends WikiModel {
 			+ "      }}|{{{1|}}} }}<noinclude><!-- default='dmy'/'iso'/'mdy'/null/\"\"/unsupported option --></noinclude>\n" + "    }}\n"
 			+ "  }}    \n" + "}}<noinclude>\n" + "{{documentation}}\n" + "</noinclude>";
 
+	private static final String ONEX = "{{{1}}}";
+	private static final String TWOX = "{{{1}}}{{{1}}}";
+	private static final String NLN = "{{1x|\n}}";
+	private static final String SPC = "{{1x| }}";
+
 	boolean fSemanticWebActive;
 
 	static {
@@ -2621,6 +2626,14 @@ public class WikiTestModel extends WikiModel {
 				return WEATHERVAL03;
 			} else if (name.equals("WeatherBox03")) {
 				return WEATHERBOX03;
+			} else if (name.equals("1x")) {
+				return ONEX;
+			} else if (name.equals("2x")) {
+				return TWOX;
+			} else if (name.equals("Nln")) {
+				return NLN;
+			} else if (name.equals("Spc")) {
+				return SPC;
 			}
 		} else {
 			if (name.equals("Include_Page")) {

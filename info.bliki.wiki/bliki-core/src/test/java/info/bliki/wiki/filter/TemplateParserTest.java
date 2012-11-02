@@ -1244,4 +1244,55 @@ public class TemplateParserTest extends FilterTestSupport {
 	public void testTemplateLastTilde01() {
 		assertEquals("[[:Template:TestTemplateName01~]]" + "", wikiModel.parseTemplates("{{TestTemplateName01~}}"));
 	}
+
+	// some tests from https://meta.wikimedia.org/wiki/Help:Newlines_and_spaces#Trimming_on_expansion
+	public void testNewlineSpaces01() {
+		assertEquals(" a ", wikiModel.parseTemplates("{{1x| a }}"));
+	}
+
+	public void testNewlineSpaces02() {
+		assertEquals("a", wikiModel.parseTemplates("{{1x|1= a }}"));
+	}
+
+	// TODO: currently fails:
+//	public void testNewlineSpaces03() {
+//		assertEquals("p\nq", wikiModel.parseTemplates("p{{2x|{{nln}}}}q"));
+//	}
+//
+//	public void testNewlineSpaces04() {
+//		assertEquals("pq", wikiModel.parseTemplates("p{{2x|1={{nln}}}}q"));
+//	}
+
+	public void testNewlineSpaces05() {
+		assertEquals("pq", wikiModel.parseTemplates("p{{#if:x|{{2x|{{nln}}}}}}q"));
+	}
+
+	public void testNewlineSpaces06() {
+		assertEquals("pq", wikiModel.parseTemplates("p{{2x|{{#if:x|{{nln}}}}}}q"));
+	}
+
+	// TODO: currently fails:
+//	public void testNewlineSpaces07() {
+//		assertEquals("p q", wikiModel.parseTemplates("p{{2x|{{spc}}}}q"));
+//	}
+//
+//	public void testNewlineSpaces08() {
+//		assertEquals("pq", wikiModel.parseTemplates("p{{2x|1={{spc}}}}q"));
+//	}
+
+	public void testNewlineSpaces09() {
+		assertEquals("pq", wikiModel.parseTemplates("p{{#if:x|{{2x|{{spc}}}}}}q"));
+	}
+
+	public void testNewlineSpaces10() {
+		assertEquals("pq", wikiModel.parseTemplates("p{{2x|{{#if:x|{{spc}}}}}}q"));
+	}
+
+	public void testNewlineSpaces11() {
+		assertEquals("pqpq", wikiModel.parseTemplates("{{2x\n|\n1 =\npq\n}}"));
+	}
+
+	public void testNewlineSpaces12() {
+		assertEquals("rs", wikiModel.parseTemplates("{{#switch:\n2\n|\n1 =\npq\n|\n2 =\nrs\n|\n3 =\ntu\n}}"));
+	}
 }
