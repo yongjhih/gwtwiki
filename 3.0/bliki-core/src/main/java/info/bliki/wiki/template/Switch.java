@@ -1,5 +1,6 @@
 package info.bliki.wiki.template;
 
+import info.bliki.wiki.filter.WikipediaScanner;
 import info.bliki.wiki.model.IWikiModel;
 
 import java.util.List;
@@ -46,35 +47,32 @@ public class Switch extends AbstractTemplateFunction {
 			}
 			boolean valueFound = false;
 			for (int i = 1; i < list.size(); i++) {
-				String temp = isSubst ? list.get(i) : parseTrim(list.get(i), model);
-				int index = temp.indexOf('=');
-				String leftHandSide;
-				if (index >= 0) {
-					if (valueFound) {
-						return temp.substring(index + 1).trim();
-					}
-					leftHandSide = temp.substring(0, index);
-				} else {
-					leftHandSide = temp;
+				List<String> splitByEq = WikipediaScanner.splitByChar('=', list.get(i), null, 2);
+				String leftHandSide = splitByEq.get(0); // note: there always is a first part
+				final boolean hasRHS = splitByEq.size() == 2;
+				if (hasRHS && valueFound) {
+					return parseTrim(splitByEq.get(1), model);
 				}
 				String parsedLHS = isSubst ? leftHandSide : parseTrim(leftHandSide, model);
-				if (index >= 0 && "#default".equals(parsedLHS)) {
-					defaultResult = temp.substring(index + 1).trim();
+				if (hasRHS && "#default".equals(parsedLHS)) {
+					// explicit default
+					defaultResult = splitByEq.get(1);
 					continue;
 				}
-				if (index < 0 && i == list.size() - 1) {
+				if (!hasRHS && i == list.size() - 1) {
+					// implicit default as the last parameter and nothing matched before
 					return parsedLHS;
 				}
 				if (equalsTypes(conditionString, parsedLHS, checkNumerically)) {
-					if (index >= 0) {
-						return temp.substring(index + 1).trim();
+					if (hasRHS) {
+						return parseTrim(splitByEq.get(1), model);
 					} else {
 						valueFound = true;
 					}
 				}
 
 			}
-			return defaultResult;
+			return parseTrim(defaultResult, model);
 		}
 		return null;
 	}
