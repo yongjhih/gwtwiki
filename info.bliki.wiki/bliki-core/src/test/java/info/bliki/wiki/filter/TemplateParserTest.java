@@ -1240,4 +1240,8 @@ public class TemplateParserTest extends FilterTestSupport {
 	public void testWeather05() {
 		assertEquals("10\n" + "", wikiModel.parseTemplates("{{WeatherVal03\n\r" + "|show=1\n\r" + "|jan1=10\n\r" + "}}\n"));
 	}
+
+	public void testTemplateLastTilde01() {
+		assertEquals("[[:Template:TestTemplateName01~]]" + "", wikiModel.parseTemplates("{{TestTemplateName01~}}"));
+	}
 }
