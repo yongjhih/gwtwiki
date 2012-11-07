@@ -809,9 +809,9 @@ public class TemplateParser extends AbstractParser {
 					StringBuilder buf = new StringBuilder();
 					value = srcString.substring(lastOffset, currOffset);
 					if (parameter != null) {
-						value = Util.trimNewlineRight(value);
 						TemplateParser.parseRecursive(value, wikiModel, buf, false, false);
-						namedParameterMap.put(parameter, buf.toString());
+						value = Util.trimNewlineRight(buf.toString());
+						namedParameterMap.put(parameter, value);
 					} else {
 						// whitespace characters are not automatically stripped from the
 						// start and end of unnamed parameters!
