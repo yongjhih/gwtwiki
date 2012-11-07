@@ -20,10 +20,11 @@ public class TemplateParserTest extends FilterTestSupport {
 	public void testWeather07() {
 		assertEquals("20\n", wikiModel.parseTemplates("{{WeatherBox03}}\n"));
 	}
-	
+
 	public void testWeather06() {
 		assertEquals("10\n", wikiModel.parseTemplates("{{WeatherBox03|show1=1}}\n"));
 	}
+
 	/**
 	 * Issue 86
 	 */
@@ -1087,97 +1088,100 @@ public class TemplateParserTest extends FilterTestSupport {
 
 	public void testTemplateNavbox() {
 		assertEquals(
-				"<table cellspacing=\"0\" class=\"navbox\" style=\"border-spacing:0;;\"><tr><td style=\"padding:2px;\"><table cellspacing=\"0\" class=\"nowraplinks  collapsible autocollapse navbox-inner\" style=\"border-spacing:0;background:transparent;color:inherit;;\"><tr><th scope=\"col\" style=\";\" class=\"navbox-title\" colspan=2><div class=\"noprint plainlinks hlist navbar mini\" style=\"\"><ul><li class=\"nv-view\">[[Template:National Board of Review Award for Best Actor|<span title=\"View this template\" style=\";;background:none transparent;border:none;\">v</span>]]</li><li class=\"nv-talk\">[[Template_talk:National Board of Review Award for Best Actor|<span title=\"Discuss this template\" style=\";;background:none transparent;border:none;\">t</span>]]</li><li class=\"nv-edit\">[http://en.wikipedia.org/w/index.php?title=Template%3ANational+Board+of+Review+Award+for+Best+Actor&amp;action=edit <span title=\"Edit this template\" style=\";;background:none transparent;border:none;\">e</span>]</li></ul></div><div class=\"\" style=\"font-size:110%;\">\n"
-						+ "[[National Board of Review Award for Best Actor]]</div></th></tr><tr style=\"height:2px;\"><td></td></tr><tr><td colspan=2 style=\"width:100%;padding:0px;;;\" class=\"navbox-list navbox-odd hlist\n"
-						+ "\"><div style=\"padding:0em 0.25em\">\n"
-						+ "* [[Ray Milland]] (1945)\n"
-						+ "* [[Laurence Olivier]] (1946)\n"
-						+ "* [[Michael Redgrave]] (1947)\n"
-						+ "* [[Walter Huston]] (1948)\n"
-						+ "* [[Ralph Richardson]] (1949)\n"
-						+ "</div></td></tr><tr style=\"height:2px\"><td></td></tr><tr><td colspan=2 style=\"width:100%;padding:0px;;;\" class=\"navbox-list navbox-even hlist\n"
-						+ "\"><div style=\"padding:0em 0.25em\">\n"
-						+ "* [[Alec Guinness]] (1950)\n"
-						+ "* [[Richard Basehart]] (1951)\n"
-						+ "* [[Ralph Richardson]] (1952)\n"
-						+ "* [[James Mason]] (1953)\n"
-						+ "* [[Bing Crosby]] (1954)\n"
-						+ "* [[Ernest Borgnine]] (1955)\n"
-						+ "* [[Yul Brynner]] (1956)\n"
-						+ "* [[Alec Guinness]] (1957)\n"
-						+ "* [[Spencer Tracy]] (1958)\n"
-						+ "* [[Victor Sjöström]] (1959)\n"
-						+ "</div></td></tr><tr style=\"height:2px\"><td></td></tr><tr><td colspan=2 style=\"width:100%;padding:0px;;;\" class=\"navbox-list navbox-odd hlist\n"
-						+ "\"><div style=\"padding:0em 0.25em\">\n"
-						+ "* [[Robert Mitchum]] (1960)\n"
-						+ "* [[Albert Finney]] (1961)\n"
-						+ "* [[Jason Robards]] (1962)\n"
-						+ "* [[Rex Harrison]] (1963)\n"
-						+ "* [[Anthony Quinn]] (1964)\n"
-						+ "* [[Lee Marvin]] (1965)\n"
-						+ "* [[Paul Scofield]] (1966)\n"
-						+ "* [[Peter Finch]] (1967)\n"
-						+ "* [[Cliff Robertson]] (1968)\n"
-						+ "* [[Peter O'Toole]] (1969)\n"
-						+ "</div></td></tr><tr style=\"height:2px\"><td></td></tr><tr><td colspan=2 style=\"width:100%;padding:0px;;;\" class=\"navbox-list navbox-even hlist\n"
-						+ "\"><div style=\"padding:0em 0.25em\">\n"
-						+ "* [[George C. Scott]] (1970)\n"
-						+ "* [[Gene Hackman]] (1971)\n"
-						+ "* [[Peter O'Toole]] (1972)\n"
-						+ "* [[Al Pacino]] / [[Robert Ryan]] (1973)\n"
-						+ "* [[Gene Hackman]] (1974)\n"
-						+ "* [[Jack Nicholson]] (1975)\n"
-						+ "* [[David Carradine]] (1976)\n"
-						+ "* [[John Travolta]] (1977)\n"
-						+ "* [[Jon Voight]] / [[Laurence Olivier]] (1978)\n"
-						+ "* [[Peter Sellers]] (1979)\n"
-						+ "</div></td></tr><tr style=\"height:2px\"><td></td></tr><tr><td colspan=2 style=\"width:100%;padding:0px;;;\" class=\"navbox-list navbox-odd hlist\n"
-						+ "\"><div style=\"padding:0em 0.25em\">\n"
-						+ "* [[Robert De Niro]] (1980)\n"
-						+ "* [[Peter Fonda]] (1981)\n"
-						+ "* [[Ben Kingsley]] (1982)\n"
-						+ "* [[Tom Conti]] (1983)\n"
-						+ "* [[Victor Banerjee]] (1984)\n"
-						+ "* [[William Hurt]] / [[Raúl Juliá]] (1985)\n"
-						+ "* [[Paul Newman]] (1986)\n"
-						+ "* [[Michael Douglas]] (1987)\n"
-						+ "* [[Gene Hackman]] (1988)\n"
-						+ "* [[Morgan Freeman]] (1989)\n"
-						+ "</div></td></tr><tr style=\"height:2px\"><td></td></tr><tr><td colspan=2 style=\"width:100%;padding:0px;;;\" class=\"navbox-list navbox-even hlist\n"
-						+ "\"><div style=\"padding:0em 0.25em\">\n"
-						+ "* [[Robert De Niro]] / [[Robin Williams]] (1990)\n"
-						+ "* [[Warren Beatty]] (1991)\n"
-						+ "* [[Jack Lemmon]] (1992)\n"
-						+ "* [[Anthony Hopkins]] (1993)\n"
-						+ "* [[Tom Hanks]] (1994)\n"
-						+ "* [[Nicolas Cage]] (1995)\n"
-						+ "* [[Tom Cruise]] (1996)\n"
-						+ "* [[Jack Nicholson]] (1997)\n"
-						+ "* [[Ian McKellen]] (1998)\n"
-						+ "* [[Russell Crowe]] (1999)\n"
-						+ "</div></td></tr><tr style=\"height:2px\"><td></td></tr><tr><td colspan=2 style=\"width:100%;padding:0px;;;\" class=\"navbox-list navbox-odd hlist\n"
-						+ "\"><div style=\"padding:0em 0.25em\">\n"
-						+ "* [[Javier Bardem]] (2000)\n"
-						+ "* [[Billy Bob Thornton]] (2001)\n"
-						+ "* [[Campbell Scott]] (2002)\n"
-						+ "* [[Sean Penn]] (2003)\n"
-						+ "* [[Jamie Foxx]] (2004)\n"
-						+ "* [[Philip Seymour Hoffman]] (2005)\n"
-						+ "* [[Forest Whitaker]] (2006)\n"
-						+ "* [[George Clooney]] (2007)\n"
-						+ "* [[Clint Eastwood]] (2008)\n"
-						+ "* [[George Clooney]] / [[Morgan Freeman]] (2009)\n"
-						+ "</div></td></tr><tr style=\"height:2px\"><td></td></tr><tr><td colspan=2 style=\"width:100%;padding:0px;;;\" class=\"navbox-list navbox-even hlist\n"
-						+ "\"><div style=\"padding:0em 0.25em\">\n"
-						+ "* [[Jesse Eisenberg]] (2010)\n"
-						+ "* [[George Clooney]] (2011)\n"
-						+ "\n"
-						+ "</div></td></tr></table></td></tr></table>\n"
-						+ "\n"
-						+ "[[Category:National Board of Review Awards|*|National Board of Review Award for Best Actor]]\n"
-						+ "[[Category:National Board of Review Awards|*]]\n"
-						+ "[[Category:Film award templates|PAGENAME]]\n"
-						+ "[[fr:Modèle:Palette Critics Choice Awards]]\n" + "[[ja:Template:ナショナル・ボード・オブ・レビュー賞]]\n" + "\n" + "", wikiModel
+				"<table cellspacing=\"0\" class=\"navbox\" style=\"border-spacing:0;;\"><tr><td style=\"padding:2px;\"><table cellspacing=\"0\" class=\"nowraplinks  collapsible autocollapse navbox-inner\" style=\"border-spacing:0;background:transparent;color:inherit;;\"><tr><th scope=\"col\" style=\";\" class=\"navbox-title\" colspan=2><div class=\"noprint plainlinks hlist navbar mini\" style=\"\"><ul><li class=\"nv-view\">[[Template:National Board of Review Award for Best Actor|<span title=\"View this template\" style=\";;background:none transparent;border:none;\">v</span>]]</li><li class=\"nv-talk\">[[Template_talk:National Board of Review Award for Best Actor|<span title=\"Discuss this template\" style=\";;background:none transparent;border:none;\">t</span>]]</li><li class=\"nv-edit\">[http://en.wikipedia.org/w/index.php?title=Template%3ANational+Board+of+Review+Award+for+Best+Actor&amp;action=edit <span title=\"Edit this template\" style=\";;background:none transparent;border:none;\">e</span>]</li></ul></div><div class=\"\" style=\"font-size:110%;\">\n" + 
+				"[[National Board of Review Award for Best Actor]]</div></th></tr><tr style=\"height:2px;\"><td></td></tr><tr><td colspan=2 style=\"width:100%;padding:0px;;;\" class=\"navbox-list navbox-odd hlist\n" + 
+				"\"><div style=\"padding:0em 0.25em\">\n" + 
+				"* [[Ray Milland]] (1945)\n" + 
+				"* [[Laurence Olivier]] (1946)\n" + 
+				"* [[Michael Redgrave]] (1947)\n" + 
+				"* [[Walter Huston]] (1948)\n" + 
+				"* [[Ralph Richardson]] (1949)\n" + 
+				"</div></td></tr><tr style=\"height:2px\"><td></td></tr><tr><td colspan=2 style=\"width:100%;padding:0px;;;\" class=\"navbox-list navbox-even hlist\n" + 
+				"\"><div style=\"padding:0em 0.25em\">\n" + 
+				"* [[Alec Guinness]] (1950)\n" + 
+				"* [[Richard Basehart]] (1951)\n" + 
+				"* [[Ralph Richardson]] (1952)\n" + 
+				"* [[James Mason]] (1953)\n" + 
+				"* [[Bing Crosby]] (1954)\n" + 
+				"* [[Ernest Borgnine]] (1955)\n" + 
+				"* [[Yul Brynner]] (1956)\n" + 
+				"* [[Alec Guinness]] (1957)\n" + 
+				"* [[Spencer Tracy]] (1958)\n" + 
+				"* [[Victor Sjöström]] (1959)\n" + 
+				"</div></td></tr><tr style=\"height:2px\"><td></td></tr><tr><td colspan=2 style=\"width:100%;padding:0px;;;\" class=\"navbox-list navbox-odd hlist\n" + 
+				"\"><div style=\"padding:0em 0.25em\">\n" + 
+				"* [[Robert Mitchum]] (1960)\n" + 
+				"* [[Albert Finney]] (1961)\n" + 
+				"* [[Jason Robards]] (1962)\n" + 
+				"* [[Rex Harrison]] (1963)\n" + 
+				"* [[Anthony Quinn]] (1964)\n" + 
+				"* [[Lee Marvin]] (1965)\n" + 
+				"* [[Paul Scofield]] (1966)\n" + 
+				"* [[Peter Finch]] (1967)\n" + 
+				"* [[Cliff Robertson]] (1968)\n" + 
+				"* [[Peter O'Toole]] (1969)\n" + 
+				"</div></td></tr><tr style=\"height:2px\"><td></td></tr><tr><td colspan=2 style=\"width:100%;padding:0px;;;\" class=\"navbox-list navbox-even hlist\n" + 
+				"\"><div style=\"padding:0em 0.25em\">\n" + 
+				"* [[George C. Scott]] (1970)\n" + 
+				"* [[Gene Hackman]] (1971)\n" + 
+				"* [[Peter O'Toole]] (1972)\n" + 
+				"* [[Al Pacino]] / [[Robert Ryan]] (1973)\n" + 
+				"* [[Gene Hackman]] (1974)\n" + 
+				"* [[Jack Nicholson]] (1975)\n" + 
+				"* [[David Carradine]] (1976)\n" + 
+				"* [[John Travolta]] (1977)\n" + 
+				"* [[Jon Voight]] / [[Laurence Olivier]] (1978)\n" + 
+				"* [[Peter Sellers]] (1979)\n" + 
+				"</div></td></tr><tr style=\"height:2px\"><td></td></tr><tr><td colspan=2 style=\"width:100%;padding:0px;;;\" class=\"navbox-list navbox-odd hlist\n" + 
+				"\"><div style=\"padding:0em 0.25em\">\n" + 
+				"* [[Robert De Niro]] (1980)\n" + 
+				"* [[Peter Fonda]] (1981)\n" + 
+				"* [[Ben Kingsley]] (1982)\n" + 
+				"* [[Tom Conti]] (1983)\n" + 
+				"* [[Victor Banerjee]] (1984)\n" + 
+				"* [[William Hurt]] / [[Raúl Juliá]] (1985)\n" + 
+				"* [[Paul Newman]] (1986)\n" + 
+				"* [[Michael Douglas]] (1987)\n" + 
+				"* [[Gene Hackman]] (1988)\n" + 
+				"* [[Morgan Freeman]] (1989)\n" + 
+				"</div></td></tr><tr style=\"height:2px\"><td></td></tr><tr><td colspan=2 style=\"width:100%;padding:0px;;;\" class=\"navbox-list navbox-even hlist\n" + 
+				"\"><div style=\"padding:0em 0.25em\">\n" + 
+				"* [[Robert De Niro]] / [[Robin Williams]] (1990)\n" + 
+				"* [[Warren Beatty]] (1991)\n" + 
+				"* [[Jack Lemmon]] (1992)\n" + 
+				"* [[Anthony Hopkins]] (1993)\n" + 
+				"* [[Tom Hanks]] (1994)\n" + 
+				"* [[Nicolas Cage]] (1995)\n" + 
+				"* [[Tom Cruise]] (1996)\n" + 
+				"* [[Jack Nicholson]] (1997)\n" + 
+				"* [[Ian McKellen]] (1998)\n" + 
+				"* [[Russell Crowe]] (1999)\n" + 
+				"</div></td></tr><tr style=\"height:2px\"><td></td></tr><tr><td colspan=2 style=\"width:100%;padding:0px;;;\" class=\"navbox-list navbox-odd hlist\n" + 
+				"\"><div style=\"padding:0em 0.25em\">\n" + 
+				"* [[Javier Bardem]] (2000)\n" + 
+				"* [[Billy Bob Thornton]] (2001)\n" + 
+				"* [[Campbell Scott]] (2002)\n" + 
+				"* [[Sean Penn]] (2003)\n" + 
+				"* [[Jamie Foxx]] (2004)\n" + 
+				"* [[Philip Seymour Hoffman]] (2005)\n" + 
+				"* [[Forest Whitaker]] (2006)\n" + 
+				"* [[George Clooney]] (2007)\n" + 
+				"* [[Clint Eastwood]] (2008)\n" + 
+				"* [[George Clooney]] / [[Morgan Freeman]] (2009)\n" + 
+				"</div></td></tr><tr style=\"height:2px\"><td></td></tr><tr><td colspan=2 style=\"width:100%;padding:0px;;;\" class=\"navbox-list navbox-even hlist\n" + 
+				"\"><div style=\"padding:0em 0.25em\">\n" + 
+				"* [[Jesse Eisenberg]] (2010)\n" + 
+				"* [[George Clooney]] (2011)\n" + 
+				"\n" + 
+				"</div></td></tr></table></td></tr></table>\n" + 
+				"\n" + 
+				"[[Category:National Board of Review Awards|*|National Board of Review Award for Best Actor]]\n" + 
+				"[[Category:National Board of Review Awards|*]]\n" + 
+				"[[Category:Film award templates|PAGENAME]]\n" + 
+				"[[fr:Modèle:Palette Critics Choice Awards]]\n" + 
+				"[[ja:Template:ナショナル・ボード・オブ・レビュー賞]]\n" + 
+				"\n" + 
+				"", wikiModel
 						.parseTemplates("{{Navbox \n" + "| name       = National Board of Review Award for Best Actor\n"
 								+ "| title      = [[National Board of Review Award for Best Actor]]\n" + "| listclass = hlist\n" + "\n"
 								+ "|group 1 = 1945-1949\n" + "|list1=\n" + "* [[Ray Milland]] (1945)\n" + "* [[Laurence Olivier]] (1946)\n"
@@ -1244,91 +1248,151 @@ public class TemplateParserTest extends FilterTestSupport {
 	public void testTemplateLastTilde01() {
 		assertEquals("[[:Template:TestTemplateName01~]]" + "", wikiModel.parseTemplates("{{TestTemplateName01~}}"));
 	}
-	
+
 	public void testShouldNotBeParsed01() {
 		wikiModel.parseTemplates("{{#switch:TestPage\n|OtherPage={{ShouldNotBeParsed}}\n|#default={{ShouldBeParsed}}\n}}");
 		assertTrue(wikiModel.getTemplates().contains("ShouldBeParsed"));
 		assertTrue(!wikiModel.getTemplates().contains("ShouldNotBeParsed"));
 	}
-	
+
 	public void testShouldNotBeParsed02() {
-		wikiModel.parseTemplates("{{#switch:TestPage\n|TestPage={{ShouldBeParsed}}\n|OtherPage={{ShouldNotBeParsed1}}\n|#default={{ShouldNotBeParsed2}}\n}}");
+		wikiModel
+				.parseTemplates("{{#switch:TestPage\n|TestPage={{ShouldBeParsed}}\n|OtherPage={{ShouldNotBeParsed1}}\n|#default={{ShouldNotBeParsed2}}\n}}");
 		assertTrue(wikiModel.getTemplates().contains("ShouldBeParsed"));
 		assertTrue(!wikiModel.getTemplates().contains("ShouldNotBeParsed1"));
 		assertTrue(!wikiModel.getTemplates().contains("ShouldNotBeParsed2"));
 	}
-	
+
 	public void testShouldNotBeParsed03() {
-		wikiModel.parseTemplates("{{#switch:TestPage\n|OtherPage={{ShouldNotBeParsed1}}\n|TestPage={{ShouldBeParsed}}\n|#default={{ShouldNotBeParsed2}}\n}}");
+		wikiModel
+				.parseTemplates("{{#switch:TestPage\n|OtherPage={{ShouldNotBeParsed1}}\n|TestPage={{ShouldBeParsed}}\n|#default={{ShouldNotBeParsed2}}\n}}");
 		assertTrue(wikiModel.getTemplates().contains("ShouldBeParsed"));
 		assertTrue(!wikiModel.getTemplates().contains("ShouldNotBeParsed1"));
 		assertTrue(!wikiModel.getTemplates().contains("ShouldNotBeParsed2"));
 	}
-	
+
 	public void testShouldNotBeParsed04() {
-		wikiModel.parseTemplates("{{#switch:TestPage\n|#default={{ShouldNotBeParsed2}}\n|OtherPage={{ShouldNotBeParsed1}}\n|TestPage={{ShouldBeParsed}}\n}}");
+		wikiModel
+				.parseTemplates("{{#switch:TestPage\n|#default={{ShouldNotBeParsed2}}\n|OtherPage={{ShouldNotBeParsed1}}\n|TestPage={{ShouldBeParsed}}\n}}");
 		assertTrue(wikiModel.getTemplates().contains("ShouldBeParsed"));
 		assertTrue(!wikiModel.getTemplates().contains("ShouldNotBeParsed1"));
 		assertTrue(!wikiModel.getTemplates().contains("ShouldNotBeParsed2"));
 	}
-	
+
 	public void testShouldNotBeParsed05() {
 		wikiModel.parseTemplates("{{#switch:TestPage\n|TestPage={{ShouldBeParsed}}\n|#default={{ShouldNotBeParsed}}\n}}");
 		assertTrue(wikiModel.getTemplates().contains("ShouldBeParsed"));
 		assertTrue(!wikiModel.getTemplates().contains("ShouldNotBeParsed"));
 	}
-	
+
 	public void testMissingImplicitParameter01() {
 		assertEquals("", wikiModel.parseTemplates("{{1x||2}}"));
 	}
 
-	// some tests from https://meta.wikimedia.org/wiki/Help:Newlines_and_spaces#Trimming_on_expansion
+	/**
+	 * Some tests from <a href=
+	 * "https://meta.wikimedia.org/wiki/Help:Newlines_and_spaces#Trimming_on_expansion"
+	 * > Help:Newlines and spaces - Trimming on expansion</a>
+	 */
 	public void testNewlineSpaces01() {
 		assertEquals(" a ", wikiModel.parseTemplates("{{1x| a }}"));
 	}
 
+	/**
+	 * Some tests from <a href=
+	 * "https://meta.wikimedia.org/wiki/Help:Newlines_and_spaces#Trimming_on_expansion"
+	 * > Help:Newlines and spaces - Trimming on expansion</a>
+	 */
 	public void testNewlineSpaces02() {
 		assertEquals("a", wikiModel.parseTemplates("{{1x|1= a }}"));
 	}
 
-	// TODO: currently fails:
-//	public void testNewlineSpaces03() {
-//		assertEquals("p\nq", wikiModel.parseTemplates("p{{2x|{{nln}}}}q"));
-//	}
-//
-//	public void testNewlineSpaces04() {
-//		assertEquals("pq", wikiModel.parseTemplates("p{{2x|1={{nln}}}}q"));
-//	}
+	/**
+	 * Some tests from <a href=
+	 * "https://meta.wikimedia.org/wiki/Help:Newlines_and_spaces#Trimming_on_expansion"
+	 * > Help:Newlines and spaces - Trimming on expansion</a>
+	 */
+	public void testNewlineSpaces03() {
+		assertEquals("p\n\nq", wikiModel.parseTemplates("p{{2x|{{nln}}}}q"));
+	}
 
+	/**
+	 * Some tests from <a href=
+	 * "https://meta.wikimedia.org/wiki/Help:Newlines_and_spaces#Trimming_on_expansion"
+	 * > Help:Newlines and spaces - Trimming on expansion</a>
+	 */
+	public void testNewlineSpaces04() {
+		assertEquals("pq", wikiModel.parseTemplates("p{{2x|1={{nln}}}}q"));
+	}
+
+	/**
+	 * Some tests from <a href=
+	 * "https://meta.wikimedia.org/wiki/Help:Newlines_and_spaces#Trimming_on_expansion"
+	 * > Help:Newlines and spaces - Trimming on expansion</a>
+	 */
 	public void testNewlineSpaces05() {
 		assertEquals("pq", wikiModel.parseTemplates("p{{#if:x|{{2x|{{nln}}}}}}q"));
 	}
 
+	/**
+	 * Some tests from <a href=
+	 * "https://meta.wikimedia.org/wiki/Help:Newlines_and_spaces#Trimming_on_expansion"
+	 * > Help:Newlines and spaces - Trimming on expansion</a>
+	 */
 	public void testNewlineSpaces06() {
 		assertEquals("pq", wikiModel.parseTemplates("p{{2x|{{#if:x|{{nln}}}}}}q"));
 	}
 
-	// TODO: currently fails:
-//	public void testNewlineSpaces07() {
-//		assertEquals("p q", wikiModel.parseTemplates("p{{2x|{{spc}}}}q"));
-//	}
-//
-//	public void testNewlineSpaces08() {
-//		assertEquals("pq", wikiModel.parseTemplates("p{{2x|1={{spc}}}}q"));
-//	}
+	/**
+	 * Some tests from <a href=
+	 * "https://meta.wikimedia.org/wiki/Help:Newlines_and_spaces#Trimming_on_expansion"
+	 * > Help:Newlines and spaces - Trimming on expansion</a>
+	 */
+	public void testNewlineSpaces07() {
+		assertEquals("p  q", wikiModel.parseTemplates("p{{2x|{{spc}}}}q"));
+	}
 
+	/**
+	 * Some tests from <a href=
+	 * "https://meta.wikimedia.org/wiki/Help:Newlines_and_spaces#Trimming_on_expansion"
+	 * > Help:Newlines and spaces - Trimming on expansion</a>
+	 */
+	public void testNewlineSpaces08() {
+		assertEquals("pq", wikiModel.parseTemplates("p{{2x|1={{spc}}}}q"));
+	}
+
+	/**
+	 * Some tests from <a href=
+	 * "https://meta.wikimedia.org/wiki/Help:Newlines_and_spaces#Trimming_on_expansion"
+	 * > Help:Newlines and spaces - Trimming on expansion</a>
+	 */
 	public void testNewlineSpaces09() {
 		assertEquals("pq", wikiModel.parseTemplates("p{{#if:x|{{2x|{{spc}}}}}}q"));
 	}
 
+	/**
+	 * Some tests from <a href=
+	 * "https://meta.wikimedia.org/wiki/Help:Newlines_and_spaces#Trimming_on_expansion"
+	 * > Help:Newlines and spaces - Trimming on expansion</a>
+	 */
 	public void testNewlineSpaces10() {
 		assertEquals("pq", wikiModel.parseTemplates("p{{2x|{{#if:x|{{spc}}}}}}q"));
 	}
 
+	/**
+	 * Some tests from <a href=
+	 * "https://meta.wikimedia.org/wiki/Help:Newlines_and_spaces#Trimming_on_expansion"
+	 * > Help:Newlines and spaces - Trimming on expansion</a>
+	 */
 	public void testNewlineSpaces11() {
 		assertEquals("pqpq", wikiModel.parseTemplates("{{2x\n|\n1 =\npq\n}}"));
 	}
 
+	/**
+	 * Some tests from <a href=
+	 * "https://meta.wikimedia.org/wiki/Help:Newlines_and_spaces#Trimming_on_expansion"
+	 * > Help:Newlines and spaces - Trimming on expansion</a>
+	 */
 	public void testNewlineSpaces12() {
 		assertEquals("rs", wikiModel.parseTemplates("{{#switch:\n2\n|\n1 =\npq\n|\n2 =\nrs\n|\n3 =\ntu\n}}"));
 	}
