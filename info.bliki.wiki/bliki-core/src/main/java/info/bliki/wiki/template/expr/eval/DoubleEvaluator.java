@@ -96,7 +96,7 @@ public class DoubleEvaluator {
 			if (Math.abs(arg2 - 0.0) < DoubleEvaluator.EPSILON) {
 				throw new ArithmeticException("Division by zero");
 			}
-			return arg1 % arg2;
+			return ((int) arg1) % ((int) arg2);
 		}
 	}
 
