@@ -697,6 +697,42 @@ public class TemplateParserTest extends FilterTestSupport {
 		wikiModel.setLocale(Locale.ENGLISH);
 	}
 
+	public void testFormatnum003() {
+		// default locale is ENGLISH
+		assertEquals("90", wikiModel.parseTemplates("{{formatnum:90}}"));
+		wikiModel.setLocale(Locale.GERMAN);
+		assertEquals("90", wikiModel.parseTemplates("{{formatnum:90}}"));
+		// reset to english locale
+		wikiModel.setLocale(Locale.ENGLISH);
+	}
+
+	public void testFormatnum004() {
+		// default locale is ENGLISH
+		assertEquals("90.", wikiModel.parseTemplates("{{formatnum:90.}}"));
+		wikiModel.setLocale(Locale.GERMAN);
+		assertEquals("90,", wikiModel.parseTemplates("{{formatnum:90.}}"));
+		// reset to english locale
+		wikiModel.setLocale(Locale.ENGLISH);
+	}
+
+	public void testFormatnum005() {
+		// default locale is ENGLISH
+		assertEquals("90.0", wikiModel.parseTemplates("{{formatnum:90.0}}"));
+		wikiModel.setLocale(Locale.GERMAN);
+		assertEquals("90,0", wikiModel.parseTemplates("{{formatnum:90.0}}"));
+		// reset to english locale
+		wikiModel.setLocale(Locale.ENGLISH);
+	}
+	
+	public void testFormatnum006() {
+		// default locale is ENGLISH
+		assertEquals("90.0", wikiModel.parseTemplates("{{formatnum:90.000}}"));
+		wikiModel.setLocale(Locale.GERMAN);
+		assertEquals("90,0", wikiModel.parseTemplates("{{formatnum:90.000}}"));
+		// reset to english locale
+		wikiModel.setLocale(Locale.ENGLISH);
+	}
+
 	public void testPlural001() {
 		assertEquals("is", wikiModel.parseTemplates("{{plural:n|is|are}}", false));
 		assertEquals("is", wikiModel.parseTemplates("{{plural:0|is|are}}", false));
