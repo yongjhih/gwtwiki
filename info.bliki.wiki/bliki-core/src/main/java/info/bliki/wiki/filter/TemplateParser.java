@@ -157,7 +157,7 @@ public class TemplateParser extends AbstractParser {
 		} catch (Error e) {
 			e.printStackTrace();
 			writer.append(e.getClass().getSimpleName());
-		} finally { 
+		} finally {
 			wikiModel.decrementTemplateRecursionLevel();
 		}
 	}
@@ -264,11 +264,13 @@ public class TemplateParser extends AbstractParser {
 					// }
 					// }
 					// }
+					int oldPosition = fCurrentPosition;
 					if (!fParseOnlySignature && parseTemplateOrTemplateParameter(writer)) {
 						fWhiteStart = true;
 						fWhiteStartPosition = fCurrentPosition;
 						continue;
 					}
+					fCurrentPosition = oldPosition;
 					break;
 				case '<':
 					int htmlStartPosition = fCurrentPosition;
@@ -638,12 +640,14 @@ public class TemplateParser extends AbstractParser {
 					fCurrentPosition = endPosition;
 					if (plainContent != null) {
 						TemplateParser.parseRecursive(plainContent, fWikiModel, writer, false, false);
-						return true;
 					}
 					return true;
 				}
 				fCurrentPosition = endOffset + 2;
 			}
+		}
+		if (Util.isInvalidTemplateName(templateName)) {
+			return false;
 		}
 		fCurrentPosition = endPosition;
 		LinkedHashMap<String, String> parameterMap = new LinkedHashMap<String, String>();

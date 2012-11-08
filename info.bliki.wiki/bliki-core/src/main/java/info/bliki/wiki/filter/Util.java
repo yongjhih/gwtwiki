@@ -175,4 +175,28 @@ public class Util {
 		}
 		return ((start > 0) || (end < str.length())) ? str.substring(start, end) : str;
 	}
+
+	/**
+	 * Check if the template name contains an invalid (ISO Control) character.
+	 * 
+	 * @param templateName
+	 * @return
+	 */
+	public static boolean isInvalidTemplateName(String templateName) {
+		boolean noNamespaceCharacter = true;
+		for (int i = 0; i < templateName.length(); i++) {
+			if (templateName.charAt(i) == ':') {
+				noNamespaceCharacter = false;
+				continue;
+			}
+			if (Character.isISOControl(templateName.charAt(i))) {
+				if (noNamespaceCharacter) {
+					return true;
+				}
+				continue;
+			}
+			noNamespaceCharacter = true;
+		}
+		return false;
+	}
 }
