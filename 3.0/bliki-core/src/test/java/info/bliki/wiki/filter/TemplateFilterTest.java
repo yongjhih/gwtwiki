@@ -1,5 +1,8 @@
 package info.bliki.wiki.filter;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
@@ -1104,5 +1107,31 @@ public class TemplateFilterTest extends FilterTestSupport {
 						+ "<li class=\"nv-edit\"><a class=\"externallink\" href=\"http://en.wikipedia.org/w/index.php?title=Template%3AScreen+Actors+Guild+Award+for+Outstanding+Performance+by+a+Cast+in+a+Motion+Picture+%281995%E2%80%932000%29&#38;action=edit\" rel=\"nofollow\" title=\"http://en.wikipedia.org/w/index.php?title=Template%3AScreen+Actors+Guild+Award+for+Outstanding+Performance+by+a+Cast+in+a+Motion+Picture+%281995%E2%80%932000%29&#38;action=edit\"><span title=\"Edit this template\">edit</span></a></li>\n"
 						+ "</ul></div>\n" + "", wikiModel.render(
 						"{{Navbar|Screen Actors Guild Award for Outstanding Performance by a Cast in a Motion Picture (1995–2000)}}\n", false));
+	}
+
+	public void testTemplateWithNewlines001() {
+		assertEquals("\n" + 
+				"<p>{{Serie de TV</p>\n" + 
+				"<pre>\n" + 
+				" Nombre        = FabulÃ³polis\n" + 
+				"</pre>\n" + 
+				"<p>}}</p>", 
+				wikiModel.render("{{Serie de TV\n  Nombre        = FabulÃ³polis\n}}", false));
+
+		assertEquals(new HashSet<String>(), wikiModel.getTemplates());
+	}
+
+	public void testTemplateWithNewlines002() {
+		assertEquals("[[:Template:Serie de TV]]", wikiModel.parseTemplates("{{Serie de TV\n\n}}"));
+
+		assertTrue("wikiModel.getTemplates() = " + wikiModel.getTemplates().toString(), wikiModel.getTemplates()
+				.contains("Serie de TV"));
+	}
+
+	public void testTemplateWithNewlines003() {
+		assertEquals("[[:Template:Serie de TV]]", wikiModel.parseTemplates("{{Serie de TV\n}}"));
+
+		assertTrue("wikiModel.getTemplates() = " + wikiModel.getTemplates().toString(), wikiModel.getTemplates()
+				.contains("Serie de TV"));
 	}
 }
