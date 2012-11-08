@@ -726,9 +726,11 @@ public class TemplateParserTest extends FilterTestSupport {
 	
 	public void testFormatnum006() {
 		// default locale is ENGLISH
-		assertEquals("90.0", wikiModel.parseTemplates("{{formatnum:90.000}}"));
+		assertEquals("90.000", wikiModel.parseTemplates("{{formatnum:90.000}}"));
+		assertEquals("90.000000000000000000000000000000000000", wikiModel.parseTemplates("{{formatnum:90.000000000000000000000000000000000000}}"));
 		wikiModel.setLocale(Locale.GERMAN);
-		assertEquals("90,0", wikiModel.parseTemplates("{{formatnum:90.000}}"));
+		assertEquals("90,000", wikiModel.parseTemplates("{{formatnum:90.000}}"));
+		assertEquals("90,000000000000000000000000000000000000", wikiModel.parseTemplates("{{formatnum:90.000000000000000000000000000000000000}}"));
 		// reset to english locale
 		wikiModel.setLocale(Locale.ENGLISH);
 	}

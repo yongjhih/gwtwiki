@@ -41,8 +41,11 @@ public class Formatnum extends AbstractTemplateFunction {
 						if (result.endsWith(".")) {
 							DecimalFormat df = (DecimalFormat) DecimalFormat.getInstance(model.getLocale());
 							result = nf.format(dbl) + df.getDecimalFormatSymbols().getDecimalSeparator();
-						} else if (dbl == dbl.intValue() && result.indexOf('.') != -1) {
-							nf.setMinimumFractionDigits(1);
+						} else if (dbl == dbl.intValue()) {
+							int idx = result.indexOf('.');
+							if (idx != -1) {
+								nf.setMinimumFractionDigits(result.length() - 1 - idx);
+							}
 							result = nf.format(dbl);
 						} else {
 							result = nf.format(dbl);
