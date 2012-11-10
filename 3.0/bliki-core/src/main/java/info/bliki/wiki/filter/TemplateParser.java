@@ -69,15 +69,45 @@ public class TemplateParser extends AbstractParser {
 		parseRecursive(rawWikitext, wikiModel, writer, parseOnlySignature, renderTemplate, null);
 	}
 
+	/**
+	 * Preprocess parsing of the <code>&lt;includeonly&gt;</code>,
+	 * <code>&lt;onlyinclude&gt;</code> and <code>&lt;noinclude&gt;</code> tags
+	 * 
+	 * @param writer
+	 * @param diff
+	 * @throws IOException
+	 */
 	private void parsePreprocessRecursive(StringBuilder writer, int diff) throws IOException {
 		StringBuilder buf = new StringBuilder(fCurrentPosition - fWhiteStartPosition);
 		appendContent(buf, fWhiteStart, fWhiteStartPosition, diff, true);
-		parsePreprocessRecursive(buf.toString(), fWikiModel, writer, fParseOnlySignature, fRenderTemplate, false, null);
+		int startIndex = Util.indexOfTemplateParsing(buf);
+		if (startIndex < 0) {
+			writer.append(buf);
+			return;
+		}
+		parsePreprocessRecursive(startIndex, buf.toString(), fWikiModel, writer, fRenderTemplate, false, null);
 	}
 
-	public static void parsePreprocessRecursive(String rawWikitext, IWikiModel wikiModel, StringBuilder writer,
-			boolean parseOnlySignature, boolean renderTemplate, boolean onlyIncludeFlag, Map<String, String> templateParameterMap)
-			throws IOException {
+	/**
+	 * Preprocess parsing of the <code>&lt;includeonly&gt;</code>,
+	 * <code>&lt;onlyinclude&gt;</code> and <code>&lt;noinclude&gt;</code> tags
+	 * 
+	 * @param rawWikitext
+	 * @param wikiModel
+	 * @param writer
+	 * @param renderTemplate
+	 * @param onlyIncludeFlag
+	 * @param templateParameterMap
+	 * @throws IOException
+	 */
+	public static void parsePreprocessRecursive(int startIndex, String rawWikitext, IWikiModel wikiModel, StringBuilder writer,
+			boolean renderTemplate, boolean onlyIncludeFlag, Map<String, String> templateParameterMap) throws IOException {
+//		int startIndex = Util.isNoTemplateParsing(rawWikitext);
+//		if (startIndex < 0) {
+//			writer.append(rawWikitext);
+//			return;
+//		}
+
 		try {
 			int templateLevel = wikiModel.incrementTemplateRecursionLevel();
 			if (templateLevel > Configuration.TEMPLATE_RECURSION_LIMIT) {
@@ -85,9 +115,9 @@ public class TemplateParser extends AbstractParser {
 				return;
 			}
 			StringBuilder sb = new StringBuilder(rawWikitext.length());
-			TemplateParser parser = new TemplateParser(rawWikitext, parseOnlySignature, renderTemplate, onlyIncludeFlag);
+			TemplateParser parser = new TemplateParser(rawWikitext, false, renderTemplate, onlyIncludeFlag);
 			parser.setModel(wikiModel);
-			parser.runPreprocessParser(sb, false);
+			parser.runPreprocessParser(0, startIndex, sb, false);
 
 			StringBuilder parameterBuffer = sb;
 			StringBuilder plainBuffer = sb;
@@ -117,8 +147,13 @@ public class TemplateParser extends AbstractParser {
 
 	public static void parseRecursive(String rawWikitext, IWikiModel wikiModel, Appendable writer, boolean parseOnlySignature,
 			boolean renderTemplate, Map<String, String> templateParameterMap) throws IOException {
+		int startIndex = Util.indexOfTemplateParsing(rawWikitext);
+		if (startIndex < 0) {
+			writer.append(rawWikitext);
+			return;
+		}
 		StringBuilder sb = new StringBuilder(rawWikitext.length());
-		parsePreprocessRecursive(rawWikitext, wikiModel, sb, parseOnlySignature, renderTemplate, false, templateParameterMap);
+		parsePreprocessRecursive(startIndex, rawWikitext, wikiModel, sb, renderTemplate, false, templateParameterMap);
 		if (parseOnlySignature) {
 			writer.append(sb);
 			return;
@@ -164,16 +199,41 @@ public class TemplateParser extends AbstractParser {
 
 	/**
 	 * Preprocess parsing of the <code>&lt;includeonly&gt;</code>,
-	 * <code>&lt;onlyinclude&gt;</code> and <code>&lt;noinclude&gt;</code> tags
+	 * <code>&lt;onlyinclude&gt;</code> and <code>&lt;noinclude&gt;</code> tags,
+	 * HTML comments and <code>&lt;nowiki&gt;</code>, <code>&lt;source&gt;</code>
+	 * and <code>&lt;math&gt;</code> tags.
 	 * 
 	 * @param writer
 	 * @param ignoreTemplateTags
-	 *          TODO
+	 *          don't parse special template tags like &lt;includeonly&gt;,
+	 *          &lt;noinclude&gt;, &lt;onlyinclude&gt;
 	 * @throws IOException
 	 */
 	protected void runPreprocessParser(StringBuilder writer, boolean ignoreTemplateTags) throws IOException {
+		runPreprocessParser(fCurrentPosition, fCurrentPosition, writer, ignoreTemplateTags);
+	}
+
+	/**
+	 * Preprocess parsing of the <code>&lt;includeonly&gt;</code>,
+	 * <code>&lt;onlyinclude&gt;</code> and <code>&lt;noinclude&gt;</code> tags,
+	 * HTML comments and <code>&lt;nowiki&gt;</code>, <code>&lt;source&gt;</code>
+	 * and <code>&lt;math&gt;</code> tags.
+	 * 
+	 * @param writer
+	 * @param whiteStartPosition
+	 *          the position to start the <i>normal content</i> before the first
+	 *          special template tag
+	 * @param currentPosition
+	 *          the position to continue with parsing special template tags
+	 * @param ignoreTemplateTags
+	 *          don't parse special template tags like &lt;includeonly&gt;,
+	 *          &lt;noinclude&gt;, &lt;onlyinclude&gt;
+	 * @throws IOException
+	 */
+	protected void runPreprocessParser(int whiteStartPosition, int currentPosition, StringBuilder writer, boolean ignoreTemplateTags)
+			throws IOException {
 		fWhiteStart = true;
-		fWhiteStartPosition = fCurrentPosition;
+		fWhiteStartPosition = whiteStartPosition;
 		int oldPosition;
 		try {
 			while (true) {
@@ -326,7 +386,8 @@ public class TemplateParser extends AbstractParser {
 	 * 
 	 * @param writer
 	 * @param ignoreTemplateTags
-	 *          TODO
+	 *          don't parse special template tags like &lt;includeonly&gt;,
+	 *          &lt;noinclude&gt;, &lt;onlyinclude&gt;
 	 * @return
 	 * @throws IOException
 	 */
@@ -811,9 +872,9 @@ public class TemplateParser extends AbstractParser {
 		} finally {
 			if (currOffset >= lastOffset) {
 				try {
-					StringBuilder buf = new StringBuilder();
 					value = srcString.substring(lastOffset, currOffset);
 					if (parameter != null) {
+						StringBuilder buf = new StringBuilder(value.length());
 						TemplateParser.parseRecursive(value, wikiModel, buf, false, false);
 						value = Util.trimNewlineRight(buf.toString());
 						namedParameterMap.put(parameter, value);
