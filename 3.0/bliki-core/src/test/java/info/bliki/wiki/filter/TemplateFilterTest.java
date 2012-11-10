@@ -15,6 +15,26 @@ public class TemplateFilterTest extends FilterTestSupport {
 		return new TestSuite(TemplateFilterTest.class);
 	}
 
+	/**
+	 * Issue124 - Image URL parsing broken in some cases
+	 */
+	public void testTemplateIssue124() { 
+		assertEquals(
+				"\n" + 
+				"<div style=\"float:left; padding-top:0.5em; padding-right:0.5em;\"><a class=\"image\" href=\"http://www.bliki.info/wiki/File:150px-Waterberg_Nashorn1.jpg\" title=\"Breitmaulnashörner in Namibia\"><img src=\"http://www.bliki.info/wiki/150px-Waterberg_Nashorn1.jpg\" alt=\"Breitmaulnashörner in Namibia\" width=\"150\" />\n" + 
+				"</a></div>\n" + 
+				"<p>Die <b><a href=\"http://www.bliki.info/wiki/Nash%C3%B6rner\" title=\"Nashörner\">Nashörner</a></b> (Rhinocerotidae) oder auch <b>Rhinozerosse</b> zählen zu den markantesten Säugetieren mit ihrem großen Kopf und den namengebenden ein bis zwei Hörnern. <small><a href=\"http://www.bliki.info/wiki/Nash%C3%B6rner\" title=\"Nashörner\">mehr</a></small></p>",
+				wikiModel
+						.render("{{AdT-Vorschlag\n"
+								+ "|DATUM            = 01.09.2012\n"
+								+ "|LEMMA            = Nashörner\n"
+								+ "|BILD             = File:Waterberg Nashorn1.jpg\n"
+								+ "|BILDGROESSE      = 150px\n"
+								+ "|BILDUMRANDUNG    = \n"
+								+ "|BILDBESCHREIBUNG = Breitmaulnashörner in Namibia\n"
+								+ "|TEASERTEXT       = Die '''[[Nashörner]]''' (Rhinocerotidae) oder auch '''Rhinozerosse''' zählen zu den markantesten Säugetieren mit ihrem großen Kopf und den namengebenden ein bis zwei Hörnern.}}"));
+	}
+	
 	public void testTemplate06() {
 		assertEquals("\n" + "<p>start- 5.0 equals +5 -end</p>", wikiModel.render("start- {{ifeq|5.0|+5}} -end", false));
 	}

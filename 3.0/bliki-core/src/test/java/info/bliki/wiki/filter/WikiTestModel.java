@@ -19,6 +19,80 @@ import java.util.Map;
  */
 public class WikiTestModel extends WikiModel {
 
+	/**
+	 * Issue 124
+	 */
+	public static String ADTVorschlag = "<includeonly>{{#if: {{{LEMMA|}}} | | {{Achtung|1=Das Lemma ist nicht eingetragen.}} }}{{#if: {{{BILD|}}} | {{#if: {{{BILDBESCHREIBUNG|}}} | | {{Achtung|1=Die Bildbeschreibung ist nicht eingetragen.}} }} }}</includeonly>{{#ifeq: {{NAMESPACEE}} | Wikipedia_Diskussion\n"
+			+ "| <div style=\"width:50%;\">\n"
+			+ "<div id=\"hauptseite\" class=\"hauptseite-links\">\n"
+			+ "<!--<div style=\"background-color:#D8E8FF; border:1px solid #8898BF; font-size:1em; font-weight:bold; margin:0; padding:0.1em 0.8em;\">{{#if: {{{DATUM|}}} | AdT-Vorschlag für den {{{DATUM}}}:<br/>}}{{{LEMMA}}}</div> -->\n"
+			+ "<div style=\"background-color:#D8E8FF; border:1px solid #8898BF; font-size:1em; font-weight:bold; margin:0; padding:0.1em 0.8em;\">&nbsp;</div>\n"
+			+ "<div class=\"inhalt\">\n"
+			+ "}}{{#if: {{{BILD|}}} | <div style=\"float:left; padding-top:0.5em; padding-right:0.5em;\">[[{{{BILD|}}}|{{#if: {{{BILDGROESSE|}}} | {{{BILDGROESSE|}}} | x89px}}|{{#if: {{{BILDUMRANDUNG|}}} | border}}|{{{BILDBESCHREIBUNG|}}}]]</div> }}\n"
+			+ "{{{TEASERTEXT|}}} <small>[[{{{LEMMA|}}}|mehr]]{{#if: {{{AUDIOVERSION|}}} | &nbsp;&nbsp;{{Audio|{{{AUDIOVERSION}}}|Gesprochene Version}} }}{{#if: {{{AUDIOVERSION1|}}} | [[Datei:Loudspeaker.svg|12px|link=|alt=]]&nbsp;Gesprochener Artikel:\n"
+			+ "[[Media:{{{AUDIOVERSION1}}}|Teil&nbsp;1]]<sup>[[Hilfe:Audio|<span title=\"Hilfe&nbsp;– Audio\">?</span>]]/[[:Datei:{{{AUDIOVERSION1}}}|<span title=\"Tondateibeschreibungsseite mit Lizenzangabe für „{{{AUDIOVERSION1}}}“\"><tt>i</tt></span>]]</sup> }}{{#if: {{{AUDIOVERSION2|}}} | &nbsp;·\n"
+			+ "[[Media:{{{AUDIOVERSION2}}}|Teil&nbsp;2]]<sup>[[Hilfe:Audio|<span title=\"Hilfe&nbsp;– Audio\">?</span>]]/[[:Datei:{{{AUDIOVERSION2}}}|<span title=\"Tondateibeschreibungsseite mit Lizenzangabe für „{{{AUDIOVERSION2}}}“\"><tt>i</tt></span>]]</sup> }}{{#if: {{{AUDIOVERSION3|}}} | &nbsp;·\n"
+			+ "[[Media:{{{AUDIOVERSION3}}}|Teil&nbsp;3]]<sup>[[Hilfe:Audio|<span title=\"Hilfe&nbsp;– Audio\">?</span>]]/[[:Datei:{{{AUDIOVERSION3}}}|<span title=\"Tondateibeschreibungsseite mit Lizenzangabe für „{{{AUDIOVERSION3}}}“\"><tt>i</tt></span>]]</sup> }}{{#if: {{{AUDIOVERSION4|}}} | &nbsp;·\n"
+			+ "[[Media:{{{AUDIOVERSION4}}}|Teil&nbsp;4]]<sup>[[Hilfe:Audio|<span title=\"Hilfe&nbsp;– Audio\">?</span>]]/[[:Datei:{{{AUDIOVERSION4}}}|<span title=\"Tondateibeschreibungsseite mit Lizenzangabe für „{{{AUDIOVERSION4}}}“\"><tt>i</tt></span>]]</sup> }}{{#if: {{{AUDIOVERSION5|}}} | &nbsp;·\n"
+			+ "[[Media:{{{AUDIOVERSION5}}}|Teil&nbsp;5]]<sup>[[Hilfe:Audio|<span title=\"Hilfe&nbsp;– Audio\">?</span>]]/[[:Datei:{{{AUDIOVERSION5}}}|<span title=\"Tondateibeschreibungsseite mit Lizenzangabe für „{{{AUDIOVERSION5}}}“\"><tt>i</tt></span>]]</sup> }}{{#if: {{{AUDIOVERSION6|}}} | &nbsp;·\n"
+			+ "[[Media:{{{AUDIOVERSION6}}}|Teil&nbsp;6]]<sup>[[Hilfe:Audio|<span title=\"Hilfe&nbsp;– Audio\">?</span>]]/[[:Datei:{{{AUDIOVERSION6}}}|<span title=\"Tondateibeschreibungsseite mit Lizenzangabe für „{{{AUDIOVERSION6}}}“\"><tt>i</tt></span>]]</sup> }}</small>{{#ifeq: {{NAMESPACEE}} | Wikipedia_Diskussion\n"
+			+ "| <div style=\"clear:left;\"></div>\n"
+			+ "</div>\n"
+			+ "</div>\n"
+			+ "</div>\n"
+			+ "}}<noinclude>\n"
+			+ "\n"
+			+ " <nowiki>\n"
+			+ "{{AdT-Vorschlag\n"
+			+ " | DATUM            = <!-- Datum des Wunschtermins -->\n"
+			+ " | LEMMA            = <!-- Angabe ohne Klammern -->\n"
+			+ " | BILD             = <!-- Angabe ohne Klammern, aber mit „Datei:“ o. ä. -->\n"
+			+ " | BILDBESCHREIBUNG = <!-- nur Text, keine Formatierungen außer &amp;nbsp; -->\n"
+			+ " | BILDGROESSE      = <!-- kann weggelassen werden -->\n"
+			+ " | BILDUMRANDUNG    = <!-- kann weggelassen werden, Angaben JA, RAND oder BORDER möglich -->\n"
+			+ " | TEASERTEXT       = <!-- nur Text, inkl. Wiki-Formatierungen -->\n"
+			+ " | AUDIOVERSION     = <!-- Audiodatei, falls einteilig vorhanden -->\n"
+			+ " | AUDIOVERSION1    = <!-- 1. Audiodatei, falls mehrteilig vorhanden -->\n"
+			+ " | AUDIOVERSION2    = <!-- 2. Audiodatei, falls mehrteilig vorhanden -->\n"
+			+ " | AUDIOVERSION3    = <!-- 3. Audiodatei, falls mehrteilig vorhanden -->\n"
+			+ " | AUDIOVERSION4    = <!-- 4. Audiodatei, falls mehrteilig vorhanden -->\n"
+			+ " | AUDIOVERSION5    = <!-- 5. Audiodatei, falls mehrteilig vorhanden -->\n"
+			+ " | AUDIOVERSION6    = <!-- 6. Audiodatei, falls mehrteilig vorhanden -->\n"
+			+ "}}\n"
+			+ "</nowiki>\n"
+			+ "\n"
+			+ "== Beispiel ==\n"
+			+ "<pre>\n"
+			+ "{{AdT-Vorschlag\n"
+			+ " | DATUM            = 29.07.2010\n"
+			+ " | LEMMA            = Satz des Pythagoras\n"
+			+ " | BILD             = Datei:pythagoras_abc.svg\n"
+			+ " | BILDBESCHREIBUNG = Rechtwinkliges Dreieck\n"
+			+ " | BILDGROESSE      = 100px\n"
+			+ " | BILDUMRANDUNG    = JA\n"
+			+ " | TEASERTEXT       = Der '''[[Satz des Pythagoras]]''' ist einer der fundamentalen Sätze der euklidischen Geometrie. Er besagt, dass in allen ebenen rechtwinkligen Dreiecken die Summe der Flächeninhalte der Kathetenquadrate gleich dem Flächeninhalt des Hypotenusenquadrates ist. Als Gleichung ausgedrückt lautet er:<br /> <math>a^2 + b^2 = c^2</math>,\n"
+			+ "wobei ''a'' und ''b'' wie im Bild für die Längen der am rechten Winkel anliegenden Seiten, der Katheten, stehen und ''c'' die Länge der dem rechten Winkel gegenüberliegenden Seite, der Hypotenuse, darstellt.\n"
+			+ "In der modernen Mathematik motiviert der Satz das Konzept des Senkrechtstehens in abstrakten Räumen.\n"
+			+ "Der Satz ist nach Pythagoras von Samos benannt, der als erster einen Beweis dafür gefunden haben soll, was allerdings in der Forschung umstritten ist. Schon lange vor Pythagoras war der ''Satz des Pythagoras'' in Babylon und Indien bekannt. Es gibt jedoch keinen Nachweis dafür, dass man dort bereits einen mathematischen Beweis hatte.\n"
+			+ "}}\n"
+			+ "</pre>\n"
+			+ "wird zu\n"
+			+ "{{AdT-Vorschlag\n"
+			+ " | DATUM            = 29.07.2010\n"
+			+ " | LEMMA            = Satz des Pythagoras\n"
+			+ " | BILD             = Datei:pythagoras_abc.svg\n"
+			+ " | BILDBESCHREIBUNG = Rechtwinkliges Dreieck\n"
+			+ " | BILDGROESSE      = 100px\n"
+			+ " | BILDUMRANDUNG    = JA\n"
+			+ " | TEASERTEXT       = Der '''[[Satz des Pythagoras]]''' ist einer der fundamentalen Sätze der euklidischen Geometrie. Er besagt, dass in allen ebenen rechtwinkligen Dreiecken die Summe der Flächeninhalte der Kathetenquadrate gleich dem Flächeninhalt des Hypotenusenquadrates ist. Als Gleichung ausgedrückt lautet er:<br /> <math>a^2 + b^2 = c^2</math>,\n"
+			+ "wobei ''a'' und ''b'' wie im Bild für die Längen der am rechten Winkel anliegenden Seiten, der Katheten, stehen und ''c'' die Länge der dem rechten Winkel gegenüberliegenden Seite, der Hypotenuse, darstellt.\n"
+			+ "In der modernen Mathematik motiviert der Satz das Konzept des Senkrechtstehens in abstrakten Räumen.\n"
+			+ "Der Satz ist nach Pythagoras von Samos benannt, der als erster einen Beweis dafür gefunden haben soll, was allerdings in der Forschung umstritten ist. Schon lange vor Pythagoras war der ''Satz des Pythagoras'' in Babylon und Indien bekannt. Es gibt jedoch keinen Nachweis dafür, dass man dort bereits einen mathematischen Beweis hatte.\n"
+			+ "}}\n"
+			+ "\n"
+			+ "[[Kategorie:Vorlage:Wikipedia:|Adt-Vorschlag]]\n"
+			+ "[[Kategorie:Wikipedia:Hauptseite/Artikel des Tages|{{PAGENAME}}]]\n" + "</noinclude>\n" + "";
+
 	public static String RELLINK = "<div class=\"rellink{{#if:{{{extraclasses|}}}|<nowiki> </nowiki>{{{extraclasses}}}}}\">{{{1}}}</div><noinclude>\n"
 			+ "{{documentation}}\n" + "</noinclude>\n" + "";
 
@@ -26,7 +100,7 @@ public class WikiTestModel extends WikiModel {
 	public final static String WEATHERVAL02 = "{{{jan1}}}";
 	public final static String WEATHERVAL03 = "{{{jan{{{show}}}}}}";
 	public final static String WEATHERBOX03 = "{{WeatherVal03\n|show={{#if:{{{show1|}}}|1|2}}|jan1=10|jan2=20}}";
-	
+
 	public static String MAIN = "{{Rellink|extraclasses=relarticle mainarticle|{{#ifeq:{{SUBJECTSPACE}}|Category|The main {{#ifeq:{{NAMESPACE:{{{1}}}}}||article|page}}{{#if:{{{2|}}}|s}} for this [[Wikipedia:Categorization|category]] {{#if:{{{2|}}}|are|is}}|Main {{#ifeq:{{NAMESPACE:{{{1}}}}}||article|page}}{{#if:{{{2|}}}|s}}:}} [[{{{1|{{PAGENAME}}}}}|{{{l1|{{{1|{{PAGENAME}}}}}}}}]]{{#if:{{{2| }}}\n"
 			+ " |{{#if:{{{3|}}}|,&#32;|&#32;and&#32;}}[[{{{2}}}|{{{l2|{{{2}}}}}}]]}}{{#if:{{{3|}}}\n"
 			+ " |{{#if:{{{4|}}}|,&#32;|,&#32;and&#32;}}[[{{{3}}}|{{{l3|{{{3}}}}}}]]}}{{#if:{{{4|}}}\n"
@@ -1810,12 +1884,13 @@ public class WikiTestModel extends WikiModel {
 			+ "\n"
 			+ "--></div></includeonly><noinclude>\n" + "\n" + "{{documentation}}\n" + "</noinclude>";
 
-	public final static String TRANSCLUDE = "{{#switch: {{NAMESPACE: {{{1}}} }}\r\n"
-			+ " |#default = {{FULLPAGENAME: {{{1}}} }} <!-- eg \"User:Foo\" -->\r\n" + " |{{ns:0}} = \r\n"
-			+ "    {{#ifeq: {{NAMESPACE: {{{1}}} }} | {{NAMESPACE: Template{{{1}}} }}\r\n"
-			+ "      | Template:{{{1}}}            <!-- no leading colon, eg \"Foo\" -->\r\n"
-			+ "      | {{PAGENAME: {{{1}}} }}      <!-- leading colon, eg \":Foo\", so we want the article -->\r\n" + "    }}\r\n"
-			+ "}}<noinclude>\r\n" + "{{documentation}}\r\n" + "</noinclude>";
+	public final static String TRANSCLUDE = "{{#switch: {{NAMESPACE: {{{1}}} }}\n"
+			+ " |#default = {{FULLPAGENAME: {{{1}}} }} <!-- eg \"User:Foo\" -->\n" + " |{{ns:0}} = \n"
+			+ "    {{#ifeq: {{NAMESPACE: {{{1}}} }} | {{NAMESPACE: Template{{{1}}} }}\n"
+			+ "      | Template:{{{1}}}            <!-- no leading colon, eg \"Foo\" -->\n"
+			+ "      | {{PAGENAME: {{{1}}} }}      <!-- leading colon, eg \":Foo\", so we want the article -->\n" + "    }}\n"
+			+ "}}<noinclude>\n" + "{{documentation}}\n" + "</noinclude>";
+
 	public final static String INFOBOX_SOFTWARE_TEXT = "<includeonly>{| class=\"infobox\" cellspacing=\"5\" style=\"width: 21em; font-size: 90%; text-align: left;\"\n"
 			+ "! colspan=\"2\" style=\"text-align: center; font-size: 130%;\" | {{{title|{{{name|{{PAGENAME}}}}}}}}\n"
 			+ "|-\n"
@@ -2624,6 +2699,8 @@ public class WikiTestModel extends WikiModel {
 				return NLN;
 			} else if (name.equals("Spc")) {
 				return SPC;
+			} else if (name.equals("AdT-Vorschlag")) {
+				return ADTVorschlag;
 			}
 		} else {
 			if (name.equals("Include_Page")) {
