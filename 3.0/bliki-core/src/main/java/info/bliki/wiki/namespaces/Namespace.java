@@ -514,15 +514,17 @@ public class Namespace implements INamespace {
 	}
 
 	/**
-	 * Extracts the two namespace strings from the resource bundle into the
-	 * {@link #fNamespaces1} and {@link #fNamespaces2} arrays.
+	 * Extracts the two namespace strings from the resource bundle as aliases
+	 * for the given namespace code.
 	 * 
+	 * @param resourceBundle
+	 *          the resource bundle to read from
 	 * @param ns1Id
 	 *          the first id in the bundle, e.g. {@link Messages#WIKI_API_MEDIA1}
 	 * @param ns2Id
 	 *          the first id in the bundle, e.g. {@link Messages#WIKI_API_MEDIA2}
-	 * @param arrayPos
-	 *          the position in the arrays
+	 * @param namespaceCode
+	 *          the namespace code
 	 */
 	private void extractAliasFromResource(ResourceBundle resourceBundle, String ns1Id, String ns2Id, Integer namespaceCode) {
 		String ns1 = Messages.getString(resourceBundle, ns1Id);
