@@ -424,11 +424,12 @@ public class WikiModel extends AbstractWikiModel {
 
 	/**
 	 * Set the model's locale to a new value. You can use this function in JUnit
-	 * tests, but otherwise it's preferred to set the Locale in the nodels
-	 * constructor and nether changeing it.
+	 * tests, but otherwise it's preferred to set the Locale in the model's
+	 * constructor and never changing it.
 	 * 
 	 * @param locale
 	 */
+	@Deprecated
 	public void setLocale(Locale locale) {
 		fLocale = locale;
 	}

@@ -31,10 +31,19 @@ public class FilterTestSupport extends TestCase {
   @Override
   protected void setUp() throws Exception {
     super.setUp();
-    wikiModel = new WikiTestModel(Locale.ENGLISH,
-        "http://www.bliki.info/wiki/${image}",
-        "http://www.bliki.info/wiki/${title}");
-    wikiModel.setUp();
+    wikiModel = newWikiTestModel();
+  }
+
+  protected static WikiTestModel newWikiTestModel() {
+	  return newWikiTestModel(Locale.ENGLISH);
+  }
+  
+  protected static WikiTestModel newWikiTestModel(Locale locale) {
+	  WikiTestModel wikiModel = new WikiTestModel(locale,
+			  "http://www.bliki.info/wiki/${image}",
+			  "http://www.bliki.info/wiki/${title}");
+	  wikiModel.setUp();
+	  return wikiModel;
   }
 
   /**
