@@ -46,6 +46,7 @@ public class Namespace implements INamespace {
 	public final Map<String, Integer> NAMESPACE_INT_MAP = new TreeMap<String, Integer>(String.CASE_INSENSITIVE_ORDER);
 
 	protected ResourceBundle fResourceBundle = null;
+	protected ResourceBundle fResourceBundleEn = null;
 
 	public Namespace() {
 		this((ResourceBundle) null);
@@ -58,6 +59,7 @@ public class Namespace implements INamespace {
 	public Namespace(ResourceBundle resourceBundle) {
 		assert(fNamespaces1.length == fNamespaces2.length);
 		fResourceBundle = resourceBundle;
+		fResourceBundleEn = Messages.getResourceBundle(Locale.ENGLISH);
 		initializeNamespaces();
 
 		for (String[] namespaces : new String[][] { fNamespaces1, fNamespaces2 }) {
@@ -116,6 +118,7 @@ public class Namespace implements INamespace {
 				CONTENTSPACE_MAP.put(entry.getValue(), entry.getKey());
 			}
 		}
+		initializeEnglishAliases();
 	}
 
 	/*
@@ -317,10 +320,9 @@ public class Namespace implements INamespace {
 	}
 
 	public String getNamespace(String namespace) {
-		for (int i = 0; i < fNamespaces1.length; i++) {
-			if (fNamespaces1[i].equals(namespace) || fNamespaces2[i].equals(namespace)) {
-				return fNamespaces1[i];
-			}
+		Integer nsNumber = getNumberByName(namespace);
+		if (nsNumber != null) {
+			return getNamespaceByNumber(nsNumber);
 		}
 		return "";
 	}
@@ -510,6 +512,67 @@ public class Namespace implements INamespace {
 		extractFromResource(Messages.WIKI_API_CATEGORY1, Messages.WIKI_API_CATEGORY2, 16);
 		extractFromResource(Messages.WIKI_API_CATEGORYTALK1, Messages.WIKI_API_CATEGORYTALK2, 17);
 	}
+
+	/**
+	 * Extracts the two namespace strings from the resource bundle into the
+	 * {@link #fNamespaces1} and {@link #fNamespaces2} arrays.
+	 * 
+	 * @param ns1Id
+	 *          the first id in the bundle, e.g. {@link Messages#WIKI_API_MEDIA1}
+	 * @param ns2Id
+	 *          the first id in the bundle, e.g. {@link Messages#WIKI_API_MEDIA2}
+	 * @param arrayPos
+	 *          the position in the arrays
+	 */
+	private void extractAliasFromResource(ResourceBundle resourceBundle, String ns1Id, String ns2Id, Integer namespaceCode) {
+		String ns1 = Messages.getString(resourceBundle, ns1Id);
+		if (ns1 != null) {
+			addAlias(ns1, namespaceCode);
+			String ns2 = Messages.getString(resourceBundle, ns2Id);
+			if (ns2 != null) {
+				addAlias(ns2, namespaceCode);
+			}
+		}
+	}
+
+	private void initializeEnglishAliases() {
+		if (fResourceBundleEn == null) {
+			return;
+		}
+		extractAliasFromResource(fResourceBundleEn, Messages.WIKI_API_MEDIA1, Messages.WIKI_API_MEDIA2, MEDIA_NAMESPACE_KEY);
+		extractAliasFromResource(fResourceBundleEn, Messages.WIKI_API_SPECIAL1, Messages.WIKI_API_SPECIAL2, SPECIAL_NAMESPACE_KEY);
+		extractAliasFromResource(fResourceBundleEn, Messages.WIKI_API_TALK1, Messages.WIKI_API_TALK2, TALK_NAMESPACE_KEY);
+		extractAliasFromResource(fResourceBundleEn, Messages.WIKI_API_USER1, Messages.WIKI_API_USER2, USER_NAMESPACE_KEY);
+		extractAliasFromResource(fResourceBundleEn, Messages.WIKI_API_USERTALK1, Messages.WIKI_API_USERTALK2, USER_TALK_NAMESPACE_KEY);
+		extractAliasFromResource(fResourceBundleEn, Messages.WIKI_API_META1, Messages.WIKI_API_META2, PROJECT_NAMESPACE_KEY);
+		extractAliasFromResource(fResourceBundleEn, Messages.WIKI_API_METATALK1, Messages.WIKI_API_METATALK2, PROJECT_TALK_NAMESPACE_KEY);
+		extractAliasFromResource(fResourceBundleEn, Messages.WIKI_API_IMAGE1, Messages.WIKI_API_IMAGE2, FILE_NAMESPACE_KEY);
+		extractAliasFromResource(fResourceBundleEn, Messages.WIKI_API_IMAGETALK1, Messages.WIKI_API_IMAGETALK2, FILE_TALK_NAMESPACE_KEY);
+		extractAliasFromResource(fResourceBundleEn, Messages.WIKI_API_MEDIAWIKI1, Messages.WIKI_API_MEDIAWIKI2, MEDIAWIKI_NAMESPACE_KEY);
+		extractAliasFromResource(fResourceBundleEn, Messages.WIKI_API_MEDIAWIKITALK1, Messages.WIKI_API_MEDIAWIKITALK2, MEDIAWIKI_TALK_NAMESPACE_KEY);
+		extractAliasFromResource(fResourceBundleEn, Messages.WIKI_API_TEMPLATE1, Messages.WIKI_API_TEMPLATE2, TEMPLATE_NAMESPACE_KEY);
+		extractAliasFromResource(fResourceBundleEn, Messages.WIKI_API_TEMPLATETALK1, Messages.WIKI_API_TEMPLATETALK2, TEMPLATE_TALK_NAMESPACE_KEY);
+		extractAliasFromResource(fResourceBundleEn, Messages.WIKI_API_HELP1, Messages.WIKI_API_HELP2, HELP_NAMESPACE_KEY);
+		extractAliasFromResource(fResourceBundleEn, Messages.WIKI_API_HELPTALK1, Messages.WIKI_API_HELPTALK2, HELP_TALK_NAMESPACE_KEY);
+		extractAliasFromResource(fResourceBundleEn, Messages.WIKI_API_CATEGORY1, Messages.WIKI_API_CATEGORY2, CATEGORY_NAMESPACE_KEY);
+		extractAliasFromResource(fResourceBundleEn, Messages.WIKI_API_CATEGORYTALK1, Messages.WIKI_API_CATEGORYTALK2, CATEGORY_TALK_NAMESPACE_KEY);
+	}
+
+    protected void addAlias(final String alias, final Integer namespaceCode) {
+        String aliasLower;
+        if (fResourceBundle == null || fResourceBundle.getLocale() == null) {
+            aliasLower = alias.toLowerCase();
+        } else {
+            aliasLower = alias.toLowerCase(fResourceBundle.getLocale());
+        }
+        NAMESPACE_MAP.put(aliasLower, getNamespaceByNumber(namespaceCode));
+        final String talkspace = getTalkspace(getNamespaceByNumber(namespaceCode));
+		TALKSPACE_MAP.put(alias, talkspace);
+		if (talkspace != null) {
+			CONTENTSPACE_MAP.put(talkspace, alias);
+		}
+        NAMESPACE_INT_MAP.put(alias, namespaceCode);
+    }
 
 	public String getTalkspace(String namespace) {
 		return TALKSPACE_MAP.get(namespace);

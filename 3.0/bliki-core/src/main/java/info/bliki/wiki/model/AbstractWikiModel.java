@@ -1262,7 +1262,7 @@ public abstract class AbstractWikiModel implements IWikiModel, IContext {
 	 * {@inheritDoc}
 	 */
 	public boolean isCategoryNamespace(String namespace) {
-		return namespace.equalsIgnoreCase(fNamespace.getCategory()) || namespace.equalsIgnoreCase(fNamespace.getCategory2());
+		return fNamespace.getNumberByName(namespace) == Namespace.CATEGORY_NAMESPACE_KEY;
 	}
 
 	/**
@@ -1276,7 +1276,7 @@ public abstract class AbstractWikiModel implements IWikiModel, IContext {
 	 * {@inheritDoc}
 	 */
 	public boolean isImageNamespace(String namespace) {
-		return namespace.equalsIgnoreCase(fNamespace.getImage()) || namespace.equalsIgnoreCase(fNamespace.getImage2());
+		return fNamespace.getNumberByName(namespace) == Namespace.FILE_NAMESPACE_KEY;
 	}
 
 	/**
@@ -1318,7 +1318,7 @@ public abstract class AbstractWikiModel implements IWikiModel, IContext {
 	 * {@inheritDoc}
 	 */
 	public boolean isTemplateNamespace(String namespace) {
-		return namespace.equalsIgnoreCase(fNamespace.getTemplate()) || namespace.equalsIgnoreCase(fNamespace.getTemplate2());
+		return fNamespace.getNumberByName(namespace) == Namespace.TEMPLATE_NAMESPACE_KEY;
 	}
 
 	/**
