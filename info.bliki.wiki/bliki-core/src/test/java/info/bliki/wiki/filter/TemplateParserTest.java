@@ -675,64 +675,54 @@ public class TemplateParserTest extends FilterTestSupport {
 	public void testFormatnum001() {
 		// default locale is ENGLISH
 		assertEquals("1,401", wikiModel.parseTemplates("{{formatnum:1401}}", false));
-
 		assertEquals("987,654,321.654", wikiModel.parseTemplates("{{formatnum:987654321.654321}}", false));
 		assertEquals("987,654,321.654", wikiModel.parseTemplates("{{FORMATNUM:987654321.654321}}", false));
-		wikiModel.setLocale(Locale.GERMAN);
-		assertEquals("1.401", wikiModel.parseTemplates("{{formatnum:1401}}", false));
-		assertEquals("987.654.321,654", wikiModel.parseTemplates("{{formatnum:987654321.654321}}", false));
-		wikiModel.setLocale(Locale.ITALIAN);
-		assertEquals("1.401", wikiModel.parseTemplates("{{formatnum:1401}}", false));
-		assertEquals("987.654.321", wikiModel.parseTemplates("{{formatnum:987654321}}", false));
-		// reset to english locale
-		wikiModel.setLocale(Locale.ENGLISH);
+		
+		WikiTestModel germanWikiModel = newWikiTestModel(Locale.GERMAN);
+		assertEquals("1.401", germanWikiModel.parseTemplates("{{formatnum:1401}}", false));
+		assertEquals("987.654.321,654", germanWikiModel.parseTemplates("{{formatnum:987654321.654321}}", false));
+		
+		WikiTestModel italianWikiModel = newWikiTestModel(Locale.ITALIAN);
+		assertEquals("1.401", italianWikiModel.parseTemplates("{{formatnum:1401}}", false));
+		assertEquals("987.654.321", italianWikiModel.parseTemplates("{{formatnum:987654321}}", false));
 	}
 
 	public void testFormatnum002() {
 		// default locale is ENGLISH
 		assertEquals("9.87654321654321E8", wikiModel.parseTemplates("{{formatnum:987,654,321.654321|R}}", false));
 
-		wikiModel.setLocale(Locale.GERMAN);
-		// reset to english locale
-		wikiModel.setLocale(Locale.ENGLISH);
+		WikiTestModel germanWikiModel = newWikiTestModel(Locale.GERMAN);
+		assertEquals("9.87654321654321E8", germanWikiModel.parseTemplates("{{formatnum:987.654.321,654321|R}}", false));
 	}
 
 	public void testFormatnum003() {
 		// default locale is ENGLISH
 		assertEquals("90", wikiModel.parseTemplates("{{formatnum:90}}"));
-		wikiModel.setLocale(Locale.GERMAN);
-		assertEquals("90", wikiModel.parseTemplates("{{formatnum:90}}"));
-		// reset to english locale
-		wikiModel.setLocale(Locale.ENGLISH);
+		WikiTestModel germanWikiModel = newWikiTestModel(Locale.GERMAN);
+		assertEquals("90", germanWikiModel.parseTemplates("{{formatnum:90}}"));
 	}
 
 	public void testFormatnum004() {
 		// default locale is ENGLISH
 		assertEquals("90.", wikiModel.parseTemplates("{{formatnum:90.}}"));
-		wikiModel.setLocale(Locale.GERMAN);
-		assertEquals("90,", wikiModel.parseTemplates("{{formatnum:90.}}"));
-		// reset to english locale
-		wikiModel.setLocale(Locale.ENGLISH);
+		WikiTestModel germanWikiModel = newWikiTestModel(Locale.GERMAN);
+		assertEquals("90,", germanWikiModel.parseTemplates("{{formatnum:90.}}"));
 	}
 
 	public void testFormatnum005() {
 		// default locale is ENGLISH
 		assertEquals("90.0", wikiModel.parseTemplates("{{formatnum:90.0}}"));
-		wikiModel.setLocale(Locale.GERMAN);
-		assertEquals("90,0", wikiModel.parseTemplates("{{formatnum:90.0}}"));
-		// reset to english locale
-		wikiModel.setLocale(Locale.ENGLISH);
+		WikiTestModel germanWikiModel = newWikiTestModel(Locale.GERMAN);
+		assertEquals("90,0", germanWikiModel.parseTemplates("{{formatnum:90.0}}"));
 	}
 	
 	public void testFormatnum006() {
 		// default locale is ENGLISH
 		assertEquals("90.000", wikiModel.parseTemplates("{{formatnum:90.000}}"));
 		assertEquals("90.000000000000000000000000000000000000", wikiModel.parseTemplates("{{formatnum:90.000000000000000000000000000000000000}}"));
-		wikiModel.setLocale(Locale.GERMAN);
-		assertEquals("90,000", wikiModel.parseTemplates("{{formatnum:90.000}}"));
-		assertEquals("90,000000000000000000000000000000000000", wikiModel.parseTemplates("{{formatnum:90.000000000000000000000000000000000000}}"));
-		// reset to english locale
-		wikiModel.setLocale(Locale.ENGLISH);
+		WikiTestModel germanWikiModel = newWikiTestModel(Locale.GERMAN);
+		assertEquals("90,000", germanWikiModel.parseTemplates("{{formatnum:90.000}}"));
+		assertEquals("90,000000000000000000000000000000000000", germanWikiModel.parseTemplates("{{formatnum:90.000000000000000000000000000000000000}}"));
 	}
 
 	public void testPlural001() {

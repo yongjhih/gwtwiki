@@ -2510,12 +2510,6 @@ public class WikiTestModel extends WikiModel {
 		Configuration.DEFAULT_CONFIGURATION.addTokenTag("imagemap", new IgnoreTag("imagemap"));
 	}
 
-	public WikiTestModel(String imageBaseURL, String linkBaseURL) {
-		this(Locale.ENGLISH, imageBaseURL, linkBaseURL);
-		// add the German image namespace as an alias
-		fNamespace.getImage().addAlias("Bild");
-	}
-
 	/**
 	 * Add German namespaces to the wiki model
 	 * 
