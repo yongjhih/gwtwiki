@@ -289,6 +289,7 @@ public class Namespace implements INamespace {
 	}
 
 	protected ResourceBundle fResourceBundle = null;
+	protected ResourceBundle fResourceBundleEn = null;
 
 	public Namespace() {
 		this((ResourceBundle) null);
@@ -300,6 +301,7 @@ public class Namespace implements INamespace {
 
 	public Namespace(ResourceBundle resourceBundle) {
 		fResourceBundle = resourceBundle;
+		fResourceBundleEn = Messages.getResourceBundle(Locale.ENGLISH);
 		initializeNamespaces();
 	}
 
@@ -393,6 +395,16 @@ public class Namespace implements INamespace {
 				namespace.setTexts(ns1);
 			}
 		}
+		if (fResourceBundleEn != null) {
+			String ns1En = Messages.getString(fResourceBundleEn, ns1Id);
+			if (ns1En != null) {
+				namespace.addAlias(ns1En);
+				String ns2En = Messages.getString(fResourceBundleEn, ns2Id);
+				if (ns2En != null) {
+					namespace.addAlias(ns2En);
+				}
+			}
+		}
 	}
 
 	private void initializeNamespaces() {
@@ -418,11 +430,6 @@ public class Namespace implements INamespace {
 		extractFromResource(Messages.WIKI_API_HELPTALK1, Messages.WIKI_API_HELPTALK2, NamespaceCode.HELP_TALK_NAMESPACE_KEY);
 		extractFromResource(Messages.WIKI_API_CATEGORY1, Messages.WIKI_API_CATEGORY2, NamespaceCode.CATEGORY_NAMESPACE_KEY);
 		extractFromResource(Messages.WIKI_API_CATEGORYTALK1, Messages.WIKI_API_CATEGORYTALK2, NamespaceCode.CATEGORY_TALK_NAMESPACE_KEY);
-		
-		IMAGE.addAlias("File");
-		IMAGE.addAlias("Image");
-		IMAGE_TALK.addAlias("File_talk");
-		IMAGE_TALK.addAlias("Image_talk");
 	}
 
 	@Override
