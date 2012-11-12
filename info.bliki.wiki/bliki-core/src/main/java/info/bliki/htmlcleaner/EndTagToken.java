@@ -64,6 +64,7 @@ public class EndTagToken extends TagToken {
 		return false;
 	}
 	
+	@Override
 	public void serialize(XmlSerializer xmlSerializer) {
 		// do nothing - simply ignore serialization
 	}

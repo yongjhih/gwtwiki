@@ -43,7 +43,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -108,7 +107,7 @@ public class TagNode extends TagToken {
 
 	private List<Object> children = new ArrayList<Object>();
 
-	private List<Object> itemsToMove = null;
+	private List<BaseToken> itemsToMove = null;
 
 	private transient boolean isFormed = false;
 
@@ -222,9 +221,7 @@ public class TagNode extends TagToken {
 
 	public void addChildren(List<? extends Object> children) {
 		if (children != null) {
-			Iterator<? extends Object> it = children.iterator();
-			while (it.hasNext()) {
-				Object child = it.next();
+			for (Object child : children) {
 				addChild(child);
 			}
 		}
@@ -232,17 +229,17 @@ public class TagNode extends TagToken {
 
 	public void addItemForMoving(BaseToken item) {
 		if (itemsToMove == null) {
-			itemsToMove = new ArrayList<Object>();
+			itemsToMove = new ArrayList<BaseToken>();
 		}
 
 		itemsToMove.add(item);
 	}
 
-	public List<Object> getItemsToMove() {
+	public List<BaseToken> getItemsToMove() {
 		return itemsToMove;
 	}
 
-	public void setItemsToMove(List<Object> itemsToMove) {
+	public void setItemsToMove(List<BaseToken> itemsToMove) {
 		this.itemsToMove = itemsToMove;
 	}
 
@@ -254,6 +251,7 @@ public class TagNode extends TagToken {
 		this.isFormed = true;
 	}
 
+	@Override
 	public void serialize(XmlSerializer xmlSerializer) throws IOException {
 		xmlSerializer.serialize(this);
 	}
@@ -271,7 +269,7 @@ public class TagNode extends TagToken {
 		tt.parent = this.parent;
 		tt.itemsToMove = this.itemsToMove;
 		tt.isFormed = this.isFormed;
-		tt.children = new ArrayList(this.children);
+		tt.children = new ArrayList<Object>(this.children);
 		tt.attributes = new TreeMap<String, String>(this.attributes);
 		if (objectAttributes == null) {
 			tt.objectAttributes = null;
@@ -288,8 +286,6 @@ public class TagNode extends TagToken {
 
 	/**
 	 * Get the pure content text without the tags from this HTMLTag
-	 * 
-	 * @return
 	 */
 	public void getBodyString(Appendable buf) throws IOException {
 		List<Object> children = getChildren();
@@ -322,8 +318,6 @@ public class TagNode extends TagToken {
 
 	/**
 	 * Get the pure content text without the tags from this HTMLTag
-	 * 
-	 * @return
 	 */
 	public String getBodyString() {
 		List<Object> children = getChildren();

@@ -64,6 +64,7 @@ public class ContentToken implements BaseToken {
 		return content.trim();
 	}
 
+	@Override
 	public void serialize(XmlSerializer xmlSerializer) throws IOException {
 		xmlSerializer.getWriter().write(getContent());
 	}

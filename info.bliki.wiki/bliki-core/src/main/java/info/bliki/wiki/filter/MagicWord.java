@@ -19,14 +19,10 @@ package info.bliki.wiki.filter;
 import info.bliki.wiki.model.IWikiModel;
 import info.bliki.wiki.namespaces.INamespace;
 import info.bliki.wiki.namespaces.INamespace.INamespaceValue;
-import info.bliki.wiki.namespaces.Namespace;
-import info.bliki.wiki.namespaces.Namespace.NamespaceValue;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Set;
 
 /**
  * See <a href="http://www.mediawiki.org/wiki/Help:Magic_words">Help:Magic
@@ -207,6 +203,7 @@ public class MagicWord {
 		/**
 		 * Converts the enum to text.
 		 */
+		@Override
 		public String toString() {
 			return this.text;
 		}

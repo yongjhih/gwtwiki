@@ -29,6 +29,7 @@ public class HTMLConverter implements ITextConverter {
 		this(false);
 	}
 
+	@Override
 	public void nodesToText(List<? extends Object> nodes, Appendable resultBuffer, IWikiModel model) throws IOException {
 		if (nodes != null && !nodes.isEmpty()) {
 			try {
@@ -44,7 +45,9 @@ public class HTMLConverter implements ITextConverter {
 					Object item = childrenIt.next();
 					if (item != null) {
 						if (item instanceof List) {
-							nodesToText((List) item, resultBuffer, model);
+							@SuppressWarnings("unchecked")
+							final List<Object> list = (List<Object>) item;
+							nodesToText(list, resultBuffer, model);
 						} else if (item instanceof ContentToken) {
 							ContentToken contentToken = (ContentToken) item;
 							String content = contentToken.getContent();
@@ -116,6 +119,7 @@ public class HTMLConverter implements ITextConverter {
 		}
 	}
 
+	@Override
 	public void imageNodeToText(TagNode imageTagNode, ImageFormat imageFormat, Appendable resultBuffer, IWikiModel model)
 			throws IOException {
 		Map<String, String> map = imageTagNode.getAttributes();
@@ -287,6 +291,7 @@ public class HTMLConverter implements ITextConverter {
 		}
 	}
 
+	@Override
 	public boolean noLinks() {
 		return fNoLinks;
 	}

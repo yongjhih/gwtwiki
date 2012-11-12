@@ -56,7 +56,7 @@ public class Connector {
 	 * href="http://code.google.com/p/gwtwiki/issues/detail?id=33">Issue #33</a>
 	 * 
 	 * @param method
-	 * @return
+	 * @return XML string
 	 * @throws IOException
 	 */
 	public static String getAsXmlString(HttpMethod method) throws IOException {
@@ -202,7 +202,7 @@ public class Connector {
 	/**
 	 * Get the HttpClient.
 	 * 
-	 * @return
+	 * @return http client
 	 */
 	public HttpClient getClient() {
 		return client;
@@ -211,7 +211,7 @@ public class Connector {
 	/**
 	 * Get the HttpConnection manager.
 	 * 
-	 * @return
+	 * @return http connection manager
 	 */
 	public MultiThreadedHttpConnectionManager getManager() {
 		return manager;
@@ -238,7 +238,7 @@ public class Connector {
 	 *          user login data
 	 * @param listOfTitleStrings
 	 *          a list of title Strings "ArticleA,ArticleB,..."
-	 * @return
+	 * @return page list
 	 */
 	public List<Page> queryCategories(User user, List<String> listOfTitleStrings) {
 		String[] valuePairs = { "prop", "categories" };
@@ -252,7 +252,7 @@ public class Connector {
 	 *          user login data
 	 * @param listOfTitleStrings
 	 *          a list of title Strings "ArticleA,ArticleB,..."
-	 * @return
+	 * @return page list
 	 */
 	public List<Page> queryInfo(User user, List<String> listOfTitleStrings) {
 		String[] valuePairs = { "prop", "info" };
@@ -266,7 +266,7 @@ public class Connector {
 	 *          user login data
 	 * @param listOfTitleStrings
 	 *          a list of title Strings "ArticleA,ArticleB,..."
-	 * @return
+	 * @return page list
 	 */
 	public List<Page> queryLinks(User user, List<String> listOfTitleStrings) {
 		String[] valuePairs = { "prop", "links" };
@@ -283,7 +283,7 @@ public class Connector {
 	 *          user login data
 	 * @param listOfImageStrings
 	 *          a list of title Strings "ArticleA,ArticleB,..."
-	 * @return
+	 * @return page list
 	 */
 	public List<Page> queryImageinfo(User user, List<String> listOfImageStrings) {
 		String[] valuePairs = { "prop", "imageinfo", "iiprop", "url" };
@@ -300,7 +300,7 @@ public class Connector {
 	 * @param imageWidth
 	 *          a URL to an image scaled to this width will be returned. Only the
 	 *          current version of the image can be scaled.
-	 * @return
+	 * @return page list
 	 */
 	public List<Page> queryImageinfo(User user, List<String> listOfImageStrings, int imageWidth) {
 		String[] valuePairs = { "prop", "imageinfo", "iiprop", "url", "iiurlwidth", Integer.toString(imageWidth) };
@@ -328,7 +328,7 @@ public class Connector {
 	 *          user login data
 	 * @param query
 	 *          a user defined query
-	 * @return
+	 * @return page list
 	 */
 	public List<Page> query(User user, Query query) {
 		String response = sendXML(user, query);
@@ -352,7 +352,7 @@ public class Connector {
 	 * @param valuePairs
 	 *          pairs of query strings which should be appended to the Mediawiki
 	 *          API URL
-	 * @return
+	 * @return page list
 	 */
 	public List<Page> query(User user, List<String> listOfTitleStrings, String[] valuePairs) {
 		try {

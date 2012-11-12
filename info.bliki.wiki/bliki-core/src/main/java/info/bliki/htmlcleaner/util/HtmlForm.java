@@ -29,7 +29,7 @@ public class HtmlForm {
 
 	private String mEncType;
 
-	private List mElements = new ArrayList();
+	private List<Element> mElements = new ArrayList<Element>();
 
 	/**
 	 * Constructor.
@@ -87,7 +87,7 @@ public class HtmlForm {
 	}
 
 	public Element getElement(int i) {
-		return (Element) mElements.get(i);
+		return mElements.get(i);
 	}
 
 	public String getID() {

@@ -112,11 +112,11 @@ public class HtmlCleaner {
 	 * unhandled tags.
 	 */
 	private class OpenTags {
-		private List list = new ArrayList();
+		private List<TagPos> list = new ArrayList<TagPos>();
 
 		private TagPos last = null;
 
-		private Set set = new HashSet();
+		private Set<String> set = new HashSet<String>();
 
 		private boolean isEmpty() {
 			return list.isEmpty();
@@ -129,20 +129,20 @@ public class HtmlCleaner {
 		}
 
 		private void removeTag(String tagName) {
-			ListIterator it = list.listIterator(list.size());
+			ListIterator<TagPos> it = list.listIterator(list.size());
 			while (it.hasPrevious()) {
-				TagPos currTagPos = (TagPos) it.previous();
+				TagPos currTagPos = it.previous();
 				if (tagName.equals(currTagPos.name)) {
 					it.remove();
 					break;
 				}
 			}
 
-			last = list.isEmpty() ? null : (TagPos) list.get(list.size() - 1);
+			last = list.isEmpty() ? null : list.get(list.size() - 1);
 		}
 
 		private TagPos findFirstTagPos() {
-			return list.isEmpty() ? null : (TagPos) list.get(0);
+			return list.isEmpty() ? null : list.get(0);
 		}
 
 		private TagPos getLastTagPos() {
@@ -151,9 +151,9 @@ public class HtmlCleaner {
 
 		private TagPos findTag(String tagName) {
 			if (tagName != null) {
-				ListIterator it = list.listIterator(list.size());
+				ListIterator<TagPos> it = list.listIterator(list.size());
 				while (it.hasPrevious()) {
-					TagPos currTagPos = (TagPos) it.previous();
+					TagPos currTagPos = it.previous();
 					if (tagName.equals(currTagPos.name)) {
 						return currTagPos;
 					}
@@ -172,9 +172,9 @@ public class HtmlCleaner {
 			TagPos result = null, prev = null;
 
 			if (!isEmpty()) {
-				ListIterator it = list.listIterator(list.size());
+				ListIterator<TagPos> it = list.listIterator(list.size());
 				while (it.hasPrevious()) {
-					result = (TagPos) it.previous();
+					result = it.previous();
 					if (result.info == null || result.info.allowsAnything()) {
 						if (prev != null) {
 							return prev;
@@ -196,10 +196,10 @@ public class HtmlCleaner {
 		 * 
 		 * @param tags
 		 */
-		private boolean someAlreadyOpen(Set tags) {
-			Iterator it = list.iterator();
+		private boolean someAlreadyOpen(Set<String> tags) {
+			Iterator<TagPos> it = list.iterator();
 			while (it.hasNext()) {
-				TagPos curr = (TagPos) it.next();
+				TagPos curr = it.next();
 				if (tags.contains(curr.name)) {
 					return true;
 				}
@@ -217,7 +217,7 @@ public class HtmlCleaner {
 
 	private transient DoctypeToken _docType = null;
 
-	private Set allTags = new TreeSet();
+	private Set<String> allTags = new TreeSet<String>();
 
 	private boolean advancedXmlEscape = true;
 
@@ -408,12 +408,13 @@ public class HtmlCleaner {
 
 		htmlTokenizer.start();
 
-		List nodeList = htmlTokenizer.getTokenList();
+		// note: cannot use BaseToken list since closeAll modifies the list and adds e.g. list items
+		List<? extends Object> nodeList = htmlTokenizer.getTokenList();
 		closeAll(nodeList);
 		createDocumentNodes(nodeList);
 	}
 
-	public List getNodeList() throws IOException {
+	public List<BaseToken> getNodeList() throws IOException {
 		allTags.clear();
 		if (htmlNode == null) {
 			htmlNode = new TagNode("html");
@@ -425,7 +426,7 @@ public class HtmlCleaner {
 
 		HtmlTokenizer htmlTokenizer = new HtmlTokenizer(this);
 		htmlTokenizer.start();
-		List nodeList = htmlTokenizer.getTokenList();
+		List<BaseToken> nodeList = htmlTokenizer.getTokenList();
 		closeAll(nodeList);
 
 		return nodeList;
@@ -491,9 +492,9 @@ public class HtmlCleaner {
 
 				// iterates through the list of open tags from the end and check if
 				// there is some higher
-				ListIterator it = _openTags.list.listIterator(_openTags.list.size());
+				ListIterator<TagPos> it = _openTags.list.listIterator(_openTags.list.size());
 				while (it.hasPrevious()) {
-					TagPos currTagPos = (TagPos) it.previous();
+					TagPos currTagPos = it.previous();
 					if (tag.isHigher(currTagPos.name)) {
 						return currTagPos.position <= fatalTagPositon;
 					}
@@ -522,7 +523,7 @@ public class HtmlCleaner {
 		return true;
 	}
 
-	private void saveToLastOpenTag(List nodeList, BaseToken tokenToAdd) {
+	private void saveToLastOpenTag(List<BaseToken> nodeList, BaseToken tokenToAdd) {
 		TagPos last = _openTags.getLastTagPos();
 		if (last != null && last.info != null && last.info.isIgnorePermitted()) {
 			return;
@@ -539,10 +540,10 @@ public class HtmlCleaner {
 		return (o instanceof TagNode) && !((TagNode) o).isFormed();
 	}
 
-	void makeTree(List nodeList, ListIterator nodeIterator) {
+	void makeTree(List<BaseToken> nodeList, ListIterator<BaseToken> nodeIterator) {
 		// process while not reach the end of the list
 		while (nodeIterator.hasNext()) {
-			BaseToken token = (BaseToken) nodeIterator.next();
+			BaseToken token = nodeIterator.next();
 
 			if (token instanceof EndTagToken) {
 				EndTagToken endTagToken = (EndTagToken) token;
@@ -607,7 +608,7 @@ public class HtmlCleaner {
 					// if last open tag has lower presidence then this, it must be closed
 				} else if (tag != null && !_openTags.isEmpty()
 						&& tag.isMustCloseTag(tagInfoProvider.getTagInfo(_openTags.getLastTagPos().name))) {
-					List closed = closeSnippet(nodeList, _openTags.getLastTagPos(), startTagToken);
+					List<TagNode> closed = closeSnippet(nodeList, _openTags.getLastTagPos(), startTagToken);
 					int closedCount = closed.size();
 
 					// it is needed to copy some tags again in front of current, if there
@@ -616,10 +617,10 @@ public class HtmlCleaner {
 						// first iterates over list from the back and collects all start
 						// tokens
 						// in sequence that must be copied
-						ListIterator closedIt = closed.listIterator(closedCount);
-						List toBeCopied = new ArrayList();
+						ListIterator<TagNode> closedIt = closed.listIterator(closedCount);
+						List<TagNode> toBeCopied = new ArrayList<TagNode>();
 						while (closedIt.hasPrevious()) {
-							TagNode currStartToken = (TagNode) closedIt.previous();
+							TagNode currStartToken = closedIt.previous();
 							if (tag.isCopy(currStartToken.getName())) {
 								toBeCopied.add(0, currStartToken);
 							} else {
@@ -628,9 +629,9 @@ public class HtmlCleaner {
 						}
 
 						if (toBeCopied.size() > 0) {
-							Iterator copyIt = toBeCopied.iterator();
+							Iterator<TagNode> copyIt = toBeCopied.iterator();
 							while (copyIt.hasNext()) {
-								TagNode currStartToken = (TagNode) copyIt.next();
+								TagNode currStartToken = copyIt.next();
 								nodeIterator.add(currStartToken.makeCopy());
 							}
 
@@ -670,11 +671,8 @@ public class HtmlCleaner {
 		}
 	}
 
-	private void createDocumentNodes(List<Object> listNodes) {
-		Iterator<Object> it = listNodes.iterator();
-		while (it.hasNext()) {
-			Object child = it.next();
-
+	private void createDocumentNodes(List<? extends Object> listNodes) {
+		for (Object child : listNodes) {
 			if (child == null) {
 				continue;
 			}
@@ -701,9 +699,10 @@ public class HtmlCleaner {
 		}
 	}
 
-	private List closeSnippet(List<BaseToken> nodeList, TagPos tagPos, Object toNode) {
-		List closed = new ArrayList();
-		ListIterator it = nodeList.listIterator(tagPos.position);
+	private List<TagNode> closeSnippet(List<? extends Object> nodeList, TagPos tagPos, Object toNode) {
+		List<TagNode> closed = new ArrayList<TagNode>();
+		@SuppressWarnings("unchecked")
+		ListIterator<Object> it = (ListIterator<Object>) nodeList.listIterator(tagPos.position);
 
 		TagNode tagNode = null;
 		Object item = it.next();
@@ -713,7 +712,7 @@ public class HtmlCleaner {
 			if (isStartToken(item)) {
 				TagNode startTagToken = (TagNode) item;
 				closed.add(startTagToken);
-				List<Object> itemsToMove = startTagToken.getItemsToMove();
+				List<BaseToken> itemsToMove = startTagToken.getItemsToMove();
 				if (itemsToMove != null) {
 					OpenTags prevOpenTags = _openTags;
 					_openTags = new OpenTags();
@@ -766,7 +765,7 @@ public class HtmlCleaner {
 	/**
 	 * Close all unclosed tags if there are any.
 	 */
-	private void closeAll(List nodeList) {
+	private void closeAll(List<? extends Object> nodeList) {
 		TagPos firstTagPos = _openTags.findFirstTagPos();
 		if (firstTagPos != null) {
 			closeSnippet(nodeList, firstTagPos, null);
@@ -863,7 +862,7 @@ public class HtmlCleaner {
 		this.hyphenReplacementInComment = hyphenReplacementInComment;
 	}
 
-	public Set getAllTags() {
+	public Set<String> getAllTags() {
 		return allTags;
 	}
 

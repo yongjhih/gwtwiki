@@ -39,7 +39,6 @@ package info.bliki.htmlcleaner;
 
 import java.io.IOException;
 import java.io.Writer;
-import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -54,14 +53,14 @@ public class CompactXmlSerializer extends XmlSerializer {
 		super(writer, htmlCleaner);
 	}
 
-    private void serialize(List nodes, TagNode tagNode) throws IOException {
+    private void serialize(List<Object> nodes, TagNode tagNode) throws IOException {
         if ( nodes != null && !nodes.isEmpty() ) {
-            Iterator childrenIt = nodes.iterator();
-            while ( childrenIt.hasNext() ) {
-                Object item = childrenIt.next();
+        	for (Object item : nodes) {
                 if (item != null) {
                 	if (item instanceof List) {
-                    	serialize((List)item, tagNode);
+                    	@SuppressWarnings("unchecked")
+						final List<Object> list = (List<Object>) item;
+						serialize(list, tagNode);
                     } else if ( item instanceof ContentToken ) {
                     	ContentToken contentToken = (ContentToken) item;
                     	String content = contentToken.getContent().trim();
@@ -88,7 +87,7 @@ public class CompactXmlSerializer extends XmlSerializer {
 		protected void serialize(TagNode tagNode) throws IOException {
         serializeOpenTag(tagNode, false);
 
-        List tagChildren = tagNode.getChildren();
+        List<Object> tagChildren = tagNode.getChildren();
         if ( !tagChildren.isEmpty() ) {
             serialize(tagChildren, tagNode);
             serializeEndTag(tagNode, false);

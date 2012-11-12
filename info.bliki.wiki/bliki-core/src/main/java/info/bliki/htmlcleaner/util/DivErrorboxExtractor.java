@@ -3,7 +3,6 @@ package info.bliki.htmlcleaner.util;
 import info.bliki.htmlcleaner.ContentToken;
 import info.bliki.htmlcleaner.TagNode;
 
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -20,17 +19,17 @@ public class DivErrorboxExtractor extends AbstractHtmlExtractor<StringBuilder> {
 	}
 
 	@Override
-	public void appendContent(List nodes) {
+	public void appendContent(List<Object> nodes) {
 		if (nodes != null && !nodes.isEmpty()) {
-			Iterator childrenIt = nodes.iterator();
-			while (childrenIt.hasNext()) {
-				Object item = childrenIt.next();
+			for (Object item : nodes) {
 				if (item != null && (item instanceof ContentToken)) {
 					ContentToken contentToken = (ContentToken) item;
 					String content = contentToken.getContent();
 					fResultObject.append(content.trim());
 				} else if (item instanceof List) {
-					appendContent((List) item);
+					@SuppressWarnings("unchecked")
+					final List<Object> list = (List<Object>) item;
+					appendContent(list);
 				}
 			}
 		}

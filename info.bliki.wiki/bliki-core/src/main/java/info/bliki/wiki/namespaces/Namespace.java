@@ -170,6 +170,7 @@ public class Namespace implements INamespace {
 		 * 
 		 * @see info.bliki.wiki.namespaces.INamespaceValue#getCode()
 		 */
+		@Override
 		public NamespaceCode getCode() {
 			return code;
 		}
@@ -180,6 +181,7 @@ public class Namespace implements INamespace {
 		 * @see
 		 * info.bliki.wiki.namespaces.INamespaceValue#setTexts(java.lang.String)
 		 */
+		@Override
 		public void setTexts(String... aliases) {
 			assert (aliases.length >= 1);
 			// remove old texts:
@@ -200,6 +202,7 @@ public class Namespace implements INamespace {
 		 * @see
 		 * info.bliki.wiki.namespaces.INamespaceValue#addAlias(java.lang.String)
 		 */
+		@Override
 		public void addAlias(String alias) {
 			texts.add(alias);
 			TEXT_TO_NAMESPACE_MAP.put(alias, this);
@@ -212,6 +215,7 @@ public class Namespace implements INamespace {
 		 * 
 		 * @see info.bliki.wiki.namespaces.INamespaceValue#getPrimaryText()
 		 */
+		@Override
 		public String getPrimaryText() {
 			return texts.get(0);
 		}
@@ -221,6 +225,7 @@ public class Namespace implements INamespace {
 		 * 
 		 * @see info.bliki.wiki.namespaces.INamespaceValue#getTexts()
 		 */
+		@Override
 		public List<String> getTexts() {
 			return texts;
 		}
@@ -230,6 +235,7 @@ public class Namespace implements INamespace {
 		 * 
 		 * @see info.bliki.wiki.namespaces.INamespaceValue#getTalkspace()
 		 */
+		@Override
 		public NamespaceValue getTalkspace() {
 			return talkspace;
 		}
@@ -239,6 +245,7 @@ public class Namespace implements INamespace {
 		 * 
 		 * @see info.bliki.wiki.namespaces.INamespaceValue#getContentspace()
 		 */
+		@Override
 		public NamespaceValue getContentspace() {
 			return contentspace;
 		}
@@ -248,6 +255,7 @@ public class Namespace implements INamespace {
 		 * 
 		 * @see info.bliki.wiki.namespaces.INamespaceValue#makeFullPagename(String)
 		 */
+		@Override
 		public String makeFullPagename(String pageName) {
 			String primaryText = getPrimaryText();
 			if (primaryText.isEmpty()) {
@@ -264,6 +272,7 @@ public class Namespace implements INamespace {
 		 * info.bliki.wiki.namespaces.INamespace.INamespaceValue#isType(info.bliki
 		 * .wiki.namespaces.INamespace.NamespaceCode)
 		 */
+		@Override
 		public boolean isType(NamespaceCode code) {
 			return this.code == code;
 		}
@@ -294,6 +303,7 @@ public class Namespace implements INamespace {
 		initializeNamespaces();
 	}
 
+	@Override
 	public boolean isNamespace(String namespace, NamespaceCode code) {
 		NamespaceValue nsVal = getNamespace(namespace);
 		if (nsVal != null) {
@@ -302,6 +312,7 @@ public class Namespace implements INamespace {
 		return false;
 	}
 
+	@Override
 	public boolean isNamespace(INamespaceValue namespace, NamespaceCode code) {
 		if (namespace == null) {
 			return false;
@@ -309,14 +320,17 @@ public class Namespace implements INamespace {
 		return namespace.getCode() == code;
 	}
 
+	@Override
 	public NamespaceValue getNamespace(String namespace) {
 		return TEXT_TO_NAMESPACE_MAP.get(namespace);
 	}
 
+	@Override
 	public NamespaceValue getNamespaceByNumber(NamespaceCode numberCode) {
 		return getNamespaceByNumber(numberCode.code);
 	}
 
+	@Override
 	public NamespaceValue getNamespaceByNumber(int numberCode) {
 		final int arrayPos = numberCodeToInt(numberCode);
 		if (arrayPos >= 0 && arrayPos < INT_TO_NAMESPACE.length) {
@@ -351,6 +365,7 @@ public class Namespace implements INamespace {
 		return numberCode - 2;
 	}
 
+	@Override
 	public ResourceBundle getResourceBundle() {
 		return fResourceBundle;
 	}
@@ -405,6 +420,7 @@ public class Namespace implements INamespace {
 		extractFromResource(Messages.WIKI_API_CATEGORYTALK1, Messages.WIKI_API_CATEGORYTALK2, NamespaceCode.CATEGORY_TALK_NAMESPACE_KEY);
 	}
 
+	@Override
 	public NamespaceValue getTalkspace(String namespace) {
 		NamespaceValue nsVal = getNamespace(namespace);
 		if (nsVal != null) {
@@ -413,6 +429,7 @@ public class Namespace implements INamespace {
 		return null;
 	}
 
+	@Override
 	public NamespaceValue getContentspace(String talkNamespace) {
 		NamespaceValue nsVal = getNamespace(talkNamespace);
 		if (nsVal != null) {
@@ -421,74 +438,92 @@ public class Namespace implements INamespace {
 		return null;
 	}
 
+	@Override
 	public INamespaceValue getMedia() {
 		return MEDIA;
 	}
 
+	@Override
 	public INamespaceValue getSpecial() {
 		return SPECIAL;
 	}
 
+	@Override
 	public INamespaceValue getMain() {
 		return MAIN;
 	}
 
+	@Override
 	public INamespaceValue getTalk() {
 		return TALK;
 	}
 
+	@Override
 	public INamespaceValue getUser() {
 		return USER;
 	}
 
+	@Override
 	public INamespaceValue getUser_talk() {
 		return USER_TALK;
 	}
 
+	@Override
 	public INamespaceValue getMeta() {
 		return META;
 	}
 
+	@Override
 	public INamespaceValue getMeta_talk() {
 		return META_TALK;
 	}
 
+	@Override
 	public INamespaceValue getImage() {
 		return IMAGE;
 	}
 
+	@Override
 	public INamespaceValue getImage_talk() {
 		return IMAGE_TALK;
 	}
 
+	@Override
 	public INamespaceValue getMediaWiki() {
 		return MEDIAWIKI;
 	}
 
+	@Override
 	public INamespaceValue getMediaWiki_talk() {
 		return MEDIAWIKI_TALK;
 	}
 
+	@Override
 	public INamespaceValue getTemplate() {
 		return TEMPLATE;
 	}
 
+	@Override
 	public INamespaceValue getTemplate_talk() {
 		return TEMPLATE_TALK;
 	}
 
+	@Override
 	public INamespaceValue getHelp() {
 		return HELP;
 	}
 
+	@Override
 	public INamespaceValue getHelp_talk() {
 		return HELP_TALK;
 	}
 
+	@Override
 	public INamespaceValue getCategory() {
 		return CATEGORY;
 	}
 
+	@Override
 	public INamespaceValue getCategory_talk() {
 		return CATEGORY_TALK;
 	}

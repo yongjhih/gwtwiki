@@ -1,7 +1,6 @@
 package info.bliki.wiki.filter;
 
 import info.bliki.wiki.model.Configuration;
-import info.bliki.wiki.model.IWikiModel;
 import info.bliki.wiki.model.WikiModel;
 
 import java.util.Locale;

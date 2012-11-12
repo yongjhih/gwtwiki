@@ -36,6 +36,7 @@ abstract public class AbstractCPPBasedCodeFilter extends AbstractCodeFormatter {
 		return currentPosition;
 	}
 
+	@Override
 	public String filter(String input) {
 		char[] source = input.toCharArray();
 		int currentPosition = 0;

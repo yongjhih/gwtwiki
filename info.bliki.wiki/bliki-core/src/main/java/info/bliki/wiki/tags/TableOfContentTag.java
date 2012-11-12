@@ -47,19 +47,21 @@ public class TableOfContentTag extends HTMLTag implements IBodyTag, ITableOfCont
 	private void renderToC(Appendable writer, List<Object> toc, int level) throws IOException {
 		writer.append("\n<ul>");
 		boolean counted = false;
-		for (int i = 0; i < toc.size(); i++) {
-			if (toc.get(i) instanceof SectionHeader) {
+		for (Object tocItem : toc) {
+			if (tocItem instanceof SectionHeader) {
 				if (!counted) {
 					level++;
 					counted = true;
 				}
-				SectionHeader pair = (SectionHeader) toc.get(i);
+				SectionHeader pair = (SectionHeader) tocItem;
 				String head = Encoder.encodeHtml(pair.getFirst());
 				String anchor = pair.getSecond();
 				writer.append("\n<li class=\"toclevel-").append(Integer.toString(level)).append("\"><a href=\"#").append(anchor).append(
 						"\">").append(head).append("</a>\n</li>");
 			} else {
-				renderToC(writer, (List<Object>) toc.get(i), level);
+				@SuppressWarnings("unchecked")
+				final List<Object> list = (List<Object>) tocItem;
+				renderToC(writer, list, level);
 			}
 		}
 		writer.append("\n</ul>");
@@ -80,6 +82,7 @@ public class TableOfContentTag extends HTMLTag implements IBodyTag, ITableOfCont
 	 * @param showToC
 	 *          if <code>true</code> render the &quot;table of content&quot;
 	 */
+	@Override
 	public void setShowToC(boolean showToC) {
 		fShowToC = showToC;
 	}
@@ -112,6 +115,7 @@ public class TableOfContentTag extends HTMLTag implements IBodyTag, ITableOfCont
 		fIsTOCIdentifier = isTOCIdentifier;
 	}
 
+	@Override
 	public List<SectionHeader> getSectionHeaders() {
 		List<SectionHeader> resultList = new ArrayList<SectionHeader>();
 		extractSectionHeaders(fTableOfContent, resultList);
@@ -119,12 +123,14 @@ public class TableOfContentTag extends HTMLTag implements IBodyTag, ITableOfCont
 	}
 
 	private void extractSectionHeaders(List<Object> toc, List<SectionHeader> resultList) {
-		for (int i = 0; i < toc.size(); i++) {
-			if (toc.get(i) instanceof SectionHeader) {
-				SectionHeader header = (SectionHeader) toc.get(i);
+		for (Object tocItem : toc) {
+			if (tocItem instanceof SectionHeader) {
+				SectionHeader header = (SectionHeader) tocItem;
 				resultList.add(header);
 			} else {
-				extractSectionHeaders((List<Object>) toc.get(i), resultList);
+				@SuppressWarnings("unchecked")
+				final List<Object> list = (List<Object>) tocItem;
+				extractSectionHeaders(list, resultList);
 			}
 		}
 	}

@@ -1192,6 +1192,7 @@ public class WikipediaParser extends AbstractParser implements IParser {
 
 	}
 
+	@Override
 	public boolean isNoToC() {
 		return fNoToC;
 	}
@@ -1211,7 +1212,7 @@ public class WikipediaParser extends AbstractParser implements IParser {
 	 * <code>setUp()</code> method before parsing and the <code>tearDown()</code>
 	 * method after the parser has finished.
 	 * 
-	 * @param rawWikitext
+	 * @param rawWikiText
 	 *          the raw text of the article
 	 * @param wikiModel
 	 *          a suitable wiki model for the given wiki article text
@@ -1268,7 +1269,6 @@ public class WikipediaParser extends AbstractParser implements IParser {
 	 * 
 	 * @param rawWikitext
 	 * @param wikiModel
-	 * @return
 	 */
 	public static void parseRecursive(String rawWikitext, IWikiModel wikiModel) {
 		parseRecursive(rawWikitext, wikiModel, false, true);
@@ -1285,9 +1285,8 @@ public class WikipediaParser extends AbstractParser implements IParser {
 	 * @param rawWikitext
 	 * @param wikiModel
 	 * @param noTOC
-	 * @param appendStack
-	 * @return
-	 * @return
+	 * @param createOnlyLocalStack
+	 * @return HTML tags from the parsing process
 	 */
 	public static TagStack parseRecursive(String rawWikitext, IWikiModel wikiModel, boolean createOnlyLocalStack, boolean noTOC) {
 		AbstractParser parser = wikiModel.createNewInstance(rawWikitext);
@@ -1299,6 +1298,7 @@ public class WikipediaParser extends AbstractParser implements IParser {
 	 * 
 	 * @return <code>true</code> if the currently parsed wiki text is a template
 	 */
+	@Override
 	public boolean isTemplate() {
 		return fRenderTemplate;
 	}

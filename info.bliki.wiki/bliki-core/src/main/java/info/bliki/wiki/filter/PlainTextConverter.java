@@ -8,7 +8,6 @@ import info.bliki.wiki.model.ImageFormat;
 import info.bliki.wiki.tags.HTMLTag;
 
 import java.io.IOException;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -28,6 +27,7 @@ public class PlainTextConverter implements ITextConverter {
 		this(true);
 	}
 
+	@Override
 	public void nodesToText(List<? extends Object> nodes, Appendable resultBuffer, IWikiModel model) throws IOException {
 		if (nodes != null && !nodes.isEmpty()) {
 			try {
@@ -37,12 +37,12 @@ public class PlainTextConverter implements ITextConverter {
 					resultBuffer.append("Error - recursion limit exceeded rendering tags in PlainTextConverter#nodesToText().");
 					return;
 				}
-				Iterator<? extends Object> childrenIt = nodes.iterator();
-				while (childrenIt.hasNext()) {
-					Object item = childrenIt.next();
+				for (Object item : nodes) {
 					if (item != null) {
 						if (item instanceof List) {
-							nodesToText((List) item, resultBuffer, model);
+							@SuppressWarnings("unchecked")
+							final List<Object> list = (List<Object>) item;
+							nodesToText(list, resultBuffer, model);
 						} else if (item instanceof ContentToken) {
 							// ContentToken contentToken = (ContentToken) item;
 							// String content = contentToken.getContent();
@@ -71,10 +71,12 @@ public class PlainTextConverter implements ITextConverter {
 		}
 	}
 
+	@Override
 	public boolean noLinks() {
 		return fNoLinks;
 	}
 
+	@Override
 	public void imageNodeToText(TagNode imageTagNode, ImageFormat imageFormat, Appendable resultBuffer, IWikiModel model)
 			throws IOException {
 

@@ -67,14 +67,16 @@ public class ToJSPWiki extends AbstractHTMLToWiki implements IHTMLToWiki {
 	}
 
 	@Override
-	public void nodesToText(List nodes, StringBuilder resultBuffer) {
+	public void nodesToText(List<Object> nodes, StringBuilder resultBuffer) {
 		if (nodes != null && !nodes.isEmpty()) {
-			Iterator childrenIt = nodes.iterator();
+			Iterator<Object> childrenIt = nodes.iterator();
 			while (childrenIt.hasNext()) {
 				Object item = childrenIt.next();
 				if (item != null) {
 					if (item instanceof List) {
-						nodesToText((List) item, resultBuffer);
+						@SuppressWarnings("unchecked")
+						final List<Object> list = (List<Object>) item;
+						nodesToText(list, resultBuffer);
 					} else if (item instanceof EndTagToken) {
 						EndTagToken node = (EndTagToken) item;
 						if (node.getName().equals("br")) {

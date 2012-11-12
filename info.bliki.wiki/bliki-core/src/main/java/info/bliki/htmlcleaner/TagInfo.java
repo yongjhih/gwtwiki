@@ -117,15 +117,15 @@ public class TagInfo {
 
 	private String contentType;
 
-	private Set mustCloseTags = new HashSet();
+	private Set<String> mustCloseTags = new HashSet<String>();
 
-	private Set higherTags = new HashSet();
+	private Set<String> higherTags = new HashSet<String>();
 
-	private Set childTags = new HashSet();
+	private Set<String> childTags = new HashSet<String>();
 
-	private Set permittedTags = new HashSet();
+	private Set<String> permittedTags = new HashSet<String>();
 
-	private Set copyTags = new HashSet();
+	private Set<String> copyTags = new HashSet<String>();
 
 	private int belongsTo = BODY;
 
@@ -200,43 +200,43 @@ public class TagInfo {
 		this.contentType = contentType;
 	}
 
-	public Set getMustCloseTags() {
+	public Set<String> getMustCloseTags() {
 		return mustCloseTags;
 	}
 
-	public void setMustCloseTags(Set mustCloseTags) {
+	public void setMustCloseTags(Set<String> mustCloseTags) {
 		this.mustCloseTags = mustCloseTags;
 	}
 
-	public Set getHigherTags() {
+	public Set<String> getHigherTags() {
 		return higherTags;
 	}
 
-	public void setHigherTags(Set higherTags) {
+	public void setHigherTags(Set<String> higherTags) {
 		this.higherTags = higherTags;
 	}
 
-	public Set getChildTags() {
+	public Set<String> getChildTags() {
 		return childTags;
 	}
 
-	public void setChildTags(Set childTags) {
+	public void setChildTags(Set<String> childTags) {
 		this.childTags = childTags;
 	}
 
-	public Set getPermittedTags() {
+	public Set<String> getPermittedTags() {
 		return permittedTags;
 	}
 
-	public void setPermittedTags(Set permittedTags) {
+	public void setPermittedTags(Set<String> permittedTags) {
 		this.permittedTags = permittedTags;
 	}
 
-	public Set getCopyTags() {
+	public Set<String> getCopyTags() {
 		return copyTags;
 	}
 
-	public void setCopyTags(Set copyTags) {
+	public void setCopyTags(Set<String> copyTags) {
 		this.copyTags = copyTags;
 	}
 

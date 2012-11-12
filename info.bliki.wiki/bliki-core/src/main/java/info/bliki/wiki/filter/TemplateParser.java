@@ -565,6 +565,7 @@ public class TemplateParser extends AbstractParser {
 		int endOffset = fCurrentPosition - 2;
 		Object[] objs = createParameterMap(fSource, startTemplatePosition, fCurrentPosition - startTemplatePosition - 2);
 		String templateName = ((String) objs[1]);
+		@SuppressWarnings("unchecked")
 		List<String> parts = (List<String>) objs[0];
 		ITemplateFunction templateFunction = null;
 		int currOffset = 0;
@@ -615,6 +616,7 @@ public class TemplateParser extends AbstractParser {
 		String plainContent = null;
 		int endOffset = fCurrentPosition - 2;
 		Object[] objs = createParameterMap(fSource, startTemplatePosition, fCurrentPosition - startTemplatePosition - 2);
+		@SuppressWarnings("unchecked")
 		List<String> parts = (List<String>) objs[0];
 		String templateName = ((String) objs[1]);
 		StringBuilder buf = new StringBuilder((templateName.length()) + (templateName.length() / 10));
@@ -693,7 +695,6 @@ public class TemplateParser extends AbstractParser {
 	 * @param writer
 	 * @param startTemplatePosition
 	 * @param templateEndPosition
-	 * @return
 	 * @throws IOException
 	 */
 	private void parseTemplateParameter(Appendable writer, int startTemplatePosition, int templateEndPosition) throws IOException {

@@ -5,7 +5,6 @@ import info.bliki.htmlcleaner.HtmlCleaner;
 import info.bliki.htmlcleaner.TagNode;
 
 import java.io.IOException;
-import java.util.Iterator;
 import java.util.List;
 
 
@@ -22,7 +21,7 @@ public abstract class AbstractHtmlExtractor<T> {
 	 * 
 	 * @param nodes
 	 */
-	protected abstract void appendContent(List nodes);
+	protected abstract void appendContent(List<Object> nodes);
 
 	/**
 	 * Append the content of the given <code>TagNode</code> to the resultObject
@@ -37,14 +36,14 @@ public abstract class AbstractHtmlExtractor<T> {
 		return fResultObject;
 	}
 
-	protected void visitTokenList(List nodes) {
+	protected void visitTokenList(List<Object> nodes) {
 		if (nodes != null && !nodes.isEmpty()) {
-			Iterator childrenIt = nodes.iterator();
-			while (childrenIt.hasNext()) {
-				Object item = childrenIt.next();
+			for (Object item : nodes) {
 				if (item != null) {
 					if (item instanceof List) {
-						visitTokenList((List) item);
+						@SuppressWarnings("unchecked")
+						final List<Object> list = (List<Object>) item;
+						visitTokenList(list);
 					} else if (item instanceof BaseToken) {
 						visitBaseToken((BaseToken) item);
 					}
@@ -59,7 +58,7 @@ public abstract class AbstractHtmlExtractor<T> {
 			if (isFound(tagNode)) {
 				appendContent(tagNode.getChildren());
 			} else {
-				List children = tagNode.getChildren();
+				List<Object> children = tagNode.getChildren();
 				if (children.size() != 0) {
 					visitTokenList(children);
 				}

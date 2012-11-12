@@ -16,6 +16,7 @@ public abstract class AbstractTemplateFunction implements ITemplateFunction {
 
 	}
 
+	@Override
 	public String getFunctionDoc() {
 		return null;
 	}
@@ -23,6 +24,7 @@ public abstract class AbstractTemplateFunction implements ITemplateFunction {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public abstract String parseFunction(List<String> parts, IWikiModel model, char[] src, int beginIndex, int endIndex,
 			boolean isSubst) throws IOException;
 

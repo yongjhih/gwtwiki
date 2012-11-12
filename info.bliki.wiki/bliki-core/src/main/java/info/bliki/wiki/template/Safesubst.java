@@ -2,11 +2,10 @@ package info.bliki.wiki.template;
 
 import info.bliki.htmlcleaner.Utils;
 import info.bliki.wiki.filter.AbstractParser;
-import info.bliki.wiki.filter.TemplateParser;
 import info.bliki.wiki.filter.AbstractParser.ParsedPageName;
+import info.bliki.wiki.filter.TemplateParser;
 import info.bliki.wiki.model.IWikiModel;
 import info.bliki.wiki.namespaces.INamespace;
-import info.bliki.wiki.namespaces.INamespace.INamespaceValue;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -34,6 +33,7 @@ public class Safesubst extends AbstractTemplateFunction {
 		char[] src2 = substituted.toCharArray();
 
 		Object[] objs = TemplateParser.createParameterMap(src2, 0, src2.length);
+		@SuppressWarnings("unchecked")
 		List<String> parts = (List<String>) objs[0];
 		String templateName = ((String) objs[1]);
 
@@ -89,7 +89,7 @@ public class Safesubst extends AbstractTemplateFunction {
 	 * 
 	 * @param content
 	 * @param model
-	 * @return
+	 * @return parsed content
 	 */
 	public static String parsePreprocess(String content, IWikiModel model, Map<String, String> templateParameterMap) {
 		if (content == null || content.length() == 0) {

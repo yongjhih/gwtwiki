@@ -48,8 +48,8 @@ public class WPTable extends WPTag {
 	}
 
 	/**
-	 * @param o
-	 * @return
+	 * @param row
+	 * @return <tt>true</tt>
 	 */
 	public boolean add(WPRow row) {
 		return fRows.add(row);
@@ -57,7 +57,7 @@ public class WPTable extends WPTag {
 
 	/**
 	 * @param index
-	 * @return
+	 * @return the row at the given index
 	 */
 	public WPRow get(int index) {
 		return fRows.get(index);
@@ -68,7 +68,7 @@ public class WPTable extends WPTag {
 	}
 
 	/**
-	 * @return
+	 * @return table size (number of rows)
 	 */
 	public int size() {
 		return fRows.size();
@@ -106,6 +106,7 @@ public class WPTable extends WPTag {
 		return maxCols;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public Object clone() {
 		WPTable tt = (WPTable) super.clone();

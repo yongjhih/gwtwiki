@@ -1,7 +1,6 @@
 package info.bliki.wiki.template;
 
 import info.bliki.wiki.model.IWikiModel;
-import info.bliki.wiki.namespaces.INamespace;
 
 import java.util.List;
 

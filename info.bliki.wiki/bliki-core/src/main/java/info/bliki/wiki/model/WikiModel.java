@@ -193,6 +193,7 @@ public class WikiModel extends AbstractWikiModel {
 	 * 
 	 * @return the set of category strings
 	 */
+	@Override
 	public Set<String> getLinks() {
 		return links;
 	}
@@ -259,6 +260,7 @@ public class WikiModel extends AbstractWikiModel {
 	 *          the raw image link text without the surrounding
 	 *          <code>[[...]]</code>
 	 */
+	@Override
 	public void parseInternalImageLink(String imageNamespace, String rawImageLink) {
 		String imageSrc = getImageBaseURL();
 		if (imageSrc != null) {
@@ -335,6 +337,7 @@ public class WikiModel extends AbstractWikiModel {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public INamespace getNamespace() {
 		return fNamespace;
 	}
@@ -407,8 +410,6 @@ public class WikiModel extends AbstractWikiModel {
 	 * 
 	 * @param rawWikiText
 	 *          a raw wiki text
-	 * @param resultBuffer
-	 *          the buffer to which to append the resulting HTML code.
 	 * @return the resulting HTML text; nay returns <code>null</code>, if an
 	 *         <code>IOException</code> occured.
 	 */
@@ -424,8 +425,8 @@ public class WikiModel extends AbstractWikiModel {
 
 	/**
 	 * Set the model's locale to a new value. You can use this function in JUnit
-	 * tests, but otherwise it's preferred to set the Locale in the nodels
-	 * constructor and nether changeing it.
+	 * tests, but otherwise it's preferred to set the Locale in the models
+	 * constructor and nether changing it.
 	 * 
 	 * @param locale
 	 */
@@ -436,6 +437,7 @@ public class WikiModel extends AbstractWikiModel {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public String getImageBaseURL() {
 		return fExternalImageBaseURL;
 	}
@@ -443,6 +445,7 @@ public class WikiModel extends AbstractWikiModel {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public String getWikiBaseURL() {
 		return fExternalWikiBaseURL;
 	}

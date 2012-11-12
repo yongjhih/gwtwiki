@@ -389,10 +389,12 @@ public class Configuration implements IConfiguration {
 	public Configuration() {
 	}
 
+	@Override
 	public Map<String, String> getInterwikiMap() {
 		return INTERWIKI_MAP;
 	}
 
+	@Override
 	public String addInterwikiLink(String key, String value) {
 		return INTERWIKI_MAP.put(key, value);
 	}
@@ -403,6 +405,7 @@ public class Configuration implements IConfiguration {
 	 * See <a href="http://en.wikipedia.org/wiki/URI_scheme">URI scheme</a>
 	 * 
 	 */
+	@Override
 	public Set<String> getUriSchemeSet() {
 		return URI_SCHEME_MAP;
 	}
@@ -430,10 +433,12 @@ public class Configuration implements IConfiguration {
 		return URI_SCHEME_MAP.contains(uriKey);
 	}
 
+	@Override
 	public Map<String, ITemplateFunction> getTemplateMap() {
 		return TEMPLATE_FUNCTION_MAP;
 	}
 
+	@Override
 	public ITemplateFunction addTemplateFunction(String key, ITemplateFunction value) {
 		return TEMPLATE_FUNCTION_MAP.put(key, value);
 	}
@@ -441,6 +446,7 @@ public class Configuration implements IConfiguration {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public Map<String, String> getTemplateCallsCache() {
 		return TEMPLATE_CALLS_CACHE;
 	}
@@ -448,22 +454,27 @@ public class Configuration implements IConfiguration {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void setTemplateCallsCache(Map<String, String> map) {
 		TEMPLATE_CALLS_CACHE = map;
 	}
 
+	@Override
 	public Map<String, SourceCodeFormatter> getCodeFormatterMap() {
 		return CODE_FORMATTER_MAP;
 	}
 
+	@Override
 	public SourceCodeFormatter addCodeFormatter(String key, SourceCodeFormatter value) {
 		return CODE_FORMATTER_MAP.put(key, value);
 	}
 
+	@Override
 	public Map<String, TagToken> getTokenMap() {
 		return TAG_TOKEN_MAP;
 	}
 
+	@Override
 	public TagToken addTokenTag(String key, TagToken value) {
 		return TAG_TOKEN_MAP.put(key, value);
 	}

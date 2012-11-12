@@ -1,10 +1,5 @@
 package info.bliki.wiki.tags;
 
-import info.bliki.htmlcleaner.TagNode;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.TreeMap;
 
 /**
  * A wiki tag that's partitioning the HTML document

@@ -6,7 +6,6 @@ import info.bliki.htmlcleaner.Utils;
 import info.bliki.wiki.filter.AbstractParser.ParsedPageName;
 import info.bliki.wiki.model.Configuration;
 import info.bliki.wiki.model.WikiModel;
-import info.bliki.wiki.namespaces.INamespace.INamespaceValue;
 import info.bliki.wiki.namespaces.INamespace.NamespaceCode;
 import info.bliki.wiki.tags.IgnoreTag;
 import info.bliki.wiki.tags.extension.ChartTag;
@@ -2527,7 +2526,7 @@ public class WikiTestModel extends WikiModel {
 		super(Configuration.DEFAULT_CONFIGURATION, locale, imageBaseURL, linkBaseURL);
 		// set up a simple cache mock-up for JUnit tests. HashMap is not usable for
 		// production!
-		Configuration.DEFAULT_CONFIGURATION.setTemplateCallsCache(new HashMap());
+		Configuration.DEFAULT_CONFIGURATION.setTemplateCallsCache(new HashMap<String, String>());
 
 		fSemanticWebActive = false;
 		// add the German image namespace as an alias
@@ -2725,6 +2724,7 @@ public class WikiTestModel extends WikiModel {
 		this.fSemanticWebActive = semanticWeb;
 	}
 
+	@Override
 	public boolean showSyntax(String tagName) {
 		return true;
 	}

@@ -93,6 +93,7 @@ public class ASTNodeFactory implements IParserFactory {
 		}
 	}
 
+	@Override
 	public String getOperatorCharacters() {
 		return DEFAULT_OPERATOR_CHARACTERS;
 	}
@@ -100,10 +101,12 @@ public class ASTNodeFactory implements IParserFactory {
 	/**
 	 * public Map<String, Operator> getIdentifier2OperatorMap()
 	 */
+	@Override
 	public Map<String, Operator> getIdentifier2OperatorMap() {
 		return fOperatorMap;
 	}
 
+	@Override
 	public Operator get(final String identifier) {
 		return (Operator) fOperatorMap.get(identifier);
 	}
@@ -111,6 +114,7 @@ public class ASTNodeFactory implements IParserFactory {
 	/**
 	 * public Map<String, ArrayList<Operator>> getOperator2ListMap()
 	 */
+	@Override
 	public Map<String, ArrayList<Operator>> getOperator2ListMap() {
 		return fOperatorTokenStartSet;
 	}
@@ -118,10 +122,12 @@ public class ASTNodeFactory implements IParserFactory {
 	/**
 	 * public List<Operator> getOperatorList(final String key)
 	 */
+	@Override
 	public List<Operator> getOperatorList(final String key) {
 		return fOperatorTokenStartSet.get(key);
 	}
 
+	@Override
 	public String getConstantSymbol(final String key) {
 		return fConstantSymbols.get(key);
 	}
@@ -155,18 +161,22 @@ public class ASTNodeFactory implements IParserFactory {
 		return new PostfixOperator(operatorStr, headStr, precedence);
 	}
 
+	@Override
 	public ASTNode createDouble(final String doubleString) {
 		return new FloatNode(doubleString);
 	}
 
+	@Override
 	public FunctionNode createFunction(final SymbolNode head) {
 		return new FunctionNode(head);
 	}
 
+	@Override
 	public FunctionNode createFunction(final SymbolNode head, final ASTNode arg0) {
 		return new FunctionNode(head, arg0);
 	}
 
+	@Override
 	public FunctionNode createFunction(final SymbolNode head, final ASTNode arg0, final ASTNode arg1) {
 		return new FunctionNode(head, arg0, arg1);
 	}
@@ -174,22 +184,27 @@ public class ASTNodeFactory implements IParserFactory {
 	/**
 	 * Creates a new list with no arguments from the given header object .
 	 */
+	@Override
 	public FunctionNode createAST(final ASTNode headExpr) {
 		return new FunctionNode(headExpr);
 	}
 
+	@Override
 	public IntegerNode createInteger(final String integerString, final int numberFormat) {
 		return new IntegerNode(integerString, numberFormat);
 	}
 
+	@Override
 	public IntegerNode createInteger(final int intValue) {
 		return new IntegerNode(intValue);
 	}
 
+	@Override
 	public FractionNode createFraction(final IntegerNode numerator, final IntegerNode denominator) {
 		return new FractionNode(numerator, denominator);
 	}
 
+	@Override
 	public SymbolNode createSymbol(final String symbolName) {
 		return new SymbolNode(symbolName);
 	}

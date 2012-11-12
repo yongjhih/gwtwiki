@@ -2,9 +2,6 @@ package info.bliki.wiki.dump;
 
 import info.bliki.wiki.namespaces.Namespace;
 
-import java.util.HashMap;
-import java.util.Map;
-
 /**
  * The site and namespace information found in the header of a Mediawiki dump
  * 
