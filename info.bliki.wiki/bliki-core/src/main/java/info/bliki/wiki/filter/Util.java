@@ -182,7 +182,7 @@ public class Util {
 	 * @param templateName
 	 * @return
 	 */
-	public static boolean isInvalidTemplateName(String templateName) {
+	public static boolean isInvalidTemplateName(CharSequence templateName) {
 		boolean noNamespaceCharacter = true;
 		for (int i = 0; i < templateName.length(); i++) {
 			if (templateName.charAt(i) == ':') {
@@ -198,5 +198,35 @@ public class Util {
 			noNamespaceCharacter = true;
 		}
 		return false;
+	}
+
+	/**
+	 * Get the first position of the <code>rawWikitext</code> string, which
+	 * contains a character requiring template parsing.
+	 * 
+	 * @param rawWikitext
+	 *          the raw wiki text
+	 * @return <code>-1</code> if character is found, which requires template
+	 *         parsing.
+	 */
+	public static int indexOfTemplateParsing(CharSequence rawWikitext) {
+		char ch;
+		int len = rawWikitext.length() - 2;
+		for (int i = 0; i < len; i++) {
+			ch = rawWikitext.charAt(i);
+			if (ch == '{') {
+				return i;
+			}
+			if (ch == '<') {
+				return i;
+			}
+			if (ch == '[') {
+				return i;
+			}
+			if (ch == '~') {
+				return i;
+			}
+		}
+		return -1;
 	}
 }

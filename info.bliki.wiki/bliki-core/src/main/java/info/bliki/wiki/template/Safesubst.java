@@ -4,6 +4,7 @@ import info.bliki.htmlcleaner.Utils;
 import info.bliki.wiki.filter.AbstractParser;
 import info.bliki.wiki.filter.AbstractParser.ParsedPageName;
 import info.bliki.wiki.filter.TemplateParser;
+import info.bliki.wiki.filter.Util;
 import info.bliki.wiki.model.IWikiModel;
 import info.bliki.wiki.namespaces.INamespace;
 
@@ -95,9 +96,13 @@ public class Safesubst extends AbstractTemplateFunction {
 		if (content == null || content.length() == 0) {
 			return "";
 		}
+		int startIndex = Util.indexOfTemplateParsing(content);
+		if (startIndex < 0) {
+			return Utils.trimNewlineLeft(content);
+		}
 		StringBuilder buf = new StringBuilder(content.length());
 		try {
-			TemplateParser.parsePreprocessRecursive(content, model, buf, false, false, false, templateParameterMap);
+			TemplateParser.parsePreprocessRecursive(startIndex, content, model, buf, false, false, templateParameterMap);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
