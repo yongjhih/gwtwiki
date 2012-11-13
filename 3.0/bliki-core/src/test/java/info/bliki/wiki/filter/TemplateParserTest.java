@@ -827,6 +827,84 @@ public class TemplateParserTest extends FilterTestSupport {
 		assertEquals("File", wikiModel.parseTemplates("{{NAMESPACE:Image:Main Page}}", false));
 	}
 
+	public void testNAMESPACE004() {
+		wikiModel.setPageName("Sandbox");
+		wikiModel.setNamespaceName("meta");
+		assertEquals("Meta", wikiModel.parseTemplates("{{NAMESPACE}}", false));
+		assertEquals("", wikiModel.parseTemplates("{{NAMESPACE:}}", false));
+	}
+
+	public void testNAMESPACE005() {
+		wikiModel.setPageName("Sandbox");
+		wikiModel.setNamespaceName("meta_talk");
+		assertEquals("Meta_talk", wikiModel.parseTemplates("{{NAMESPACEE}}", false));
+		// TODO: namespace should actually have a space:
+		assertEquals("Meta_talk", wikiModel.parseTemplates("{{NAMESPACE}}", false));
+	}
+
+	public void testTALKSPACE001() {
+		assertEquals("Talk", wikiModel.parseTemplates("{{TALKSPACE}}", false));
+		assertEquals("Template_talk", wikiModel.parseTemplates("{{TALKSPACE:Template:Main Page}}", false));
+		assertEquals("Talk", wikiModel.parseTemplates("{{TALKSPACE:Bad:Main Page}}", false));
+	}
+
+	public void testTALKSPACE002() {
+		assertEquals("Talk", wikiModel.parseTemplates("{{TALKSPACE}}", false));
+		assertEquals("File_talk", wikiModel.parseTemplates("{{TALKSPACE:Image:Main Page}}", false));
+	}
+
+	public void testTALKSPACE003() {
+		wikiModel.setNamespaceName("category");
+		assertEquals("Category_talk", wikiModel.parseTemplates("{{TALKSPACE}}", false));
+		assertEquals("File_talk", wikiModel.parseTemplates("{{TALKSPACE:Image:Main Page}}", false));
+	}
+
+	public void testTALKSPACE004() {
+		wikiModel.setPageName("Sandbox");
+		wikiModel.setNamespaceName("meta");
+		assertEquals("Meta_talk", wikiModel.parseTemplates("{{TALKSPACE}}", false));
+		assertEquals("", wikiModel.parseTemplates("{{TALKSPACE:}}", false));
+	}
+
+	public void testTALKSPACE005() {
+		wikiModel.setPageName("Sandbox");
+		wikiModel.setNamespaceName("meta_talk");
+		assertEquals("Meta_talk", wikiModel.parseTemplates("{{TALKSPACEE}}", false));
+		// TODO: talkspace should actually have a space:
+		assertEquals("Meta_talk", wikiModel.parseTemplates("{{TALKSPACE}}", false));
+	}
+
+	public void testSUBJECTSPACE001() {
+		assertEquals("", wikiModel.parseTemplates("{{SUBJECTSPACE}}", false));
+		assertEquals("Template", wikiModel.parseTemplates("{{SUBJECTSPACE:Template:Main Page}}", false));
+		assertEquals("", wikiModel.parseTemplates("{{SUBJECTSPACE:Bad:Main Page}}", false));
+	}
+
+	public void testSUBJECTSPACE002() {
+		assertEquals("", wikiModel.parseTemplates("{{SUBJECTSPACE}}", false));
+		assertEquals("File", wikiModel.parseTemplates("{{SUBJECTSPACE:Image:Main Page}}", false));
+	}
+
+	public void testSUBJECTSPACE003() {
+		wikiModel.setNamespaceName("category");
+		assertEquals("Category", wikiModel.parseTemplates("{{SUBJECTSPACE}}", false));
+		assertEquals("File", wikiModel.parseTemplates("{{SUBJECTSPACE:Image:Main Page}}", false));
+	}
+
+	public void testSUBJECTSPACE004() {
+		wikiModel.setPageName("Sandbox");
+		wikiModel.setNamespaceName("meta");
+		assertEquals("Meta", wikiModel.parseTemplates("{{SUBJECTSPACE}}", false));
+		assertEquals("", wikiModel.parseTemplates("{{SUBJECTSPACE:}}", false));
+	}
+
+	public void testSUBJECTSPACE005() {
+		wikiModel.setPageName("Sandbox");
+		wikiModel.setNamespaceName("meta_talk");
+		assertEquals("Meta", wikiModel.parseTemplates("{{SUBJECTSPACEE}}", false));
+		assertEquals("Meta", wikiModel.parseTemplates("{{SUBJECTSPACE}}", false));
+	}
+
 	public void testURLEncode001() {
 		assertEquals("%22%23%24%25%26%27%28%29*%2C%3B%3F%5B%5D%5E%60%7B%7D", wikiModel.parseTemplates(
 				"{{urlencode: \"#$%&'()*,;?[]^`{}}}", false));
