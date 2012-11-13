@@ -293,6 +293,13 @@ public class MagicWord {
 	 * value. See <a
 	 * href="http://www.mediawiki.org/wiki/Help:Magic_words">Help:Magic words</a>
 	 * for a list of Mediawiki magic words.
+	 * 
+	 * @param name
+	 *            the magic word
+	 * @param parameter
+	 *            the parameter of the magic word (may be <tt>null</tt>)
+	 * @param model
+	 *            the model being used
 	 */
 	public static String processMagicWord(String name, String parameter, IWikiModel model) {
 		SimpleDateFormat formatter = model.getSimpleDateFormat();
@@ -380,7 +387,7 @@ public class MagicWord {
 		}
 
 		if (name.equals(MAGIC_PAGE_NAME)) {
-			if (parameter.length() > 0) {
+			if (parameter != null) {
 				return parameter;
 			} else {
 				String temp = model.getPageName();
@@ -389,7 +396,7 @@ public class MagicWord {
 				}
 			}
 		} else if (name.equals(MAGIC_NAMESPACE)) {
-			if (parameter.length() > 0) {
+			if (parameter != null) {
 				int indx = parameter.indexOf(':');
 				if (indx >= 0) {
 					String subStr = parameter.substring(0, indx);
@@ -403,7 +410,7 @@ public class MagicWord {
 				}
 			}
 		} else if (name.equals(MAGIC_FULL_PAGE_NAME)) {
-			if (parameter.length() > 0) {
+			if (parameter != null) {
 				return parameter;
 			} else {
 				String temp = model.getPageName();
@@ -414,7 +421,7 @@ public class MagicWord {
 		} else if (name.equals(MAGIC_TALK_PAGE_NAME)) {
 			String pageName = model.getPageName();
 			INamespace ns = model.getNamespace();
-			if (parameter.length() > 0) {
+			if (parameter != null) {
 				String namespace = parameter;
 				int index = namespace.indexOf(':');
 				if (index > 0) {

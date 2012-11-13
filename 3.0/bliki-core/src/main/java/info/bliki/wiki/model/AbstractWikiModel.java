@@ -1089,7 +1089,7 @@ public abstract class AbstractWikiModel implements IWikiModel, IContext {
 		}
 		if (isTemplateNamespace(namespace)) {
 			String magicWord = templateName;
-			String parameter = "";
+			String parameter = null;
 			int index = magicWord.indexOf(':');
 			if (index > 0) {
 				parameter = magicWord.substring(index + 1);
