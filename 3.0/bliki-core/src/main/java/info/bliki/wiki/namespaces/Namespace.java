@@ -114,7 +114,7 @@ public class Namespace implements INamespace {
 		}
 		for (Entry<String, String> entry : TALKSPACE_MAP.entrySet()) {
 			String value = entry.getValue();
-			if (value != null) {
+			if (value != null && !entry.getKey().equals(entry.getValue())) {
 				CONTENTSPACE_MAP.put(entry.getValue(), entry.getKey());
 			}
 		}
