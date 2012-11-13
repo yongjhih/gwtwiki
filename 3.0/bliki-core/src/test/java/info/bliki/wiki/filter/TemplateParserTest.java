@@ -909,6 +909,10 @@ public class TemplateParserTest extends FilterTestSupport {
 		wikiModel.setPageName("");
 		assertEquals("", wikiModel.parseTemplates("{{PAGENAME}}", false));
 		assertEquals("Main Page", wikiModel.parseTemplates("{{PAGENAME:Main Page}}", false));
+		assertEquals("Main page", wikiModel.parseTemplates("{{PAGENAME:Main page}}", false));
+		assertEquals("Main Page", wikiModel.parseTemplates("{{PAGENAME:main Page}}", false));
+		assertEquals("Main page", wikiModel.parseTemplates("{{PAGENAME:main page}}", false));
+		assertEquals("Main Page", wikiModel.parseTemplates("{{PAGENAME:Template:Main Page}}", false));
 		assertEquals("Bad:Main Page", wikiModel.parseTemplates("{{PAGENAME:Bad:Main Page}}", false));
 	}
 
@@ -916,6 +920,10 @@ public class TemplateParserTest extends FilterTestSupport {
 		wikiModel.setPageName("");
 		assertEquals("", wikiModel.parseTemplates("{{PAGENAMEE}}", false));
 		assertEquals("Main_Page", wikiModel.parseTemplates("{{PAGENAMEE:Main Page}}", false));
+		assertEquals("Main_page", wikiModel.parseTemplates("{{PAGENAMEE:Main page}}", false));
+		assertEquals("Main_Page", wikiModel.parseTemplates("{{PAGENAMEE:main Page}}", false));
+		assertEquals("Main_page", wikiModel.parseTemplates("{{PAGENAMEE:main page}}", false));
+		assertEquals("Main_Page", wikiModel.parseTemplates("{{PAGENAMEE:Template:Main Page}}", false));
 		assertEquals("Bad:Main_Page", wikiModel.parseTemplates("{{PAGENAMEE:Bad:Main Page}}", false));
 	}
 
