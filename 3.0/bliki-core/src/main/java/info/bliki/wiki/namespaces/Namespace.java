@@ -56,56 +56,67 @@ public class Namespace implements INamespace {
 		initializeNamespaces();
 
 		for (String[] namespaces : new String[][] { fNamespaces1, fNamespaces2 }) {
-			TALKSPACE_MAP.put(namespaces[convertNumberCode(MEDIA_NAMESPACE_KEY)], null); // media
-			TALKSPACE_MAP.put(namespaces[convertNumberCode(SPECIAL_NAMESPACE_KEY)], null); // special
-			TALKSPACE_MAP.put(namespaces[convertNumberCode(MAIN_NAMESPACE_KEY)], getTalk()); // ""
-			TALKSPACE_MAP.put(namespaces[convertNumberCode(TALK_NAMESPACE_KEY)], getTalk()); // talk
-			TALKSPACE_MAP.put(namespaces[convertNumberCode(USER_NAMESPACE_KEY)], getUser_talk()); // user
-			TALKSPACE_MAP.put(namespaces[convertNumberCode(USER_TALK_NAMESPACE_KEY)], getUser_talk()); // user_talk
-			TALKSPACE_MAP.put(namespaces[convertNumberCode(PROJECT_NAMESPACE_KEY)], getMeta_talk()); // project
-			TALKSPACE_MAP.put(namespaces[convertNumberCode(PROJECT_TALK_NAMESPACE_KEY)], getMeta_talk()); // project_talk
-			TALKSPACE_MAP.put(namespaces[convertNumberCode(FILE_NAMESPACE_KEY)], getImage_talk()); // image
-			TALKSPACE_MAP.put(namespaces[convertNumberCode(FILE_TALK_NAMESPACE_KEY)], getImage_talk()); // image_talk
-			TALKSPACE_MAP.put(namespaces[convertNumberCode(MEDIAWIKI_NAMESPACE_KEY)], getMediaWiki_talk()); // mediawiki
-			TALKSPACE_MAP.put(namespaces[convertNumberCode(MEDIAWIKI_TALK_NAMESPACE_KEY)], getMediaWiki_talk()); // mediawiki_talk
-			TALKSPACE_MAP.put(namespaces[convertNumberCode(TEMPLATE_NAMESPACE_KEY)], getTemplate_talk()); // template
-			TALKSPACE_MAP.put(namespaces[convertNumberCode(TEMPLATE_TALK_NAMESPACE_KEY)], getTemplate_talk()); // template_talk
-			TALKSPACE_MAP.put(namespaces[convertNumberCode(HELP_NAMESPACE_KEY)], getHelp_talk()); // help
-			TALKSPACE_MAP.put(namespaces[convertNumberCode(HELP_TALK_NAMESPACE_KEY)], getHelp_talk()); // help_talk
-			TALKSPACE_MAP.put(namespaces[convertNumberCode(CATEGORY_NAMESPACE_KEY)], getCategory_talk()); // category
-			TALKSPACE_MAP.put(namespaces[convertNumberCode(CATEGORY_TALK_NAMESPACE_KEY)], getCategory_talk()); // category_talk
+			addToMap(TALKSPACE_MAP, namespaces[convertNumberCode(MEDIA_NAMESPACE_KEY)], null); // media
+			addToMap(TALKSPACE_MAP, namespaces[convertNumberCode(SPECIAL_NAMESPACE_KEY)], null); // special
+			addToMap(TALKSPACE_MAP, namespaces[convertNumberCode(MAIN_NAMESPACE_KEY)], getTalk()); // ""
+			addToMap(TALKSPACE_MAP, namespaces[convertNumberCode(TALK_NAMESPACE_KEY)], getTalk()); // talk
+			addToMap(TALKSPACE_MAP, namespaces[convertNumberCode(USER_NAMESPACE_KEY)], getUser_talk()); // user
+			addToMap(TALKSPACE_MAP, namespaces[convertNumberCode(USER_TALK_NAMESPACE_KEY)], getUser_talk()); // user_talk
+			addToMap(TALKSPACE_MAP, namespaces[convertNumberCode(PROJECT_NAMESPACE_KEY)], getMeta_talk()); // project
+			addToMap(TALKSPACE_MAP, namespaces[convertNumberCode(PROJECT_TALK_NAMESPACE_KEY)], getMeta_talk()); // project_talk
+			addToMap(TALKSPACE_MAP, namespaces[convertNumberCode(FILE_NAMESPACE_KEY)], getImage_talk()); // image
+			addToMap(TALKSPACE_MAP, namespaces[convertNumberCode(FILE_TALK_NAMESPACE_KEY)], getImage_talk()); // image_talk
+			addToMap(TALKSPACE_MAP, namespaces[convertNumberCode(MEDIAWIKI_NAMESPACE_KEY)], getMediaWiki_talk()); // mediawiki
+			addToMap(TALKSPACE_MAP, namespaces[convertNumberCode(MEDIAWIKI_TALK_NAMESPACE_KEY)], getMediaWiki_talk()); // mediawiki_talk
+			addToMap(TALKSPACE_MAP, namespaces[convertNumberCode(TEMPLATE_NAMESPACE_KEY)], getTemplate_talk()); // template
+			addToMap(TALKSPACE_MAP, namespaces[convertNumberCode(TEMPLATE_TALK_NAMESPACE_KEY)], getTemplate_talk()); // template_talk
+			addToMap(TALKSPACE_MAP, namespaces[convertNumberCode(HELP_NAMESPACE_KEY)], getHelp_talk()); // help
+			addToMap(TALKSPACE_MAP, namespaces[convertNumberCode(HELP_TALK_NAMESPACE_KEY)], getHelp_talk()); // help_talk
+			addToMap(TALKSPACE_MAP, namespaces[convertNumberCode(CATEGORY_NAMESPACE_KEY)], getCategory_talk()); // category
+			addToMap(TALKSPACE_MAP, namespaces[convertNumberCode(CATEGORY_TALK_NAMESPACE_KEY)], getCategory_talk()); // category_talk
 
-			NAMESPACE_INT_MAP.put(namespaces[convertNumberCode(MEDIA_NAMESPACE_KEY)], MEDIA_NAMESPACE_KEY);
-			NAMESPACE_INT_MAP.put(namespaces[convertNumberCode(SPECIAL_NAMESPACE_KEY)], SPECIAL_NAMESPACE_KEY);
-			NAMESPACE_INT_MAP.put(namespaces[convertNumberCode(MAIN_NAMESPACE_KEY)], MAIN_NAMESPACE_KEY);
-			NAMESPACE_INT_MAP.put(namespaces[convertNumberCode(TALK_NAMESPACE_KEY)], TALK_NAMESPACE_KEY);
-			NAMESPACE_INT_MAP.put(namespaces[convertNumberCode(USER_NAMESPACE_KEY)], USER_NAMESPACE_KEY);
-			NAMESPACE_INT_MAP.put(namespaces[convertNumberCode(USER_TALK_NAMESPACE_KEY)], USER_TALK_NAMESPACE_KEY);
-			NAMESPACE_INT_MAP.put(namespaces[convertNumberCode(PROJECT_NAMESPACE_KEY)], PROJECT_NAMESPACE_KEY);
-			NAMESPACE_INT_MAP.put(namespaces[convertNumberCode(PROJECT_TALK_NAMESPACE_KEY)], PROJECT_TALK_NAMESPACE_KEY);
-			NAMESPACE_INT_MAP.put(namespaces[convertNumberCode(FILE_NAMESPACE_KEY)], FILE_NAMESPACE_KEY);
-			NAMESPACE_INT_MAP.put(namespaces[convertNumberCode(FILE_TALK_NAMESPACE_KEY)], FILE_TALK_NAMESPACE_KEY);
-			NAMESPACE_INT_MAP.put(namespaces[convertNumberCode(MEDIAWIKI_NAMESPACE_KEY)], MEDIAWIKI_NAMESPACE_KEY);
-			NAMESPACE_INT_MAP.put(namespaces[convertNumberCode(MEDIAWIKI_TALK_NAMESPACE_KEY)], MEDIAWIKI_TALK_NAMESPACE_KEY);
-			NAMESPACE_INT_MAP.put(namespaces[convertNumberCode(TEMPLATE_NAMESPACE_KEY)], TEMPLATE_NAMESPACE_KEY);
-			NAMESPACE_INT_MAP.put(namespaces[convertNumberCode(TEMPLATE_TALK_NAMESPACE_KEY)], TEMPLATE_TALK_NAMESPACE_KEY);
-			NAMESPACE_INT_MAP.put(namespaces[convertNumberCode(HELP_NAMESPACE_KEY)], HELP_NAMESPACE_KEY);
-			NAMESPACE_INT_MAP.put(namespaces[convertNumberCode(HELP_TALK_NAMESPACE_KEY)], HELP_TALK_NAMESPACE_KEY);
-			NAMESPACE_INT_MAP.put(namespaces[convertNumberCode(CATEGORY_NAMESPACE_KEY)], CATEGORY_NAMESPACE_KEY);
-			NAMESPACE_INT_MAP.put(namespaces[convertNumberCode(CATEGORY_TALK_NAMESPACE_KEY)], CATEGORY_TALK_NAMESPACE_KEY);
-
+			addToMap(NAMESPACE_INT_MAP, namespaces[convertNumberCode(MEDIA_NAMESPACE_KEY)], MEDIA_NAMESPACE_KEY);
+			addToMap(NAMESPACE_INT_MAP, namespaces[convertNumberCode(SPECIAL_NAMESPACE_KEY)], SPECIAL_NAMESPACE_KEY);
+			addToMap(NAMESPACE_INT_MAP, namespaces[convertNumberCode(MAIN_NAMESPACE_KEY)], MAIN_NAMESPACE_KEY);
+			addToMap(NAMESPACE_INT_MAP, namespaces[convertNumberCode(TALK_NAMESPACE_KEY)], TALK_NAMESPACE_KEY);
+			addToMap(NAMESPACE_INT_MAP, namespaces[convertNumberCode(USER_NAMESPACE_KEY)], USER_NAMESPACE_KEY);
+			addToMap(NAMESPACE_INT_MAP, namespaces[convertNumberCode(USER_TALK_NAMESPACE_KEY)], USER_TALK_NAMESPACE_KEY);
+			addToMap(NAMESPACE_INT_MAP, namespaces[convertNumberCode(PROJECT_NAMESPACE_KEY)], PROJECT_NAMESPACE_KEY);
+			addToMap(NAMESPACE_INT_MAP, namespaces[convertNumberCode(PROJECT_TALK_NAMESPACE_KEY)], PROJECT_TALK_NAMESPACE_KEY);
+			addToMap(NAMESPACE_INT_MAP, namespaces[convertNumberCode(FILE_NAMESPACE_KEY)], FILE_NAMESPACE_KEY);
+			addToMap(NAMESPACE_INT_MAP, namespaces[convertNumberCode(FILE_TALK_NAMESPACE_KEY)], FILE_TALK_NAMESPACE_KEY);
+			addToMap(NAMESPACE_INT_MAP, namespaces[convertNumberCode(MEDIAWIKI_NAMESPACE_KEY)], MEDIAWIKI_NAMESPACE_KEY);
+			addToMap(NAMESPACE_INT_MAP, namespaces[convertNumberCode(MEDIAWIKI_TALK_NAMESPACE_KEY)], MEDIAWIKI_TALK_NAMESPACE_KEY);
+			addToMap(NAMESPACE_INT_MAP, namespaces[convertNumberCode(TEMPLATE_NAMESPACE_KEY)], TEMPLATE_NAMESPACE_KEY);
+			addToMap(NAMESPACE_INT_MAP, namespaces[convertNumberCode(TEMPLATE_TALK_NAMESPACE_KEY)], TEMPLATE_TALK_NAMESPACE_KEY);
+			addToMap(NAMESPACE_INT_MAP, namespaces[convertNumberCode(HELP_NAMESPACE_KEY)], HELP_NAMESPACE_KEY);
+			addToMap(NAMESPACE_INT_MAP, namespaces[convertNumberCode(HELP_TALK_NAMESPACE_KEY)], HELP_TALK_NAMESPACE_KEY);
+			addToMap(NAMESPACE_INT_MAP, namespaces[convertNumberCode(CATEGORY_NAMESPACE_KEY)], CATEGORY_NAMESPACE_KEY);
+			addToMap(NAMESPACE_INT_MAP, namespaces[convertNumberCode(CATEGORY_TALK_NAMESPACE_KEY)], CATEGORY_TALK_NAMESPACE_KEY);
 		}
 		// first set contentspace for all namespaces to their own, then overwrite the talkspaces:
 		for (String namespace : NAMESPACE_INT_MAP.keySet()) {
-			CONTENTSPACE_MAP.put(namespace, namespace);
+			CONTENTSPACE_MAP.put(namespace, getNamespace(namespace));
 		}
 		for (Entry<String, String> entry : TALKSPACE_MAP.entrySet()) {
 			String value = entry.getValue();
-			if (value != null && !entry.getKey().equals(entry.getValue())) {
-				CONTENTSPACE_MAP.put(entry.getValue(), entry.getKey());
+			String key = getNamespace(entry.getKey());
+			if (value != null && !key.equals(value)) {
+				addToMap(CONTENTSPACE_MAP, value, key);
 			}
 		}
 		initializeEnglishAliases();
+	}
+
+	protected <V> void addToMap(Map<String, V> map, final String namespace, V value) {
+		addToMap(map, namespace, namespace.replace(' ', '_'), namespace.replace('_', ' '), value);
+	}
+
+	protected <K, V> void addToMap(Map<K, V> map, final K namespace,
+			final K namespaceUS, final K namespaceSP, V value) {
+		map.put(namespace, value);
+		map.put(namespaceUS, value);
+		map.put(namespaceSP, value);
 	}
 
 	/*
@@ -563,12 +574,14 @@ public class Namespace implements INamespace {
 
 	protected void addAlias(final String alias, final Integer namespaceCode) {
 		if (!NAMESPACE_INT_MAP.containsKey(alias)) {
+			final String aliasUS = alias.replace(' ', '_');
+			final String aliasSP = alias.replace('_', ' ');
 			final String talkspace = getTalkspace(getNamespaceByNumber(namespaceCode));
-			TALKSPACE_MAP.put(alias, talkspace);
+			addToMap(TALKSPACE_MAP, alias, aliasUS, aliasSP, talkspace);
 			if (talkspace != null) {
-				CONTENTSPACE_MAP.put(alias, getContentspace(talkspace));
+				addToMap(CONTENTSPACE_MAP, alias, aliasUS, aliasSP, getContentspace(talkspace));
 			}
-			NAMESPACE_INT_MAP.put(alias, namespaceCode);
+			addToMap(NAMESPACE_INT_MAP, alias, aliasUS, aliasSP, namespaceCode);
 		}
 	}
 
