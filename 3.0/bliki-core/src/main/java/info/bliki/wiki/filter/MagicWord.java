@@ -17,7 +17,6 @@
 package info.bliki.wiki.filter;
 
 import info.bliki.wiki.model.IWikiModel;
-import info.bliki.wiki.namespaces.INamespace;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -449,31 +448,41 @@ public class MagicWord {
 				}
 			}
 		} else if (name.equals(MAGIC_TALK_PAGE_NAME)) {
-			String pageName = model.getPageName();
-			INamespace ns = model.getNamespace();
-			if (parameter.length() > 0) {
-				String namespace = parameter;
-				int index = namespace.indexOf(':');
-				if (index > 0) {
-					// {{TALKPAGENAME:Template:Sandbox}}
-					String rest = namespace.substring(index + 1);
-					namespace = namespace.substring(0, index);
-					String talkspace = ns.getTalkspace(namespace);
-					if (talkspace != null) {
-						return talkspace + ":" + rest;
-					}
-				}
-				return ns.getTalk() + ":" + parameter;
-			}
-			if (pageName != null) {
-				String talkspace = ns.getTalkspace(model.getNamespaceName());
-				if (talkspace != null) {
-					return talkspace + ":" + pageName;
-				}
-			}
+			return getTalkpage(parameter, model, hasParameter);
+		} else if (name.equals(MAGIC_TALK_PAGE_NAME_E)) {
+			return model.encodeTitleToUrl(getTalkpage(parameter, model, hasParameter), true);
 		}
 
 		return name;
+	}
+
+	/**
+	 * Gets the talkpage's name of a given non-<tt>null</tt> parameter or the
+	 * current model's pagename and namespace.
+	 * 
+	 * @param parameter
+	 *            the parameter of the magic word
+	 * @param model
+	 *            the model being used
+	 * @param hasParameter
+	 *            whether a parameter was given or not
+	 * 
+	 * @return the name of the talkpage
+	 */
+	protected static String getTalkpage(String parameter, IWikiModel model,
+			boolean hasParameter) {
+		String[] fullPage = getPagenameHelper2(parameter, model, hasParameter);
+		if (fullPage != null) {
+		    String talkSpace = model.getNamespace().getTalkspace(fullPage[0]);
+		    if (talkSpace == null || talkSpace.length() == 0) {
+		        talkSpace = "";
+		    } else {
+		        talkSpace += ':';
+		    }
+		    return talkSpace + fullPage[1];
+		} else {
+			return "";
+		}
 	}
 
 	/**
@@ -604,5 +613,32 @@ public class MagicWord {
 			}
 		}
 		return model.getPageName();
+	}
+
+	/**
+	 * Helper to get the pagename and the namespace of either a given non-
+	 * <tt>null</tt> parameter or the current model's pagename and namespace.
+	 * 
+	 * @param parameter
+	 *            the parameter of the magic word
+	 * @param model
+	 *            the model being used
+	 * @param hasParameter
+	 *            whether a parameter was given or not
+	 * 
+	 * @return the extracted pagename or <tt>null</tt> if the parameter was
+	 *         empty
+	 */
+	protected static String[] getPagenameHelper2(String parameter, IWikiModel model, boolean hasParameter) {
+		if (hasParameter) {
+			if (parameter.length() > 0) {
+				return model.splitNsTitle(parameter);
+			} else {
+				return null;
+			}
+		}
+		return new String[] {
+				model.getNamespace().getNamespace(model.getNamespaceName()),
+				model.getPageName() };
 	}
 }
