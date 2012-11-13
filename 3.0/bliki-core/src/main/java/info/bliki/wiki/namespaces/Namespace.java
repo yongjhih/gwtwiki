@@ -112,6 +112,10 @@ public class Namespace implements INamespace {
 			NAMESPACE_INT_MAP.put(namespaces[convertNumberCode(CATEGORY_TALK_NAMESPACE_KEY)], CATEGORY_TALK_NAMESPACE_KEY);
 
 		}
+		// first set contentspace for all namespaces to their own, then overwrite the talkspaces:
+		for (String namespace : NAMESPACE_MAP.values()) {
+			CONTENTSPACE_MAP.put(namespace, namespace);
+		}
 		for (Entry<String, String> entry : TALKSPACE_MAP.entrySet()) {
 			String value = entry.getValue();
 			if (value != null && !entry.getKey().equals(entry.getValue())) {
