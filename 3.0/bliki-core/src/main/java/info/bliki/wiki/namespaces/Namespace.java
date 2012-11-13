@@ -558,6 +558,16 @@ public class Namespace implements INamespace {
 		extractAliasFromResource(fResourceBundleEn, Messages.WIKI_API_HELPTALK1, Messages.WIKI_API_HELPTALK2, HELP_TALK_NAMESPACE_KEY);
 		extractAliasFromResource(fResourceBundleEn, Messages.WIKI_API_CATEGORY1, Messages.WIKI_API_CATEGORY2, CATEGORY_NAMESPACE_KEY);
 		extractAliasFromResource(fResourceBundleEn, Messages.WIKI_API_CATEGORYTALK1, Messages.WIKI_API_CATEGORYTALK2, CATEGORY_TALK_NAMESPACE_KEY);
+		
+		// Aliases as defined by
+		// https://en.wikipedia.org/wiki/Wikipedia:Namespace#Aliases
+		addAlias("WP", PROJECT_NAMESPACE_KEY);
+		addAlias("Project", PROJECT_NAMESPACE_KEY);
+		addAlias("WT", PROJECT_TALK_NAMESPACE_KEY);
+		addAlias("Project_talk", PROJECT_TALK_NAMESPACE_KEY);
+		// already in the English resource bundle:
+		// addAlias("Image", Namespace.FILE_NAMESPACE_KEY);
+		// addAlias("Image talk", Namespace.FILE_TALK_NAMESPACE_KEY);
 	}
 
     protected void addAlias(final String alias, final Integer namespaceCode) {
