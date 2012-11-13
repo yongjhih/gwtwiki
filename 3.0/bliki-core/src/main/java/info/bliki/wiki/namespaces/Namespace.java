@@ -470,10 +470,10 @@ public class Namespace implements INamespace {
 	 *          the position in the arrays
 	 */
 	private void extractFromResource(String ns1Id, String ns2Id, int arrayPos) {
-		String ns1 = Messages.getString(fResourceBundle, ns1Id);
+		String ns1 = Messages.getString(fResourceBundle, ns1Id, null);
 		if (ns1 != null) {
 			fNamespaces1[arrayPos] = ns1;
-			String ns2 = Messages.getString(fResourceBundle, ns2Id);
+			String ns2 = Messages.getString(fResourceBundle, ns2Id, null);
 			if (ns2 != null) {
 				fNamespaces2[arrayPos] = ns2;
 			}
@@ -518,10 +518,10 @@ public class Namespace implements INamespace {
 	 *          the namespace code
 	 */
 	private void extractAliasFromResource(ResourceBundle resourceBundle, String ns1Id, String ns2Id, Integer namespaceCode) {
-		String ns1 = Messages.getString(resourceBundle, ns1Id);
+		String ns1 = Messages.getString(resourceBundle, ns1Id, null);
 		if (ns1 != null) {
 			addAlias(ns1, namespaceCode);
-			String ns2 = Messages.getString(resourceBundle, ns2Id);
+			String ns2 = Messages.getString(resourceBundle, ns2Id, null);
 			if (ns2 != null) {
 				addAlias(ns2, namespaceCode);
 			}
