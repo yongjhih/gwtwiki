@@ -2,12 +2,11 @@ package info.bliki.wiki.namespaces;
 
 import info.bliki.Messages;
 
-import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.ResourceBundle;
 import java.util.TreeMap;
-import java.util.Map.Entry;
 
 /**
  * Mediawiki Namespaces. See <a
@@ -22,12 +21,6 @@ public class Namespace implements INamespace {
 
 	protected final String[] fNamespaces2 = { "Media", "Special", "", "Talk", "User", "User_talk", "Meta", "Meta_talk", "File",
 			"File_talk", "MediaWiki", "MediaWiki_talk", "Template", "Template_talk", "Help", "Help_talk", "Category", "Category_talk" };
-
-	/**
-	 * 
-	 * Maps lower-case namespace names to the original names.
-	 */
-	public final Map<String, String> NAMESPACE_MAP = new HashMap<String, String>();
 
 	/**
 	 * Maps namespaces case-insensitively to their according talkspaces.
@@ -63,16 +56,6 @@ public class Namespace implements INamespace {
 		initializeNamespaces();
 
 		for (String[] namespaces : new String[][] { fNamespaces1, fNamespaces2 }) {
-			for (String namespace : namespaces) {
-				String namespaceLower;
-				if (fResourceBundle == null || fResourceBundle.getLocale() == null) {
-					namespaceLower = namespace.toLowerCase();
-				} else {
-					namespaceLower = namespace.toLowerCase(fResourceBundle.getLocale());
-				}
-				NAMESPACE_MAP.put(namespaceLower, namespace);
-			}
-
 			TALKSPACE_MAP.put(namespaces[convertNumberCode(MEDIA_NAMESPACE_KEY)], null); // media
 			TALKSPACE_MAP.put(namespaces[convertNumberCode(SPECIAL_NAMESPACE_KEY)], null); // special
 			TALKSPACE_MAP.put(namespaces[convertNumberCode(MAIN_NAMESPACE_KEY)], getTalk()); // ""
@@ -113,7 +96,7 @@ public class Namespace implements INamespace {
 
 		}
 		// first set contentspace for all namespaces to their own, then overwrite the talkspaces:
-		for (String namespace : NAMESPACE_MAP.values()) {
+		for (String namespace : NAMESPACE_INT_MAP.keySet()) {
 			CONTENTSPACE_MAP.put(namespace, namespace);
 		}
 		for (Entry<String, String> entry : TALKSPACE_MAP.entrySet()) {
@@ -332,7 +315,11 @@ public class Namespace implements INamespace {
 	}
 
 	public String getNamespaceByLowercase(String lowercaseNamespace) {
-		return NAMESPACE_MAP.get(lowercaseNamespace);
+		Integer nsNumber = getNumberByName(lowercaseNamespace);
+		if (nsNumber != null) {
+			return getNamespaceByNumber(nsNumber);
+		}
+		return null;
 	}
 
 	public String getNamespaceByNumber(int numberCode) {
@@ -576,13 +563,6 @@ public class Namespace implements INamespace {
 
 	protected void addAlias(final String alias, final Integer namespaceCode) {
 		if (!NAMESPACE_INT_MAP.containsKey(alias)) {
-			String aliasLower;
-			if (fResourceBundle == null || fResourceBundle.getLocale() == null) {
-				aliasLower = alias.toLowerCase();
-			} else {
-				aliasLower = alias.toLowerCase(fResourceBundle.getLocale());
-			}
-			NAMESPACE_MAP.put(aliasLower, getNamespaceByNumber(namespaceCode));
 			final String talkspace = getTalkspace(getNamespaceByNumber(namespaceCode));
 			TALKSPACE_MAP.put(alias, talkspace);
 			if (talkspace != null) {
