@@ -569,12 +569,8 @@ public class MagicWord {
 		String namespace;
 		if (hasParameter) {
 			if (parameter.length() > 0) {
-				int indx = parameter.indexOf(':');
-				if (indx >= 0) {
-					namespace = parameter.substring(0, indx);
-				} else {
-					namespace = "";
-				}
+				String[] split = model.splitNsTitle(parameter);
+				namespace = split[0];
 			} else {
 				return null;
 			}
