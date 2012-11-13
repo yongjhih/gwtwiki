@@ -451,9 +451,42 @@ public class MagicWord {
 			return getTalkpage(parameter, model, hasParameter);
 		} else if (name.equals(MAGIC_TALK_PAGE_NAME_E)) {
 			return model.encodeTitleToUrl(getTalkpage(parameter, model, hasParameter), true);
+		} else if (name.equals(MAGIC_SUBJECT_PAGE_NAME) || name.equals(MAGIC_ARTICLE_PAGE_NAME)) {
+			return getSubjectpage(parameter, model, hasParameter);
+		} else if (name.equals(MAGIC_SUBJECT_PAGE_NAME_E) || name.equals(MAGIC_ARTICLE_PAGE_NAME_E)) {
+			return model.encodeTitleToUrl(getSubjectpage(parameter, model, hasParameter), true);
 		}
 
 		return name;
+	}
+
+	/**
+	 * Gets the talkpage's name of a given non-<tt>null</tt> parameter or the
+	 * current model's pagename and namespace.
+	 * 
+	 * @param parameter
+	 *            the parameter of the magic word
+	 * @param model
+	 *            the model being used
+	 * @param hasParameter
+	 *            whether a parameter was given or not
+	 * 
+	 * @return the name of the talkpage
+	 */
+	protected static String getSubjectpage(String parameter, IWikiModel model,
+			boolean hasParameter) {
+		String[] fullPage = getPagenameHelper2(parameter, model, hasParameter);
+		if (fullPage != null) {
+		    String subjectSpace = model.getNamespace().getContentspace(fullPage[0]);
+		    if (subjectSpace == null || subjectSpace.length() == 0) {
+		        subjectSpace = "";
+		    } else {
+		        subjectSpace += ':';
+		    }
+		    return subjectSpace + fullPage[1];
+		} else {
+			return "";
+		}
 	}
 
 	/**
