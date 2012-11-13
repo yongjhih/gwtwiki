@@ -905,6 +905,36 @@ public class TemplateParserTest extends FilterTestSupport {
 		assertEquals("Meta", wikiModel.parseTemplates("{{SUBJECTSPACE}}", false));
 	}
 
+	public void testPAGENAME001() {
+		wikiModel.setPageName("");
+		assertEquals("", wikiModel.parseTemplates("{{PAGENAME}}", false));
+		assertEquals("Main Page", wikiModel.parseTemplates("{{PAGENAME:Main Page}}", false));
+		assertEquals("Bad:Main Page", wikiModel.parseTemplates("{{PAGENAME:Bad:Main Page}}", false));
+	}
+
+	public void testPAGENAMEE001() {
+		wikiModel.setPageName("");
+		assertEquals("", wikiModel.parseTemplates("{{PAGENAMEE}}", false));
+		assertEquals("Main_Page", wikiModel.parseTemplates("{{PAGENAMEE:Main Page}}", false));
+		assertEquals("Bad:Main_Page", wikiModel.parseTemplates("{{PAGENAMEE:Bad:Main Page}}", false));
+	}
+
+	public void testFULLPAGENAME001() {
+		wikiModel.setPageName("");
+		assertEquals("", wikiModel.parseTemplates("{{FULLPAGENAME}}", false));
+		assertEquals("Main Page", wikiModel.parseTemplates("{{FULLPAGENAME:Main Page}}", false));
+		assertEquals("Template:Main Page", wikiModel.parseTemplates("{{FULLPAGENAME:Template:Main Page}}", false));
+		assertEquals("Bad:Main Page", wikiModel.parseTemplates("{{FULLPAGENAME:Bad:Main Page}}", false));
+	}
+
+	public void testFULLPAGENAMEE001() {
+		wikiModel.setPageName("");
+		assertEquals("", wikiModel.parseTemplates("{{FULLPAGENAMEE}}", false));
+		assertEquals("Main_Page", wikiModel.parseTemplates("{{FULLPAGENAMEE:Main Page}}", false));
+		assertEquals("Template:Main_Page", wikiModel.parseTemplates("{{FULLPAGENAMEE:Template:Main Page}}", false));
+		assertEquals("Bad:Main_Page", wikiModel.parseTemplates("{{FULLPAGENAMEE:Bad:Main Page}}", false));
+	}
+
 	public void testURLEncode001() {
 		assertEquals("%22%23%24%25%26%27%28%29*%2C%3B%3F%5B%5D%5E%60%7B%7D", wikiModel.parseTemplates(
 				"{{urlencode: \"#$%&'()*,;?[]^`{}}}", false));

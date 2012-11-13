@@ -395,6 +395,15 @@ public class MagicWord {
 					return temp;
 				}
 			}
+		} else if (name.equals(MAGIC_PAGE_NAME_E)) {
+			if (parameter != null) {
+				return model.encodeTitleToUrl(parameter, true);
+			} else {
+				String temp = model.getPageName();
+				if (temp != null) {
+					return model.encodeTitleToUrl(temp, true);
+				}
+			}
 		} else if (name.equals(MAGIC_NAMESPACE)) {
 			return getNamespace(parameter, model);
 		} else if (name.equals(MAGIC_NAMESPACE_E)) {
@@ -414,6 +423,15 @@ public class MagicWord {
 				String temp = model.getPageName();
 				if (temp != null) {
 					return temp;
+				}
+			}
+		} else if (name.equals(MAGIC_FULL_PAGE_NAME_E)) {
+			if (parameter != null) {
+				return model.encodeTitleToUrl(parameter, true);
+			} else {
+				String temp = model.getPageName();
+				if (temp != null) {
+					return model.encodeTitleToUrl(temp, true);
 				}
 			}
 		} else if (name.equals(MAGIC_TALK_PAGE_NAME)) {
