@@ -41,5 +41,7 @@ public class NamespaceTest extends TestCase {
 	public void testContentspace001() {
 		assertEquals("Meta", namespace.getContentspace("Meta"));
 		assertEquals("Meta", namespace.getContentspace("Meta_talk"));
+		assertEquals("Meta", namespace.getContentspace("Project"));
+		assertEquals("Meta", namespace.getContentspace("Project_talk"));
 	}
 }
