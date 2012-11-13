@@ -297,11 +297,33 @@ public class MagicWord {
 	 * @param name
 	 *            the magic word
 	 * @param parameter
-	 *            the parameter of the magic word (may be <tt>null</tt>)
+	 *            the parameter of the magic word
 	 * @param model
 	 *            the model being used
+	 *
+	 * @deprecated Use {@link #processMagicWord(String, String, IWikiModel, boolean)} and specify whether a parameter was given or not!
 	 */
+	@Deprecated
 	public static String processMagicWord(String name, String parameter, IWikiModel model) {
+		return processMagicWord(name, parameter, model, true);
+	}
+
+	/**
+	 * Process a magic word, returning the value corresponding to the magic word
+	 * value. See <a
+	 * href="http://www.mediawiki.org/wiki/Help:Magic_words">Help:Magic words</a>
+	 * for a list of Mediawiki magic words.
+	 * 
+	 * @param name
+	 *            the magic word
+	 * @param parameter
+	 *            the parameter of the magic word
+	 * @param model
+	 *            the model being used
+	 * @param hasParameter
+	 *            whether a parameter was given or not (cannot distinguish from <tt>parameter</tt> value alone)
+	 */
+	public static String processMagicWord(String name, String parameter, IWikiModel model, boolean hasParameter) {
 		SimpleDateFormat formatter = model.getSimpleDateFormat();
 		Date current = model.getCurrentTimeStamp();
 		if (current == null) {
@@ -387,29 +409,29 @@ public class MagicWord {
 		}
 
 		if (name.equals(MAGIC_PAGE_NAME)) {
-			String pagename = getPagenameHelper(parameter, model);
+			String pagename = getPagenameHelper(parameter, model, hasParameter);
 			if (pagename != null) {
 				return pagename;
 			}
 		} else if (name.equals(MAGIC_PAGE_NAME_E)) {
-			String pagename = getPagenameHelper(parameter, model);
+			String pagename = getPagenameHelper(parameter, model, hasParameter);
 			if (pagename != null) {
 				return model.encodeTitleToUrl(pagename, true);
 			}
 		} else if (name.equals(MAGIC_NAMESPACE)) {
-			return getNamespace(parameter, model);
+			return getNamespace(parameter, model, hasParameter);
 		} else if (name.equals(MAGIC_NAMESPACE_E)) {
-			return model.encodeTitleToUrl(getNamespace(parameter, model), true);
+			return model.encodeTitleToUrl(getNamespace(parameter, model, hasParameter), true);
 		} else if (name.equals(MAGIC_TALK_SPACE)) {
-			return getTalkspace(parameter, model);
+			return getTalkspace(parameter, model, hasParameter);
 		} else if (name.equals(MAGIC_TALK_SPACE_E)) {
-			return model.encodeTitleToUrl(getTalkspace(parameter, model), true);
+			return model.encodeTitleToUrl(getTalkspace(parameter, model, hasParameter), true);
 		} else if (name.equals(MAGIC_SUBJECT_SPACE) || name.equals(MAGIC_ARTICLE_SPACE)) {
-			return getSubjectSpace(parameter, model);
+			return getSubjectSpace(parameter, model, hasParameter);
 		} else if (name.equals(MAGIC_SUBJECT_SPACE_E) || name.equals(MAGIC_ARTICLE_SPACE_E)) {
-			return model.encodeTitleToUrl(getSubjectSpace(parameter, model), true);
+			return model.encodeTitleToUrl(getSubjectSpace(parameter, model, hasParameter), true);
 		} else if (name.equals(MAGIC_FULL_PAGE_NAME)) {
-			if (parameter != null) {
+			if (hasParameter) {
 				return parameter;
 			} else {
 				String temp = model.getPageName();
@@ -418,7 +440,7 @@ public class MagicWord {
 				}
 			}
 		} else if (name.equals(MAGIC_FULL_PAGE_NAME_E)) {
-			if (parameter != null) {
+			if (hasParameter) {
 				return model.encodeTitleToUrl(parameter, true);
 			} else {
 				String temp = model.getPageName();
@@ -429,7 +451,7 @@ public class MagicWord {
 		} else if (name.equals(MAGIC_TALK_PAGE_NAME)) {
 			String pageName = model.getPageName();
 			INamespace ns = model.getNamespace();
-			if (parameter != null) {
+			if (parameter.length() > 0) {
 				String namespace = parameter;
 				int index = namespace.indexOf(':');
 				if (index > 0) {
@@ -459,14 +481,16 @@ public class MagicWord {
 	 * or the current model's namespace.
 	 * 
 	 * @param parameter
-	 *            the parameter of the magic word (may be <tt>null</tt>)
+	 *            the parameter of the magic word
 	 * @param model
 	 *            the model being used
+	 * @param hasParameter
+	 *            whether a parameter was given or not
 	 *
 	 * @return the talkspace
 	 */
-	protected static String getTalkspace(String parameter, IWikiModel model) {
-		String namespace = getNamespaceHelper(parameter, model);
+	protected static String getTalkspace(String parameter, IWikiModel model, boolean hasParameter) {
+		String namespace = getNamespaceHelper(parameter, model, hasParameter);
 		if (namespace != null) {
 			String talkspace = model.getNamespace().getTalkspace(namespace);
 			if (talkspace != null) {
@@ -484,14 +508,16 @@ public class MagicWord {
 	 * or the current model's namespace.
 	 * 
 	 * @param parameter
-	 *            the parameter of the magic word (may be <tt>null</tt>)
+	 *            the parameter of the magic word
 	 * @param model
 	 *            the model being used
+	 * @param hasParameter
+	 *            whether a parameter was given or not
 	 *
 	 * @return the subjectspace
 	 */
-	protected static String getSubjectSpace(String parameter, IWikiModel model) {
-		String namespace = getNamespaceHelper(parameter, model);
+	protected static String getSubjectSpace(String parameter, IWikiModel model, boolean hasParameter) {
+		String namespace = getNamespaceHelper(parameter, model, hasParameter);
 		if (namespace != null) {
 			String subjectspace = model.getNamespace().getContentspace(namespace);
 			if (subjectspace != null) {
@@ -509,14 +535,16 @@ public class MagicWord {
 	 * or the current model's namespace.
 	 * 
 	 * @param parameter
-	 *            the parameter of the magic word (may be <tt>null</tt>)
+	 *            the parameter of the magic word
 	 * @param model
 	 *            the model being used
+	 * @param hasParameter
+	 *            whether a parameter was given or not
 	 * 
 	 * @return the extracted namespace or <tt>""</tt> if the parameter was empty
 	 */
-	protected static String getNamespace(String parameter, IWikiModel model) {
-		String namespace = getNamespaceHelper(parameter, model);
+	protected static String getNamespace(String parameter, IWikiModel model, boolean hasParameter) {
+		String namespace = getNamespaceHelper(parameter, model, hasParameter);
 		if (namespace != null) {
 			return namespace;
 		} else {
@@ -529,15 +557,17 @@ public class MagicWord {
 	 * or the current model's namespace.
 	 * 
 	 * @param parameter
-	 *            the parameter of the magic word (may be <tt>null</tt>)
+	 *            the parameter of the magic word
 	 * @param model
 	 *            the model being used
+	 * @param hasParameter
+	 *            whether a parameter was given or not
 	 * 
 	 * @return the extracted namespace or <tt>null</tt> if the parameter was empty
 	 */
-	protected static String getNamespaceHelper(String parameter, IWikiModel model) {
+	protected static String getNamespaceHelper(String parameter, IWikiModel model, boolean hasParameter) {
 		String namespace;
-		if (parameter != null) {
+		if (hasParameter) {
 			if (parameter.length() > 0) {
 				int indx = parameter.indexOf(':');
 				if (indx >= 0) {
@@ -559,15 +589,17 @@ public class MagicWord {
 	 * non-<tt>null</tt> parameter or the current model's pagename.
 	 * 
 	 * @param parameter
-	 *            the parameter of the magic word (may be <tt>null</tt>)
+	 *            the parameter of the magic word
 	 * @param model
 	 *            the model being used
+	 * @param hasParameter
+	 *            whether a parameter was given or not
 	 * 
 	 * @return the extracted pagename or <tt>null</tt> if the parameter was
 	 *         empty
 	 */
-	protected static String getPagenameHelper(String parameter, IWikiModel model) {
-		if (parameter != null) {
+	protected static String getPagenameHelper(String parameter, IWikiModel model, boolean hasParameter) {
+		if (hasParameter) {
 			if (parameter.length() > 0) {
 	            String[] split = model.splitNsTitle(parameter);
 	            return split[1];

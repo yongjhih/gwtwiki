@@ -1089,9 +1089,11 @@ public abstract class AbstractWikiModel implements IWikiModel, IContext {
 		}
 		if (isTemplateNamespace(namespace)) {
 			String magicWord = templateName;
-			String parameter = null;
+			String parameter = "";
+			boolean hasParameter = false;
 			int index = magicWord.indexOf(':');
 			if (index > 0) {
+				hasParameter = true;
 				parameter = magicWord.substring(index + 1);
 				if (parameter.length() != 0) {
 					parameter = AbstractTemplateFunction.parseTrim(parameter, this);
@@ -1099,7 +1101,7 @@ public abstract class AbstractWikiModel implements IWikiModel, IContext {
 				magicWord = magicWord.substring(0, index);
 			}
 			if (MagicWord.isMagicWord(magicWord)) {
-				return MagicWord.processMagicWord(magicWord, parameter, this);
+				return MagicWord.processMagicWord(magicWord, parameter, this, hasParameter);
 			}
 		}
 		return null;
