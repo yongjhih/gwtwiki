@@ -1,7 +1,6 @@
 package info.bliki.wiki.filter;
 
 import info.bliki.wiki.model.Configuration;
-import info.bliki.wiki.model.IWikiModel;
 import info.bliki.wiki.model.WikiModel;
 
 import java.util.Locale;
@@ -44,6 +43,9 @@ public class FilterTestSupport extends TestCase {
 			  "http://www.bliki.info/wiki/${title}");
 	  wikiModel.setUp();
 	  return wikiModel;
+  }
+  
+  public void testStub() {
   }
 
   /**
