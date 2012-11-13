@@ -574,21 +574,21 @@ public class Namespace implements INamespace {
 		// addAlias("Image talk", Namespace.FILE_TALK_NAMESPACE_KEY);
 	}
 
-    protected void addAlias(final String alias, final Integer namespaceCode) {
-        String aliasLower;
-        if (fResourceBundle == null || fResourceBundle.getLocale() == null) {
-            aliasLower = alias.toLowerCase();
-        } else {
-            aliasLower = alias.toLowerCase(fResourceBundle.getLocale());
-        }
-        NAMESPACE_MAP.put(aliasLower, getNamespaceByNumber(namespaceCode));
-        final String talkspace = getTalkspace(getNamespaceByNumber(namespaceCode));
+	protected void addAlias(final String alias, final Integer namespaceCode) {
+		String aliasLower;
+		if (fResourceBundle == null || fResourceBundle.getLocale() == null) {
+			aliasLower = alias.toLowerCase();
+		} else {
+			aliasLower = alias.toLowerCase(fResourceBundle.getLocale());
+		}
+		NAMESPACE_MAP.put(aliasLower, getNamespaceByNumber(namespaceCode));
+		final String talkspace = getTalkspace(getNamespaceByNumber(namespaceCode));
 		TALKSPACE_MAP.put(alias, talkspace);
 		if (talkspace != null && !CONTENTSPACE_MAP.containsKey(talkspace)) {
 			CONTENTSPACE_MAP.put(talkspace, alias);
 		}
-        NAMESPACE_INT_MAP.put(alias, namespaceCode);
-    }
+		NAMESPACE_INT_MAP.put(alias, namespaceCode);
+	}
 
 	public String getTalkspace(String namespace) {
 		return TALKSPACE_MAP.get(namespace);
