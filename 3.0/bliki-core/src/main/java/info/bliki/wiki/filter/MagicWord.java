@@ -411,11 +411,15 @@ public class MagicWord {
 			String pagename = getPagenameHelper(parameter, model, hasParameter);
 			if (pagename != null) {
 				return pagename;
+			} else {
+				return "";
 			}
 		} else if (name.equals(MAGIC_PAGE_NAME_E)) {
 			String pagename = getPagenameHelper(parameter, model, hasParameter);
 			if (pagename != null) {
 				return model.encodeTitleToUrl(pagename, true);
+			} else {
+				return "";
 			}
 		} else if (name.equals(MAGIC_NAMESPACE)) {
 			return getNamespace(parameter, model, hasParameter);
