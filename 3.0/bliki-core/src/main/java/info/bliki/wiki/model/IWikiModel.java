@@ -3,6 +3,7 @@ package info.bliki.wiki.model;
 import info.bliki.htmlcleaner.BaseToken;
 import info.bliki.htmlcleaner.TagToken;
 import info.bliki.wiki.filter.AbstractParser;
+import info.bliki.wiki.filter.Encoder;
 import info.bliki.wiki.filter.ITextConverter;
 import info.bliki.wiki.namespaces.INamespace;
 import info.bliki.wiki.tags.util.TagStack;
@@ -1082,4 +1083,18 @@ public interface IWikiModel extends IConfiguration {
 	 * 
 	 */
 	public void tearDown();
+
+	/**
+	 * Splits the given full title into its namespace and page title components
+	 * and normalises both components using
+	 * {@link Encoder#normaliseTitle(String, boolean, char)} keeping
+	 * underscores.
+	 * 
+	 * @param fullTitle
+	 *            the (full) title including a namespace (if present)
+	 * 
+	 * @return a 2-element array with the namespace (index 0) and the page title
+	 *         (index 1)
+	 */
+	public abstract String[] splitNsTitle(String fullTitle);
 }
