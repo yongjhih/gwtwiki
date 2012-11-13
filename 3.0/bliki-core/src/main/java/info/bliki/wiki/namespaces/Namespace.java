@@ -575,19 +575,21 @@ public class Namespace implements INamespace {
 	}
 
 	protected void addAlias(final String alias, final Integer namespaceCode) {
-		String aliasLower;
-		if (fResourceBundle == null || fResourceBundle.getLocale() == null) {
-			aliasLower = alias.toLowerCase();
-		} else {
-			aliasLower = alias.toLowerCase(fResourceBundle.getLocale());
+		if (!NAMESPACE_INT_MAP.containsKey(alias)) {
+			String aliasLower;
+			if (fResourceBundle == null || fResourceBundle.getLocale() == null) {
+				aliasLower = alias.toLowerCase();
+			} else {
+				aliasLower = alias.toLowerCase(fResourceBundle.getLocale());
+			}
+			NAMESPACE_MAP.put(aliasLower, getNamespaceByNumber(namespaceCode));
+			final String talkspace = getTalkspace(getNamespaceByNumber(namespaceCode));
+			TALKSPACE_MAP.put(alias, talkspace);
+			if (talkspace != null) {
+				CONTENTSPACE_MAP.put(alias, getContentspace(talkspace));
+			}
+			NAMESPACE_INT_MAP.put(alias, namespaceCode);
 		}
-		NAMESPACE_MAP.put(aliasLower, getNamespaceByNumber(namespaceCode));
-		final String talkspace = getTalkspace(getNamespaceByNumber(namespaceCode));
-		TALKSPACE_MAP.put(alias, talkspace);
-		if (talkspace != null) {
-			CONTENTSPACE_MAP.put(alias, getContentspace(talkspace));
-		}
-		NAMESPACE_INT_MAP.put(alias, namespaceCode);
 	}
 
 	public String getTalkspace(String namespace) {
