@@ -580,7 +580,7 @@ public class Namespace implements INamespace {
         NAMESPACE_MAP.put(aliasLower, getNamespaceByNumber(namespaceCode));
         final String talkspace = getTalkspace(getNamespaceByNumber(namespaceCode));
 		TALKSPACE_MAP.put(alias, talkspace);
-		if (talkspace != null) {
+		if (talkspace != null && !CONTENTSPACE_MAP.containsKey(talkspace)) {
 			CONTENTSPACE_MAP.put(talkspace, alias);
 		}
         NAMESPACE_INT_MAP.put(alias, namespaceCode);
