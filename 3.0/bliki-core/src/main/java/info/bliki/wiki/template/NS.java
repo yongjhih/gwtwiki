@@ -3,6 +3,7 @@ package info.bliki.wiki.template;
 import info.bliki.wiki.model.IWikiModel;
 import info.bliki.wiki.namespaces.INamespace;
 
+import java.security.InvalidParameterException;
 import java.util.List;
 
 /**
@@ -32,8 +33,10 @@ public class NS extends AbstractTemplateFunction {
 			INamespace namespace = model.getNamespace();
 			try {
 				int numberCode = Integer.valueOf(arg0).intValue();
-				if (numberCode >= (-2) || numberCode <= 15) {
+				try {
 					return namespace.getNamespaceByNumber(numberCode);
+				} catch (InvalidParameterException ipe) {
+					// nothing to do
 				}
 			} catch (NumberFormatException nfe) {
 				// the given argument could not be parsed as integer number

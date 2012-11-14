@@ -3,6 +3,7 @@ package info.bliki.wiki.namespaces;
 import info.bliki.Messages;
 import info.bliki.wiki.filter.Encoder;
 
+import java.security.InvalidParameterException;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -18,10 +19,12 @@ import java.util.TreeMap;
 public class Namespace implements INamespace {
 
 	protected final String[] fNamespaces1 = { "Media", "Special", "", "Talk", "User", "User_talk", "Meta", "Meta_talk", "Image",
-			"Image_talk", "MediaWiki", "MediaWiki_talk", "Template", "Template_talk", "Help", "Help_talk", "Category", "Category_talk" };
+			"Image_talk", "MediaWiki", "MediaWiki_talk", "Template", "Template_talk", "Help", "Help_talk", "Category", "Category_talk",
+			"Portal", "Portal_talk" };
 
 	protected final String[] fNamespaces2 = { "Media", "Special", "", "Talk", "User", "User_talk", "Meta", "Meta_talk", "File",
-			"File_talk", "MediaWiki", "MediaWiki_talk", "Template", "Template_talk", "Help", "Help_talk", "Category", "Category_talk" };
+			"File_talk", "MediaWiki", "MediaWiki_talk", "Template", "Template_talk", "Help", "Help_talk", "Category", "Category_talk",
+			"Portal", "Portal_talk" };
 
 	/**
 	 * Maps namespaces case-insensitively to their according talkspaces.
@@ -75,6 +78,8 @@ public class Namespace implements INamespace {
 			addToMap(TALKSPACE_MAP, namespaces[convertNumberCode(HELP_TALK_NAMESPACE_KEY)], getHelp_talk()); // help_talk
 			addToMap(TALKSPACE_MAP, namespaces[convertNumberCode(CATEGORY_NAMESPACE_KEY)], getCategory_talk()); // category
 			addToMap(TALKSPACE_MAP, namespaces[convertNumberCode(CATEGORY_TALK_NAMESPACE_KEY)], getCategory_talk()); // category_talk
+			addToMap(TALKSPACE_MAP, namespaces[convertNumberCode(PORTAL_NAMESPACE_KEY)], getPortal_talk()); // portal
+			addToMap(TALKSPACE_MAP, namespaces[convertNumberCode(PORTAL_TALK_NAMESPACE_KEY)], getPortal_talk()); // portal_talk
 
 			addToMap(NAMESPACE_INT_MAP, namespaces[convertNumberCode(MEDIA_NAMESPACE_KEY)], MEDIA_NAMESPACE_KEY);
 			addToMap(NAMESPACE_INT_MAP, namespaces[convertNumberCode(SPECIAL_NAMESPACE_KEY)], SPECIAL_NAMESPACE_KEY);
@@ -94,6 +99,8 @@ public class Namespace implements INamespace {
 			addToMap(NAMESPACE_INT_MAP, namespaces[convertNumberCode(HELP_TALK_NAMESPACE_KEY)], HELP_TALK_NAMESPACE_KEY);
 			addToMap(NAMESPACE_INT_MAP, namespaces[convertNumberCode(CATEGORY_NAMESPACE_KEY)], CATEGORY_NAMESPACE_KEY);
 			addToMap(NAMESPACE_INT_MAP, namespaces[convertNumberCode(CATEGORY_TALK_NAMESPACE_KEY)], CATEGORY_TALK_NAMESPACE_KEY);
+			addToMap(NAMESPACE_INT_MAP, namespaces[convertNumberCode(PORTAL_NAMESPACE_KEY)], PORTAL_NAMESPACE_KEY);
+			addToMap(NAMESPACE_INT_MAP, namespaces[convertNumberCode(PORTAL_TALK_NAMESPACE_KEY)], PORTAL_TALK_NAMESPACE_KEY);
 		}
 		// first set contentspace for all namespaces to their own, then overwrite the talkspaces:
 		for (String namespace : NAMESPACE_INT_MAP.keySet()) {
@@ -123,7 +130,43 @@ public class Namespace implements INamespace {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see info.bliki.wiki.namespaces.INamespcae#getCategory()
+	 * @see info.bliki.wiki.namespaces.INamespace#getPortal()
+	 */
+	public String getPortal() {
+		return fNamespaces1[18];
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see info.bliki.wiki.namespaces.INamespace#getPortal_talk()
+	 */
+	public String getPortal_talk() {
+		return fNamespaces1[19];
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see info.bliki.wiki.namespaces.INamespace#getPortal2()
+	 */
+	public String getPortal2() {
+		return fNamespaces2[18];
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see info.bliki.wiki.namespaces.INamespace#getPortal_talk2()
+	 */
+	public String getPortal_talk2() {
+		return fNamespaces2[19];
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see info.bliki.wiki.namespaces.INamespace#getCategory()
 	 */
 	public String getCategory() {
 		return fNamespaces1[16];
@@ -132,7 +175,7 @@ public class Namespace implements INamespace {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see info.bliki.wiki.namespaces.INamespcae#getCategory_talk()
+	 * @see info.bliki.wiki.namespaces.INamespace#getCategory_talk()
 	 */
 	public String getCategory_talk() {
 		return fNamespaces1[17];
@@ -141,7 +184,7 @@ public class Namespace implements INamespace {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see info.bliki.wiki.namespaces.INamespcae#getCategory_talk2()
+	 * @see info.bliki.wiki.namespaces.INamespace#getCategory_talk2()
 	 */
 	public String getCategory_talk2() {
 		return fNamespaces2[17];
@@ -150,7 +193,7 @@ public class Namespace implements INamespace {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see info.bliki.wiki.namespaces.INamespcae#getCategory2()
+	 * @see info.bliki.wiki.namespaces.INamespace#getCategory2()
 	 */
 	public String getCategory2() {
 		return fNamespaces2[16];
@@ -159,7 +202,7 @@ public class Namespace implements INamespace {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see info.bliki.wiki.namespaces.INamespcae#getHelp()
+	 * @see info.bliki.wiki.namespaces.INamespace#getHelp()
 	 */
 	public String getHelp() {
 		return fNamespaces1[14];
@@ -168,7 +211,7 @@ public class Namespace implements INamespace {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see info.bliki.wiki.namespaces.INamespcae#getHelp_talk()
+	 * @see info.bliki.wiki.namespaces.INamespace#getHelp_talk()
 	 */
 	public String getHelp_talk() {
 		return fNamespaces1[15];
@@ -177,7 +220,7 @@ public class Namespace implements INamespace {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see info.bliki.wiki.namespaces.INamespcae#getHelp_talk2()
+	 * @see info.bliki.wiki.namespaces.INamespace#getHelp_talk2()
 	 */
 	public String getHelp_talk2() {
 		return fNamespaces2[15];
@@ -186,7 +229,7 @@ public class Namespace implements INamespace {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see info.bliki.wiki.namespaces.INamespcae#getHelp2()
+	 * @see info.bliki.wiki.namespaces.INamespace#getHelp2()
 	 */
 	public String getHelp2() {
 		return fNamespaces2[14];
@@ -195,7 +238,7 @@ public class Namespace implements INamespace {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see info.bliki.wiki.namespaces.INamespcae#getImage()
+	 * @see info.bliki.wiki.namespaces.INamespace#getImage()
 	 */
 	public String getImage() {
 		return fNamespaces1[8];
@@ -204,7 +247,7 @@ public class Namespace implements INamespace {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see info.bliki.wiki.namespaces.INamespcae#getImage_talk()
+	 * @see info.bliki.wiki.namespaces.INamespace#getImage_talk()
 	 */
 	public String getImage_talk() {
 		return fNamespaces1[9];
@@ -213,7 +256,7 @@ public class Namespace implements INamespace {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see info.bliki.wiki.namespaces.INamespcae#getImage_talk2()
+	 * @see info.bliki.wiki.namespaces.INamespace#getImage_talk2()
 	 */
 	public String getImage_talk2() {
 		return fNamespaces2[9];
@@ -222,7 +265,7 @@ public class Namespace implements INamespace {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see info.bliki.wiki.namespaces.INamespcae#getImage2()
+	 * @see info.bliki.wiki.namespaces.INamespace#getImage2()
 	 */
 	public String getImage2() {
 		return fNamespaces2[8];
@@ -231,7 +274,7 @@ public class Namespace implements INamespace {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see info.bliki.wiki.namespaces.INamespcae#getMedia()
+	 * @see info.bliki.wiki.namespaces.INamespace#getMedia()
 	 */
 	public String getMedia() {
 		return fNamespaces1[0];
@@ -240,7 +283,7 @@ public class Namespace implements INamespace {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see info.bliki.wiki.namespaces.INamespcae#getMedia2()
+	 * @see info.bliki.wiki.namespaces.INamespace#getMedia2()
 	 */
 	public String getMedia2() {
 		return fNamespaces2[0];
@@ -249,7 +292,7 @@ public class Namespace implements INamespace {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see info.bliki.wiki.namespaces.INamespcae#getMediaWiki()
+	 * @see info.bliki.wiki.namespaces.INamespace#getMediaWiki()
 	 */
 	public String getMediaWiki() {
 		return fNamespaces1[10];
@@ -258,7 +301,7 @@ public class Namespace implements INamespace {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see info.bliki.wiki.namespaces.INamespcae#getMediaWiki_talk()
+	 * @see info.bliki.wiki.namespaces.INamespace#getMediaWiki_talk()
 	 */
 	public String getMediaWiki_talk() {
 		return fNamespaces1[11];
@@ -267,7 +310,7 @@ public class Namespace implements INamespace {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see info.bliki.wiki.namespaces.INamespcae#getMediaWiki_talk2()
+	 * @see info.bliki.wiki.namespaces.INamespace#getMediaWiki_talk2()
 	 */
 	public String getMediaWiki_talk2() {
 		return fNamespaces2[11];
@@ -276,7 +319,7 @@ public class Namespace implements INamespace {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see info.bliki.wiki.namespaces.INamespcae#getMediaWiki2()
+	 * @see info.bliki.wiki.namespaces.INamespace#getMediaWiki2()
 	 */
 	public String getMediaWiki2() {
 		return fNamespaces2[10];
@@ -285,7 +328,7 @@ public class Namespace implements INamespace {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see info.bliki.wiki.namespaces.INamespcae#getMeta()
+	 * @see info.bliki.wiki.namespaces.INamespace#getMeta()
 	 */
 	public String getMeta() {
 		return fNamespaces1[6];
@@ -294,7 +337,7 @@ public class Namespace implements INamespace {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see info.bliki.wiki.namespaces.INamespcae#getMeta_talk()
+	 * @see info.bliki.wiki.namespaces.INamespace#getMeta_talk()
 	 */
 	public String getMeta_talk() {
 		return fNamespaces1[7];
@@ -303,7 +346,7 @@ public class Namespace implements INamespace {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see info.bliki.wiki.namespaces.INamespcae#getMeta_talk2()
+	 * @see info.bliki.wiki.namespaces.INamespace#getMeta_talk2()
 	 */
 	public String getMeta_talk2() {
 		return fNamespaces2[7];
@@ -312,7 +355,7 @@ public class Namespace implements INamespace {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see info.bliki.wiki.namespaces.INamespcae#getMeta2()
+	 * @see info.bliki.wiki.namespaces.INamespace#getMeta2()
 	 */
 	public String getMeta2() {
 		return fNamespaces2[6];
@@ -355,7 +398,13 @@ public class Namespace implements INamespace {
 	 * @return an array index
 	 */
 	protected final int convertNumberCode(int numberCode) {
-		return numberCode + 2;
+		if (numberCode >= -2 && numberCode <= 15) {
+			return numberCode + 2;
+		} else if (numberCode >= 100 && numberCode <= 101) {
+			return numberCode - 100 + 18;
+		} else {
+			throw new InvalidParameterException("unknown number code: " + numberCode);
+		}
 	}
 
 	public ResourceBundle getResourceBundle() {
@@ -365,7 +414,7 @@ public class Namespace implements INamespace {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see info.bliki.wiki.namespaces.INamespcae#getSpecial()
+	 * @see info.bliki.wiki.namespaces.INamespace#getSpecial()
 	 */
 	public String getSpecial() {
 		return fNamespaces1[1];
@@ -374,7 +423,7 @@ public class Namespace implements INamespace {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see info.bliki.wiki.namespaces.INamespcae#getSpecial2()
+	 * @see info.bliki.wiki.namespaces.INamespace#getSpecial2()
 	 */
 	public String getSpecial2() {
 		return fNamespaces2[1];
@@ -383,7 +432,7 @@ public class Namespace implements INamespace {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see info.bliki.wiki.namespaces.INamespcae#getTalk()
+	 * @see info.bliki.wiki.namespaces.INamespace#getTalk()
 	 */
 	public String getTalk() {
 		return fNamespaces1[3];
@@ -392,7 +441,7 @@ public class Namespace implements INamespace {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see info.bliki.wiki.namespaces.INamespcae#getTalk2()
+	 * @see info.bliki.wiki.namespaces.INamespace#getTalk2()
 	 */
 	public String getTalk2() {
 		return fNamespaces2[3];
@@ -401,7 +450,7 @@ public class Namespace implements INamespace {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see info.bliki.wiki.namespaces.INamespcae#getTemplate()
+	 * @see info.bliki.wiki.namespaces.INamespace#getTemplate()
 	 */
 	public String getTemplate() {
 		return fNamespaces1[12];
@@ -410,7 +459,7 @@ public class Namespace implements INamespace {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see info.bliki.wiki.namespaces.INamespcae#getTemplate_talk()
+	 * @see info.bliki.wiki.namespaces.INamespace#getTemplate_talk()
 	 */
 	public String getTemplate_talk() {
 		return fNamespaces1[13];
@@ -419,7 +468,7 @@ public class Namespace implements INamespace {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see info.bliki.wiki.namespaces.INamespcae#getTemplate_talk2()
+	 * @see info.bliki.wiki.namespaces.INamespace#getTemplate_talk2()
 	 */
 	public String getTemplate_talk2() {
 		return fNamespaces2[13];
@@ -428,7 +477,7 @@ public class Namespace implements INamespace {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see info.bliki.wiki.namespaces.INamespcae#getTemplate2()
+	 * @see info.bliki.wiki.namespaces.INamespace#getTemplate2()
 	 */
 	public String getTemplate2() {
 		return fNamespaces2[12];
@@ -437,7 +486,7 @@ public class Namespace implements INamespace {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see info.bliki.wiki.namespaces.INamespcae#getUser()
+	 * @see info.bliki.wiki.namespaces.INamespace#getUser()
 	 */
 	public String getUser() {
 		return fNamespaces1[4];
@@ -446,7 +495,7 @@ public class Namespace implements INamespace {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see info.bliki.wiki.namespaces.INamespcae#getUser_talk()
+	 * @see info.bliki.wiki.namespaces.INamespace#getUser_talk()
 	 */
 	public String getUser_talk() {
 		return fNamespaces1[5];
@@ -455,7 +504,7 @@ public class Namespace implements INamespace {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see info.bliki.wiki.namespaces.INamespcae#getUser_talk2()
+	 * @see info.bliki.wiki.namespaces.INamespace#getUser_talk2()
 	 */
 	public String getUser_talk2() {
 		return fNamespaces2[5];
@@ -464,7 +513,7 @@ public class Namespace implements INamespace {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see info.bliki.wiki.namespaces.INamespcae#getUser2()
+	 * @see info.bliki.wiki.namespaces.INamespace#getUser2()
 	 */
 	public String getUser2() {
 		return fNamespaces2[4];
@@ -514,6 +563,8 @@ public class Namespace implements INamespace {
 		extractFromResource(Messages.WIKI_API_HELPTALK1, Messages.WIKI_API_HELPTALK2, 15);
 		extractFromResource(Messages.WIKI_API_CATEGORY1, Messages.WIKI_API_CATEGORY2, 16);
 		extractFromResource(Messages.WIKI_API_CATEGORYTALK1, Messages.WIKI_API_CATEGORYTALK2, 17);
+		extractFromResource(Messages.WIKI_API_PORTAL1, Messages.WIKI_API_PORTAL2, 18);
+		extractFromResource(Messages.WIKI_API_PORTALTALK1, Messages.WIKI_API_PORTALTALK2, 19);
 	}
 
 	/**
@@ -561,6 +612,8 @@ public class Namespace implements INamespace {
 		extractAliasFromResource(fResourceBundleEn, Messages.WIKI_API_HELPTALK1, Messages.WIKI_API_HELPTALK2, HELP_TALK_NAMESPACE_KEY);
 		extractAliasFromResource(fResourceBundleEn, Messages.WIKI_API_CATEGORY1, Messages.WIKI_API_CATEGORY2, CATEGORY_NAMESPACE_KEY);
 		extractAliasFromResource(fResourceBundleEn, Messages.WIKI_API_CATEGORYTALK1, Messages.WIKI_API_CATEGORYTALK2, CATEGORY_TALK_NAMESPACE_KEY);
+		extractAliasFromResource(fResourceBundleEn, Messages.WIKI_API_PORTAL1, Messages.WIKI_API_PORTAL2, PORTAL_NAMESPACE_KEY);
+		extractAliasFromResource(fResourceBundleEn, Messages.WIKI_API_PORTALTALK1, Messages.WIKI_API_PORTALTALK2, PORTAL_TALK_NAMESPACE_KEY);
 		
 		// Aliases as defined by
 		// https://en.wikipedia.org/wiki/Wikipedia:Namespace#Aliases

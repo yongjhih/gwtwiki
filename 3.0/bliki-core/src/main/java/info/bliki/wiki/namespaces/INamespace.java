@@ -102,6 +102,16 @@ public interface INamespace {
    */
 	public final static Integer CATEGORY_TALK_NAMESPACE_KEY = Integer.valueOf(15);
 
+	/**
+	 * Portal pages.
+	 */
+	public final static Integer PORTAL_NAMESPACE_KEY = Integer.valueOf(100);
+
+	/**
+	 * Talk pages for portal pages.
+	 */
+	public final static Integer PORTAL_TALK_NAMESPACE_KEY = Integer.valueOf(101);
+
 	public String getCategory();
 
 	public String getCategory_talk();
