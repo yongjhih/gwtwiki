@@ -71,6 +71,11 @@ import java.util.regex.Pattern;
 public class Configuration implements IConfiguration {
 
 	/**
+	 * Get the current <code>Bliki.info Engine</code> version
+	 */
+	public final static String BLIKI_VERSION = "3.0.20";
+
+	/**
 	 * Print additional debug information to System.out
 	 */
 	public final static boolean DEBUG = false;
