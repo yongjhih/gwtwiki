@@ -1,5 +1,7 @@
 package info.bliki.wiki.namespaces;
 
+import info.bliki.wiki.filter.Encoder;
+
 import java.util.ResourceBundle;
 
 /**
@@ -215,4 +217,38 @@ public interface INamespace {
 	 * @see #getTalkspace(String)
 	 */
 	public String getContentspace(String talkNamespace);
+
+	/**
+	 * Splits the given full title into its namespace and page title components
+	 * and normalises both components using
+	 * {@link Encoder#normaliseTitle(String, boolean, char)}. Assumes
+	 * <tt>underScoreIsWhitespace</tt> and uses a space as
+	 * <tt>whiteSpaceChar</tt>.
+	 * 
+	 * @param fullTitle
+	 *            the (full) title including a namespace (if present)
+	 * 
+	 * @return a 2-element array with the raw namespace string (index 0) and the
+	 *         page title (index 1)
+	 * @see #splitNsTitle(String, boolean, char)
+	 */
+	public abstract String[] splitNsTitle(String fullTitle);
+
+	/**
+	 * Splits the given full title into its namespace and page title components
+	 * and normalises both components using
+	 * {@link Encoder#normaliseTitle(String, boolean, char)}.
+	 * 
+	 * @param fullTitle
+	 *            the (full) title including a namespace (if present)
+	 * @param underScoreIsWhitespace
+	 *            whether '_' should be seen as whitespace or not
+	 * @param whiteSpaceChar
+	 *            the character to replace whitespace with
+	 * 
+	 * @return a 2-element array with the raw namespace string (index 0) and the
+	 *         page title (index 1)
+	 */
+	public abstract String[] splitNsTitle(String fullTitle,
+			boolean underScoreIsWhitespace, char whiteSpaceChar);
 }

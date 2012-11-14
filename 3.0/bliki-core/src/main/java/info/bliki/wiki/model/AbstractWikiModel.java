@@ -1877,74 +1877,7 @@ public abstract class AbstractWikiModel implements IWikiModel, IContext {
 	 * {@inheritDoc}
 	 */
 	public String[] splitNsTitle(String fullTitle) {
-		return splitNsTitle(fullTitle, fNamespace, true, true, ' ');
+		return fNamespace.splitNsTitle(fullTitle, true, ' ');
 	}
 
-	/**
-	 * Splits the given full title into its namespace and page title components
-	 * and normalises both components using
-	 * {@link Encoder#normaliseTitle(String, boolean, char)}.
-	 * 
-	 * @param fullTitle
-	 *            the (full) title including a namespace (if present)
-	 * @param nsObject
-	 *            the namespace for determining how to split the title
-	 * @param underScoreIsWhitespace
-	 *            whether '_' should be seen as whitespace or not
-	 * @param whiteSpaceChar
-	 *            the character to replace whitespace with
-	 * 
-	 * @return a 2-element array with the namespace (index 0) and the page title
-	 *         (index 1)
-	 */
-	public static String[] splitNsTitle(String fullTitle,
-			final INamespace nsObject, boolean underScoreIsWhitespace,
-			char whiteSpaceChar) {
-		return splitNsTitle(fullTitle, nsObject, true, underScoreIsWhitespace,
-				whiteSpaceChar);
-	}
-
-	/**
-	 * Splits the given full title into its namespace and page title components
-	 * and normalises both components using
-	 * {@link Encoder#normaliseTitle(String, boolean, char)}.
-	 * 
-	 * @param fullTitle
-	 *            the (full) title including a namespace (if present)
-	 * @param nsObject
-	 *            the namespace for determining how to split the title
-	 * @param onlyValidNs
-	 *            whether only valid namespaces should be split off
-	 * @param underScoreIsWhitespace
-	 *            whether '_' should be seen as whitespace or not
-	 * @param whiteSpaceChar
-	 *            the character to replace whitespace with
-	 * 
-	 * @return a 2-element array with the namespace (index 0) and the page title
-	 *         (index 1)
-	 */
-	protected static String[] splitNsTitle(String fullTitle,
-			final INamespace nsObject, boolean onlyValidNs,
-			boolean underScoreIsWhitespace, char whiteSpaceChar) {
-		int colonIndex = fullTitle.indexOf(':');
-		if (colonIndex != (-1)) {
-			String maybeNs = Encoder.normaliseTitle(
-					fullTitle.substring(0, colonIndex), underScoreIsWhitespace,
-					whiteSpaceChar);
-			if (!onlyValidNs || nsObject.getNumberByName(maybeNs) != null) {
-				// this is a real namespace
-				return new String[] {
-						maybeNs,
-						Encoder.normaliseTitle(
-								fullTitle.substring(colonIndex + 1),
-								underScoreIsWhitespace, whiteSpaceChar) };
-			}
-			// else: page belongs to the main namespace and only contains a
-			// colon
-		}
-		return new String[] {
-				"",
-				Encoder.normaliseTitle(fullTitle, underScoreIsWhitespace,
-						whiteSpaceChar) };
-	}
 }
