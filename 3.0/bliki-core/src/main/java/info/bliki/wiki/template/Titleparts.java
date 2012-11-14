@@ -75,7 +75,7 @@ public class Titleparts extends AbstractTemplateFunction {
 			while (firstSegment < 0) {
 				indx = pagename.lastIndexOf('/', --indx);
 				if (indx < 0) {
-					return "";
+					return pagename;
 				}
 				firstSegment++;
 			}
