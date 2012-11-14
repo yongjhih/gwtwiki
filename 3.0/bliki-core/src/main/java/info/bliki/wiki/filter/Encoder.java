@@ -399,14 +399,16 @@ public class Encoder {
 	 *            whether '_' should be seen as whitespace or not
 	 * @param whiteSpaceChar
 	 *            the character to replace whitespace with
+	 * @param firstCharacterAsUpperCase
+	 *          if <code>true</code> convert the first of the title to upper case
 	 * 
 	 * @return a normalised title
 	 */
     public static String normaliseTitle(final String value, boolean underScoreIsWhitespace,
-    		char whiteSpaceChar) {
+    		char whiteSpaceChar, boolean firstCharacterAsUpperCase) {
         StringBuilder sb = new StringBuilder(value.length());
         boolean whiteSpace = true;
-        boolean first = true;
+        boolean first = firstCharacterAsUpperCase;
         for (int i = 0; i < value.length(); ++i) {
             char c = value.charAt(i);
             switch (c) {
