@@ -17,6 +17,7 @@
 package info.bliki.wiki.filter;
 
 import info.bliki.wiki.model.IWikiModel;
+import info.bliki.wiki.template.Titleparts;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -445,9 +446,70 @@ public class MagicWord {
 			return getSubjectpage(parameter, model, hasParameter);
 		} else if (name.equals(MAGIC_SUBJECT_PAGE_NAME_E) || name.equals(MAGIC_ARTICLE_PAGE_NAME_E)) {
 			return model.encodeTitleToUrl(getSubjectpage(parameter, model, hasParameter), true);
+		} else if (name.equals(MAGIC_BASE_PAGE_NAME)) {
+			return getBasePageName(parameter, model, hasParameter);
+		} else if (name.equals(MAGIC_BASE_PAGE_NAME_E)) {
+			return model.encodeTitleToUrl(getBasePageName(parameter, model, hasParameter), true);
+		} else if (name.equals(MAGIC_SUB_PAGE_NAME)) {
+			return getSubPageName(parameter, model, hasParameter);
+		} else if (name.equals(MAGIC_SUB_PAGE_NAME_E)) {
+			return model.encodeTitleToUrl(getSubPageName(parameter, model, hasParameter), false);
 		}
 
 		return name;
+	}
+
+	/**
+	 * Gets the sub page name of a given non-<tt>null</tt> parameter or the
+	 * current model's pagename and namespace.
+	 * 
+	 * @param parameter
+	 *            the parameter of the magic word
+	 * @param model
+	 *            the model being used
+	 * @param hasParameter
+	 *            whether a parameter was given or not
+	 * 
+	 * @return the sub page name (or the pagename if there is no sub-page)
+	 */
+	protected static String getSubPageName(String parameter, IWikiModel model,
+			boolean hasParameter) {
+		String pagename = getPagenameHelper(parameter, model, hasParameter);
+		if (pagename != null) {
+			return Titleparts.getTitleparts(pagename, 0, -1);
+		} else {
+			return "";
+		}
+	}
+
+	/**
+	 * Gets the base page name of a given non-<tt>null</tt> parameter or the
+	 * current model's pagename and namespace.
+	 * 
+	 * @param parameter
+	 *            the parameter of the magic word
+	 * @param model
+	 *            the model being used
+	 * @param hasParameter
+	 *            whether a parameter was given or not
+	 * 
+	 * @return the base page name
+	 */
+	protected static String getBasePageName(String parameter, IWikiModel model,
+			boolean hasParameter) {
+		String pagename = getPagenameHelper(parameter, model, hasParameter);
+		if (pagename != null) {
+			// note: titleparts even strips off if there is no subpage - in this
+			// case the result is an empty string
+			final String basePagename = Titleparts.getTitleparts(pagename, -1, 1);
+			if (pagename.length() != 0 && basePagename.length() == 0) {
+				return pagename;
+			} else {
+				return basePagename;
+			}
+		} else {
+			return "";
+		}
 	}
 
 	/**
@@ -678,8 +740,8 @@ public class MagicWord {
 	 * @param hasParameter
 	 *            whether a parameter was given or not
 	 * 
-	 * @return the extracted pagename or <tt>null</tt> if the parameter was
-	 *         empty
+	 * @return a 2-element array with the namespace (index 0) and the page title
+	 *         (index 1) or <tt>null</tt> if the parameter was empty
 	 */
 	protected static String[] getPagenameHelper2(String parameter, IWikiModel model, boolean hasParameter) {
 		if (hasParameter) {

@@ -1006,6 +1006,122 @@ public class TemplateParserTest extends FilterTestSupport {
 		assertEquals("Template:Sandbox", wikiModel.parseTemplates("{{SUBJECTPAGENAMEE:Template talk:Sandbox}}", false));
 	}
 
+	public void testBASEPAGENAME001() {
+		wikiModel.setPageName("MyPage");
+		wikiModel.setNamespaceName("");
+		assertEquals("MyPage", wikiModel.parseTemplates("{{BASEPAGENAME}}", false));
+	}
+
+	public void testBASEPAGENAME002() {
+		wikiModel.setPageName("MyPage/foo");
+		wikiModel.setNamespaceName("");
+		assertEquals("MyPage", wikiModel.parseTemplates("{{BASEPAGENAME}}", false));
+	}
+
+	public void testBASEPAGENAME003() {
+		wikiModel.setPageName("MyPage/foo/bar");
+		wikiModel.setNamespaceName("");
+		assertEquals("MyPage/foo", wikiModel.parseTemplates("{{BASEPAGENAME}}", false));
+	}
+
+	public void testBASEPAGENAME004() {
+		assertEquals("", wikiModel.parseTemplates("{{BASEPAGENAME:}}", false));
+		assertEquals("Title", wikiModel.parseTemplates("{{BASEPAGENAME:Talk:Title}}", false));
+		assertEquals("Title", wikiModel.parseTemplates("{{BASEPAGENAME:Talk:title}}", false));
+		assertEquals("Title", wikiModel.parseTemplates("{{BASEPAGENAME:Talk:Title/foo}}", false));
+		assertEquals("Title/foo", wikiModel.parseTemplates("{{BASEPAGENAME:Talk:Title/foo/bar}}", false));
+		assertEquals("Title/foo/bar", wikiModel.parseTemplates("{{BASEPAGENAME:Talk:Title/foo/bar/baz}}", false));
+		assertEquals("Title 2/foo/bar", wikiModel.parseTemplates("{{BASEPAGENAME:Talk:Title 2/foo/bar/baz}}", false));
+		assertEquals("Bad:Title 2/foo/bar", wikiModel.parseTemplates("{{BASEPAGENAME:Bad:Title 2/foo/bar/baz}}", false));
+	}
+
+	public void testBASEPAGENAMEE001() {
+		wikiModel.setPageName("MyPage");
+		wikiModel.setNamespaceName("");
+		assertEquals("MyPage", wikiModel.parseTemplates("{{BASEPAGENAMEE}}", false));
+	}
+
+	public void testBASEPAGENAMEE002() {
+		wikiModel.setPageName("MyPage/foo");
+		wikiModel.setNamespaceName("");
+		assertEquals("MyPage", wikiModel.parseTemplates("{{BASEPAGENAMEE}}", false));
+	}
+
+	public void testBASEPAGENAMEE003() {
+		wikiModel.setPageName("MyPage/foo/bar");
+		wikiModel.setNamespaceName("");
+		assertEquals("MyPage/foo", wikiModel.parseTemplates("{{BASEPAGENAMEE}}", false));
+	}
+
+	public void testBASEPAGENAMEE004() {
+		assertEquals("", wikiModel.parseTemplates("{{BASEPAGENAMEE:}}", false));
+		assertEquals("Title", wikiModel.parseTemplates("{{BASEPAGENAMEE:Talk:Title}}", false));
+		assertEquals("Title", wikiModel.parseTemplates("{{BASEPAGENAMEE:Talk:title}}", false));
+		assertEquals("Title", wikiModel.parseTemplates("{{BASEPAGENAMEE:Talk:Title/foo}}", false));
+		assertEquals("Title/foo", wikiModel.parseTemplates("{{BASEPAGENAMEE:Talk:Title/foo/bar}}", false));
+		assertEquals("Title/foo/bar", wikiModel.parseTemplates("{{BASEPAGENAMEE:Talk:Title/foo/bar/baz}}", false));
+		assertEquals("Title_2/foo/bar", wikiModel.parseTemplates("{{BASEPAGENAMEE:Talk:Title 2/foo/bar/baz}}", false));
+		assertEquals("Bad:Title_2/foo/bar", wikiModel.parseTemplates("{{BASEPAGENAMEE:Bad:Title 2/foo/bar/baz}}", false));
+	}
+
+	public void testSUBPAGENAME001() {
+		wikiModel.setPageName("MyPage");
+		wikiModel.setNamespaceName("");
+		assertEquals("MyPage", wikiModel.parseTemplates("{{SUBPAGENAME}}", false));
+	}
+
+	public void testSUBPAGENAME002() {
+		wikiModel.setPageName("MyPage/foo");
+		wikiModel.setNamespaceName("");
+		assertEquals("foo", wikiModel.parseTemplates("{{SUBPAGENAME}}", false));
+	}
+
+	public void testSUBPAGENAME003() {
+		wikiModel.setPageName("MyPage/foo/bar");
+		wikiModel.setNamespaceName("");
+		assertEquals("bar", wikiModel.parseTemplates("{{SUBPAGENAME}}", false));
+	}
+
+	public void testSUBPAGENAME004() {
+		assertEquals("", wikiModel.parseTemplates("{{SUBPAGENAME:}}", false));
+		assertEquals("Title", wikiModel.parseTemplates("{{SUBPAGENAME:Talk:Title}}", false));
+		assertEquals("Title", wikiModel.parseTemplates("{{SUBPAGENAME:Talk:title}}", false));
+		assertEquals("foo", wikiModel.parseTemplates("{{SUBPAGENAME:Talk:Title/foo}}", false));
+		assertEquals("bar", wikiModel.parseTemplates("{{SUBPAGENAME:Talk:Title/foo/bar}}", false));
+		assertEquals("baz", wikiModel.parseTemplates("{{SUBPAGENAME:Talk:Title/foo/bar/baz}}", false));
+		assertEquals("baz 2", wikiModel.parseTemplates("{{SUBPAGENAME:Talk:Title 2/foo/bar/baz 2}}", false));
+		assertEquals("baz 2", wikiModel.parseTemplates("{{SUBPAGENAME:Bad:Title 2/foo/bar/baz 2}}", false));
+	}
+
+	public void testSUBPAGENAMEE001() {
+		wikiModel.setPageName("MyPage");
+		wikiModel.setNamespaceName("");
+		assertEquals("MyPage", wikiModel.parseTemplates("{{SUBPAGENAMEE}}", false));
+	}
+
+	public void testSUBPAGENAMEE002() {
+		wikiModel.setPageName("MyPage/foo");
+		wikiModel.setNamespaceName("");
+		assertEquals("foo", wikiModel.parseTemplates("{{SUBPAGENAMEE}}", false));
+	}
+
+	public void testSUBPAGENAMEE003() {
+		wikiModel.setPageName("MyPage/foo/bar");
+		wikiModel.setNamespaceName("");
+		assertEquals("bar", wikiModel.parseTemplates("{{SUBPAGENAMEE}}", false));
+	}
+
+	public void testSUBPAGENAMEE004() {
+		assertEquals("", wikiModel.parseTemplates("{{SUBPAGENAMEE:}}", false));
+		assertEquals("Title", wikiModel.parseTemplates("{{SUBPAGENAMEE:Talk:Title}}", false));
+		assertEquals("Title", wikiModel.parseTemplates("{{SUBPAGENAMEE:Talk:title}}", false));
+		assertEquals("foo", wikiModel.parseTemplates("{{SUBPAGENAMEE:Talk:Title/foo}}", false));
+		assertEquals("bar", wikiModel.parseTemplates("{{SUBPAGENAMEE:Talk:Title/foo/bar}}", false));
+		assertEquals("baz", wikiModel.parseTemplates("{{SUBPAGENAMEE:Talk:Title/foo/bar/baz}}", false));
+		assertEquals("baz_2", wikiModel.parseTemplates("{{SUBPAGENAMEE:Talk:Title 2/foo/bar/baz 2}}", false));
+		assertEquals("baz_2", wikiModel.parseTemplates("{{SUBPAGENAMEE:Bad:Title 2/foo/bar/baz 2}}", false));
+	}
+
 	public void testURLEncode001() {
 		assertEquals("%22%23%24%25%26%27%28%29*%2C%3B%3F%5B%5D%5E%60%7B%7D", wikiModel.parseTemplates(
 				"{{urlencode: \"#$%&'()*,;?[]^`{}}}", false));
