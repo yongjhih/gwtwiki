@@ -591,29 +591,33 @@ public class Namespace implements INamespace {
 		}
 	}
 
-	private void initializeEnglishAliases() {
-		if (fResourceBundleEn == null) {
+	protected void initializeAliases(ResourceBundle fResourceBundle) {
+		if (fResourceBundle == null) {
 			return;
 		}
-		extractAliasFromResource(fResourceBundleEn, Messages.WIKI_API_MEDIA1, Messages.WIKI_API_MEDIA2, MEDIA_NAMESPACE_KEY);
-		extractAliasFromResource(fResourceBundleEn, Messages.WIKI_API_SPECIAL1, Messages.WIKI_API_SPECIAL2, SPECIAL_NAMESPACE_KEY);
-		extractAliasFromResource(fResourceBundleEn, Messages.WIKI_API_TALK1, Messages.WIKI_API_TALK2, TALK_NAMESPACE_KEY);
-		extractAliasFromResource(fResourceBundleEn, Messages.WIKI_API_USER1, Messages.WIKI_API_USER2, USER_NAMESPACE_KEY);
-		extractAliasFromResource(fResourceBundleEn, Messages.WIKI_API_USERTALK1, Messages.WIKI_API_USERTALK2, USER_TALK_NAMESPACE_KEY);
-		extractAliasFromResource(fResourceBundleEn, Messages.WIKI_API_META1, Messages.WIKI_API_META2, PROJECT_NAMESPACE_KEY);
-		extractAliasFromResource(fResourceBundleEn, Messages.WIKI_API_METATALK1, Messages.WIKI_API_METATALK2, PROJECT_TALK_NAMESPACE_KEY);
-		extractAliasFromResource(fResourceBundleEn, Messages.WIKI_API_IMAGE1, Messages.WIKI_API_IMAGE2, FILE_NAMESPACE_KEY);
-		extractAliasFromResource(fResourceBundleEn, Messages.WIKI_API_IMAGETALK1, Messages.WIKI_API_IMAGETALK2, FILE_TALK_NAMESPACE_KEY);
-		extractAliasFromResource(fResourceBundleEn, Messages.WIKI_API_MEDIAWIKI1, Messages.WIKI_API_MEDIAWIKI2, MEDIAWIKI_NAMESPACE_KEY);
-		extractAliasFromResource(fResourceBundleEn, Messages.WIKI_API_MEDIAWIKITALK1, Messages.WIKI_API_MEDIAWIKITALK2, MEDIAWIKI_TALK_NAMESPACE_KEY);
-		extractAliasFromResource(fResourceBundleEn, Messages.WIKI_API_TEMPLATE1, Messages.WIKI_API_TEMPLATE2, TEMPLATE_NAMESPACE_KEY);
-		extractAliasFromResource(fResourceBundleEn, Messages.WIKI_API_TEMPLATETALK1, Messages.WIKI_API_TEMPLATETALK2, TEMPLATE_TALK_NAMESPACE_KEY);
-		extractAliasFromResource(fResourceBundleEn, Messages.WIKI_API_HELP1, Messages.WIKI_API_HELP2, HELP_NAMESPACE_KEY);
-		extractAliasFromResource(fResourceBundleEn, Messages.WIKI_API_HELPTALK1, Messages.WIKI_API_HELPTALK2, HELP_TALK_NAMESPACE_KEY);
-		extractAliasFromResource(fResourceBundleEn, Messages.WIKI_API_CATEGORY1, Messages.WIKI_API_CATEGORY2, CATEGORY_NAMESPACE_KEY);
-		extractAliasFromResource(fResourceBundleEn, Messages.WIKI_API_CATEGORYTALK1, Messages.WIKI_API_CATEGORYTALK2, CATEGORY_TALK_NAMESPACE_KEY);
-		extractAliasFromResource(fResourceBundleEn, Messages.WIKI_API_PORTAL1, Messages.WIKI_API_PORTAL2, PORTAL_NAMESPACE_KEY);
-		extractAliasFromResource(fResourceBundleEn, Messages.WIKI_API_PORTALTALK1, Messages.WIKI_API_PORTALTALK2, PORTAL_TALK_NAMESPACE_KEY);
+		extractAliasFromResource(fResourceBundle, Messages.WIKI_API_MEDIA1, Messages.WIKI_API_MEDIA2, MEDIA_NAMESPACE_KEY);
+		extractAliasFromResource(fResourceBundle, Messages.WIKI_API_SPECIAL1, Messages.WIKI_API_SPECIAL2, SPECIAL_NAMESPACE_KEY);
+		extractAliasFromResource(fResourceBundle, Messages.WIKI_API_TALK1, Messages.WIKI_API_TALK2, TALK_NAMESPACE_KEY);
+		extractAliasFromResource(fResourceBundle, Messages.WIKI_API_USER1, Messages.WIKI_API_USER2, USER_NAMESPACE_KEY);
+		extractAliasFromResource(fResourceBundle, Messages.WIKI_API_USERTALK1, Messages.WIKI_API_USERTALK2, USER_TALK_NAMESPACE_KEY);
+		extractAliasFromResource(fResourceBundle, Messages.WIKI_API_META1, Messages.WIKI_API_META2, PROJECT_NAMESPACE_KEY);
+		extractAliasFromResource(fResourceBundle, Messages.WIKI_API_METATALK1, Messages.WIKI_API_METATALK2, PROJECT_TALK_NAMESPACE_KEY);
+		extractAliasFromResource(fResourceBundle, Messages.WIKI_API_IMAGE1, Messages.WIKI_API_IMAGE2, FILE_NAMESPACE_KEY);
+		extractAliasFromResource(fResourceBundle, Messages.WIKI_API_IMAGETALK1, Messages.WIKI_API_IMAGETALK2, FILE_TALK_NAMESPACE_KEY);
+		extractAliasFromResource(fResourceBundle, Messages.WIKI_API_MEDIAWIKI1, Messages.WIKI_API_MEDIAWIKI2, MEDIAWIKI_NAMESPACE_KEY);
+		extractAliasFromResource(fResourceBundle, Messages.WIKI_API_MEDIAWIKITALK1, Messages.WIKI_API_MEDIAWIKITALK2, MEDIAWIKI_TALK_NAMESPACE_KEY);
+		extractAliasFromResource(fResourceBundle, Messages.WIKI_API_TEMPLATE1, Messages.WIKI_API_TEMPLATE2, TEMPLATE_NAMESPACE_KEY);
+		extractAliasFromResource(fResourceBundle, Messages.WIKI_API_TEMPLATETALK1, Messages.WIKI_API_TEMPLATETALK2, TEMPLATE_TALK_NAMESPACE_KEY);
+		extractAliasFromResource(fResourceBundle, Messages.WIKI_API_HELP1, Messages.WIKI_API_HELP2, HELP_NAMESPACE_KEY);
+		extractAliasFromResource(fResourceBundle, Messages.WIKI_API_HELPTALK1, Messages.WIKI_API_HELPTALK2, HELP_TALK_NAMESPACE_KEY);
+		extractAliasFromResource(fResourceBundle, Messages.WIKI_API_CATEGORY1, Messages.WIKI_API_CATEGORY2, CATEGORY_NAMESPACE_KEY);
+		extractAliasFromResource(fResourceBundle, Messages.WIKI_API_CATEGORYTALK1, Messages.WIKI_API_CATEGORYTALK2, CATEGORY_TALK_NAMESPACE_KEY);
+		extractAliasFromResource(fResourceBundle, Messages.WIKI_API_PORTAL1, Messages.WIKI_API_PORTAL2, PORTAL_NAMESPACE_KEY);
+		extractAliasFromResource(fResourceBundle, Messages.WIKI_API_PORTALTALK1, Messages.WIKI_API_PORTALTALK2, PORTAL_TALK_NAMESPACE_KEY);
+	}
+
+	private void initializeEnglishAliases() {
+		initializeAliases(fResourceBundleEn);
 		
 		// Aliases as defined by
 		// https://en.wikipedia.org/wiki/Wikipedia:Namespace#Aliases
