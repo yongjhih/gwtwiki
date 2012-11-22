@@ -77,7 +77,7 @@ public class HTTPUrlFilterTest extends FilterTestSupport {
 		assertEquals(
 				"\n"
 						+ "<ol>\n"
-						+ "<li>Bare URL: <a class=\"externallink\" href=\"http://www.nupedia.com/\" rel=\"nofollow\" title=\"http://www.nupedia.com/\">http://www.nupedia.com/</a></li></ol>",
+						+ "<li>Bare URL: <a class=\"externallink\" href=\"http://www.nupedia.com/\" rel=\"nofollow\" title=\"http://www.nupedia.com/\">http://www.nupedia.com/</a></li>\n</ol>",
 				wikiModel.render("# Bare URL: http://www.nupedia.com/", false));
 	}
 
@@ -114,11 +114,11 @@ public class HTTPUrlFilterTest extends FilterTestSupport {
 						+ "<p>Note that the numbers are not automatically made clickable until they are in this format:</p>\n"
 						+ "\n"
 						+ "<dl>\n"
-						+ "<dd><a class=\"external text\" href=\"http://www.amazon.com/exec/obidos/ASIN/1413304540\" rel=\"nofollow\" title=\"http://www.amazon.com/exec/obidos/ASIN/1413304540\">ISBN 1413304540</a></dd></dl>\n"
+						+ "<dd><a class=\"external text\" href=\"http://www.amazon.com/exec/obidos/ASIN/1413304540\" rel=\"nofollow\" title=\"http://www.amazon.com/exec/obidos/ASIN/1413304540\">ISBN 1413304540</a></dd>\n</dl>\n"
 						+ "\n"
 						+ "\n"
 						+ "<dl>\n"
-						+ "<dd><a class=\"external text\" href=\"http://www.amazon.com/exec/obidos/ASIN/9781413304541\" rel=\"nofollow\" title=\"http://www.amazon.com/exec/obidos/ASIN/9781413304541\">ISBN 978-1413304541</a> <b><i>or</i></b> <a class=\"external text\" href=\"http://www.amazon.com/exec/obidos/ASIN/9781413304541\" rel=\"nofollow\" title=\"http://www.amazon.com/exec/obidos/ASIN/9781413304541\">ISBN 9781413304541</a> (without the dash)</dd></dl>",
+						+ "<dd><a class=\"external text\" href=\"http://www.amazon.com/exec/obidos/ASIN/9781413304541\" rel=\"nofollow\" title=\"http://www.amazon.com/exec/obidos/ASIN/9781413304541\">ISBN 978-1413304541</a> <b><i>or</i></b> <a class=\"external text\" href=\"http://www.amazon.com/exec/obidos/ASIN/9781413304541\" rel=\"nofollow\" title=\"http://www.amazon.com/exec/obidos/ASIN/9781413304541\">ISBN 9781413304541</a> (without the dash)</dd>\n</dl>",
 				wikiModel.render("Note that the numbers are not automatically made clickable until they are in this format:\n" + "\n"
 						+ ":ISBN 1413304540\n" + "\n" + ":ISBN 978-1413304541 \'\'\'\'\'or\'\'\'\'\' ISBN 9781413304541 (without the dash)",
 						false));

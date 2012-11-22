@@ -16,7 +16,7 @@ public class DefinitionListFilterTest extends FilterTestSupport {
 		assertEquals(
 				"\n" + 
 				"<dl>\n" + 
-				"<dd><i>There is also an <a href=\"http://www.bliki.info/wiki/Asteroid\" title=\"asteroid\">asteroid</a> <a href=\"http://www.bliki.info/wiki/9969_Braille\" title=\"9969 Braille\">9969 Braille</a></i></dd></dl>",
+				"<dd><i>There is also an <a href=\"http://www.bliki.info/wiki/Asteroid\" title=\"asteroid\">asteroid</a> <a href=\"http://www.bliki.info/wiki/9969_Braille\" title=\"9969 Braille\">9969 Braille</a></i></dd>\n</dl>",
 				wikiModel.render(":''There is also an [[asteroid]] [[9969 Braille]]''", false));
 	}
 
@@ -24,21 +24,21 @@ public class DefinitionListFilterTest extends FilterTestSupport {
 		assertEquals("\n" + 
 				"<dl>\n" + 
 				"<dt>name</dt>\n" + 
-				"<dd>Definition</dd></dl>", wikiModel.render(";name:Definition", false));
+				"<dd>Definition</dd>\n</dl>", wikiModel.render(";name:Definition", false));
 	}
 
 	public void testDefinitionList2() {
 		assertEquals("\n" + 
 				"<dl>\n" + 
 				"<dt>name </dt>\n" + 
-				"<dd>Definition</dd></dl>", wikiModel.render("; name : Definition", false));
+				"<dd>Definition</dd>\n</dl>", wikiModel.render("; name : Definition", false));
 	}
 	 
 	public void testDefinitionList3() {
 		assertEquals("\n" + 
 				"<dl>\n" + 
 				"<dt>foo</dt>\n" + 
-				"<dd>12:30</dd></dl>", wikiModel.render(";foo:12:30", false));
+				"<dd>12:30</dd>\n</dl>", wikiModel.render(";foo:12:30", false));
 	}
 
 	public void testDefinitionList10() {
@@ -46,7 +46,7 @@ public class DefinitionListFilterTest extends FilterTestSupport {
 				"<dl>\n" + 
 				"<dd>a simple test\n" + 
 				"  x+y\n" + 
-				"  </dd></dl>\n" + 
+				"  </dd>\n</dl>\n" + 
 				"<p>test test</p>", wikiModel
 				.render(":a simple test<nowiki>\n" + "  x+y\n" + "  </nowiki>\n" + "test test", false));
 	}
@@ -54,7 +54,7 @@ public class DefinitionListFilterTest extends FilterTestSupport {
 	public void testDefinitionList11() {
 		assertEquals("\n" + 
 				"<dl>\n" + 
-				"<dd>a simple test<span class=\"math\">ein text</span></dd></dl>\n" + 
+				"<dd>a simple test<span class=\"math\">ein text</span></dd>\n</dl>\n" + 
 				"<pre>" + 
 				" x+y\n" + 
 				" \n" + 
@@ -67,7 +67,7 @@ public class DefinitionListFilterTest extends FilterTestSupport {
 				"<dl>\n" + 
 				"<dd>blabla\n" + 
 				"<dl>\n" + 
-				"<dd>blablabla</dd></dl></dd></dl>\n" + 
+				"<dd>blablabla</dd>\n</dl></dd>\n</dl>\n" + 
 				"<pre>" + 
 				"test it\n" + 
 				"\n" + 

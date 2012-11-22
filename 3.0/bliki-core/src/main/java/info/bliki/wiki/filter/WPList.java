@@ -130,9 +130,9 @@ public class WPList extends WPTag {
 					InternalList subList = (InternalList) element;
 					beginHTMLTag(buf, subList);
 					renderSubListHTML(subList, converter, buf, wikiModel);
-					// if (NEW_LINES) {
-					// buf.append('\n');
-					// }
+					if (NEW_LINES) {
+						buf.append('\n');
+					}
 					if (subList.fChar == UL_CHAR) {
 						// bullet list
 						buf.append("</ul>");
@@ -170,6 +170,9 @@ public class WPList extends WPTag {
 	}
 
 	private void endHTMLTag(Appendable buf, InternalList subList) throws IOException {
+		if (NEW_LINES) {
+			buf.append('\n');
+		}
 		if (subList.fChar == UL_CHAR) {
 			// bullet list
 			buf.append("</ul>");

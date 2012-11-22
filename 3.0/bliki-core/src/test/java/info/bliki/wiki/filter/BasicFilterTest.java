@@ -94,7 +94,7 @@ public class BasicFilterTest extends FilterTestSupport {
 	}
 
 	public void testSimpleList() {
-		assertEquals("\n" + "<ul>\n" + "<li>Item 1</li>\n" + "<li>Item 2</li></ul>", wikiModel.render("* Item 1\n" + "* Item 2", false));
+		assertEquals("\n" + "<ul>\n" + "<li>Item 1</li>\n" + "<li>Item 2</li>\n</ul>", wikiModel.render("* Item 1\n" + "* Item 2", false));
 	}
 
 	public void testSimpleTable() {

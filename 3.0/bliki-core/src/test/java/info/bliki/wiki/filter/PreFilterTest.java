@@ -134,7 +134,7 @@ public class PreFilterTest extends FilterTestSupport {
 
 	public void testPre3() {
 		assertEquals("\n" + "\n" + "<ul>\n" + "<li>line 1 ...</li>\n" + "<li>line 2 &#60; test wrong tag</li>\n"
-				+ "<li>line 3 &#60; test wrong tag</li></ul>\n" + "\n" + "<pre>" + "preformatted text\n" + "</pre>", wikiModel.render(
+				+ "<li>line 3 &#60; test wrong tag</li>\n</ul>\n" + "\n" + "<pre>" + "preformatted text\n" + "</pre>", wikiModel.render(
 				"\n" + "* line 1 ...\n" + "* line 2 < test wrong tag\n" + "* line 3 < test wrong tag\n" + "\n" + "<pre>"
 						+ "preformatted text\n" + "</pre>", false));
 	}

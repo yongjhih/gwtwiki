@@ -21,7 +21,7 @@ public class WPLinkFilterTest extends FilterTestSupport {
 						+ "<ol>\n"
 						+ "<li>\n"
 						+ "<ol>\n"
-						+ "<li><a href=\"http://www.bliki.info/wiki/Using_Eclipse_Wikipedia_Editor:Getting_Started#Features\" title=\"Using Eclipse Wikipedia Editor:Getting Started\">Features</a></li></ol></li></ol>",
+						+ "<li><a href=\"http://www.bliki.info/wiki/Using_Eclipse_Wikipedia_Editor:Getting_Started#Features\" title=\"Using Eclipse Wikipedia Editor:Getting Started\">Features</a></li>\n</ol></li>\n</ol>",
 				wikiModel.render("##[[Using Eclipse Wikipedia Editor:Getting Started#Features|Features]]", false));
 	}
 
@@ -112,7 +112,7 @@ public class WPLinkFilterTest extends FilterTestSupport {
 	}
 
 	public void testLink11() {
-		assertEquals("\n" + "<p>test\n" + "</p>\n" + "<ul>\n" + "<li>blabla[[List of cities by country#Morocco|</li></ul>\n"
+		assertEquals("\n" + "<p>test\n" + "</p>\n" + "<ul>\n" + "<li>blabla[[List of cities by country#Morocco|</li>\n</ul>\n"
 				+ "<p>Cities in Morocco]]</p>", wikiModel.render("test\n*blabla[[List of cities by country#Morocco|\nCities in Morocco]]",
 				false));
 	}
@@ -173,7 +173,7 @@ public class WPLinkFilterTest extends FilterTestSupport {
 		assertEquals(
 				"\n"
 						+ "<ul>\n"
-						+ "<li><a href=\"http://www.bliki.info/wiki/Special:Specialpages\" title=\"Special:Specialpages\">Special Pages</a></li></ul>",
+						+ "<li><a href=\"http://www.bliki.info/wiki/Special:Specialpages\" title=\"Special:Specialpages\">Special Pages</a></li>\n</ul>",
 				wikiModel.render("* [[Special:Specialpages|Special Pages]]", false));
 	}
 
