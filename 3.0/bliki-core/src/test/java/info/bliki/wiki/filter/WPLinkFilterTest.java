@@ -204,7 +204,7 @@ public class WPLinkFilterTest extends FilterTestSupport {
 	}
 
 	public void testRedirect04() {
-		assertEquals(" \n" + "<pre>\n" + "Hello World! \n" + "</pre>", wikiModel.render(" \n {{TestRedirect1}} ", false));
+		assertEquals(" \n" + "<pre>" + "Hello World! \n" + "</pre>", wikiModel.render(" \n {{TestRedirect1}} ", false));
 	}
 
 	public void testRedirect05() {

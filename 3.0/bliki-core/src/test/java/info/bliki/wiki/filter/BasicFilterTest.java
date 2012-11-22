@@ -137,14 +137,14 @@ public class BasicFilterTest extends FilterTestSupport {
 	}
 
 	public void testPreBlock() {
-		assertEquals("\n<pre>\n* Lists are easy to do:\n" + "** start every line\n" + "* with a star\n" + "** more stars mean\n"
+		assertEquals("\n<pre>* Lists are easy to do:\n" + "** start every line\n" + "* with a star\n" + "** more stars mean\n"
 				+ "*** deeper levels\n</pre>", wikiModel.render(" * Lists are easy to do:\n" + " ** start every line\n"
 				+ " * with a star\n" + " ** more stars mean\n" + " *** deeper levels", false));
 	}
 
 	public void testNestedPreBlock() {
 		assertEquals("\n" + "<div style=\"page-break-inside: avoid;\">\n" + "<table border=\"1\" width=\"79%\">\n" + "<tr>\n"
-				+ "<th>wikitext</th></tr>\n" + "<tr>\n" + "<td>\n" + "<pre>\n* Lists are easy to do:\n" + "** start every line\n"
+				+ "<th>wikitext</th></tr>\n" + "<tr>\n" + "<td>\n" + "<pre>* Lists are easy to do:\n" + "** start every line\n"
 				+ "* with a star\n" + "** more stars mean\n" + "*** deeper levels\n</pre></td></tr></table></div>", wikiModel.render(
 				"{|border=1 width=\"79%\"\n" + "!wikitext\n" + "|-\n" + "|\n" + " * Lists are easy to do:\n" + " ** start every line\n"
 						+ " * with a star\n" + " ** more stars mean\n" + " *** deeper levels\n" + "|}", false));

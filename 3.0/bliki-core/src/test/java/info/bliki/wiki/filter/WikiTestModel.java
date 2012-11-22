@@ -62,7 +62,7 @@ public class WikiTestModel extends WikiModel {
 			+ "</nowiki>\n"
 			+ "\n"
 			+ "== Beispiel ==\n"
-			+ "<pre>\n"
+			+ "<pre>"
 			+ "{{AdT-Vorschlag\n"
 			+ " | DATUM            = 29.07.2010\n"
 			+ " | LEMMA            = Satz des Pythagoras\n"
@@ -1394,7 +1394,7 @@ public class WikiTestModel extends WikiModel {
 
 	public final static String CAT = "[[:Category:{{{1}}}]]<noinclude>\n"
 			+ "{{Interwikitmp-grp ineligible|CAT|Commons|Wiktionary}}\n" + "Creates a link to the specified category.\n" + "\n"
-			+ "\'\'\'Example\'\'\':\n" + "<pre>\n" + "{{Cat|stubs}}\n" + "</pre>\n" + "{{Cat|stubs}}\n" + "\n" + "==See also==\n"
+			+ "\'\'\'Example\'\'\':\n" + "<pre>" + "{{Cat|stubs}}\n" + "</pre>\n" + "{{Cat|stubs}}\n" + "\n" + "==See also==\n"
 			+ "* {{Tl|Cl}}\n" + "* {{Tl|Ccl}}\n" + "* {{Tl|Lcs}}\n" + "\n" + "[[sl:predloga:kat]]\n" + "</noinclude>\n" + "";
 
 	public final static String CITE_WEB_TEXT = "<includeonly>{{\n"

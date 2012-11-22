@@ -275,7 +275,7 @@ public class TemplateFilterTest extends FilterTestSupport {
 						+ "<th>Opera </th>\n"
 						+ "<th>Safari </th>\n"
 						+ "<th>Google Chrome</th></tr></table></div>\n"
-						+ "<pre>\n"
+						+ "<pre>"
 						+ "<ol class=\"references\">\n"
 						+ "<li id=\"_note-1\"><b><a href=\"#_ref-1\" title=\"\">&#8593;</a></b> John Resig. <i><a class=\"externallink\" href=\"http://ejohn.org/blog/versions-of-javascript\" rel=\"nofollow\" title=\"http://ejohn.org/blog/versions-of-javascript\">Versions of JavaScript</a></i>. Ejohn.org. Abgerufen am <a href=\"http://www.bliki.info/wiki/Template:safesubst:#Switch:none\" title=\"Template:safesubst:\">Template:safesubst:</a>.</li></ol>\n"
 						+ "</pre>",
@@ -369,7 +369,7 @@ public class TemplateFilterTest extends FilterTestSupport {
 			+ "{{{disambiguation|}}}}}}}}}|articles|{{#if:{{{mulcat|}}}|categories|an\n" + "article}}}}}} on:\n";
 
 	public void testNestedIf02() {
-		assertEquals("\n" + "<pre>\nan\n</pre>\n" + "<p>article on:\n" + "</p>" + "", wikiModel.render(TEST_STRING_02, false));
+		assertEquals("\n" + "<pre>an\n</pre>\n" + "<p>article on:\n" + "</p>" + "", wikiModel.render(TEST_STRING_02, false));
 	}
 
 	public void testParserFunctionLC001() {
@@ -1146,7 +1146,7 @@ public class TemplateFilterTest extends FilterTestSupport {
 	public void testTemplateWithNewlines001() {
 		assertEquals("\n" + 
 				"<p>{{Serie de TV</p>\n" + 
-				"<pre>\n" + 
+				"<pre>" + 
 				" Nombre        = FabulÃ³polis\n" + 
 				"</pre>\n" + 
 				"<p>}}</p>", 

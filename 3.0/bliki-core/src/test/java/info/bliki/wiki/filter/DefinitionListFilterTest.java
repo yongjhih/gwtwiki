@@ -55,7 +55,7 @@ public class DefinitionListFilterTest extends FilterTestSupport {
 		assertEquals("\n" + 
 				"<dl>\n" + 
 				"<dd>a simple test<span class=\"math\">ein text</span></dd></dl>\n" + 
-				"<pre>\n" + 
+				"<pre>" + 
 				" x+y\n" + 
 				" \n" + 
 				"</pre>\n" + 
@@ -68,7 +68,7 @@ public class DefinitionListFilterTest extends FilterTestSupport {
 				"<dd>blabla\n" + 
 				"<dl>\n" + 
 				"<dd>blablabla</dd></dl></dd></dl>\n" + 
-				"<pre>\n" + 
+				"<pre>" + 
 				"test it\n" + 
 				"\n" + 
 				"</pre>", wikiModel.render(":blabla\n::blablabla\n" + " test it\n", false));
