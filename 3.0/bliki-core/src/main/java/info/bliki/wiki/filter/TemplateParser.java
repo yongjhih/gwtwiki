@@ -936,18 +936,17 @@ public class TemplateParser extends AbstractParser {
 				appendContent(writer, fWhiteStart, fWhiteStartPosition, diff, true);
 			}
 			fCurrentPosition += 3;
-			if (readUntil("-->")) {
-				// end of HTML comment
+			readUntil("-->");
+			// end of HTML comment
+			if (temp >= 0) {
+				temp = readWhitespaceUntilEndOfLine(0);
 				if (temp >= 0) {
-					temp = readWhitespaceUntilEndOfLine(0);
-					if (temp >= 0) {
-						fCurrentPosition++;
-					}
+					fCurrentPosition++;
 				}
-				fWhiteStart = true;
-				fWhiteStartPosition = fCurrentPosition;
-				return true;
 			}
+			fWhiteStart = true;
+			fWhiteStartPosition = fCurrentPosition;
+			return true;
 		}
 		return false;
 	}
