@@ -1,5 +1,6 @@
 package info.bliki.wiki.filter;
 
+import java.util.HashMap;
 import java.util.Locale;
 
 import junit.framework.Test;
@@ -1754,5 +1755,12 @@ public class TemplateParserTest extends FilterTestSupport {
 	 */
 	public void testNewlineSpaces12() {
 		assertEquals("rs", wikiModel.parseTemplates("{{#switch:\n2\n|\n1 =\npq\n|\n2 =\nrs\n|\n3 =\ntu\n}}"));
+	}
+
+	public void testCategory001() {
+		assertEquals("", wikiModel.render("[[Category:Main Page]]", false));
+		HashMap<String, String> expectedCategories = new HashMap<String, String>();
+		expectedCategories.put("Main Page", "Category:Main Page");
+		assertEquals(expectedCategories, wikiModel.getCategories());
 	}
 }
