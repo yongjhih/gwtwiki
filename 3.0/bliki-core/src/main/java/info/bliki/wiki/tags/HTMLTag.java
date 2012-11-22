@@ -84,6 +84,8 @@ public class HTMLTag extends TagNode {
 				buf.append('\n');
 				newLinesAfterTag = false;
 				newLinesAfterChildren = true;
+			} else if (name.equals("blockquote")) {
+				newLinesAfterChildren = true;
 			}
 		}
 		buf.append('<');
