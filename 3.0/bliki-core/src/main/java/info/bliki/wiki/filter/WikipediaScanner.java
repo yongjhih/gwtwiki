@@ -425,7 +425,7 @@ public class WikipediaScanner {
 						continue;
 					}
 				}
-				if (ch == '[') {
+				if (ch == '[') { 
 					int temp = findNestedEndSingle(fSource, '[', ']', fScannerPosition);
 					if (temp >= 0) {
 						fScannerPosition = temp;
@@ -1484,18 +1484,7 @@ public class WikipediaScanner {
 				WikiTagNode tagNode = parseTag(start);
 				if (tagNode != null && !tagNode.isEmptyXmlTag()) {
 					String tagName = tagNode.getTagName();
-					if (tagName.equals("nowiki")) {
-						return readUntilIgnoreCase(fScannerPosition, "</", "nowiki>");
-					} else if (tagName.equals("source")) {
-						return readUntilIgnoreCase(fScannerPosition, "</", "source>");
-					} else if (tagName.equals("math")) {
-						return readUntilIgnoreCase(fScannerPosition, "</", "math>");
-					} else if (tagName.equals("span")) {
-						return readUntilIgnoreCase(fScannerPosition, "</", "span>");
-						// <div> could be nested ?
-						// } else if (tagName.equals("div")) {
-						// return readUntilIgnoreCase(fScannerPosition, "</", "div>");
-					}
+					return readUntilIgnoreCase(fScannerPosition, "</", tagName+">");
 				}
 			}
 		} catch (IndexOutOfBoundsException e) {
