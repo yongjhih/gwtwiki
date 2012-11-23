@@ -425,6 +425,14 @@ public class WikipediaScanner {
 						continue;
 					}
 				}
+				if (ch == '[') {
+					int temp = findNestedEndSingle(fSource, '[', ']', fScannerPosition);
+					if (temp >= 0) {
+						fScannerPosition = temp;
+						ch = fSource[fScannerPosition++];
+						continue;
+					}
+				}
 				ch = fSource[fScannerPosition++];
 			}
 		} catch (IndexOutOfBoundsException e) {
@@ -726,7 +734,7 @@ public class WikipediaScanner {
 	 *          end position in <tt>srcArray</tt>
 	 * @param resultList
 	 *          the list which contains the splitted strings
-	 *
+	 * 
 	 * @return splitted strings
 	 */
 	public static List<String> splitByPipe(char[] srcArray, int currOffset, int endOffset, List<String> resultList) {
@@ -754,7 +762,8 @@ public class WikipediaScanner {
 	}
 
 	/**
-	 * Split the given <code>srcArray</code> character array by the given character.
+	 * Split the given <code>srcArray</code> character array by the given
+	 * character.
 	 * 
 	 * @param splitChar
 	 *          the character to split by
@@ -770,13 +779,12 @@ public class WikipediaScanner {
 	 *          max number of parts to split the source into (less than <tt>0</tt>
 	 *          for infinite number of parts, otherwise only values greater than
 	 *          <tt>0</tt> allowed!)
-	 *
+	 * 
 	 * @return splitted strings
 	 */
-	protected static List<String> splitByChar(final char splitChar,
-			char[] srcArray, int currOffset, int endOffset,
+	protected static List<String> splitByChar(final char splitChar, char[] srcArray, int currOffset, int endOffset,
 			List<String> resultList, final int maxParts) {
-		assert(maxParts != 0 && maxParts != 1); // this doesn't make any sense!
+		assert (maxParts != 0 && maxParts != 1); // this doesn't make any sense!
 		if (resultList == null) {
 			resultList = new ArrayList<String>();
 		}

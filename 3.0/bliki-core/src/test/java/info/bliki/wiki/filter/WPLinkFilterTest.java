@@ -112,8 +112,12 @@ public class WPLinkFilterTest extends FilterTestSupport {
 	}
 
 	public void testLink11() {
-		assertEquals("\n" + "<p>test\n" + "</p>\n" + "<ul>\n" + "<li>blabla[[List of cities by country#Morocco|</li>\n</ul>\n"
-				+ "<p>Cities in Morocco]]</p>", wikiModel.render("test\n*blabla[[List of cities by country#Morocco|\nCities in Morocco]]",
+		assertEquals("\n" + 
+				"<p>test\n" + 
+				"</p>\n" + 
+				"<ul>\n" + 
+				"<li>blabla<a href=\"http://www.bliki.info/wiki/List_of_cities_by_country#Morocco\" title=\"List of cities by country\">Cities in Morocco</a></li>\n" + 
+				"</ul>", wikiModel.render("test\n*blabla[[List of cities by country#Morocco|\nCities in Morocco]]",
 				false));
 	}
 
