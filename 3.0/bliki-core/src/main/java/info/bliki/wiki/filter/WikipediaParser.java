@@ -456,7 +456,8 @@ public class WikipediaParser extends AbstractParser implements IParser {
 					&& (fSource[++fCurrentPosition] == 'i' || fSource[fCurrentPosition] == 'I')
 					&& (fSource[++fCurrentPosition] == 'l' || fSource[fCurrentPosition] == 'L')
 					&& (fSource[++fCurrentPosition] == 't' || fSource[fCurrentPosition] == 'T')
-					&& (fSource[++fCurrentPosition] == 'o' || fSource[fCurrentPosition] == 'O')) {
+					&& (fSource[++fCurrentPosition] == 'o' || fSource[fCurrentPosition] == 'O')
+					&& fSource[fCurrentPosition+1] == ':') {
 				tempPosition += 6;
 				fCurrentCharacter = fSource[tempPosition++];
 
