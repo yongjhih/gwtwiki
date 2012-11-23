@@ -77,7 +77,7 @@ public class TemplateParserTest extends FilterTestSupport {
 	public void testOnlyicludeDemo003() {
 		assertEquals(
 				"\n"
-						+ "<p>abcdefghi</p><hr/>\n"
+						+ "<p>abcdefghi</p><hr />\n"
 						+ "\n"
 						+ "<dl>\n"
 						+ "<dt>Only active template content is above.</dt>\n</dl>\n"

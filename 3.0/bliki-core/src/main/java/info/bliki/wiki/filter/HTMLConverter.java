@@ -66,7 +66,7 @@ public class HTMLConverter implements ITextConverter {
 							EndTagToken node = (EndTagToken) item;
 							resultBuffer.append('<');
 							resultBuffer.append(node.getName());
-							resultBuffer.append("/>");
+							resultBuffer.append(" />");
 						}
 					}
 				}

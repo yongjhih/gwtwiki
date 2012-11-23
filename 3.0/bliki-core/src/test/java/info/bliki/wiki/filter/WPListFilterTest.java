@@ -166,7 +166,7 @@ public class WPListFilterTest extends FilterTestSupport {
 
 	public void testListContinuation06() {
 		assertEquals("\n" + "<ul>\n" + "<li>You can even do mixed lists\n" + "<ol>\n" + "<li>and nest them</li>\n"
-				+ "<li>inside each other\n" + "<ul>\n" + "<li>or break lines<br/>in lists.</li>\n</ul>\n" + "<dl>\n"
+				+ "<li>inside each other\n" + "<ul>\n" + "<li>or break lines<br />in lists.</li>\n</ul>\n" + "<dl>\n"
 				+ "<dt>definition lists</dt>\n" + "<dd>can be \n" + "<dl>\n" + "<dt>nested </dt>\n"
 				+ "<dd>too</dd>\n</dl></dd>\n</dl></li>\n</ol></li>\n</ul>", wikiModel.render("* You can even do mixed lists\n"
 				+ "*# and nest them\n" + "*# inside each other\n" + "*#* or break lines<br>in lists.\n" + "*#; definition lists\n"
