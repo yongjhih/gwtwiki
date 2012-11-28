@@ -81,6 +81,7 @@ public abstract class AbstractParser extends WikipediaScanner {
 			fCurrentPosition = index + untilString.length();
 			return true;
 		}
+		fCurrentPosition = fStringSource.length();
 		return false;
 	}
 
@@ -602,10 +603,9 @@ public abstract class AbstractParser extends WikipediaScanner {
 		if (fStringSource.startsWith("<!--", fCurrentPosition - 1)) {
 			int htmlStartPosition = fCurrentPosition;
 			fCurrentPosition += 3;
-			if (readUntil("-->")) {
-				createContentToken(fCurrentPosition - htmlStartPosition + 1);
-				return true;
-			}
+			readUntil("-->");
+			createContentToken(fCurrentPosition - htmlStartPosition + 1);
+			return true;
 		}
 		return false;
 	}

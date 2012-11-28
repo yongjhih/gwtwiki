@@ -1,0 +1,643 @@
+# MediaWiki Parser test cases
+# Some taken from http://meta.wikimedia.org/wiki/Parser_testing
+# All (C) their respective authors and released under the GPL
+#
+# The syntax should be fairly self-explanatory.
+#
+# Currently supported test options:
+# One of the following three:
+#
+#  (default)  generate HTML output
+#  pst        apply pre-save transform
+#  msg        apply message transform
+#
+# Plus any combination of these:
+#
+# cat           add category links
+# ill           add inter-language links
+# subpage       enable subpages (disabled by default)
+# noxml         don't check for XML well formdness
+# title=[[XXX]] run test using article title XXX
+# language=XXX  set content language to XXX for this test
+# variant=XXX   set the variant of language for this test (eg zh-tw)
+# disabled      do not run test
+# showtitle     make the first line the title
+# comment       run through Linker::formatComment() instead of main parser
+# local         format section links in edit comment text as local links
+#
+# For testing purposes, temporary articles can created:
+# !!article / NAMESPACE:TITLE / !!text / ARTICLE TEXT / !!endarticle
+# where '/' denotes a newline.
+
+# This is the standard article assumed to exist.
+!! article
+Main Page
+!! text
+blah blah
+!! endarticle
+
+!!article 
+Template:Foo
+!!text
+FOO
+!!endarticle
+
+!! article 
+Template:Blank
+!! text
+!! endarticle
+
+!! article
+Template:!
+!! text
+|
+!! endarticle
+
+!!article
+MediaWiki:bad image list
+!!text
+* [[File:Bad.jpg]] except [[Nasty page]]
+!!endarticle
+
+###
+### Basic tests
+###
+!! test
+Blank input
+!! input
+!! result
+!! end
+
+
+!! test
+Simple paragraph
+!! input
+This is a simple paragraph.
+!! result
+<p>This is a simple paragraph.</p>
+!! end
+
+!! test
+Simple list
+!! input
+* Item 1
+* Item 2
+!! result
+<ul>
+<li>Item 1</li>
+<li>Item 2</li>
+</ul>
+!! end
+
+!! test
+Italics and bold
+!! options
+disabled
+!! input
+* plain
+* plain''italic''plain
+* plain''italic''plain''italic''plain
+* plain'''bold'''plain
+* plain'''bold'''plain'''bold'''plain
+* plain''italic''plain'''bold'''plain
+* plain'''bold'''plain''italic''plain
+* plain''italic'''bold-italic'''italic''plain
+* plain'''bold''bold-italic''bold'''plain
+* plain'''''bold-italic'''italic''plain
+* plain'''''bold-italic''bold'''plain
+* plain''italic'''bold-italic'''''plain
+* plain'''bold''bold-italic'''''plain
+* plain l'''italic''plain
+* plain l''''bold''' plain
+!! result
+<ul>
+<li>plain</li>
+<li>plain<i>italic</i>plain</li>
+<li>plain<i>italic</i>plain<i>italic</i>plain</li>
+<li>plain<b>bold</b>plain</li>
+<li>plain<b>bold</b>plain<b>bold</b>plain</li>
+<li>plain<i>italic</i>plain<b>bold</b>plain</li>
+<li>plain<b>bold</b>plain<i>italic</i>plain</li>
+<li>plain<i>italic<b>bold-italic</b>italic</i>plain</li>
+<li>plain<b>bold<i>bold-italic</i>bold</b>plain</li>
+<li>plain<i><b>bold-italic</b>italic</i>plain</li>
+<li>plain<b><i>bold-italic</i>bold</b>plain</li>
+<li>plain<i>italic<b>bold-italic</b></i>plain</li>
+<li>plain<b>bold<i>bold-italic</i></b>plain</li>
+<li>plain l'<i>italic</i>plain</li>
+<li>plain l'<b>bold</b> plain</li></ul>
+!! end
+
+###
+### <nowiki> test cases
+###
+
+!! test
+<nowiki> unordered list
+!! input
+<nowiki>* This is not an unordered list item.</nowiki>
+!! result
+<p>* This is not an unordered list item.</p>
+!! end
+
+!! test
+<nowiki> spacing
+!! input
+<nowiki>Lorem ipsum dolor
+
+sed abit.
+  sed nullum.
+
+:and a colon
+</nowiki>
+!! result
+<p>Lorem ipsum dolor
+
+sed abit.
+  sed nullum.
+
+:and a colon
+</p>
+!! end
+
+!! test
+nowiki 3
+!! input
+:There is not nowiki.
+:There is <nowiki>nowiki</nowiki>.
+
+#There is not nowiki.
+#There is <nowiki>nowiki</nowiki>.
+
+*There is not nowiki.
+*There is <nowiki>nowiki</nowiki>.
+!! result
+<dl>
+<dd>There is not nowiki.</dd>
+<dd>There is nowiki.</dd>
+</dl>
+
+
+<ol>
+<li>There is not nowiki.</li>
+<li>There is nowiki.</li>
+</ol>
+
+
+<ul>
+<li>There is not nowiki.</li>
+<li>There is nowiki.</li>
+</ul>
+!! end
+
+
+###
+### Comments
+###
+!! test
+Comment test 1
+!! options
+disabled
+!! input
+<!-- comment 1 --> asdf
+<!-- comment 2 -->
+!! result
+<pre>asdf
+</pre>
+
+!! end
+
+!! test
+Comment test 2
+!! input
+asdf
+<!-- comment 1 -->
+jkl
+!! result
+<p>asdf
+jkl</p>
+!! end
+
+!! test
+Comment test 3
+!! input
+asdf
+<!-- comment 1 -->
+<!-- comment 2 -->
+jkl
+!! result
+<p>asdf
+jkl</p>
+!! end
+
+!! test
+Comment test 4
+!! input
+asdf<!-- comment 1 -->jkl
+!! result
+<p>asdfjkl</p>
+!! end
+
+!! test
+Comment spacing
+!! options
+disabled
+!! input
+a
+ <!-- foo --> b <!-- bar -->
+c
+!! result
+<p>a</p>
+<pre> b 
+</pre>
+<p>c</p>
+!! end
+
+!! test
+Comment whitespace
+!! input
+<!-- returns a single newline, not nothing, since the newline after > is not stripped -->
+!! result
+
+!! end
+
+!! test
+Comment semantics and delimiters
+!! input
+<!-- --><!----><!-----><!------>
+!! result
+
+!! end
+
+!! test
+Comment semantics and delimiters, redux
+!! input
+<!-- In SGML every "foo" here would actually show up in the text -- foo -- bar
+-- foo -- funky huh? ... -->
+!! result
+
+!! end
+
+!! test
+Comment semantics and delimiters: directors cut
+!! options
+disabled
+!! input
+<!-- ... However we like to keep things simple and somewhat XML-ish so we eat
+everything starting with < followed by !-- until the first -- and > we see,
+that wouldn't be valid XML however, since in XML -- has to terminate a comment
+-->-->
+!! result
+<p>--&gt;</p>
+!! end
+
+!! test
+Comment semantics: nesting
+!! options
+disabled
+!! input
+<!--<!-- no, we're not going to do anything fancy here -->-->
+!! result
+<p>--&gt;</p>
+!! end
+
+!! test
+Comment semantics: unclosed comment at end
+!! input
+<!--This comment will run out to the end of the document
+!! result
+
+!! end
+
+!! test
+Comment in template title
+!! input
+{{f<!---->oo}}
+!! result
+<p>FOO</p>
+!! end
+
+!! test
+Comment on its own line post-expand
+!! input
+a
+{{blank}}<!---->
+b
+!! result
+<p>a</p>
+<p>b</p>
+!! end
+
+###
+### Preformatted text
+###
+!! test
+Preformatted text
+!! input
+ This is some
+ Preformatted text
+ With ''italic''
+ And '''bold'''
+ And a [[Main Page|link]]
+!! result
+<pre>This is some
+Preformatted text
+With <i>italic</i>
+And <b>bold</b>
+And a <a href="/wiki/Main_Page" title="Main Page">link</a>
+</pre>
+!! end
+
+!! test
+<pre> with <nowiki> inside (compatibility with 1.6 and earlier)
+!! input
+<pre><nowiki>
+<b>
+<cite>
+<em>
+</nowiki></pre>
+!! result
+<pre>
+&lt;b&gt;
+&lt;cite&gt;
+&lt;em&gt;
+</pre>
+!! end
+
+!! test
+Regression with preformatted in <center>
+!! options
+disabled
+!! input
+<center>
+ Blah
+</center>
+!! result
+<center>
+<pre>Blah
+</pre>
+</center>
+
+!! end
+
+# Expected output in the following test is not really expected (there should be
+# <pre> in the output) -- it's only testing for well-formedness.
+!! test
+Bug 6200: Preformatted in <blockquote>
+!! input
+<blockquote>
+ Blah
+</blockquote>
+!! result
+<blockquote>
+ Blah
+</blockquote>
+!! end
+
+!! test
+<pre> with attributes (bug 3202)
+!! input
+<pre style="background: blue; color:white">Bluescreen of WikiDeath</pre>
+!! result
+<pre style="background: blue; color:white">Bluescreen of WikiDeath</pre>
+!! end
+
+!! test
+<pre> with width attribute (bug 3202)
+!! input
+<pre width="8">Narrow screen goodies</pre>
+!! result
+<pre width="8">Narrow screen goodies</pre>
+!! end
+
+!! test
+<pre> with forbidden attribute (bug 3202)
+!! input
+<pre width="8" onmouseover="alert(document.cookie)">Narrow screen goodies</pre>
+!! result
+<pre width="8">Narrow screen goodies</pre>
+!! end
+
+!! test
+<pre> with forbidden attribute values (bug 3202)
+!! input
+<pre width="8" style="border-width: expression(alert(document.cookie))">Narrow screen goodies</pre>
+!! result
+<pre width="8">Narrow screen goodies</pre>
+!! end
+
+!! test
+<nowiki> inside <pre> (bug 13238)
+!! options
+disabled
+!! input
+<pre>
+<nowiki>
+</pre>
+<pre>
+<nowiki></nowiki>
+</pre>
+<pre><nowiki><nowiki></nowiki>Foo<nowiki></nowiki></nowiki></pre>
+!! result
+<pre>
+&lt;nowiki&gt;
+</pre>
+<pre>
+
+</pre>
+<pre>&lt;nowiki&gt;Foo&lt;/nowiki&gt;</pre>
+
+!! end
+
+!! test
+<nowiki> and <pre> preference (first one wins)
+!! options
+disabled
+!! input
+<pre>
+<nowiki>
+</pre>
+</nowiki>
+</pre>
+
+<nowiki>
+<pre>
+<nowiki>
+</pre>
+</nowiki>
+</pre>
+
+!! result
+<pre>
+&lt;nowiki&gt;
+</pre>
+<p>&lt;/nowiki&gt;
+&lt;/pre&gt;
+</p><p>
+&lt;pre&gt;
+&lt;nowiki&gt;
+&lt;/pre&gt;
+
+&lt;/pre&gt;
+</p>
+!! end
+
+
+###
+### Definition lists
+###
+!! test
+Simple definition
+!! options
+disabled
+!! input
+; name : Definition
+!! result
+<dl>
+<dt>name&#160;</dt>
+<dd>Definition</dd>
+</dl>
+!! end
+
+!! test
+Definition list for indentation only
+!! input
+: Indented text
+!! result
+<dl>
+<dd>Indented text</dd>
+</dl>
+!! end
+
+!! test
+Definition list with no space
+!! input
+;name:Definition
+!! result
+<dl>
+<dt>name</dt>
+<dd>Definition</dd>
+</dl>
+!!end
+
+!! test
+Definition list with URL link
+!! options
+disabled
+!! input
+; http://example.com/ : definition
+!! result
+<dl>
+<dt><a rel="nofollow" class="external free" href="http://example.com/">http://example.com/</a>&#160;</dt>
+<dd>definition</dd>
+</dl>
+!! end
+
+!! test
+Definition list with bracketed URL link
+!! options
+disabled
+!! input
+;[http://www.example.com/ Example]:Something about it
+!! result
+<dl>
+<dt><a rel="nofollow" class="external text" href="http://www.example.com/">Example</a></dt>
+<dd>Something about it</dd>
+</dl>
+!! end
+
+!! test
+Definition list with wikilink containing colon
+!! options
+disabled
+!! input
+; [[Help:FAQ]]: The least-read page on Wikipedia
+!! result
+<dl>
+<dt><a href="/index.php?title=Help:FAQ&amp;action=edit&amp;redlink=1" class="new" title="Help:FAQ (page does not exist)">Help:FAQ</a></dt>
+<dd>The least-read page on Wikipedia</dd>
+</dl>
+!! end
+
+# At Brion's and JeLuF's insistence... :)
+!! test
+Definition list with news link containing colon
+!! options
+disabled
+!! input
+;  news:alt.wikipedia.rox: This isn't even a real newsgroup!
+!! result
+<dl>
+<dt><a rel="nofollow" class="external free" href="news:alt.wikipedia.rox">news:alt.wikipedia.rox</a></dt>
+<dd>This isn't even a real newsgroup!</dd>
+</dl>
+!! end
+
+!! test
+Malformed definition list with colon
+!! options
+disabled
+!! input
+;  news:alt.wikipedia.rox -- don't crash or enter an infinite loop
+!! result
+<dl>
+<dt><a rel="nofollow" class="external free" href="news:alt.wikipedia.rox">news:alt.wikipedia.rox</a> -- don't crash or enter an infinite loop
+</dt>
+</dl>
+!! end
+
+!! test
+Definition lists: colon in external link text
+!! options
+disabled
+!! input
+; [http://www.wikipedia2.org/ Wikipedia : The Next Generation]: OK, I made that up
+!! result
+<dl><dt> <a rel="nofollow" class="external text" href="http://www.wikipedia2.org/">Wikipedia&#160;: The Next Generation</a></dt><dd> OK, I made that up
+</dd></dl>
+
+!! end
+
+!! test
+Definition lists: colon in HTML attribute
+!! input
+;<b style="display: inline">bold</b>
+!! result
+<dl>
+<dt><b style="display: inline">bold</b></dt>
+</dl>
+!! end
+
+
+!! test
+Definition lists: self-closed tag
+!! options
+disabled
+!! input
+;one<br/>two : two-line fun
+!! result
+<dl>
+<dt>one<br />two&#160;</dt>
+<dd>two-line fun</dd>
+</dl>
+!! end
+
+!! test
+Bug 11748: Literal closing tags
+!! options
+disabled
+!! input
+<dl>
+<dt>test 1</dt>
+<dd>test test test test test</dd>
+<dt>test 2</dt>
+<dd>test test test test test</dd>
+</dl>
+!! result
+<dl>
+<dt>test 1</dt>
+<dd>test test test test test</dd>
+<dt>test 2</dt>
+<dd>test test test test test</dd>
+</dl>
+!! end

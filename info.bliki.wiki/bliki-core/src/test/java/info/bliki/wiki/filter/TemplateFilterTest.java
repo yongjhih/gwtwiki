@@ -274,9 +274,9 @@ public class TemplateFilterTest extends FilterTestSupport {
 						+ "<th>Opera </th>\n"
 						+ "<th>Safari </th>\n"
 						+ "<th>Google Chrome</th></tr></table></div>\n"
-						+ "<pre>\n"
+						+ "<pre>"
 						+ "<ol class=\"references\">\n"
-						+ "<li id=\"_note-1\"><b><a href=\"#_ref-1\" title=\"\">&#8593;</a></b> John Resig. <i><a class=\"externallink\" href=\"http://ejohn.org/blog/versions-of-javascript\" rel=\"nofollow\" title=\"http://ejohn.org/blog/versions-of-javascript\">Versions of JavaScript</a></i>. Ejohn.org. Abgerufen am <a href=\"http://www.bliki.info/wiki/Template:safesubst:#Switch:none\" title=\"Template:safesubst:\">Template:safesubst:</a>.</li></ol>\n"
+						+ "<li id=\"_note-1\"><b><a href=\"#_ref-1\" title=\"\">&#8593;</a></b> John Resig. <i><a class=\"externallink\" href=\"http://ejohn.org/blog/versions-of-javascript\" rel=\"nofollow\" title=\"http://ejohn.org/blog/versions-of-javascript\">Versions of JavaScript</a></i>. Ejohn.org. Abgerufen am <a href=\"http://www.bliki.info/wiki/Template:safesubst:#Switch:none\" title=\"Template:safesubst:\">Template:safesubst:</a>.</li>\n</ol>\n"
 						+ "</pre>",
 				wikiModel
 						.render(
@@ -368,7 +368,7 @@ public class TemplateFilterTest extends FilterTestSupport {
 			+ "{{{disambiguation|}}}}}}}}}|articles|{{#if:{{{mulcat|}}}|categories|an\n" + "article}}}}}} on:\n";
 
 	public void testNestedIf02() {
-		assertEquals("\n" + "<pre>\nan\n</pre>\n" + "<p>article on:\n" + "</p>" + "", wikiModel.render(TEST_STRING_02, false));
+		assertEquals("\n" + "<pre>an\n</pre>\n" + "<p>article on:\n" + "</p>" + "", wikiModel.render(TEST_STRING_02, false));
 	}
 
 	public void testParserFunctionLC001() {
@@ -378,7 +378,7 @@ public class TemplateFilterTest extends FilterTestSupport {
 	public void testParserFunctionTag001() {
 		assertEquals("\n"
 				+ "<p><sup id=\"_ref-1\" class=\"reference\"><a href=\"#_note-1\" title=\"\">[1]</a></sup></p><ol class=\"references\">\n"
-				+ "<li id=\"_note-1\"><b><a href=\"#_ref-1\" title=\"\">&#8593;</a></b> <b>a simple test</b></li></ol>", wikiModel.render(
+				+ "<li id=\"_note-1\"><b><a href=\"#_ref-1\" title=\"\">&#8593;</a></b> <b>a simple test</b></li>\n</ol>", wikiModel.render(
 				"{{#tag:ref|'''a simple test'''}}{{#tag:references}}", false));
 	}
 
@@ -507,7 +507,7 @@ public class TemplateFilterTest extends FilterTestSupport {
 		assertEquals(
 				"\n"
 						+ "<dl>\n"
-						+ "<dd><span class=\"boilerplate further\"><i>Further information: <a href=\"http://www.bliki.info/wiki/History_of_molecular_biology\" title=\"History of molecular biology\">History of molecular biology</a></i></span></dd></dl>",
+						+ "<dd><span class=\"boilerplate further\"><i>Further information: <a href=\"http://www.bliki.info/wiki/History_of_molecular_biology\" title=\"History of molecular biology\">History of molecular biology</a></i></span></dd>\n</dl>",
 				wikiModel.render("{{further|[[History of molecular biology]]}}", false));
 	}
 
@@ -669,14 +669,14 @@ public class TemplateFilterTest extends FilterTestSupport {
 						+ "<li>5.5 (JScript 5.5)</li>\n"
 						+ "<li>6 (JScript 5.6)</li>\n"
 						+ "<li>7 (JScript 5.7)</li>\n"
-						+ "<li>8 (JScript 6)</li></ul></td>\n"
+						+ "<li>8 (JScript 6)</li>\n</ul></td>\n"
 						+ "<td>\n"
 						+ "\n"
 						+ "<ul>\n"
 						+ "<li>6.0</li>\n"
 						+ "<li>7.0</li>\n"
 						+ "<li>8.0</li>\n"
-						+ "<li>9.0</li></ul></td>\n"
+						+ "<li>9.0</li>\n</ul></td>\n"
 						+ "<td />\n"
 						+ "<td /></tr>\n"
 						+ "<tr>\n"
@@ -691,7 +691,7 @@ public class TemplateFilterTest extends FilterTestSupport {
 						+ "\n"
 						+ "<ul>\n"
 						+ "<li>3.0</li>\n"
-						+ "<li>3.1</li></ul></td>\n"
+						+ "<li>3.1</li>\n</ul></td>\n"
 						+ "<td /></tr>\n"
 						+ "<tr>\n"
 						+ "<td>1.7 </td>\n"
@@ -705,7 +705,7 @@ public class TemplateFilterTest extends FilterTestSupport {
 						+ "\n"
 						+ "<ul>\n"
 						+ "<li>3.2</li>\n"
-						+ "<li>4.0</li></ul></td>\n"
+						+ "<li>4.0</li>\n</ul></td>\n"
 						+ "<td>1.0</td></tr>\n"
 						+ "<tr>\n"
 						+ "<td>1.8 </td>\n"
@@ -738,7 +738,7 @@ public class TemplateFilterTest extends FilterTestSupport {
 						+ "<td />\n"
 						+ "<td /></tr></table></div>\n"
 						+ "<ol class=\"references\">\n"
-						+ "<li id=\"_note-1\"><b><a href=\"#_ref-1\" title=\"\">&#8593;</a></b> John Resig. <i><a class=\"externallink\" href=\"http://ejohn.org/blog/versions-of-javascript\" rel=\"nofollow\" title=\"http://ejohn.org/blog/versions-of-javascript\">Versions of JavaScript</a></i>. Ejohn.org. Abgerufen am <a href=\"http://www.bliki.info/wiki/Template:safesubst:#Switch:none\" title=\"Template:safesubst:\">Template:safesubst:</a>.</li></ol>",
+						+ "<li id=\"_note-1\"><b><a href=\"#_ref-1\" title=\"\">&#8593;</a></b> John Resig. <i><a class=\"externallink\" href=\"http://ejohn.org/blog/versions-of-javascript\" rel=\"nofollow\" title=\"http://ejohn.org/blog/versions-of-javascript\">Versions of JavaScript</a></i>. Ejohn.org. Abgerufen am <a href=\"http://www.bliki.info/wiki/Template:safesubst:#Switch:none\" title=\"Template:safesubst:\">Template:safesubst:</a>.</li>\n</ol>",
 				wikiModel
 						.render(
 								"=== Versionsgeschichte ===\n"
@@ -954,7 +954,7 @@ public class TemplateFilterTest extends FilterTestSupport {
 						+ "<li><a href=\"http://www.bliki.info/wiki/Laurence_Olivier\" title=\"Laurence Olivier\">Laurence Olivier</a> (1946)</li>\n"
 						+ "<li><a href=\"http://www.bliki.info/wiki/Michael_Redgrave\" title=\"Michael Redgrave\">Michael Redgrave</a> (1947)</li>\n"
 						+ "<li><a href=\"http://www.bliki.info/wiki/Walter_Huston\" title=\"Walter Huston\">Walter Huston</a> (1948)</li>\n"
-						+ "<li><a href=\"http://www.bliki.info/wiki/Ralph_Richardson\" title=\"Ralph Richardson\">Ralph Richardson</a> (1949)</li></ul></div></td>\n"
+						+ "<li><a href=\"http://www.bliki.info/wiki/Ralph_Richardson\" title=\"Ralph Richardson\">Ralph Richardson</a> (1949)</li>\n</ul></div></td>\n"
 						+ "</tr>\n"
 						+ "<tr style=\"height:2px\">\n"
 						+ "\n"
@@ -975,7 +975,7 @@ public class TemplateFilterTest extends FilterTestSupport {
 						+ "<li><a href=\"http://www.bliki.info/wiki/Yul_Brynner\" title=\"Yul Brynner\">Yul Brynner</a> (1956)</li>\n"
 						+ "<li><a href=\"http://www.bliki.info/wiki/Alec_Guinness\" title=\"Alec Guinness\">Alec Guinness</a> (1957)</li>\n"
 						+ "<li><a href=\"http://www.bliki.info/wiki/Spencer_Tracy\" title=\"Spencer Tracy\">Spencer Tracy</a> (1958)</li>\n"
-						+ "<li><a href=\"http://www.bliki.info/wiki/Victor_Sj%C3%B6str%C3%B6m\" title=\"Victor Sjöström\">Victor Sjöström</a> (1959)</li></ul></div></td>\n"
+						+ "<li><a href=\"http://www.bliki.info/wiki/Victor_Sj%C3%B6str%C3%B6m\" title=\"Victor Sjöström\">Victor Sjöström</a> (1959)</li>\n</ul></div></td>\n"
 						+ "</tr>\n"
 						+ "<tr style=\"height:2px\">\n"
 						+ "\n"
@@ -996,7 +996,7 @@ public class TemplateFilterTest extends FilterTestSupport {
 						+ "<li><a href=\"http://www.bliki.info/wiki/Paul_Scofield\" title=\"Paul Scofield\">Paul Scofield</a> (1966)</li>\n"
 						+ "<li><a href=\"http://www.bliki.info/wiki/Peter_Finch\" title=\"Peter Finch\">Peter Finch</a> (1967)</li>\n"
 						+ "<li><a href=\"http://www.bliki.info/wiki/Cliff_Robertson\" title=\"Cliff Robertson\">Cliff Robertson</a> (1968)</li>\n"
-						+ "<li><a href=\"http://www.bliki.info/wiki/Peter_O&#39;Toole\" title=\"Peter O&#39;Toole\">Peter O&#39;Toole</a> (1969)</li></ul></div></td>\n"
+						+ "<li><a href=\"http://www.bliki.info/wiki/Peter_O&#39;Toole\" title=\"Peter O&#39;Toole\">Peter O&#39;Toole</a> (1969)</li>\n</ul></div></td>\n"
 						+ "</tr>\n"
 						+ "<tr style=\"height:2px\">\n"
 						+ "\n"
@@ -1017,7 +1017,7 @@ public class TemplateFilterTest extends FilterTestSupport {
 						+ "<li><a href=\"http://www.bliki.info/wiki/David_Carradine\" title=\"David Carradine\">David Carradine</a> (1976)</li>\n"
 						+ "<li><a href=\"http://www.bliki.info/wiki/John_Travolta\" title=\"John Travolta\">John Travolta</a> (1977)</li>\n"
 						+ "<li><a href=\"http://www.bliki.info/wiki/Jon_Voight\" title=\"Jon Voight\">Jon Voight</a> / <a href=\"http://www.bliki.info/wiki/Laurence_Olivier\" title=\"Laurence Olivier\">Laurence Olivier</a> (1978)</li>\n"
-						+ "<li><a href=\"http://www.bliki.info/wiki/Peter_Sellers\" title=\"Peter Sellers\">Peter Sellers</a> (1979)</li></ul></div></td>\n"
+						+ "<li><a href=\"http://www.bliki.info/wiki/Peter_Sellers\" title=\"Peter Sellers\">Peter Sellers</a> (1979)</li>\n</ul></div></td>\n"
 						+ "</tr>\n"
 						+ "<tr style=\"height:2px\">\n"
 						+ "\n"
@@ -1038,7 +1038,7 @@ public class TemplateFilterTest extends FilterTestSupport {
 						+ "<li><a href=\"http://www.bliki.info/wiki/Paul_Newman\" title=\"Paul Newman\">Paul Newman</a> (1986)</li>\n"
 						+ "<li><a href=\"http://www.bliki.info/wiki/Michael_Douglas\" title=\"Michael Douglas\">Michael Douglas</a> (1987)</li>\n"
 						+ "<li><a href=\"http://www.bliki.info/wiki/Gene_Hackman\" title=\"Gene Hackman\">Gene Hackman</a> (1988)</li>\n"
-						+ "<li><a href=\"http://www.bliki.info/wiki/Morgan_Freeman\" title=\"Morgan Freeman\">Morgan Freeman</a> (1989)</li></ul></div></td>\n"
+						+ "<li><a href=\"http://www.bliki.info/wiki/Morgan_Freeman\" title=\"Morgan Freeman\">Morgan Freeman</a> (1989)</li>\n</ul></div></td>\n"
 						+ "</tr>\n"
 						+ "<tr style=\"height:2px\">\n"
 						+ "\n"
@@ -1059,7 +1059,7 @@ public class TemplateFilterTest extends FilterTestSupport {
 						+ "<li><a href=\"http://www.bliki.info/wiki/Tom_Cruise\" title=\"Tom Cruise\">Tom Cruise</a> (1996)</li>\n"
 						+ "<li><a href=\"http://www.bliki.info/wiki/Jack_Nicholson\" title=\"Jack Nicholson\">Jack Nicholson</a> (1997)</li>\n"
 						+ "<li><a href=\"http://www.bliki.info/wiki/Ian_McKellen\" title=\"Ian McKellen\">Ian McKellen</a> (1998)</li>\n"
-						+ "<li><a href=\"http://www.bliki.info/wiki/Russell_Crowe\" title=\"Russell Crowe\">Russell Crowe</a> (1999)</li></ul></div></td>\n"
+						+ "<li><a href=\"http://www.bliki.info/wiki/Russell_Crowe\" title=\"Russell Crowe\">Russell Crowe</a> (1999)</li>\n</ul></div></td>\n"
 						+ "</tr>\n"
 						+ "<tr style=\"height:2px\">\n"
 						+ "\n"
@@ -1080,7 +1080,7 @@ public class TemplateFilterTest extends FilterTestSupport {
 						+ "<li><a href=\"http://www.bliki.info/wiki/Forest_Whitaker\" title=\"Forest Whitaker\">Forest Whitaker</a> (2006)</li>\n"
 						+ "<li><a href=\"http://www.bliki.info/wiki/George_Clooney\" title=\"George Clooney\">George Clooney</a> (2007)</li>\n"
 						+ "<li><a href=\"http://www.bliki.info/wiki/Clint_Eastwood\" title=\"Clint Eastwood\">Clint Eastwood</a> (2008)</li>\n"
-						+ "<li><a href=\"http://www.bliki.info/wiki/George_Clooney\" title=\"George Clooney\">George Clooney</a> / <a href=\"http://www.bliki.info/wiki/Morgan_Freeman\" title=\"Morgan Freeman\">Morgan Freeman</a> (2009)</li></ul></div></td>\n"
+						+ "<li><a href=\"http://www.bliki.info/wiki/George_Clooney\" title=\"George Clooney\">George Clooney</a> / <a href=\"http://www.bliki.info/wiki/Morgan_Freeman\" title=\"Morgan Freeman\">Morgan Freeman</a> (2009)</li>\n</ul></div></td>\n"
 						+ "</tr>\n"
 						+ "<tr style=\"height:2px\">\n"
 						+ "\n"
@@ -1093,7 +1093,7 @@ public class TemplateFilterTest extends FilterTestSupport {
 						+ "\n"
 						+ "<ul>\n"
 						+ "<li><a href=\"http://www.bliki.info/wiki/Jesse_Eisenberg\" title=\"Jesse Eisenberg\">Jesse Eisenberg</a> (2010)</li>\n"
-						+ "<li><a href=\"http://www.bliki.info/wiki/George_Clooney\" title=\"George Clooney\">George Clooney</a> (2011)</li></ul>\n"
+						+ "<li><a href=\"http://www.bliki.info/wiki/George_Clooney\" title=\"George Clooney\">George Clooney</a> (2011)</li>\n</ul>\n"
 						+ "</div></td>\n" + "</tr>\n" + "</table></td>\n" + "</tr>\n" + "</table>\n" + "", wikiModel.render("{{Navbox \n"
 						+ "| name       = National Board of Review Award for Best Actor\n"
 						+ "| title      = [[National Board of Review Award for Best Actor]]\n" + "| listclass = hlist\n" + "\n"
@@ -1145,7 +1145,7 @@ public class TemplateFilterTest extends FilterTestSupport {
 	public void testTemplateWithNewlines001() {
 		assertEquals("\n" + 
 				"<p>{{Serie de TV</p>\n" + 
-				"<pre>\n" + 
+				"<pre>" + 
 				" Nombre        = FabulÃ³polis\n" + 
 				"</pre>\n" + 
 				"<p>}}</p>", 

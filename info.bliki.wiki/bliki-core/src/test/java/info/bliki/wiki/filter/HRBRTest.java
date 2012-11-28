@@ -42,7 +42,7 @@ public class HRBRTest extends FilterTestSupport {
   public void testHR02() {
     assertEquals("<blockquote><hr />\n" + 
     		"<p>test\n" + 
-    		"</p></blockquote>", wikiModel.render("\n<blockquote>\n----\ntest\n</blockquote>", false));
+    		"</p>\n</blockquote>", wikiModel.render("\n<blockquote>\n----\ntest\n</blockquote>", false));
   }
   
   public void testHR03() {

@@ -94,7 +94,7 @@ public class BasicFilterTest extends FilterTestSupport {
 	}
 
 	public void testSimpleList() {
-		assertEquals("\n" + "<ul>\n" + "<li>Item 1</li>\n" + "<li>Item 2</li></ul>", wikiModel.render("* Item 1\n" + "* Item 2", false));
+		assertEquals("\n" + "<ul>\n" + "<li>Item 1</li>\n" + "<li>Item 2</li>\n</ul>", wikiModel.render("* Item 1\n" + "* Item 2", false));
 	}
 
 	public void testSimpleTable() {
@@ -113,7 +113,7 @@ public class BasicFilterTest extends FilterTestSupport {
 	public void testbq1() {
 		assertEquals(
 				"<blockquote style=\"background: white; border: 1px solid rgb(153, 153, 153); padding: 1em;\">\n"
-						+ "<p><b>Hello World</b></p></blockquote>",
+						+ "<p><b>Hello World</b></p>\n</blockquote>",
 				wikiModel
 						.render(
 								"<blockquote style=\"background: white; border: 1px solid rgb(153, 153, 153); padding: 1em;\">\n'''Hello World'''</blockquote>",
@@ -123,7 +123,7 @@ public class BasicFilterTest extends FilterTestSupport {
 	public void testbq2() {
 		assertEquals("<blockquote>\n" + "<p>The <b>blockquote</b> command formats block \n"
 				+ "quotations, typically by surrounding them \n" + "with whitespace and a slightly different font.\n"
-				+ "</p></blockquote>\n" + "", wikiModel.render("<blockquote>\n" + "The \'\'\'blockquote\'\'\' command formats block \n"
+				+ "</p>\n</blockquote>\n" + "", wikiModel.render("<blockquote>\n" + "The \'\'\'blockquote\'\'\' command formats block \n"
 				+ "quotations, typically by surrounding them \n" + "with whitespace and a slightly different font.\n" + "</blockquote>\n",
 				false));
 	}
@@ -131,20 +131,20 @@ public class BasicFilterTest extends FilterTestSupport {
 	public void testbq3() {
 		assertEquals("<blockquote>start blockquote here\n" + "\n" + "<p>line above me\n"
 				+ "no line above me and i am <b>bold</b></p>\n" + "\n" + "<p>and line above me\n"
-				+ "end of blockquote here</p></blockquote> ", wikiModel.render("<blockquote>start blockquote here\n" + "\n"
+				+ "end of blockquote here</p>\n</blockquote> ", wikiModel.render("<blockquote>start blockquote here\n" + "\n"
 				+ "line above me\n" + "no line above me and i am <b>bold</b>\n" + "\n" + "\n" + "and line above me\n"
 				+ "end of blockquote here</blockquote> ", false));
 	}
 
 	public void testPreBlock() {
-		assertEquals("\n<pre>\n* Lists are easy to do:\n" + "** start every line\n" + "* with a star\n" + "** more stars mean\n"
+		assertEquals("\n<pre>* Lists are easy to do:\n" + "** start every line\n" + "* with a star\n" + "** more stars mean\n"
 				+ "*** deeper levels\n</pre>", wikiModel.render(" * Lists are easy to do:\n" + " ** start every line\n"
 				+ " * with a star\n" + " ** more stars mean\n" + " *** deeper levels", false));
 	}
 
 	public void testNestedPreBlock() {
 		assertEquals("\n" + "<div style=\"page-break-inside: avoid;\">\n" + "<table border=\"1\" width=\"79%\">\n" + "<tr>\n"
-				+ "<th>wikitext</th></tr>\n" + "<tr>\n" + "<td>\n" + "<pre>\n* Lists are easy to do:\n" + "** start every line\n"
+				+ "<th>wikitext</th></tr>\n" + "<tr>\n" + "<td>\n" + "<pre>* Lists are easy to do:\n" + "** start every line\n"
 				+ "* with a star\n" + "** more stars mean\n" + "*** deeper levels\n</pre></td></tr></table></div>", wikiModel.render(
 				"{|border=1 width=\"79%\"\n" + "!wikitext\n" + "|-\n" + "|\n" + " * Lists are easy to do:\n" + " ** start every line\n"
 						+ " * with a star\n" + " ** more stars mean\n" + " *** deeper levels\n" + "|}", false));

@@ -1,5 +1,6 @@
 package info.bliki.wiki.filter;
 
+import java.util.HashMap;
 import java.util.Locale;
 
 import junit.framework.Test;
@@ -79,19 +80,19 @@ public class TemplateParserTest extends FilterTestSupport {
 						+ "<p>abcdefghi</p><hr />\n"
 						+ "\n"
 						+ "<dl>\n"
-						+ "<dt>Only active template content is above.</dt></dl>\n"
+						+ "<dt>Only active template content is above.</dt>\n</dl>\n"
 						+ "\n"
 						+ "\n"
 						+ "<dl>\n"
 						+ "<dt>The verbatim active code within reads</dt>\n"
-						+ "<dd></dd></dl>:\n"
-						+ "<pre>\n"
+						+ "<dd></dd>\n</dl>:\n"
+						+ "<pre>"
 						+ "abc<b>&#60;onlyinclude&#62;</b>def<b>&#60;/onlyinclude&#62;</b>ghi<b>&#60;includeonly&#62;</b>jkl<b>&#60;/includeonly&#62;</b>\n"
 						+ "</pre>\n"
 						+ "<p>If transposed, the only part included will be the string literal <code>def</code>. </p>\n"
 						+ "<h2><span class=\"mw-headline\" id=\"Example\">Example</span></h2>\n"
 						+ "<p>Including <a href=\"http://www.bliki.info/wiki/Help:Template/onlyinclude_demo\" title=\"Help:Template/onlyinclude demo\">Help:Template/onlyinclude demo</a> yields only:</p>\n"
-						+ "<pre>\n"
+						+ "<pre>"
 						+ "<a href=\"http://www.bliki.info/wiki/Help:Template/onlyinclude_demo\" title=\"Help:Template/onlyinclude demo\">Help:Template/onlyinclude demo</a>\n"
 						+ "</pre>\n" + "\n" + "\n" + "<p>\n" + "</p>\n" + "", wikiModel.render(WikiTestModel.ONLYINCLUDE_DEMO, true));
 	}
@@ -1423,5 +1424,12 @@ public class TemplateParserTest extends FilterTestSupport {
 	 */
 	public void testNewlineSpaces12() {
 		assertEquals("rs", wikiModel.parseTemplates("{{#switch:\n2\n|\n1 =\npq\n|\n2 =\nrs\n|\n3 =\ntu\n}}"));
+	}
+
+	public void testCategory001() {
+		assertEquals("", wikiModel.render("[[Category:Main Page]]", false));
+		HashMap<String, String> expectedCategories = new HashMap<String, String>();
+		expectedCategories.put("Main Page", "Category:Main Page");
+		assertEquals(expectedCategories, wikiModel.getCategories());
 	}
 }

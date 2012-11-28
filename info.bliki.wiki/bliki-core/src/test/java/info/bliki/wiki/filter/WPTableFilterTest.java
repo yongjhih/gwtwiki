@@ -134,7 +134,7 @@ public class WPTableFilterTest extends FilterTestSupport {
 				"| C\n" + 
 				"| D\n" + 
 				"|}\n" + 
-				"</pre></blockquote>\n" + 
+				"</pre>\n</blockquote>\n" + 
 				"<blockquote style=\"background: white; border: 1px solid rgb(153, 153, 153); padding: 1em;\">\n" + 
 				"<pre>\n" + 
 				"{| \n" + 
@@ -142,7 +142,7 @@ public class WPTableFilterTest extends FilterTestSupport {
 				"|- \n" + 
 				"| C || D \n" + 
 				"|}\n" + 
-				"</pre></blockquote>\n" + 
+				"</pre>\n</blockquote>\n" + 
 				"\n" + 
 				"<p><b>What it looks like in your browser</b>\n" + 
 				"</p><blockquote style=\"background: white; border: 1px solid rgb(153, 153, 153); padding: 1em;\">\n" + 
@@ -154,7 +154,7 @@ public class WPTableFilterTest extends FilterTestSupport {
 				"<td>B</td></tr>\n" + 
 				"<tr>\n" + 
 				"<td>C</td>\n" + 
-				"<td>D</td></tr></table></div></blockquote>\n" + 
+				"<td>D</td></tr></table></div>\n</blockquote>\n" + 
 				"", wikiModel.render(TEST3, false));
 	}
 
@@ -225,7 +225,7 @@ public class WPTableFilterTest extends FilterTestSupport {
 				"<th>5</th>\n" + 
 				"<td>5 </td>\n" + 
 				"<td>10 </td>\n" + 
-				"<td>15</td></tr></table></div></blockquote></td>\n" + 
+				"<td>15</td></tr></table></div>\n</blockquote></td>\n" + 
 				"</tr>\n" + 
 				"</table>\n" + 
 				"", wikiModel.render(TEST5, false));

@@ -60,7 +60,8 @@ public class HTMLTag extends TagNode {
 	}
 
 	public void renderHTML(ITextConverter converter, Appendable buf, IWikiModel model) throws IOException {
-		boolean newLines = false;
+		boolean newLinesAfterTag = false;
+		boolean newLinesAfterChildren = false;
 		TagNode node = this;
 		String name = node.getName();
 		List<Object> children = node.getChildren();
@@ -75,10 +76,16 @@ public class HTMLTag extends TagNode {
 		if (NEW_LINES) {
 			if (name.equals("div") || name.equals("p") || name.equals("li") || name.equals("td")) {
 				buf.append('\n');
-			} else if (name.equals("table") || name.equals("ul") || name.equals("ol") || name.equals("th") || name.equals("tr")
-					|| name.equals("pre")) {
+			} else if (name.equals("table") || name.equals("ul") || name.equals("ol") || name.equals("th") || name.equals("tr")) {
 				buf.append('\n');
-				newLines = true;
+				newLinesAfterTag = true;
+				newLinesAfterChildren = true;
+			} else if (name.equals("pre")) {
+				buf.append('\n');
+				newLinesAfterTag = false;
+				newLinesAfterChildren = true;
+			} else if (name.equals("blockquote")) {
+				newLinesAfterChildren = true;
 			}
 		}
 		buf.append('<');
@@ -92,11 +99,11 @@ public class HTMLTag extends TagNode {
 			buf.append(" />");
 		} else {
 			buf.append('>');
-			if (newLines) {
+			if (newLinesAfterTag) {
 				buf.append('\n');
 			}
 			converter.nodesToText(children, buf, model);
-			if (newLines) {
+			if (newLinesAfterChildren) {
 				buf.append('\n');
 			}
 			buf.append("</");
