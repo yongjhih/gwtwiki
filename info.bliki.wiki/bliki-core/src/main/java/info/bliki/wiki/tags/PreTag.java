@@ -30,7 +30,9 @@ public class PreTag extends HTMLBlockTag implements INoBodyParsingTag {// implem
 	public void renderHTML(ITextConverter converter, Appendable writer, IWikiModel model) throws IOException {
 		String content = getBodyString();
 		if (content != null && content.length() > 0) {
-			writer.append("\n<pre>");
+			writer.append("\n<pre");
+		  appendAttributes(writer, getAttributes());
+		  writer.append('>');
 			content = Configuration.NOWIKI_OPEN_PATTERN.matcher(content).replaceAll("");
 			content = Configuration.NOWIKI_CLOSE_PATTERN.matcher(content).replaceAll("");
 			NowikiTag.copyPre(content, writer, true);
