@@ -150,6 +150,12 @@ public class HTTPUrlFilterTest extends FilterTestSupport {
 				+ "mailto:some one@domain.com or \n" + "[mailto:some one@domain.com someone]", false));
 	}
 
+	public void testWrongMailto2() {
+	  	assertEquals("\n" +
+	      "<p>mailto someone@domain.com or \n" +
+		    "[mailto someone@domain.com someone]</p>", wikiModel.render("mailto someone@domain.com or \n" + "[mailto someone@domain.com someone]", false));
+	}
+	
 	public void testUrlWithSpan() {
 		assertEquals(
 				"\n"
