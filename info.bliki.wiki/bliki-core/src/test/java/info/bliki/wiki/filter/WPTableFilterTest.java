@@ -338,7 +338,7 @@ public class WPTableFilterTest extends FilterTestSupport {
 				"<tr>\n" + 
 				"<th colspan=\"2\" style=\"text-align:center;\">\n" + 
 				"<a class=\"image\" href=\"http://www.bliki.info/wiki/Image:300px-Cap.jpg\" ><img src=\"http://www.bliki.info/wiki/300px-Cap.jpg\" width=\"300\" />\n" + 
-				"</a><br/>\n" + 
+				"</a><br />\n" + 
 				"</th></tr>\n" + 
 				"<tr>\n" + 
 				"<td colspan=\"2\" style=\"text-align:center; background: #042462;\"><span class=\"note\" style=\"color:white;\"><b><span style=\"color:white;\">Milwaukee Brewers</span> — No. 39</b></span></td></tr>\n" + 

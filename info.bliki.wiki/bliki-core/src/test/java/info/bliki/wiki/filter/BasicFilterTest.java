@@ -43,18 +43,18 @@ public class BasicFilterTest extends FilterTestSupport {
 	 * Issue 98
 	 */
 	public void testEmptyTags003() {
-		assertEquals("\n" + "<p><br/></p>", wikiModel.render("<br />", false));
+		assertEquals("\n" + "<p><br /></p>", wikiModel.render("<br />", false));
 	}
 
 	/**
 	 * Issue 98
 	 */
 	public void testEmptyTags004() {
-		assertEquals("<hr/>", wikiModel.render("<hr />", false));
+		assertEquals("<hr />", wikiModel.render("<hr />", false));
 	}
 
 	public void testTT() {
-		assertEquals("\n" + "<p><b>hosted by:</b><br/></p>", wikiModel.render("'''hosted by:'''<br>", false));
+		assertEquals("\n" + "<p><b>hosted by:</b><br /></p>", wikiModel.render("'''hosted by:'''<br>", false));
 	}
 
 	public void testBlankInput() {
@@ -154,14 +154,15 @@ public class BasicFilterTest extends FilterTestSupport {
 		assertEquals(
 				"\n"
 						+ "<p style=\"padding: 1em; border: 1px dashed #2f6fab; color: Black; background-color: #f9f9f9; line-height: 1.1em;\"> <tt>\n"
-						+ "&#60;p style=&#34;padding: 1em; border: 1px dashed #2f6fab; color: Black; background-color: #f9f9f9; line-height: 1.1em;&#34;&#62; &#60;tt&#62; <br/>\n"
-						+ "&#38;#123;&#38;#124; border=&#34;5&#34; cellspacing=&#34;5&#34; cellpadding=&#34;2&#34; &#60;br /&#62; <br/>\n"
-						+ "&#38;#124; style=&#34;text-align: center;&#34; &#38;#124; &#38;#91;&#38;#91;Image:gnome-system.png]] &#60;br /&#62; <br/>\n"
-						+ "&#38;#124;- &#60;br /&#62; <br/>\n"
-						+ "&#38;#33; Computer &#60;br /&#62; <br/>\n"
-						+ "&#38;#124;- &#60;br /&#62; <br/>\n"
-						+ "<b>&#38;#124; style=&#34;color: yellow; background-color: green;&#34; &#38;#124; Processor Speed: &#38;#60;span style=&#34;color: red;&#34;&#62; 1.8 GHz &#38;#60;/span&#62; &#60;br /&#62;</b> <br/>\n"
-						+ "&#38;#124;&#38;#125; &#60;br /&#62; <br/>\n" + "&#60;/tt&#62; &#60;/p&#62;\n" + "</tt> </p>",
+						+ "&#60;p style=&#34;padding: 1em; border: 1px dashed #2f6fab; color: Black; background-color: #f9f9f9; line-height: 1.1em;&#34;&#62; &#60;tt&#62; <br />\n"
+						+ "&#38;#123;&#38;#124; border=&#34;5&#34; cellspacing=&#34;5&#34; cellpadding=&#34;2&#34; &#60;br /&#62; <br />\n"
+						+ "&#38;#124; style=&#34;text-align: center;&#34; &#38;#124; &#38;#91;&#38;#91;Image:gnome-system.png]] &#60;br /&#62; <br />\n"
+						+ "&#38;#124;- &#60;br /&#62; <br />\n"
+						+ "&#38;#33; Computer &#60;br /&#62; <br />\n"
+						+ "&#38;#124;- &#60;br /&#62; <br />\n"
+						+ "<b>&#38;#124; style=&#34;color: yellow; background-color: green;&#34; &#38;#124; Processor Speed: &#38;#60;span style=&#34;color: red;&#34;&#62; 1.8 GHz &#38;#60;/span&#62; &#60;br /&#62;</b> <br />\n"
+						+ "&#38;#124;&#38;#125; &#60;br /&#62; <br />\n" 
+						+ "&#60;/tt&#62; &#60;/p&#62;\n" + "</tt> </p>",
 				wikiModel
 						.render(
 								"<p style=\"padding: 1em; border: 1px dashed #2f6fab; color: Black; background-color: #f9f9f9; line-height: 1.1em;\"> <tt>\n"
