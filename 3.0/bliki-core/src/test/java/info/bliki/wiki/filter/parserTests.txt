@@ -91,6 +91,8 @@ Simple list
 
 !! test
 Italics and bold
+!! options
+disabled
 !! input
 * plain
 * plain''italic''plain
@@ -194,6 +196,8 @@ nowiki 3
 ###
 !! test
 Comment test 1
+!! options
+disabled
 !! input
 <!-- comment 1 --> asdf
 <!-- comment 2 -->
@@ -236,6 +240,8 @@ asdf<!-- comment 1 -->jkl
 
 !! test
 Comment spacing
+!! options
+disabled
 !! input
 a
  <!-- foo --> b <!-- bar -->
@@ -274,6 +280,8 @@ Comment semantics and delimiters, redux
 
 !! test
 Comment semantics and delimiters: directors cut
+!! options
+disabled
 !! input
 <!-- ... However we like to keep things simple and somewhat XML-ish so we eat
 everything starting with < followed by !-- until the first -- and > we see,
@@ -285,6 +293,8 @@ that wouldn't be valid XML however, since in XML -- has to terminate a comment
 
 !! test
 Comment semantics: nesting
+!! options
+disabled
 !! input
 <!--<!-- no, we're not going to do anything fancy here -->-->
 !! result
@@ -356,6 +366,8 @@ And a <a href="/wiki/Main_Page" title="Main Page">link</a>
 
 !! test
 Regression with preformatted in <center>
+!! options
+disabled
 !! input
 <center>
  Blah
@@ -416,6 +428,8 @@ Bug 6200: Preformatted in <blockquote>
 
 !! test
 <nowiki> inside <pre> (bug 13238)
+!! options
+disabled
 !! input
 <pre>
 <nowiki>
@@ -437,6 +451,8 @@ Bug 6200: Preformatted in <blockquote>
 
 !! test
 <nowiki> and <pre> preference (first one wins)
+!! options
+disabled
 !! input
 <pre>
 <nowiki>
@@ -472,6 +488,8 @@ Bug 6200: Preformatted in <blockquote>
 ###
 !! test
 Simple definition
+!! options
+disabled
 !! input
 ; name : Definition
 !! result
@@ -504,6 +522,8 @@ Definition list with no space
 
 !! test
 Definition list with URL link
+!! options
+disabled
 !! input
 ; http://example.com/ : definition
 !! result
@@ -515,6 +535,8 @@ Definition list with URL link
 
 !! test
 Definition list with bracketed URL link
+!! options
+disabled
 !! input
 ;[http://www.example.com/ Example]:Something about it
 !! result
@@ -526,6 +548,8 @@ Definition list with bracketed URL link
 
 !! test
 Definition list with wikilink containing colon
+!! options
+disabled
 !! input
 ; [[Help:FAQ]]: The least-read page on Wikipedia
 !! result
@@ -538,6 +562,8 @@ Definition list with wikilink containing colon
 # At Brion's and JeLuF's insistence... :)
 !! test
 Definition list with news link containing colon
+!! options
+disabled
 !! input
 ;  news:alt.wikipedia.rox: This isn't even a real newsgroup!
 !! result
@@ -549,6 +575,8 @@ Definition list with news link containing colon
 
 !! test
 Malformed definition list with colon
+!! options
+disabled
 !! input
 ;  news:alt.wikipedia.rox -- don't crash or enter an infinite loop
 !! result
@@ -560,6 +588,8 @@ Malformed definition list with colon
 
 !! test
 Definition lists: colon in external link text
+!! options
+disabled
 !! input
 ; [http://www.wikipedia2.org/ Wikipedia : The Next Generation]: OK, I made that up
 !! result
@@ -581,6 +611,8 @@ Definition lists: colon in HTML attribute
 
 !! test
 Definition lists: self-closed tag
+!! options
+disabled
 !! input
 ;one<br/>two : two-line fun
 !! result
