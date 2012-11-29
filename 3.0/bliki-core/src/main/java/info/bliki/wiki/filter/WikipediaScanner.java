@@ -334,37 +334,48 @@ public class WikipediaScanner {
 			list = new WPList();
 
 			while (true) {
-				if (ch == WPList.DL_DD_CHAR && lastCh == WPList.DL_DT_CHAR && sequence != null) {
-					startPosition = fScannerPosition;
-					if (listElement != null) {
-						listElement.createTagStack(fSource, fWikiModel, fScannerPosition - 1);
-						list.add(listElement);
-						listElement = null;
-					}
-					char[] ddSequence = new char[sequence.length];
-					System.arraycopy(sequence, 0, ddSequence, 0, sequence.length);
-					ddSequence[sequence.length - 1] = WPList.DL_DD_CHAR;
-					sequence = ddSequence;
-
-					int startPos;
-					while (true) {
-						ch = fSource[fScannerPosition++];
-						if (!Character.isWhitespace(ch)) {
-							startPos = fScannerPosition - 1;
-							listElement = new WPListElement(count, sequence, startPos);
-							break;
+				if (ch == WPList.DL_DD_CHAR) {
+					if ((fScannerPosition < fSource.length - 2) && fSource[fScannerPosition] == '/' && fSource[fScannerPosition + 1] == '/') {
+						if (fScannerPosition > 1 && Character.isLetter(fSource[fScannerPosition - 2])) {
+							// definition list with URL link
+							fScannerPosition += 2;
+							ch = fSource[fScannerPosition++];
+							continue;
 						}
-						if (ch == '\n') {
-							fScannerPosition--; // to detect next row
-							startPos = fScannerPosition;
-							listElement = new WPListElement(count, sequence, startPos);
-							listElement.createTagStack(fSource, fWikiModel, startPos);
+					}
+
+					if (lastCh == WPList.DL_DT_CHAR && sequence != null) {
+						startPosition = fScannerPosition;
+						if (listElement != null) {
+							listElement.createTagStack(fSource, fWikiModel, fScannerPosition - 1);
 							list.add(listElement);
 							listElement = null;
-							break;
 						}
+						char[] ddSequence = new char[sequence.length];
+						System.arraycopy(sequence, 0, ddSequence, 0, sequence.length);
+						ddSequence[sequence.length - 1] = WPList.DL_DD_CHAR;
+						sequence = ddSequence;
+
+						int startPos;
+						while (true) {
+							ch = fSource[fScannerPosition++];
+							if (!Character.isWhitespace(ch)) {
+								startPos = fScannerPosition - 1;
+								listElement = new WPListElement(count, sequence, startPos);
+								break;
+							}
+							if (ch == '\n') {
+								fScannerPosition--; // to detect next row
+								startPos = fScannerPosition;
+								listElement = new WPListElement(count, sequence, startPos);
+								listElement.createTagStack(fSource, fWikiModel, startPos);
+								list.add(listElement);
+								listElement = null;
+								break;
+							}
+						}
+						lastCh = ' ';
 					}
-					lastCh = ' ';
 				}
 				if (ch == '\n' || fScannerPosition == 0) {
 					startPosition = fScannerPosition;
@@ -421,16 +432,11 @@ public class WikipediaScanner {
 					int temp = readSpecialWikiTags(fScannerPosition);
 					if (temp >= 0) {
 						fScannerPosition = temp;
-						ch = fSource[fScannerPosition++];
-						continue;
 					}
-				}
-				if (ch == '[') { 
+				} else if (ch == '[') {
 					int temp = findNestedEndSingle(fSource, '[', ']', fScannerPosition);
 					if (temp >= 0) {
 						fScannerPosition = temp;
-						ch = fSource[fScannerPosition++];
-						continue;
 					}
 				}
 				ch = fSource[fScannerPosition++];
@@ -1484,7 +1490,7 @@ public class WikipediaScanner {
 				WikiTagNode tagNode = parseTag(start);
 				if (tagNode != null && !tagNode.isEmptyXmlTag()) {
 					String tagName = tagNode.getTagName();
-					return readUntilIgnoreCase(fScannerPosition, "</", tagName+">");
+					return readUntilIgnoreCase(fScannerPosition, "</", tagName + ">");
 				}
 			}
 		} catch (IndexOutOfBoundsException e) {
