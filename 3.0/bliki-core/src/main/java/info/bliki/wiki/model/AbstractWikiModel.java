@@ -373,14 +373,8 @@ public abstract class AbstractWikiModel implements IWikiModel, IContext {
 			if (trimmedText.length() > 0) {
 				pushNode(aTagNode);
 				if (linkName.equals(link)) {
-					if (withoutSquareBrackets) {
-						aTagNode.addAttribute("class", "externallink", true);
-						aTagNode.addAttribute("title", link, true);
-						aTagNode.addChild(new ContentToken(trimmedText));
-					} else {
-						aTagNode.addAttribute("class", "external autonumber", true);
-						aTagNode.addChild(new ContentToken("[" + (++fExternalLinksCounter) + "]"));
-					}
+					aTagNode.addAttribute("class", "external autonumber", true);
+					aTagNode.addChild(new ContentToken("[" + (++fExternalLinksCounter) + "]"));
 				} else {
 					aTagNode.addAttribute("class", "externallink", true);
 					aTagNode.addAttribute("title", link, true);
