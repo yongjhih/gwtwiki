@@ -18,7 +18,7 @@ public class HTTPUrlFilterTest extends FilterTestSupport {
 	public void testIssue89() {
 		assertEquals(
 				"\n"
-						+ "<p>start <a class=\"externallink\" href=\"//en.wikipedia.org/w/index.php?title=Main_Page\" rel=\"nofollow\" title=\"//en.wikipedia.org/w/index.php?title=Main_Page\">en.wikipedia.org/w/index.php?title=Main_Page</a> end</p>",
+						+ "<p>start <a class=\"external autonumber\" href=\"//en.wikipedia.org/w/index.php?title=Main_Page\" rel=\"nofollow\">[1]</a> end</p>",
 				wikiModel.render("start [//en.wikipedia.org/w/index.php?title=Main_Page] end", false));
 	}
 
@@ -35,8 +35,8 @@ public class HTTPUrlFilterTest extends FilterTestSupport {
 	public void testIssue90a() {
 		assertEquals(
 				"\n"
-						+ "<p>start [  <a class=\"externallink\" href=\"http://www.google.com\" rel=\"nofollow\" title=\"http://www.google.com\">http://www.google.com</a> Google] middle [\n"
-						+ "<a class=\"externallink\" href=\"http://www.google.de\" rel=\"nofollow\" title=\"http://www.google.de\">http://www.google.de</a> Google DE] end</p>",
+						+ "<p>start [  <a class=\"external free\" href=\"http://www.google.com\" rel=\"nofollow\">http://www.google.com</a> Google] middle [\n"
+						+ "<a class=\"external free\" href=\"http://www.google.de\" rel=\"nofollow\">http://www.google.de</a> Google DE] end</p>",
 				wikiModel.render("start [  http://www.google.com Google] middle [\nhttp://www.google.de Google DE] end", false));
 	}
 
@@ -48,28 +48,28 @@ public class HTTPUrlFilterTest extends FilterTestSupport {
 	public void testUrlHTTP() {
 		assertEquals(
 				"\n"
-						+ "<p>see <a class=\"externallink\" href=\"http://www.plog4u.de\" rel=\"nofollow\" title=\"http://www.plog4u.de\">http://www.plog4u.de</a></p>",
+						+ "<p>see <a class=\"external free\" href=\"http://www.plog4u.de\" rel=\"nofollow\">http://www.plog4u.de</a></p>",
 				wikiModel.render("see http://www.plog4u.de", false));
 	}
 
 	public void testUrlHTTP001() {
 		assertEquals(
 				"\n"
-						+ "<p><b><a class=\"externallink\" href=\"http://bla.blub.com\" rel=\"nofollow\" title=\"http://bla.blub.com\">http://bla.blub.com</a></b></p>",
+						+ "<p><b><a class=\"external free\" href=\"http://bla.blub.com\" rel=\"nofollow\">http://bla.blub.com</a></b></p>",
 				wikiModel.render("'''http://bla.blub.com'''", false));
 	}
 
 	public void testUrlFTP() {
 		assertEquals(
 				"\n"
-						+ "<p>see <a class=\"externallink\" href=\"ftp://www.plog4u.de\" rel=\"nofollow\" title=\"ftp://www.plog4u.de\">ftp://www.plog4u.de</a></p>",
+						+ "<p>see <a class=\"external free\" href=\"ftp://www.plog4u.de\" rel=\"nofollow\">ftp://www.plog4u.de</a></p>",
 				wikiModel.render("see ftp://www.plog4u.de", false));
 	}
 
 	public void testUrl2() {
 		assertEquals(
 				"\n"
-						+ "<p>see <a class=\"externallink\" href=\"http://www.plog4u.de/index.php&#38;test_me\" rel=\"nofollow\" title=\"http://www.plog4u.de/index.php&#38;test_me\">http://www.plog4u.de/index.php&#38;test_me</a></p>",
+						+ "<p>see <a class=\"external free\" href=\"http://www.plog4u.de/index.php&#38;test_me\" rel=\"nofollow\">http://www.plog4u.de/index.php&#38;test_me</a></p>",
 				wikiModel.render("see http://www.plog4u.de/index.php&test_me", false));
 	}
 
@@ -77,14 +77,14 @@ public class HTTPUrlFilterTest extends FilterTestSupport {
 		assertEquals(
 				"\n"
 						+ "<ol>\n"
-						+ "<li>Bare URL: <a class=\"externallink\" href=\"http://www.nupedia.com/\" rel=\"nofollow\" title=\"http://www.nupedia.com/\">http://www.nupedia.com/</a></li>\n</ol>",
+						+ "<li>Bare URL: <a class=\"external free\" href=\"http://www.nupedia.com/\" rel=\"nofollow\">http://www.nupedia.com/</a></li>\n</ol>",
 				wikiModel.render("# Bare URL: http://www.nupedia.com/", false));
 	}
 
 	public void testUrl4() {
 		assertEquals(
 				"\n"
-						+ "<p>Bericht über die Weltkulturerbe-Bewerbung von <a class=\"externallink\" href=\"ftp://www.hr-online.de/website/rubriken/kultur/index.jsp?rubrik=5676&#38;key=standard&#38;key=standard_document_7782534\" rel=\"nofollow\" title=\"ftp://www.hr-online.de/website/rubriken/kultur/index.jsp?rubrik=5676&#38;key=standard&#38;key=standard_document_7782534\">www.hr-online.de?rubrik=5676&#38;key=standard</a> vom 13. Juli 2005</p>",
+						+ "<p>Bericht über die Weltkulturerbe-Bewerbung von <a class=\"external text\" href=\"ftp://www.hr-online.de/website/rubriken/kultur/index.jsp?rubrik=5676&#38;key=standard&#38;key=standard_document_7782534\" rel=\"nofollow\">www.hr-online.de?rubrik=5676&#38;key=standard</a> vom 13. Juli 2005</p>",
 				wikiModel
 						.render(
 								"Bericht über die Weltkulturerbe-Bewerbung von [ftp://www.hr-online.de/website/rubriken/kultur/index.jsp?rubrik=5676&amp;key=standard&key=standard_document_7782534 www.hr-online.de?rubrik=5676&key=standard] vom 13.&nbsp;Juli 2005",
@@ -94,7 +94,7 @@ public class HTTPUrlFilterTest extends FilterTestSupport {
 	public void testUrl5() {
 		assertEquals(
 				"\n"
-						+ "<p>Bericht über die Weltkulturerbe-Bewerbung von <a class=\"externallink\" href=\"http://www.hr-online.de/website/rubriken/kultur/index.jsp?rubrik=5676&#38;key=standard&#38;key=standard_document_7782534\" rel=\"nofollow\" title=\"http://www.hr-online.de/website/rubriken/kultur/index.jsp?rubrik=5676&#38;key=standard&#38;key=standard_document_7782534\">www.hr-online.de?rubrik=5676&#38;key=standard</a> vom 13. Juli 2005</p>",
+						+ "<p>Bericht über die Weltkulturerbe-Bewerbung von <a class=\"external text\" href=\"http://www.hr-online.de/website/rubriken/kultur/index.jsp?rubrik=5676&#38;key=standard&#38;key=standard_document_7782534\" rel=\"nofollow\">www.hr-online.de?rubrik=5676&#38;key=standard</a> vom 13. Juli 2005</p>",
 				wikiModel
 						.render(
 								"Bericht über die Weltkulturerbe-Bewerbung von [http://www.hr-online.de/website/rubriken/kultur/index.jsp?rubrik=5676&amp;key=standard&key=standard_document_7782534 www.hr-online.de?rubrik=5676&key=standard] vom 13.&nbsp;Juli 2005",
@@ -104,7 +104,7 @@ public class HTTPUrlFilterTest extends FilterTestSupport {
 	public void testImageUrl() {
 		assertEquals(
 				"\n"
-						+ "<p>see <a class=\"externallink\" href=\"http://www.plog4u.de/image.gif\" rel=\"nofollow\" title=\"http://www.plog4u.de/image.gif\">http://www.plog4u.de/image.gif</a></p>",
+						+ "<p>see <a class=\"external free\" href=\"http://www.plog4u.de/image.gif\" rel=\"nofollow\">http://www.plog4u.de/image.gif</a></p>",
 				wikiModel.render("see http://www.plog4u.de/image.gif", false));
 	}
 
@@ -159,7 +159,7 @@ public class HTTPUrlFilterTest extends FilterTestSupport {
 	public void testUrlWithSpan() {
 		assertEquals(
 				"\n"
-						+ "<p><a class=\"externallink\" href=\"http://en.wikipedia.org/w/index.php?title=Template%3AMilwaukee+Brewers+roster+navbox&#38;action=edit\" rel=\"nofollow\" title=\"http://en.wikipedia.org/w/index.php?title=Template%3AMilwaukee+Brewers+roster+navbox&#38;action=edit\"><span style=\"color:#002bb8;;background:#0a2351; color:#c9b074;;border:none;;\" title=\"You can edit this template. Please use the preview button before saving.\">e</span></a></p>",
+						+ "<p><a class=\"external text\" href=\"http://en.wikipedia.org/w/index.php?title=Template%3AMilwaukee+Brewers+roster+navbox&#38;action=edit\" rel=\"nofollow\"><span style=\"color:#002bb8;;background:#0a2351; color:#c9b074;;border:none;;\" title=\"You can edit this template. Please use the preview button before saving.\">e</span></a></p>",
 				wikiModel
 						.render(
 								"[http://en.wikipedia.org/w/index.php?title=Template%3AMilwaukee+Brewers+roster+navbox&action=edit <span style=\"color:#002bb8;;background:#0a2351; color:#c9b074;;border:none;;\" title=\"You can edit this template. Please use the preview button before saving.\">e</span>]",
