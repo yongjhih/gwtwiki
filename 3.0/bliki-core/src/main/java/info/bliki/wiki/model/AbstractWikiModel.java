@@ -1724,6 +1724,12 @@ public abstract class AbstractWikiModel implements IWikiModel, IContext {
 			templateStr = templateStr.substring(1);
 		}
 
+		// parse away any "#label" markers which are not supported
+		int hashIndex = templateStr.indexOf('#');
+		if (hashIndex != (-1)) {
+			templateStr = templateStr.substring(0, hashIndex);
+		}
+		
 		int indx = templateStr.indexOf(':');
 		if (indx > 0) {
 			String maybeNamespaceStr = fNamespace.getNamespaceByLowercase(templateStr.substring(0, indx).toLowerCase());

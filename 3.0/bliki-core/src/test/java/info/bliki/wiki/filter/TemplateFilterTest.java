@@ -277,7 +277,7 @@ public class TemplateFilterTest extends FilterTestSupport {
 						+ "<th>Google Chrome</th></tr></table></div>\n"
 						+ "<pre>"
 						+ "<ol class=\"references\">\n"
-						+ "<li id=\"_note-1\"><b><a href=\"#_ref-1\" title=\"\">&#8593;</a></b> John Resig. <i><a class=\"external text\" href=\"http://ejohn.org/blog/versions-of-javascript\" rel=\"nofollow\">Versions of JavaScript</a></i>. Ejohn.org. Abgerufen am <a href=\"http://www.bliki.info/wiki/Template:safesubst:#Switch:none\" title=\"Template:safesubst:\">Template:safesubst:</a>.</li>\n</ol>\n"
+						+ "<li id=\"_note-1\"><b><a href=\"#_ref-1\" title=\"\">&#8593;</a></b> John Resig. <i><a class=\"external text\" href=\"http://ejohn.org/blog/versions-of-javascript\" rel=\"nofollow\">Versions of JavaScript</a></i>. Ejohn.org. Abgerufen am <a href=\"http://www.bliki.info/wiki/Template:safesubst:\" title=\"Template:safesubst:\">Template:safesubst:</a>.</li>\n</ol>\n"
 						+ "</pre>",
 				wikiModel
 						.render(
@@ -739,7 +739,7 @@ public class TemplateFilterTest extends FilterTestSupport {
 						+ "<td />\n"
 						+ "<td /></tr></table></div>\n"
 						+ "<ol class=\"references\">\n"
-						+ "<li id=\"_note-1\"><b><a href=\"#_ref-1\" title=\"\">&#8593;</a></b> John Resig. <i><a class=\"external text\" href=\"http://ejohn.org/blog/versions-of-javascript\" rel=\"nofollow\">Versions of JavaScript</a></i>. Ejohn.org. Abgerufen am <a href=\"http://www.bliki.info/wiki/Template:safesubst:#Switch:none\" title=\"Template:safesubst:\">Template:safesubst:</a>.</li>\n</ol>",
+						+ "<li id=\"_note-1\"><b><a href=\"#_ref-1\" title=\"\">&#8593;</a></b> John Resig. <i><a class=\"external text\" href=\"http://ejohn.org/blog/versions-of-javascript\" rel=\"nofollow\">Versions of JavaScript</a></i>. Ejohn.org. Abgerufen am <a href=\"http://www.bliki.info/wiki/Template:safesubst:\" title=\"Template:safesubst:\">Template:safesubst:</a>.</li>\n</ol>",
 				wikiModel
 						.render(
 								"=== Versionsgeschichte ===\n"
@@ -1167,5 +1167,23 @@ public class TemplateFilterTest extends FilterTestSupport {
 
 		assertTrue("wikiModel.getTemplates() = " + wikiModel.getTemplates().toString(), wikiModel.getTemplates()
 				.contains("Serie de TV"));
+	}
+
+	public void testTemplateWithHashtag001() {
+		assertEquals(
+				"\n"
+						+ "<p>{{::Viva_World_Cup#Tournament_results}}\n"
+						+ "<a href=\"http://www.bliki.info/wiki/Viva_World_Cup\" title=\"Viva_World_Cup\">Viva_World_Cup</a>\n"
+						+ "<a href=\"http://www.bliki.info/wiki/Viva_World_Cup\" title=\"Viva_World_Cup\">Viva_World_Cup</a>\n"
+						+ "</p>",
+				wikiModel.render("{{::Viva_World_Cup#Tournament_results}}\n"
+						+ "{{:Viva_World_Cup#Tournament_results}}\n"
+						+ "{{:Viva_World_Cup#Tournament_results#History}}\n"
+						+ "[[Category:Test#test]]", false));
+
+		assertTrue("wikiModel.getIncludes() = " + wikiModel.getIncludes().toString(),
+				wikiModel.getIncludes().contains("Viva_World_Cup"));
+		assertTrue("wikiModel.getCategories() = " + wikiModel.getCategories().keySet().toString(),
+				wikiModel.getCategories().keySet().contains("Test"));
 	}
 }
