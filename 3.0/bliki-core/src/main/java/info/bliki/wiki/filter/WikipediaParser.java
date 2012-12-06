@@ -316,6 +316,8 @@ public class WikipediaParser extends AbstractParser implements IParser {
 							if (fCurrentCharacter == 'i' || fCurrentCharacter == 'I') {
 								// ISBN ?
 								if (parseISBNLinks()) {
+									fWhiteStart = true;
+									fWhiteStartPosition = fCurrentPosition;
 									continue;
 								}
 							}
@@ -323,12 +325,16 @@ public class WikipediaParser extends AbstractParser implements IParser {
 							if (parseURIScheme()) {
 								// a URI scheme registered in the wiki model (ftp, http,
 								// https,...)
+								fWhiteStart = true;
+								fWhiteStartPosition = fCurrentPosition;
 								continue;
 							}
 
 							if (fWikiModel.isCamelCaseEnabled() && Character.isUpperCase(fCurrentCharacter)
 									&& fWikiModel.getRecursionLevel() <= 1) {
 								if (parseCamelCaseLink()) {
+									fWhiteStart = true;
+									fWhiteStartPosition = fCurrentPosition;
 									continue;
 								}
 							}
