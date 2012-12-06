@@ -421,6 +421,9 @@ public class TemplateParser extends AbstractParser {
 						} else if (tagName.equals("math")) {
 							readUntilIgnoreCase("</", "math>");
 							return true;
+						} else if (tagName.equals("pre")) {
+							readUntilIgnoreCase("</", "pre>");
+							return true;
 						}
 						if (ignoreTemplateTags) {
 							return false;
@@ -528,6 +531,10 @@ public class TemplateParser extends AbstractParser {
 						} else if (tagName.equals("source")) {
 							readUntilIgnoreCase("</", "source>");
 							appendContentWithComment(writer, startPosition);
+							return true;
+
+						} else if (tagName.equals("pre")) {
+							readUntilIgnoreCase("</", "pre>");
 							return true;
 
 						} else if (tagName.equals("math")) {
