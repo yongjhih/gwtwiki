@@ -113,6 +113,8 @@ public abstract class AbstractWikiModel implements IWikiModel, IContext {
 	 */
 	protected Map<String, Object> attributes;
 
+	protected Map<String, Counter> fTemplates;
+
 	/**
 	 * A Map<Class,Object> that allows people to register a renderer for a
 	 * particular kind of object to be displayed in this template. This overrides
@@ -1045,12 +1047,12 @@ public abstract class AbstractWikiModel implements IWikiModel, IContext {
 	public String getPageName() {
 		return fPageTitle;
 	}
-	
+
 	@Override
 	public MagicWordE getMagicWord(String name) {
 		return MagicWord.getMagicWord(name);
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -1219,6 +1221,7 @@ public abstract class AbstractWikiModel implements IWikiModel, IContext {
 			fSectionCounter = 0;
 			fExternalLinksCounter = 0;
 			fInitialized = true;
+			fTemplates = new HashMap<String, Counter>();
 		}
 	}
 
@@ -1628,6 +1631,7 @@ public abstract class AbstractWikiModel implements IWikiModel, IContext {
 		fRedirectLink = null;
 		fSectionCounter = 0;
 		fExternalLinksCounter = 0;
+		fTemplates = new HashMap<String, Counter>();
 	}
 
 	/**
@@ -1705,29 +1709,45 @@ public abstract class AbstractWikiModel implements IWikiModel, IContext {
 			return;
 		}
 		String fullTemplateStr = parsedPagename.namespace.makeFullPagename(parsedPagename.pagename);
-		if (parsedPagename.namespace.isType(NamespaceCode.TEMPLATE_NAMESPACE_KEY)) {
-			addTemplate(parsedPagename.pagename);
-		} else {
-			addInclude(fullTemplateStr);
-			// invalidate cache:
-			templateCallsCache = null;
-		}
-		
-		String plainContent = getRawWikiContent(parsedPagename, parameterMap);
-		if (plainContent == null) {
-			// content of this transclusion is missing => render as link:
-			plainContent = "[[:" + fullTemplateStr + "]]";
-		}
+		Counter val = null;
+		try {
+			if (parsedPagename.namespace.isType(NamespaceCode.TEMPLATE_NAMESPACE_KEY)) {
+				val = fTemplates.get(parsedPagename.pagename);
+				if (val == null) {
+					fTemplates.put(parsedPagename.pagename, new Counter());
+				} else {
+					if (val.inc() > 1) {
+						writer.append("<span class=\"error\">Template loop detected: <strong class=\"selflink\">Template:SELF RECURSION</strong></span>");
+						return; 
+					}
+				}
+				addTemplate(parsedPagename.pagename);
+			} else {
+				addInclude(fullTemplateStr);
+				// invalidate cache:
+				templateCallsCache = null;
+			}
 
-		StringBuilder templateBuffer = new StringBuilder(plainContent.length());
-		TemplateParser.parseRecursive(plainContent.trim(), this, templateBuffer, false, false, parameterMap);
-		if (templateCallsCache != null && cacheKey != null) {
-			// save this template call in the cache
-			String cacheValue = templateBuffer.toString();
-			templateCallsCache.put(cacheKey, cacheValue);
-			writer.append(cacheValue);
-		} else {
-			writer.append(templateBuffer);
+			String plainContent = getRawWikiContent(parsedPagename, parameterMap);
+			if (plainContent == null) {
+				// content of this transclusion is missing => render as link:
+				plainContent = "[[:" + fullTemplateStr + "]]";
+			}
+
+			StringBuilder templateBuffer = new StringBuilder(plainContent.length());
+			TemplateParser.parseRecursive(plainContent.trim(), this, templateBuffer, false, false, parameterMap);
+			if (templateCallsCache != null && cacheKey != null) {
+				// save this template call in the cache
+				String cacheValue = templateBuffer.toString();
+				templateCallsCache.put(cacheKey, cacheValue);
+				writer.append(cacheValue);
+			} else {
+				writer.append(templateBuffer);
+			}
+		} finally {
+			if (val != null) {
+				val.dec();
+			}
 		}
 	}
 
@@ -1798,7 +1818,8 @@ public abstract class AbstractWikiModel implements IWikiModel, IContext {
 			fNamespaceName = "";
 			return;
 		}
-		// TODO: we should only allow valid namespaces and probably set pagename and namespace in one go
+		// TODO: we should only allow valid namespaces and probably set pagename and
+		// namespace in one go
 		INamespaceValue nsVal = fNamespace.getNamespace(namespaceLowercase);
 		if (nsVal != null) {
 			fNamespaceName = nsVal.getPrimaryText();

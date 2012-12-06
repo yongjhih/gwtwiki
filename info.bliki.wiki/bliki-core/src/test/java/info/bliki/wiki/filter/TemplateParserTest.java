@@ -491,7 +491,7 @@ public class TemplateParserTest extends FilterTestSupport {
 	}
 
 	public void testEndlessRecursion() {
-		assertEquals("Error - template recursion limit exceeded parsing templates.", wikiModel.parseTemplates("{{recursion}}", false));
+		assertEquals("<span class=\"error\">Template loop detected: <strong class=\"selflink\">Template:SELF RECURSION</strong></span>", wikiModel.parseTemplates("{{recursion}}", false));
 	}
 
 	private final String TEST_STRING_01 = "[[Category:Interwiki templates|wikipedia]]\n" + "[[zh:Template:Wikipedia]]\n"
