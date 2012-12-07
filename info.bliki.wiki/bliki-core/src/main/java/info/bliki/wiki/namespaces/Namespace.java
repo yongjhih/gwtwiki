@@ -187,6 +187,8 @@ public class Namespace implements INamespace {
 			// remove old texts:
 			for (String text : this.texts) {
 				TEXT_TO_NAMESPACE_MAP.remove(text);
+				TEXT_TO_NAMESPACE_MAP.remove(text.replace(' ', '_'));
+				TEXT_TO_NAMESPACE_MAP.remove(text.replace('_', ' '));
 			}
 			// note: don't assign the fixed-size list of Arrays.asList to texts!
 			texts = new ArrayList<String>(aliases.length);

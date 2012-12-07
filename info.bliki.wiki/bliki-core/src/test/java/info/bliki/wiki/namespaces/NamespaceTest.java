@@ -67,4 +67,10 @@ public class NamespaceTest extends TestCase {
 		assertEquals(namespace.META, namespace.getContentspace("Project_talk"));
 		assertEquals(namespace.META, namespace.getContentspace("Project talk"));
 	}
+
+	public void testOldAliases001() {
+		namespace.getCategory_talk().setTexts("Kategorie Diskussion");
+		assertEquals(null, namespace.getNamespace("Category talk"));
+		assertEquals(null, namespace.getNamespace("Category_talk"));
+	}
 }
