@@ -4,6 +4,7 @@ import info.bliki.htmlcleaner.BaseToken;
 import info.bliki.htmlcleaner.TagToken;
 import info.bliki.wiki.filter.AbstractParser;
 import info.bliki.wiki.filter.AbstractParser.ParsedPageName;
+import info.bliki.wiki.filter.Encoder;
 import info.bliki.wiki.filter.ITextConverter;
 import info.bliki.wiki.namespaces.INamespace;
 import info.bliki.wiki.namespaces.INamespace.INamespaceValue;
@@ -988,4 +989,18 @@ public interface IWikiModel extends IConfiguration {
 	 *         <tt>null</tt> if this is no valid magic word
 	 */
 	public abstract Object getMagicWord(String name);
+
+	/**
+	 * Splits the given full title into its namespace and page title components
+	 * and normalises both components using
+	 * {@link Encoder#normaliseTitle(String, boolean, char)} keeping
+	 * underscores.
+	 * 
+	 * @param fullTitle
+	 *            the (full) title including a namespace (if present)
+	 * 
+	 * @return a 2-element array with the namespace (index 0) and the page title
+	 *         (index 1)
+	 */
+	public abstract String[] splitNsTitle(String fullTitle);
 }
