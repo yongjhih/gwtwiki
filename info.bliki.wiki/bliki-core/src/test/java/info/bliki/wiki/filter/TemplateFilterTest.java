@@ -1216,4 +1216,13 @@ public class TemplateFilterTest extends FilterTestSupport {
 		assertTrue("wikiModel.getLinks() = " + wikiModel.getLinks().toString(),
 				wikiModel.getLinks().size() == 0);
 	}
+
+	/**
+	 * Issue 131 - incorrect parsing of links if an additional HTML tag is appended
+	 */
+	public void testLinkWithExtraHTMLTag001() {
+		assertEquals(
+				"\n<p><a class=\"external free\" href=\"http://www.example.com/\" rel=\"nofollow\">http://www.example.com/</a>&#60;hello&#62;</p>",
+				wikiModel.render("http://www.example.com/<hello>", false));
+	}
 }
