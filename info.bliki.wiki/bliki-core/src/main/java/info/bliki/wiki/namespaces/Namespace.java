@@ -398,6 +398,10 @@ public class Namespace implements INamespace {
 		return fResourceBundle;
 	}
 
+	protected enum ExtractType {
+		REPLACE_TEXTS, APPEND_AS_ALIASES;
+	}
+	
 	/**
 	 * Extracts the two namespace strings from the resource bundle into the
 	 * {@link #fNamespaces1} and {@link #fNamespaces2} arrays.
@@ -409,55 +413,57 @@ public class Namespace implements INamespace {
 	 * @param code
 	 *          the namespace code
 	 */
-	private void extractFromResource(String ns1Id, String ns2Id, NamespaceCode code) {
+	private void extractFromResource(ResourceBundle resourceBundle, String ns1Id, String ns2Id, NamespaceCode code, ExtractType cmd) {
 		NamespaceValue namespace = getNamespaceByNumber(code);
 		assert (namespace != null) : "undefined namespace code: " + code;
-		String ns1 = Messages.getString(fResourceBundle, ns1Id, null);
+		String ns1 = Messages.getString(resourceBundle, ns1Id, null);
 		if (ns1 != null) {
-			String ns2 = Messages.getString(fResourceBundle, ns2Id, null);
-			if (ns2 != null) {
-				namespace.setTexts(ns1, ns2);
-			} else {
-				namespace.setTexts(ns1);
-			}
-		}
-		if (fResourceBundleEn != null) {
-			String ns1En = Messages.getString(fResourceBundleEn, ns1Id, null);
-			if (ns1En != null) {
-				namespace.addAlias(ns1En);
-				String ns2En = Messages.getString(fResourceBundleEn, ns2Id, null);
-				if (ns2En != null) {
-					namespace.addAlias(ns2En);
-				}
+			String ns2 = Messages.getString(resourceBundle, ns2Id, null);
+			switch (cmd) {
+				case REPLACE_TEXTS:
+					if (ns2 != null) {
+						namespace.setTexts(ns1, ns2);
+					} else {
+						namespace.setTexts(ns1);
+					}
+				case APPEND_AS_ALIASES:
+					namespace.addAlias(ns1);
+					if (ns2 != null) {
+						namespace.addAlias(ns2);
+					}
 			}
 		}
 	}
 
-	private void initializeNamespaces() {
-		if (fResourceBundle == null) {
+	protected void extractFromResource(ResourceBundle resource, ExtractType cmd) {
+		if (resource == null) {
 			return;
 		}
+		extractFromResource(resource, Messages.WIKI_API_MEDIA1, Messages.WIKI_API_MEDIA2, NamespaceCode.MEDIA_NAMESPACE_KEY, cmd);
+		extractFromResource(resource, Messages.WIKI_API_SPECIAL1, Messages.WIKI_API_SPECIAL2, NamespaceCode.SPECIAL_NAMESPACE_KEY, cmd);
+		extractFromResource(resource, Messages.WIKI_API_TALK1, Messages.WIKI_API_TALK2, NamespaceCode.TALK_NAMESPACE_KEY, cmd);
+		extractFromResource(resource, Messages.WIKI_API_USER1, Messages.WIKI_API_USER2, NamespaceCode.USER_NAMESPACE_KEY, cmd);
+		extractFromResource(resource, Messages.WIKI_API_USERTALK1, Messages.WIKI_API_USERTALK2, NamespaceCode.USER_TALK_NAMESPACE_KEY, cmd);
+		extractFromResource(resource, Messages.WIKI_API_META1, Messages.WIKI_API_META2, NamespaceCode.PROJECT_NAMESPACE_KEY, cmd);
+		extractFromResource(resource, Messages.WIKI_API_METATALK1, Messages.WIKI_API_METATALK2, NamespaceCode.PROJECT_TALK_NAMESPACE_KEY, cmd);
+		extractFromResource(resource, Messages.WIKI_API_IMAGE1, Messages.WIKI_API_IMAGE2, NamespaceCode.FILE_NAMESPACE_KEY, cmd);
+		extractFromResource(resource, Messages.WIKI_API_IMAGETALK1, Messages.WIKI_API_IMAGETALK2, NamespaceCode.FILE_TALK_NAMESPACE_KEY, cmd);
+		extractFromResource(resource, Messages.WIKI_API_MEDIAWIKI1, Messages.WIKI_API_MEDIAWIKI2, NamespaceCode.MEDIAWIKI_NAMESPACE_KEY, cmd);
+		extractFromResource(resource, Messages.WIKI_API_MEDIAWIKITALK1, Messages.WIKI_API_MEDIAWIKITALK2,
+				NamespaceCode.MEDIAWIKI_TALK_NAMESPACE_KEY, cmd);
+		extractFromResource(resource, Messages.WIKI_API_TEMPLATE1, Messages.WIKI_API_TEMPLATE2, NamespaceCode.TEMPLATE_NAMESPACE_KEY, cmd);
+		extractFromResource(resource, Messages.WIKI_API_TEMPLATETALK1, Messages.WIKI_API_TEMPLATETALK2, NamespaceCode.TEMPLATE_TALK_NAMESPACE_KEY, cmd);
+		extractFromResource(resource, Messages.WIKI_API_HELP1, Messages.WIKI_API_HELP2, NamespaceCode.HELP_NAMESPACE_KEY, cmd);
+		extractFromResource(resource, Messages.WIKI_API_HELPTALK1, Messages.WIKI_API_HELPTALK2, NamespaceCode.HELP_TALK_NAMESPACE_KEY, cmd);
+		extractFromResource(resource, Messages.WIKI_API_CATEGORY1, Messages.WIKI_API_CATEGORY2, NamespaceCode.CATEGORY_NAMESPACE_KEY, cmd);
+		extractFromResource(resource, Messages.WIKI_API_CATEGORYTALK1, Messages.WIKI_API_CATEGORYTALK2, NamespaceCode.CATEGORY_TALK_NAMESPACE_KEY, cmd);
+		extractFromResource(resource, Messages.WIKI_API_PORTAL1, Messages.WIKI_API_PORTAL2, NamespaceCode.PORTAL_NAMESPACE_KEY, cmd);
+		extractFromResource(resource, Messages.WIKI_API_PORTALTALK1, Messages.WIKI_API_PORTALTALK2, NamespaceCode.PORTAL_TALK_NAMESPACE_KEY, cmd);
+	}
 
-		extractFromResource(Messages.WIKI_API_MEDIA1, Messages.WIKI_API_MEDIA2, NamespaceCode.MEDIA_NAMESPACE_KEY);
-		extractFromResource(Messages.WIKI_API_SPECIAL1, Messages.WIKI_API_SPECIAL2, NamespaceCode.SPECIAL_NAMESPACE_KEY);
-		extractFromResource(Messages.WIKI_API_TALK1, Messages.WIKI_API_TALK2, NamespaceCode.TALK_NAMESPACE_KEY);
-		extractFromResource(Messages.WIKI_API_USER1, Messages.WIKI_API_USER2, NamespaceCode.USER_NAMESPACE_KEY);
-		extractFromResource(Messages.WIKI_API_USERTALK1, Messages.WIKI_API_USERTALK2, NamespaceCode.USER_TALK_NAMESPACE_KEY);
-		extractFromResource(Messages.WIKI_API_META1, Messages.WIKI_API_META2, NamespaceCode.PROJECT_NAMESPACE_KEY);
-		extractFromResource(Messages.WIKI_API_METATALK1, Messages.WIKI_API_METATALK2, NamespaceCode.PROJECT_TALK_NAMESPACE_KEY);
-		extractFromResource(Messages.WIKI_API_IMAGE1, Messages.WIKI_API_IMAGE2, NamespaceCode.FILE_NAMESPACE_KEY);
-		extractFromResource(Messages.WIKI_API_IMAGETALK1, Messages.WIKI_API_IMAGETALK2, NamespaceCode.FILE_TALK_NAMESPACE_KEY);
-		extractFromResource(Messages.WIKI_API_MEDIAWIKI1, Messages.WIKI_API_MEDIAWIKI2, NamespaceCode.MEDIAWIKI_NAMESPACE_KEY);
-		extractFromResource(Messages.WIKI_API_MEDIAWIKITALK1, Messages.WIKI_API_MEDIAWIKITALK2,
-				NamespaceCode.MEDIAWIKI_TALK_NAMESPACE_KEY);
-		extractFromResource(Messages.WIKI_API_TEMPLATE1, Messages.WIKI_API_TEMPLATE2, NamespaceCode.TEMPLATE_NAMESPACE_KEY);
-		extractFromResource(Messages.WIKI_API_TEMPLATETALK1, Messages.WIKI_API_TEMPLATETALK2, NamespaceCode.TEMPLATE_TALK_NAMESPACE_KEY);
-		extractFromResource(Messages.WIKI_API_HELP1, Messages.WIKI_API_HELP2, NamespaceCode.HELP_NAMESPACE_KEY);
-		extractFromResource(Messages.WIKI_API_HELPTALK1, Messages.WIKI_API_HELPTALK2, NamespaceCode.HELP_TALK_NAMESPACE_KEY);
-		extractFromResource(Messages.WIKI_API_CATEGORY1, Messages.WIKI_API_CATEGORY2, NamespaceCode.CATEGORY_NAMESPACE_KEY);
-		extractFromResource(Messages.WIKI_API_CATEGORYTALK1, Messages.WIKI_API_CATEGORYTALK2, NamespaceCode.CATEGORY_TALK_NAMESPACE_KEY);
-		extractFromResource(Messages.WIKI_API_PORTAL1, Messages.WIKI_API_PORTAL2, NamespaceCode.PORTAL_NAMESPACE_KEY);
-		extractFromResource(Messages.WIKI_API_PORTALTALK1, Messages.WIKI_API_PORTALTALK2, NamespaceCode.PORTAL_TALK_NAMESPACE_KEY);
+	private void initializeNamespaces() {
+		extractFromResource(fResourceBundle, ExtractType.REPLACE_TEXTS);
+		extractFromResource(fResourceBundleEn, ExtractType.APPEND_AS_ALIASES);
 		
 		// Aliases as defined by
 		// https://en.wikipedia.org/wiki/Wikipedia:Namespace#Aliases
