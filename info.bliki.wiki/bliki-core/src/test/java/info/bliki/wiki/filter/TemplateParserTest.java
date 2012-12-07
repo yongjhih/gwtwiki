@@ -967,6 +967,29 @@ public class TemplateParserTest extends FilterTestSupport {
 		assertEquals("Template_talk:Sandbox", wikiModel.parseTemplates("{{TALKPAGENAMEE:Template talk:Sandbox}}", false));
 	}
 
+	public void testSUBJECTPAGENAME001() {
+		wikiModel.setPageName("MyPage");
+		wikiModel.setNamespaceName("");
+		assertEquals("MyPage", wikiModel.parseTemplates("{{SUBJECTPAGENAME}}", false));
+		assertEquals("Main Page", wikiModel.parseTemplates("{{SUBJECTPAGENAME:Main Page}}", false));
+		assertEquals("Template:Main Page", wikiModel.parseTemplates("{{SUBJECTPAGENAME:Template:Main Page}}", false));
+		assertEquals("Bad:Main Page", wikiModel.parseTemplates("{{SUBJECTPAGENAME:Bad:Main Page}}", false));
+		assertEquals("Template:Sandbox", wikiModel.parseTemplates("{{SUBJECTPAGENAME:Template:Sandbox}}", false));
+		assertEquals("Template:Sandbox", wikiModel.parseTemplates("{{SUBJECTPAGENAME:Template_talk:Sandbox}}", false));
+		assertEquals("Template:Sandbox", wikiModel.parseTemplates("{{SUBJECTPAGENAME:Template talk:Sandbox}}", false));
+	}
+
+	public void testSUBJECTPAGENAMEE001() {
+		wikiModel.setPageName("MyPage");
+		assertEquals("MyPage", wikiModel.parseTemplates("{{SUBJECTPAGENAMEE}}", false));
+		assertEquals("Main_Page", wikiModel.parseTemplates("{{SUBJECTPAGENAMEE:Main Page}}", false));
+		assertEquals("Template:Main_Page", wikiModel.parseTemplates("{{SUBJECTPAGENAMEE:Template:Main Page}}", false));
+		assertEquals("Bad:Main_Page", wikiModel.parseTemplates("{{SUBJECTPAGENAMEE:Bad:Main Page}}", false));
+		assertEquals("Template:Sandbox", wikiModel.parseTemplates("{{SUBJECTPAGENAMEE:Template:Sandbox}}", false));
+		assertEquals("Template:Sandbox", wikiModel.parseTemplates("{{SUBJECTPAGENAMEE:Template_talk:Sandbox}}", false));
+		assertEquals("Template:Sandbox", wikiModel.parseTemplates("{{SUBJECTPAGENAMEE:Template talk:Sandbox}}", false));
+	}
+
 	public void testURLEncode001() {
 		assertEquals("%22%23%24%25%26%27%28%29*%2C%3B%3F%5B%5D%5E%60%7B%7D", wikiModel.parseTemplates(
 				"{{urlencode: \"#$%&'()*,;?[]^`{}}}", false));

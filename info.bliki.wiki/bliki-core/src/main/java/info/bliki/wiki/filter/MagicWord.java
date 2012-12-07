@@ -424,11 +424,42 @@ public class MagicWord {
 				return getTalkpage(parameter, model);
 			case MAGIC_TALK_PAGE_NAME_E:
 				return model.encodeTitleToUrl(getTalkpage(parameter, model), true);
+			case MAGIC_SUBJECT_PAGE_NAME:
+			case MAGIC_ARTICLE_PAGE_NAME:
+				return getSubjectpage(parameter, model);
+			case MAGIC_SUBJECT_PAGE_NAME_E:
+			case MAGIC_ARTICLE_PAGE_NAME_E:
+				return model.encodeTitleToUrl(getSubjectpage(parameter, model), true);
 			default:
 				break;
 		}
 
 		return magicWord.toString();
+	}
+
+	/**
+	 * Gets the subjectpage's name of a given non-<tt>null</tt> parameter or the
+	 * current model's pagename and namespace.
+	 * 
+	 * @param parameter
+	 *            the parameter of the magic word (may be <tt>null</tt>)
+	 * @param model
+	 *            the model being used
+	 * 
+	 * @return the name of the subjectpage
+	 */
+	protected static String getSubjectpage(String parameter, IWikiModel model) {
+		String[] fullPage = getPagenameHelper2(parameter, model);
+		if (fullPage != null) {
+			INamespaceValue subjectSpace = model.getNamespace().getContentspace(fullPage[0]);
+			if (subjectSpace == null) {
+				return fullPage[1];
+			} else {
+				return subjectSpace.makeFullPagename(fullPage[1]);
+			}
+		} else {
+			return "";
+		}
 	}
 
 	/**
@@ -443,7 +474,7 @@ public class MagicWord {
 	 * @return the name of the talkpage
 	 */
 	protected static String getTalkpage(String parameter, IWikiModel model) {
-		String[] fullPage = getPagenameHelper2(parameter, model);
+	String[] fullPage = getPagenameHelper2(parameter, model);
 		if (fullPage != null) {
 		    INamespaceValue talkSpace = model.getNamespace().getTalkspace(fullPage[0]);
 		    if (talkSpace == null) {
