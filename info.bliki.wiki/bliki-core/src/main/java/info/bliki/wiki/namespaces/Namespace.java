@@ -390,9 +390,9 @@ public class Namespace implements INamespace {
 	private void extractFromResource(String ns1Id, String ns2Id, NamespaceCode code) {
 		NamespaceValue namespace = getNamespaceByNumber(code);
 		assert (namespace != null) : "undefined namespace code: " + code;
-		String ns1 = Messages.getString(fResourceBundle, ns1Id);
+		String ns1 = Messages.getString(fResourceBundle, ns1Id, null);
 		if (ns1 != null) {
-			String ns2 = Messages.getString(fResourceBundle, ns2Id);
+			String ns2 = Messages.getString(fResourceBundle, ns2Id, null);
 			if (ns2 != null) {
 				namespace.setTexts(ns1, ns2);
 			} else {
@@ -400,10 +400,10 @@ public class Namespace implements INamespace {
 			}
 		}
 		if (fResourceBundleEn != null) {
-			String ns1En = Messages.getString(fResourceBundleEn, ns1Id);
+			String ns1En = Messages.getString(fResourceBundleEn, ns1Id, null);
 			if (ns1En != null) {
 				namespace.addAlias(ns1En);
-				String ns2En = Messages.getString(fResourceBundleEn, ns2Id);
+				String ns2En = Messages.getString(fResourceBundleEn, ns2Id, null);
 				if (ns2En != null) {
 					namespace.addAlias(ns2En);
 				}
