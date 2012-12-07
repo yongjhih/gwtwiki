@@ -347,20 +347,23 @@ public abstract class AbstractWikiModel implements IWikiModel, IContext {
 		aTagNode.addAttribute("href", link, true);
 		aTagNode.addAttribute("rel", "nofollow", true);
 		if (withoutSquareBrackets) {
-			aTagNode.addAttribute("class", "externallink", true);
-			aTagNode.addAttribute("title", link, true);
+			aTagNode.addAttribute("class", "external free", true);
+//			aTagNode.addAttribute("title", link, true);
 			append(aTagNode);
 			aTagNode.addChild(new ContentToken(linkName));
 		} else {
 			String trimmedText = linkName.trim();
 			if (trimmedText.length() > 0) {
 				pushNode(aTagNode);
-				if (linkName.equals(link)) {
+				if (linkName.equals(link)
+						// protocol-relative URLs also get auto-numbered if there is no real alias
+						|| (link.length() >= 2 && link.charAt(0) == '/' && link.charAt(1) == '/'
+								&& link.substring(2).equals(linkName))) {
 					aTagNode.addAttribute("class", "external autonumber", true);
 					aTagNode.addChild(new ContentToken("[" + (++fExternalLinksCounter) + "]"));
 				} else {
-					aTagNode.addAttribute("class", "externallink", true);
-					aTagNode.addAttribute("title", link, true);
+					aTagNode.addAttribute("class", "external text", true);
+//					aTagNode.addAttribute("title", link, true);
 					WikipediaParser.parseRecursive(trimmedText, this, false, true);
 				}
 				popNode();

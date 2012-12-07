@@ -187,7 +187,7 @@ public class TemplateFilterTest extends FilterTestSupport {
 		// see method WikiTestModel#getTemplateContent()
 		assertEquals(
 				"\n"
-						+ "<p>start- <i><a class=\"externallink\" href=\"http://www.etymonline.com/index.php?search=hello&#38;searchmode=none\" rel=\"nofollow\" title=\"http://www.etymonline.com/index.php?search=hello&#38;searchmode=none\">Online Etymology Dictionary</a></i>. -end</p>",
+						+ "<p>start- <i><a class=\"external text\" href=\"http://www.etymonline.com/index.php?search=hello&#38;searchmode=none\" rel=\"nofollow\">Online Etymology Dictionary</a></i>. -end</p>",
 				wikiModel
 						.render(
 								"start- {{cite web|url=http://www.etymonline.com/index.php?search=hello&searchmode=none|title=Online Etymology Dictionary}} -end",
@@ -249,7 +249,7 @@ public class TemplateFilterTest extends FilterTestSupport {
 						+ "<td><a href=\"http://www.bliki.info/wiki/GNU_Lesser_General_Public_License\" title=\"GNU Lesser General Public License\">LGPL</a></td></tr>\n"
 						+ "<tr>\n"
 						+ "<th><a href=\"http://www.bliki.info/wiki/Website\" title=\"Website\">Website</a></th>\n"
-						+ "<td><a class=\"externallink\" href=\"http://www.jamwiki.org/\" rel=\"nofollow\" title=\"http://www.jamwiki.org/\">JAMWiki wiki</a></td></tr></table></div>\n"
+						+ "<td><a class=\"external text\" href=\"http://www.jamwiki.org/\" rel=\"nofollow\">JAMWiki wiki</a></td></tr></table></div>\n"
 						+ "", wikiModel.render("{{Infobox_Software\n" + "|name = JAMWiki\n" + "|logo = \n" + "|caption =\n" + "\n"
 						+ "|developer = \n" + "|latest_release_version = 0.6.5\n" + "|latest_release_date = [[March 16]], [[2008]]\n"
 						+ "|latest preview version = 0.6.5 \n" + "|latest preview date = \n" + "|operating_system = [[Cross-platform]]\n"
@@ -276,7 +276,7 @@ public class TemplateFilterTest extends FilterTestSupport {
 						+ "<th>Google Chrome</th></tr></table></div>\n"
 						+ "<pre>"
 						+ "<ol class=\"references\">\n"
-						+ "<li id=\"_note-1\"><b><a href=\"#_ref-1\" title=\"\">&#8593;</a></b> John Resig. <i><a class=\"externallink\" href=\"http://ejohn.org/blog/versions-of-javascript\" rel=\"nofollow\" title=\"http://ejohn.org/blog/versions-of-javascript\">Versions of JavaScript</a></i>. Ejohn.org. Abgerufen am <a href=\"http://www.bliki.info/wiki/Template:safesubst:#Switch:none\" title=\"Template:safesubst:\">Template:safesubst:</a>.</li>\n</ol>\n"
+						+ "<li id=\"_note-1\"><b><a href=\"#_ref-1\" title=\"\">&#8593;</a></b> John Resig. <i><a class=\"external text\" href=\"http://ejohn.org/blog/versions-of-javascript\" rel=\"nofollow\">Versions of JavaScript</a></i>. Ejohn.org. Abgerufen am <a href=\"http://www.bliki.info/wiki/Template:safesubst:#Switch:none\" title=\"Template:safesubst:\">Template:safesubst:</a>.</li>\n</ol>\n"
 						+ "</pre>",
 				wikiModel
 						.render(
@@ -422,7 +422,7 @@ public class TemplateFilterTest extends FilterTestSupport {
 						+ "\n"
 						+ "<li class=\"nv-view\"><a href=\"http://www.bliki.info/wiki/Template:AcademyAwardBestActor_1981-2000\" title=\"Template:AcademyAwardBestActor 1981-2000\"><span style=\";background: #EEDD82;background:none transparent;border:none;\" title=\"View this template\">v</span></a></li>\n"
 						+ "<li class=\"nv-talk\"><a href=\"http://www.bliki.info/wiki/Template_talk:AcademyAwardBestActor_1981-2000\" title=\"Template_talk:AcademyAwardBestActor 1981-2000\"><span style=\";background: #EEDD82;background:none transparent;border:none;\" title=\"Discuss this template\">t</span></a></li>\n"
-						+ "<li class=\"nv-edit\"><a class=\"externallink\" href=\"http://en.wikipedia.org/w/index.php?title=Template%3AAcademyAwardBestActor+1981-2000&#38;action=edit\" rel=\"nofollow\" title=\"http://en.wikipedia.org/w/index.php?title=Template%3AAcademyAwardBestActor+1981-2000&#38;action=edit\"><span style=\";background: #EEDD82;background:none transparent;border:none;\" title=\"Edit this template\">e</span></a></li>\n"
+						+ "<li class=\"nv-edit\"><a class=\"external text\" href=\"http://en.wikipedia.org/w/index.php?title=Template%3AAcademyAwardBestActor+1981-2000&#38;action=edit\" rel=\"nofollow\"><span style=\";background: #EEDD82;background:none transparent;border:none;\" title=\"Edit this template\">e</span></a></li>\n"
 						+ "</ul></div>\n"
 						+ "<div style=\"font-size:110%;\">\n"
 						+ "<p><a href=\"http://www.bliki.info/wiki/Academy_Award_for_Best_Actor\" title=\"Academy Award for Best Actor\">Academy Award for</a> <a href=\"http://www.bliki.info/wiki/Academy_Award_for_Best_Actor#1980s\" title=\"Academy Award for Best Actor\">Best Actor</a></p></div>\n"
@@ -738,7 +738,7 @@ public class TemplateFilterTest extends FilterTestSupport {
 						+ "<td />\n"
 						+ "<td /></tr></table></div>\n"
 						+ "<ol class=\"references\">\n"
-						+ "<li id=\"_note-1\"><b><a href=\"#_ref-1\" title=\"\">&#8593;</a></b> John Resig. <i><a class=\"externallink\" href=\"http://ejohn.org/blog/versions-of-javascript\" rel=\"nofollow\" title=\"http://ejohn.org/blog/versions-of-javascript\">Versions of JavaScript</a></i>. Ejohn.org. Abgerufen am <a href=\"http://www.bliki.info/wiki/Template:safesubst:#Switch:none\" title=\"Template:safesubst:\">Template:safesubst:</a>.</li>\n</ol>",
+						+ "<li id=\"_note-1\"><b><a href=\"#_ref-1\" title=\"\">&#8593;</a></b> John Resig. <i><a class=\"external text\" href=\"http://ejohn.org/blog/versions-of-javascript\" rel=\"nofollow\">Versions of JavaScript</a></i>. Ejohn.org. Abgerufen am <a href=\"http://www.bliki.info/wiki/Template:safesubst:#Switch:none\" title=\"Template:safesubst:\">Template:safesubst:</a>.</li>\n</ol>",
 				wikiModel
 						.render(
 								"=== Versionsgeschichte ===\n"
@@ -934,7 +934,7 @@ public class TemplateFilterTest extends FilterTestSupport {
 						+ "\n"
 						+ "<li class=\"nv-view\"><a href=\"http://www.bliki.info/wiki/Template:National_Board_of_Review_Award_for_Best_Actor\" title=\"Template:National Board of Review Award for Best Actor\"><span style=\";;background:none transparent;border:none;\" title=\"View this template\">v</span></a></li>\n"
 						+ "<li class=\"nv-talk\"><a href=\"http://www.bliki.info/wiki/Template_talk:National_Board_of_Review_Award_for_Best_Actor\" title=\"Template_talk:National Board of Review Award for Best Actor\"><span style=\";;background:none transparent;border:none;\" title=\"Discuss this template\">t</span></a></li>\n"
-						+ "<li class=\"nv-edit\"><a class=\"externallink\" href=\"http://en.wikipedia.org/w/index.php?title=Template%3ANational+Board+of+Review+Award+for+Best+Actor&#38;action=edit\" rel=\"nofollow\" title=\"http://en.wikipedia.org/w/index.php?title=Template%3ANational+Board+of+Review+Award+for+Best+Actor&#38;action=edit\"><span style=\";;background:none transparent;border:none;\" title=\"Edit this template\">e</span></a></li>\n"
+						+ "<li class=\"nv-edit\"><a class=\"external text\" href=\"http://en.wikipedia.org/w/index.php?title=Template%3ANational+Board+of+Review+Award+for+Best+Actor&#38;action=edit\" rel=\"nofollow\"><span style=\";;background:none transparent;border:none;\" title=\"Edit this template\">e</span></a></li>\n"
 						+ "</ul></div>\n"
 						+ "<div style=\"font-size:110%;\">\n"
 						+ "<p><a href=\"http://www.bliki.info/wiki/National_Board_of_Review_Award_for_Best_Actor\" title=\"National Board of Review Award for Best Actor\">National Board of Review Award for Best Actor</a></p></div>\n"
@@ -1137,7 +1137,7 @@ public class TemplateFilterTest extends FilterTestSupport {
 						+ "\n"
 						+ "<li class=\"nv-view\"><a href=\"http://www.bliki.info/wiki/Template:Screen_Actors_Guild_Award_for_Outstanding_Performance_by_a_Cast_in_a_Motion_Picture_(1995%E2%80%932000)\" title=\"Template:Screen Actors Guild Award for Outstanding Performance by a Cast in a Motion Picture (1995–2000)\"><span title=\"View this template\">view</span></a></li>\n"
 						+ "<li class=\"nv-talk\"><a href=\"http://www.bliki.info/wiki/Template_talk:Screen_Actors_Guild_Award_for_Outstanding_Performance_by_a_Cast_in_a_Motion_Picture_(1995%E2%80%932000)\" title=\"Template_talk:Screen Actors Guild Award for Outstanding Performance by a Cast in a Motion Picture (1995–2000)\"><span title=\"Discuss this template\">talk</span></a></li>\n"
-						+ "<li class=\"nv-edit\"><a class=\"externallink\" href=\"http://en.wikipedia.org/w/index.php?title=Template%3AScreen+Actors+Guild+Award+for+Outstanding+Performance+by+a+Cast+in+a+Motion+Picture+%281995%E2%80%932000%29&#38;action=edit\" rel=\"nofollow\" title=\"http://en.wikipedia.org/w/index.php?title=Template%3AScreen+Actors+Guild+Award+for+Outstanding+Performance+by+a+Cast+in+a+Motion+Picture+%281995%E2%80%932000%29&#38;action=edit\"><span title=\"Edit this template\">edit</span></a></li>\n"
+						+ "<li class=\"nv-edit\"><a class=\"external text\" href=\"http://en.wikipedia.org/w/index.php?title=Template%3AScreen+Actors+Guild+Award+for+Outstanding+Performance+by+a+Cast+in+a+Motion+Picture+%281995%E2%80%932000%29&#38;action=edit\" rel=\"nofollow\"><span title=\"Edit this template\">edit</span></a></li>\n"
 						+ "</ul></div>\n" + "", wikiModel.render(
 						"{{Navbar|Screen Actors Guild Award for Outstanding Performance by a Cast in a Motion Picture (1995–2000)}}\n", false));
 	}

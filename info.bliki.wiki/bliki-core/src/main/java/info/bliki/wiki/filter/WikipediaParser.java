@@ -523,12 +523,17 @@ public class WikipediaParser extends AbstractParser implements IParser {
 					foundUrl = true;
 					while (Encoder.isUrlIdentifierPart(fSource[tempPosition++])) {
 					}
-
 				}
 			}
 		} catch (IndexOutOfBoundsException e) {
 		}
 		if (foundUrl) {
+			// separators at the end must be removed - maybe more chars?
+			final String separators = ".!;?:,";
+			while (tempPosition > 1 && tempPosition > urlStartPosition
+					&& (separators.indexOf(fSource[tempPosition - 2]) != (-1))) {
+				--tempPosition;
+			}
 			String restString = fStringSource.substring(urlStartPosition - 1, tempPosition - 1);
 			String uriSchemeSpecificPart = fStringSource.substring(index + 1, tempPosition - 1);
 			if (fWikiModel.isValidUriSchemeSpecificPart(uriSchemeName, uriSchemeSpecificPart)) {
@@ -1062,11 +1067,20 @@ public class WikipediaParser extends AbstractParser implements IParser {
 			}
 
 			if (foundUrl) {
-				// Wikipedia link style: name separated by space?
-				int pipeIndex = urlString.indexOf(' ');
+				// Wikipedia link style: name separated by invalid URL character?
+				// see test: "open square bracket forbidden in URL (named) (bug 4377)"
+				int pipeIndex = 0;
+				while (pipeIndex < urlString.length()
+						&& Encoder.isUrlIdentifierPart(urlString.charAt(pipeIndex))) {
+					++pipeIndex;
+				}
 				String alias = "";
-				if (pipeIndex != (-1)) {
-					alias = urlString.substring(pipeIndex + 1);
+				if (pipeIndex < urlString.length()) {
+					if (urlString.charAt(pipeIndex) == ' ') {
+						alias = urlString.substring(pipeIndex + 1);
+					} else {
+						alias = urlString.substring(pipeIndex);
+					}
 					urlString = urlString.substring(0, pipeIndex);
 				} else {
 					if (protocolRelativeURL) {
