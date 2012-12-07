@@ -403,25 +403,9 @@ public class MagicWord {
 			case MAGIC_ARTICLE_SPACE_E:
 				return model.encodeTitleToUrl(getSubjectSpace(parameter, model), true);
 			case MAGIC_FULL_PAGE_NAME:
-				if (parameter != null) {
-					return parameter;
-				} else {
-					String temp = model.getPageName();
-					if (temp != null) {
-						return temp;
-					}
-				}
-				break;
+				return getFullpagename(parameter, model);
 			case MAGIC_FULL_PAGE_NAME_E:
-				if (parameter != null) {
-					return model.encodeTitleToUrl(parameter, true);
-				} else {
-					String temp = model.getPageName();
-					if (temp != null) {
-						return model.encodeTitleToUrl(temp, true);
-					}
-				}
-				break;
+				return model.encodeTitleToUrl(getFullpagename(parameter, model), true);
 			case MAGIC_TALK_PAGE_NAME:
 				return getTalkpage(parameter, model);
 			case MAGIC_TALK_PAGE_NAME_E:
@@ -440,7 +424,7 @@ public class MagicWord {
 	}
 
 	/**
-	 * Gets the subjectpage's name of a given non-<tt>null</tt> parameter or the
+	 * Gets the full page's name of a given non-<tt>null</tt> parameter or the
 	 * current model's pagename and namespace.
 	 * 
 	 * @param parameter
@@ -448,7 +432,32 @@ public class MagicWord {
 	 * @param model
 	 *            the model being used
 	 * 
-	 * @return the name of the subjectpage
+	 * @return the (normalised) name of the page
+	 */
+	protected static String getFullpagename(String parameter, IWikiModel model) {
+		String[] fullPage = getPagenameHelper2(parameter, model);
+		if (fullPage != null) {
+			INamespaceValue namespace = model.getNamespace().getNamespace(fullPage[0]);
+			if (namespace == null) {
+				return fullPage[1];
+			} else {
+				return namespace.makeFullPagename(fullPage[1]);
+			}
+		} else {
+			return "";
+		}
+	}
+
+	/**
+	 * Gets the talkpage's name of a given non-<tt>null</tt> parameter or the
+	 * current model's pagename and namespace.
+	 * 
+	 * @param parameter
+	 *            the parameter of the magic word (may be <tt>null</tt>)
+	 * @param model
+	 *            the model being used
+	 * 
+	 * @return the name of the talkpage
 	 */
 	protected static String getSubjectpage(String parameter, IWikiModel model) {
 		String[] fullPage = getPagenameHelper2(parameter, model);
