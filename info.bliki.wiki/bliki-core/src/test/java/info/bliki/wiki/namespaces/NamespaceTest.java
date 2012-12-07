@@ -1,5 +1,6 @@
 package info.bliki.wiki.namespaces;
 
+import info.bliki.wiki.namespaces.INamespace.NamespaceCode;
 import info.bliki.wiki.namespaces.Namespace.NamespaceValue;
 
 import java.util.Locale;
@@ -33,11 +34,29 @@ public class NamespaceTest extends TestCase {
 	/**
 	 * Checks whether all content spaces are set.
 	 */
+	public void testNumberCodeConversion01() {
+		for (NamespaceCode nsCode : NamespaceCode.values()) {
+			assertEquals((int) nsCode.code, Namespace.intToNumberCode(Namespace.numberCodeToInt(nsCode.code)));
+		}
+	}
+
+	/**
+	 * Checks whether all content spaces are set.
+	 */
+	public void testNumberCodeConversion02() {
+		for (int i = 0; i <= 19; ++i) {
+			assertEquals(i, Namespace.numberCodeToInt(Namespace.intToNumberCode(i)));
+		}
+	}
+
+	/**
+	 * Checks whether all content spaces are set.
+	 */
 	public void testEnsureContentSpacesNotNull() {
 		Namespace namespaceObj = new Namespace();
-		for (int i = -2; i <= 15; ++i) {
-			NamespaceValue namespace = namespaceObj.getNamespaceByNumber(i);
-			assertNotNull("contentspace of " + i + ", " + namespace, namespace.getContentspace());
+		for (NamespaceCode nsCode : NamespaceCode.values()) {
+			NamespaceValue namespace = namespaceObj.getNamespaceByNumber(nsCode.code);
+			assertNotNull("contentspace of " + nsCode + ", " + namespace, namespace.getContentspace());
 		}
 	}
 

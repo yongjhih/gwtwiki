@@ -800,6 +800,8 @@ public class TemplateParserTest extends FilterTestSupport {
 		assertEquals("MediaWiki_talk", wikiModel.parseTemplates("{{ns:{{ns:8}} talk}}", false));
 		assertEquals("MediaWiki_talk", wikiModel.parseTemplates("{{ns:{{ns:8}} talk  }}", false));
 		assertEquals("[[:Template:Ns:MediaWikitalk]]", wikiModel.parseTemplates("{{ns:{{ns:8}}talk}}", false));
+		assertEquals("Portal", wikiModel.parseTemplates("{{ns:100}}", false));
+		assertEquals("Portal_talk", wikiModel.parseTemplates("{{ns:{{ns:100}}_talk}}", false));
 	}
 
 	public void testNSE001() {
@@ -809,6 +811,8 @@ public class TemplateParserTest extends FilterTestSupport {
 		assertEquals("MediaWiki_talk", wikiModel.parseTemplates("{{nse:{{nse:8}} talk}}", false));
 		assertEquals("MediaWiki_talk", wikiModel.parseTemplates("{{nse:{{nse:8}} talk  }}", false));
 		assertEquals("[[:Template:Ns:MediaWikitalk]]", wikiModel.parseTemplates("{{nse:{{nse:8}}talk}}", false));
+		assertEquals("Portal", wikiModel.parseTemplates("{{ns:100}}", false));
+		assertEquals("Portal_talk", wikiModel.parseTemplates("{{ns:{{ns:100}}_talk}}", false));
 	}
 
 	public void testNAMESPACE001() {
@@ -878,6 +882,17 @@ public class TemplateParserTest extends FilterTestSupport {
 		assertEquals("Meta_talk", wikiModel.parseTemplates("{{TALKSPACEE}}", false));
 		// TODO: talkspace should actually have a space:
 		assertEquals("Meta_talk", wikiModel.parseTemplates("{{TALKSPACE}}", false));
+	}
+
+	public void testTALKSPACE006() {
+		wikiModel.setNamespaceName("portal");
+		assertEquals("Portal_talk", wikiModel.parseTemplates("{{TALKSPACE}}", false));
+	}
+
+	public void testTALKSPACE007() {
+		wikiModel.setNamespaceName("");
+		assertEquals("Talk", wikiModel.parseTemplates("{{TALKSPACE}}", false));
+		assertEquals("Portal_talk", wikiModel.parseTemplates("{{TALKSPACE:Portal:Main Page}}", false));
 	}
 
 	public void testSUBJECTSPACE001() {

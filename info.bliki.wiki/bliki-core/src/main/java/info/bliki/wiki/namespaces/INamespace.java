@@ -106,7 +106,17 @@ public interface INamespace {
 		/**
 		 * 
 		 */
-		CATEGORY_TALK_NAMESPACE_KEY(Integer.valueOf(15));
+		CATEGORY_TALK_NAMESPACE_KEY(Integer.valueOf(15)),
+
+		/**
+		 * Portal pages.
+		 */
+		PORTAL_NAMESPACE_KEY(Integer.valueOf(100)),
+
+		/**
+		 * Talk pages for portal pages.
+		 */
+		PORTAL_TALK_NAMESPACE_KEY(Integer.valueOf(101));
 
 		/**
 		 * The integer number code of this namespace.
@@ -316,6 +326,18 @@ public interface INamespace {
 	 * The &quot;Category talk&quot; namespace for the current language.
 	 */
 	public INamespaceValue getCategory_talk();
+
+	/**
+	 * The &quot;Portal&quot; namespace for the current language.
+	 * 
+	 * @return the namespace
+	 */
+	public INamespaceValue getPortal();
+
+	/**
+	 * The &quot;Portal talk&quot; namespace for the current language.
+	 */
+	public INamespaceValue getPortal_talk();
 
 	/**
 	 * Checks whether the given string is a valid namespace of the given type.

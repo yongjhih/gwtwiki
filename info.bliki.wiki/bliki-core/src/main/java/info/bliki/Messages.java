@@ -68,6 +68,12 @@ public class Messages {
 	public final static String WIKI_API_CATEGORYTALK1 = "wiki.api.categorytalk1";
 	public final static String WIKI_API_CATEGORYTALK2 = "wiki.api.categorytalk2";
 
+	public final static String WIKI_API_PORTAL1 = "wiki.api.portal1";
+	public final static String WIKI_API_PORTAL2 = "wiki.api.portal2";
+
+	public final static String WIKI_API_PORTALTALK1 = "wiki.api.portaltalk1";
+	public final static String WIKI_API_PORTALTALK2 = "wiki.api.portaltalk2";
+
 	public Messages() {
 	}
 

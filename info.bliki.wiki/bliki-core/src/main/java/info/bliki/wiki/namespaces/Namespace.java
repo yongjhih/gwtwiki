@@ -3,6 +3,7 @@ package info.bliki.wiki.namespaces;
 import info.bliki.Messages;
 import info.bliki.wiki.filter.Encoder;
 
+import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -31,7 +32,7 @@ public class Namespace implements INamespace {
 	 * @see Namespace#numberCodeToInt(int)
 	 * @see Namespace#intToNumberCode(int)
 	 */
-	protected final NamespaceValue[] INT_TO_NAMESPACE = new NamespaceValue[18];
+	protected final NamespaceValue[] INT_TO_NAMESPACE = new NamespaceValue[20];
 
 	/**
 	 * The &quot;Media&quot; namespace for the current language.
@@ -107,6 +108,14 @@ public class Namespace implements INamespace {
 	 * The &quot;Category&quot; namespace for the current language.
 	 */
 	public final NamespaceValue CATEGORY = new NamespaceValue(NamespaceCode.CATEGORY_NAMESPACE_KEY, CATEGORY_TALK, "Category");
+	/**
+	 * The &quot;Portal talk&quot; namespace for the current language.
+	 */
+	public final NamespaceValue PORTAL_TALK = new NamespaceValue(NamespaceCode.PORTAL_TALK_NAMESPACE_KEY, true, "Portal_talk");
+	/**
+	 * The &quot;Portal&quot; namespace for the current language.
+	 */
+	public final NamespaceValue PORTAL = new NamespaceValue(NamespaceCode.PORTAL_NAMESPACE_KEY, PORTAL_TALK, "Portal");
 
 	/**
 	 * Base class for all namespace constants.
@@ -356,7 +365,13 @@ public class Namespace implements INamespace {
 	 * @return an array index
 	 */
 	protected static int numberCodeToInt(int numberCode) {
-		return numberCode + 2;
+		if (numberCode >= -2 && numberCode <= 15) {
+			return numberCode + 2;
+		} else if (numberCode >= 100 && numberCode <= 101) {
+			return numberCode - 100 + 18;
+		} else {
+			throw new InvalidParameterException("unknown number code: " + numberCode);
+		}
 	}
 
 	/**
@@ -369,7 +384,13 @@ public class Namespace implements INamespace {
 	 * @return a number code like {@link INamespace#MEDIA_NAMESPACE_KEY}
 	 */
 	protected static int intToNumberCode(int numberCode) {
-		return numberCode - 2;
+		if (numberCode >= 0 && numberCode <= 17) {
+			return numberCode - 2;
+		} else if (numberCode >= 18 && numberCode <= 19) {
+			return numberCode + 100 - 18;
+		} else {
+			throw new InvalidParameterException("unknown number code: " + numberCode);
+		}
 	}
 
 	@Override
@@ -435,6 +456,8 @@ public class Namespace implements INamespace {
 		extractFromResource(Messages.WIKI_API_HELPTALK1, Messages.WIKI_API_HELPTALK2, NamespaceCode.HELP_TALK_NAMESPACE_KEY);
 		extractFromResource(Messages.WIKI_API_CATEGORY1, Messages.WIKI_API_CATEGORY2, NamespaceCode.CATEGORY_NAMESPACE_KEY);
 		extractFromResource(Messages.WIKI_API_CATEGORYTALK1, Messages.WIKI_API_CATEGORYTALK2, NamespaceCode.CATEGORY_TALK_NAMESPACE_KEY);
+		extractFromResource(Messages.WIKI_API_PORTAL1, Messages.WIKI_API_PORTAL2, NamespaceCode.PORTAL_NAMESPACE_KEY);
+		extractFromResource(Messages.WIKI_API_PORTALTALK1, Messages.WIKI_API_PORTALTALK2, NamespaceCode.PORTAL_TALK_NAMESPACE_KEY);
 		
 		// Aliases as defined by
 		// https://en.wikipedia.org/wiki/Wikipedia:Namespace#Aliases
@@ -553,6 +576,16 @@ public class Namespace implements INamespace {
 	@Override
 	public INamespaceValue getCategory_talk() {
 		return CATEGORY_TALK;
+	}
+
+	@Override
+	public INamespaceValue getPortal() {
+		return PORTAL;
+	}
+
+	@Override
+	public INamespaceValue getPortal_talk() {
+		return PORTAL_TALK;
 	}
 
 	/**
