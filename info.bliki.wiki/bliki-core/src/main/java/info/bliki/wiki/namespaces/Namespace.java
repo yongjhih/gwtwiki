@@ -204,10 +204,12 @@ public class Namespace implements INamespace {
 		 */
 		@Override
 		public void addAlias(String alias) {
-			texts.add(alias);
-			TEXT_TO_NAMESPACE_MAP.put(alias, this);
-			TEXT_TO_NAMESPACE_MAP.put(alias.replace(' ', '_'), this);
-			TEXT_TO_NAMESPACE_MAP.put(alias.replace('_', ' '), this);
+			if (!TEXT_TO_NAMESPACE_MAP.containsKey(alias)) {
+				texts.add(alias);
+				TEXT_TO_NAMESPACE_MAP.put(alias, this);
+				TEXT_TO_NAMESPACE_MAP.put(alias.replace(' ', '_'), this);
+				TEXT_TO_NAMESPACE_MAP.put(alias.replace('_', ' '), this);
+			}
 		}
 
 		/*
