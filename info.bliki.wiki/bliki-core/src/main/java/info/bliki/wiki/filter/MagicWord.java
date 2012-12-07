@@ -380,6 +380,16 @@ public class MagicWord {
 					}
 				}
 				break;
+			case MAGIC_PAGE_NAME_E:
+				if (parameter != null) {
+					return model.encodeTitleToUrl(parameter, true);
+				} else {
+					String temp = model.getPageName();
+					if (temp != null) {
+						return model.encodeTitleToUrl(temp, true);
+					}
+				}
+				break;
 			case MAGIC_NAMESPACE:
 				return getNamespace(parameter, model);
 			case MAGIC_NAMESPACE_E:
@@ -401,6 +411,16 @@ public class MagicWord {
 					String temp = model.getPageName();
 					if (temp != null) {
 						return temp;
+					}
+				}
+				break;
+			case MAGIC_FULL_PAGE_NAME_E:
+				if (parameter != null) {
+					return model.encodeTitleToUrl(parameter, true);
+				} else {
+					String temp = model.getPageName();
+					if (temp != null) {
+						return model.encodeTitleToUrl(temp, true);
 					}
 				}
 				break;
