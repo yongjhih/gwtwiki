@@ -371,22 +371,18 @@ public class MagicWord {
 				return formatter.format(current);
 
 			case MAGIC_PAGE_NAME:
-				if (parameter != null) {
-					return parameter;
-				} else {
-					String temp = model.getPageName();
-					if (temp != null) {
-						return temp;
+				if (true) { // block to hide local variables from other cases
+					String pagename = getPagenameHelper(parameter, model);
+					if (pagename != null) {
+						return pagename;
 					}
 				}
 				break;
 			case MAGIC_PAGE_NAME_E:
-				if (parameter != null) {
-					return model.encodeTitleToUrl(parameter, true);
-				} else {
-					String temp = model.getPageName();
-					if (temp != null) {
-						return model.encodeTitleToUrl(temp, true);
+				if (true) { // block to hide local variables from other cases
+					String pagename = getPagenameHelper(parameter, model);
+					if (pagename != null) {
+						return model.encodeTitleToUrl(pagename, true);
 					}
 				}
 				break;
@@ -553,5 +549,29 @@ public class MagicWord {
 		} else {
 			return namespaceObj.getNamespace(model.getNamespaceName());
 		}
+	}
+
+	/**
+	 * Helper to get the pagename (excluding the namespace) of either a given
+	 * non-<tt>null</tt> parameter or the current model's pagename.
+	 * 
+	 * @param parameter
+	 *            the parameter of the magic word (may be <tt>null</tt>)
+	 * @param model
+	 *            the model being used
+	 * 
+	 * @return the extracted pagename or <tt>null</tt> if the parameter was
+	 *         empty
+	 */
+	protected static String getPagenameHelper(String parameter, IWikiModel model) {
+		if (parameter != null) {
+			if (parameter.length() > 0) {
+				String[] split = model.splitNsTitle(parameter);
+				return split[1];
+			} else {
+				return null;
+			}
+		}
+		return model.getPageName();
 	}
 }
