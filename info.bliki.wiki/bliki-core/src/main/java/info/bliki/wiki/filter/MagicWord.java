@@ -534,15 +534,8 @@ public class MagicWord {
 		final INamespace namespaceObj = model.getNamespace();
 		if (parameter != null) {
 			if (parameter.length() > 0) {
-				int indx = parameter.indexOf(':');
-				if (indx >= 0) {
-					INamespaceValue maybeNamespace = namespaceObj.getNamespace(
-							parameter.substring(0, indx));
-					if (maybeNamespace != null) {
-						return maybeNamespace;
-					}
-				}
-				return namespaceObj.getMain();
+				String[] split = model.splitNsTitle(parameter);
+				return namespaceObj.getNamespace(split[0]);
 			} else {
 				return null;
 			}
