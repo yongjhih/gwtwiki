@@ -278,7 +278,7 @@ public class MagicWord {
 	 * @param magicWord
 	 *            the magic word to process
 	 * @param parameter
-	 *            the parameters supplied to the magic word
+	 *            the parameter of the magic word (may be <tt>null</tt> if no parameter supplied)
 	 * @param model
 	 *            the wiki model to use while rendering
 	 * 
@@ -371,7 +371,7 @@ public class MagicWord {
 				return formatter.format(current);
 
 			case MAGIC_PAGE_NAME:
-				if (parameter.length() > 0) {
+				if (parameter != null) {
 					return parameter;
 				} else {
 					String temp = model.getPageName();
@@ -381,7 +381,7 @@ public class MagicWord {
 				}
 				break;
 			case MAGIC_NAMESPACE:
-				if (parameter.length() > 0) {
+				if (parameter != null) {
 					int indx = parameter.indexOf(':');
 					if (indx >= 0) {
 						String subStr = parameter.substring(0, indx);
@@ -399,7 +399,7 @@ public class MagicWord {
 				}
 				break;
 			case MAGIC_FULL_PAGE_NAME:
-				if (parameter.length() > 0) {
+				if (parameter != null) {
 					return parameter;
 				} else {
 					String temp = model.getPageName();
@@ -413,7 +413,7 @@ public class MagicWord {
 					String pageName;
 					INamespaceValue talkspace = null;
 					INamespace ns = model.getNamespace();
-					if (parameter.length() > 0) {
+					if (parameter != null) {
 						pageName = parameter;
 						int index = pageName.indexOf(':');
 						// assume main namespace for now:

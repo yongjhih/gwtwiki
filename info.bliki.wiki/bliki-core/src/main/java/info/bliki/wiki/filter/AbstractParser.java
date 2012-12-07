@@ -785,7 +785,7 @@ public abstract class AbstractParser extends WikipediaScanner {
 		 */
 		public final Object magicWord;
 		/**
-		 * Parameters of the magic word.
+		 * Parameters of the magic word (<tt>null</tt> if not supplied).
 		 */
 		public final String magicWordParameter;
 		/**
@@ -817,7 +817,8 @@ public abstract class AbstractParser extends WikipediaScanner {
 		 *            the magic word object if the pagename was a magic word,
 		 *            otherwise <tt>null</tt>
 		 * @param magicWordParameter
-		 *            parameters of the magic word
+		 *            parameters of the magic word (<tt>null</tt> if not
+		 *            supplied)
 		 * @param valid
 		 *            whether this pagename was successfully parsed or not
 		 */
@@ -882,7 +883,6 @@ public abstract class AbstractParser extends WikipediaScanner {
 			Object maybeMagicWord = wikiModel.getMagicWord(pagename);
 			if (maybeMagicWord != null) {
 				magicWord = maybeMagicWord;
-				magicWordParameter = "";
 			}
 		}
 		return new ParsedPageName(namespace, pagename, magicWord, magicWordParameter, true);
