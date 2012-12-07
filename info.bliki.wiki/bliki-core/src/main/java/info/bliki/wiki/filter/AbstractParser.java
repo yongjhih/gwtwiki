@@ -849,7 +849,7 @@ public abstract class AbstractParser extends WikipediaScanner {
 	 * 
 	 * @return a parsed page name
 	 */
-	public static ParsedPageName parsePageName(IWikiModel wikiModel, String pagename, INamespaceValue namespace, boolean magicWordAllowed) {
+	public static ParsedPageName parsePageName(IWikiModel wikiModel, String pagename, INamespaceValue namespace, boolean magicWordAllowed, boolean stripOffSection) {
 		// if a magic word is recognised, it will be non-null:
 		Object magicWord = null;
 		String magicWordParameter = null;
@@ -862,6 +862,14 @@ public abstract class AbstractParser extends WikipediaScanner {
 			// assume main namespace for now:
 			namespace = wikiModel.getNamespace().getMain();
 			pagename = pagename.substring(1);
+		}
+		
+		if (stripOffSection) {
+			// parse away any "#label" markers which are not supported
+			int hashIndex = pagename.indexOf('#');
+			if (hashIndex != (-1)) {
+				pagename = pagename.substring(0, hashIndex);
+			}
 		}
 		
 		int indx = pagename.indexOf(':');
@@ -895,7 +903,7 @@ public abstract class AbstractParser extends WikipediaScanner {
 			Map<String, String> templateParameters) {
 		try {
 			final INamespace namespace = wikiModel.getNamespace();
-			ParsedPageName parsedPagename = AbstractParser.parsePageName(wikiModel, redirectedLink, namespace.getMain(), false);
+			ParsedPageName parsedPagename = AbstractParser.parsePageName(wikiModel, redirectedLink, namespace.getMain(), false, false);
 			// note: don't just get redirect content if the namespace is the template namespace!
 			if (!parsedPagename.valid) {
 				return null;

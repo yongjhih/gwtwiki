@@ -1697,14 +1697,15 @@ public abstract class AbstractWikiModel implements IWikiModel, IContext {
 				System.out.println("Not Cached: " + templateName + "-" + cacheKeyLength);
 			}
 		}
-
-		ParsedPageName parsedPagename = AbstractParser.parsePageName(this, templateName, fNamespace.getTemplate(), true);
+		
+		ParsedPageName parsedPagename = AbstractParser.parsePageName(this, templateName, fNamespace.getTemplate(), true, true);
 		if (!parsedPagename.valid) {
 			writer.append("{{");
-			writer.append(parsedPagename.pagename);
+			writer.append(templateName);
 			writer.append("}}");
 			return;
 		}
+
 		String fullTemplateStr = parsedPagename.namespace.makeFullPagename(parsedPagename.pagename);
 		Counter val = null;
 		try {
