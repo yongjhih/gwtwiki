@@ -24,7 +24,7 @@ import junit.framework.TestSuite;
 public class MediaWikiParserTest extends TestCase {
 
 	protected final static String testFileName = "parserTests.txt";
-	// protected final static String testFileName = "parserTests-full.txt";
+//	protected final static String testFileName = "parserTests-full.txt";
 
 	protected MediaWikiTestModel wikiModel = null;
 	static protected HashMap<String, String> db = new HashMap<String, String>();
@@ -36,23 +36,43 @@ public class MediaWikiParserTest extends TestCase {
 
 	protected static final Pattern COMMAND = Pattern.compile("^!!\\s*(\\w+).*");
 	protected static final Pattern TEST_DISABLED = Pattern.compile(".*\\bdisabled\\b.*", Pattern.CASE_INSENSITIVE);
-	protected static final Pattern NEWLINE_BLOCK = Pattern.compile("^\n<(div|p|li|td|table|ul|ol|th|tr|dl|pre).*",
-			Pattern.CASE_INSENSITIVE | Pattern.DOTALL);
+	protected static final Pattern NEWLINE_BLOCK = Pattern.compile("^\n<(div|p|li|td|table|ul|ol|th|tr|dl|pre).*", Pattern.CASE_INSENSITIVE | Pattern.DOTALL);
 	/*
-	 * foo foo=bar foo="bar baz" foo=[[bar baz]] foo=bar,"baz quux"
+	 * foo
+	 * foo=bar
+	 * foo="bar baz"
+	 * foo=[[bar baz]]
+	 * foo=bar,"baz quux"
 	 */
-	protected static final Pattern OPTION = Pattern.compile("\\b" + "([\\w-]+)" + // Key
-			"\\b" + "(?:\\s*" + "=" + // First sub-value
-			"\\s*" + "(" + "\"[^\"]*\"" + // Quoted val
-			"|" + "\\[\\[[^]]*\\]\\]" + // Link target
-			"|" + "[\\w-]+" + // Plain word
-			")" + "(?:\\s*" + "," + // Sub-vals 1..N
-			"\\s*" + "(" + "\"[^\"]*\"" + // Quoted val
-			"|" + "\\[\\[[^]]*\\]\\]" + // Link target
-			"|" + "[\\w-]+" + // Plain word
-			")" + ")*" + ")?", Pattern.COMMENTS);
+	protected static final Pattern OPTION = Pattern.compile(
+			"\\b" + 
+			"([\\w-]+)" + // Key
+			"\\b" +
+			"(?:\\s*" +
+				"=" + // First sub-value
+				"\\s*" +
+				"(" +
+					"\"[^\"]*\"" + // Quoted val
+				"|" +
+					"\\[\\[[^]]*\\]\\]" + // Link target
+				"|" +
+					"[\\w-]+" + // Plain word
+				")" +
+				"(?:\\s*" +
+					"," + // Sub-vals 1..N
+					"\\s*" +
+					"(" +
+						"\"[^\"]*\"" + // Quoted val
+					"|" +
+						"\\[\\[[^]]*\\]\\]" + // Link target
+					"|" +
+						"[\\w-]+" + // Plain word
+					")" +
+				")*" +
+			")?", Pattern.COMMENTS);
 
-	public MediaWikiParserTest(String test, String input, String result, String options, String configs) {
+	public MediaWikiParserTest(String test, String input, String result,
+			String options, String configs) {
 		super(test);
 		this.input = input;
 		this.expectedResult = result;
@@ -65,27 +85,30 @@ public class MediaWikiParserTest extends TestCase {
 	}
 
 	protected static MediaWikiTestModel newWikiTestModel(Locale locale) {
-		MediaWikiTestModel wikiModel = new MediaWikiTestModel(locale, "/wiki/${image}", "/wiki/${title}", db);
+		MediaWikiTestModel wikiModel = new MediaWikiTestModel(locale,
+				"/wiki/${image}",
+				"/wiki/${title}", db);
 		wikiModel.setUp();
 		return wikiModel;
 	}
 
-	/**
-	 * Splits the given full title at the first colon.
-	 * 
-	 * @param fullTitle
-	 *          the (full) title including a namespace (if present)
-	 * 
-	 * @return a 2-element array with the two components - the first may be empty
-	 *         if no colon is found
-	 */
-	protected static String[] splitAtColon(String fullTitle) {
-		int colonIndex = fullTitle.indexOf(':');
-		if (colonIndex != (-1)) {
-			return new String[] { fullTitle.substring(0, colonIndex), fullTitle.substring(colonIndex + 1) };
-		}
-		return new String[] { "", fullTitle };
-	}
+    /**
+     * Splits the given full title at the first colon.
+     * 
+     * @param fullTitle
+     *            the (full) title including a namespace (if present)
+     * 
+     * @return a 2-element array with the two components - the first may be
+     *         empty if no colon is found
+     */
+    protected static String[] splitAtColon(String fullTitle) {
+        int colonIndex = fullTitle.indexOf(':');
+        if (colonIndex != (-1)) {
+            return new String[] { fullTitle.substring(0, colonIndex),
+                    fullTitle.substring(colonIndex + 1) };
+        }
+        return new String[] { "", fullTitle };
+    }
 
 	/**
 	 * Set up a test model, which contains predefined templates
@@ -110,7 +133,7 @@ public class MediaWikiParserTest extends TestCase {
 		}
 		assumeTrue(config.isEmpty());
 		assumeTrue(options.isEmpty());
-
+		
 		String actualResult = wikiModel.render(input, true);
 		Matcher matcher = NEWLINE_BLOCK.matcher(actualResult);
 		if (matcher.matches()) {
@@ -140,7 +163,7 @@ public class MediaWikiParserTest extends TestCase {
 				String section = null;
 				Map<String, String> data = new HashMap<String, String>();
 
-				while ((line = br.readLine()) != null) {
+				while((line = br.readLine()) != null) {
 					++lineNr;
 					final Matcher matcher = COMMAND.matcher(line);
 					if (matcher.matches()) {
@@ -193,9 +216,12 @@ public class MediaWikiParserTest extends TestCase {
 								section = null;
 								continue;
 							}
-							suite.addTest(new MediaWikiParserTest(removeNewlineAtEnd(data.get("test")) + " (line: " + lineNrStartTest + ")",
-									removeNewlineAtEnd(data.get("input")), removeNewlineAtEnd(data.get("result")), removeNewlineAtEnd(data
-											.get("options")), removeNewlineAtEnd(data.get("config"))));
+							suite.addTest(new MediaWikiParserTest(removeNewlineAtEnd(data
+									.get("test")) + " (line: " + lineNrStartTest + ")",
+									removeNewlineAtEnd(data.get("input")),
+									removeNewlineAtEnd(data.get("result")),
+									removeNewlineAtEnd(data.get("options")),
+									removeNewlineAtEnd(data.get("config"))));
 							data.clear();
 							section = null;
 							continue;
@@ -209,7 +235,7 @@ public class MediaWikiParserTest extends TestCase {
 						continue;
 					}
 					if (section != null) {
-						data.put(section, data.get(section) + line + "\n");
+						data.put(section, data.get(section) + line + "\n"); 
 					}
 				}
 			} catch (FileNotFoundException e) {
@@ -230,7 +256,7 @@ public class MediaWikiParserTest extends TestCase {
 		}
 		return suite;
 	}
-
+	
 	static protected Map<String, Object> parseConfig(String configs) {
 		HashMap<String, Object> result = new HashMap<String, Object>();
 		for (String config : configs.split("\n")) {
@@ -255,7 +281,7 @@ public class MediaWikiParserTest extends TestCase {
 		}
 		return result;
 	}
-
+	
 	static protected Map<String, Object> parseOptions(String options) {
 		HashMap<String, Object> result = new HashMap<String, Object>();
 		Matcher matcher = OPTION.matcher(options);
@@ -278,7 +304,7 @@ public class MediaWikiParserTest extends TestCase {
 		}
 		return result;
 	}
-
+	
 	static protected String cleanupOption(String option) {
 		if (option.startsWith("\"")) {
 			return option.substring(1, option.length() - 1);
@@ -288,7 +314,7 @@ public class MediaWikiParserTest extends TestCase {
 		}
 		return option;
 	}
-
+	
 	static protected String removeNewlineAtEnd(String value) {
 		if (value.endsWith("\n")) {
 			return value.substring(0, value.length() - 1);
