@@ -430,6 +430,16 @@ public class Namespace implements INamespace {
 		extractFromResource(Messages.WIKI_API_HELPTALK1, Messages.WIKI_API_HELPTALK2, NamespaceCode.HELP_TALK_NAMESPACE_KEY);
 		extractFromResource(Messages.WIKI_API_CATEGORY1, Messages.WIKI_API_CATEGORY2, NamespaceCode.CATEGORY_NAMESPACE_KEY);
 		extractFromResource(Messages.WIKI_API_CATEGORYTALK1, Messages.WIKI_API_CATEGORYTALK2, NamespaceCode.CATEGORY_TALK_NAMESPACE_KEY);
+		
+		// Aliases as defined by
+		// https://en.wikipedia.org/wiki/Wikipedia:Namespace#Aliases
+		META.addAlias("WP");
+		META.addAlias("Project");
+		META_TALK.addAlias("WT");
+		META_TALK.addAlias("Project_talk");
+		// already in the English resource bundle:
+		// IMAGE.addAlias("Image");
+		// IMAGE_TALK.addAlias("Image_talk");
 	}
 
 	@Override
