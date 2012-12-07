@@ -842,14 +842,17 @@ public abstract class AbstractParser extends WikipediaScanner {
 	 * @param namespace
 	 *            the default namespace to use if there is no namespace in the
 	 *            pagename
+	 * @param magicWordAllowed
+	 *            whether the <tt>pagename</tt> may be a magic word or not (if
+	 *            it is a magic word and this is set to <tt>false</tt>, it will
+	 *            be parsed as if it is a page name)
 	 * 
 	 * @return a parsed page name
 	 */
-	public static ParsedPageName parsePageName(IWikiModel wikiModel, String pagename, INamespaceValue namespace) {
+	public static ParsedPageName parsePageName(IWikiModel wikiModel, String pagename, INamespaceValue namespace, boolean magicWordAllowed) {
 		// if a magic word is recognised, it will be non-null:
 		Object magicWord = null;
 		String magicWordParameter = null;
-		boolean magicWordAllowed = true;
 		if (pagename.length() > 0 && pagename.charAt(0) == ':') {
 			magicWordAllowed = false; // this is not allowed for magic words
 			if (pagename.length() > 1 && pagename.charAt(1) == ':') {
@@ -892,7 +895,7 @@ public abstract class AbstractParser extends WikipediaScanner {
 			Map<String, String> templateParameters) {
 		try {
 			final INamespace namespace = wikiModel.getNamespace();
-			ParsedPageName parsedPagename = AbstractParser.parsePageName(wikiModel, redirectedLink, namespace.getMain());
+			ParsedPageName parsedPagename = AbstractParser.parsePageName(wikiModel, redirectedLink, namespace.getMain(), false);
 			// note: don't just get redirect content if the namespace is the template namespace!
 			if (!parsedPagename.valid) {
 				return null;

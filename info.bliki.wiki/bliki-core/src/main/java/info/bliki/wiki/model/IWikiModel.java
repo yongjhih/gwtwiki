@@ -468,7 +468,7 @@ public interface IWikiModel extends IConfiguration {
 	 *          template parameters are stored as <code>String</code>s in this map
 	 * 
 	 * @return <code>null</code> if no content was found
-	 * @see AbstractParser#parsePageName(IWikiModel, String, INamespaceValue)
+	 * @see AbstractParser#parsePageName(IWikiModel, String, INamespaceValue, boolean)
 	 */
 	public String getRawWikiContent(ParsedPageName templateName, Map<String, String> templateParameters);
 

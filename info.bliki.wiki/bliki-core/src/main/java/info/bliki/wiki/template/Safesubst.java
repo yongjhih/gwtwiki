@@ -72,7 +72,7 @@ public class Safesubst extends AbstractTemplateFunction {
 		TemplateParser.mergeParameters(parameterMap, unnamedParameters);
 
 		final INamespace namespace = model.getNamespace();
-		ParsedPageName parsedPagename = AbstractParser.parsePageName(model, templateName, namespace.getTemplate());
+		ParsedPageName parsedPagename = AbstractParser.parsePageName(model, templateName, namespace.getTemplate(), true);
 		if (!parsedPagename.valid) {
 			return "{{" + parsedPagename.pagename + "}}";
 		}

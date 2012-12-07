@@ -1701,7 +1701,7 @@ public abstract class AbstractWikiModel implements IWikiModel, IContext {
 			}
 		}
 
-		ParsedPageName parsedPagename = AbstractParser.parsePageName(this, templateName, fNamespace.getTemplate());
+		ParsedPageName parsedPagename = AbstractParser.parsePageName(this, templateName, fNamespace.getTemplate(), true);
 		if (!parsedPagename.valid) {
 			writer.append("{{");
 			writer.append(parsedPagename.pagename);

@@ -26,7 +26,7 @@ public class Ifexist extends AbstractTemplateFunction {
 			String wikiTopicName = isSubst ? list.get(0) : parseTrim(list.get(0), model);
 			
 			final INamespace namespace = model.getNamespace();
-			ParsedPageName parsedPagename = AbstractParser.parsePageName(model, wikiTopicName, namespace.getMain());
+			ParsedPageName parsedPagename = AbstractParser.parsePageName(model, wikiTopicName, namespace.getMain(), false);
 			String rawWikiContent = null;
 			// if parsing failed, e.g. double "::" at the page titles beginning, this is the same as if the page does not exist.
 			if (parsedPagename.valid) {
