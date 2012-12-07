@@ -44,6 +44,9 @@ public class FilterTestSupport extends TestCase {
 	  wikiModel.setUp();
 	  return wikiModel;
   }
+  
+  public void testStub() {
+  }
 
   /**
    * simple example
