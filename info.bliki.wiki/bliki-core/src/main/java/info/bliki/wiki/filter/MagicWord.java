@@ -381,23 +381,19 @@ public class MagicWord {
 				}
 				break;
 			case MAGIC_NAMESPACE:
-				if (parameter != null) {
-					int indx = parameter.indexOf(':');
-					if (indx >= 0) {
-						String subStr = parameter.substring(0, indx);
-						INamespaceValue namespace = model.getNamespace().getNamespace(subStr);
-						if (namespace != null) {
-							return namespace.getPrimaryText();
-						}
-					}
-					return "";
-				} else {
-					String temp = model.getNamespaceName();
-					if (temp != null) {
-						return temp;
-					}
-				}
-				break;
+				return getNamespace(parameter, model);
+			case MAGIC_NAMESPACE_E:
+				return model.encodeTitleToUrl(getNamespace(parameter, model), true);
+			case MAGIC_TALK_SPACE:
+				return getTalkspace(parameter, model);
+			case MAGIC_TALK_SPACE_E:
+				return model.encodeTitleToUrl(getTalkspace(parameter, model), true);
+			case MAGIC_SUBJECT_SPACE:
+			case MAGIC_ARTICLE_SPACE:
+				return getSubjectSpace(parameter, model);
+			case MAGIC_SUBJECT_SPACE_E:
+			case MAGIC_ARTICLE_SPACE_E:
+				return model.encodeTitleToUrl(getSubjectSpace(parameter, model), true);
 			case MAGIC_FULL_PAGE_NAME:
 				if (parameter != null) {
 					return parameter;
@@ -445,5 +441,97 @@ public class MagicWord {
 		}
 
 		return magicWord.toString();
+	}
+
+	/**
+	 * Gets the talkspace of a given non-<tt>null</tt> parameter
+	 * or the current model's namespace.
+	 * 
+	 * @param parameter
+	 *            the parameter of the magic word (may be <tt>null</tt>)
+	 * @param model
+	 *            the model being used
+	 *
+	 * @return the talkspace
+	 */
+	protected static String getTalkspace(String parameter, IWikiModel model) {
+		INamespaceValue namespace = getNamespaceHelper(parameter, model);
+		if (namespace != null) {
+			return namespace.getTalkspace().toString();
+		} else {
+			return "";
+		}
+	}
+
+	/**
+	 * Gets the subject/articlespace of a given non-<tt>null</tt> parameter
+	 * or the current model's namespace.
+	 * 
+	 * @param parameter
+	 *            the parameter of the magic word (may be <tt>null</tt>)
+	 * @param model
+	 *            the model being used
+	 *
+	 * @return the subjectspace
+	 */
+	protected static String getSubjectSpace(String parameter, IWikiModel model) {
+		INamespaceValue namespace = getNamespaceHelper(parameter, model);
+		if (namespace != null) {
+			return namespace.getContentspace().toString();
+		} else {
+			return "";
+		}
+	}
+
+	/**
+	 * Helper to get the namespace of either a given non-<tt>null</tt> parameter
+	 * or the current model's namespace.
+	 * 
+	 * @param parameter
+	 *            the parameter of the magic word (may be <tt>null</tt>)
+	 * @param model
+	 *            the model being used
+	 * 
+	 * @return the extracted namespace or <tt>""</tt> if the parameter was empty
+	 */
+	protected static String getNamespace(String parameter, IWikiModel model) {
+		INamespaceValue namespace = getNamespaceHelper(parameter, model);
+		if (namespace != null) {
+			return namespace.toString();
+		} else {
+			return "";
+		}
+	}
+
+	/**
+	 * Helper to get the namespace of either a given non-<tt>null</tt> parameter
+	 * or the current model's namespace.
+	 * 
+	 * @param parameter
+	 *            the parameter of the magic word (may be <tt>null</tt>)
+	 * @param model
+	 *            the model being used
+	 * 
+	 * @return the extracted namespace or <tt>null</tt> if the parameter was empty
+	 */
+	protected static INamespaceValue getNamespaceHelper(String parameter, IWikiModel model) {
+		final INamespace namespaceObj = model.getNamespace();
+		if (parameter != null) {
+			if (parameter.length() > 0) {
+				int indx = parameter.indexOf(':');
+				if (indx >= 0) {
+					INamespaceValue maybeNamespace = namespaceObj.getNamespace(
+							parameter.substring(0, indx));
+					if (maybeNamespace != null) {
+						return maybeNamespace;
+					}
+				}
+				return namespaceObj.getMain();
+			} else {
+				return null;
+			}
+		} else {
+			return namespaceObj.getNamespace(model.getNamespaceName());
+		}
 	}
 }
