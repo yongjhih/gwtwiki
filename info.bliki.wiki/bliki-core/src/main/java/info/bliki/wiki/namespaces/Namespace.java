@@ -560,7 +560,7 @@ public class Namespace implements INamespace {
 	 */
 	@Override
 	public String[] splitNsTitle(String fullTitle) {
-		return splitNsTitle(fullTitle, true, ' ');
+		return splitNsTitle(fullTitle, true, ' ', true);
 	}
 
 	/**
@@ -568,19 +568,18 @@ public class Namespace implements INamespace {
 	 */
 	@Override
 	public String[] splitNsTitle(String fullTitle, boolean underScoreIsWhitespace,
-			char whiteSpaceChar) {
+			char whiteSpaceChar, boolean firstCharacterAsUpperCase) {
 		int colonIndex = fullTitle.indexOf(':');
 		if (colonIndex != (-1)) {
-			String maybeNs = Encoder.normaliseTitle(
-					fullTitle.substring(0, colonIndex), underScoreIsWhitespace,
-					whiteSpaceChar);
+			String maybeNs = Encoder.normaliseTitle(fullTitle.substring(0, colonIndex),
+					underScoreIsWhitespace, whiteSpaceChar, firstCharacterAsUpperCase);
 			if (getNamespace(maybeNs) != null) {
 				// this is a real namespace
 				return new String[] {
 						maybeNs,
-						Encoder.normaliseTitle(
-								fullTitle.substring(colonIndex + 1),
-								underScoreIsWhitespace, whiteSpaceChar) };
+						Encoder.normaliseTitle(fullTitle.substring(colonIndex + 1),
+								underScoreIsWhitespace, whiteSpaceChar,
+								firstCharacterAsUpperCase) };
 			}
 			// else: page belongs to the main namespace and only contains a
 			// colon
@@ -588,6 +587,6 @@ public class Namespace implements INamespace {
 		return new String[] {
 				"",
 				Encoder.normaliseTitle(fullTitle, underScoreIsWhitespace,
-						whiteSpaceChar) };
+						whiteSpaceChar, firstCharacterAsUpperCase) };
 	}
 }

@@ -89,7 +89,7 @@ public interface IWikiModel extends IConfiguration {
 	 * other Wiki page, i.e. transclusion, this method should be called to add
 	 * that page to the output metadata.
 	 * 
-	 * This excludes pages f
+	 * This excludes transcluded template pages.
 	 * 
 	 * @param pageName
 	 *          The name of the page that is being included (including its

@@ -1861,7 +1861,7 @@ public abstract class AbstractWikiModel implements IWikiModel, IContext {
 	 */
 	@Override
 	public String[] splitNsTitle(String fullTitle) {
-		return fNamespace.splitNsTitle(fullTitle, true, ' ');
+		return fNamespace.splitNsTitle(fullTitle, true, ' ', true);
 	}
 
 }
