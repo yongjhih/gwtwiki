@@ -1185,4 +1185,35 @@ public class TemplateFilterTest extends FilterTestSupport {
 		assertTrue("wikiModel.getCategories() = " + wikiModel.getCategories().keySet().toString(),
 				wikiModel.getCategories().keySet().contains("Test"));
 	}
+
+	public void testTransclusionInPre001() {
+		assertEquals(
+				"<pre>{{:Viva_World_Cup}}</pre>",
+				wikiModel.parseTemplates("<pre>{{:Viva_World_Cup}}</pre>"));
+
+		assertTrue("wikiModel.getIncludes() = " + wikiModel.getIncludes().toString(),
+				wikiModel.getIncludes().size() == 0);
+		assertTrue("wikiModel.getTemplates() = " + wikiModel.getTemplates().toString(),
+				wikiModel.getTemplates().size() == 0);
+	}
+
+	public void testPreAlmostEqualToNowiki001() {
+		// https://en.wikipedia.org/wiki/Help:Wiki_markup#Pre
+		assertEquals(
+				"\n<pre>Text\n[[wiki]] markup</pre>",
+				wikiModel.render("<pre>Text\n[[wiki]] markup</pre>", false));
+
+		assertTrue("wikiModel.getLinks() = " + wikiModel.getLinks().toString(),
+				wikiModel.getLinks().size() == 0);
+	}
+
+	public void testPreAlmostEqualToNowiki002() {
+		// https://en.wikipedia.org/wiki/Help:Wiki_markup#Nowiki
+		assertEquals(
+				"\n<p>Text\n[[wiki]] markup</p>",
+				wikiModel.render("<nowiki>Text\n[[wiki]] markup</nowiki>", false));
+
+		assertTrue("wikiModel.getLinks() = " + wikiModel.getLinks().toString(),
+				wikiModel.getLinks().size() == 0);
+	}
 }
