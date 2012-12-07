@@ -375,17 +375,19 @@ public class MagicWord {
 					String pagename = getPagenameHelper(parameter, model);
 					if (pagename != null) {
 						return pagename;
+					} else {
+						return "";
 					}
 				}
-				break;
 			case MAGIC_PAGE_NAME_E:
 				if (true) { // block to hide local variables from other cases
 					String pagename = getPagenameHelper(parameter, model);
 					if (pagename != null) {
 						return model.encodeTitleToUrl(pagename, true);
+					} else {
+						return "";
 					}
 				}
-				break;
 			case MAGIC_NAMESPACE:
 				return getNamespace(parameter, model);
 			case MAGIC_NAMESPACE_E:
