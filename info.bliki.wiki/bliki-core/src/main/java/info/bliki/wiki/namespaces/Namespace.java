@@ -1,6 +1,7 @@
 package info.bliki.wiki.namespaces;
 
 import info.bliki.Messages;
+import info.bliki.wiki.filter.Encoder;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -552,5 +553,41 @@ public class Namespace implements INamespace {
 	@Override
 	public INamespaceValue getCategory_talk() {
 		return CATEGORY_TALK;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String[] splitNsTitle(String fullTitle) {
+		return splitNsTitle(fullTitle, true, ' ');
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String[] splitNsTitle(String fullTitle, boolean underScoreIsWhitespace,
+			char whiteSpaceChar) {
+		int colonIndex = fullTitle.indexOf(':');
+		if (colonIndex != (-1)) {
+			String maybeNs = Encoder.normaliseTitle(
+					fullTitle.substring(0, colonIndex), underScoreIsWhitespace,
+					whiteSpaceChar);
+			if (getNamespace(maybeNs) != null) {
+				// this is a real namespace
+				return new String[] {
+						maybeNs,
+						Encoder.normaliseTitle(
+								fullTitle.substring(colonIndex + 1),
+								underScoreIsWhitespace, whiteSpaceChar) };
+			}
+			// else: page belongs to the main namespace and only contains a
+			// colon
+		}
+		return new String[] {
+				"",
+				Encoder.normaliseTitle(fullTitle, underScoreIsWhitespace,
+						whiteSpaceChar) };
 	}
 }
