@@ -916,6 +916,7 @@ public class TemplateParserTest extends FilterTestSupport {
 		assertEquals("MyPage", wikiModel.parseTemplates("{{PAGENAME}}", false));
 		assertEquals("", wikiModel.parseTemplates("{{PAGENAME:}}", false));
 		assertEquals("Main Page", wikiModel.parseTemplates("{{PAGENAME:Main Page}}", false));
+		assertEquals("Main Page", wikiModel.parseTemplates("{{PAGENAME:Main_Page}}", false));
 		assertEquals("Main page", wikiModel.parseTemplates("{{PAGENAME:Main page}}", false));
 		assertEquals("Main Page", wikiModel.parseTemplates("{{PAGENAME:main Page}}", false));
 		assertEquals("Main page", wikiModel.parseTemplates("{{PAGENAME:main page}}", false));
@@ -929,6 +930,7 @@ public class TemplateParserTest extends FilterTestSupport {
 		assertEquals("MyPage", wikiModel.parseTemplates("{{PAGENAMEE}}", false));
 		assertEquals("", wikiModel.parseTemplates("{{PAGENAMEE:}}", false));
 		assertEquals("Main_Page", wikiModel.parseTemplates("{{PAGENAMEE:Main Page}}", false));
+		assertEquals("Main_Page", wikiModel.parseTemplates("{{PAGENAMEE:Main_Page}}", false));
 		assertEquals("Main_page", wikiModel.parseTemplates("{{PAGENAMEE:Main page}}", false));
 		assertEquals("Main_Page", wikiModel.parseTemplates("{{PAGENAMEE:main Page}}", false));
 		assertEquals("Main_page", wikiModel.parseTemplates("{{PAGENAMEE:main page}}", false));
@@ -942,6 +944,7 @@ public class TemplateParserTest extends FilterTestSupport {
 		assertEquals("MyPage", wikiModel.parseTemplates("{{FULLPAGENAME}}", false));
 		assertEquals("", wikiModel.parseTemplates("{{FULLPAGENAME:}}", false));
 		assertEquals("Main Page", wikiModel.parseTemplates("{{FULLPAGENAME:Main Page}}", false));
+		assertEquals("Main Page", wikiModel.parseTemplates("{{FULLPAGENAME:Main_Page}}", false));
 		assertEquals("Template:Main Page", wikiModel.parseTemplates("{{FULLPAGENAME:Template:Main Page}}", false));
 		assertEquals("Bad:Main Page", wikiModel.parseTemplates("{{FULLPAGENAME:Bad:Main Page}}", false));
 		assertEquals("File:Test.jpg", wikiModel.parseTemplates("{{FULLPAGENAME:Image:test.jpg}}", false));
@@ -952,6 +955,7 @@ public class TemplateParserTest extends FilterTestSupport {
 		assertEquals("MyPage", wikiModel.parseTemplates("{{FULLPAGENAMEE}}", false));
 		assertEquals("", wikiModel.parseTemplates("{{FULLPAGENAMEE:}}", false));
 		assertEquals("Main_Page", wikiModel.parseTemplates("{{FULLPAGENAMEE:Main Page}}", false));
+		assertEquals("Main_Page", wikiModel.parseTemplates("{{FULLPAGENAMEE:Main_Page}}", false));
 		assertEquals("Template:Main_Page", wikiModel.parseTemplates("{{FULLPAGENAMEE:Template:Main Page}}", false));
 		assertEquals("Bad:Main_Page", wikiModel.parseTemplates("{{FULLPAGENAMEE:Bad:Main Page}}", false));
 		assertEquals("File:Test.jpg", wikiModel.parseTemplates("{{FULLPAGENAMEE:Image:test.jpg}}", false));
