@@ -944,6 +944,29 @@ public class TemplateParserTest extends FilterTestSupport {
 		assertEquals("Bad:Main_Page", wikiModel.parseTemplates("{{FULLPAGENAMEE:Bad:Main Page}}", false));
 	}
 
+	public void testTALKPAGENAME001() {
+		wikiModel.setPageName("MyPage");
+		wikiModel.setNamespaceName("");
+		assertEquals("Talk:MyPage", wikiModel.parseTemplates("{{TALKPAGENAME}}", false));
+		assertEquals("Talk:Main Page", wikiModel.parseTemplates("{{TALKPAGENAME:Main Page}}", false));
+		assertEquals("Template_talk:Main Page", wikiModel.parseTemplates("{{TALKPAGENAME:Template:Main Page}}", false)); // TODO: talk namespace should contain a space
+		assertEquals("Talk:Bad:Main Page", wikiModel.parseTemplates("{{TALKPAGENAME:Bad:Main Page}}", false));
+		assertEquals("Template_talk:Sandbox", wikiModel.parseTemplates("{{TALKPAGENAME:Template:Sandbox}}", false)); // TODO: talk namespace should contain a space
+		assertEquals("Template_talk:Sandbox", wikiModel.parseTemplates("{{TALKPAGENAME:Template_talk:Sandbox}}", false)); // TODO: talk namespace should contain a space
+		assertEquals("Template_talk:Sandbox", wikiModel.parseTemplates("{{TALKPAGENAME:Template talk:Sandbox}}", false)); // TODO: talk namespace should contain a space
+	}
+
+	public void testTALKPAGENAMEE001() {
+		wikiModel.setPageName("MyPage");
+		assertEquals("Talk:MyPage", wikiModel.parseTemplates("{{TALKPAGENAMEE}}", false));
+		assertEquals("Talk:Main_Page", wikiModel.parseTemplates("{{TALKPAGENAMEE:Main Page}}", false));
+		assertEquals("Template_talk:Main_Page", wikiModel.parseTemplates("{{TALKPAGENAMEE:Template:Main Page}}", false));
+		assertEquals("Talk:Bad:Main_Page", wikiModel.parseTemplates("{{TALKPAGENAMEE:Bad:Main Page}}", false));
+		assertEquals("Template_talk:Sandbox", wikiModel.parseTemplates("{{TALKPAGENAMEE:Template:Sandbox}}", false));
+		assertEquals("Template_talk:Sandbox", wikiModel.parseTemplates("{{TALKPAGENAMEE:Template_talk:Sandbox}}", false));
+		assertEquals("Template_talk:Sandbox", wikiModel.parseTemplates("{{TALKPAGENAMEE:Template talk:Sandbox}}", false));
+	}
+
 	public void testURLEncode001() {
 		assertEquals("%22%23%24%25%26%27%28%29*%2C%3B%3F%5B%5D%5E%60%7B%7D", wikiModel.parseTemplates(
 				"{{urlencode: \"#$%&'()*,;?[]^`{}}}", false));
