@@ -348,7 +348,7 @@ public abstract class AbstractWikiModel implements IWikiModel, IContext {
 		aTagNode.addAttribute("rel", "nofollow", true);
 		if (withoutSquareBrackets) {
 			aTagNode.addAttribute("class", "external free", true);
-//			aTagNode.addAttribute("title", link, true);
+			// aTagNode.addAttribute("title", link, true);
 			append(aTagNode);
 			aTagNode.addChild(new ContentToken(linkName));
 		} else {
@@ -356,14 +356,14 @@ public abstract class AbstractWikiModel implements IWikiModel, IContext {
 			if (trimmedText.length() > 0) {
 				pushNode(aTagNode);
 				if (linkName.equals(link)
-						// protocol-relative URLs also get auto-numbered if there is no real alias
-						|| (link.length() >= 2 && link.charAt(0) == '/' && link.charAt(1) == '/'
-								&& link.substring(2).equals(linkName))) {
+				// protocol-relative URLs also get auto-numbered if there is no real
+						// alias
+						|| (link.length() >= 2 && link.charAt(0) == '/' && link.charAt(1) == '/' && link.substring(2).equals(linkName))) {
 					aTagNode.addAttribute("class", "external autonumber", true);
 					aTagNode.addChild(new ContentToken("[" + (++fExternalLinksCounter) + "]"));
 				} else {
 					aTagNode.addAttribute("class", "external text", true);
-//					aTagNode.addAttribute("title", link, true);
+					// aTagNode.addAttribute("title", link, true);
 					WikipediaParser.parseRecursive(trimmedText, this, false, true);
 				}
 				popNode();
@@ -1661,64 +1661,66 @@ public abstract class AbstractWikiModel implements IWikiModel, IContext {
 	 */
 	@Override
 	public void substituteTemplateCall(String templateName, Map<String, String> parameterMap, Appendable writer) throws IOException {
-
-		Map<String, String> templateCallsCache = null;
-		String cacheKey = null;
-		int cacheKeyLength = 0;
-		templateCallsCache = fConfiguration.getTemplateCallsCache();
-		if (templateCallsCache != null) {
-			cacheKeyLength += templateName.length() + 1;
-			for (Entry<String, String> entry : parameterMap.entrySet()) {
-				cacheKeyLength += entry.getKey().length() + entry.getValue().length() + 2;
-			}
-			if (cacheKeyLength < Configuration.MAX_CACHE_KEY_LENGTH) {
-				StringBuilder cacheKeyBuffer = new StringBuilder(cacheKeyLength);
-				cacheKeyBuffer.append(templateName);
-				cacheKeyBuffer.append("|");
-				for (Entry<String, String> entry : parameterMap.entrySet()) {
-					cacheKeyBuffer.append(entry.getKey());
-					cacheKeyBuffer.append("=");
-					cacheKeyBuffer.append(entry.getValue());
-					cacheKeyBuffer.append("|");
-				}
-				cacheKey = cacheKeyBuffer.toString();
-
-				String value = templateCallsCache.get(cacheKey);
-				if (value != null) {
-					// System.out.println("Cache key: " + cacheKey);
-					writer.append(value);
-					if (Configuration.TEMPLATE_NAMES) {
-						System.out.println("Cached: " + templateName + "-" + cacheKey);
-					}
-					return;
-				}
-			}
-			if (Configuration.TEMPLATE_NAMES) {
-				System.out.println("Not Cached: " + templateName + "-" + cacheKeyLength);
-			}
-		}
-		
-		ParsedPageName parsedPagename = AbstractParser.parsePageName(this, templateName, fNamespace.getTemplate(), true, true);
-		if (!parsedPagename.valid) {
-			writer.append("{{");
-			writer.append(templateName);
-			writer.append("}}");
-			return;
-		}
-
-		String fullTemplateStr = parsedPagename.namespace.makeFullPagename(parsedPagename.pagename);
 		Counter val = null;
 		try {
-			if (parsedPagename.namespace.isType(NamespaceCode.TEMPLATE_NAMESPACE_KEY)) {
-				val = fTemplates.get(parsedPagename.pagename);
-				if (val == null) {
-					fTemplates.put(parsedPagename.pagename, new Counter());
-				} else {
-					if (val.inc() > 1) {
-						writer.append("<span class=\"error\">Template loop detected: <strong class=\"selflink\">Template:SELF RECURSION</strong></span>");
-						return; 
+			val = fTemplates.get(templateName);
+			if (val == null) {
+				val = new Counter(0);
+				fTemplates.put(templateName, val);
+			}
+			if (val.inc() > 1) {
+				writer.append("<span class=\"error\">Template loop detected: <strong class=\"selflink\">Template:" + templateName
+						+ "</strong></span>");
+				return;
+			}
+			
+			Map<String, String> templateCallsCache = null;
+			String cacheKey = null;
+			int cacheKeyLength = 0;
+			templateCallsCache = fConfiguration.getTemplateCallsCache();
+			if (templateCallsCache != null) {
+				cacheKeyLength += templateName.length() + 1;
+				for (Entry<String, String> entry : parameterMap.entrySet()) {
+					cacheKeyLength += entry.getKey().length() + entry.getValue().length() + 2;
+				}
+				if (cacheKeyLength < Configuration.MAX_CACHE_KEY_LENGTH) {
+					StringBuilder cacheKeyBuffer = new StringBuilder(cacheKeyLength);
+					cacheKeyBuffer.append(templateName);
+					cacheKeyBuffer.append("|");
+					for (Entry<String, String> entry : parameterMap.entrySet()) {
+						cacheKeyBuffer.append(entry.getKey());
+						cacheKeyBuffer.append("=");
+						cacheKeyBuffer.append(entry.getValue());
+						cacheKeyBuffer.append("|");
+					}
+					cacheKey = cacheKeyBuffer.toString();
+
+					String value = templateCallsCache.get(cacheKey);
+					if (value != null) {
+						// System.out.println("Cache key: " + cacheKey);
+						writer.append(value);
+						if (Configuration.TEMPLATE_NAMES) {
+							System.out.println("Cached: " + templateName + "-" + cacheKey);
+						}
+						return;
 					}
 				}
+				if (Configuration.TEMPLATE_NAMES) {
+					System.out.println("Not Cached: " + templateName + "-" + cacheKeyLength);
+				}
+			}
+
+			ParsedPageName parsedPagename = AbstractParser.parsePageName(this, templateName, fNamespace.getTemplate(), true, true);
+			if (!parsedPagename.valid) {
+				writer.append("{{");
+				writer.append(templateName);
+				writer.append("}}");
+				return;
+			}
+
+			String fullTemplateStr = parsedPagename.namespace.makeFullPagename(parsedPagename.pagename);
+
+			if (parsedPagename.namespace.isType(NamespaceCode.TEMPLATE_NAMESPACE_KEY)) {
 				addTemplate(parsedPagename.pagename);
 			} else {
 				addInclude(fullTemplateStr);

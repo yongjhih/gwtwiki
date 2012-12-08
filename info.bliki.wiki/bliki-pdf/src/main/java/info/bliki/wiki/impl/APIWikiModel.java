@@ -179,7 +179,7 @@ public class APIWikiModel extends WikiModel {
 		}
 		String redirectedLink = WikipediaParser.parseRedirect(rawWikitext, this);
 		if (redirectedLink != null) {
-			ParsedPageName redirParsedPage = AbstractParser.parsePageName(this, redirectedLink, fNamespace.getTemplate());
+			ParsedPageName redirParsedPage = AbstractParser.parsePageName(this, redirectedLink, fNamespace.getTemplate(), true, true);
 			try {
 				int level = incrementRecursionLevel();
 				// TODO: what to do if parsing the title failed due to invalid syntax?

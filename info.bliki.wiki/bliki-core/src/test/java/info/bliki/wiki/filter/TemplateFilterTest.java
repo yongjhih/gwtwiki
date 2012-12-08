@@ -14,7 +14,7 @@ public class TemplateFilterTest extends FilterTestSupport {
 	public static Test suite() {
 		return new TestSuite(TemplateFilterTest.class);
 	}
-	
+
 	/**
 	 * Issue124 - Image URL parsing broken in some cases
 	 */
@@ -27,27 +27,27 @@ public class TemplateFilterTest extends FilterTestSupport {
 				+ "|BILDUMRANDUNG    = \n"
 				+ "|BILDBESCHREIBUNG = Breitmaulnashörner in Namibia\n"
 				+ "|TEASERTEXT       = Die '''[[Nashörner]]''' (Rhinocerotidae) oder auch '''Rhinozerosse''' zählen zu den markantesten Säugetieren mit ihrem großen Kopf und den namengebenden ein bis zwei Hörnern.}}";
-		final String expected = "\n" + 
-		"<div style=\"float:left; padding-top:0.5em; padding-right:0.5em;\"><a class=\"image\" href=\"http://www.bliki.info/wiki/File:150px-Waterberg_Nashorn1.jpg\" title=\"Breitmaulnashörner in Namibia\"><img src=\"http://www.bliki.info/wiki/150px-Waterberg_Nashorn1.jpg\" alt=\"Breitmaulnashörner in Namibia\" width=\"150\" />\n" + 
-		"</a></div>\n" + 
-		"<p>Die <b><a href=\"http://www.bliki.info/wiki/Nash%C3%B6rner\" title=\"Nashörner\">Nashörner</a></b> (Rhinocerotidae) oder auch <b>Rhinozerosse</b> zählen zu den markantesten Säugetieren mit ihrem großen Kopf und den namengebenden ein bis zwei Hörnern. <small><a href=\"http://www.bliki.info/wiki/Nash%C3%B6rner\" title=\"Nashörner\">mehr</a></small></p>";
+		final String expected = "\n"
+				+ "<div style=\"float:left; padding-top:0.5em; padding-right:0.5em;\"><a class=\"image\" href=\"http://www.bliki.info/wiki/File:150px-Waterberg_Nashorn1.jpg\" title=\"Breitmaulnashörner in Namibia\"><img src=\"http://www.bliki.info/wiki/150px-Waterberg_Nashorn1.jpg\" alt=\"Breitmaulnashörner in Namibia\" width=\"150\" />\n"
+				+ "</a></div>\n"
+				+ "<p>Die <b><a href=\"http://www.bliki.info/wiki/Nash%C3%B6rner\" title=\"Nashörner\">Nashörner</a></b> (Rhinocerotidae) oder auch <b>Rhinozerosse</b> zählen zu den markantesten Säugetieren mit ihrem großen Kopf und den namengebenden ein bis zwei Hörnern. <small><a href=\"http://www.bliki.info/wiki/Nash%C3%B6rner\" title=\"Nashörner\">mehr</a></small></p>";
 		assertEquals(expected, wikiModel.render(rawWikiText));
 		WikiTestModel germanWikiTextModel = newWikiTestModel(Locale.GERMAN);
 		assertEquals(expected, germanWikiTextModel.render(rawWikiText));
 	}
-	
+
 	/**
 	 * Issue124 - Image URL parsing broken in some cases
 	 */
 	public void testTemplateIssue124_002() {
 		final String rawWikiText = "[[File:Waterberg Nashorn1.jpg|150px]]";
-		final String expected = "\n" + 
-		"<p><a class=\"image\" href=\"http://www.bliki.info/wiki/File:150px-Waterberg_Nashorn1.jpg\" ><img src=\"http://www.bliki.info/wiki/150px-Waterberg_Nashorn1.jpg\" width=\"150\" />\n</a></p>";
+		final String expected = "\n"
+				+ "<p><a class=\"image\" href=\"http://www.bliki.info/wiki/File:150px-Waterberg_Nashorn1.jpg\" ><img src=\"http://www.bliki.info/wiki/150px-Waterberg_Nashorn1.jpg\" width=\"150\" />\n</a></p>";
 		assertEquals(expected, wikiModel.render(rawWikiText));
 		WikiTestModel germanWikiTextModel = newWikiTestModel(Locale.GERMAN);
 		assertEquals(expected, germanWikiTextModel.render(rawWikiText));
 	}
-	
+
 	public void testTemplate06() {
 		assertEquals("\n" + "<p>start- 5.0 equals +5 -end</p>", wikiModel.render("start- {{ifeq|5.0|+5}} -end", false));
 	}
@@ -378,8 +378,8 @@ public class TemplateFilterTest extends FilterTestSupport {
 	public void testParserFunctionTag001() {
 		assertEquals("\n"
 				+ "<p><sup id=\"_ref-1\" class=\"reference\"><a href=\"#_note-1\" title=\"\">[1]</a></sup></p><ol class=\"references\">\n"
-				+ "<li id=\"_note-1\"><b><a href=\"#_ref-1\" title=\"\">&#8593;</a></b> <b>a simple test</b></li>\n</ol>", wikiModel.render(
-				"{{#tag:ref|'''a simple test'''}}{{#tag:references}}", false));
+				+ "<li id=\"_note-1\"><b><a href=\"#_ref-1\" title=\"\">&#8593;</a></b> <b>a simple test</b></li>\n</ol>", wikiModel
+				.render("{{#tag:ref|'''a simple test'''}}{{#tag:references}}", false));
 	}
 
 	public final static String NAVBOX_STRING = "{{Navbox\n" + "|name  = AcademyAwardBestActor 1981-2000\n"
@@ -492,16 +492,24 @@ public class TemplateFilterTest extends FilterTestSupport {
 				+ "{{!}}- \n" + "{{!}} C\n" + "{{!}} D\n" + "{{!}}}\n" + "}}", false));
 	}
 
-	public void testPipe003() {
-		assertEquals("\n" + "<div style=\"page-break-inside: avoid;\">\n" + "<table>\n" + "<tr>\n" + "<td>A </td>\n"
-				+ "<td>B</td></tr>\n" + "<tr>\n" + "<td>C</td>\n" + "<td>D</td></tr></table></div>\n" + "\n"
-				+ "<div style=\"page-break-inside: avoid;\">\n" + "<table>\n" + "<tr>\n" + "<td>A </td>\n" + "<td>B</td></tr>\n" + "<tr>\n"
-				+ "<td>C</td>\n" + "<td>D</td></tr></table></div>\n" + "\n" + "<div style=\"page-break-inside: avoid;\">\n" + "<table>\n"
-				+ "<tr>\n" + "<td>A </td>\n" + "<td>B</td></tr>\n" + "<tr>\n" + "<td>C</td>\n" + "<td>D</td></tr></table></div>\n" + "\n"
-				+ "<div style=\"page-break-inside: avoid;\">\n" + "<table>\n" + "<tr>\n" + "<td>A </td>\n" + "<td>B</td></tr>\n" + "<tr>\n"
-				+ "<td>C</td>\n" + "<td>D</td></tr></table></div>\n" + "", wikiModel.render("{{2x|{{2x|{{{!}} \n" + "{{!}} A \n"
-				+ "{{!}} B\n" + "{{!}}- \n" + "{{!}} C\n" + "{{!}} D\n" + "{{!}}}\n" + "}}}}", false));
-	}
+	// public void testPipe003() {
+	// assertEquals("\n" + "<div style=\"page-break-inside: avoid;\">\n" +
+	// "<table>\n" + "<tr>\n" + "<td>A </td>\n"
+	// + "<td>B</td></tr>\n" + "<tr>\n" + "<td>C</td>\n" +
+	// "<td>D</td></tr></table></div>\n" + "\n"
+	// + "<div style=\"page-break-inside: avoid;\">\n" + "<table>\n" + "<tr>\n" +
+	// "<td>A </td>\n" + "<td>B</td></tr>\n" + "<tr>\n"
+	// + "<td>C</td>\n" + "<td>D</td></tr></table></div>\n" + "\n" +
+	// "<div style=\"page-break-inside: avoid;\">\n" + "<table>\n"
+	// + "<tr>\n" + "<td>A </td>\n" + "<td>B</td></tr>\n" + "<tr>\n" +
+	// "<td>C</td>\n" + "<td>D</td></tr></table></div>\n" + "\n"
+	// + "<div style=\"page-break-inside: avoid;\">\n" + "<table>\n" + "<tr>\n" +
+	// "<td>A </td>\n" + "<td>B</td></tr>\n" + "<tr>\n"
+	// + "<td>C</td>\n" + "<td>D</td></tr></table></div>\n" + "",
+	// wikiModel.render("{{2x|{{2x|{{{!}} \n" + "{{!}} A \n"
+	// + "{{!}} B\n" + "{{!}}- \n" + "{{!}} C\n" + "{{!}} D\n" + "{{!}}}\n" +
+	// "}}}}", false));
+	// }
 
 	public void testFurther() {
 		assertEquals(
@@ -1141,14 +1149,9 @@ public class TemplateFilterTest extends FilterTestSupport {
 						+ "</ul></div>\n" + "", wikiModel.render(
 						"{{Navbar|Screen Actors Guild Award for Outstanding Performance by a Cast in a Motion Picture (1995–2000)}}\n", false));
 	}
-	
+
 	public void testTemplateWithNewlines001() {
-		assertEquals("\n" + 
-				"<p>{{Serie de TV</p>\n" + 
-				"<pre>" + 
-				" Nombre        = FabulÃ³polis\n" + 
-				"</pre>\n" + 
-				"<p>}}</p>", 
+		assertEquals("\n" + "<p>{{Serie de TV</p>\n" + "<pre>" + " Nombre        = FabulÃ³polis\n" + "</pre>\n" + "<p>}}</p>",
 				wikiModel.render("{{Serie de TV\n  Nombre        = FabulÃ³polis\n}}", false));
 
 		assertEquals(new HashSet<String>(), wikiModel.getTemplates());
@@ -1169,60 +1172,95 @@ public class TemplateFilterTest extends FilterTestSupport {
 	}
 
 	public void testTemplateWithHashtag001() {
-		assertEquals(
-				"\n"
-						+ "<p>{{::Viva_World_Cup#Tournament_results}}\n"
-						+ "<a href=\"http://www.bliki.info/wiki/Viva_World_Cup\" title=\"Viva_World_Cup\">Viva_World_Cup</a>\n"
-						+ "<a href=\"http://www.bliki.info/wiki/Viva_World_Cup\" title=\"Viva_World_Cup\">Viva_World_Cup</a>\n"
-						+ "</p>",
-				wikiModel.render("{{::Viva_World_Cup#Tournament_results}}\n"
-						+ "{{:Viva_World_Cup#Tournament_results}}\n"
-						+ "{{:Viva_World_Cup#Tournament_results#History}}\n"
-						+ "[[Category:Test#test]]", false));
+		assertEquals("\n" + "<p>{{::Viva_World_Cup#Tournament_results}}\n"
+				+ "<a href=\"http://www.bliki.info/wiki/Viva_World_Cup\" title=\"Viva_World_Cup\">Viva_World_Cup</a>\n"
+				+ "<a href=\"http://www.bliki.info/wiki/Viva_World_Cup\" title=\"Viva_World_Cup\">Viva_World_Cup</a>\n" + "</p>", wikiModel
+				.render("{{::Viva_World_Cup#Tournament_results}}\n" + "{{:Viva_World_Cup#Tournament_results}}\n"
+						+ "{{:Viva_World_Cup#Tournament_results#History}}\n" + "[[Category:Test#test]]", false));
 
-		assertTrue("wikiModel.getIncludes() = " + wikiModel.getIncludes().toString(),
-				wikiModel.getIncludes().contains("Viva_World_Cup"));
-		assertTrue("wikiModel.getCategories() = " + wikiModel.getCategories().keySet().toString(),
-				wikiModel.getCategories().keySet().contains("Test"));
+		assertTrue("wikiModel.getIncludes() = " + wikiModel.getIncludes().toString(), wikiModel.getIncludes()
+				.contains("Viva_World_Cup"));
+		assertTrue("wikiModel.getCategories() = " + wikiModel.getCategories().keySet().toString(), wikiModel.getCategories().keySet()
+				.contains("Test"));
 	}
 
 	public void testTransclusionInPre001() {
-		assertEquals(
-				"<pre>{{:Viva_World_Cup}}</pre>",
-				wikiModel.parseTemplates("<pre>{{:Viva_World_Cup}}</pre>"));
+		assertEquals("<pre>{{:Viva_World_Cup}}</pre>", wikiModel.parseTemplates("<pre>{{:Viva_World_Cup}}</pre>"));
 
-		assertTrue("wikiModel.getIncludes() = " + wikiModel.getIncludes().toString(),
-				wikiModel.getIncludes().size() == 0);
-		assertTrue("wikiModel.getTemplates() = " + wikiModel.getTemplates().toString(),
-				wikiModel.getTemplates().size() == 0);
+		assertTrue("wikiModel.getIncludes() = " + wikiModel.getIncludes().toString(), wikiModel.getIncludes().size() == 0);
+		assertTrue("wikiModel.getTemplates() = " + wikiModel.getTemplates().toString(), wikiModel.getTemplates().size() == 0);
 	}
 
 	public void testPreAlmostEqualToNowiki001() {
 		// https://en.wikipedia.org/wiki/Help:Wiki_markup#Pre
-		assertEquals(
-				"\n<pre>Text\n[[wiki]] markup</pre>",
-				wikiModel.render("<pre>Text\n[[wiki]] markup</pre>", false));
+		assertEquals("\n<pre>Text\n[[wiki]] markup</pre>", wikiModel.render("<pre>Text\n[[wiki]] markup</pre>", false));
 
-		assertTrue("wikiModel.getLinks() = " + wikiModel.getLinks().toString(),
-				wikiModel.getLinks().size() == 0);
+		assertTrue("wikiModel.getLinks() = " + wikiModel.getLinks().toString(), wikiModel.getLinks().size() == 0);
 	}
 
 	public void testPreAlmostEqualToNowiki002() {
 		// https://en.wikipedia.org/wiki/Help:Wiki_markup#Nowiki
-		assertEquals(
-				"\n<p>Text\n[[wiki]] markup</p>",
-				wikiModel.render("<nowiki>Text\n[[wiki]] markup</nowiki>", false));
+		assertEquals("\n<p>Text\n[[wiki]] markup</p>", wikiModel.render("<nowiki>Text\n[[wiki]] markup</nowiki>", false));
 
-		assertTrue("wikiModel.getLinks() = " + wikiModel.getLinks().toString(),
-				wikiModel.getLinks().size() == 0);
+		assertTrue("wikiModel.getLinks() = " + wikiModel.getLinks().toString(), wikiModel.getLinks().size() == 0);
 	}
 
 	/**
-	 * Issue 131 - incorrect parsing of links if an additional HTML tag is appended
+	 * Issue 131 - incorrect parsing of links if an additional HTML tag is
+	 * appended
 	 */
 	public void testLinkWithExtraHTMLTag001() {
 		assertEquals(
 				"\n<p><a class=\"external free\" href=\"http://www.example.com/\" rel=\"nofollow\">http://www.example.com/</a>&#60;hello&#62;</p>",
 				wikiModel.render("http://www.example.com/<hello>", false));
+	}
+
+	/**
+	 * Issue 133 - self-inclusion is only allowed once in MediaWiki
+	 */
+	public void testSelfRecusion001() {
+		// https://en.wikipedia.org/wiki/Help:Template#Nesting_templates
+		assertEquals(
+				"\n<p>Line1</p>"
+						+ "\n<p>Line1</p>"
+						+ "\n<p><span class=\"error\">Template loop detected: <strong class=\"selflink\">Template:SELF_RECURSION</strong></span></p>",
+				wikiModel.render(WikiTestModel.SELF_RECURSION, false));
+	}
+
+	/**
+	 * Issue 133 - self-inclusion is only allowed once in MediaWiki
+	 */
+	public void testSelfRecusion002() {
+		// check that a template can be included more than once
+		assertEquals("\n<p>a, a</p>", wikiModel.render("{{1x|a}}, {{1x|a}}", false));
+		assertEquals("\n<p>a, b</p>", wikiModel.render("{{1x|a}}, {{1x|b}}", false));
+	}
+
+	/**
+	 * Issue 133 - self-inclusion is only allowed once in MediaWiki
+	 */
+	public void testIndirectSelfRecusion001() {
+		// https://en.wikipedia.org/wiki/Help:Template#Nesting_templates
+		assertEquals(
+				"\n"
+						+ "<p>INDIRECT_SELF_RECURSION1</p>\n"
+						+ "<p>INDIRECT_SELF_RECURSION2</p>\n"
+						+ "<p>INDIRECT_SELF_RECURSION1</p>\n"
+						+ "<p><span class=\"error\">Template loop detected: <strong class=\"selflink\">Template:INDIRECT_SELF_RECURSION2</strong></span></p>",
+				wikiModel.render(WikiTestModel.INDIRECT_SELF_RECURSION1, false));
+	}
+
+	/**
+	 * Issue 133 - self-inclusion is only allowed once in MediaWiki
+	 */
+	public void testIndirectSelfRecusion002() {
+		// https://en.wikipedia.org/wiki/Help:Template#Nesting_templates
+		assertEquals(
+				"\n"
+						+ "<p>INDIRECT_SELF_RECURSION2</p>\n"
+						+ "<p>INDIRECT_SELF_RECURSION1</p>\n"
+						+ "<p>INDIRECT_SELF_RECURSION2</p>\n"
+						+ "<p><span class=\"error\">Template loop detected: <strong class=\"selflink\">Template:INDIRECT_SELF_RECURSION1</strong></span></p>",
+				wikiModel.render(WikiTestModel.INDIRECT_SELF_RECURSION2, false));
 	}
 }
