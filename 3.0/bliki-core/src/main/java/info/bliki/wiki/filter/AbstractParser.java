@@ -708,10 +708,25 @@ public abstract class AbstractParser extends WikipediaScanner {
 		int level = 1;
 		int position = fCurrentPosition;
 		boolean pipeSymbolFound = false;
+		boolean newLineFound = false;
+		String namespace = null;
+		boolean isImageNamespace = false;
 		try {
 			while (true) {
 				ch = fSource[position++];
-				if (ch == '|') {
+				if (ch == ':') {
+					if (namespace == null) {
+						namespace = fStringSource.substring(fCurrentPosition, position - 1);
+						if (fWikiModel.isImageNamespace(namespace)) {
+							isImageNamespace = true;
+						}
+					}
+				} else if (ch == '\n') {
+					newLineFound = true;
+				} else if (ch == '|') {
+					if (newLineFound && level == 1 && !isImageNamespace) {
+						return false;
+					}
 					pipeSymbolFound = true;
 				} else if (ch == '[' && fSource[position] == '[') {
 					if (pipeSymbolFound) {
