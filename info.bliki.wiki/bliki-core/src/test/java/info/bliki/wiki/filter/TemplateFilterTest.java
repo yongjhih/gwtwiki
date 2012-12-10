@@ -492,24 +492,16 @@ public class TemplateFilterTest extends FilterTestSupport {
 				+ "{{!}}- \n" + "{{!}} C\n" + "{{!}} D\n" + "{{!}}}\n" + "}}", false));
 	}
 
-	// public void testPipe003() {
-	// assertEquals("\n" + "<div style=\"page-break-inside: avoid;\">\n" +
-	// "<table>\n" + "<tr>\n" + "<td>A </td>\n"
-	// + "<td>B</td></tr>\n" + "<tr>\n" + "<td>C</td>\n" +
-	// "<td>D</td></tr></table></div>\n" + "\n"
-	// + "<div style=\"page-break-inside: avoid;\">\n" + "<table>\n" + "<tr>\n" +
-	// "<td>A </td>\n" + "<td>B</td></tr>\n" + "<tr>\n"
-	// + "<td>C</td>\n" + "<td>D</td></tr></table></div>\n" + "\n" +
-	// "<div style=\"page-break-inside: avoid;\">\n" + "<table>\n"
-	// + "<tr>\n" + "<td>A </td>\n" + "<td>B</td></tr>\n" + "<tr>\n" +
-	// "<td>C</td>\n" + "<td>D</td></tr></table></div>\n" + "\n"
-	// + "<div style=\"page-break-inside: avoid;\">\n" + "<table>\n" + "<tr>\n" +
-	// "<td>A </td>\n" + "<td>B</td></tr>\n" + "<tr>\n"
-	// + "<td>C</td>\n" + "<td>D</td></tr></table></div>\n" + "",
-	// wikiModel.render("{{2x|{{2x|{{{!}} \n" + "{{!}} A \n"
-	// + "{{!}} B\n" + "{{!}}- \n" + "{{!}} C\n" + "{{!}} D\n" + "{{!}}}\n" +
-	// "}}}}", false));
-	// }
+	public void testPipe003() {
+		assertEquals("\n" + "<div style=\"page-break-inside: avoid;\">\n" + "<table>\n" + "<tr>\n" + "<td>A </td>\n"
+				+ "<td>B</td></tr>\n" + "<tr>\n" + "<td>C</td>\n" + "<td>D</td></tr></table></div>\n" + "\n"
+				+ "<div style=\"page-break-inside: avoid;\">\n" + "<table>\n" + "<tr>\n" + "<td>A </td>\n" + "<td>B</td></tr>\n" + "<tr>\n"
+				+ "<td>C</td>\n" + "<td>D</td></tr></table></div>\n" + "\n" + "<div style=\"page-break-inside: avoid;\">\n" + "<table>\n"
+				+ "<tr>\n" + "<td>A </td>\n" + "<td>B</td></tr>\n" + "<tr>\n" + "<td>C</td>\n" + "<td>D</td></tr></table></div>\n" + "\n"
+				+ "<div style=\"page-break-inside: avoid;\">\n" + "<table>\n" + "<tr>\n" + "<td>A </td>\n" + "<td>B</td></tr>\n" + "<tr>\n"
+				+ "<td>C</td>\n" + "<td>D</td></tr></table></div>\n" + "", wikiModel.render("{{2x|{{2x|{{{!}} \n" + "{{!}} A \n"
+				+ "{{!}} B\n" + "{{!}}- \n" + "{{!}} C\n" + "{{!}} D\n" + "{{!}}}\n" + "}}}}", false));
+	}
 
 	public void testFurther() {
 		assertEquals(
@@ -1239,6 +1231,15 @@ public class TemplateFilterTest extends FilterTestSupport {
 	/**
 	 * Issue 133 - self-inclusion is only allowed once in MediaWiki
 	 */
+	public void testSelfRecusion003() {
+		// check that a template can be included as a parameter to itself
+		assertEquals("\n<p>a</p>", wikiModel.render("{{1x|{{1x|a}}}}", false));
+		assertEquals("\n<p>ab</p>", wikiModel.render("{{1x|a{{1x|b}}}}", false));
+	}
+
+	/**
+	 * Issue 133 - self-inclusion is only allowed once in MediaWiki
+	 */
 	public void testIndirectSelfRecusion001() {
 		// https://en.wikipedia.org/wiki/Help:Template#Nesting_templates
 		assertEquals(
@@ -1262,5 +1263,33 @@ public class TemplateFilterTest extends FilterTestSupport {
 						+ "<p>INDIRECT_SELF_RECURSION2</p>\n"
 						+ "<p><span class=\"error\">Template loop detected: <strong class=\"selflink\">Template:INDIRECT_SELF_RECURSION1</strong></span></p>",
 				wikiModel.render(WikiTestModel.INDIRECT_SELF_RECURSION2, false));
+	}
+
+	/**
+	 * Issue 133 - self-inclusion is only allowed once in MediaWiki
+	 */
+	public void testIndirectSelfRecusion001a() {
+		// https://en.wikipedia.org/wiki/Help:Template#Nesting_templates
+		assertEquals(
+				"\n"
+						+ "<p>INDIRECT_SELF_RECURSION1a</p>\n"
+						+ "<p>INDIRECT_SELF_RECURSION2a</p>\n"
+						+ "<p>INDIRECT_SELF_RECURSION1a</p>\n"
+						+ "<p><span class=\"error\">Template loop detected: <strong class=\"selflink\">Template:INDIRECT_SELF_RECURSION2a</strong></span></p>",
+				wikiModel.render(WikiTestModel.INDIRECT_SELF_RECURSION1a, false));
+	}
+
+	/**
+	 * Issue 133 - self-inclusion is only allowed once in MediaWiki
+	 */
+	public void testIndirectSelfRecusion002a() {
+		// https://en.wikipedia.org/wiki/Help:Template#Nesting_templates
+		assertEquals(
+				"\n"
+						+ "<p>INDIRECT_SELF_RECURSION2a</p>\n"
+						+ "<p>INDIRECT_SELF_RECURSION1a</p>\n"
+						+ "<p>INDIRECT_SELF_RECURSION2a</p>\n"
+						+ "<p><span class=\"error\">Template loop detected: <strong class=\"selflink\">Template:INDIRECT_SELF_RECURSION1a</strong></span></p>",
+				wikiModel.render(WikiTestModel.INDIRECT_SELF_RECURSION2a, false));
 	}
 }
