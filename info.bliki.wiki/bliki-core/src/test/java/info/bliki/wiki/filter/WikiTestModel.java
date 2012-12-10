@@ -2505,6 +2505,9 @@ public class WikiTestModel extends WikiModel {
 	public static final String INDIRECT_SELF_RECURSION1a = "INDIRECT_SELF_RECURSION1a\n\n{{INDIRECT_SELF_RECURSION2a|{{#if:{{{1|}}}|{{#expr:{{{1}}}+1}}|1}}}}";
 	public static final String INDIRECT_SELF_RECURSION2a = "INDIRECT_SELF_RECURSION2a\n\n{{INDIRECT_SELF_RECURSION1a|{{#if:{{{1|}}}|{{#expr:{{{1}}}+1}}|1}}}}";
 
+	public static final String TEMPLATE_FOO = "FOO";
+	public static final String MAIN_FOO = "BAR";
+
 	boolean fSemanticWebActive;
 
 	static {
@@ -2715,10 +2718,16 @@ public class WikiTestModel extends WikiModel {
 				return INDIRECT_SELF_RECURSION1a;
 			} else if (name.equals("INDIRECT_SELF_RECURSION2a")) {
 				return INDIRECT_SELF_RECURSION2a;
+			} else if (name.equals("FOO")) {
+				return TEMPLATE_FOO;
+			} else if (name.equals("FOODATE")) {
+				return "FOO" + System.currentTimeMillis();
 			}
-		} else {
+		} else if (parsedPagename.namespace.isType(NamespaceCode.MAIN_NAMESPACE_KEY)) {
 			if (name.equals("Include_Page")) {
 				return "an include page";
+			} else if (name.equals("FOO")) {
+				return MAIN_FOO;
 			}
 		}
 		return null;

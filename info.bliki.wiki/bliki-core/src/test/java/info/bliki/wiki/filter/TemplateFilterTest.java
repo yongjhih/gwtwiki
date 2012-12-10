@@ -1292,4 +1292,56 @@ public class TemplateFilterTest extends FilterTestSupport {
 						+ "<p><span class=\"error\">Template loop detected: <strong class=\"selflink\">Template:INDIRECT_SELF_RECURSION1a</strong></span></p>",
 				wikiModel.render(WikiTestModel.INDIRECT_SELF_RECURSION2a, false));
 	}
+
+	/**
+	 * Test whether the template cache distinguishes pages from different
+	 * namespaces with the same page title.
+	 */
+	public void testTemplateCache001() {
+		assertEquals("\n<p>FOOBAR</p>", wikiModel.render("{{FOO}}{{:FOO}}", false));
+	}
+
+	/**
+	 * Test whether the template cache distinguishes pages from different
+	 * namespaces with the same page title.
+	 */
+	public void testTemplateCache002() {
+		assertEquals("\n<p>FOOFOO</p>", wikiModel.render("{{FOO}}{{Template:FOO}}", false));
+	}
+
+	/**
+	 * Test whether the template cache distinguishes pages from different
+	 * namespaces with the same page title.
+	 */
+	public void testTemplateCache003() {
+		assertEquals("\n<p>FOOFOO</p>", wikiModel.render("{{Template:FOO}}{{FOO}}", false));
+	}
+
+	/**
+	 * Test whether the template cache distinguishes pages from different
+	 * namespaces with the same page title.
+	 */
+	public void testTemplateCache004() {
+		String foodate = wikiModel.render("{{FOODATE}}", false);
+		System.out.println(foodate);
+		try {
+			Thread.sleep(1);
+		} catch (InterruptedException e) {
+		}
+		assertEquals(foodate, wikiModel.render("{{Template:FOODATE}}", false));
+	}
+
+	/**
+	 * Test whether the template cache distinguishes pages from different
+	 * namespaces with the same page title.
+	 */
+	public void testTemplateCache005() {
+		String foodate = wikiModel.render("{{Template:FOODATE}}", false);
+		System.out.println(foodate);
+		try {
+			Thread.sleep(1);
+		} catch (InterruptedException e) {
+		}
+		assertEquals(foodate, wikiModel.render("{{FOODATE}}", false));
+	}
 }

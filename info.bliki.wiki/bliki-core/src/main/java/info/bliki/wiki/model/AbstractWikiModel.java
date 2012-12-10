@@ -1663,13 +1663,22 @@ public abstract class AbstractWikiModel implements IWikiModel, IContext {
 	public void substituteTemplateCall(String templateName, Map<String, String> parameterMap, Appendable writer) throws IOException {
 		Counter val = null;
 		try {
-			val = fTemplates.get(templateName);
+			ParsedPageName parsedPagename = AbstractParser.parsePageName(this, templateName, fNamespace.getTemplate(), true, true);
+			if (!parsedPagename.valid) {
+				writer.append("{{");
+				writer.append(templateName);
+				writer.append("}}");
+				return;
+			}
+			String fullTemplateStr = parsedPagename.namespace.makeFullPagename(parsedPagename.pagename);
+			
+			val = fTemplates.get(fullTemplateStr);
 			if (val == null) {
 				val = new Counter(0);
-				fTemplates.put(templateName, val);
+				fTemplates.put(fullTemplateStr, val);
 			}
 			if (val.inc() > 1) {
-				writer.append("<span class=\"error\">Template loop detected: <strong class=\"selflink\">Template:" + templateName
+				writer.append("<span class=\"error\">Template loop detected: <strong class=\"selflink\">" + fullTemplateStr
 						+ "</strong></span>");
 				return;
 			}
@@ -1679,13 +1688,13 @@ public abstract class AbstractWikiModel implements IWikiModel, IContext {
 			int cacheKeyLength = 0;
 			templateCallsCache = fConfiguration.getTemplateCallsCache();
 			if (templateCallsCache != null) {
-				cacheKeyLength += templateName.length() + 1;
+				cacheKeyLength += fullTemplateStr.length() + 1;
 				for (Entry<String, String> entry : parameterMap.entrySet()) {
 					cacheKeyLength += entry.getKey().length() + entry.getValue().length() + 2;
 				}
 				if (cacheKeyLength < Configuration.MAX_CACHE_KEY_LENGTH) {
 					StringBuilder cacheKeyBuffer = new StringBuilder(cacheKeyLength);
-					cacheKeyBuffer.append(templateName);
+					cacheKeyBuffer.append(fullTemplateStr);
 					cacheKeyBuffer.append("|");
 					for (Entry<String, String> entry : parameterMap.entrySet()) {
 						cacheKeyBuffer.append(entry.getKey());
@@ -1700,25 +1709,15 @@ public abstract class AbstractWikiModel implements IWikiModel, IContext {
 						// System.out.println("Cache key: " + cacheKey);
 						writer.append(value);
 						if (Configuration.TEMPLATE_NAMES) {
-							System.out.println("Cached: " + templateName + "-" + cacheKey);
+							System.out.println("Cached: " + fullTemplateStr + "-" + cacheKey);
 						}
 						return;
 					}
 				}
 				if (Configuration.TEMPLATE_NAMES) {
-					System.out.println("Not Cached: " + templateName + "-" + cacheKeyLength);
+					System.out.println("Not Cached: " + fullTemplateStr + "-" + cacheKeyLength);
 				}
 			}
-
-			ParsedPageName parsedPagename = AbstractParser.parsePageName(this, templateName, fNamespace.getTemplate(), true, true);
-			if (!parsedPagename.valid) {
-				writer.append("{{");
-				writer.append(templateName);
-				writer.append("}}");
-				return;
-			}
-
-			String fullTemplateStr = parsedPagename.namespace.makeFullPagename(parsedPagename.pagename);
 
 			if (parsedPagename.namespace.isType(NamespaceCode.TEMPLATE_NAMESPACE_KEY)) {
 				addTemplate(parsedPagename.pagename);
