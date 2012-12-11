@@ -2500,6 +2500,7 @@ public class WikiTestModel extends WikiModel {
 	private static final String SPC = "{{1x| }}";
 
 	public static final String SELF_RECURSION = "Line1\n\n{{SELF_RECURSION}}";
+	public static final String SELF_RECURSION1 = "Line1\n\n{{{{{1}}}}}";
 	public static final String INDIRECT_SELF_RECURSION1 = "INDIRECT_SELF_RECURSION1\n\n{{INDIRECT_SELF_RECURSION2}}";
 	public static final String INDIRECT_SELF_RECURSION2 = "INDIRECT_SELF_RECURSION2\n\n{{INDIRECT_SELF_RECURSION1}}";
 	public static final String INDIRECT_SELF_RECURSION1a = "INDIRECT_SELF_RECURSION1a\n\n{{INDIRECT_SELF_RECURSION2a|{{#if:{{{1|}}}|{{#expr:{{{1}}}+1}}|1}}}}";
@@ -2710,6 +2711,8 @@ public class WikiTestModel extends WikiModel {
 				return ADTVorschlag;
 			} else if (name.equals("SELF_RECURSION")) {
 				return SELF_RECURSION;
+			} else if (name.equals("SELF_RECURSION1")) {
+				return SELF_RECURSION1;
 			} else if (name.equals("INDIRECT_SELF_RECURSION1")) {
 				return INDIRECT_SELF_RECURSION1;
 			} else if (name.equals("INDIRECT_SELF_RECURSION2")) {

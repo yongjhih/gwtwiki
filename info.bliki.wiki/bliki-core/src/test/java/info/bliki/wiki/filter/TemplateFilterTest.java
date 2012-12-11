@@ -1240,6 +1240,16 @@ public class TemplateFilterTest extends FilterTestSupport {
 	/**
 	 * Issue 133 - self-inclusion is only allowed once in MediaWiki
 	 */
+	public void testSelfRecusion004() {
+		// check that a template which includes itself via a parameter is recognised as a loop
+		assertEquals("\n<p>Line1</p>"
+						+ "\n<p><span class=\"error\">Template loop detected: <strong class=\"selflink\">Template:SELF_RECURSION1</strong></span></p>",
+				wikiModel.render("{{SELF_RECURSION1|SELF_RECURSION1}}", false));
+	}
+
+	/**
+	 * Issue 133 - self-inclusion is only allowed once in MediaWiki
+	 */
 	public void testIndirectSelfRecusion001() {
 		// https://en.wikipedia.org/wiki/Help:Template#Nesting_templates
 		assertEquals(
