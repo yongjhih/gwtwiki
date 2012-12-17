@@ -1,5 +1,7 @@
 package info.bliki.wiki.filter;
 
+import info.bliki.wiki.model.Configuration;
+
 import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -33,6 +35,8 @@ public class MediaWikiParserTest extends TestCase {
 	protected final String expectedResult;
 	protected final Map<String, Object> options;
 	protected final Map<String, Object> config;
+
+	private boolean AVOID_PAGE_BREAK_IN_TABLE_before;
 
 	protected static final Pattern COMMAND = Pattern.compile("^!!\\s*(\\w+).*");
 	protected static final Pattern TEST_DISABLED = Pattern.compile(".*\\bdisabled\\b.*", Pattern.CASE_INSENSITIVE);
@@ -116,6 +120,8 @@ public class MediaWikiParserTest extends TestCase {
 	@Override
 	protected void setUp() throws Exception {
 		super.setUp();
+		AVOID_PAGE_BREAK_IN_TABLE_before = Configuration.AVOID_PAGE_BREAK_IN_TABLE;
+		Configuration.AVOID_PAGE_BREAK_IN_TABLE = false;
 		wikiModel = newWikiTestModel();
 		String title = (String) options.get("title");
 		if (title == null) {
@@ -125,6 +131,15 @@ public class MediaWikiParserTest extends TestCase {
 		wikiModel.setNamespaceName(title0[0]);
 		wikiModel.setPageName(title0[1]);
 		// TODO: use (more) options/config
+	}
+
+	/* (non-Javadoc)
+	 * @see junit.framework.TestCase#tearDown()
+	 */
+	@Override
+	protected void tearDown() throws Exception {
+		Configuration.AVOID_PAGE_BREAK_IN_TABLE = AVOID_PAGE_BREAK_IN_TABLE_before;
+		super.tearDown();
 	}
 
 	protected void runTest() throws Throwable {

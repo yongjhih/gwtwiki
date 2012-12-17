@@ -78,8 +78,11 @@ public class WPTable extends WPTag {
 	@Override
 	public void renderHTML(ITextConverter converter, Appendable buf, IWikiModel wikiModel) throws IOException {
 		if (fRows.size() > 0) {
-			buf.append("\n<div style=\"page-break-inside: avoid;\">");
 			boolean hasContentRow = false;
+			if (Configuration.AVOID_PAGE_BREAK_IN_TABLE) {
+				// TODO: integrate into table attributes?
+				buf.append("\n<div style=\"page-break-inside: avoid;\">");
+			}
 			if (NEW_LINES) {
 				buf.append("\n<table");
 			} else {
@@ -99,7 +102,10 @@ public class WPTable extends WPTag {
 				row = new WPRow(Arrays.asList(new WPCell(0)));
 				row.renderHTML(converter, buf, wikiModel);
 			}
-			buf.append("</table></div>");
+			buf.append("</table>");
+			if (Configuration.AVOID_PAGE_BREAK_IN_TABLE) {
+				buf.append("</div>");
+			}
 		}
 	}
 

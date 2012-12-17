@@ -386,6 +386,15 @@ public class Configuration implements IConfiguration {
 	public final static int TEMPLATE_VALUE_LIMIT = 262144;
 
 	/**
+	 * Tries to avoid page breaks inside tables, e.g. for printouts
+	 * (disable to get more MediaWiki-compliant HTML code).
+	 * 
+	 * Note: Only supported by Opera, according to
+	 * http://www.w3schools.com/cssref/pr_print_pagebi.asp
+	 */
+	public static boolean AVOID_PAGE_BREAK_IN_TABLE = true;
+
+	/**
 	 * Limits the recursive call of the AbstractParser parser to a depth of
 	 * GLOBAL_RECURSION_LIMIT
 	 */
