@@ -7,6 +7,7 @@ import info.bliki.wiki.tags.WPTag;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -78,6 +79,7 @@ public class WPTable extends WPTag {
 	public void renderHTML(ITextConverter converter, Appendable buf, IWikiModel wikiModel) throws IOException {
 		if (fRows.size() > 0) {
 			buf.append("\n<div style=\"page-break-inside: avoid;\">");
+			boolean hasContentRow = false;
 			if (NEW_LINES) {
 				buf.append("\n<table");
 			} else {
@@ -88,6 +90,13 @@ public class WPTable extends WPTag {
 			WPRow row;
 			for (int i = 0; i < fRows.size(); i++) {
 				row = fRows.get(i);
+				if (row.getType() != WPCell.CAPTION) {
+					hasContentRow = true;
+				}
+				row.renderHTML(converter, buf, wikiModel);
+			}
+			if (!hasContentRow) {
+				row = new WPRow(Arrays.asList(new WPCell(0)));
 				row.renderHTML(converter, buf, wikiModel);
 			}
 			buf.append("</table></div>");
