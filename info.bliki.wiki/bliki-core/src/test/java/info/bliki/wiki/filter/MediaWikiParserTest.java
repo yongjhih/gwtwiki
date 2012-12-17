@@ -84,10 +84,6 @@ public class MediaWikiParserTest extends TestCase {
 		this.config = parseConfig(configs);
 	}
 
-	protected static MediaWikiTestModel newWikiTestModel() {
-		return newWikiTestModel(Locale.ENGLISH);
-	}
-
 	protected static MediaWikiTestModel newWikiTestModel(Locale locale) {
 		MediaWikiTestModel wikiModel = new MediaWikiTestModel(locale,
 				"/wiki/${image}",
@@ -122,7 +118,33 @@ public class MediaWikiParserTest extends TestCase {
 		super.setUp();
 		AVOID_PAGE_BREAK_IN_TABLE_before = Configuration.AVOID_PAGE_BREAK_IN_TABLE;
 		Configuration.AVOID_PAGE_BREAK_IN_TABLE = false;
-		wikiModel = newWikiTestModel();
+
+		String language = (String) options.get("language");
+		Locale locale = Locale.ENGLISH;
+		if (language != null) {
+			// only support languages for which we have a localised Messages file:
+			if (language.equals("de")) {
+				locale = Locale.GERMAN;
+				options.remove("language");
+			} else if (language.equals("en")) {
+				locale = Locale.ENGLISH;
+				options.remove("language");
+			} else if (language.equals("es")) {
+				locale = new Locale("es");
+				options.remove("language");
+			} else if (language.equals("fr")) {
+				locale = Locale.FRENCH;
+				options.remove("language");
+			} else if (language.equals("it")) {
+				locale = Locale.ITALIAN;
+				options.remove("language");
+			} else if (language.equals("pt_BR")) {
+				locale = new Locale("pt_BR");
+				options.remove("language");
+			}
+		}
+		
+		wikiModel = newWikiTestModel(locale);
 		String title = (String) options.get("title");
 		if (title == null) {
 			title = "Parser test";
@@ -147,6 +169,7 @@ public class MediaWikiParserTest extends TestCase {
 			return;
 		}
 		assumeTrue(config.isEmpty());
+		
 		String title = (String) options.get("title");
 		if (title != null) {
 			options.remove("title");
