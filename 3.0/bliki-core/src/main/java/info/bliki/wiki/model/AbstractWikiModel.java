@@ -509,7 +509,7 @@ public abstract class AbstractWikiModel implements IWikiModel, IContext {
 		WPATag aTagNode = new WPATag();
 		String href = encodeTitleToUrl(topic, true);
 		if (hashSection != null) {
-			href = href + '#' + encodeTitleDotUrl(hashSection, true);
+			href = href + '#' + encodeTitleDotUrl(hashSection, false);
 		}
 		aTagNode.addAttribute("href", href, true);
 		if (cssClass != null) {
