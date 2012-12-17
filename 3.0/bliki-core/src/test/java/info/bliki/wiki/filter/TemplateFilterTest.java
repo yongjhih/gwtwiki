@@ -85,7 +85,7 @@ public class TemplateFilterTest extends FilterTestSupport {
 
 	private void nonExistingTemplateTestLink(String wikiText, String linkTitle, String templateName) {
 		String urlTitle = Character.toUpperCase(linkTitle.charAt(0)) + linkTitle.substring(1);
-		assertEquals(wikiText, "\n<p><a href=\"http://www.bliki.info/wiki/" + urlTitle + "\" title=\"" + linkTitle + "\">" + linkTitle
+		assertEquals(wikiText, "\n<p><a href=\"http://www.bliki.info/wiki/" + urlTitle + "\" title=\"" + urlTitle + "\">" + linkTitle
 				+ "</a></p>", wikiModel.render(wikiText, false));
 		if (templateName != null) {
 			assertTrue(wikiText + ", wikiModel.getTemplates().contains(" + templateName + ")", wikiModel.getTemplates().contains(
@@ -243,7 +243,7 @@ public class TemplateFilterTest extends FilterTestSupport {
 						+ "<td><a href=\"http://www.bliki.info/wiki/Cross-platform\" title=\"Cross-platform\">Cross-platform</a></td></tr>\n"
 						+ "<tr>\n"
 						+ "<th><a href=\"http://www.bliki.info/wiki/List_of_software_categories\" title=\"List of software categories\">Genre</a></th>\n"
-						+ "<td><a href=\"http://www.bliki.info/wiki/Wiki_software\" title=\"wiki software\">Wiki software</a></td></tr>\n"
+						+ "<td><a href=\"http://www.bliki.info/wiki/Wiki_software\" title=\"Wiki software\">Wiki software</a></td></tr>\n"
 						+ "<tr>\n"
 						+ "<th><a href=\"http://www.bliki.info/wiki/Software_license\" title=\"Software license\">License</a></th>\n"
 						+ "<td><a href=\"http://www.bliki.info/wiki/GNU_Lesser_General_Public_License\" title=\"GNU Lesser General Public License\">LGPL</a></td></tr>\n"
@@ -421,7 +421,7 @@ public class TemplateFilterTest extends FilterTestSupport {
 						+ "<ul>\n"
 						+ "\n"
 						+ "<li class=\"nv-view\"><a href=\"http://www.bliki.info/wiki/Template:AcademyAwardBestActor_1981-2000\" title=\"Template:AcademyAwardBestActor 1981-2000\"><span style=\";background: #EEDD82;background:none transparent;border:none;\" title=\"View this template\">v</span></a></li>\n"
-						+ "<li class=\"nv-talk\"><a href=\"http://www.bliki.info/wiki/Template_talk:AcademyAwardBestActor_1981-2000\" title=\"Template_talk:AcademyAwardBestActor 1981-2000\"><span style=\";background: #EEDD82;background:none transparent;border:none;\" title=\"Discuss this template\">t</span></a></li>\n"
+						+ "<li class=\"nv-talk\"><a href=\"http://www.bliki.info/wiki/Template_talk:AcademyAwardBestActor_1981-2000\" title=\"Template talk:AcademyAwardBestActor 1981-2000\"><span style=\";background: #EEDD82;background:none transparent;border:none;\" title=\"Discuss this template\">t</span></a></li>\n"
 						+ "<li class=\"nv-edit\"><a class=\"external text\" href=\"http://en.wikipedia.org/w/index.php?title=Template%3AAcademyAwardBestActor+1981-2000&#38;action=edit\" rel=\"nofollow\"><span style=\";background: #EEDD82;background:none transparent;border:none;\" title=\"Edit this template\">e</span></a></li>\n"
 						+ "</ul></div>\n"
 						+ "<div style=\"font-size:110%;\">\n"
@@ -469,7 +469,7 @@ public class TemplateFilterTest extends FilterTestSupport {
 	public void test11() {
 		assertEquals(
 				"\n"
-						+ "<p><a href=\"http://www.bliki.info/wiki/Template:AcademyAwardBestActor_1981-2000\" title=\"Template:AcademyAwardBestActor_1981-2000\"><span style=\";background: #EEDD82;border:none;;\" title=\"View this template\">v</span></a></p>",
+						+ "<p><a href=\"http://www.bliki.info/wiki/Template:AcademyAwardBestActor_1981-2000\" title=\"Template:AcademyAwardBestActor 1981-2000\"><span style=\";background: #EEDD82;border:none;;\" title=\"View this template\">v</span></a></p>",
 				wikiModel
 						.render(
 								"[[Template:AcademyAwardBestActor_1981-2000|<span title=\"View this template\" style=\";background: #EEDD82;border:none;;\">v</span>]]",
@@ -933,7 +933,7 @@ public class TemplateFilterTest extends FilterTestSupport {
 						+ "<ul>\n"
 						+ "\n"
 						+ "<li class=\"nv-view\"><a href=\"http://www.bliki.info/wiki/Template:National_Board_of_Review_Award_for_Best_Actor\" title=\"Template:National Board of Review Award for Best Actor\"><span style=\";;background:none transparent;border:none;\" title=\"View this template\">v</span></a></li>\n"
-						+ "<li class=\"nv-talk\"><a href=\"http://www.bliki.info/wiki/Template_talk:National_Board_of_Review_Award_for_Best_Actor\" title=\"Template_talk:National Board of Review Award for Best Actor\"><span style=\";;background:none transparent;border:none;\" title=\"Discuss this template\">t</span></a></li>\n"
+						+ "<li class=\"nv-talk\"><a href=\"http://www.bliki.info/wiki/Template_talk:National_Board_of_Review_Award_for_Best_Actor\" title=\"Template talk:National Board of Review Award for Best Actor\"><span style=\";;background:none transparent;border:none;\" title=\"Discuss this template\">t</span></a></li>\n"
 						+ "<li class=\"nv-edit\"><a class=\"external text\" href=\"http://en.wikipedia.org/w/index.php?title=Template%3ANational+Board+of+Review+Award+for+Best+Actor&#38;action=edit\" rel=\"nofollow\"><span style=\";;background:none transparent;border:none;\" title=\"Edit this template\">e</span></a></li>\n"
 						+ "</ul></div>\n"
 						+ "<div style=\"font-size:110%;\">\n"
@@ -1136,7 +1136,7 @@ public class TemplateFilterTest extends FilterTestSupport {
 						+ "<ul>\n"
 						+ "\n"
 						+ "<li class=\"nv-view\"><a href=\"http://www.bliki.info/wiki/Template:Screen_Actors_Guild_Award_for_Outstanding_Performance_by_a_Cast_in_a_Motion_Picture_(1995%E2%80%932000)\" title=\"Template:Screen Actors Guild Award for Outstanding Performance by a Cast in a Motion Picture (1995–2000)\"><span title=\"View this template\">view</span></a></li>\n"
-						+ "<li class=\"nv-talk\"><a href=\"http://www.bliki.info/wiki/Template_talk:Screen_Actors_Guild_Award_for_Outstanding_Performance_by_a_Cast_in_a_Motion_Picture_(1995%E2%80%932000)\" title=\"Template_talk:Screen Actors Guild Award for Outstanding Performance by a Cast in a Motion Picture (1995–2000)\"><span title=\"Discuss this template\">talk</span></a></li>\n"
+						+ "<li class=\"nv-talk\"><a href=\"http://www.bliki.info/wiki/Template_talk:Screen_Actors_Guild_Award_for_Outstanding_Performance_by_a_Cast_in_a_Motion_Picture_(1995%E2%80%932000)\" title=\"Template talk:Screen Actors Guild Award for Outstanding Performance by a Cast in a Motion Picture (1995–2000)\"><span title=\"Discuss this template\">talk</span></a></li>\n"
 						+ "<li class=\"nv-edit\"><a class=\"external text\" href=\"http://en.wikipedia.org/w/index.php?title=Template%3AScreen+Actors+Guild+Award+for+Outstanding+Performance+by+a+Cast+in+a+Motion+Picture+%281995%E2%80%932000%29&#38;action=edit\" rel=\"nofollow\"><span title=\"Edit this template\">edit</span></a></li>\n"
 						+ "</ul></div>\n" + "", wikiModel.render(
 						"{{Navbar|Screen Actors Guild Award for Outstanding Performance by a Cast in a Motion Picture (1995–2000)}}\n", false));
@@ -1172,8 +1172,8 @@ public class TemplateFilterTest extends FilterTestSupport {
 		assertEquals(
 				"\n"
 						+ "<p>{{::Viva_World_Cup#Tournament_results}}\n"
-						+ "<a href=\"http://www.bliki.info/wiki/Viva_World_Cup\" title=\"Viva_World_Cup\">Viva_World_Cup</a>\n"
-						+ "<a href=\"http://www.bliki.info/wiki/Viva_World_Cup\" title=\"Viva_World_Cup\">Viva_World_Cup</a>\n"
+						+ "<a href=\"http://www.bliki.info/wiki/Viva_World_Cup\" title=\"Viva World Cup\">Viva_World_Cup</a>\n"
+						+ "<a href=\"http://www.bliki.info/wiki/Viva_World_Cup\" title=\"Viva World Cup\">Viva_World_Cup</a>\n"
 						+ "</p>",
 				wikiModel.render("{{::Viva_World_Cup#Tournament_results}}\n"
 						+ "{{:Viva_World_Cup#Tournament_results}}\n"

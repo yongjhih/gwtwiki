@@ -414,7 +414,7 @@ public class WPTableFilterTest extends FilterTestSupport {
 				"<th>col2 </th>\n" + 
 				"<th>col3</th></tr>\n" + 
 				"<tr malformed=\"\">\n" + 
-				"<td><b><a href=\"http://www.bliki.info/wiki/Testing\" title=\"testing\">testing</a></b></td>\n" + 
+				"<td><b><a href=\"http://www.bliki.info/wiki/Testing\" title=\"Testing\">testing</a></b></td>\n" + 
 				"<td>\n" + 
 				"This is a test of a malformed table.</td>\n" + 
 				"<td align=\"center\"><a class=\"image\" href=\"http://www.bliki.info/wiki/Image:140px-test.png\" ><img src=\"http://www.bliki.info/wiki/140px-test.png\" width=\"140\" />\n" + 

@@ -16,7 +16,7 @@ public class DefinitionListFilterTest extends FilterTestSupport {
 		assertEquals(
 				"\n" + 
 				"<dl>\n" + 
-				"<dd><i>There is also an <a href=\"http://www.bliki.info/wiki/Asteroid\" title=\"asteroid\">asteroid</a> <a href=\"http://www.bliki.info/wiki/9969_Braille\" title=\"9969 Braille\">9969 Braille</a></i></dd>\n</dl>",
+				"<dd><i>There is also an <a href=\"http://www.bliki.info/wiki/Asteroid\" title=\"Asteroid\">asteroid</a> <a href=\"http://www.bliki.info/wiki/9969_Braille\" title=\"9969 Braille\">9969 Braille</a></i></dd>\n</dl>",
 				wikiModel.render(":''There is also an [[asteroid]] [[9969 Braille]]''", false));
 	}
 
