@@ -147,6 +147,11 @@ public class MediaWikiParserTest extends TestCase {
 			return;
 		}
 		assumeTrue(config.isEmpty());
+		String title = (String) options.get("title");
+		if (title != null) {
+			options.remove("title");
+			wikiModel.setPageName(title);
+		}
 		assumeTrue(options.isEmpty());
 		
 		String actualResult = wikiModel.render(input, true);
