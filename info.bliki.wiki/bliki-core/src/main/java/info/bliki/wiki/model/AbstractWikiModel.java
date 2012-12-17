@@ -644,7 +644,7 @@ public abstract class AbstractWikiModel implements IWikiModel, IContext {
 				rawTopicName = rawTopicName.substring(trimLeftIndex);
 			}
 			// Is there an alias like [alias|link] ?
-			int pipeIndex = rawTopicName.lastIndexOf('|');
+			int pipeIndex = rawTopicName.indexOf('|');
 			String alias = "";
 			if (-1 != pipeIndex) {
 				alias = rawTopicName.substring(pipeIndex + 1);
