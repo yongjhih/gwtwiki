@@ -1240,7 +1240,7 @@ public abstract class AbstractWikiModel implements IWikiModel, IContext {
 	 */
 	@Override
 	public boolean isInterWiki(String namespace) {
-		return getInterwikiMap().containsKey(namespace);
+		return !isNamespace(namespace) && getInterwikiMap().containsKey(namespace);
 	}
 
 	/**
