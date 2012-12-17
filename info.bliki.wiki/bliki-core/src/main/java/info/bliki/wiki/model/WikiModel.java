@@ -143,7 +143,8 @@ public class WikiModel extends AbstractWikiModel {
 		String description = topicDescription;
 		WPATag aTagNode = new WPATag();
 		if (topic.length() > 0) {
-			aTagNode.addAttribute("title", topic, true);
+			final String title = Encoder.normaliseTitle(topic, true, ' ', true);
+			aTagNode.addAttribute("title", title, true);
 			String encodedtopic = encodeTitleToUrl(topic, true);
 			if (replaceColon()) {
 				encodedtopic = encodedtopic.replace(':', '/');
