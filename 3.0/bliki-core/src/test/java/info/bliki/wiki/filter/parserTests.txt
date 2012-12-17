@@ -1422,3 +1422,418 @@ disabled
 !! end
 
 
+
+###
+### Internal links
+###
+!! test
+Plain link, capitalized
+!! input
+[[Main Page]]
+!! result
+<p><a href="/wiki/Main_Page" title="Main Page">Main Page</a></p>
+!! end
+
+!! test
+Plain link, uncapitalized
+!! input
+[[main Page]]
+!! result
+<p><a href="/wiki/Main_Page" title="Main Page">main Page</a></p>
+!! end
+
+!! test
+Piped link
+!! input
+[[Main Page|The Main Page]]
+!! result
+<p><a href="/wiki/Main_Page" title="Main Page">The Main Page</a></p>
+!! end
+
+!! test
+Broken link
+!! input
+[[Zigzagzogzagzig]]
+!! result
+<p><a class="new" href="/wiki/Zigzagzogzagzig?action=edit&amp;redlink=1" title="Zigzagzogzagzig (page does not exist)">Zigzagzogzagzig</a></p>
+!! end
+
+!! test
+Broken link with fragment
+!! input
+[[Zigzagzogzagzig#zug]]
+!! result
+<p><a class="new" href="/wiki/Zigzagzogzagzig?action=edit&amp;redlink=1" title="Zigzagzogzagzig (page does not exist)">Zigzagzogzagzig#zug</a></p>
+!! end
+
+!! test
+Special page link with fragment
+!! input
+[[Special:Version#anchor]]
+!! result
+<p><a href="/wiki/Special:Version#anchor" title="Special:Version">Special:Version#anchor</a></p>
+!! end
+
+!! test
+Nonexistent special page link with fragment
+!! options
+disabled
+!! input
+[[Special:ThisNameWillHopefullyNeverBeUsed#anchor]]
+!! result
+<p><a href="/wiki/Special:ThisNameWillHopefullyNeverBeUsed" class="new" title="Special:ThisNameWillHopefullyNeverBeUsed (page does not exist)">Special:ThisNameWillHopefullyNeverBeUsed#anchor</a></p>
+!! end
+
+!! test
+Link with prefix
+!! input
+xxx[[main Page]], xxx[[Main Page]], Xxx[[main Page]] XXX[[main Page]], XXX[[Main Page]]
+!! result
+<p>xxx<a href="/wiki/Main_Page" title="Main Page">main Page</a>, xxx<a href="/wiki/Main_Page" title="Main Page">Main Page</a>, Xxx<a href="/wiki/Main_Page" title="Main Page">main Page</a> XXX<a href="/wiki/Main_Page" title="Main Page">main Page</a>, XXX<a href="/wiki/Main_Page" title="Main Page">Main Page</a></p>
+!! end
+
+!! test
+Link with suffix
+!! input
+[[Main Page]]xxx, [[Main Page]]XXX, [[Main Page]]!!!
+!! result
+<p><a href="/wiki/Main_Page" title="Main Page">Main Pagexxx</a>, <a href="/wiki/Main_Page" title="Main Page">Main Page</a>XXX, <a href="/wiki/Main_Page" title="Main Page">Main Page</a>!!!</p>
+!! end
+
+!! test
+Link with 3 brackets
+!! options
+disabled
+!! input
+[[[main page]]]
+!! result
+<p>[[[main page]]]</p>
+!! end
+
+!! test
+Piped link with 3 brackets
+!! options
+disabled
+!! input
+[[[main page|the main page]]]
+!! result
+<p>[[[main page|the main page]]]</p>
+!! end
+
+!! test
+Link with multiple pipes
+!! input
+[[Main Page|The|Main|Page]]
+!! result
+<p><a href="/wiki/Main_Page" title="Main Page">The|Main|Page</a></p>
+!! end
+
+!! test
+Link to namespaces
+!! input
+[[Talk:Parser testing]], [[Meta:Disclaimers]]
+!! result
+<p><a class="new" href="/wiki/Talk:Parser_testing?action=edit&amp;redlink=1" title="Talk:Parser testing (page does not exist)">Talk:Parser testing</a>, <a class="new" href="/wiki/Meta:Disclaimers?action=edit&amp;redlink=1" title="Meta:Disclaimers (page does not exist)">Meta:Disclaimers</a></p>
+!! end
+
+!! test
+Piped link to namespace
+!! input
+[[Meta:Disclaimers|The disclaimers]]
+!! result
+<p><a class="new" href="/wiki/Meta:Disclaimers?action=edit&amp;redlink=1" title="Meta:Disclaimers (page does not exist)">The disclaimers</a></p>
+!! end
+
+!! test
+Link containing }
+!! input
+[[Usually caused by a typo (oops}]]
+!! result
+<p>[[Usually caused by a typo (oops}]]</p>
+!! end
+
+!! test
+Link containing % (not as a hex sequence)
+!! input
+[[7% Solution]]
+!! result
+<p><a class="new" href="/wiki/7%25_Solution?action=edit&amp;redlink=1" title="7% Solution (page does not exist)">7% Solution</a></p>
+!! end
+
+!! test
+Link containing % as a single hex sequence interpreted to char
+!! options
+disabled
+!! input
+[[7%25 Solution]]
+!! result
+<p><a class="new" href="/wiki/7%25_Solution?action=edit&amp;redlink=1" title="7% Solution (page does not exist)">7% Solution</a></p>
+!!end
+
+!! test
+Link containing % as a double hex sequence interpreted to hex sequence
+!! options
+disabled
+!! input
+[[7%2525 Solution]]
+!! result
+<p>[[7%2525 Solution]]</p>
+!!end
+
+!! test
+Link containing "#<" and "#>" % as a hex sequences- these are valid section anchors
+Example for such a section: == < ==
+!! options
+disabled
+!! input
+[[%23%3c]][[%23%3e]]
+!! result
+<p><a href="#.3C">#&lt;</a><a href="#.3E">#&gt;</a></p>
+!! end
+
+!! test
+Link containing "<#" and ">#" as a hex sequences
+!! options
+disabled
+!! input
+[[%3c%23]][[%3e%23]]
+!! result
+<p>[[%3c%23]][[%3e%23]]</p>
+!! end
+
+!! test
+Link containing double-single-quotes '' (bug 4598)
+!! options
+disabled
+!! input
+[[Lista d''e paise d''o munno]]
+!! result
+<p><a class="new" href="/wiki/Lista_d&#39;&#39;e_paise_d&#39;&#39;o_munno?action=edit&amp;redlink=1" title="Lista d&#39;&#39;e paise d&#39;&#39;o munno (page does not exist)">Lista d&#39;&#39;e paise d&#39;&#39;o munno</a></p>
+!! end
+
+!! test
+Link containing double-single-quotes '' in text (bug 4598 sanity check)
+!! input
+Some [[Link|pretty ''italics'' and stuff]]!
+!! result
+<p>Some <a class="new" href="/wiki/Link?action=edit&amp;redlink=1" title="Link (page does not exist)">pretty <i>italics</i> and stuff</a>!</p>
+!! end
+
+!! test
+Link containing double-single-quotes '' in text embedded in italics (bug 4598 sanity check)
+!! input
+''Some [[Link|pretty ''italics'' and stuff]]!
+!! result
+<p><i>Some <a class="new" href="/wiki/Link?action=edit&amp;redlink=1" title="Link (page does not exist)">pretty <i>italics</i> and stuff</a>!</i></p>
+!! end
+
+!! test
+Link with double quotes in title part (literal) and alternate part (interpreted)
+!! options
+disabled
+!! input
+[[File:Denys Savchenko ''Pentecoste''.jpg]]
+
+[[''Pentecoste'']]
+
+[[''Pentecoste''|Pentecoste]]
+
+[[''Pentecoste''|''Pentecoste'']]
+!! result
+<p><a href="/index.php?title=Special:Upload&amp;wpDestFile=Denys_Savchenko_&#39;&#39;Pentecoste&#39;&#39;.jpg" class="new" title="File:Denys Savchenko &#39;&#39;Pentecoste&#39;&#39;.jpg">File:Denys Savchenko <i>Pentecoste</i>.jpg</a></p>
+<p><a class="new" href="/wiki/&#39;&#39;Pentecoste&#39;&#39;?action=edit&amp;redlink=1" title="''Pentecoste'' (page does not exist)">''Pentecoste''</a></p>
+<p><a class="new" href="/wiki/&#39;&#39;Pentecoste&#39;&#39;?action=edit&amp;redlink=1" title="''Pentecoste'' (page does not exist)">Pentecoste</a></p>
+<p><a class="new" href="/wiki/&#39;&#39;Pentecoste&#39;&#39;?action=edit&amp;redlink=1" title="''Pentecoste'' (page does not exist)"><i>Pentecoste</i></a></p>
+!! end
+
+!! test
+Plain link to URL
+!! options
+disabled
+!! input
+[[http://www.example.com]]
+!! result
+<p>[<a class="external autonumber" href="http://www.example.com" rel="nofollow">[1]</a>]</p>
+!! end
+
+!! test
+Plain link to URL with link text
+!! options
+disabled
+!! input
+[[http://www.example.com Link text]]
+!! result
+<p>[<a class="external text" href="http://www.example.com" rel="nofollow">Link text</a>]
+</p>
+!! end
+
+!! test
+Plain link to protocol-relative URL
+!! options
+disabled
+!! input
+[[//www.example.com]]
+!! result
+<p>[<a class="external autonumber" href="//www.example.com" rel="nofollow">[1]</a>]</p>
+!! end
+
+!! test
+Plain link to protocol-relative URL with link text
+!! options
+disabled
+!! input
+[[//www.example.com Link text]]
+!! result
+<p>[<a class="external text" href="//www.example.com" rel="nofollow">Link text</a>]</p>
+!! end
+
+
+# I'm fairly sure the expected result here is wrong.
+# We want these to be URL links, not pseudo-pages with URLs for titles....
+# However the current output is also pretty screwy.
+#
+# ----
+# I'm changing it to match the current output--it arguably makes more
+# sense in the light of the test above. Old expected result was:
+#<p>Piped link to URL: <a href="/index.php?title=Http://www.example.com&amp;action=edit" class="new">an example URL</a>
+#</p>
+# But I think this test is bordering on "garbage in, garbage out" anyway.
+# -- wtm
+!! test
+Piped link to URL
+!! options
+disabled
+!! input
+Piped link to URL: [[http://www.example.com|an example URL]]
+!! result
+<p>Piped link to URL: [<a rel="nofollow" class="external text" href="http://www.example.com%7Can">example URL</a>]</p>
+!! end
+
+!! test
+BUG 2: [[page|http://url/]] should link to page, not http://url/
+!! options
+disabled
+!! input
+[[Main Page|http://url/]]
+!! result
+<p><a href="/wiki/Main_Page" title="Main Page">http://url/</a></p>
+!! end
+
+!! test
+BUG 337: Escaped self-links should be bold
+!! options
+disabled
+title=[[Bug462]]
+!! input
+[[Bu&#103;462]] [[Bug462]]
+!! result
+<p><strong class="selflink">Bu&#103;462</strong> <strong class="selflink">Bug462</strong></p>
+!! end
+
+!! test
+Self-link to section should not be bold
+!! options
+title=[[Main Page]]
+!! input
+[[Main Page#section]]
+!! result
+<p><a href="/wiki/Main_Page#section" title="Main Page">Main Page#section</a></p>
+!! end
+
+!! article
+00
+!! text
+This is 00.
+!! endarticle
+
+!!test
+Self-link to numeric title
+!!options
+title=[[0]]
+!!input
+[[0]]
+!!result
+<p><strong class="selflink">0</strong></p>
+!!end
+
+!!test
+Link to numeric-equivalent title
+!!options
+title=[[0]]
+!!input
+[[00]]
+!!result
+<p><a href="/wiki/00" title="00">00</a></p>
+!!end
+
+!! test
+<nowiki> inside a link
+!! input
+[[Main<nowiki> Page</nowiki>]] [[Main Page|the main page <nowiki>[it's not very good]</nowiki>]]
+!! result
+<p>[[Main Page]] <a href="/wiki/Main_Page" title="Main Page">the main page [it&#39;s not very good]</a></p>
+!! end
+
+!! test
+Non-breaking spaces in title
+!! options
+disabled
+!! input
+[[&nbsp; Main &nbsp; Page &nbsp;]]
+!! result
+<p><a href="/wiki/Main_Page" title="Main Page">&#160; Main &#160; Page &#160;</a></p>
+!!end
+
+!! test
+Internal link with ca linktrail, surrounded by bold apostrophes (bug 27473 primary issue)
+!! options
+disabled
+language=ca
+!! input
+'''[[Main Page]]'''
+!! result
+<p><b><a href="/wiki/Main_Page" title="Main Page">Main Page</a></b></p>
+!! end
+
+!! test
+Internal link with ca linktrail, surrounded by italic apostrophes (bug 27473 primary issue)
+!! options
+disabled
+language=ca
+!! input
+''[[Main Page]]''
+!! result
+<p><i><a href="/wiki/Main_Page" title="Main Page">Main Page</a></i></p>
+!! end
+
+!! test
+Internal link with en linktrail: no apostrophes (bug 27473)
+!! options
+language=en
+!! input
+[[Something]]'nice
+!! result
+<p><a class="new" href="/wiki/Something?action=edit&amp;redlink=1" title="Something (page does not exist)">Something</a>&#39;nice</p>
+!! end
+
+!! test
+Internal link with ca linktrail with apostrophes (bug 27473)
+!! options
+disabled
+language=ca
+!! input
+[[Something]]'nice
+!! result
+<p><a class="new" href="/wiki/Something?action=edit&amp;redlink=1" title="Something (encara no existeix)">Something'nice</a></p>
+!! end
+
+!! test
+Internal link with kaa linktrail with apostrophes (bug 27473)
+!! options
+disabled
+language=kaa
+!! input
+[[Something]]'nice
+!! result
+<p><a class="new" href="/wiki/Something?action=edit&amp;redlink=1" title="Something (bet ele jaratılmag'an)">Something'nice</a></p>
+!! end
