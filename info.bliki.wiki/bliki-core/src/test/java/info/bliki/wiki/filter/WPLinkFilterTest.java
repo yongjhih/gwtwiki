@@ -146,6 +146,30 @@ public class WPLinkFilterTest extends FilterTestSupport {
 						+ "<p>Dolphins are <a href=\"http://www.bliki.info/wiki/Aquatic_mammal\" title=\"aquatic mammal\">aquatic mammals</a> that are closely related to <a href=\"http://www.bliki.info/wiki/Whale\" title=\"whale\">whales</a> and <a href=\"http://www.bliki.info/wiki/Porpoise\" title=\"porpoise\">porpoises</a>.</p>",
 				wikiModel.render("Dolphins are [[aquatic mammal]]s that are closely related to [[whale]]s and [[porpoise]]s.", false));
 	}
+	
+	public void testLink15() {
+		assertEquals(
+				"\n<p><a href=\"http://www.bliki.info/wiki/Main_Page\" title=\"main Page\">main Page</a></p>",
+				wikiModel.render("[[main Page]]", false));
+	}
+	
+	public void testLink16() {
+		assertEquals(
+				"\n<p><a href=\"http://www.bliki.info/wiki/Main_Page\" title=\"main  Page\">main  Page</a></p>",
+				wikiModel.render("[[main  Page]]", false));
+	}
+	
+	public void testLink17() {
+		assertEquals(
+				"\n<p><a href=\"http://www.bliki.info/wiki/Main_Page\" title=\"main__Page\">main__Page</a></p>",
+				wikiModel.render("[[main__Page]]", false));
+	}
+	
+	public void testLink18() {
+		assertEquals(
+				"\n<p><a href=\"http://www.bliki.info/wiki/Main_Page\" title=\"main_ Page\">main_ Page</a></p>",
+				wikiModel.render("[[main_ Page]]", false));
+	}
 
 	public void testInterwiki1() {
 		assertEquals("\n" + "<p><a href=\"http://de.wikipedia.org/wiki/Johann_Wolfgang_von_Goethe\">Goethes</a> Faust</p>", wikiModel

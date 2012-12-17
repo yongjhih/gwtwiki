@@ -273,36 +273,7 @@ public class Encoder {
 	 * @return the encoded wiki title
 	 */
 	public static String encodeTitleToUrl(String wikiTitle, boolean firstCharacterAsUpperCase) {
-		int len = wikiTitle.length();
-		if (len == 0) {
-			return "";
-		}
-		for (int j = len - 1; j > 0; j--) {
-			if (Character.isWhitespace(wikiTitle.charAt(j))) {
-				continue;
-			}
-			len = j + 1;
-			break;
-		}
-
-		boolean whiteSpace = true;
-		StringBuilder buffer = new StringBuilder(len + len / 10);
-		char ch;
-		for (int i = 0; i < len; i++) {
-			ch = wikiTitle.charAt(i);
-			if (whiteSpace && Character.isWhitespace(ch)) {
-				continue;
-			}
-			if (whiteSpace) {
-				whiteSpace = false;
-				if (firstCharacterAsUpperCase) {
-					Encoder.encodeUrl(buffer, Character.toUpperCase(ch));
-					continue;
-				}
-			}
-			Encoder.encodeUrl(buffer, ch);
-		}
-		return buffer.toString();
+		return normaliseTitle(wikiTitle, true, ' ', firstCharacterAsUpperCase, true);
 	}
 
 	public static String encodeTitleDotUrl(String wikiTitle, boolean firstCharacterAsUpperCase) {
@@ -406,39 +377,66 @@ public class Encoder {
 	 */
     public static String normaliseTitle(final String value, boolean underScoreIsWhitespace,
     		char whiteSpaceChar, boolean firstCharacterAsUpperCase) {
-        StringBuilder sb = new StringBuilder(value.length());
-        boolean whiteSpace = true;
-        boolean first = firstCharacterAsUpperCase;
-        for (int i = 0; i < value.length(); ++i) {
-            char c = value.charAt(i);
-            switch (c) {
-                case ' ':
-                    if (!whiteSpace) {
-                        sb.append(whiteSpaceChar);
-                    }
-                    whiteSpace = true;
-                    break;
-                case '_':
-                	if (underScoreIsWhitespace) {
-                        if (!whiteSpace) {
-                            sb.append(whiteSpaceChar);
-                        }
-                        whiteSpace = true;
-                        break;
-                	}
-                default:
-                    if (first) {
-                        sb.append(Character.toUpperCase(c));
-                        first = false;
-                    } else {
-                        sb.append(c);
-                    }
-                    whiteSpace = false;
-                    break;
-            }
-        }
-        return sb.toString().trim();
+    	return normaliseTitle(value, underScoreIsWhitespace, whiteSpaceChar,
+				firstCharacterAsUpperCase, false);
     }
+
+    /**
+     * Normalises the given title, i.e. capitalises the first letter and
+     * replaces whitespace with <tt>whitespaceChar</tt>, also multiple
+     * consecutive whitespace characters will be replaced by one
+     * <tt>whitespaceChar</tt>. If <tt>encodeUrl</tt> is set, each character
+     * will be mangled through {@link #encodeUrl(StringBuilder, int)} after all
+     * the previous replacements!
+     * 
+     * @param value
+     *            the string
+     * @param underScoreIsWhitespace
+     *            whether '_' should be seen as whitespace or not
+     * @param whiteSpaceChar
+     *            the character to replace whitespace with
+     * @param firstCharacterAsUpperCase
+     *            if <code>true</code> convert the first of the title to upper
+     *            case
+     * @param encodeUrl
+     *            finally mangles each character through
+     *            {@link #encodeUrl(StringBuilder, int)}
+     * 
+     * @return a normalised title
+     */
+	public static String normaliseTitle(final String value, boolean underScoreIsWhitespace,
+			char whiteSpaceChar, boolean firstCharacterAsUpperCase, boolean encodeUrl) {
+		final int len = value.length();
+		StringBuilder sb = encodeUrl ? new StringBuilder(len + len / 10) : new StringBuilder(len);
+		boolean whiteSpace = true;
+		boolean first = firstCharacterAsUpperCase;
+		for (int i = 0; i < len; ++i) {
+			char c = value.charAt(i);
+			if (Character.isWhitespace(c) || (underScoreIsWhitespace && c == '_')) {
+				if (!whiteSpace) {
+					whiteSpace = true;
+					if (encodeUrl) {
+						Encoder.encodeUrl(sb, whiteSpaceChar);
+					} else {
+						sb.append(whiteSpaceChar);
+					}
+				}
+			} else {
+				char ch = c;
+				if (first) {
+					ch = Character.toUpperCase(c);
+					first = false;
+				}
+				if (encodeUrl) {
+					Encoder.encodeUrl(sb, ch);
+				} else {
+					sb.append(ch);
+				}
+				whiteSpace = false;
+			}
+		}
+		return sb.toString().trim();
+	}
 
 	/**
 	 * copy the text in the resulting buffer and escape special html characters
