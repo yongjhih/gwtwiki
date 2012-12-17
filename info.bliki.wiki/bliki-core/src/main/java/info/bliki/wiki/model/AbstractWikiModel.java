@@ -672,7 +672,7 @@ public abstract class AbstractWikiModel implements IWikiModel, IContext {
 
 			int hashIndex = rawTopicName.lastIndexOf('#');
 
-			String hash = "";
+			String hash = null;
 			if (-1 != hashIndex && hashIndex != rawTopicName.length() - 1) {
 				hash = rawTopicName.substring(hashIndex + 1);
 				rawTopicName = rawTopicName.substring(0, hashIndex);
@@ -692,10 +692,11 @@ public abstract class AbstractWikiModel implements IWikiModel, IContext {
 			if (-1 != pipeIndex) {
 				viewableLinkDescription = alias + suffix;
 			} else {
+				final String hashStr = (hash != null) ? "&#35;" + hash : ""; // #....
 				if (rawTopicName.length() > 0 && rawTopicName.charAt(0) == ':') {
-					viewableLinkDescription = rawTopicName.substring(1) + suffix;
+					viewableLinkDescription = rawTopicName.substring(1) + hashStr + suffix;
 				} else {
-					viewableLinkDescription = rawTopicName + suffix;
+					viewableLinkDescription = rawTopicName + hashStr + suffix;
 				}
 			}
 
@@ -719,11 +720,7 @@ public abstract class AbstractWikiModel implements IWikiModel, IContext {
 					rawTopicName = rawTopicName.substring(1);
 				}
 				addLink(rawTopicName);
-				if (-1 != hashIndex) {
-					appendInternalLink(rawTopicName, hash, viewableLinkDescription, null, true);
-				} else {
-					appendInternalLink(rawTopicName, null, viewableLinkDescription, null, true);
-				}
+				appendInternalLink(rawTopicName, hash, viewableLinkDescription, null, true);
 				return true;
 			}
 		}
