@@ -1186,3 +1186,241 @@ disabled
 <p>/index.php?title=Some_page&amp;q=?&amp;amp=&amp;
 </p>
 !! end
+
+###
+### Quotes
+###
+
+!! test
+Quotes
+!! options
+disabled
+!! input
+Normal text. '''Bold text.''' Normal text. ''Italic text.''
+
+Normal text. '''''Bold italic text.''''' Normal text.
+!!result
+<p>Normal text. <b>Bold text.</b> Normal text. <i>Italic text.</i></p>
+<p>Normal text. <i><b>Bold italic text.</b></i> Normal text.</p>
+!! end
+
+
+!! test
+Unclosed and unmatched quotes
+!! options
+disabled
+!! input
+'''''Bold italic text '''with bold deactivated''' in between.'''''
+
+'''''Bold italic text ''with italic deactivated'' in between.'''''
+
+'''Bold text..
+
+..spanning two paragraphs (should not work).'''
+
+'''Bold tag left open
+
+''Italic tag left open
+
+Normal text.
+
+<!-- Unmatching number of opening, closing tags: -->
+'''This year''''s election ''should'' beat '''last year''''s.
+
+''Tom'''s car is bigger than ''Susan'''s.
+!! result
+<p><i><b>Bold italic text </b>with bold deactivated<b> in between.</b></i></p>
+<p><b><i>Bold italic text </i>with italic deactivated<i> in between.</i></b></p>
+<p><b>Bold text..</b></p>
+<p>..spanning two paragraphs (should not work).</p>
+<p><b>Bold tag left open</b></p>
+<p><i>Italic tag left open</i></p>
+<p>Normal text.</p>
+<p><b>This year'</b>s election <i>should</i> beat <b>last year'</b>s.</p>
+<p><i>Tom<b>s car is bigger than </b></i><b>Susan</b>s.</p>
+!! end
+
+###
+### Tables
+###
+### some content taken from http://meta.wikimedia.org/wiki/MediaWiki_User%27s_Guide:_Using_tables
+###
+
+# This should not produce <table></table> as <table><tr><td></td></tr></table>
+# is the bare minimun required by the spec, see:
+# http://www.w3.org/TR/xhtml-modularization/dtd_module_defs.html#a_module_Basic_Tables
+!! test
+A table with no data.
+!! input
+{||}
+!! result
+!! end
+
+# A table with nothing but a caption is invalid XHTML, we might want to render
+# this as <p>caption</p>
+!! test
+A table with nothing but a caption
+!! input 
+{|
+|+ caption
+|}
+!! result
+<table>
+<caption>caption</caption>
+<tr>
+<td></td></tr></table>
+!! end
+
+!! test
+Simple table
+!! input
+{| 
+| 1 || 2
+|- 
+| 3 || 4
+|}
+!! result
+<table>
+<tr>
+<td>1 </td>
+<td>2</td></tr>
+<tr>
+<td>3 </td>
+<td>4</td></tr></table>
+!! end
+
+!! test
+Multiplication table
+!! input
+{| border="1" cellpadding="2"
+|+Multiplication table
+|-
+! &times; !! 1 !! 2 !! 3
+|-
+! 1
+| 1 || 2 || 3
+|-
+! 2
+| 2 || 4 || 6
+|-
+! 3
+| 3 || 6 || 9
+|-
+! 4
+| 4 || 8 || 12
+|-
+! 5
+| 5 || 10 || 15
+|}
+!! result
+<table border="1" cellpadding="2">
+<caption>Multiplication table</caption>
+<tr>
+<th>× </th>
+<th>1 </th>
+<th>2 </th>
+<th>3</th></tr>
+<tr>
+<th>1</th>
+<td>1 </td>
+<td>2 </td>
+<td>3</td></tr>
+<tr>
+<th>2</th>
+<td>2 </td>
+<td>4 </td>
+<td>6</td></tr>
+<tr>
+<th>3</th>
+<td>3 </td>
+<td>6 </td>
+<td>9</td></tr>
+<tr>
+<th>4</th>
+<td>4 </td>
+<td>8 </td>
+<td>12</td></tr>
+<tr>
+<th>5</th>
+<td>5 </td>
+<td>10 </td>
+<td>15</td></tr></table>
+!! end
+
+!! test
+Table rowspan
+!! input
+{| align=right border=1
+| Cell 1, row 1 
+|rowspan=2| Cell 2, row 1 (and 2) 
+| Cell 3, row 1 
+|- 
+| Cell 1, row 2 
+| Cell 3, row 2 
+|}
+!! result
+<table align="right" border="1">
+<tr>
+<td>Cell 1, row 1 </td>
+<td rowspan="2">Cell 2, row 1 (and 2) </td>
+<td>Cell 3, row 1 </td></tr>
+<tr>
+<td>Cell 1, row 2 </td>
+<td>Cell 3, row 2 </td></tr></table>
+!! end
+
+!! test
+Nested table
+!! input
+{| border=1
+| &alpha;
+|
+{| bgcolor=#ABCDEF border=2
+|nested
+|-
+|table
+|}
+|the original table again
+|}
+!! result
+<table border="1">
+<tr>
+<td>α</td>
+<td>
+
+<table bgcolor="#ABCDEF" border="2">
+<tr>
+<td>nested</td></tr>
+<tr>
+<td>table</td></tr></table></td>
+<td>the original table again</td></tr></table>
+!! end
+
+!! test
+Invalid attributes in table cell (bug 1830)
+!! input
+{|
+|Cell:|broken
+|}
+!! result
+<table>
+<tr>
+<td>broken</td></tr></table>
+!! end
+
+
+!! test
+Table security: embedded pipes (http://lists.wikimedia.org/mailman/htdig/wikitech-l/2006-April/022293.html)
+!! options
+disabled
+!! input
+{|
+| |[ftp://|x||]" onmouseover="alert(document.cookie)">test
+!! result
+<table>
+<tr>
+<td>[<a rel="nofollow" class="external free" href="ftp://%7Cx">ftp://%7Cx</a></td>
+<td>]" onmouseover="alert(document.cookie)"&gt;test</td></tr></table>
+!! end
+
+
