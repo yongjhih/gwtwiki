@@ -139,18 +139,36 @@ public class WikiModel extends AbstractWikiModel {
 	 */
 	@Override
 	public void appendInternalLink(String topic, String hashSection, String topicDescription, String cssClass, boolean parseRecursive) {
+		appendInternalLink(topic, hashSection, topicDescription, cssClass, parseRecursive, true);
+	}
+
+	protected void appendInternalLink(String topic, String hashSection, String topicDescription,
+			String cssClass, boolean parseRecursive, boolean topicExists) {
 		String hrefLink;
 		String description = topicDescription;
 		WPATag aTagNode = new WPATag();
 		if (topic.length() > 0) {
-			final String title = Encoder.normaliseTitle(topic, true, ' ', true);
-			aTagNode.addAttribute("title", title, true);
+			String title = Encoder.normaliseTitle(topic, true, ' ', true);
 			String encodedtopic = encodeTitleToUrl(topic, true);
 			if (replaceColon()) {
 				encodedtopic = encodedtopic.replace(':', '/');
 			}
 			hrefLink = getWikiBaseURL().replace("${title}", encodedtopic);
+			if (!topicExists) {
+				if (cssClass == null) {
+					cssClass = "new";
+				}
+				if (hrefLink.indexOf('?') != -1) {
+					hrefLink += "&";
+				} else {
+					hrefLink += "?";
+				}
+				hrefLink += "action=edit&redlink=1";
+				title += " (page does not exist)";
+			}
+			aTagNode.addAttribute("title", title, true);
 		} else {
+			// assume, the own topic exists
 			if (hashSection != null) {
 				hrefLink = "";
 				if (description.length() == 0) {
@@ -162,7 +180,7 @@ public class WikiModel extends AbstractWikiModel {
 		}
 
 		String href = hrefLink;
-		if (hashSection != null) {
+		if (topicExists && hashSection != null) {
 			href = href + '#' + encodeTitleDotUrl(hashSection, false);
 		}
 		aTagNode.addAttribute("href", href, true);
