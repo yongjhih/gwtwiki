@@ -546,13 +546,11 @@ Definition list with bracketed URL link
 
 !! test
 Definition list with wikilink containing colon
-!! options
-disabled
 !! input
 ; [[Help:FAQ]]: The least-read page on Wikipedia
 !! result
 <dl>
-<dt><a href="/index.php?title=Help:FAQ&amp;action=edit&amp;redlink=1" class="new" title="Help:FAQ (page does not exist)">Help:FAQ</a></dt>
+<dt><a class="new" href="/wiki/Help:FAQ?action=edit&amp;redlink=1" title="Help:FAQ (page does not exist)">Help:FAQ</a></dt>
 <dd>The least-read page on Wikipedia</dd>
 </dl>
 !! end
@@ -1028,7 +1026,7 @@ disabled
 !! input
 [http://example.com [[wikilink]] embedded in ext link]
 !! result
-<p><a class="external text" href="http://example.com" rel="nofollow"></a><a href="/index.php?title=Wikilink&amp;action=edit&amp;redlink=1" class="new" title="Wikilink (page does not exist)">wikilink</a><a class="external text" href="http://example.com" rel="nofollow"> embedded in ext link</a></p>
+<p><a class="external text" href="http://example.com" rel="nofollow"></a><a class="new" href="/wiki/Wikilink?action=edit&amp;redlink=1" title="Wikilink (page does not exist)">wikilink</a><a class="external text" href="http://example.com" rel="nofollow"> embedded in ext link</a></p>
 !! end
 
 !! test
@@ -1162,7 +1160,7 @@ disabled
 !! input
 [http://www.musee-picasso.fr/pages/page_id18528_u1l2.htm''La muerte de Casagemas'' (1901) en el sitio de [[Museo Picasso (París)|Museo Picasso]].]
 !! result
-<p><a class="external text" href="http://www.musee-picasso.fr/pages/page_id18528_u1l2.htm" rel="nofollow"><i>La muerte de Casagemas</i> (1901) en el sitio de <a href="/index.php?title=Museo_Picasso_(Par%C3%ADs)&amp;action=edit&amp;redlink=1" class="new" title="Museo Picasso (París) (page does not exist)">Museo Picasso</a>.</a></p>
+<p><a class="external text" href="http://www.musee-picasso.fr/pages/page_id18528_u1l2.htm" rel="nofollow"><i>La muerte de Casagemas</i> (1901) en el sitio de <a class="new" href="/wiki/Museo_Picasso_(Par%C3%ADs)?action=edit&amp;redlink=1" title="Museo Picasso (París) (page does not exist)">Museo Picasso</a>.</a></p>
 !! end
 
 !! test
