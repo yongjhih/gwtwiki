@@ -1,5 +1,6 @@
 package info.bliki.wiki.model;
 
+import info.bliki.Messages;
 import info.bliki.htmlcleaner.ContentToken;
 import info.bliki.htmlcleaner.TagToken;
 import info.bliki.wiki.filter.Encoder;
@@ -178,7 +179,9 @@ public class WikiModel extends AbstractWikiModel {
 					hrefLink += "?";
 				}
 				hrefLink += "action=edit&redlink=1";
-				title += " (page does not exist)";
+				String redlinkString = Messages.getString(getResourceBundle(),
+						Messages.WIKI_TAGS_RED_LINK, "${title} (page does not exist)");
+				title = redlinkString.replace("${title}", title);
 			}
 			aTagNode.addAttribute("title", title, true);
 		} else {

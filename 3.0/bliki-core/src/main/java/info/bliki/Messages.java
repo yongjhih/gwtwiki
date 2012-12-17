@@ -14,6 +14,7 @@ public class Messages {
 	private static ResourceBundle resourceBundle = null;
 
 	public final static String WIKI_TAGS_TOC_CONTENT = "wiki.tags.toc.content";
+	public final static String WIKI_TAGS_RED_LINK = "wiki.tags.red-link";
 
 	public final static String WIKI_API_URL = "wiki.api.url";
 
