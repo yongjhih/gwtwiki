@@ -7,6 +7,7 @@ import info.bliki.wiki.filter.HTMLConverter;
 import info.bliki.wiki.filter.ITextConverter;
 import info.bliki.wiki.filter.WikipediaParser;
 import info.bliki.wiki.namespaces.INamespace;
+import info.bliki.wiki.tags.HTMLTag;
 import info.bliki.wiki.tags.PTag;
 import info.bliki.wiki.tags.WPATag;
 
@@ -149,6 +150,19 @@ public class WikiModel extends AbstractWikiModel {
 		WPATag aTagNode = new WPATag();
 		if (topic.length() > 0) {
 			String title = Encoder.normaliseTitle(topic, true, ' ', true);
+			if (hashSection == null) {
+				String pageName = Encoder.normaliseTitle(fPageTitle, true, ' ', true);
+				// self link?
+				if (title.equals(pageName)) {
+					HTMLTag selfLink = new HTMLTag("strong");
+					selfLink.addAttribute("class", "selflink", false);
+					pushNode(selfLink);
+					selfLink.addChild(new ContentToken(description));
+					popNode();
+					return;
+				}
+			}
+			
 			String encodedtopic = encodeTitleToUrl(topic, true);
 			if (replaceColon()) {
 				encodedtopic = encodedtopic.replace(':', '/');
