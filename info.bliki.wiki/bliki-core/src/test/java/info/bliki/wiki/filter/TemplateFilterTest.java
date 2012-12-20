@@ -1247,6 +1247,10 @@ public class TemplateFilterTest extends FilterTestSupport {
 				wikiModel.render("{{SELF_RECURSION1|SELF_RECURSION1}}", false));
 	}
 
+	public void testSelfRecusion005() {
+		assertEquals("foo|bar", wikiModel.parseTemplates("{{1x|{{1x|foo{{!}}bar}}}}"));
+	}
+
 	/**
 	 * Issue 133 - self-inclusion is only allowed once in MediaWiki
 	 */

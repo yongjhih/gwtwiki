@@ -1410,6 +1410,14 @@ public class TemplateParserTest extends FilterTestSupport {
 						+ "{{Main Page subpanel|column=both|title=Sister projects|1=\n" + "TEST2\n" + "}}\n" + "}}"));
 	}
 
+	public void testIssue77_003a() {
+		assertEquals("1test2foo|bar\n", wikiModel.parseTemplates("{{1x1y_opt|test|foo{{!}}bar}}\n"));
+	}
+
+	public void testIssue77_003b() {
+		assertEquals("1test2foo|bar\n", wikiModel.parseTemplates("{{1x1y_opt|1=test|2=foo{{!}}bar}}\n"));
+	}
+
 	public void testIssue81_001() {
 		assertEquals(" April 14 ", wikiModel.parseTemplates(" {{{1|April 14}}} "));
 	}

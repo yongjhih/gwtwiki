@@ -1390,6 +1390,8 @@ public class WikiTestModel extends WikiModel {
 	public final static String PIPE_SYMBOL = "|<noinclude>{{template doc}}</noinclude>";
 	public final static String SINGLE_PARAMETER = "{{{1}}}";
 	public final static String DOUBLE_PARAMETER = "{{{1}}}{{{1}}}";
+	public final static String TWO_PARAMETER = "{{{1}}}{{{2}}}";
+	public final static String TWO_PARAMETER_OPTIONAL = "1{{{1}}}2{{#if:{{{2|}}}|{{{2}}}}}";
 	public final static String REFLIST_TEXT = "<div class=\"references-small\" {{#if: {{{colwidth|}}}| style=\"-moz-column-width:{{{colwidth}}}; -webkit-column-width:{{{colwidth}}}; column-width:{{{colwidth}}};\" | {{#if: {{{1|}}}| style=\"-moz-column-count:{{{1}}}; -webkit-column-count:{{{1}}}; column-count:{{{1}}} }};\" |}}>\n"
 			+ "<references /></div><noinclude>{{pp-template|small=yes}}{{template doc}}</noinclude>\n";
 
@@ -2584,6 +2586,10 @@ public class WikiTestModel extends WikiModel {
 				return SINGLE_PARAMETER;
 			} else if (name.equals("2x")) {
 				return DOUBLE_PARAMETER;
+			} else if (name.equals("1x1y")) {
+				return TWO_PARAMETER;
+			} else if (name.equals("1x1y_opt")) {
+				return TWO_PARAMETER_OPTIONAL;
 			} else if (name.equals("Cat")) {
 				return CAT;
 			} else if (name.equals("!")) {
