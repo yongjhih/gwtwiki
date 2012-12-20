@@ -33,11 +33,11 @@ public class FilterTestSupport extends TestCase {
     wikiModel = newWikiTestModel();
   }
 
-  protected static WikiTestModel newWikiTestModel() {
+  protected final WikiModel newWikiTestModel() {
 	  return newWikiTestModel(Locale.ENGLISH);
   }
   
-  protected static WikiTestModel newWikiTestModel(Locale locale) {
+  protected WikiModel newWikiTestModel(Locale locale) {
 	  WikiTestModel wikiModel = new WikiTestModel(locale,
 			  "http://www.bliki.info/wiki/${image}",
 			  "http://www.bliki.info/wiki/${title}");

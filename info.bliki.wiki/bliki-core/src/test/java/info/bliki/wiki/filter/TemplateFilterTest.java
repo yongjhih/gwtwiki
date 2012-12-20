@@ -1,5 +1,7 @@
 package info.bliki.wiki.filter;
 
+import info.bliki.wiki.model.WikiModel;
+
 import java.util.HashSet;
 import java.util.Locale;
 
@@ -32,7 +34,7 @@ public class TemplateFilterTest extends FilterTestSupport {
 				+ "</a></div>\n"
 				+ "<p>Die <b><a href=\"http://www.bliki.info/wiki/Nash%C3%B6rner\" title=\"Nashörner\">Nashörner</a></b> (Rhinocerotidae) oder auch <b>Rhinozerosse</b> zählen zu den markantesten Säugetieren mit ihrem großen Kopf und den namengebenden ein bis zwei Hörnern. <small><a href=\"http://www.bliki.info/wiki/Nash%C3%B6rner\" title=\"Nashörner\">mehr</a></small></p>";
 		assertEquals(expected, wikiModel.render(rawWikiText));
-		WikiTestModel germanWikiTextModel = newWikiTestModel(Locale.GERMAN);
+		WikiModel germanWikiTextModel = newWikiTestModel(Locale.GERMAN);
 		assertEquals(expected, germanWikiTextModel.render(rawWikiText));
 	}
 
@@ -44,7 +46,7 @@ public class TemplateFilterTest extends FilterTestSupport {
 		final String expected = "\n"
 				+ "<p><a class=\"image\" href=\"http://www.bliki.info/wiki/File:150px-Waterberg_Nashorn1.jpg\" ><img src=\"http://www.bliki.info/wiki/150px-Waterberg_Nashorn1.jpg\" width=\"150\" />\n</a></p>";
 		assertEquals(expected, wikiModel.render(rawWikiText));
-		WikiTestModel germanWikiTextModel = newWikiTestModel(Locale.GERMAN);
+		WikiModel germanWikiTextModel = newWikiTestModel(Locale.GERMAN);
 		assertEquals(expected, germanWikiTextModel.render(rawWikiText));
 	}
 

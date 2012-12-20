@@ -1,6 +1,9 @@
 package info.bliki.wiki.filter;
 
+import java.util.Locale;
+
 import info.bliki.wiki.model.BBCodeModel;
+import info.bliki.wiki.model.WikiModel;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
@@ -12,9 +15,11 @@ public class BBCodeFilterTest extends FilterTestSupport
 	}
 
 	@Override
-	protected void setUp() throws Exception
-	{
-		wikiModel = new BBCodeModel("http://en.wikipedia.org/wiki/Image:${image}", "http://en.wikipedia.org/wiki/${title}");
+	protected WikiModel newWikiTestModel(Locale locale) {
+		WikiModel wikiModel = new BBCodeModel("http://en.wikipedia.org/wiki/Image:${image}",
+				"http://en.wikipedia.org/wiki/${title}");
+		wikiModel.setUp();
+		return wikiModel;
 	}
 
 	public static Test suite()

@@ -1,5 +1,7 @@
 package info.bliki.wiki.filter;
 
+import info.bliki.wiki.model.WikiModel;
+
 import java.util.HashMap;
 import java.util.Locale;
 
@@ -679,11 +681,11 @@ public class TemplateParserTest extends FilterTestSupport {
 		assertEquals("987,654,321.654", wikiModel.parseTemplates("{{formatnum:987654321.654321}}", false));
 		assertEquals("987,654,321.654", wikiModel.parseTemplates("{{FORMATNUM:987654321.654321}}", false));
 		
-		WikiTestModel germanWikiModel = newWikiTestModel(Locale.GERMAN);
+		WikiModel germanWikiModel = newWikiTestModel(Locale.GERMAN);
 		assertEquals("1.401", germanWikiModel.parseTemplates("{{formatnum:1401}}", false));
 		assertEquals("987.654.321,654", germanWikiModel.parseTemplates("{{formatnum:987654321.654321}}", false));
 		
-		WikiTestModel italianWikiModel = newWikiTestModel(Locale.ITALIAN);
+		WikiModel italianWikiModel = newWikiTestModel(Locale.ITALIAN);
 		assertEquals("1.401", italianWikiModel.parseTemplates("{{formatnum:1401}}", false));
 		assertEquals("987.654.321", italianWikiModel.parseTemplates("{{formatnum:987654321}}", false));
 	}
@@ -692,28 +694,28 @@ public class TemplateParserTest extends FilterTestSupport {
 		// default locale is ENGLISH
 		assertEquals("9.87654321654321E8", wikiModel.parseTemplates("{{formatnum:987,654,321.654321|R}}", false));
 
-		WikiTestModel germanWikiModel = newWikiTestModel(Locale.GERMAN);
+		WikiModel germanWikiModel = newWikiTestModel(Locale.GERMAN);
 		assertEquals("9.87654321654321E8", germanWikiModel.parseTemplates("{{formatnum:987.654.321,654321|R}}", false));
 	}
 
 	public void testFormatnum003() {
 		// default locale is ENGLISH
 		assertEquals("90", wikiModel.parseTemplates("{{formatnum:90}}"));
-		WikiTestModel germanWikiModel = newWikiTestModel(Locale.GERMAN);
+		WikiModel germanWikiModel = newWikiTestModel(Locale.GERMAN);
 		assertEquals("90", germanWikiModel.parseTemplates("{{formatnum:90}}"));
 	}
 
 	public void testFormatnum004() {
 		// default locale is ENGLISH
 		assertEquals("90.", wikiModel.parseTemplates("{{formatnum:90.}}"));
-		WikiTestModel germanWikiModel = newWikiTestModel(Locale.GERMAN);
+		WikiModel germanWikiModel = newWikiTestModel(Locale.GERMAN);
 		assertEquals("90,", germanWikiModel.parseTemplates("{{formatnum:90.}}"));
 	}
 
 	public void testFormatnum005() {
 		// default locale is ENGLISH
 		assertEquals("90.0", wikiModel.parseTemplates("{{formatnum:90.0}}"));
-		WikiTestModel germanWikiModel = newWikiTestModel(Locale.GERMAN);
+		WikiModel germanWikiModel = newWikiTestModel(Locale.GERMAN);
 		assertEquals("90,0", germanWikiModel.parseTemplates("{{formatnum:90.0}}"));
 	}
 	
@@ -721,7 +723,7 @@ public class TemplateParserTest extends FilterTestSupport {
 		// default locale is ENGLISH
 		assertEquals("90.000", wikiModel.parseTemplates("{{formatnum:90.000}}"));
 		assertEquals("90.000000000000000000000000000000000000", wikiModel.parseTemplates("{{formatnum:90.000000000000000000000000000000000000}}"));
-		WikiTestModel germanWikiModel = newWikiTestModel(Locale.GERMAN);
+		WikiModel germanWikiModel = newWikiTestModel(Locale.GERMAN);
 		assertEquals("90,000", germanWikiModel.parseTemplates("{{formatnum:90.000}}"));
 		assertEquals("90,000000000000000000000000000000000000", germanWikiModel.parseTemplates("{{formatnum:90.000000000000000000000000000000000000}}"));
 	}
