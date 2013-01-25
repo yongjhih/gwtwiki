@@ -82,6 +82,8 @@ public abstract class AbstractWikiModel implements IWikiModel, IContext {
 
 	protected boolean fTemplateTopic = false;
 
+	protected boolean fParameterParsingMode = false;
+
 	protected int fExternalLinksCounter;
 
 	/**
@@ -1259,6 +1261,10 @@ public abstract class AbstractWikiModel implements IWikiModel, IContext {
 		return fNamespace.getNamespace(namespace) != null;
 	}
 
+	public boolean isParameterParsingMode() {
+		return fParameterParsingMode;
+	}
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -1358,7 +1364,9 @@ public abstract class AbstractWikiModel implements IWikiModel, IContext {
 		}
 		StringBuilder buf = new StringBuilder(rawWikiText.length() + rawWikiText.length() / 10);
 		try {
-			TemplateParser.parse(rawWikiText, this, buf, parseOnlySignature, true);
+//			TemplateParser.parse(rawWikiText, this, buf, parseOnlySignature, true);
+			TemplateParser.parseRecursive(rawWikiText, this, buf, parseOnlySignature, true, true, null);
+			
 		} catch (Exception ioe) {
 			ioe.printStackTrace();
 			buf.append("<span class=\"error\">TemplateParser exception: " + ioe.getClass().getSimpleName() + "</span>");
@@ -1596,6 +1604,14 @@ public abstract class AbstractWikiModel implements IWikiModel, IContext {
 	 * {@inheritDoc}
 	 */
 	@Override
+	public void setParameterParsingMode(boolean parameterParsingMode) {
+		fParameterParsingMode = parameterParsingMode;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
 	public void setSemanticWebActive(boolean semanticWeb) {
 
 	}
@@ -1626,6 +1642,7 @@ public abstract class AbstractWikiModel implements IWikiModel, IContext {
 		fSectionCounter = 0;
 		fExternalLinksCounter = 0;
 		fTemplates = new HashMap<String, Counter>();
+		fParameterParsingMode = false;
 	}
 
 	/**
@@ -1668,7 +1685,7 @@ public abstract class AbstractWikiModel implements IWikiModel, IContext {
 				return;
 			}
 			String fullTemplateStr = parsedPagename.namespace.makeFullPagename(parsedPagename.pagename);
-			
+
 			val = fTemplates.get(fullTemplateStr);
 			if (val == null) {
 				val = new Counter(0);
@@ -1679,7 +1696,7 @@ public abstract class AbstractWikiModel implements IWikiModel, IContext {
 						+ "</strong></span>");
 				return;
 			}
-			
+
 			Map<String, String> templateCallsCache = null;
 			String cacheKey = null;
 			int cacheKeyLength = 0;
@@ -1717,6 +1734,10 @@ public abstract class AbstractWikiModel implements IWikiModel, IContext {
 			}
 
 			if (parsedPagename.namespace.isType(NamespaceCode.TEMPLATE_NAMESPACE_KEY)) {
+				if (isParameterParsingMode() && templateName.equals("!") && parameterMap.isEmpty()) {
+					writer.append("{{"+templateName+"}}");
+					return;
+				}
 				addTemplate(parsedPagename.pagename);
 			} else {
 				addInclude(fullTemplateStr);
@@ -1731,7 +1752,8 @@ public abstract class AbstractWikiModel implements IWikiModel, IContext {
 			}
 
 			StringBuilder templateBuffer = new StringBuilder(plainContent.length());
-			TemplateParser.parseRecursive(plainContent.trim(), this, templateBuffer, false, false, parameterMap);
+			TemplateParser.parseRecursive(plainContent.trim(), this, templateBuffer, false, false, false, parameterMap);
+			
 			if (templateCallsCache != null && cacheKey != null) {
 				// save this template call in the cache
 				String cacheValue = templateBuffer.toString();

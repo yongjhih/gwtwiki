@@ -66,7 +66,7 @@ public class TemplateParser extends AbstractParser {
 
 	protected static void parseRecursive(String rawWikitext, IWikiModel wikiModel, Appendable writer, boolean parseOnlySignature,
 			boolean renderTemplate) throws IOException {
-		parseRecursive(rawWikitext, wikiModel, writer, parseOnlySignature, renderTemplate, null);
+		parseRecursive(rawWikitext, wikiModel, writer, parseOnlySignature, renderTemplate, false, null);
 	}
 
 	/**
@@ -102,12 +102,6 @@ public class TemplateParser extends AbstractParser {
 	 */
 	public static void parsePreprocessRecursive(int startIndex, String rawWikitext, IWikiModel wikiModel, StringBuilder writer,
 			boolean renderTemplate, boolean onlyIncludeFlag, Map<String, String> templateParameterMap) throws IOException {
-//		int startIndex = Util.isNoTemplateParsing(rawWikitext);
-//		if (startIndex < 0) {
-//			writer.append(rawWikitext);
-//			return;
-//		}
-
 		try {
 			int templateLevel = wikiModel.incrementTemplateRecursionLevel();
 			if (templateLevel > Configuration.TEMPLATE_RECURSION_LIMIT) {
@@ -119,21 +113,16 @@ public class TemplateParser extends AbstractParser {
 			parser.setModel(wikiModel);
 			parser.runPreprocessParser(0, startIndex, sb, false);
 
-			StringBuilder parameterBuffer = sb;
-			StringBuilder plainBuffer = sb;
 			if (templateParameterMap != null && (!templateParameterMap.isEmpty())) {
-				String preprocessedContent = parameterBuffer.toString();
-				int indx = preprocessedContent.indexOf("{{{");
+				int indx = sb.indexOf("{{{");
 				if (indx >= 0) {
-					WikipediaScanner scanner = new WikipediaScanner(preprocessedContent);
+					WikipediaScanner scanner = new WikipediaScanner(sb.toString());
 					scanner.setModel(wikiModel);
-					parameterBuffer = scanner.replaceTemplateParameters(templateParameterMap, 0);
-					if (parameterBuffer != null) {
-						plainBuffer = parameterBuffer;
-					}
+					sb = scanner.replaceTemplateParameters(templateParameterMap, 0);
 				}
 			}
-			writer.append(plainBuffer);
+			writer.append(sb);
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 			writer.append(e.getClass().getSimpleName());
@@ -146,7 +135,7 @@ public class TemplateParser extends AbstractParser {
 	}
 
 	public static void parseRecursive(String rawWikitext, IWikiModel wikiModel, Appendable writer, boolean parseOnlySignature,
-			boolean renderTemplate, Map<String, String> templateParameterMap) throws IOException {
+			boolean renderTemplate, boolean parsePostprocessing, Map<String, String> templateParameterMap) throws IOException {
 		int startIndex = Util.indexOfTemplateParsing(rawWikitext);
 		if (startIndex < 0) {
 			writer.append(rawWikitext);
@@ -174,6 +163,12 @@ public class TemplateParser extends AbstractParser {
 			parser.setModel(wikiModel);
 			sb = new StringBuilder(sb.length());
 			parser.runParser(sb);
+			if (!wikiModel.isParameterParsingMode()) {
+				parser = new TemplateParser(sb.toString(), parseOnlySignature, renderTemplate);
+				parser.setModel(wikiModel);
+				sb = new StringBuilder(sb.length());
+				parser.runParser(sb);
+			}
 
 			if (!renderTemplate) {
 				String redirectedLink = AbstractParser.parseRedirect(sb.toString(), wikiModel);
@@ -508,6 +503,7 @@ public class TemplateParser extends AbstractParser {
 	}
 
 	protected boolean parseSpecialWikiTags(Appendable writer) throws IOException {
+		int startPosition = fCurrentPosition;
 		try {
 			switch (fSource[fCurrentPosition]) {
 			case '!': // <!-- html comment -->
@@ -518,7 +514,7 @@ public class TemplateParser extends AbstractParser {
 			default:
 
 				if (fSource[fCurrentPosition] != '/') {
-					int startPosition = fCurrentPosition;
+
 					// starting tag
 					WikiTagNode tagNode = parseTag(fCurrentPosition);
 					if (tagNode != null && !tagNode.isEmptyXmlTag()) {
@@ -542,12 +538,12 @@ public class TemplateParser extends AbstractParser {
 							return true;
 						}
 					}
-					fCurrentPosition = startPosition;
 				}
 			}
 		} catch (IndexOutOfBoundsException e) {
 			// do nothing
 		}
+		fCurrentPosition = startPosition;
 		return false;
 	}
 
@@ -880,19 +876,25 @@ public class TemplateParser extends AbstractParser {
 			if (currOffset >= lastOffset) {
 				try {
 					value = srcString.substring(lastOffset, currOffset);
-					if (parameter != null) {
-						StringBuilder buf = new StringBuilder(value.length());
-						TemplateParser.parseRecursive(value, wikiModel, buf, false, false);
-						value = Util.trimNewlineRight(buf.toString());
-						namedParameterMap.put(parameter, value);
-					} else {
-						// whitespace characters are not automatically stripped from the
-						// start and end of unnamed parameters!
-						unnamedParams.add(value);
+					boolean parameterParsingMode = wikiModel.isParameterParsingMode();
+					try {
+						wikiModel.setParameterParsingMode(true);
+						if (parameter != null) {
+							StringBuilder buf = new StringBuilder(value.length());
+							TemplateParser.parseRecursive(value, wikiModel, buf, false, false);
+							value = Util.trimNewlineRight(buf.toString());
+							namedParameterMap.put(parameter, value);
+						} else {
+							// whitespace characters are not automatically stripped from the
+							// start and end of unnamed parameters!
+							StringBuilder buf = new StringBuilder(value.length());
+							TemplateParser.parseRecursive(value, wikiModel, buf, false, false);
+							unnamedParams.add(buf.toString());
+						}
+					} finally {
+						wikiModel.setParameterParsingMode(parameterParsingMode);
 					}
 				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
 				}
 			}
 		}

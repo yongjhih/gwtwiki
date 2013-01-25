@@ -468,7 +468,8 @@ public interface IWikiModel extends IConfiguration {
 	 *          template parameters are stored as <code>String</code>s in this map
 	 * 
 	 * @return <code>null</code> if no content was found
-	 * @see AbstractParser#parsePageName(IWikiModel, String, INamespaceValue, boolean)
+	 * @see AbstractParser#parsePageName(IWikiModel, String, INamespaceValue,
+	 *      boolean)
 	 */
 	public String getRawWikiContent(ParsedPageName templateName, Map<String, String> templateParameters);
 
@@ -654,6 +655,13 @@ public interface IWikiModel extends IConfiguration {
 	 * @return <code>true</code> if the namespace is a namespace in this model
 	 */
 	public boolean isNamespace(String namespace);
+
+	/**
+	 * The current model currently renders a template parameter value
+	 * 
+	 * @return <code>true</code> if your model renders a template parameter value
+	 */
+	public boolean isParameterParsingMode();
 
 	/**
 	 * The current model is used to render a wikipage in preview mode
@@ -907,9 +915,8 @@ public interface IWikiModel extends IConfiguration {
 
 	/**
 	 * Set the "lower-case" namespace name of the article rendered with this
-	 * model. This name will be converted with the
-	 * Namespace#getNamespace() method to a string in the current
-	 * Locale.
+	 * model. This name will be converted with the Namespace#getNamespace() method
+	 * to a string in the current Locale.
 	 * 
 	 * @param namespaceLowercase
 	 *          the lowercase key for the namespace.
@@ -925,6 +932,12 @@ public interface IWikiModel extends IConfiguration {
 	 * @param pageTitle
 	 */
 	public void setPageName(String pageTitle);
+
+	/**
+	 * Activate the mode for rendering a template parameter value
+	 * 
+	 */
+	public void setParameterParsingMode(boolean parameterParsingMode);
 
 	/**
 	 * Activate the parsing of semantic Mediawiki (SMW) links See <a
@@ -981,23 +994,22 @@ public interface IWikiModel extends IConfiguration {
 	 * Gets the magic word object for the given string.
 	 * 
 	 * @param name
-	 *            the (potential) magic word
+	 *          the (potential) magic word
 	 * 
 	 * @return a magic word object (e.g.
 	 *         {@link info.bliki.wiki.filter.MagicWord.MagicWordE} in case
-	 *         {@link info.bliki.wiki.filter.MagicWord} is used) or
-	 *         <tt>null</tt> if this is no valid magic word
+	 *         {@link info.bliki.wiki.filter.MagicWord} is used) or <tt>null</tt>
+	 *         if this is no valid magic word
 	 */
 	public abstract Object getMagicWord(String name);
 
 	/**
 	 * Splits the given full title into its namespace and page title components
 	 * and normalises both components using
-	 * {@link Encoder#normaliseTitle(String, boolean, char)} keeping
-	 * underscores.
+	 * {@link Encoder#normaliseTitle(String, boolean, char)} keeping underscores.
 	 * 
 	 * @param fullTitle
-	 *            the (full) title including a namespace (if present)
+	 *          the (full) title including a namespace (if present)
 	 * 
 	 * @return a 2-element array with the namespace (index 0) and the page title
 	 *         (index 1)

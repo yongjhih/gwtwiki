@@ -851,21 +851,21 @@ public class TemplateFilterTest extends FilterTestSupport {
 										+ "{{Main Page subpanel|column=both|title=Sister projects|1=\n" + "TEST2\n" + "}}\n" + "|}", false));
 	}
 
-	public void testIssue81() {
-		assertEquals("\n" + "<p>104</p>", wikiModel.render("{{#time:z|{{{1|April 14}}}}}", false));
-	}
-
-	public void testIssue82_001() {
-		assertEquals("105", wikiModel.parseTemplates("{{#expr:{{#time:z|{{{1|April 14}}}}}+1}}"));
-	}
+//	public void testIssue81() {
+//		assertEquals("\n" + "<p>104</p>", wikiModel.render("{{#time:z|{{{1|April 14}}}}}", false));
+//	}
+//
+//	public void testIssue82_001() {
+//		assertEquals("105", wikiModel.parseTemplates("{{#expr:{{#time:z|{{{1|April 14}}}}}+1}}"));
+//	}
 
 	public void testIssue82_002() {
 		assertEquals("105th", wikiModel.parseTemplates("{{ordinal|105}}"));
 	}
-
-	public void testIssue82_003() {
-		assertEquals("105th", wikiModel.parseTemplates("{{ordinal|{{#expr:{{#time:z|{{{1|April 14}}}}}+1}}}}"));
-	}
+// time dependent tests
+//	public void testIssue82_003() {
+//		assertEquals("105th", wikiModel.parseTemplates("{{ordinal|{{#expr:{{#time:z|{{{1|April 14}}}}}+1}}}}"));
+//	}
 
 	/**
 	 * This is a date dependent template test, so only activate it for local tests
@@ -1253,6 +1253,10 @@ public class TemplateFilterTest extends FilterTestSupport {
 		assertEquals("foo|bar", wikiModel.parseTemplates("{{1x|{{1x|foo{{!}}bar}}}}"));
 	}
 
+	public void testSelfRecusion005a() {
+		assertEquals("\n" + 
+				"<p>foo|bar</p>", wikiModel.render("{{1x|{{1x|foo{{!}}bar}}}}"));
+	}
 	/**
 	 * Issue 133 - self-inclusion is only allowed once in MediaWiki
 	 */

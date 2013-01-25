@@ -883,17 +883,20 @@ public class WikipediaParser extends AbstractParser implements IParser {
 	}
 
 	private boolean parseTemplate() {
-		// dummy parsing of Wikipedia templates for event listeners
-		// doesn't change fCurrentPosition
-		if (fSource[fCurrentPosition] == '{') {
-			int templateStartPosition = fCurrentPosition + 1;
-			if (fSource[templateStartPosition] != '{') {
-				int templateEndPosition = findNestedTemplateEnd(fSource, templateStartPosition);
-				if (templateEndPosition > 0) {
-					fEventListener.onTemplate(fSource, templateStartPosition, templateEndPosition - 2);
-					return true;
+		try {
+			// dummy parsing of Wikipedia templates for event listeners
+			// doesn't change fCurrentPosition
+			if (fSource[fCurrentPosition] == '{') {
+				int templateStartPosition = fCurrentPosition + 1;
+				if (fSource[templateStartPosition] != '{') {
+					int templateEndPosition = findNestedTemplateEnd(fSource, templateStartPosition);
+					if (templateEndPosition > 0) {
+						fEventListener.onTemplate(fSource, templateStartPosition, templateEndPosition - 2);
+						return true;
+					}
 				}
 			}
+		} catch (Exception e) {
 		}
 		return false;
 	}
@@ -1257,17 +1260,18 @@ public class WikipediaParser extends AbstractParser implements IParser {
 				} else {
 					buf = new StringBuilder(rawWikiText.length() + rawWikiText.length() / 10);
 				}
-				String pass1Text = null;
+				String templatesParsedText = rawWikiText;
 				try {
-					TemplateParser.parse(rawWikiText, wikiModel, buf, wikiModel.isTemplateTopic());
-					pass1Text = buf.toString();
+//					TemplateParser.parse(templatesParsedText, wikiModel, buf, wikiModel.isTemplateTopic());
+					TemplateParser.parseRecursive(templatesParsedText, wikiModel, buf, false, wikiModel.isTemplateTopic(), true, null);
+					templatesParsedText = buf.toString(); 
 				} catch (Exception ioe) {
 					ioe.printStackTrace();
-					pass1Text = "<span class=\"error\">TemplateParser exception: " + ioe.getClass().getSimpleName() + "</span>";
+					templatesParsedText = "<span class=\"error\">TemplateParser exception: " + ioe.getClass().getSimpleName() + "</span>";
 				}
-				String redirectedLink = AbstractParser.parseRedirect(pass1Text, wikiModel);
+				String redirectedLink = AbstractParser.parseRedirect(templatesParsedText, wikiModel);
 				if (redirectedLink == null) {
-					parseRecursive(pass1Text, wikiModel, false, false);
+					parseRecursive(templatesParsedText, wikiModel, false, false);
 				}
 			} else {
 				if (AbstractParser.parseRedirect(rawWikiText, wikiModel) == null) {
