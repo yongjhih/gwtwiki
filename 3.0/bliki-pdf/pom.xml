@@ -84,13 +84,13 @@
 	</build>
 	<distributionManagement>
 		<repository>
-			<id>googlecode.svn.gwtwiki</id>
-			<url>dav:https://gwtwiki.googlecode.com/svn/maven-repository/</url>
+			<id>sonatype-nexus-staging</id>
+			<url>dav:https://oss.sonatype.org/service/local/staging/deploy/maven2</url>
 		</repository>
 		<snapshotRepository>
-			<id>googlecode.svn.gwtwiki</id>
-			<url>dav:https://gwtwiki.googlecode.com/svn/maven-snapshot-repository/</url>
+			<id>sonatype-nexus-snapshots</id>
+			<url>dav:https://oss.sonatype.org/content/repositories/snapshots</url>
 			<uniqueVersion>false</uniqueVersion>
-		</snapshotRepository>
+		</snapshotRepository> 
 	</distributionManagement>
 </project>

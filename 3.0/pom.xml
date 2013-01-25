@@ -1,6 +1,11 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 
                         http://maven.apache.org/maven-v4_0_0.xsd">
+	<parent>
+      <groupId>org.sonatype.oss</groupId>
+      <artifactId>oss-parent</artifactId>
+      <version>7</version>
+    </parent>
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>info.bliki.wiki</groupId>
 	<artifactId>bliki</artifactId>
@@ -14,11 +19,24 @@
 		<url>http://code.google.com/p/gwtwiki/</url>
 	</organization>
 	<scm>
-		<connection>scm:svn:http://gwtwiki.googlecode.com/svn/trunk/</connection>
-		<developerConnection>scm:svn:https://gwtwiki.googlecode.com/svn/trunk/</developerConnection>
-		<tag>HEAD</tag>
-		<url>http://code.google.com/p/gwtwiki/source/browse/</url>
+		<connection>scm:svn:http://gwtwiki.googlecode.com/svn/branches/info.bliki.wiki/3.0/</connection>
+		<developerConnection>scm:svn:https://gwtwiki.googlecode.com/svn/branches/info.bliki.wiki/3.0/</developerConnection>
+		<url>http://gwtwiki.googlecode.com/svn/branches/info.bliki.wiki/3.0/</url>
 	</scm>
+	<developers>
+    <developer>
+        <id>axelclk</id>
+        <name>Axel Kramer</name>
+        <email>axelclk@gmail.com</email>
+        <url>https://plus.google.com/u/0/115247592083413370964/about</url>
+        <organization>bliki.info</organization>
+        <organizationUrl>http://code.google.com/p/gwtwiki/</organizationUrl>
+        <roles>
+          <role>architect</role>
+          <role>developer</role>
+        </roles> 
+      </developer>
+    </developers>
 	<issueManagement>
 		<system>Google Code</system>
 		<url>http://code.google.com/p/gwtwiki/issues/list</url>
@@ -114,15 +132,15 @@
 				</configuration>
 			</plugin>
 		</plugins>
-	</build>
+	</build> 
 	<distributionManagement>
 		<repository>
-			<id>googlecode.svn.gwtwiki</id>
-			<url>dav:https://gwtwiki.googlecode.com/svn/maven-repository/</url>
+			<id>sonatype-nexus-staging</id>
+			<url>dav:https://oss.sonatype.org/service/local/staging/deploy/maven2</url>
 		</repository>
 		<snapshotRepository>
-			<id>googlecode.svn.gwtwiki</id>
-			<url>dav:https://gwtwiki.googlecode.com/svn/maven-snapshot-repository/</url>
+			<id>sonatype-nexus-snapshots</id>
+			<url>dav:https://oss.sonatype.org/content/repositories/snapshots</url>
 			<uniqueVersion>false</uniqueVersion>
 		</snapshotRepository>
 	</distributionManagement>
