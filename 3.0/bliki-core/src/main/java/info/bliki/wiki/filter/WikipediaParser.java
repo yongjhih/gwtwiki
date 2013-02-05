@@ -87,7 +87,7 @@ public class WikipediaParser extends AbstractParser implements IParser {
 		return false;
 	}
 
-	public int getNextToken()  // throws InvalidInputException
+	public int getNextToken() // throws InvalidInputException
 	{
 		fWhiteStart = true;
 		fWhiteStartPosition = fCurrentPosition;
@@ -462,8 +462,7 @@ public class WikipediaParser extends AbstractParser implements IParser {
 					&& (fSource[++fCurrentPosition] == 'i' || fSource[fCurrentPosition] == 'I')
 					&& (fSource[++fCurrentPosition] == 'l' || fSource[fCurrentPosition] == 'L')
 					&& (fSource[++fCurrentPosition] == 't' || fSource[fCurrentPosition] == 'T')
-					&& (fSource[++fCurrentPosition] == 'o' || fSource[fCurrentPosition] == 'O')
-					&& fSource[fCurrentPosition+1] == ':') {
+					&& (fSource[++fCurrentPosition] == 'o' || fSource[fCurrentPosition] == 'O') && fSource[fCurrentPosition + 1] == ':') {
 				tempPosition += 6;
 				fCurrentCharacter = fSource[tempPosition++];
 
@@ -530,8 +529,7 @@ public class WikipediaParser extends AbstractParser implements IParser {
 		if (foundUrl) {
 			// separators at the end must be removed - maybe more chars?
 			final String separators = ".!;?:,";
-			while (tempPosition > 1 && tempPosition > urlStartPosition
-					&& (separators.indexOf(fSource[tempPosition - 2]) != (-1))) {
+			while (tempPosition > 1 && tempPosition > urlStartPosition && (separators.indexOf(fSource[tempPosition - 2]) != (-1))) {
 				--tempPosition;
 			}
 			String restString = fStringSource.substring(urlStartPosition - 1, tempPosition - 1);
@@ -904,49 +902,55 @@ public class WikipediaParser extends AbstractParser implements IParser {
 	 * @return
 	 */
 	private boolean parseSpecialIdentifiers() {
-		if (fSource[fCurrentPosition] == '_') {
-			fCurrentPosition++;
-			int tocEndPosition = fCurrentPosition;
-			char ch;
-			while (true) {
-				ch = fSource[tocEndPosition++];
-				if (ch >= 'A' && ch <= 'Z') {
-					continue;
+		if (fSource.length > fCurrentPosition && fSource[fCurrentPosition] == '_') {
+			int oldPosition = fCurrentPosition;
+			try {
+				fCurrentPosition++;
+				int tocEndPosition = fCurrentPosition;
+				char ch;
+				while (true) {
+					ch = fSource[tocEndPosition++];
+					if (ch >= 'A' && ch <= 'Z') {
+						continue;
+					}
+					break;
 				}
-				break;
-			}
-			if (ch == '_' && fSource[tocEndPosition] == '_') {
-				String tocIdent = fStringSource.substring(fCurrentPosition, tocEndPosition - 1);
-				if (fWikiModel.parseBehaviorSwitch(tocIdent)) {
-					createContentToken(2);
-					fCurrentPosition = tocEndPosition + 1;
-					return true;
-				}
-				boolean tocRecognized = false;
-				for (int i = 0; i < TOC_IDENTIFIERS.length; i++) {
-					if (TOC_IDENTIFIERS[i].equals(tocIdent)) {
+				if (ch == '_' && fSource[tocEndPosition] == '_') {
+					String tocIdent = fStringSource.substring(fCurrentPosition, tocEndPosition - 1);
+					if (fWikiModel.parseBehaviorSwitch(tocIdent)) {
 						createContentToken(2);
-						tocRecognized = true;
 						fCurrentPosition = tocEndPosition + 1;
-						switch (i) {
-						case 0: // TOC
-							fTableOfContentTag = fWikiModel.createTableOfContent(true);
-							fForceToC = true;
-							break;
-						case 1: // NOTOC
-							setNoToC(true);
-							break;
-						case 2: // FORCETOC
-							fForceToC = true;
+						return true;
+					}
+					boolean tocRecognized = false;
+					for (int i = 0; i < TOC_IDENTIFIERS.length; i++) {
+						if (TOC_IDENTIFIERS[i].equals(tocIdent)) {
+							createContentToken(2);
+							tocRecognized = true;
+							fCurrentPosition = tocEndPosition + 1;
+							switch (i) {
+							case 0: // TOC
+								fTableOfContentTag = fWikiModel.createTableOfContent(true);
+								fForceToC = true;
+								break;
+							case 1: // NOTOC
+								setNoToC(true);
+								break;
+							case 2: // FORCETOC
+								fForceToC = true;
+								break;
+							}
 							break;
 						}
-						break;
+					}
+					if (tocRecognized) {
+						return true;
 					}
 				}
-				if (tocRecognized) {
-					return true;
-				}
+			} catch (IndexOutOfBoundsException e) {
+				// end of scanner text
 			}
+			fCurrentPosition = oldPosition;
 		}
 		return false;
 	}
@@ -1070,8 +1074,7 @@ public class WikipediaParser extends AbstractParser implements IParser {
 				// Wikipedia link style: name separated by invalid URL character?
 				// see test: "open square bracket forbidden in URL (named) (bug 4377)"
 				int pipeIndex = 0;
-				while (pipeIndex < urlString.length()
-						&& Encoder.isUrlIdentifierPart(urlString.charAt(pipeIndex))) {
+				while (pipeIndex < urlString.length() && Encoder.isUrlIdentifierPart(urlString.charAt(pipeIndex))) {
 					++pipeIndex;
 				}
 				String alias = "";

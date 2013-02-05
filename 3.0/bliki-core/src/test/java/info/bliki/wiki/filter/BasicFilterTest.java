@@ -18,6 +18,21 @@ public class BasicFilterTest extends FilterTestSupport {
 	}
 
 	/**
+	 * Issue 135
+	 */
+	public void testIssue135() {
+		assertEquals("\n" + 
+				"<p>Test_</p>", wikiModel.render("Test_", false));
+	}
+	/**
+	 * Issue 135
+	 */
+	public void testIssue135b() {
+		assertEquals("\n" + 
+				"<p>Test__</p>", wikiModel.render("Test__", false));
+	}
+	
+	/**
 	 * Issue 118
 	 */
 	public void testLiNoUl01() {
