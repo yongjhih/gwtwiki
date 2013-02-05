@@ -18,6 +18,20 @@ public class BasicFilterTest extends FilterTestSupport {
 	}
 
 	/**
+	 * Issue 135
+	 */
+	public void testIssue135() {
+		assertEquals("\n" + 
+				"<p>Test_</p>", wikiModel.render("Test_", false));
+	}
+	/**
+	 * Issue 135
+	 */
+	public void testIssue135b() {
+		assertEquals("\n" + 
+				"<p>Test__</p>", wikiModel.render("Test__", false));
+	}
+	/**
 	 * Issue 118
 	 */
 	public void testLiNoUl01() {
@@ -94,7 +108,8 @@ public class BasicFilterTest extends FilterTestSupport {
 	}
 
 	public void testSimpleList() {
-		assertEquals("\n" + "<ul>\n" + "<li>Item 1</li>\n" + "<li>Item 2</li>\n</ul>", wikiModel.render("* Item 1\n" + "* Item 2", false));
+		assertEquals("\n" + "<ul>\n" + "<li>Item 1</li>\n" + "<li>Item 2</li>\n</ul>", wikiModel.render("* Item 1\n" + "* Item 2",
+				false));
 	}
 
 	public void testSimpleTable() {
@@ -161,8 +176,7 @@ public class BasicFilterTest extends FilterTestSupport {
 						+ "&#38;#33; Computer &#60;br /&#62; <br />\n"
 						+ "&#38;#124;- &#60;br /&#62; <br />\n"
 						+ "<b>&#38;#124; style=&#34;color: yellow; background-color: green;&#34; &#38;#124; Processor Speed: &#38;#60;span style=&#34;color: red;&#34;&#62; 1.8 GHz &#38;#60;/span&#62; &#60;br /&#62;</b> <br />\n"
-						+ "&#38;#124;&#38;#125; &#60;br /&#62; <br />\n" 
-						+ "&#60;/tt&#62; &#60;/p&#62;\n" + "</tt> </p>",
+						+ "&#38;#124;&#38;#125; &#60;br /&#62; <br />\n" + "&#60;/tt&#62; &#60;/p&#62;\n" + "</tt> </p>",
 				wikiModel
 						.render(
 								"<p style=\"padding: 1em; border: 1px dashed #2f6fab; color: Black; background-color: #f9f9f9; line-height: 1.1em;\"> <tt>\n"
