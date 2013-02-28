@@ -277,43 +277,44 @@ public class APIWikiModel extends WikiModel {
 		}
 	}
 
-	public void appendInternalLink(String topic, String hashSection, String topicDescription, String cssClass, boolean parseRecursive) {
-		// WPATag aTagNode = new WPATag();
-		// append(aTagNode);
-		// aTagNode.addAttribute("id", "w", true);
-		// String href = topic;
-		// if (hashSection != null) {
-		// href = href + '#' + hashSection;
-		// }
-		// aTagNode.addAttribute("href", href, true);
-		// if (cssClass != null) {
-		// aTagNode.addAttribute("class", cssClass, true);
-		// }
-		// aTagNode.addObjectAttribute("wikilink", topic);
-		//
-		// // Show only descriptions no internal wiki links
-		// ContentToken text = new ContentToken(topicDescription);
-		// // append(text);
-		// aTagNode.addChild(text);
-
-		WPATag aTagNode = new WPATag();
-		// append(aTagNode);
-		aTagNode.addAttribute("id", "w", true);
-		String href = topic;
-		if (hashSection != null) {
-			href = href + '#' + hashSection;
-		}
-		aTagNode.addAttribute("href", href, true);
-		if (cssClass != null) {
-			aTagNode.addAttribute("class", cssClass, true);
-		}
-		aTagNode.addObjectAttribute("wikilink", topic);
-		pushNode(aTagNode);
-		WikipediaParser.parseRecursive(topicDescription.trim(), this, false, true);
-		popNode();
-		// ContentToken text = new ContentToken(topicDescription);
-		// aTagNode.addChild(text);
-	}
+	// public void appendInternalLink(String topic, String hashSection, String
+	// topicDescription, String cssClass, boolean parseRecursive) {
+	// // WPATag aTagNode = new WPATag();
+	// // append(aTagNode);
+	// // aTagNode.addAttribute("id", "w", true);
+	// // String href = topic;
+	// // if (hashSection != null) {
+	// // href = href + '#' + hashSection;
+	// // }
+	// // aTagNode.addAttribute("href", href, true);
+	// // if (cssClass != null) {
+	// // aTagNode.addAttribute("class", cssClass, true);
+	// // }
+	// // aTagNode.addObjectAttribute("wikilink", topic);
+	// //
+	// // // Show only descriptions no internal wiki links
+	// // ContentToken text = new ContentToken(topicDescription);
+	// // // append(text);
+	// // aTagNode.addChild(text);
+	//
+	// WPATag aTagNode = new WPATag();
+	// // append(aTagNode);
+	// aTagNode.addAttribute("id", "w", true);
+	// String href = topic;
+	// if (hashSection != null) {
+	// href = href + '#' + hashSection;
+	// }
+	// aTagNode.addAttribute("href", href, true);
+	// if (cssClass != null) {
+	// aTagNode.addAttribute("class", cssClass, true);
+	// }
+	// aTagNode.addObjectAttribute("wikilink", topic);
+	// pushNode(aTagNode);
+	// WikipediaParser.parseRecursive(topicDescription.trim(), this, false, true);
+	// popNode();
+	// // ContentToken text = new ContentToken(topicDescription);
+	// // aTagNode.addChild(text);
+	// }
 
 	public void parseInternalImageLink(String imageNamespace, String rawImageLink) {
 		String imageSrc = getImageBaseURL();

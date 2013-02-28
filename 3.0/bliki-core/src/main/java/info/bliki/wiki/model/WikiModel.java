@@ -7,6 +7,7 @@ import info.bliki.wiki.filter.Encoder;
 import info.bliki.wiki.filter.HTMLConverter;
 import info.bliki.wiki.filter.ITextConverter;
 import info.bliki.wiki.filter.WikipediaParser;
+import info.bliki.wiki.filter.WikipediaPreTagParser;
 import info.bliki.wiki.namespaces.INamespace;
 import info.bliki.wiki.tags.HTMLTag;
 import info.bliki.wiki.tags.PTag;
@@ -147,7 +148,7 @@ public class WikiModel extends AbstractWikiModel {
 	protected void appendInternalLink(String topic, String hashSection, String topicDescription,
 			String cssClass, boolean parseRecursive, boolean topicExists) {
 		String hrefLink;
-		String description = topicDescription;
+		String description = topicDescription.trim();
 		WPATag aTagNode = new WPATag();
 		if (topic.length() > 0) {
 			String title = Encoder.normaliseTitle(topic, true, ' ', true);
@@ -208,7 +209,7 @@ public class WikiModel extends AbstractWikiModel {
 
 		pushNode(aTagNode);
 		if (parseRecursive) {
-			WikipediaParser.parseRecursive(description.trim(), this, false, true);
+			WikipediaPreTagParser.parseRecursive(description, this, false, true);
 		} else {
 			aTagNode.addChild(new ContentToken(description));
 		}

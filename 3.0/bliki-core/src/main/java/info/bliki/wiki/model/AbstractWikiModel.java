@@ -15,6 +15,7 @@ import info.bliki.wiki.filter.PDFConverter;
 import info.bliki.wiki.filter.SectionHeader;
 import info.bliki.wiki.filter.TemplateParser;
 import info.bliki.wiki.filter.WikipediaParser;
+import info.bliki.wiki.filter.WikipediaPreTagParser;
 import info.bliki.wiki.namespaces.INamespace;
 import info.bliki.wiki.namespaces.Namespace;
 import info.bliki.wiki.tags.HTMLTag;
@@ -519,7 +520,7 @@ public abstract class AbstractWikiModel implements IWikiModel, IContext {
 
 		pushNode(aTagNode);
 		if (parseRecursive) {
-			WikipediaParser.parseRecursive(topicDescription.trim(), this, false, true);
+			WikipediaPreTagParser.parseRecursive(topicDescription.trim(), this, false, true);
 		} else {
 			aTagNode.addChild(new ContentToken(topicDescription));
 		}
