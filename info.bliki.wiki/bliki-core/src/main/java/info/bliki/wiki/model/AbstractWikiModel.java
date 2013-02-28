@@ -7,20 +7,21 @@ import info.bliki.htmlcleaner.TagNode;
 import info.bliki.htmlcleaner.TagToken;
 import info.bliki.htmlcleaner.Utils;
 import info.bliki.wiki.filter.AbstractParser;
-import info.bliki.wiki.filter.AbstractParser.ParsedPageName;
 import info.bliki.wiki.filter.Encoder;
 import info.bliki.wiki.filter.HTMLConverter;
 import info.bliki.wiki.filter.ITextConverter;
 import info.bliki.wiki.filter.MagicWord;
-import info.bliki.wiki.filter.MagicWord.MagicWordE;
 import info.bliki.wiki.filter.PDFConverter;
 import info.bliki.wiki.filter.SectionHeader;
 import info.bliki.wiki.filter.TemplateParser;
 import info.bliki.wiki.filter.WikipediaParser;
+import info.bliki.wiki.filter.WikipediaPreTagParser;
+import info.bliki.wiki.filter.AbstractParser.ParsedPageName;
+import info.bliki.wiki.filter.MagicWord.MagicWordE;
 import info.bliki.wiki.namespaces.INamespace;
+import info.bliki.wiki.namespaces.Namespace;
 import info.bliki.wiki.namespaces.INamespace.INamespaceValue;
 import info.bliki.wiki.namespaces.INamespace.NamespaceCode;
-import info.bliki.wiki.namespaces.Namespace;
 import info.bliki.wiki.tags.HTMLTag;
 import info.bliki.wiki.tags.TableOfContentTag;
 import info.bliki.wiki.tags.WPATag;
@@ -40,10 +41,10 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.ResourceBundle;
 import java.util.Set;
 import java.util.TimeZone;
+import java.util.Map.Entry;
 
 /**
  * Standard model implementation for the Wikipedia syntax
@@ -500,7 +501,7 @@ public abstract class AbstractWikiModel implements IWikiModel, IContext {
 
 		pushNode(aTagNode);
 		if (parseRecursive) {
-			WikipediaParser.parseRecursive(topicDescription.trim(), this, false, true);
+			WikipediaPreTagParser.parseRecursive(topicDescription.trim(), this, false, true);
 		} else {
 			aTagNode.addChild(new ContentToken(topicDescription));
 		}
@@ -1364,9 +1365,9 @@ public abstract class AbstractWikiModel implements IWikiModel, IContext {
 		}
 		StringBuilder buf = new StringBuilder(rawWikiText.length() + rawWikiText.length() / 10);
 		try {
-//			TemplateParser.parse(rawWikiText, this, buf, parseOnlySignature, true);
+			// TemplateParser.parse(rawWikiText, this, buf, parseOnlySignature, true);
 			TemplateParser.parseRecursive(rawWikiText, this, buf, parseOnlySignature, true, true, null);
-			
+
 		} catch (Exception ioe) {
 			ioe.printStackTrace();
 			buf.append("<span class=\"error\">TemplateParser exception: " + ioe.getClass().getSimpleName() + "</span>");
@@ -1735,7 +1736,7 @@ public abstract class AbstractWikiModel implements IWikiModel, IContext {
 
 			if (parsedPagename.namespace.isType(NamespaceCode.TEMPLATE_NAMESPACE_KEY)) {
 				if (isParameterParsingMode() && templateName.equals("!") && parameterMap.isEmpty()) {
-					writer.append("{{"+templateName+"}}");
+					writer.append("{{" + templateName + "}}");
 					return;
 				}
 				addTemplate(parsedPagename.pagename);
@@ -1753,7 +1754,7 @@ public abstract class AbstractWikiModel implements IWikiModel, IContext {
 
 			StringBuilder templateBuffer = new StringBuilder(plainContent.length());
 			TemplateParser.parseRecursive(plainContent.trim(), this, templateBuffer, false, false, false, parameterMap);
-			
+
 			if (templateCallsCache != null && cacheKey != null) {
 				// save this template call in the cache
 				String cacheValue = templateBuffer.toString();

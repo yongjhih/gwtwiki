@@ -5,10 +5,12 @@ import info.bliki.api.User;
 import info.bliki.api.creator.ImageData;
 import info.bliki.api.creator.TopicData;
 import info.bliki.api.creator.WikiDB;
+import info.bliki.htmlcleaner.ContentToken;
 import info.bliki.htmlcleaner.TagNode;
 import info.bliki.wiki.filter.AbstractParser;
 import info.bliki.wiki.filter.Encoder;
 import info.bliki.wiki.filter.WikipediaParser;
+import info.bliki.wiki.filter.WikipediaPreTagParser;
 import info.bliki.wiki.filter.AbstractParser.ParsedPageName;
 import info.bliki.wiki.model.Configuration;
 import info.bliki.wiki.model.ImageFormat;
@@ -145,7 +147,6 @@ public class APIWikiModel extends WikiModel {
 						return null;
 					}
 				}
-
 				String[] listOfTitleStrings = { fullPageName };
 				fUser.login();
 				List<Page> listOfPages = fUser.queryContent(listOfTitleStrings);
@@ -268,43 +269,47 @@ public class APIWikiModel extends WikiModel {
 		}
 	}
 
-	public void appendInternalLink(String topic, String hashSection, String topicDescription, String cssClass, boolean parseRecursive) {
-		// WPATag aTagNode = new WPATag();
-		// append(aTagNode);
-		// aTagNode.addAttribute("id", "w", true);
-		// String href = topic;
-		// if (hashSection != null) {
-		// href = href + '#' + hashSection;
-		// }
-		// aTagNode.addAttribute("href", href, true);
-		// if (cssClass != null) {
-		// aTagNode.addAttribute("class", cssClass, true);
-		// }
-		// aTagNode.addObjectAttribute("wikilink", topic);
-		//
-		// // Show only descriptions no internal wiki links
-		// ContentToken text = new ContentToken(topicDescription);
-		// // append(text);
-		// aTagNode.addChild(text);
-
-		WPATag aTagNode = new WPATag();
-		// append(aTagNode);
-		aTagNode.addAttribute("id", "w", true);
-		String href = topic;
-		if (hashSection != null) {
-			href = href + '#' + hashSection;
-		}
-		aTagNode.addAttribute("href", href, true);
-		if (cssClass != null) {
-			aTagNode.addAttribute("class", cssClass, true);
-		}
-		aTagNode.addObjectAttribute("wikilink", topic);
-		pushNode(aTagNode);
-		WikipediaParser.parseRecursive(topicDescription.trim(), this, false, true);
-		popNode();
-		// ContentToken text = new ContentToken(topicDescription);
-		// aTagNode.addChild(text);
-	}
+//	public void appendInternalLink(String topic, String hashSection, String topicDescription, String cssClass, boolean parseRecursive) {
+//		// WPATag aTagNode = new WPATag();
+//		// append(aTagNode);
+//		// aTagNode.addAttribute("id", "w", true);
+//		// String href = topic;
+//		// if (hashSection != null) {
+//		// href = href + '#' + hashSection;
+//		// }
+//		// aTagNode.addAttribute("href", href, true);
+//		// if (cssClass != null) {
+//		// aTagNode.addAttribute("class", cssClass, true);
+//		// }
+//		// aTagNode.addObjectAttribute("wikilink", topic);
+//		//
+//		// // Show only descriptions no internal wiki links
+//		// ContentToken text = new ContentToken(topicDescription);
+//		// // append(text);
+//		// aTagNode.addChild(text);
+//		String description = topicDescription.trim();
+//		WPATag aTagNode = new WPATag();
+//		// append(aTagNode);
+//		aTagNode.addAttribute("id", "w", true);
+//		String href = topic;
+//		if (hashSection != null) {
+//			href = href + '#' + hashSection;
+//		}
+//		aTagNode.addAttribute("href", href, true);
+//		if (cssClass != null) {
+//			aTagNode.addAttribute("class", cssClass, true);
+//		}
+//		aTagNode.addObjectAttribute("wikilink", topic);
+//		pushNode(aTagNode);
+//		if (parseRecursive) {
+//			WikipediaPreTagParser.parseRecursive(description, this, false, true);
+//		} else {
+//			aTagNode.addChild(new ContentToken(description));
+//		}
+//		popNode();
+//		// ContentToken text = new ContentToken(topicDescription);
+//		// aTagNode.addChild(text);
+//	}
 
 	public void parseInternalImageLink(String imageNamespace, String rawImageLink) {
 		String imageSrc = getImageBaseURL();

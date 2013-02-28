@@ -7,6 +7,7 @@ import info.bliki.wiki.filter.Encoder;
 import info.bliki.wiki.filter.HTMLConverter;
 import info.bliki.wiki.filter.ITextConverter;
 import info.bliki.wiki.filter.WikipediaParser;
+import info.bliki.wiki.filter.WikipediaPreTagParser;
 import info.bliki.wiki.namespaces.INamespace;
 import info.bliki.wiki.tags.HTMLTag;
 import info.bliki.wiki.tags.PTag;
@@ -208,7 +209,7 @@ public class WikiModel extends AbstractWikiModel {
 
 		pushNode(aTagNode);
 		if (parseRecursive) {
-			WikipediaParser.parseRecursive(description.trim(), this, false, true);
+			WikipediaPreTagParser.parseRecursive(topicDescription.trim(), this, false, true);
 		} else {
 			aTagNode.addChild(new ContentToken(description));
 		}
