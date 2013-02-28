@@ -148,7 +148,7 @@ public class WikiModel extends AbstractWikiModel {
 	protected void appendInternalLink(String topic, String hashSection, String topicDescription,
 			String cssClass, boolean parseRecursive, boolean topicExists) {
 		String hrefLink;
-		String description = topicDescription;
+		String description = topicDescription.trim();
 		WPATag aTagNode = new WPATag();
 		if (topic.length() > 0) {
 			String title = Encoder.normaliseTitle(topic, true, ' ', true);
@@ -209,7 +209,7 @@ public class WikiModel extends AbstractWikiModel {
 
 		pushNode(aTagNode);
 		if (parseRecursive) {
-			WikipediaPreTagParser.parseRecursive(topicDescription.trim(), this, false, true);
+			WikipediaPreTagParser.parseRecursive(description, this, false, true);
 		} else {
 			aTagNode.addChild(new ContentToken(description));
 		}
