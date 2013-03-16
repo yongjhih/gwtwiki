@@ -4,6 +4,7 @@ import info.bliki.htmlcleaner.Utils;
 import info.bliki.wiki.filter.TemplateParser;
 import info.bliki.wiki.filter.Util;
 import info.bliki.wiki.model.IWikiModel;
+import info.bliki.wiki.model.WikiModelContentException;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -67,11 +68,20 @@ public class Safesubst extends AbstractTemplateFunction {
 		}
 		TemplateParser.mergeParameters(parameterMap, unnamedParameters);
 
-		String plainContent;
+		String plainContent = null;
 		if (templateName.length() > 0 && templateName.charAt(0) == ':') {
-			plainContent = model.getRawWikiContent("", templateName.substring(1), parameterMap);
+			try {
+				plainContent = model.getRawWikiContent("", templateName.substring(1), parameterMap);
+			} catch (WikiModelContentException e) {
+				// the requested templateName doesn't exist
+			}
 		} else {
-			plainContent = model.getRawWikiContent(model.getTemplateNamespace(), templateName, parameterMap);
+
+			try {
+				plainContent = model.getRawWikiContent(model.getTemplateNamespace(), templateName, parameterMap);
+			} catch (WikiModelContentException e) {
+				// the requested templateName doesn't exist
+			}
 		}
 
 		if (plainContent != null) {

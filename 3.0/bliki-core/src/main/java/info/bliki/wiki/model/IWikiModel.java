@@ -546,7 +546,7 @@ public interface IWikiModel extends IConfiguration {
 	 * 
 	 * @return <code>null</code> if no content was found
 	 */
-	public String getRawWikiContent(String namespace, String templateName, Map<String, String> templateParameters);
+	public String getRawWikiContent(String namespace, String templateName, Map<String, String> templateParameters) throws WikiModelContentException;
 
 	/**
 	 * Get the current recursion level of the parser. The recursion level is used

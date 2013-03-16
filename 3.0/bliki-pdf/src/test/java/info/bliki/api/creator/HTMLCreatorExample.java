@@ -211,6 +211,14 @@ public class HTMLCreatorExample {
 		testWikipediaENAPI("Alps");
 	}
 
+	public static void testCreator016() {
+		testWikipediaENAPI("Acute disseminated encephalomyelitis");
+	}
+
+	public static void testCreator017() {
+		testWikipediaENAPI("Apatosaurus");
+	}
+
 	public static void testCreateText001() {
 		testWikipediaText(TEXT_ISSUE_96, "Wikipedia:Hauptseite/Artikel des Tages/Donnerstag", "http://de.wikipedia.org/w/api.php",
 				Locale.GERMAN);

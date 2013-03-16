@@ -5,11 +5,13 @@ import info.bliki.api.creator.TopicData;
 import info.bliki.api.creator.WikiDB;
 import info.bliki.htmlcleaner.TagNode;
 import info.bliki.wiki.dump.Siteinfo;
+import info.bliki.wiki.filter.AbstractParser;
 import info.bliki.wiki.filter.Encoder;
 import info.bliki.wiki.filter.WikipediaParser;
 import info.bliki.wiki.model.Configuration;
 import info.bliki.wiki.model.ImageFormat;
 import info.bliki.wiki.model.WikiModel;
+import info.bliki.wiki.model.WikiModelContentException;
 import info.bliki.wiki.namespaces.INamespace;
 import info.bliki.wiki.tags.WPATag;
 
@@ -105,7 +107,8 @@ public class DumpWikiModel extends WikiModel {
 	 * @see info.bliki.api.User#queryContent(String[])
 	 */
 	@Override
-	public String getRawWikiContent(String namespace, String articleName, Map<String, String> templateParameters) {
+	public String getRawWikiContent(String namespace, String articleName, Map<String, String> templateParameters)
+			throws WikiModelContentException {
 		String result = super.getRawWikiContent(namespace, articleName, templateParameters);
 		if (result != null) {
 			// found magic word template
@@ -131,7 +134,15 @@ public class DumpWikiModel extends WikiModel {
 					}
 				}
 			} catch (Exception e) {
-				e.printStackTrace();
+				if (Configuration.DEBUG) {
+					e.printStackTrace();
+				}
+				String temp = e.getMessage();
+				if (temp != null) {
+					throw new WikiModelContentException("<span class=\"error\">Exception: " + temp + "</span>", e);
+				}
+				throw new WikiModelContentException("<span class=\"error\">Exception: " + e.getClass().getSimpleName() + "</span>", e);
+
 			}
 			return content;
 		}
@@ -156,15 +167,7 @@ public class DumpWikiModel extends WikiModel {
 					redirNamespace = "";
 				}
 			}
-			try {
-				int level = incrementRecursionLevel();
-				if (level > Configuration.PARSER_RECURSION_LIMIT) {
-					return "Error - getting content of redirected link: " + redirNamespace + ":" + redirArticle;
-				}
-				return getRawWikiContent(redirNamespace, redirArticle, templateParameters);
-			} finally {
-				decrementRecursionLevel();
-			}
+			return AbstractParser.getRedirectedRawContent(this, redirNamespace, redirArticle, templateParameters);
 		}
 		return rawWikitext;
 	}

@@ -42,7 +42,7 @@ public class PDFWikiModel extends WikiModel {
 	 * 
 	 */
 	@Override
-	public String getRawWikiContent(String namespace, String articleName, Map<String, String> map) {
+	public String getRawWikiContent(String namespace, String articleName, Map<String, String> map) throws WikiModelContentException {
 		String result = super.getRawWikiContent(namespace, articleName, map);
 		if (result != null) {
 			return result;

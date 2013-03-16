@@ -2,6 +2,7 @@ package info.bliki.wiki.template;
 
 import info.bliki.wiki.model.Configuration;
 import info.bliki.wiki.model.WikiModel;
+import info.bliki.wiki.model.WikiModelContentException;
 import info.bliki.wiki.template.extension.AttributeRenderer;
 import info.bliki.wiki.template.extension.DollarContext;
 
@@ -65,7 +66,7 @@ public class ParserFunctionModel extends WikiModel {
 	 * 
 	 */
 	@Override
-	public String getRawWikiContent(String namespace, String articleName, Map<String, String> map) {
+	public String getRawWikiContent(String namespace, String articleName, Map<String, String> map) throws WikiModelContentException {
 		String result = super.getRawWikiContent(namespace, articleName, map);
 		if (result != null) {
 			return result;

@@ -1078,7 +1078,7 @@ public abstract class AbstractWikiModel implements IWikiModel, IContext {
 	/**
 	 * {@inheritDoc}
 	 */
-	public String getRawWikiContent(String namespace, String templateName, Map<String, String> templateParameters) {
+	public String getRawWikiContent(String namespace, String templateName, Map<String, String> templateParameters) throws WikiModelContentException {
 		if (Configuration.RAW_CONTENT) {
 			System.out.println("AbstractWikiModel raw: " + " " + namespace + " " + templateName);
 		}
@@ -1706,8 +1706,7 @@ public abstract class AbstractWikiModel implements IWikiModel, IContext {
 				System.out.println("Not Cached: " + templateName + "-" + cacheKeyLength);
 			}
 		}
-
-		String plainContent;
+ 
 		String templateStr = templateName;
 		String namespaceStr = getTemplateNamespace();
 		if (templateStr.length() > 0 && templateStr.charAt(0) == ':') {
@@ -1744,7 +1743,14 @@ public abstract class AbstractWikiModel implements IWikiModel, IContext {
 			// invalidate cache:
 			templateCallsCache = null;
 		}
-		plainContent = getRawWikiContent(namespaceStr, templateStr, parameterMap);
+		
+		String plainContent=null;;
+		try {
+			plainContent = getRawWikiContent(namespaceStr, templateStr, parameterMap);
+		} catch (WikiModelContentException wme) {
+			writer.append( wme.getMessage());
+			return;
+		}
 		if (plainContent == null) {
 			// content of this transclusion is missing => render as link:
 			plainContent = "[[:" + fullTemplateStr + "]]";

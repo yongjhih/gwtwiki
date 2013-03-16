@@ -5,6 +5,7 @@ import info.bliki.htmlcleaner.TagNode;
 import info.bliki.htmlcleaner.Utils;
 import info.bliki.wiki.model.Configuration;
 import info.bliki.wiki.model.WikiModel;
+import info.bliki.wiki.model.WikiModelContentException;
 import info.bliki.wiki.tags.IgnoreTag;
 import info.bliki.wiki.tags.extension.ChartTag;
 
@@ -2535,7 +2536,7 @@ public class WikiTestModel extends WikiModel {
 	 * 
 	 */
 	@Override
-	public String getRawWikiContent(String namespace, String articleName, Map<String, String> map) {
+	public String getRawWikiContent(String namespace, String articleName, Map<String, String> map) throws WikiModelContentException {
 		String result = super.getRawWikiContent(namespace, articleName, map);
 		if (result != null) {
 			// found magic word template

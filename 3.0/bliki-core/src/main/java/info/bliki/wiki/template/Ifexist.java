@@ -1,6 +1,7 @@
 package info.bliki.wiki.template;
 
 import info.bliki.wiki.model.IWikiModel;
+import info.bliki.wiki.model.WikiModelContentException;
 
 import java.util.List;
 
@@ -32,7 +33,13 @@ public class Ifexist extends AbstractTemplateFunction {
 					templateName = wikiTopicName.substring(index + 1);
 				}
 			}
-			if (model.getRawWikiContent(namespace, templateName, null) != null) {
+			String rawWikiContent = null;
+			try {
+				rawWikiContent = model.getRawWikiContent(namespace, templateName, null);
+			} catch (WikiModelContentException e) {
+				// the requested templateName doesn't exist
+			}
+			if (rawWikiContent != null) {
 				return isSubst ? list.get(1) : parseTrim(list.get(1), model);
 			} else {
 				// the requested templateName doesn't exist

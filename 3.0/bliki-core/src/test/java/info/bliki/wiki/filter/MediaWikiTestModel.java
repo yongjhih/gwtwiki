@@ -5,6 +5,7 @@ import info.bliki.htmlcleaner.TagNode;
 import info.bliki.htmlcleaner.Utils;
 import info.bliki.wiki.model.Configuration;
 import info.bliki.wiki.model.WikiModel;
+import info.bliki.wiki.model.WikiModelContentException;
 import info.bliki.wiki.tags.IgnoreTag;
 import info.bliki.wiki.tags.extension.ChartTag;
 
@@ -44,10 +45,11 @@ public class MediaWikiTestModel extends WikiModel {
 	public MediaWikiTestModel(Locale locale, String imageBaseURL, String linkBaseURL, Map<String, String> db) {
 		super(Configuration.DEFAULT_CONFIGURATION, locale, imageBaseURL, linkBaseURL);
 		this.db = db;
-		// add some basic pages assumed to always exist (at least in parserTests.txt):
+		// add some basic pages assumed to always exist (at least in
+		// parserTests.txt):
 		db.put("Main_Page", "");
 		db.put("Special:Version", "");
-		
+
 		// set up a simple cache mock-up for JUnit tests. HashMap is not usable for
 		// production!
 		Configuration.DEFAULT_CONFIGURATION.setTemplateCallsCache(new HashMap());
@@ -61,7 +63,8 @@ public class MediaWikiTestModel extends WikiModel {
 	 * 
 	 */
 	@Override
-	public String getRawWikiContent(String namespace, String articleName, Map<String, String> templateParameters) {
+	public String getRawWikiContent(String namespace, String articleName, Map<String, String> templateParameters)
+			throws WikiModelContentException {
 		String result = super.getRawWikiContent(namespace, articleName, templateParameters);
 		if (result != null) {
 			// found magic word template
@@ -89,16 +92,17 @@ public class MediaWikiTestModel extends WikiModel {
 		return true;
 	}
 
-    /* (non-Javadoc)
-     * @see info.bliki.wiki.model.WikiModel#appendInternalLink(java.lang.String, java.lang.String, java.lang.String, java.lang.String, boolean)
-     */
-    @Override
-    public void appendInternalLink(String topic, String hashSection, String topicDescription,
-            String cssClass, boolean parseRecursive) {
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see info.bliki.wiki.model.WikiModel#appendInternalLink(java.lang.String,
+	 * java.lang.String, java.lang.String, java.lang.String, boolean)
+	 */
+	@Override
+	public void appendInternalLink(String topic, String hashSection, String topicDescription, String cssClass, boolean parseRecursive) {
 		String encodedtopic = encodeTitleToUrl(topic, true);
-		appendInternalLink(topic, hashSection, topicDescription, cssClass, parseRecursive,
-				db.get(encodedtopic) != null);
-    }
+		appendInternalLink(topic, hashSection, topicDescription, cssClass, parseRecursive, db.get(encodedtopic) != null);
+	}
 
 	@Override
 	public void appendExternalLink(String uriSchemeName, String link, String linkName, boolean withoutSquareBrackets) {

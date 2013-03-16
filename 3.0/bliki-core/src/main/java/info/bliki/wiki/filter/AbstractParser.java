@@ -5,12 +5,12 @@ import info.bliki.htmlcleaner.TagNode;
 import info.bliki.htmlcleaner.TagToken;
 import info.bliki.wiki.model.Configuration;
 import info.bliki.wiki.model.IWikiModel;
+import info.bliki.wiki.model.WikiModelContentException;
 import info.bliki.wiki.tags.HTMLTag;
 import info.bliki.wiki.tags.WPBoldItalicTag;
 import info.bliki.wiki.tags.WPTag;
 import info.bliki.wiki.tags.util.TagStack;
 
-import java.io.IOException;
 import java.util.Map;
 
 public abstract class AbstractParser extends WikipediaScanner {
@@ -772,20 +772,31 @@ public abstract class AbstractParser extends WikipediaScanner {
 			redirNamespace = redirectedLink.substring(0, index);
 			if (wikiModel.isTemplateNamespace(redirNamespace)) {
 				redirArticle = redirectedLink.substring(index + 1);
-				try {
-					int level = wikiModel.incrementRecursionLevel();
-					if (level > Configuration.PARSER_RECURSION_LIMIT) {
-						return "Error - getting content of redirected template link: " + redirNamespace + ":" + redirArticle;
-					}
-					return wikiModel.getRawWikiContent(redirNamespace, redirArticle, templateParameters);
-				} finally {
-					wikiModel.decrementRecursionLevel();
-				}
+				return getRedirectedRawContent(wikiModel, redirNamespace, redirArticle, templateParameters);
 			}
 		}
 		return null;
 	}
 
+	public static String getRedirectedRawContent(IWikiModel wikiModel, String redirNamespace,String redirArticle,
+			Map<String, String> templateParameters) {
+		try {
+			int level = wikiModel.incrementRecursionLevel(); 
+			if (level > Configuration.PARSER_RECURSION_LIMIT) {
+				return "<span class=\"error\">Error - getting content of redirected link: " + redirNamespace + ":"
+						+ redirArticle + "<span>";
+			}
+			try { 
+				return wikiModel.getRawWikiContent(redirNamespace, redirArticle, templateParameters);
+			} catch (WikiModelContentException e) {
+				return "<span class=\"error\">Error - getting content of redirected link: " + redirNamespace + ":"
+				+ redirArticle + "<span>";
+			}
+		} finally {
+			wikiModel.decrementRecursionLevel();
+		}
+	}
+	
 	/**
 	 * Check the text for a <code>#REDIRECT [[...]]</code> or
 	 * <code>#redirect [[...]]</code> link
