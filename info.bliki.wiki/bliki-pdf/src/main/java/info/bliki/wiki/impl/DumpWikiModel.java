@@ -158,28 +158,7 @@ public class DumpWikiModel extends WikiModel {
 		String redirectedLink = WikipediaParser.parseRedirect(rawWikitext, this);
 		if (redirectedLink != null) {
 			ParsedPageName redirParsedPage = AbstractParser.parsePageName(this, redirectedLink, fNamespace.getTemplate(), true, true);
-			AbstractParser.getRedirectedRawContent(this, redirParsedPage, templateParameters);
-			// try {
-			// int level = incrementRecursionLevel();
-			// // TODO: what to do if parsing the title failed due to invalid syntax?
-			// if (level > Configuration.PARSER_RECURSION_LIMIT ||
-			// !redirParsedPage.valid) {
-			// return
-			// "<span class=\"error\">Error - getting content of redirected link: " +
-			// redirParsedPage.namespace + ":"
-			// + redirParsedPage.pagename + "<span>";
-			// }
-			// try {
-			// return getRawWikiContent(redirParsedPage, templateParameters);
-			// } catch (WikiModelException e) {
-			// return
-			// "<span class=\"error\">Error - getting content of redirected link: " +
-			// redirParsedPage.namespace + ":"
-			// + redirParsedPage.pagename + "<span>";
-			// }
-			// } finally {
-			// decrementRecursionLevel();
-			// }
+			return AbstractParser.getRedirectedRawContent(this, redirParsedPage, templateParameters);
 		}
 		return rawWikitext;
 	}
