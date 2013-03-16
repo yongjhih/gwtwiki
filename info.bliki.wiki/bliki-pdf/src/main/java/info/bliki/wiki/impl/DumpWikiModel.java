@@ -13,6 +13,7 @@ import info.bliki.wiki.filter.AbstractParser.ParsedPageName;
 import info.bliki.wiki.model.Configuration;
 import info.bliki.wiki.model.ImageFormat;
 import info.bliki.wiki.model.WikiModel;
+import info.bliki.wiki.model.WikiModelContentException;
 import info.bliki.wiki.namespaces.INamespace;
 import info.bliki.wiki.namespaces.INamespace.NamespaceCode;
 import info.bliki.wiki.tags.WPATag;
@@ -72,7 +73,8 @@ public class DumpWikiModel extends WikiModel {
 	 */
 	public DumpWikiModel(WikiDB wikiDB, Siteinfo siteinfo, Locale locale, String imageBaseURL, String linkBaseURL,
 			String imageDirectoryName) {
-		super(Configuration.DEFAULT_CONFIGURATION, locale, Messages.getResourceBundle(locale), siteinfo.getNamespace(), imageBaseURL, linkBaseURL);
+		super(Configuration.DEFAULT_CONFIGURATION, locale, Messages.getResourceBundle(locale), siteinfo.getNamespace(), imageBaseURL,
+				linkBaseURL);
 		fWikiDB = wikiDB;
 		fSiteinfo = siteinfo;
 		fTemplateNamespace = fSiteinfo.getNamespace(INamespace.NamespaceCode.TEMPLATE_NAMESPACE_KEY.code);
@@ -107,7 +109,7 @@ public class DumpWikiModel extends WikiModel {
 	 * @see info.bliki.api.User#queryContent(String[])
 	 */
 	@Override
-	public String getRawWikiContent(ParsedPageName parsedPagename, Map<String, String> templateParameters) {
+	public String getRawWikiContent(ParsedPageName parsedPagename, Map<String, String> templateParameters) throws WikiModelContentException {
 		String result = super.getRawWikiContent(parsedPagename, templateParameters);
 		if (result != null) {
 			// found magic word template
@@ -133,7 +135,15 @@ public class DumpWikiModel extends WikiModel {
 					}
 				}
 			} catch (Exception e) {
-				e.printStackTrace();
+				if (Configuration.DEBUG) {
+					e.printStackTrace();
+				}
+				String temp = e.getMessage();
+				if (temp != null) {
+					throw new WikiModelContentException("<span class=\"error\">Exception: " + temp + "</span>", e);
+				}
+				throw new WikiModelContentException("<span class=\"error\">Exception: " + e.getClass().getSimpleName() + "</span>", e);
+
 			}
 			return content;
 		}
@@ -148,16 +158,28 @@ public class DumpWikiModel extends WikiModel {
 		String redirectedLink = WikipediaParser.parseRedirect(rawWikitext, this);
 		if (redirectedLink != null) {
 			ParsedPageName redirParsedPage = AbstractParser.parsePageName(this, redirectedLink, fNamespace.getTemplate(), true, true);
-			try {
-				int level = incrementRecursionLevel();
-				// TODO: what to do if parsing the title failed due to invalid syntax?
-				if (level > Configuration.PARSER_RECURSION_LIMIT || !redirParsedPage.valid) {
-					return "Error - getting content of redirected link: " + redirParsedPage.namespace + ":" + redirParsedPage.pagename;
-				}
-				return getRawWikiContent(redirParsedPage, templateParameters);
-			} finally {
-				decrementRecursionLevel();
-			}
+			AbstractParser.getRedirectedRawContent(this, redirParsedPage, templateParameters);
+			// try {
+			// int level = incrementRecursionLevel();
+			// // TODO: what to do if parsing the title failed due to invalid syntax?
+			// if (level > Configuration.PARSER_RECURSION_LIMIT ||
+			// !redirParsedPage.valid) {
+			// return
+			// "<span class=\"error\">Error - getting content of redirected link: " +
+			// redirParsedPage.namespace + ":"
+			// + redirParsedPage.pagename + "<span>";
+			// }
+			// try {
+			// return getRawWikiContent(redirParsedPage, templateParameters);
+			// } catch (WikiModelException e) {
+			// return
+			// "<span class=\"error\">Error - getting content of redirected link: " +
+			// redirParsedPage.namespace + ":"
+			// + redirParsedPage.pagename + "<span>";
+			// }
+			// } finally {
+			// decrementRecursionLevel();
+			// }
 		}
 		return rawWikitext;
 	}

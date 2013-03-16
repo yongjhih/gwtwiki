@@ -471,7 +471,7 @@ public interface IWikiModel extends IConfiguration {
 	 * @see AbstractParser#parsePageName(IWikiModel, String, INamespaceValue,
 	 *      boolean)
 	 */
-	public String getRawWikiContent(ParsedPageName templateName, Map<String, String> templateParameters);
+	public String getRawWikiContent(ParsedPageName templateName, Map<String, String> templateParameters) throws WikiModelContentException;
 
 	/**
 	 * Get the current recursion level of the parser. The recursion level is used

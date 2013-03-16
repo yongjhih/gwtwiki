@@ -5,6 +5,7 @@ import info.bliki.htmlcleaner.TagNode;
 import info.bliki.htmlcleaner.TagToken;
 import info.bliki.wiki.model.Configuration;
 import info.bliki.wiki.model.IWikiModel;
+import info.bliki.wiki.model.WikiModelContentException;
 import info.bliki.wiki.namespaces.INamespace;
 import info.bliki.wiki.namespaces.INamespace.INamespaceValue;
 import info.bliki.wiki.namespaces.INamespace.NamespaceCode;
@@ -261,7 +262,7 @@ public abstract class AbstractParser extends WikipediaScanner {
 		return temp;
 	}
 
-	protected boolean parsePHPBBCode(String name, StringBuilder bbCode)  {
+	protected boolean parsePHPBBCode(String name, StringBuilder bbCode) {
 		int index = 1;
 		char ch = ' ';
 
@@ -750,13 +751,13 @@ public abstract class AbstractParser extends WikipediaScanner {
 	public abstract void setNoToC(boolean noToC);
 
 	public abstract void runParser();
-	
+
 	/**
 	 * Represents the result of parsing a (potential) page name.
 	 * 
-	 * Note that {@link #magicWord} takes precedence over {@link #pagename},
-	 * i.e. if {@link #magicWord} if not <tt>null</tt>, the parsed name is a
-	 * magic word!
+	 * Note that {@link #magicWord} takes precedence over {@link #pagename}, i.e.
+	 * if {@link #magicWord} if not <tt>null</tt>, the parsed name is a magic
+	 * word!
 	 * 
 	 * @author Nico Kruber, kruber@zib.de
 	 */
@@ -774,8 +775,8 @@ public abstract class AbstractParser extends WikipediaScanner {
 		 */
 		public final boolean valid;
 		/**
-		 * If the pagename was a magic word it will be this, otherwise
-		 * <tt>null</tt>.
+		 * If the pagename was a magic word it will be this, otherwise <tt>null</tt>
+		 * .
 		 * 
 		 * The object type depends on the concrete
 		 * {@link info.bliki.wiki.filter.MagicWord} implementation used by the
@@ -788,15 +789,16 @@ public abstract class AbstractParser extends WikipediaScanner {
 		 * Parameters of the magic word (<tt>null</tt> if not supplied).
 		 */
 		public final String magicWordParameter;
+
 		/**
 		 * Creates a new parsed page name object (no magic word).
 		 * 
 		 * @param namespace
-		 *            the namespace the page is in
+		 *          the namespace the page is in
 		 * @param pagename
-		 *            the name of the page (without the namespace)
+		 *          the name of the page (without the namespace)
 		 * @param valid
-		 *            whether this pagename was successfully parsed or not
+		 *          whether this pagename was successfully parsed or not
 		 */
 		public ParsedPageName(INamespaceValue namespace, String pagename, boolean valid) {
 			this.namespace = namespace;
@@ -805,22 +807,21 @@ public abstract class AbstractParser extends WikipediaScanner {
 			this.magicWord = null;
 			this.magicWordParameter = null;
 		}
-		
+
 		/**
 		 * Creates a new parsed page name object.
 		 * 
 		 * @param namespace
-		 *            the namespace the page is in
+		 *          the namespace the page is in
 		 * @param pagename
-		 *            the name of the page (without the namespace)
+		 *          the name of the page (without the namespace)
 		 * @param magicWord
-		 *            the magic word object if the pagename was a magic word,
-		 *            otherwise <tt>null</tt>
+		 *          the magic word object if the pagename was a magic word,
+		 *          otherwise <tt>null</tt>
 		 * @param magicWordParameter
-		 *            parameters of the magic word (<tt>null</tt> if not
-		 *            supplied)
+		 *          parameters of the magic word (<tt>null</tt> if not supplied)
 		 * @param valid
-		 *            whether this pagename was successfully parsed or not
+		 *          whether this pagename was successfully parsed or not
 		 */
 		public ParsedPageName(INamespaceValue namespace, String pagename, Object magicWord, String magicWordParameter, boolean valid) {
 			this.namespace = namespace;
@@ -830,26 +831,27 @@ public abstract class AbstractParser extends WikipediaScanner {
 			this.magicWordParameter = magicWordParameter;
 		}
 	}
-	
+
 	/**
 	 * Parses a given page name into its components, e.g. namespace and pagename
 	 * or magic word and parameters.
 	 * 
 	 * @param wikiModel
-	 *            the wiki model to use
+	 *          the wiki model to use
 	 * @param pagename
-	 *            the name in wiki text
+	 *          the name in wiki text
 	 * @param namespace
-	 *            the default namespace to use if there is no namespace in the
-	 *            pagename
+	 *          the default namespace to use if there is no namespace in the
+	 *          pagename
 	 * @param magicWordAllowed
-	 *            whether the <tt>pagename</tt> may be a magic word or not (if
-	 *            it is a magic word and this is set to <tt>false</tt>, it will
-	 *            be parsed as if it is a page name)
+	 *          whether the <tt>pagename</tt> may be a magic word or not (if it is
+	 *          a magic word and this is set to <tt>false</tt>, it will be parsed
+	 *          as if it is a page name)
 	 * 
 	 * @return a parsed page name
 	 */
-	public static ParsedPageName parsePageName(IWikiModel wikiModel, String pagename, INamespaceValue namespace, boolean magicWordAllowed, boolean stripOffSection) {
+	public static ParsedPageName parsePageName(IWikiModel wikiModel, String pagename, INamespaceValue namespace,
+			boolean magicWordAllowed, boolean stripOffSection) {
 		// if a magic word is recognised, it will be non-null:
 		Object magicWord = null;
 		String magicWordParameter = null;
@@ -863,7 +865,7 @@ public abstract class AbstractParser extends WikipediaScanner {
 			namespace = wikiModel.getNamespace().getMain();
 			pagename = pagename.substring(1);
 		}
-		
+
 		if (stripOffSection) {
 			// parse away any "#label" markers which are not supported
 			int hashIndex = pagename.indexOf('#');
@@ -871,15 +873,13 @@ public abstract class AbstractParser extends WikipediaScanner {
 				pagename = pagename.substring(0, hashIndex);
 			}
 		}
-		
+
 		int indx = pagename.indexOf(':');
 		if (indx > 0) {
 			String maybeNamespaceStr0 = pagename.substring(0, indx);
-			INamespaceValue maybeNamespace = wikiModel.getNamespace()
-					.getNamespace(maybeNamespaceStr0);
+			INamespaceValue maybeNamespace = wikiModel.getNamespace().getNamespace(maybeNamespaceStr0);
 			if (maybeNamespace != null) {
-				return new ParsedPageName(maybeNamespace,
-						pagename.substring(indx + 1), true);
+				return new ParsedPageName(maybeNamespace, pagename.substring(indx + 1), true);
 			} else if (magicWordAllowed) {
 				// no namespace? maybe a magic word with a parameter?
 				magicWord = wikiModel.getMagicWord(maybeNamespaceStr0);
@@ -901,18 +901,30 @@ public abstract class AbstractParser extends WikipediaScanner {
 
 	public static String getRedirectedTemplateContent(IWikiModel wikiModel, String redirectedLink,
 			Map<String, String> templateParameters) {
+		final INamespace namespace = wikiModel.getNamespace();
+		ParsedPageName parsedPagename = AbstractParser.parsePageName(wikiModel, redirectedLink, namespace.getMain(), false, false);
+		// note: don't just get redirect content if the namespace is the template
+		// namespace!
+		if (!parsedPagename.valid) {
+			return null;
+		}
+		return getRedirectedRawContent(wikiModel, parsedPagename, templateParameters);
+	}
+
+	public static String getRedirectedRawContent(IWikiModel wikiModel, ParsedPageName parsedPagename,
+			Map<String, String> templateParameters) {
 		try {
-			final INamespace namespace = wikiModel.getNamespace();
-			ParsedPageName parsedPagename = AbstractParser.parsePageName(wikiModel, redirectedLink, namespace.getMain(), false, false);
-			// note: don't just get redirect content if the namespace is the template namespace!
-			if (!parsedPagename.valid) {
-				return null;
+			int level = wikiModel.incrementRecursionLevel(); 
+			if (level > Configuration.PARSER_RECURSION_LIMIT || !parsedPagename.valid) {
+				return "<span class=\"error\">Error - getting content of redirected link: " + parsedPagename.namespace + ":"
+						+ parsedPagename.pagename + "<span>";
 			}
-			int level = wikiModel.incrementRecursionLevel();
-			if (level > Configuration.PARSER_RECURSION_LIMIT) {
-				return "Error - getting content of redirected template link: " + parsedPagename.namespace + ":" + parsedPagename.pagename;
+			try { 
+				return wikiModel.getRawWikiContent(parsedPagename, templateParameters);
+			} catch (WikiModelContentException e) {
+				return "<span class=\"error\">Error - getting content of redirected link: " + parsedPagename.namespace + ":"
+						+ parsedPagename.pagename + "<span>";
 			}
-			return wikiModel.getRawWikiContent(parsedPagename, templateParameters);
 		} finally {
 			wikiModel.decrementRecursionLevel();
 		}

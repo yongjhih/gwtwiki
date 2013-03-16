@@ -15,7 +15,7 @@ public class WPLinkFilterTest extends FilterTestSupport {
 		return new TestSuite(WPLinkFilterTest.class);
 	}
 	
-		public void testIssue136() {
+  public void testIssue136() {
 		assertEquals(
 				"\n" + 
 				"<p><a href=\"http://www.bliki.info/wiki/Test:http://somesite.org\" title=\"Test:http://somesite.org\">Test:http://somesite.org</a></p>",
@@ -24,6 +24,7 @@ public class WPLinkFilterTest extends FilterTestSupport {
 								"[[Test:http://somesite.org]]",
 								false));
 	}
+  
 	public void testLinkHash() {
 		assertEquals(
 				"\n"

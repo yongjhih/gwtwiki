@@ -6,6 +6,7 @@ import info.bliki.wiki.filter.AbstractParser.ParsedPageName;
 import info.bliki.wiki.filter.TemplateParser;
 import info.bliki.wiki.filter.Util;
 import info.bliki.wiki.model.IWikiModel;
+import info.bliki.wiki.model.WikiModelContentException;
 import info.bliki.wiki.namespaces.INamespace;
 
 import java.io.IOException;
@@ -77,8 +78,12 @@ public class Safesubst extends AbstractTemplateFunction {
 		if (!parsedPagename.valid) {
 			return "{{" + parsedPagename.pagename + "}}";
 		}
-		
-		String plainContent = model.getRawWikiContent(parsedPagename, parameterMap);
+
+		String plainContent = null;
+		try {
+			plainContent = model.getRawWikiContent(parsedPagename, parameterMap);
+		} catch (WikiModelContentException e) {
+		}
 		if (plainContent != null) {
 			return Safesubst.parsePreprocess(plainContent, model, parameterMap);
 		}

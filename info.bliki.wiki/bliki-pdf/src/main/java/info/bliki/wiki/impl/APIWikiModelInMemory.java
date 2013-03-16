@@ -7,6 +7,7 @@ import info.bliki.wiki.filter.AbstractParser.ParsedPageName;
 import info.bliki.wiki.model.Configuration;
 import info.bliki.wiki.model.ImageFormat;
 import info.bliki.wiki.model.WikiModel;
+import info.bliki.wiki.model.WikiModelContentException;
 import info.bliki.wiki.namespaces.INamespace.NamespaceCode;
 import info.bliki.wiki.tags.WPATag;
 
@@ -24,7 +25,7 @@ public class APIWikiModelInMemory extends WikiModel
     }
 
     @Override
-    public String getRawWikiContent(ParsedPageName parsedPagename, Map<String, String> templateParameters) {
+    public String getRawWikiContent(ParsedPageName parsedPagename, Map<String, String> templateParameters) throws WikiModelContentException {
         final String result = super.getRawWikiContent(parsedPagename, templateParameters);
         if(result != null) {
             return result;

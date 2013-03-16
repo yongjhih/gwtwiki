@@ -1343,7 +1343,7 @@ public class TemplateFilterTest extends FilterTestSupport {
 	 */
 	public void testTemplateCache004() {
 		String foodate = wikiModel.render("{{FOODATE}}", false);
-		System.out.println(foodate);
+		System.out.println("testTemplateCache004: "+foodate);
 		try {
 			Thread.sleep(1);
 		} catch (InterruptedException e) {
@@ -1357,7 +1357,7 @@ public class TemplateFilterTest extends FilterTestSupport {
 	 */
 	public void testTemplateCache005() {
 		String foodate = wikiModel.render("{{Template:FOODATE}}", false);
-		System.out.println(foodate);
+		System.out.println("testTemplateCache005: "+foodate);
 		try {
 			Thread.sleep(1);
 		} catch (InterruptedException e) {

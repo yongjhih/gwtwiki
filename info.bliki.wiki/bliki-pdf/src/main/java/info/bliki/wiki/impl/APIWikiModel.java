@@ -15,6 +15,7 @@ import info.bliki.wiki.filter.AbstractParser.ParsedPageName;
 import info.bliki.wiki.model.Configuration;
 import info.bliki.wiki.model.ImageFormat;
 import info.bliki.wiki.model.WikiModel;
+import info.bliki.wiki.model.WikiModelContentException;
 import info.bliki.wiki.namespaces.INamespace.NamespaceCode;
 import info.bliki.wiki.tags.WPATag;
 
@@ -126,7 +127,8 @@ public class APIWikiModel extends WikiModel {
 	 * @see info.bliki.api.User#queryContent(String[])
 	 */
 	@Override
-	public String getRawWikiContent(ParsedPageName parsedPagename, Map<String, String> templateParameters) {
+	public String getRawWikiContent(ParsedPageName parsedPagename, Map<String, String> templateParameters)
+			throws WikiModelContentException {
 		String result = super.getRawWikiContent(parsedPagename, templateParameters);
 		if (result != null) {
 			// found magic word template
@@ -167,13 +169,21 @@ public class APIWikiModel extends WikiModel {
 				}
 				return content;
 			} catch (Exception e) {
-				e.printStackTrace();
+				if (Configuration.DEBUG) {
+					e.printStackTrace();
+				}
+				String temp = e.getMessage();
+				if (temp != null) {
+					throw new WikiModelContentException("<span class=\"error\">Exception: " + temp + "</span>", e);
+				}
+				throw new WikiModelContentException("<span class=\"error\">Exception: " + e.getClass().getSimpleName() + "</span>", e);
+
 			}
 		}
 		return null;
 	}
 
-	public String getRedirectedWikiContent(String rawWikitext, Map<String, String> templateParameters) {
+	private String getRedirectedWikiContent(String rawWikitext, Map<String, String> templateParameters) {
 		if (rawWikitext.length() < 9) {
 			// less than "#REDIRECT" string
 			return rawWikitext;
@@ -181,16 +191,28 @@ public class APIWikiModel extends WikiModel {
 		String redirectedLink = WikipediaParser.parseRedirect(rawWikitext, this);
 		if (redirectedLink != null) {
 			ParsedPageName redirParsedPage = AbstractParser.parsePageName(this, redirectedLink, fNamespace.getTemplate(), true, true);
-			try {
-				int level = incrementRecursionLevel();
-				// TODO: what to do if parsing the title failed due to invalid syntax?
-				if (level > Configuration.PARSER_RECURSION_LIMIT || !redirParsedPage.valid) {
-					return "Error - getting content of redirected link: " + redirParsedPage.namespace + ":" + redirParsedPage.pagename;
-				}
-				return getRawWikiContent(redirParsedPage, templateParameters);
-			} finally {
-				decrementRecursionLevel();
-			}
+			AbstractParser.getRedirectedRawContent(this, redirParsedPage, templateParameters);
+			// try {
+			// int level = incrementRecursionLevel();
+			// // TODO: what to do if parsing the title failed due to invalid syntax?
+			// if (level > Configuration.PARSER_RECURSION_LIMIT ||
+			// !redirParsedPage.valid) {
+			// return
+			// "<span class=\"error\">Error - getting content of redirected link: " +
+			// redirParsedPage.namespace + ":"
+			// + redirParsedPage.pagename + "<span>";
+			// }
+			// try {
+			// return getRawWikiContent(redirParsedPage, templateParameters);
+			// } catch (WikiModelException e) {
+			// return
+			// "<span class=\"error\">Error - getting content of redirected link: " +
+			// redirParsedPage.namespace + ":"
+			// + redirParsedPage.pagename + "<span>";
+			// }
+			// } finally {
+			// decrementRecursionLevel();
+			// }
 		}
 		return rawWikitext;
 	}
@@ -269,47 +291,48 @@ public class APIWikiModel extends WikiModel {
 		}
 	}
 
-//	public void appendInternalLink(String topic, String hashSection, String topicDescription, String cssClass, boolean parseRecursive) {
-//		// WPATag aTagNode = new WPATag();
-//		// append(aTagNode);
-//		// aTagNode.addAttribute("id", "w", true);
-//		// String href = topic;
-//		// if (hashSection != null) {
-//		// href = href + '#' + hashSection;
-//		// }
-//		// aTagNode.addAttribute("href", href, true);
-//		// if (cssClass != null) {
-//		// aTagNode.addAttribute("class", cssClass, true);
-//		// }
-//		// aTagNode.addObjectAttribute("wikilink", topic);
-//		//
-//		// // Show only descriptions no internal wiki links
-//		// ContentToken text = new ContentToken(topicDescription);
-//		// // append(text);
-//		// aTagNode.addChild(text);
-//		String description = topicDescription.trim();
-//		WPATag aTagNode = new WPATag();
-//		// append(aTagNode);
-//		aTagNode.addAttribute("id", "w", true);
-//		String href = topic;
-//		if (hashSection != null) {
-//			href = href + '#' + hashSection;
-//		}
-//		aTagNode.addAttribute("href", href, true);
-//		if (cssClass != null) {
-//			aTagNode.addAttribute("class", cssClass, true);
-//		}
-//		aTagNode.addObjectAttribute("wikilink", topic);
-//		pushNode(aTagNode);
-//		if (parseRecursive) {
-//			WikipediaPreTagParser.parseRecursive(description, this, false, true);
-//		} else {
-//			aTagNode.addChild(new ContentToken(description));
-//		}
-//		popNode();
-//		// ContentToken text = new ContentToken(topicDescription);
-//		// aTagNode.addChild(text);
-//	}
+	// public void appendInternalLink(String topic, String hashSection, String
+	// topicDescription, String cssClass, boolean parseRecursive) {
+	// // WPATag aTagNode = new WPATag();
+	// // append(aTagNode);
+	// // aTagNode.addAttribute("id", "w", true);
+	// // String href = topic;
+	// // if (hashSection != null) {
+	// // href = href + '#' + hashSection;
+	// // }
+	// // aTagNode.addAttribute("href", href, true);
+	// // if (cssClass != null) {
+	// // aTagNode.addAttribute("class", cssClass, true);
+	// // }
+	// // aTagNode.addObjectAttribute("wikilink", topic);
+	// //
+	// // // Show only descriptions no internal wiki links
+	// // ContentToken text = new ContentToken(topicDescription);
+	// // // append(text);
+	// // aTagNode.addChild(text);
+	// String description = topicDescription.trim();
+	// WPATag aTagNode = new WPATag();
+	// // append(aTagNode);
+	// aTagNode.addAttribute("id", "w", true);
+	// String href = topic;
+	// if (hashSection != null) {
+	// href = href + '#' + hashSection;
+	// }
+	// aTagNode.addAttribute("href", href, true);
+	// if (cssClass != null) {
+	// aTagNode.addAttribute("class", cssClass, true);
+	// }
+	// aTagNode.addObjectAttribute("wikilink", topic);
+	// pushNode(aTagNode);
+	// if (parseRecursive) {
+	// WikipediaPreTagParser.parseRecursive(description, this, false, true);
+	// } else {
+	// aTagNode.addChild(new ContentToken(description));
+	// }
+	// popNode();
+	// // ContentToken text = new ContentToken(topicDescription);
+	// // aTagNode.addChild(text);
+	// }
 
 	public void parseInternalImageLink(String imageNamespace, String rawImageLink) {
 		String imageSrc = getImageBaseURL();

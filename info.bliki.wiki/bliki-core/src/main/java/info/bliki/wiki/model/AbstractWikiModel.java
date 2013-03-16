@@ -1054,7 +1054,7 @@ public abstract class AbstractWikiModel implements IWikiModel, IContext {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public String getRawWikiContent(ParsedPageName parsedPagename, Map<String, String> templateParameters) {
+	public String getRawWikiContent(ParsedPageName parsedPagename, Map<String, String> templateParameters) throws WikiModelContentException {
 		INamespaceValue namespace = parsedPagename.namespace;
 		String templateName = parsedPagename.pagename;
 		if (Configuration.RAW_CONTENT) {
@@ -1746,7 +1746,13 @@ public abstract class AbstractWikiModel implements IWikiModel, IContext {
 				templateCallsCache = null;
 			}
 
-			String plainContent = getRawWikiContent(parsedPagename, parameterMap);
+			String plainContent=null;;
+			try {
+				plainContent = getRawWikiContent(parsedPagename, parameterMap);
+			} catch (WikiModelContentException wme) {
+				writer.append( wme.getMessage());
+				return;
+			}
 			if (plainContent == null) {
 				// content of this transclusion is missing => render as link:
 				plainContent = "[[:" + fullTemplateStr + "]]";
