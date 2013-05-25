@@ -106,7 +106,7 @@ public class WikiXMLParser extends DefaultHandler {
 
 		} else if (wikiDumpFilename.endsWith(".bz2")) {
 			FileInputStream fis = new FileInputStream(wikiDumpFilename);
-			br = new BufferedReader(new InputStreamReader(new BZip2CompressorInputStream(fis), "UTF-8"));
+			br = new BufferedReader(new InputStreamReader(new BZip2CompressorInputStream(fis, true), "UTF-8"));
 		} else {
 			br = new BufferedReader(new InputStreamReader(new FileInputStream(wikiDumpFilename), "UTF-8"));
 		}
