@@ -75,7 +75,10 @@ public class XMLSearchParser extends AbstractXMLParser {
 			fSearchResult.setTimestamp(fAttributes.getValue(TIMESTAMP_ID));
 			fSearchResult.setWordCount(fAttributes.getValue(WORDCOUNT_ID));
 		} else if (SEARCH_TAG.equals(qName)) {
-			srOffset = fAttributes.getValue(SROFFSET_ID);
+			String value = fAttributes.getValue(SROFFSET_ID);
+			if (value != null) {
+				srOffset = value;
+			}
 		}
 		fData = null;
 	}

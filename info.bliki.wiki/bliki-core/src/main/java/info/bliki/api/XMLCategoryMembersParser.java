@@ -63,7 +63,8 @@ public class XMLCategoryMembersParser extends AbstractXMLParser {
 	}
 
 	@Override
-	public void startElement(String namespaceURI, String localName, String qName, Attributes atts) {
+	public void startElement(String namespaceURI, String localName,
+			String qName, Attributes atts) {
 		fAttributes = atts;
 
 		if (CM_TAG.equals(qName)) {
@@ -72,7 +73,10 @@ public class XMLCategoryMembersParser extends AbstractXMLParser {
 			fPage.setNs(fAttributes.getValue(AbstractXMLParser.NS_ID));
 			fPage.setTitle(fAttributes.getValue(AbstractXMLParser.TITLE_ID));
 		} else if (CATEGORYMEMBERS_TAG.equals(qName)) {
-			cmContinue = fAttributes.getValue(CMCONTINUE_ID);
+			String value = fAttributes.getValue(CMCONTINUE_ID);
+			if (value != null) {
+				cmContinue = value;
+			}
 		}
 		fData = null;
 	}
