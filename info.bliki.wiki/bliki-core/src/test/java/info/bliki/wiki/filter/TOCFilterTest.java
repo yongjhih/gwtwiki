@@ -27,11 +27,11 @@ public class TOCFilterTest extends FilterTestSupport {
 				"<ul>\n" + 
 				"<ul>\n" + 
 				"<li class=\"toclevel-1\"><a href=\"#hello_world_2\">hello world 2</a>\n" + 
-				"</li>\n" + 
 				"<ul>\n" + 
 				"<li class=\"toclevel-2\"><a href=\"#hello_world3\">hello world3</a>\n" + 
 				"</li>\n" + 
 				"</ul>\n" + 
+				"</li>\n" + 
 				"</ul>\n" + 
 				"</ul></td></tr></table><hr/>\n" + 
 				" </td></tr></table></div>\n" + 
@@ -57,13 +57,13 @@ public class TOCFilterTest extends FilterTestSupport {
 				"</div>\n" + 
 				"<ul>\n" + 
 				"<li class=\"toclevel-1\"><a href=\"#hello_world_1\">hello world 1</a>\n" + 
-				"</li>\n" + 
 				"<ul>\n" + 
 				"<li class=\"toclevel-2\"><a href=\"#hello_world_2\">hello world 2</a>\n" + 
 				"</li>\n" + 
 				"<li class=\"toclevel-2\"><a href=\"#hello_world1a\">hello world1a</a>\n" + 
 				"</li>\n" + 
 				"</ul>\n" + 
+				"</li>\n" + 
 				"</ul></td></tr></table><hr/>\n" + 
 				"</td></tr></table></div>\n" + 
 				"\n" + 
@@ -96,17 +96,17 @@ public class TOCFilterTest extends FilterTestSupport {
 				"</div>\n" + 
 				"<ul>\n" + 
 				"<li class=\"toclevel-1\"><a href=\"#hello_world_1\">hello world 1</a>\n" + 
-				"</li>\n" + 
 				"<ul>\n" + 
 				"<li class=\"toclevel-2\"><a href=\"#hello_world_2\">hello world 2</a>\n" + 
 				"</li>\n" + 
 				"<li class=\"toclevel-2\"><a href=\"#hello_world_3\">hello world 3</a>\n" + 
-				"</li>\n" + 
 				"<ul>\n" + 
 				"<li class=\"toclevel-3\"><a href=\"#hello_world_4\">hello world 4</a>\n" + 
 				"</li>\n" + 
 				"</ul>\n" + 
+				"</li>\n" + 
 				"</ul>\n" + 
+				"</li>\n" + 
 				"</ul></td></tr></table><hr/>\n" + 
 				"<h1><span class=\"mw-headline\" id=\"hello_world_1\">hello world 1</span></h1>\n" + 
 				"<p>hello world 1</p>\n" + 

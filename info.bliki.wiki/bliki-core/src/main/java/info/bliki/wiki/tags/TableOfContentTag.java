@@ -17,7 +17,8 @@ import java.util.List;
  * article
  * 
  */
-public class TableOfContentTag extends HTMLTag implements IBodyTag, ITableOfContent {
+public class TableOfContentTag extends HTMLTag implements IBodyTag,
+		ITableOfContent {
 	private List<Object> fTableOfContent = null;
 
 	private boolean fShowToC;
@@ -31,12 +32,16 @@ public class TableOfContentTag extends HTMLTag implements IBodyTag, ITableOfCont
 	}
 
 	@Override
-	public void renderHTML(ITextConverter converter, Appendable writer, IWikiModel model) throws IOException {
+	public void renderHTML(ITextConverter converter, Appendable writer,
+			IWikiModel model) throws IOException {
 		if (fShowToC && fTableOfContent != null && fTableOfContent.size() > 0) {
-			String contentString = Messages.getString(model.getResourceBundle(), Messages.WIKI_TAGS_TOC_CONTENT, "Contents");
+			String contentString = Messages.getString(
+					model.getResourceBundle(), Messages.WIKI_TAGS_TOC_CONTENT,
+					"Contents");
 			writer.append("<table id=\"toc\" class=\"toc\" summary=\"");
 			writer.append(contentString);
-			writer.append("\">\n" + "<tr>\n" + "<td>\n" + "<div id=\"toctitle\">\n" + "<h2>");
+			writer.append("\">\n" + "<tr>\n" + "<td>\n"
+					+ "<div id=\"toctitle\">\n" + "<h2>");
 			writer.append(contentString);
 			writer.append("</h2>\n</div>");
 			renderToC(writer, fTableOfContent, 0);
@@ -44,11 +49,17 @@ public class TableOfContentTag extends HTMLTag implements IBodyTag, ITableOfCont
 		}
 	}
 
-	private void renderToC(Appendable writer, List<Object> toc, int level) throws IOException {
+	private void renderToC(Appendable writer, List<Object> toc, int level)
+			throws IOException {
 		writer.append("\n<ul>");
 		boolean counted = false;
+		boolean setLI = false;
 		for (Object tocItem : toc) {
 			if (tocItem instanceof SectionHeader) {
+				if (setLI) {
+					setLI = false;
+					writer.append("\n</li>");
+				}
 				if (!counted) {
 					level++;
 					counted = true;
@@ -56,13 +67,24 @@ public class TableOfContentTag extends HTMLTag implements IBodyTag, ITableOfCont
 				SectionHeader pair = (SectionHeader) tocItem;
 				String head = Encoder.encodeHtml(pair.getFirst());
 				String anchor = pair.getSecond();
-				writer.append("\n<li class=\"toclevel-").append(Integer.toString(level)).append("\"><a href=\"#").append(anchor).append(
-						"\">").append(head).append("</a>\n</li>");
+				writer.append("\n<li class=\"toclevel-")
+						.append(Integer.toString(level))
+						.append("\"><a href=\"#").append(anchor).append("\">")
+						.append(head).append("</a>");
+				setLI = true;
 			} else {
 				@SuppressWarnings("unchecked")
 				final List<Object> list = (List<Object>) tocItem;
 				renderToC(writer, list, level);
+				if (setLI) {
+					setLI = false;
+					writer.append("\n</li>");
+				}
 			}
+
+		}
+		if (setLI) {
+			writer.append("\n</li>");
 		}
 		writer.append("\n</ul>");
 	}
@@ -80,7 +102,7 @@ public class TableOfContentTag extends HTMLTag implements IBodyTag, ITableOfCont
 	 * Enable or disable the rendering of the &quot;table of content&quot;
 	 * 
 	 * @param showToC
-	 *          if <code>true</code> render the &quot;table of content&quot;
+	 *            if <code>true</code> render the &quot;table of content&quot;
 	 */
 	@Override
 	public void setShowToC(boolean showToC) {
@@ -122,7 +144,8 @@ public class TableOfContentTag extends HTMLTag implements IBodyTag, ITableOfCont
 		return resultList;
 	}
 
-	private void extractSectionHeaders(List<Object> toc, List<SectionHeader> resultList) {
+	private void extractSectionHeaders(List<Object> toc,
+			List<SectionHeader> resultList) {
 		for (Object tocItem : toc) {
 			if (tocItem instanceof SectionHeader) {
 				SectionHeader header = (SectionHeader) tocItem;
