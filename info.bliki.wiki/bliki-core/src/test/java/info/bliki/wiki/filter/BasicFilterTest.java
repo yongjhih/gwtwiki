@@ -296,6 +296,10 @@ public class BasicFilterTest extends FilterTestSupport {
 				"<abbr title=\"<nowiki>test</nowiki>\">[?]</abbr>", false));
 	}
 
+	public void testIFrame01() {
+		assertEquals("<iframe height=\"180\" name=\"inlineframe\" src=\"float.html\" width=\"500\"> </iframe>", wikiModel.render("<iframe name=\"inlineframe\" src=\"float.html\" frameborder=\"0\" scrolling=\"auto\" width=\"500\" height=\"180\" marginwidth=\"5\" marginheight=\"5\" >&nbsp;</iframe>", false));
+	}
+	
 	// TODO: should this work, too?!
 	// public void testAbbr03() {
 	// assertEquals("\n" + "<p>" + "<abbr title=\"test\">[?]</abbr></p>",
