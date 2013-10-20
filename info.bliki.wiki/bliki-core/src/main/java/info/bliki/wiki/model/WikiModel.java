@@ -50,32 +50,35 @@ public class WikiModel extends AbstractWikiModel {
 	/**
 	 * 
 	 * @param imageBaseURL
-	 *          a url string which must contains a &quot;${image}&quot; variable
-	 *          which will be replaced by the image name, to create links to
-	 *          images.
+	 *            a url string which must contains a &quot;${image}&quot;
+	 *            variable which will be replaced by the image name, to create
+	 *            links to images.
 	 * @param linkBaseURL
-	 *          a url string which must contains a &quot;${title}&quot; variable
-	 *          which will be replaced by the topic title, to create links to
-	 *          other wiki topics.
+	 *            a url string which must contains a &quot;${title}&quot;
+	 *            variable which will be replaced by the topic title, to create
+	 *            links to other wiki topics.
 	 */
 	public WikiModel(String imageBaseURL, String linkBaseURL) {
 		this(Configuration.DEFAULT_CONFIGURATION, imageBaseURL, linkBaseURL);
 	}
 
-	public WikiModel(Configuration configuration, String imageBaseURL, String linkBaseURL) {
+	public WikiModel(Configuration configuration, String imageBaseURL,
+			String linkBaseURL) {
 		super(configuration);
 		fExternalImageBaseURL = imageBaseURL;
 		fExternalWikiBaseURL = linkBaseURL;
 	}
 
-	public WikiModel(Configuration configuration, Locale locale, String imageBaseURL, String linkBaseURL) {
+	public WikiModel(Configuration configuration, Locale locale,
+			String imageBaseURL, String linkBaseURL) {
 		super(configuration, locale);
 		fExternalImageBaseURL = imageBaseURL;
 		fExternalWikiBaseURL = linkBaseURL;
 	}
 
-	public WikiModel(Configuration configuration, Locale locale, ResourceBundle resourceBundle, INamespace namespace, String imageBaseURL,
-			String linkBaseURL) {
+	public WikiModel(Configuration configuration, Locale locale,
+			ResourceBundle resourceBundle, INamespace namespace,
+			String imageBaseURL, String linkBaseURL) {
 		super(configuration, locale, resourceBundle, namespace);
 		fExternalImageBaseURL = imageBaseURL;
 		fExternalWikiBaseURL = linkBaseURL;
@@ -105,7 +108,8 @@ public class WikiModel extends AbstractWikiModel {
 		if (semanticAttributes == null) {
 			semanticAttributes = new ArrayList<SemanticAttribute>();
 		}
-		semanticAttributes.add(new SemanticAttribute(attribute, attributeValue));
+		semanticAttributes
+				.add(new SemanticAttribute(attribute, attributeValue));
 		return true;
 	}
 
@@ -141,19 +145,23 @@ public class WikiModel extends AbstractWikiModel {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void appendInternalLink(String topic, String hashSection, String topicDescription, String cssClass, boolean parseRecursive) {
-		appendInternalLink(topic, hashSection, topicDescription, cssClass, parseRecursive, true);
+	public void appendInternalLink(String topic, String hashSection,
+			String topicDescription, String cssClass, boolean parseRecursive) {
+		appendInternalLink(topic, hashSection, topicDescription, cssClass,
+				parseRecursive, true);
 	}
 
-	protected void appendInternalLink(String topic, String hashSection, String topicDescription,
-			String cssClass, boolean parseRecursive, boolean topicExists) {
+	protected void appendInternalLink(String topic, String hashSection,
+			String topicDescription, String cssClass, boolean parseRecursive,
+			boolean topicExists) {
 		String hrefLink;
 		String description = topicDescription.trim();
 		WPATag aTagNode = new WPATag();
 		if (topic.length() > 0) {
 			String title = Encoder.normaliseTitle(topic, true, ' ', true);
 			if (hashSection == null) {
-				String pageName = Encoder.normaliseTitle(fPageTitle, true, ' ', true);
+				String pageName = Encoder.normaliseTitle(fPageTitle, true, ' ',
+						true);
 				// self link?
 				if (title.equals(pageName)) {
 					HTMLTag selfLink = new HTMLTag("strong");
@@ -164,7 +172,7 @@ public class WikiModel extends AbstractWikiModel {
 					return;
 				}
 			}
-			
+
 			String encodedtopic = encodeTitleToUrl(topic, true);
 			if (replaceColon()) {
 				encodedtopic = encodedtopic.replace(':', '/');
@@ -181,7 +189,8 @@ public class WikiModel extends AbstractWikiModel {
 				}
 				hrefLink += "action=edit&redlink=1";
 				String redlinkString = Messages.getString(getResourceBundle(),
-						Messages.WIKI_TAGS_RED_LINK, "${title} (page does not exist)");
+						Messages.WIKI_TAGS_RED_LINK,
+						"${title} (page does not exist)");
 				title = redlinkString.replace("${title}", title);
 			}
 			aTagNode.addAttribute("title", title, true);
@@ -209,7 +218,8 @@ public class WikiModel extends AbstractWikiModel {
 
 		pushNode(aTagNode);
 		if (parseRecursive) {
-			WikipediaPreTagParser.parseRecursive(description, this, false, true);
+			WikipediaPreTagParser
+					.parseRecursive(description, this, false, true);
 		} else {
 			aTagNode.addChild(new ContentToken(description));
 		}
@@ -277,45 +287,37 @@ public class WikiModel extends AbstractWikiModel {
 	 * <b>Note</b>: the pipe symbol (i.e. &quot;|&quot;) splits the
 	 * <code>rawImageLink</code> into different segments. The first segment is
 	 * used as the <code>&lt;image-name&gt;</code> and typically ends with
-	 * extensions like <code>.png</code>, <code>.gif</code>, <code>.jpg</code> or
-	 * <code>.jpeg</code>.
+	 * extensions like <code>.png</code>, <code>.gif</code>, <code>.jpg</code>
+	 * or <code>.jpeg</code>.
 	 * 
 	 * <br/>
 	 * <br/>
 	 * <b>Note</b>: if the image link contains a "width" attribute, the filename
-	 * is constructed as <code>&lt;size&gt;px-&lt;image-name&gt;</code>, otherwise
-	 * it's only the <code>&lt;image-name&gt;</code>.
+	 * is constructed as <code>&lt;size&gt;px-&lt;image-name&gt;</code>,
+	 * otherwise it's only the <code>&lt;image-name&gt;</code>.
 	 * 
 	 * <br/>
 	 * <br/>
 	 * See <a href="http://en.wikipedia.org/wiki/Image_markup">Image markup</a>
-	 * and see <a href="http://www.mediawiki.org/wiki/Help:Images">Help:Images</a>
+	 * and see <a
+	 * href="http://www.mediawiki.org/wiki/Help:Images">Help:Images</a>
 	 * 
 	 * @param imageNamespace
-	 *          the image namespace
+	 *            the image namespace
 	 * @param rawImageLink
-	 *          the raw image link text without the surrounding
-	 *          <code>[[...]]</code>
+	 *            the raw image link text without the surrounding
+	 *            <code>[[...]]</code>
 	 */
 	@Override
-	public void parseInternalImageLink(String imageNamespace, String rawImageLink) {
+	public void parseInternalImageLink(String imageNamespace,
+			String rawImageLink) {
 		String imageSrc = getImageBaseURL();
 		if (imageSrc != null) {
 			String imageHref = getWikiBaseURL();
-			ImageFormat imageFormat = ImageFormat.getImageFormat(rawImageLink, imageNamespace);
+			ImageFormat imageFormat = ImageFormat.getImageFormat(rawImageLink,
+					imageNamespace);
 
-			String imageName = imageFormat.getFilename();
-			String sizeStr = imageFormat.getWidthStr();
-			if (sizeStr != null) {
-				imageName = sizeStr + '-' + imageName;
-			}
-			if (imageName.endsWith(".svg")) {
-				imageName += ".png";
-			}
-			imageName = Encoder.encodeUrl(imageName);
-			if (replaceColon()) {
-				imageName = imageName.replace(':', '/');
-			}
+			String imageName = createImageName(imageFormat);
 			String link = imageFormat.getLink();
 			if (link != null) {
 				if (link.length() == 0) {
@@ -327,9 +329,11 @@ public class WikiModel extends AbstractWikiModel {
 
 			} else {
 				if (replaceColon()) {
-					imageHref = imageHref.replace("${title}", imageNamespace + '/' + imageName);
+					imageHref = imageHref.replace("${title}", imageNamespace
+							+ '/' + imageName);
 				} else {
-					imageHref = imageHref.replace("${title}", imageNamespace + ':' + imageName);
+					imageHref = imageHref.replace("${title}", imageNamespace
+							+ ':' + imageName);
 				}
 			}
 			imageSrc = imageSrc.replace("${image}", imageName);
@@ -347,6 +351,22 @@ public class WikiModel extends AbstractWikiModel {
 				pushNode(new PTag());
 			}
 		}
+	}
+
+	protected String createImageName(ImageFormat imageFormat) {
+		String imageName = imageFormat.getFilename();
+		String sizeStr = imageFormat.getWidthStr();
+		if (sizeStr != null) {
+			imageName = sizeStr + '-' + imageName;
+		}
+		if (imageName.endsWith(".svg")) {
+			imageName += ".png";
+		}
+		imageName = Encoder.encodeUrl(imageName);
+		if (replaceColon()) {
+			imageName = imageName.replace(':', '/');
+		}
+		return imageName;
 	}
 
 	/**
@@ -383,77 +403,85 @@ public class WikiModel extends AbstractWikiModel {
 	 * Convert a given text in wiki notation into another format.
 	 * 
 	 * @param model
-	 *          a wiki model
+	 *            a wiki model
 	 * @param converter
-	 *          a text converter. <b>Note</b> the converter may be
-	 *          <code>null</code>, if you only would like to analyze the raw wiki
-	 *          text and don't need to convert. This speeds up the parsing
-	 *          process.
+	 *            a text converter. <b>Note</b> the converter may be
+	 *            <code>null</code>, if you only would like to analyze the raw
+	 *            wiki text and don't need to convert. This speeds up the
+	 *            parsing process.
 	 * @param rawWikiText
-	 *          a raw wiki text
+	 *            a raw wiki text
 	 * @param resultBuffer
-	 *          the buffer to which to append the resulting HTML code.
+	 *            the buffer to which to append the resulting HTML code.
 	 * @param templateTopic
-	 *          if <code>true</code>, render the wiki text as if a template topic
-	 *          will be displayed directly, otherwise render the text as if a
-	 *          common wiki topic will be displayed.
+	 *            if <code>true</code>, render the wiki text as if a template
+	 *            topic will be displayed directly, otherwise render the text as
+	 *            if a common wiki topic will be displayed.
 	 * @param parseTemplates
-	 *          parses the template expansion step (parses include, onlyinclude,
-	 *          includeonly etc)
+	 *            parses the template expansion step (parses include,
+	 *            onlyinclude, includeonly etc)
 	 * @throws IOException
 	 */
-	public static void toText(IWikiModel model, ITextConverter converter, String rawWikiText, Appendable resultBuffer,
-			boolean templateTopic, boolean parseTemplates) throws IOException {
-		model.render(converter, rawWikiText, resultBuffer, templateTopic, parseTemplates);
+	public static void toText(IWikiModel model, ITextConverter converter,
+			String rawWikiText, Appendable resultBuffer, boolean templateTopic,
+			boolean parseTemplates) throws IOException {
+		model.render(converter, rawWikiText, resultBuffer, templateTopic,
+				parseTemplates);
 	}
 
 	/**
 	 * Convert a given text in wiki notation into HTML text.
 	 * 
 	 * @param rawWikiText
-	 *          a raw wiki text
+	 *            a raw wiki text
 	 * @param resultBuffer
-	 *          the buffer to which to append the resulting HTML code.
+	 *            the buffer to which to append the resulting HTML code.
 	 * @param imageBaseURL
-	 *          a url string which must contains a &quot;${image}&quot; variable
-	 *          which will be replaced by the image name, to create links to
-	 *          images.
+	 *            a url string which must contains a &quot;${image}&quot;
+	 *            variable which will be replaced by the image name, to create
+	 *            links to images.
 	 * @param linkBaseURL
-	 *          a url string which must contains a &quot;${title}&quot; variable
-	 *          which will be replaced by the topic title, to create links to
-	 *          other wiki topics.
+	 *            a url string which must contains a &quot;${title}&quot;
+	 *            variable which will be replaced by the topic title, to create
+	 *            links to other wiki topics.
 	 * @throws IOException
 	 */
-	public static void toHtml(String rawWikiText, Appendable resultBuffer, String imageBaseURL, String linkBaseURL)
-			throws IOException {
-		toText(new WikiModel(imageBaseURL, linkBaseURL), new HTMLConverter(), rawWikiText, resultBuffer, false, false);
+	public static void toHtml(String rawWikiText, Appendable resultBuffer,
+			String imageBaseURL, String linkBaseURL) throws IOException {
+		toText(new WikiModel(imageBaseURL, linkBaseURL), new HTMLConverter(),
+				rawWikiText, resultBuffer, false, false);
 	}
 
 	/**
 	 * Convert a given text in wiki notation into HTML text.
 	 * 
 	 * @param rawWikiText
-	 *          a raw wiki text
+	 *            a raw wiki text
 	 * @param resultBuffer
-	 *          the buffer to which to append the resulting HTML code.
+	 *            the buffer to which to append the resulting HTML code.
 	 * @throws IOException
 	 */
-	public static void toHtml(String rawWikiText, Appendable resultBuffer) throws IOException {
-		toText(new WikiModel("/${image}", "/${title}"), new HTMLConverter(), rawWikiText, resultBuffer, false, false);
+	public static void toHtml(String rawWikiText, Appendable resultBuffer)
+			throws IOException {
+		toText(new WikiModel("/${image}", "/${title}"), new HTMLConverter(),
+				rawWikiText, resultBuffer, false, false);
 	}
 
 	/**
 	 * Convert a given text in wiki notation into HTML text.
 	 * 
 	 * @param rawWikiText
-	 *          a raw wiki text
+	 *            a raw wiki text
 	 * @return the resulting HTML text; nay returns <code>null</code>, if an
 	 *         <code>IOException</code> occured.
 	 */
 	public static String toHtml(String rawWikiText) {
 		try {
-			StringBuilder resultBuffer = new StringBuilder(rawWikiText.length() + rawWikiText.length() / 10);
-			toText(new WikiModel("/${image}", "/${title}"), new HTMLConverter(), rawWikiText, resultBuffer, false, false);
+			StringBuilder resultBuffer = new StringBuilder(rawWikiText.length()
+					+ rawWikiText.length() / 10);
+			toText(new WikiModel("/${image}", "/${title}"),
+					new HTMLConverter(), rawWikiText, resultBuffer, false,
+					false);
 			return resultBuffer.toString();
 		} catch (IOException e) {
 		}
