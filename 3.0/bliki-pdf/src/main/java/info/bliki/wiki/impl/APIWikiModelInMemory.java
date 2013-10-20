@@ -2,6 +2,7 @@ package info.bliki.wiki.impl;
 
 import info.bliki.api.Page;
 import info.bliki.api.User;
+import info.bliki.wiki.filter.Encoder;
 import info.bliki.wiki.filter.WikipediaParser;
 import info.bliki.wiki.model.Configuration;
 import info.bliki.wiki.model.ImageFormat;
@@ -17,16 +18,20 @@ public class APIWikiModelInMemory extends WikiModel {
 	private final User user;
 	private final Map<String, String> contentCache;
 
-	public APIWikiModelInMemory(User user, Locale locale, String imageBaseURL, String linkBaseURL, Map<String, String> contentCache) {
-		super(Configuration.DEFAULT_CONFIGURATION, locale, imageBaseURL, linkBaseURL);
+	public APIWikiModelInMemory(User user, Locale locale, String imageBaseURL,
+			String linkBaseURL, Map<String, String> contentCache) {
+		super(Configuration.DEFAULT_CONFIGURATION, locale, imageBaseURL,
+				linkBaseURL);
 		this.user = user;
 		this.contentCache = contentCache;
 	}
 
 	@Override
-	public String getRawWikiContent(String namespace, String articleName, Map<String, String> templateParameters)
+	public String getRawWikiContent(String namespace, String articleName,
+			Map<String, String> templateParameters)
 			throws WikiModelContentException {
-		final String result = super.getRawWikiContent(namespace, articleName, templateParameters);
+		final String result = super.getRawWikiContent(namespace, articleName,
+				templateParameters);
 		if (result != null) {
 			return result;
 		}
@@ -55,8 +60,8 @@ public class APIWikiModelInMemory extends WikiModel {
 	}
 
 	@Override
-	public void appendInternalLink(String topic, String hashSection, String topicDescription, String cssClass,
-			boolean isParseRecursive) {
+	public void appendInternalLink(String topic, String hashSection,
+			String topicDescription, String cssClass, boolean isParseRecursive) {
 		WPATag tagNode = new WPATag();
 		tagNode.addAttribute("id", "w", true);
 		String href = topic;
@@ -70,42 +75,19 @@ public class APIWikiModelInMemory extends WikiModel {
 		tagNode.addObjectAttribute("wikilink", topic);
 
 		pushNode(tagNode);
-		WikipediaParser.parseRecursive(topicDescription.trim(), this, false, true);
+		WikipediaParser.parseRecursive(topicDescription.trim(), this, false,
+				true);
 		popNode();
 	}
 
 	@Override
-	public void appendInternalImageLink(String hrefImageLink, String srcImageLink, ImageFormat imageFormat) {
-		super.appendInternalImageLink(normalizeImageName(hrefImageLink), normalizeImageName(srcImageLink), imageFormat);
+	public boolean isImageNamespace(String namespace) {
+		return (super.isImageNamespace(namespace) || namespace
+				.equalsIgnoreCase("File"));
 	}
 
 	@Override
-	public boolean isImageNamespace(String namespace) {
-		return (super.isImageNamespace(namespace) || namespace.equalsIgnoreCase("File"));
-	}
-
-	/**
-	 * TODO Why is the size and ".png" appended to the original image name/link?!
-	 * This bad method is only required to revert this strange modification...
-	 * 
-	 * @param imageLink
-	 * @return
-	 */
-	private static String normalizeImageName(String imageLink) {
-		final int sizeSplitPos = imageLink.indexOf('-');
-		String modifiedImageLink = imageLink;
-		if (sizeSplitPos > -1) {
-			final int typeSplitPos = imageLink.indexOf(':');
-			if (typeSplitPos > -1) {
-				String type = imageLink.substring(0, typeSplitPos + 1);
-				modifiedImageLink = type + imageLink.substring(sizeSplitPos + 1);
-			} else {
-				modifiedImageLink = imageLink.substring(sizeSplitPos + 1);
-			}
-		}
-		if (modifiedImageLink.endsWith(".svg.png")) {
-			modifiedImageLink = modifiedImageLink.substring(0, modifiedImageLink.length() - 4);
-		}
-		return modifiedImageLink;
+	protected String createImageName(ImageFormat imageFormat) {
+		return Encoder.encodeUrl(imageFormat.getFilename());
 	}
 }
