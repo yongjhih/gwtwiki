@@ -182,7 +182,6 @@ public abstract class AbstractParser extends WikipediaScanner {
 	 * Read until the end-of-line characters (i.e. '\r' or '\n') or the end of the
 	 * string is reached
 	 * 
-	 * @param fName
 	 * @return <code>true</code> if the end-of-line characters or the end of the
 	 *         string is reached
 	 * 

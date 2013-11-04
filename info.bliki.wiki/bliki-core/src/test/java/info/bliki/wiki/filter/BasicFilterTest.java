@@ -17,6 +17,15 @@ public class BasicFilterTest extends FilterTestSupport {
 		return new TestSuite(BasicFilterTest.class);
 	}
 
+	
+	/**
+	 * Issue 149
+	 */
+	public void testIssue149() {
+		assertEquals("\n" + 
+				"<p>mit <b>db2 connect to &#60;db&#62;</b> mit der Datenbank v</p>", wikiModel.render("mit '''db2 connect to <db>''' mit der Datenbank v", false));
+	}
+	
 	/**
 	 * Issue 135
 	 */
@@ -24,6 +33,7 @@ public class BasicFilterTest extends FilterTestSupport {
 		assertEquals("\n" + 
 				"<p>Test_</p>", wikiModel.render("Test_", false));
 	}
+	
 	/**
 	 * Issue 135
 	 */
