@@ -532,10 +532,10 @@ public class TemplateParser extends AbstractParser {
 						} else if (tagName.equals("pre")) {
 							readUntilIgnoreCase("</", "pre>");
 							return true;
-
-						} else if (tagName.equals("math")) {
-							readUntilIgnoreCase("</", "math>");
-							return true;
+// see issue#153
+//						} else if (tagName.equals("math")) {
+//							readUntilIgnoreCase("</", "math>");
+//							return true;
 						}
 					}
 				}
