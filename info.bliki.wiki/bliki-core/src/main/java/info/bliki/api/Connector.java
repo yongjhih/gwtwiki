@@ -445,7 +445,7 @@ public class Connector {
 		String title = editQuery.get("title");
 		if (title != null) {
 			List<Page> pages = queryInfoWithEditToken(user, title);
-			if (pages != null && pages.size() == 1 && pages.get(0).getPageid() != null) {
+			if (pages != null && pages.size() == 1) {
 				Page page = pages.get(0);
 				if (page.getEditToken() != null) {
 					// ok, edit token was received
