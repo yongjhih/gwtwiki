@@ -28,18 +28,18 @@ public interface IWikiModel extends IConfiguration {
 
 	/**
 	 * When an article contains a token indicating that the article belongs to a
-	 * specific category this method should be called to add that category to the
-	 * output metadata. For the <code>sortKey</code> see also <a href=
+	 * specific category this method should be called to add that category to
+	 * the output metadata. For the <code>sortKey</code> see also <a href=
 	 * "http://en.wikipedia.org/wiki/Wikipedia:Categorization#Category_sorting"
 	 * >Wikipedia:Categorization#Category_sorting</a>
 	 * 
 	 * @param categoryName
-	 *          The name of the category that the document belongs to.
+	 *            The name of the category that the document belongs to.
 	 * @param sortKey
-	 *          The sort key for the category, or <code>null</code> if no sort key
-	 *          has been specified. The sort key determines what order categories
-	 *          are sorted on category index pages, so a category for "John Doe"
-	 *          might be given a sort key of "Doe, John".
+	 *            The sort key for the category, or <code>null</code> if no sort
+	 *            key has been specified. The sort key determines what order
+	 *            categories are sorted on category index pages, so a category
+	 *            for "John Doe" might be given a sort key of "Doe, John".
 	 */
 	public void addCategory(String categoryName, String sortKey);
 
@@ -49,7 +49,7 @@ public interface IWikiModel extends IConfiguration {
 	 * the output metadata.
 	 * 
 	 * @param topicName
-	 *          The name of the topic that is linked to.
+	 *            The name of the topic that is linked to.
 	 */
 	public void addLink(String topicName);
 
@@ -79,8 +79,8 @@ public interface IWikiModel extends IConfiguration {
 	 * output metadata.
 	 * 
 	 * @param template
-	 *          The name of the template that is being included (excluding the
-	 *          template namespace).
+	 *            The name of the template that is being included (excluding the
+	 *            template namespace).
 	 */
 	public void addTemplate(String template);
 
@@ -92,8 +92,8 @@ public interface IWikiModel extends IConfiguration {
 	 * This excludes transcluded template pages.
 	 * 
 	 * @param pageName
-	 *          The name of the page that is being included (including its
-	 *          namespace).
+	 *            The name of the page that is being included (including its
+	 *            namespace).
 	 * 
 	 * @see #addTemplate(String)
 	 */
@@ -103,9 +103,10 @@ public interface IWikiModel extends IConfiguration {
 	 * Add a reference (i.e. footnote) to the internal list
 	 * 
 	 * @param reference
-	 *          the rendered HTML code of the ref-Tag body
+	 *            the rendered HTML code of the ref-Tag body
 	 * @param nameAttribute
-	 *          the value of the <code>name</code> attribute or <code>null</code>
+	 *            the value of the <code>name</code> attribute or
+	 *            <code>null</code>
 	 * @return the current offset (i.e. size()-1) of the element in the list
 	 */
 	public String[] addToReferences(String reference, String nameAttribute);
@@ -134,43 +135,44 @@ public interface IWikiModel extends IConfiguration {
 	 * Links</a>
 	 * 
 	 * @param uriSchemeName
-	 *          the top level URI (Uniform Resource Identifier) scheme name
-	 *          (without the following colon character ":"). Example "ftp",
-	 *          "http", "https". See <a
-	 *          href="http://en.wikipedia.org/wiki/URI_scheme">URI scheme</a>
+	 *            the top level URI (Uniform Resource Identifier) scheme name
+	 *            (without the following colon character ":"). Example "ftp",
+	 *            "http", "https". See <a
+	 *            href="http://en.wikipedia.org/wiki/URI_scheme">URI scheme</a>
 	 * @param link
-	 *          the external link with <code>http://, https:// or ftp://</code>
-	 *          prefix
+	 *            the external link with
+	 *            <code>http://, https:// or ftp://</code> prefix
 	 * @param linkName
-	 *          the link name which is separated from the URL by a space
+	 *            the link name which is separated from the URL by a space
 	 * @param withoutSquareBrackets
-	 *          if <code>true</code> a link with no square brackets around the
-	 *          link was parsed
+	 *            if <code>true</code> a link with no square brackets around the
+	 *            link was parsed
 	 */
-	public void appendExternalLink(String uriSchemeName, String link, String linkName, boolean withoutSquareBrackets);
+	public void appendExternalLink(String uriSchemeName, String link,
+			String linkName, boolean withoutSquareBrackets);
 
 	/**
 	 * Add a single wiki head (i.e. ==...==, ===...===, ====...====,...) to the
 	 * table of content
 	 * 
 	 * @param rawHead
-	 *          the unparsed header string
+	 *            the unparsed header string
 	 * @param headLevel
-	 *          level of header (i.e. h1, h2, h3, h4, 5h,..)
+	 *            level of header (i.e. h1, h2, h3, h4, 5h,..)
 	 * @param noToc
-	 *          don't show the &quot;table of content&quot;
+	 *            don't show the &quot;table of content&quot;
 	 * @param headCounter
-	 *          the total number of headers parsed
+	 *            the total number of headers parsed
 	 * @param startPosition
-	 *          the start index in the text where the header line of the section
-	 *          begins
+	 *            the start index in the text where the header line of the
+	 *            section begins
 	 * @param endPosition
-	 *          the start index in the text where the header line of the section
-	 *          ends
+	 *            the start index in the text where the header line of the
+	 *            section ends
 	 * @return the &quot;table of content&quot; tag
 	 */
-	public ITableOfContent appendHead(String rawHead, int headLevel, boolean noToC, int headCounter, int startPosition,
-			int endPosition);
+	public ITableOfContent appendHead(String rawHead, int headLevel,
+			boolean noToC, int headCounter, int startPosition, int endPosition);
 
 	/**
 	 * Append this internal wiki image link. In the current implementation some
@@ -181,7 +183,8 @@ public interface IWikiModel extends IConfiguration {
 	 * @param srcImageLink
 	 * @param imageFormat
 	 */
-	public void appendInternalImageLink(String hrefImageLink, String srcImageLink, ImageFormat imageFormat);
+	public void appendInternalImageLink(String hrefImageLink,
+			String srcImageLink, ImageFormat imageFormat);
 
 	/**
 	 * Append an internal wikilink as described in <a
@@ -191,11 +194,12 @@ public interface IWikiModel extends IConfiguration {
 	 * @param hashSection
 	 * @param topicDescription
 	 * @param cssClass
-	 *          the links CSS class style
+	 *            the links CSS class style
 	 * @param parseRecursive
-	 *          TODO
+	 *            TODO
 	 */
-	public void appendInternalLink(String topic, String hashSection, String topicDescription, String cssClass, boolean parseRecursive);
+	public void appendInternalLink(String topic, String hashSection,
+			String topicDescription, String cssClass, boolean parseRecursive);
 
 	/**
 	 * Append an InterWiki link
@@ -204,7 +208,8 @@ public interface IWikiModel extends IConfiguration {
 	 * @param title
 	 * @param linkText
 	 */
-	public void appendInterWikiLink(String namespace, String title, String linkText);
+	public void appendInterWikiLink(String namespace, String title,
+			String linkText);
 
 	/**
 	 * Append an external ISBN link (starting with <code>ISBN </code>) as
@@ -218,42 +223,45 @@ public interface IWikiModel extends IConfiguration {
 	 * href="http://amazon.com">Amazon.com</a>.
 	 * 
 	 * @param isbnPureText
-	 *          the pure ISBN string which contains the ISBN prefix and optional
-	 *          dashes in the ISBN number
+	 *            the pure ISBN string which contains the ISBN prefix and
+	 *            optional dashes in the ISBN number
 	 */
 	public void appendISBNLink(String isbnPureText);
 
 	/**
-	 * Append an external link (starting with mailto:...) as described in <a href
+	 * Append an external link (starting with mailto:...) as described in <a
+	 * href
 	 * ="http://en.wikipedia.org/wiki/Help:Wikitext#Links">Help:Wikitext#Links
 	 * </a>
 	 * 
 	 * @param link
-	 *          the external link with <code>mailto:</code> prefix
+	 *            the external link with <code>mailto:</code> prefix
 	 * @param linkName
-	 *          the link name which is separated from the URL by a space
+	 *            the link name which is separated from the URL by a space
 	 * @param withoutSquareBrackets
-	 *          if <code>true</code> a mailto link with no square brackets around
-	 *          the link was parsed
+	 *            if <code>true</code> a mailto link with no square brackets
+	 *            around the link was parsed
 	 */
-	public void appendMailtoLink(String link, String linkName, boolean withoutSquareBrackets);
+	public void appendMailtoLink(String link, String linkName,
+			boolean withoutSquareBrackets);
 
 	/**
 	 * Check if the topic is a special namespace topic. In the
-	 * <code>AbstractWikiModel</code> defaults implementation this namespace topic
-	 * is parsed and checks for various namespaces, like <code>Categories</code>
-	 * and <code>Interwiki</code> links.
+	 * <code>AbstractWikiModel</code> defaults implementation this namespace
+	 * topic is parsed and checks for various namespaces, like
+	 * <code>Categories</code> and <code>Interwiki</code> links.
 	 * 
 	 * @param rawNamespaceTopic
-	 *          the text between the [[...]] square brackets of a wiki link before
-	 *          the pipe symbol
+	 *            the text between the [[...]] square brackets of a wiki link
+	 *            before the pipe symbol
 	 * @param viewableLinkDescription
 	 * @param containsNoPipe
-	 *          set to <code>true</code> if the rawLinkText contained no pipe
-	 *          symbol.
+	 *            set to <code>true</code> if the rawLinkText contained no pipe
+	 *            symbol.
 	 * @return <code>true</code> if the topic is a special namespace topic
 	 */
-	public boolean appendRawNamespaceLinks(String rawNamespaceTopic, String viewableLinkDescription, boolean containsNoPipe);
+	public boolean appendRawNamespaceLinks(String rawNamespaceTopic,
+			String viewableLinkDescription, boolean containsNoPipe);
 
 	/**
 	 * Main entry method for parsing a raw wiki link (i.e. the text between the
@@ -263,10 +271,10 @@ public interface IWikiModel extends IConfiguration {
 	 * cases.
 	 * 
 	 * @param rawLinkText
-	 *          the text between the [[...]] square brackets of a wiki link
+	 *            the text between the [[...]] square brackets of a wiki link
 	 * @param suffix
-	 *          a String of lowercase letters which directly follow the link after
-	 *          the closing ]] brackets. Useful for topic plurals.
+	 *            a String of lowercase letters which directly follow the link
+	 *            after the closing ]] brackets. Useful for topic plurals.
 	 * @return <code>true</code> if the method used the suffix for rendering the
 	 *         wiki link. If <code>false</code> the parser should append the
 	 *         suffix as normal text after the wiki link (i.e. in the case of an
@@ -278,7 +286,7 @@ public interface IWikiModel extends IConfiguration {
 	 * Append the redirect link to the model
 	 * 
 	 * @param redirectLink
-	 *          the raw string between the wikilink tags <code>[[ ]]</code>
+	 *            the raw string between the wikilink tags <code>[[ ]]</code>
 	 * @return <code>true</code> if the the wikitext shouldn't be parsed
 	 */
 	public boolean appendRedirectLink(String redirectLink);
@@ -286,17 +294,18 @@ public interface IWikiModel extends IConfiguration {
 	/**
 	 * Append the user signature to the writer (i.e. '~~~', '~~~~' or '~~~~').
 	 * This method is used in the first pass of parsing the wiki text (together
-	 * with template parsing). You can append a [[User:xxxx]] string according to
-	 * your model.
+	 * with template parsing). You can append a [[User:xxxx]] string according
+	 * to your model.
 	 * 
 	 * 
 	 * @param writer
 	 * @param numberOfTildes
-	 *          an <code>int</code> value between 3 and 5
+	 *            an <code>int</code> value between 3 and 5
 	 * @return
 	 * @throws IOException
 	 */
-	public void appendSignature(Appendable writer, int numberOfTildes) throws IOException;
+	public void appendSignature(Appendable writer, int numberOfTildes)
+			throws IOException;
 
 	/**
 	 * Append the given tag stack to the current tag stack of the model.
@@ -324,14 +333,14 @@ public interface IWikiModel extends IConfiguration {
 	 * Create the &quot;table of content&quot; placeholder
 	 * 
 	 * @param isTOCIdentifier
-	 *          <code>true</code> if the __TOC__ keyword was parsed
+	 *            <code>true</code> if the __TOC__ keyword was parsed
 	 * @return the &quot;table of content&quot; tag
 	 */
 	public ITableOfContent createTableOfContent(boolean isTOCIdentifier);
 
 	/**
-	 * Decrement the current recursion level of the parser. The recursion level is
-	 * used to prevent infinite nesting of templates, tables, lists and other
+	 * Decrement the current recursion level of the parser. The recursion level
+	 * is used to prevent infinite nesting of templates, tables, lists and other
 	 * parser objects.
 	 * 
 	 * @return the decremented recursion level
@@ -349,40 +358,46 @@ public interface IWikiModel extends IConfiguration {
 
 	/**
 	 * Encode the <i>wiki links title</i> into a URL for HTML hyperlinks (i.e.
-	 * create the <i>href</i> attribute representation for the <i>a</i> tag). This
-	 * method uses the '.' character to encode special characters. To get the <a
+	 * create the <i>href</i> attribute representation for the <i>a</i> tag).
+	 * This method uses the '.' character to encode special characters. To get
+	 * the <a
 	 * href="http://meta.wikimedia.org/wiki/Help:Page_name#Case-sensitivity"
-	 * >behavior of the MediaWiki software</a>, which is configured to convert the
-	 * first letter to upper case, the <code>firstCharacterAsUpperCase</code>
-	 * parameters must be set to <code>true</code>. For an example encoding
-	 * routine see:
+	 * >behavior of the MediaWiki software</a>, which is configured to convert
+	 * the first letter to upper case, the
+	 * <code>firstCharacterAsUpperCase</code> parameters must be set to
+	 * <code>true</code>. For an example encoding routine see:
 	 * {@link info.bliki.wiki.filter.Encoder#encodeTitleDotUrl(String, boolean)}
 	 * 
 	 * @param firstCharacterAsUpperCase
-	 *          if <code>true</code> convert the first of the title to uppercase
+	 *            if <code>true</code> convert the first of the title to
+	 *            uppercase
 	 * 
 	 * @see info.bliki.wiki.filter.Encoder#encodeTitleToUrl(String, boolean)
 	 */
-	public String encodeTitleDotUrl(String wikiTitle, boolean firstCharacterAsUpperCase);
+	public String encodeTitleDotUrl(String wikiTitle,
+			boolean firstCharacterAsUpperCase);
 
 	/**
 	 * Encode the <i>wiki links title</i> into a URL for HTML hyperlinks (i.e.
-	 * create the <i>href</i> attribute representation for the <i>a</i> tag). This
-	 * method uses the '%' character to encode special characters. To get the <a
+	 * create the <i>href</i> attribute representation for the <i>a</i> tag).
+	 * This method uses the '%' character to encode special characters. To get
+	 * the <a
 	 * href="http://meta.wikimedia.org/wiki/Help:Page_name#Case-sensitivity"
-	 * >behavior of the MediaWiki software</a>, which is configured to convert the
-	 * first letter to upper case, the <code>firstCharacterAsUpperCase</code>
-	 * parameters must be set to <code>true</code>. For an example encoding
-	 * routine see
+	 * >behavior of the MediaWiki software</a>, which is configured to convert
+	 * the first letter to upper case, the
+	 * <code>firstCharacterAsUpperCase</code> parameters must be set to
+	 * <code>true</code>. For an example encoding routine see
 	 * {@link info.bliki.wiki.filter.Encoder#encodeTitleToUrl(String, boolean)}
 	 * 
 	 * 
 	 * @param firstCharacterAsUpperCase
-	 *          if <code>true</code> convert the first of the title to uppercase
+	 *            if <code>true</code> convert the first of the title to
+	 *            uppercase
 	 * 
 	 * @see info.bliki.wiki.filter.Encoder#encodeTitleToUrl(String, boolean)
 	 */
-	public String encodeTitleToUrl(String wikiTitle, boolean firstCharacterAsUpperCase);
+	public String encodeTitleToUrl(String wikiTitle,
+			boolean firstCharacterAsUpperCase);
 
 	/**
 	 * Get the current time stamp. This is the value for the magic word
@@ -462,21 +477,24 @@ public interface IWikiModel extends IConfiguration {
 	 * Get the raw wiki text for the given namespace and article name
 	 * 
 	 * @param templateName
-	 *          the parsed template name
+	 *            the parsed template name
 	 * @param templateParameters
-	 *          if the namespace is the <b>Template</b> namespace, the current
-	 *          template parameters are stored as <code>String</code>s in this map
+	 *            if the namespace is the <b>Template</b> namespace, the current
+	 *            template parameters are stored as <code>String</code>s in this
+	 *            map
 	 * 
 	 * @return <code>null</code> if no content was found
 	 * @see AbstractParser#parsePageName(IWikiModel, String, INamespaceValue,
 	 *      boolean)
 	 */
-	public String getRawWikiContent(ParsedPageName templateName, Map<String, String> templateParameters) throws WikiModelContentException;
+	public String getRawWikiContent(ParsedPageName templateName,
+			Map<String, String> templateParameters)
+			throws WikiModelContentException;
 
 	/**
-	 * Get the current recursion level of the parser. The recursion level is used
-	 * to prevent infinite nesting of templates, tables, lists and other parser
-	 * objects.
+	 * Get the current recursion level of the parser. The recursion level is
+	 * used to prevent infinite nesting of templates, tables, lists and other
+	 * parser objects.
 	 * 
 	 * @return the current recursion level counter
 	 */
@@ -494,7 +512,8 @@ public interface IWikiModel extends IConfiguration {
 	 * Get the internal list of references (i.e. footnotes)
 	 * 
 	 * 
-	 * @return the list of references or <code>null</code> if no reference exists
+	 * @return the list of references or <code>null</code> if no reference
+	 *         exists
 	 * @see Reference
 	 */
 	public List<Reference> getReferences();
@@ -546,8 +565,8 @@ public interface IWikiModel extends IConfiguration {
 	 * implementation.
 	 * 
 	 * @param name
-	 *          the name of the function without the &quot;#&quot; and
-	 *          &quot;:&quot; delimiters
+	 *            the name of the function without the &quot;#&quot; and
+	 *            &quot;:&quot; delimiters
 	 * @return the parser function or <code>null</code> if no function is
 	 *         available for the given name
 	 */
@@ -573,7 +592,8 @@ public interface IWikiModel extends IConfiguration {
 
 	/**
 	 * Return a URL string which contains, a &quot;${title}&quot; variable which
-	 * will be replaced by the topic title, to create links to other wiki topics.
+	 * will be replaced by the topic title, to create links to other wiki
+	 * topics.
 	 * 
 	 * For the english Wikipedia this URL would look like:
 	 * 
@@ -596,8 +616,8 @@ public interface IWikiModel extends IConfiguration {
 	public IEventListener getWikiListener();
 
 	/**
-	 * Increment the current recursion level of the parser. The recursion level is
-	 * used to prevent infinite nesting of templates, tables, lists and other
+	 * Increment the current recursion level of the parser. The recursion level
+	 * is used to prevent infinite nesting of templates, tables, lists and other
 	 * parser objects.
 	 * 
 	 * @return the current recursion level counter
@@ -605,8 +625,8 @@ public interface IWikiModel extends IConfiguration {
 	public int incrementRecursionLevel();
 
 	/**
-	 * Increment the current recursion level of the template parser. The recursion
-	 * level is used to prevent infinite nesting of templates.
+	 * Increment the current recursion level of the template parser. The
+	 * recursion level is used to prevent infinite nesting of templates.
 	 * 
 	 * @return the current recursion level counter
 	 */
@@ -628,6 +648,15 @@ public interface IWikiModel extends IConfiguration {
 	 * @return <code>true</code> if your model is used in an editor mode
 	 */
 	public boolean isEditorMode();
+
+	/**
+	 * Check if the rendering of the &quot;table of contents&quot; is disabled
+	 * globally.
+	 * 
+	 * @return <code>true</code> if the rendering of the &quot;table of
+	 *         contents&quot; is disabled globally.
+	 */
+	public boolean isNoToc();
 
 	/**
 	 * Check if the given namespace is an interwiki link prefix.
@@ -659,7 +688,8 @@ public interface IWikiModel extends IConfiguration {
 	/**
 	 * The current model currently renders a template parameter value
 	 * 
-	 * @return <code>true</code> if your model renders a template parameter value
+	 * @return <code>true</code> if your model renders a template parameter
+	 *         value
 	 */
 	public boolean isParameterParsingMode();
 
@@ -684,7 +714,8 @@ public interface IWikiModel extends IConfiguration {
 	/**
 	 * Determine if the currently parsed wiki text is a template.
 	 * 
-	 * @return <code>true</code> if the currently parsed wiki text is a template.
+	 * @return <code>true</code> if the currently parsed wiki text is a
+	 *         template.
 	 */
 	public boolean isTemplateTopic();
 
@@ -695,8 +726,8 @@ public interface IWikiModel extends IConfiguration {
 	 * See <a href="http://en.wikipedia.org/wiki/URI_scheme">URI scheme</a>
 	 * 
 	 * @param uriScheme
-	 *          the top level URI (Uniform Resource Identifier) scheme name
-	 *          (without the following colon character ":")
+	 *            the top level URI (Uniform Resource Identifier) scheme name
+	 *            (without the following colon character ":")
 	 * @return <code>true</code> if the specified URI scheme is valid.
 	 * @see IWikiModel#isValidUriSchemeSpecificPart(String, String)
 	 */
@@ -709,18 +740,20 @@ public interface IWikiModel extends IConfiguration {
 	 * See <a href="http://en.wikipedia.org/wiki/URI_scheme">URI scheme</a>
 	 * 
 	 * @param uriScheme
-	 *          the top level URI (Uniform Resource Identifier) scheme name
-	 *          (without the following colon character ":")
+	 *            the top level URI (Uniform Resource Identifier) scheme name
+	 *            (without the following colon character ":")
 	 * @param uriSchemeSpecificPart
-	 *          the URI (Uniform Resource Identifier) scheme part following the
-	 *          top level scheme name and the colon character ":"
+	 *            the URI (Uniform Resource Identifier) scheme part following
+	 *            the top level scheme name and the colon character ":"
 	 * @return <code>true</code> if the specified URI scheme is valid.
 	 * @see IWikiModel#isValidUriScheme(String)
 	 */
-	public boolean isValidUriSchemeSpecificPart(String uriScheme, String uriSchemeSpecificPart);
+	public boolean isValidUriSchemeSpecificPart(String uriScheme,
+			String uriSchemeSpecificPart);
 
 	/**
-	 * Parse BBCode (Bulletin Board Code), like syntax codes in this wiki. See <a
+	 * Parse BBCode (Bulletin Board Code), like syntax codes in this wiki. See
+	 * <a
 	 * href="http://en.wikipedia.org/wiki/BBCode">http://en.wikipedia.org/wiki
 	 * /BBCode</a> for more information.
 	 * 
@@ -730,14 +763,14 @@ public interface IWikiModel extends IConfiguration {
 
 	/**
 	 * Parse a behavior switch (i.e. an identifier with two leading and trailing
-	 * underscores &quot;__&quot; like for example <code>__NOEDITSECTION__</code>
-	 * ). See <a href
+	 * underscores &quot;__&quot; like for example
+	 * <code>__NOEDITSECTION__</code> ). See <a href
 	 * ="http://www.mediawiki.org/wiki/Help:Magic_words#Behavior_switches">Help
 	 * :Magic_words#Behavior_switches</a>.
 	 * 
 	 * @param identifier
-	 *          the identifier without the leading and trailing underscores
-	 *          (&quot;__&quot;)
+	 *            the identifier without the leading and trailing underscores
+	 *            (&quot;__&quot;)
 	 * @return <code>true</code> if the switch was parsed
 	 */
 	public boolean parseBehaviorSwitch(String identifier);
@@ -746,9 +779,9 @@ public interface IWikiModel extends IConfiguration {
 	 * Parse the raw Wikipedia text and notify the listener
 	 * 
 	 * @param listener
-	 *          an event listener
+	 *            an event listener
 	 * @param rawWikiText
-	 *          the raw wiki text
+	 *            the raw wiki text
 	 */
 	public void parseEvents(IEventListener listener, String rawWikiText);
 
@@ -760,12 +793,13 @@ public interface IWikiModel extends IConfiguration {
 	 * href="http://www.mediawiki.org/wiki/Help:Images">Help:Images</a>.
 	 * 
 	 * @param imageNamespace
-	 *          the image namespace
+	 *            the image namespace
 	 * @param rawImageLink
-	 *          the raw image link text without the surrounding
-	 *          <code>[[...]]</code>
+	 *            the raw image link text without the surrounding
+	 *            <code>[[...]]</code>
 	 */
-	public void parseInternalImageLink(String imageNamespace, String rawImageLink);
+	public void parseInternalImageLink(String imageNamespace,
+			String rawImageLink);
 
 	/**
 	 * Parse the templates in a raw wikipedia text into a resulting wikipedia
@@ -782,8 +816,8 @@ public interface IWikiModel extends IConfiguration {
 	 * 
 	 * @param rawWikiText
 	 * @param parseOnlySignature
-	 *          if <code>true</code> parse only the signature wiki texts, no
-	 *          templates and wiki comment parsing
+	 *            if <code>true</code> parse only the signature wiki texts, no
+	 *            templates and wiki comment parsing
 	 * @return
 	 */
 	public String parseTemplates(String rawWikiText, boolean parseOnlySignature);
@@ -804,13 +838,14 @@ public interface IWikiModel extends IConfiguration {
 	/**
 	 * Push the given TagNode on top of the internal stack
 	 * 
-	 * @return <code>true</code> if the push on the internal stack was successful
+	 * @return <code>true</code> if the push on the internal stack was
+	 *         successful
 	 */
 	public boolean pushNode(TagToken node);
 
 	/**
-	 * Reduce the current token stack until an allowed parent is at the top of the
-	 * stack
+	 * Reduce the current token stack until an allowed parent is at the top of
+	 * the stack
 	 */
 	public void reduceTokenStack(TagToken node);
 
@@ -818,12 +853,12 @@ public interface IWikiModel extends IConfiguration {
 	 * Render the raw Wikipedia text into a string for a given converter
 	 * 
 	 * @param converter
-	 *          a text converter. <b>Note</b> the converter may be
-	 *          <code>null</code>, if you only would like to analyze the raw wiki
-	 *          text and don't need to convert. This speeds up the parsing
-	 *          process.
+	 *            a text converter. <b>Note</b> the converter may be
+	 *            <code>null</code>, if you only would like to analyze the raw
+	 *            wiki text and don't need to convert. This speeds up the
+	 *            parsing process.
 	 * @param rawWikiText
-	 *          a raw wiki text
+	 *            a raw wiki text
 	 * @return <code>null</code> if an IOException occurs or
 	 *         <code>converter==null</code>
 	 * @return
@@ -834,44 +869,46 @@ public interface IWikiModel extends IConfiguration {
 	 * Render the raw Wikipedia text into a string for a given converter
 	 * 
 	 * @param converter
-	 *          a text converter. <b>Note</b> the converter may be
-	 *          <code>null</code>, if you only would like to analyze the raw wiki
-	 *          text and don't need to convert. This speeds up the parsing
-	 *          process.
+	 *            a text converter. <b>Note</b> the converter may be
+	 *            <code>null</code>, if you only would like to analyze the raw
+	 *            wiki text and don't need to convert. This speeds up the
+	 *            parsing process.
 	 * @param rawWikiText
-	 *          a raw wiki text
+	 *            a raw wiki text
 	 * @param buffer
-	 *          write to this buffer
+	 *            write to this buffer
 	 * @param templateTopic
-	 *          if <code>true</code>, render the wiki text as if a template topic
-	 *          will be displayed directly, otherwise render the text as if a
-	 *          common wiki topic will be displayed.
+	 *            if <code>true</code>, render the wiki text as if a template
+	 *            topic will be displayed directly, otherwise render the text as
+	 *            if a common wiki topic will be displayed.
 	 * @param parseTemplates
-	 *          parses the template expansion step (parses include, onlyinclude,
-	 *          includeonly etc)
+	 *            parses the template expansion step (parses include,
+	 *            onlyinclude, includeonly etc)
 	 */
-	public void render(ITextConverter converter, String rawWikiText, Appendable buffer, boolean templateTopic, boolean parseTemplates)
+	public void render(ITextConverter converter, String rawWikiText,
+			Appendable buffer, boolean templateTopic, boolean parseTemplates)
 			throws IOException;
 
 	/**
 	 * Render the raw Wikipedia text into a string for a given converter
 	 * 
 	 * @param converter
-	 *          a text converter. <b>Note</b> the converter may be
-	 *          <code>null</code>, if you only would like to analyze the raw wiki
-	 *          text and don't need to convert. This speeds up the parsing
-	 *          process.
+	 *            a text converter. <b>Note</b> the converter may be
+	 *            <code>null</code>, if you only would like to analyze the raw
+	 *            wiki text and don't need to convert. This speeds up the
+	 *            parsing process.
 	 * @param rawWikiText
-	 *          a raw wiki text
+	 *            a raw wiki text
 	 * @param templateTopic
-	 *          if <code>true</code>, render the wiki text as if a template topic
-	 *          will be displayed directly, otherwise render the text as if a
-	 *          common wiki topic will be displayed.
+	 *            if <code>true</code>, render the wiki text as if a template
+	 *            topic will be displayed directly, otherwise render the text as
+	 *            if a common wiki topic will be displayed.
 	 * @return <code>null</code> if an IOException occurs or
 	 *         <code>converter==null</code>
 	 * @return
 	 */
-	public String render(ITextConverter converter, String rawWikiText, boolean templateTopic);
+	public String render(ITextConverter converter, String rawWikiText,
+			boolean templateTopic);
 
 	/**
 	 * Render the raw Wikipedia text into an HTML string and use the default
@@ -888,9 +925,9 @@ public interface IWikiModel extends IConfiguration {
 	 * 
 	 * @param rawWikiText
 	 * @param templateTopic
-	 *          if <code>true</code>, render the wiki text as if a template topic
-	 *          will be displayed directly, otherwise render the text as if a
-	 *          common wiki topic will be displayed.
+	 *            if <code>true</code>, render the wiki text as if a template
+	 *            topic will be displayed directly, otherwise render the text as
+	 *            if a common wiki topic will be displayed.
 	 * @return <code>null</code> if an IOException occurs
 	 */
 	public String render(String rawWikiText, boolean templateTopic);
@@ -906,8 +943,8 @@ public interface IWikiModel extends IConfiguration {
 	public String renderPDF(String rawWikiText);
 
 	/**
-	 * Replace a colon ':' with a slash '/' in wiki names (i.e. links, categories,
-	 * templates)
+	 * Replace a colon ':' with a slash '/' in wiki names (i.e. links,
+	 * categories, templates)
 	 * 
 	 * @return
 	 */
@@ -915,16 +952,26 @@ public interface IWikiModel extends IConfiguration {
 
 	/**
 	 * Set the "lower-case" namespace name of the article rendered with this
-	 * model. This name will be converted with the Namespace#getNamespace() method
-	 * to a string in the current Locale.
+	 * model. This name will be converted with the Namespace#getNamespace()
+	 * method to a string in the current Locale.
 	 * 
 	 * @param namespaceLowercase
-	 *          the lowercase key for the namespace.
+	 *            the lowercase key for the namespace.
 	 * @return the namespace for this model
 	 * @see java.util.Locale
 	 * @see info.bliki.wiki.namespaces.Namespace#getNamespace(String)
 	 */
 	public void setNamespaceName(String namespaceLowercase);
+
+	/**
+	 * Set to <code>true</code> if the rendering of the &quot;table of
+	 * contents&quot; should be disabled globally.
+	 * 
+	 * @param disableToc
+	 *            set to <code>true</code> if the rendering of the &quot;table
+	 *            of contents&quot; should be disabled globally.
+	 */
+	public void setNoToc(boolean disableToc);
 
 	/**
 	 * Set the title of the currently rendered page data.
@@ -972,14 +1019,16 @@ public interface IWikiModel extends IConfiguration {
 	 * append the new content to the writer.
 	 * 
 	 * @param templateName
-	 *          the name of the template
+	 *            the name of the template
 	 * @param parameterMap
-	 *          the templates parameter <code>java.util.SortedMap</code>
+	 *            the templates parameter <code>java.util.SortedMap</code>
 	 * @param writer
-	 *          the buffer to append the substituted template content
+	 *            the buffer to append the substituted template content
 	 * @throws IOException
 	 */
-	public void substituteTemplateCall(String templateName, Map<String, String> parameterMap, Appendable writer) throws IOException;
+	public void substituteTemplateCall(String templateName,
+			Map<String, String> parameterMap, Appendable writer)
+			throws IOException;
 
 	public TagStack swapStack(TagStack stack);
 
@@ -994,22 +1043,23 @@ public interface IWikiModel extends IConfiguration {
 	 * Gets the magic word object for the given string.
 	 * 
 	 * @param name
-	 *          the (potential) magic word
+	 *            the (potential) magic word
 	 * 
 	 * @return a magic word object (e.g.
 	 *         {@link info.bliki.wiki.filter.MagicWord.MagicWordE} in case
-	 *         {@link info.bliki.wiki.filter.MagicWord} is used) or <tt>null</tt>
-	 *         if this is no valid magic word
+	 *         {@link info.bliki.wiki.filter.MagicWord} is used) or
+	 *         <tt>null</tt> if this is no valid magic word
 	 */
 	public abstract Object getMagicWord(String name);
 
 	/**
 	 * Splits the given full title into its namespace and page title components
 	 * and normalises both components using
-	 * {@link Encoder#normaliseTitle(String, boolean, char)} keeping underscores.
+	 * {@link Encoder#normaliseTitle(String, boolean, char)} keeping
+	 * underscores.
 	 * 
 	 * @param fullTitle
-	 *          the (full) title including a namespace (if present)
+	 *            the (full) title including a namespace (if present)
 	 * 
 	 * @return a 2-element array with the namespace (index 0) and the page title
 	 *         (index 1)

@@ -34,18 +34,21 @@ public class TableOfContentTag extends HTMLTag implements IBodyTag,
 	@Override
 	public void renderHTML(ITextConverter converter, Appendable writer,
 			IWikiModel model) throws IOException {
-		if (fShowToC && fTableOfContent != null && fTableOfContent.size() > 0) {
-			String contentString = Messages.getString(
-					model.getResourceBundle(), Messages.WIKI_TAGS_TOC_CONTENT,
-					"Contents");
-			writer.append("<table id=\"toc\" class=\"toc\" summary=\"");
-			writer.append(contentString);
-			writer.append("\">\n" + "<tr>\n" + "<td>\n"
-					+ "<div id=\"toctitle\">\n" + "<h2>");
-			writer.append(contentString);
-			writer.append("</h2>\n</div>");
-			renderToC(writer, fTableOfContent, 0);
-			writer.append("</td></tr></table><hr/>\n");
+		if (!model.isNoToc()) {
+			if (fShowToC && fTableOfContent != null
+					&& fTableOfContent.size() > 0) {
+				String contentString = Messages.getString(
+						model.getResourceBundle(),
+						Messages.WIKI_TAGS_TOC_CONTENT, "Contents");
+				writer.append("<table id=\"toc\" class=\"toc\" summary=\"");
+				writer.append(contentString);
+				writer.append("\">\n" + "<tr>\n" + "<td>\n"
+						+ "<div id=\"toctitle\">\n" + "<h2>");
+				writer.append(contentString);
+				writer.append("</h2>\n</div>");
+				renderToC(writer, fTableOfContent, 0);
+				writer.append("</td></tr></table><hr/>\n");
+			}
 		}
 	}
 
