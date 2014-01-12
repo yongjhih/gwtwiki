@@ -22,6 +22,7 @@ import info.bliki.wiki.namespaces.INamespace;
 import info.bliki.wiki.namespaces.Namespace;
 import info.bliki.wiki.namespaces.INamespace.INamespaceValue;
 import info.bliki.wiki.namespaces.INamespace.NamespaceCode;
+import info.bliki.wiki.tags.HTMLBlockTag;
 import info.bliki.wiki.tags.HTMLTag;
 import info.bliki.wiki.tags.TableOfContentTag;
 import info.bliki.wiki.tags.WPATag;
@@ -401,7 +402,7 @@ public abstract class AbstractWikiModel implements IWikiModel, IContext {
 		TagStack localStack = WikipediaParser.parseRecursive(rawHead.trim(),
 				this, true, true);
 
-		WPTag headTagNode = new WPTag("h" + headLevel);
+		HTMLBlockTag headTagNode = new HTMLBlockTag("h" + headLevel, Configuration.SPECIAL_BLOCK_TAGS);
 		TagNode spanTagNode = new TagNode("span");
 		// Example:
 		// <h2><span class="mw-headline" id="Header_level_2">Header level
