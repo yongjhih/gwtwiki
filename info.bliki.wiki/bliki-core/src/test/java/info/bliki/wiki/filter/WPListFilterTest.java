@@ -117,7 +117,16 @@ public class WPListFilterTest extends FilterTestSupport {
 	}
 
 	public void testList13() {
-		assertEquals("\n" + "test 1\n" + "test 2\n" + "test 3\n" + "hello\n" + "\n" + "\n" + "test 4\n" + "", wikiModel.render(
+		assertEquals("\n" + 
+				"test 1\n" + 
+				"test 2\n" + 
+				"test 3\n" + 
+				"\n" + 
+				"hello\n" + 
+				"\n" + 
+				"\n" + 
+				"test 4\n" + 
+				"", wikiModel.render(
 				new PlainTextConverter(), LIST3, false));
 	}
 

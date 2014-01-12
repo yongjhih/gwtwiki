@@ -370,7 +370,11 @@ public class WPTableFilterTest extends FilterTestSupport {
 
 	public void testBlockquoteTableText01() {
 		assertEquals(
-				"Simple exampleBoth of these generate the same output.  Choose a style based on the number of cells in each row and the total text inside each cell. Wiki markup\n" + 
+				"\n" + 
+				"Simple example\n" + 
+				"Both of these generate the same output.  Choose a style based on the number of cells in each row and the total text inside each cell. \n" + 
+				"Wiki markup\n" + 
+				"\n" + 
 				"<nowiki>\n" + 
 				"{| \n" + 
 				"| A \n" + 
@@ -380,6 +384,8 @@ public class WPTableFilterTest extends FilterTestSupport {
 				"| D\n" + 
 				"|}\n" + 
 				"</nowiki>\n" + 
+				"\n" + 
+				"\n" + 
 				"<nowiki>\n" + 
 				"{| \n" + 
 				"| A || B\n" + 
@@ -387,9 +393,12 @@ public class WPTableFilterTest extends FilterTestSupport {
 				"| C || D \n" + 
 				"|}\n" + 
 				"</nowiki>\n" + 
+				"\n" + 
 				"What it looks like in your browser\n" + 
 				"\n" + 
-				"\n", wikiModel.render(new PlainTextConverter(), TEST3, false));
+				"\n" + 
+				"\n" + 
+				"", wikiModel.render(new PlainTextConverter(), TEST3, false));
 	}
 
 	public void testWPTableText01() {
@@ -398,7 +407,8 @@ public class WPTableFilterTest extends FilterTestSupport {
 	}
 
 	public void testUmlauts01() {
-		assertEquals("Eine große Überraschung", wikiModel.render(new PlainTextConverter(), "Eine große''' <del>Überraschung</del>", false));
+		assertEquals("\n" + 
+				"Eine große Überraschung", wikiModel.render(new PlainTextConverter(), "Eine große''' <del>Überraschung</del>", false));
 	}
 
 	public void testTableCross() {

@@ -5,6 +5,7 @@ import info.bliki.htmlcleaner.TagNode;
 import info.bliki.wiki.model.Configuration;
 import info.bliki.wiki.model.IWikiModel;
 import info.bliki.wiki.model.ImageFormat;
+import info.bliki.wiki.tags.HTMLBlockTag;
 import info.bliki.wiki.tags.HTMLTag;
 
 import java.io.IOException;
@@ -53,6 +54,9 @@ public class PlainTextConverter implements ITextConverter {
 							((WPList) item).renderPlainText(this, resultBuffer, model);
 						} else if (item instanceof WPTable) {
 							((WPTable) item).renderPlainText(this, resultBuffer, model);
+						} else if (item instanceof HTMLBlockTag) {
+							resultBuffer.append("\n");
+						    ((HTMLBlockTag) item).getBodyString(resultBuffer);
 						} else if (item instanceof HTMLTag) {
 							((HTMLTag) item).getBodyString(resultBuffer);
 						} else if (item instanceof TagNode) {

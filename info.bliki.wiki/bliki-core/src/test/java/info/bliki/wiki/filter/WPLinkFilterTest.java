@@ -251,7 +251,8 @@ public class WPLinkFilterTest extends FilterTestSupport {
 	}
 
 	public void testPlainTextConverter001() {
-		assertEquals("An external link. ", wikiModel.render(new PlainTextConverter(), "An [http://www.example.com external link]. ",
+		assertEquals("\n" + 
+				"An external link. ", wikiModel.render(new PlainTextConverter(), "An [http://www.example.com external link]. ",
 				false));
 	}
 
@@ -260,7 +261,8 @@ public class WPLinkFilterTest extends FilterTestSupport {
 				+ "<!--Note: French does not have tonic accents, so do not add stress marks to this pronunciation-->)"
 				+ " is a 19th century ";
 
-		assertEquals("The Eiffel Tower,[tuʀ ɛfɛl]) is a 19th century ", wikiModel.render(
+		assertEquals("\n" + 
+				"The Eiffel Tower,[tuʀ ɛfɛl]) is a 19th century ", wikiModel.render(
 				new PlainTextConverter(), wikitext, false));
 	}
 
@@ -269,7 +271,8 @@ public class WPLinkFilterTest extends FilterTestSupport {
 				+ "<!--Note: French does not have tonic accents, so do not add stress marks to this pronunciation-->)"
 				+ " is a 19th century ";
 
-		assertEquals("The Eiffel Tower,French pronunciation: [tuʀ ɛfɛl]) is a 19th century ", wikiModel.render(
+		assertEquals("\n" + 
+				"The Eiffel Tower,French pronunciation: [tuʀ ɛfɛl]) is a 19th century ", wikiModel.render(
 				new PlainTextConverter(), wikitext, false));
 	}
 
@@ -278,7 +281,8 @@ public class WPLinkFilterTest extends FilterTestSupport {
 				+ "<!--Note: French does not have tonic accents, so do not add stress marks to this pronunciation-->)"
 				+ " is a 19th century ";
 
-		assertEquals("The Eiffel Tower,French: [tuʀ ɛfɛl]) is a 19th century ", wikiModel.render(
+		assertEquals("\n" + 
+				"The Eiffel Tower,French: [tuʀ ɛfɛl]) is a 19th century ", wikiModel.render(
 				new PlainTextConverter(), wikitext, false));
 	}
 
@@ -287,7 +291,8 @@ public class WPLinkFilterTest extends FilterTestSupport {
 				+ "<!--Note: French does not have tonic accents, so do not add stress marks to this pronunciation-->)"
 				+ " is a 19th century ";
 
-		assertEquals("The Eiffel Tower,[tuʀ ɛfɛl]) is a 19th century ", wikiModel.render(
+		assertEquals("\n" + 
+				"The Eiffel Tower,[tuʀ ɛfɛl]) is a 19th century ", wikiModel.render(
 				new PlainTextConverter(), wikitext, false));
 	}
 	// public static void main(String[] args) {
